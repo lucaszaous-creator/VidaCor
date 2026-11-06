@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#0A1A4A;font-family:Inter,system-ui,sans-serif;color:#0F172A}
+.scene{position:absolute;inset:0;opacity:0}
+.navy{background:radial-gradient(120% 100% at 30% 20%,#17306E 0%,#0A1A4A 55%,#060F2E 100%);color:#fff}
+.light{background:#F2F3F6}
+.card{background:#fff;border-radius:28px;box-shadow:0 20px 60px rgba(10,26,74,.18),0 4px 12px rgba(10,26,74,.08)}
+.chip{display:inline-flex;align-items:center;gap:10px;height:44px;padding:0 20px;border-radius:999px;font-weight:700;font-size:22px}
+.ok{background:#E5F5EC;color:#1F7A4D}.amber{background:#FFF3DF;color:#9A5B00}.blue{background:#E8F2FB;color:#0C72B0}
+.kicker{font-size:24px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#3E9BDB}
+.h{font-size:64px;font-weight:800;letter-spacing:-.03em;line-height:1.05}
+.sub{position:absolute;left:50%;bottom:54px;transform:translateX(-50%);max-width:1500px;text-align:center;font-size:34px;font-weight:600;color:#fff;background:rgba(6,15,46,.78);padding:14px 30px;border-radius:18px;line-height:1.3;z-index:50}
+.plate{width:300px;height:96px;border-radius:10px;background:#fff;border:4px solid #1B1F2A;overflow:hidden;position:relative;font-family:'Inter';box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.plate .band{height:24px;background:#003399;color:#fff;font-size:15px;font-weight:800;letter-spacing:.3em;display:flex;align-items:center;justify-content:center}
+.plate .num{font-size:52px;font-weight:800;letter-spacing:.06em;text-align:center;line-height:64px;color:#111}
+.phone{width:520px;height:960px;border-radius:64px;background:#0B1020;padding:18px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.screen{width:100%;height:100%;border-radius:48px;background:#ECE5DD;overflow:hidden;display:flex;flex-direction:column}
+.bubble{max-width:82%;padding:18px 22px;border-radius:22px;font-size:25px;line-height:1.35;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.in{background:#fff;align-self:flex-start;border-top-left-radius:6px}
+.out{background:#D8FDD2;align-self:flex-end;border-top-right-radius:6px}
+.small{font-size:18px;color:#5B6474}
+</style></head>
+<body>
+<div id="root"></div>
+<div class="sub" id="sub"></div>
+<script>
+const root=document.getElementById('root');
+const $=(h)=>{const d=document.createElement('div');d.innerHTML=h.trim();return d.firstChild};
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const ease=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const lerp=(a,b,x)=>a+(b-a)*x;
+
+const LOGO='assets/logo.png';
+const CAR=(color='#0C72B0',gid='cb')=>`<svg width="520" height="210" viewBox="0 0 520 210" style="transform:scaleX(-1)"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${color}"/><stop offset="1" stop-color="#084B78"/></linearGradient></defs>
+<ellipse cx="260" cy="196" rx="230" ry="12" fill="rgba(0,0,0,.25)"/>
+<path d="M30 150 C30 120 50 108 90 104 L150 96 C180 60 215 44 270 44 L330 44 C370 44 400 62 428 96 L470 104 C495 110 505 126 505 150 L505 166 L30 166 Z" fill="url(#${gid})"/>
+<path d="M168 98 C192 68 220 58 266 58 L300 58 L300 98 Z" fill="#CFE6F7"/><path d="M314 58 L330 58 C360 58 384 72 405 98 L314 98 Z" fill="#CFE6F7"/>
+<rect x="40" y="128" width="40" height="12" rx="6" fill="#FFE8A3"/><rect x="474" y="126" width="26" height="14" rx="6" fill="#E05A4E"/>
+<circle cx="130" cy="166" r="34" fill="#1B1F2A"/><circle cx="130" cy="166" r="15" fill="#9AA6B8"/><circle cx="408" cy="166" r="34" fill="#1B1F2A"/><circle cx="408" cy="166" r="15" fill="#9AA6B8"/></svg>`;
+
+// ---------- scenes ----------
+const S={};
+function scene(id,cls,html){const el=$(`<div class="scene ${cls}" id="${id}">${html}</div>`);root.appendChild(el);S[id]=el;return el}
+
+scene('intro','navy',`
+ <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px">
+  <div id="introLogo" style="background:#fff;border-radius:36px;padding:36px 56px"><img src="${LOGO}" style="height:260px;display:block"></div>
+  <div id="introT" style="text-align:center"><div class="kicker">Estacionamento inteligente</div><div class="h" style="margin-top:14px">Da confirmação à cancela,<br>sem ticket e sem fila</div></div>
+ </div>`);
+
+scene('whats','light',`
+ <div style="position:absolute;left:170px;top:60px;transform:scale(.82);transform-origin:top left" id="phone1" class="phone"><div class="screen">
+   <div style="background:#075E54;color:#fff;padding:34px 28px 20px;display:flex;align-items:center;gap:16px"><div style="width:56px;height:56px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center"><img src="assets/simbolo.png" style="width:40px"></div><div><div style="font-size:26px;font-weight:700">VidaCor Imagem</div><div style="font-size:18px;opacity:.85">conta comercial</div></div></div>
+   <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:16px" >
+    <div class="bubble in" id="w1">Olá, Antônio! Seu <b>ecocardiograma</b> é amanhã, 08:30. Responda <b>1</b> para confirmar.</div>
+    <div class="bubble out" id="w2">1</div>
+    <div class="bubble in" id="w3">Confirmado! Vai de carro? Envie a <b>placa</b> e a entrada no estacionamento será automática.</div>
+    <div class="bubble out" id="w4">QRT4B21</div>
+    <div class="bubble in" id="w5">Pronto! Placa <b>QRT4B21</b> vinculada ao seu exame. A cancela abre sozinha.</div>
+   </div></div></div>
+ <div style="position:absolute;left:800px;top:250px;width:960px" id="linkCard" class="card">
+   <div style="padding:44px">
+    <div class="kicker" style="color:#0C72B0">No sistema VidaCor</div>
+    <div style="font-size:46px;font-weight:800;margin-top:12px;letter-spacing:-.02em">Placa vinculada ao paciente</div>
+    <div style="display:flex;align-items:center;gap:36px;margin-top:36px">
+      <div class="plate"><div class="band">BRASIL</div><div class="num">QRT4B21</div></div>
+      <svg width="70" height="30" viewBox="0 0 70 30"><path d="M2 15h60M50 4l12 11-12 11" stroke="#0C72B0" stroke-width="5" fill="none" stroke-linecap="round"/></svg>
+      <div><div style="font-size:34px;font-weight:700">Antônio Carlos Ribeiro</div><div style="font-size:24px;color:#5B6474;margin-top:6px">Ecocardiograma + Doppler · amanhã 08:30</div></div>
+    </div>
+    <div style="display:flex;gap:14px;margin-top:34px"><span class="chip ok">✓ Cadastro do paciente</span><span class="chip blue">Agenda</span><span class="chip blue">Estacionamento</span></div>
+   </div></div>`);
+
+scene('entrada','light',`
+ <div style="position:absolute;left:0;right:0;top:0;height:640px;background:linear-gradient(#DCE8F5,#F2F3F6)"></div>
+ <div style="position:absolute;left:0;right:0;top:640px;bottom:0;background:#3B4252"></div>
+ <div style="position:absolute;left:0;right:0;top:760px;height:10px;background:repeating-linear-gradient(90deg,#F2F3F6 0 80px,transparent 80px 160px)"></div>
+ <div style="position:absolute;left:1180px;top:180px;width:26px;height:470px;background:#9AA6B8;border-radius:6px"></div>
+ <div style="position:absolute;left:1120px;top:150px;width:150px;height:70px;background:#1B1F2A;border-radius:16px"><div style="position:absolute;left:18px;top:20px;width:30px;height:30px;border-radius:50%;background:#3E9BDB;box-shadow:0 0 18px #3E9BDB"></div></div>
+ <div id="beam" style="position:absolute;left:1140px;top:210px;width:0;height:0;border-left:120px solid transparent;border-right:120px solid transparent;border-top:420px solid rgba(62,155,219,.22);transform-origin:top center;"></div>
+ <div style="position:absolute;left:1360px;top:470px;width:60px;height:180px;background:#E7EBF1;border-radius:10px;border:4px solid #C9D2DE"></div>
+ <div id="arm" style="position:absolute;left:1390px;top:480px;width:470px;height:26px;background:repeating-linear-gradient(90deg,#C2334D 0 50px,#fff 50px 100px);border-radius:13px;transform-origin:0 50%"></div>
+ <div id="car1" style="position:absolute;top:470px;left:-600px">${CAR()}</div>
+ <div id="ocr" class="card" style="position:absolute;left:120px;top:90px;width:760px;padding:36px">
+   <div style="display:flex;align-items:center;gap:16px"><span class="chip blue">Câmera da entrada</span><span style="font-size:22px;color:#5B6474">leitura em 0,4 s</span></div>
+   <div style="display:flex;align-items:center;gap:30px;margin-top:26px">
+     <div style="position:relative"><div class="plate"><div class="band">BRASIL</div><div class="num">QRT4B21</div></div><div id="scanbox" style="position:absolute;inset:-10px;border:4px solid #3E9BDB;border-radius:14px"></div></div>
+     <div><div style="font-size:32px;font-weight:700">Antônio Carlos Ribeiro</div><div style="font-size:23px;color:#5B6474;margin-top:6px">Eco + Doppler 08:30 · Sala 1</div></div>
+   </div>
+   <div id="ocrOk" style="display:flex;gap:12px;margin-top:26px"><span class="chip ok">✓ Paciente reconhecido</span><span class="chip ok">Entrada 08:12</span><span class="chip ok">Cancela liberada</span></div>
+ </div>`);
+
+scene('recepcao','light',`
+ <div style="position:absolute;left:140px;top:80px" class="kicker">Recepção</div>
+ <div style="position:absolute;left:140px;top:120px" class="h">O check-in já sabe que você chegou</div>
+ <div id="rcard" class="card" style="position:absolute;left:140px;top:300px;width:1640px;padding:44px">
+   <div style="display:flex;align-items:center;gap:26px">
+     <div style="width:92px;height:92px;border-radius:50%;background:#E8F2FB;color:#0C72B0;font-size:34px;font-weight:800;display:flex;align-items:center;justify-content:center">AR</div>
+     <div style="flex:1"><div style="font-size:40px;font-weight:800">Antônio Carlos Ribeiro <span class="chip" style="background:#0A1A4A;color:#fff;font-size:20px;height:38px;margin-left:10px">P012</span></div><div style="font-size:26px;color:#5B6474;margin-top:6px">Ecocardiograma + Doppler de carótidas · Unimed · 08:30</div></div>
+     <div style="background:#0A1A4A;color:#fff;border-radius:999px;font-size:26px;font-weight:700;padding:20px 34px">Enviar para a sala</div>
+   </div>
+   <div style="display:flex;gap:14px;margin-top:34px;flex-wrap:wrap" id="steps">
+     <span class="chip ok">✓ Identidade</span><span class="chip ok">✓ Elegível</span><span class="chip ok">✓ Guia autorizada</span><span class="chip ok">✓ Pedido médico</span><span class="chip ok">✓ Termo</span>
+   </div>
+   <div id="park" style="margin-top:34px;display:flex;align-items:center;gap:26px;background:#F2F8FD;border-radius:22px;padding:26px 30px">
+     <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#0C72B0" stroke-width="1.8"><path d="M5 17h14l-1.5-6.5A2 2 0 0 0 15.6 9H8.4a2 2 0 0 0-1.9 1.5zM7 17v2M17 17v2"/></svg>
+     <div style="flex:1"><div style="font-size:30px;font-weight:700">Veículo QRT4B21 no estacionamento</div><div style="font-size:24px;color:#5B6474;margin-top:4px">Entrada às 08:12 pela câmera 1</div></div>
+     <span class="chip ok" id="valid" style="font-size:24px;height:52px">✓ Estacionamento validado pelo exame</span>
+   </div>
+ </div>`);
+
+scene('tempo','navy',`
+ <div style="position:absolute;left:160px;top:200px">
+   <div class="kicker">Permanência</div>
+   <div class="h" style="margin-top:14px">Contada sozinha,<br>enquanto você é atendido</div>
+   <div style="display:flex;gap:16px;margin-top:40px"><span class="chip" style="background:rgba(255,255,255,.12);color:#fff">Entrada 08:12</span><span class="chip" style="background:rgba(255,255,255,.12);color:#fff">Exame 08:30 – 09:00</span></div>
+ </div>
+ <div style="position:absolute;left:1180px;top:200px;width:580px;height:580px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center">
+   <svg width="580" height="580" viewBox="0 0 580 580" style="position:absolute;inset:0"><circle cx="290" cy="290" r="250" stroke="rgba(255,255,255,.14)" stroke-width="26" fill="none"/><circle id="ring" cx="290" cy="290" r="250" stroke="#3E9BDB" stroke-width="26" fill="none" stroke-linecap="round" stroke-dasharray="1571" stroke-dashoffset="1571" transform="rotate(-90 290 290)"/></svg>
+   <div style="text-align:center"><div id="clock" style="font-size:150px;font-weight:800;letter-spacing:-.04em">0 min</div><div style="font-size:28px;opacity:.8">de 2 h de cortesia</div></div>
+ </div>`);
+
+scene('pagar','light',`
+ <div style="position:absolute;left:140px;top:90px" class="kicker">Saída</div>
+ <div style="position:absolute;left:140px;top:130px" class="h">Dentro da cortesia, sai livre.<br>Passou do tempo, paga pelo PIX.</div>
+ <div id="isento" class="card" style="position:absolute;left:140px;top:420px;width:760px;padding:44px">
+   <span class="chip ok">Paciente com exame</span>
+   <div style="font-size:42px;font-weight:800;margin-top:24px">54 min · dentro das 2 h</div>
+   <div style="font-size:26px;color:#5B6474;margin-top:10px">Nada a pagar. A cancela abre na saída.</div>
+   <div style="font-size:80px;font-weight:800;color:#1F7A4D;margin-top:20px">R$ 0,00</div>
+ </div>
+ <div style="position:absolute;left:1240px;top:250px;transform-origin:top left" id="phone2" class="phone" ><div class="screen" style="background:#ECE5DD">
+   <div style="background:#075E54;color:#fff;padding:34px 28px 20px;font-size:26px;font-weight:700">VidaCor Imagem</div>
+   <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:16px">
+     <div class="bubble in" id="p1">Acompanhante · 2 h 40 min no estacionamento. Valor: <b>R$ 8,00</b>. Pague pelo PIX e a saída é liberada.</div>
+     <div class="bubble in" id="p2" style="text-align:center"><svg width="230" height="230" viewBox="0 0 29 29"><rect width="29" height="29" fill="#fff"/><path fill="#0A1A4A" d="M1 1h7v7H1zM2 2v5h5V2zM3 3h3v3H3zM21 1h7v7h-7zm1 1v5h5V2zm1 1h3v3h-3zM1 21h7v7H1zm1 1v5h5v-5zm1 1h3v3H3zM10 1h1v2h-1zM12 2h2v1h-2zM15 1h2v3h-2zM10 5h3v1h-3zM14 6h3v2h-3zM18 2h1v4h-1zM10 9h2v2h-2zM13 10h4v1h-4zM18 9h3v1h-3zM22 10h2v2h-2zM25 9h3v1h-3zM1 10h3v1H1zM5 11h3v2H5zM2 13h2v2H2zM9 13h3v1H9zM13 13h1v3h-1zM15 12h3v2h-3zM19 13h2v3h-2zM23 13h4v1h-4zM26 15h2v3h-2zM10 16h2v2h-2zM5 16h3v1H5zM1 17h3v1H1zM15 16h3v1h-3zM22 16h3v2h-3zM9 19h4v1H9zM14 18h3v2h-3zM18 19h2v1h-2zM21 19h1v3h-1zM24 20h4v1h-4zM10 22h2v3h-2zM13 22h3v1h-3zM17 21h3v2h-3zM23 23h2v2h-2zM26 22h2v3h-2zM13 25h1v3h-1zM15 24h3v1h-3zM19 25h3v1h-3zM10 27h2v1h-2zM16 26h2v2h-2zM20 27h4v1h-4zM25 26h3v2h-3z"/></svg><div class="small">PIX copia e cola</div></div>
+     <div class="bubble in" id="p3" style="background:#E5F5EC"><b>✓ Pagamento recebido.</b> Saída liberada até 09:20. Nota fiscal enviada.</div>
+   </div></div></div>
+ <div id="caixaTag" style="position:absolute;left:140px;top:900px;font-size:26px;color:#5B6474">Também dá para pagar no <b style="color:#0F172A">caixa da recepção</b>: PIX, cartão ou dinheiro.</div>`);
+
+scene('saida','light',`
+ <div style="position:absolute;left:0;right:0;top:0;height:640px;background:linear-gradient(#DCE8F5,#F2F3F6)"></div>
+ <div style="position:absolute;left:0;right:0;top:640px;bottom:0;background:#3B4252"></div>
+ <div style="position:absolute;left:0;right:0;top:760px;height:10px;background:repeating-linear-gradient(90deg,#F2F3F6 0 80px,transparent 80px 160px)"></div>
+ <div style="position:absolute;left:700px;top:180px;width:26px;height:470px;background:#9AA6B8;border-radius:6px"></div>
+ <div style="position:absolute;left:640px;top:150px;width:150px;height:70px;background:#1B1F2A;border-radius:16px"><div style="position:absolute;right:18px;top:20px;width:30px;height:30px;border-radius:50%;background:#3E9BDB;box-shadow:0 0 18px #3E9BDB"></div></div>
+ <div style="position:absolute;left:880px;top:470px;width:60px;height:180px;background:#E7EBF1;border-radius:10px;border:4px solid #C9D2DE"></div>
+ <div id="arm2" style="position:absolute;left:910px;top:480px;width:470px;height:26px;background:repeating-linear-gradient(90deg,#C2334D 0 50px,#fff 50px 100px);border-radius:13px;transform-origin:0 50%"></div>
+ <div id="car2" style="position:absolute;top:470px;left:-560px">${CAR('#0C72B0','cb2')}</div>
+ <div id="sumCard" class="card" style="position:absolute;right:120px;top:90px;width:720px;padding:36px">
+   <div style="display:flex;gap:12px"><span class="chip blue">Câmera da saída</span><span class="chip ok" id="libOk">✓ Liberado</span></div>
+   <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px 30px;margin-top:26px;font-size:24px">
+     <div><div class="small">Placa</div><b style="font-size:32px">QRT4B21</b></div><div><div class="small">Paciente</div><b style="font-size:28px">Antônio C. Ribeiro</b></div>
+     <div><div class="small">Entrada · saída</div><b style="font-size:32px">08:12 · 09:06</b></div><div><div class="small">Permanência</div><b style="font-size:32px">54 min · isento</b></div>
+   </div>
+ </div>`);
+
+scene('statement','navy',`
+ <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:60px" id="stm">
+   <div class="w" style="font-size:110px;font-weight:800;letter-spacing:-.04em">Sem ticket.</div>
+   <div class="w" style="font-size:110px;font-weight:800;letter-spacing:-.04em">Sem fila.</div>
+   <div class="w" style="font-size:110px;font-weight:800;letter-spacing:-.04em;color:#3E9BDB">Sem papel.</div>
+ </div>`);
+
+scene('gestao','light',`
+ <div style="position:absolute;left:140px;top:80px" class="kicker">Gestão em tempo real</div>
+ <div style="position:absolute;left:140px;top:120px" class="h">A clínica acompanha tudo</div>
+ <div style="position:absolute;left:140px;top:300px;right:140px;display:grid;grid-template-columns:repeat(3,1fr);gap:36px" id="kpis">
+   <div class="card" style="padding:40px"><div class="small" style="font-size:22px;font-weight:700;letter-spacing:.08em">VAGAS OCUPADAS</div><div style="font-size:110px;font-weight:800;letter-spacing:-.04em" id="k1">18</div><div style="font-size:24px;color:#5B6474">de 40 vagas</div><div style="height:16px;background:#EEF1F5;border-radius:99px;margin-top:20px;overflow:hidden"><div id="kb1" style="height:100%;width:45%;background:linear-gradient(90deg,#0A1A4A,#3E9BDB)"></div></div></div>
+   <div class="card" style="padding:40px"><div class="small" style="font-size:22px;font-weight:700;letter-spacing:.08em">PERMANÊNCIA MÉDIA</div><div style="font-size:110px;font-weight:800;letter-spacing:-.04em" id="k2">54</div><div style="font-size:24px;color:#5B6474">minutos hoje</div><div style="display:flex;gap:10px;margin-top:20px"><span class="chip ok" style="font-size:20px;height:38px">14 validados pelo exame</span></div></div>
+   <div class="card" style="padding:40px"><div class="small" style="font-size:22px;font-weight:700;letter-spacing:.08em">RECEITA DO ESTACIONAMENTO</div><div style="font-size:110px;font-weight:800;letter-spacing:-.04em">R$ <span id="k3">0</span></div><div style="font-size:24px;color:#5B6474">hoje · PIX e caixa</div><div style="display:flex;align-items:flex-end;gap:10px;height:60px;margin-top:20px" id="spark"></div></div>
+ </div>`);
+
+scene('end','navy',`
+ <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px">
+  <div style="background:#fff;border-radius:36px;padding:40px 64px" id="endLogo"><img src="${LOGO}" style="height:300px;display:block"></div>
+  <div style="font-size:30px;opacity:.85" id="endT">Agenda · Recepção · Caixa · Exames · Laudos · Estacionamento</div>
+ </div>
+ <div style="position:absolute;right:40px;bottom:24px;font-size:18px;opacity:.6">Valores e regras de cortesia ilustrativos</div>`);
+const spark=document.getElementById('spark');for(let i=0;i<12;i++){const b=document.createElement('i');b.style.cssText='flex:1;border-radius:6px;background:#DCE1E8;height:10%';spark.appendChild(b)}
+
+// ---------- timeline ----------
+// segments: [sceneId, captionText, weight(chars)]
+const SEG=[
+ ['intro','Na VidaCor Imagem, o cuidado começa antes mesmo de você chegar.'],
+ ['whats','Ao confirmar o exame pelo WhatsApp, você informa a placa do seu carro, e ela fica vinculada ao seu agendamento.'],
+ ['entrada','Na entrada, a câmera lê a placa em menos de um segundo.'],
+ ['entrada','O sistema reconhece o paciente, registra o horário e abre a cancela.'],
+ ['recepcao','Na recepção, o check-in já mostra o seu veículo, e o estacionamento é validado junto com o exame.'],
+ ['tempo','Enquanto você é atendido, o tempo de permanência é contado automaticamente.'],
+ ['pagar','Dentro da cortesia, a saída é livre.'],
+ ['pagar','Se passar do tempo, você paga pelo PIX, direto no WhatsApp, ou no caixa da recepção.'],
+ ['saida','Na saída, a câmera confere a placa e o pagamento, e a cancela abre sozinha.'],
+ ['statement','Sem ticket, sem fila, sem papel.'],
+ ['gestao','E a clínica acompanha tudo em tempo real: vagas, permanência e receita.'],
+ ['end','VidaCor Imagem. Tecnologia que cuida da sua vida.']
+];
+let TOTAL=60, LEAD=0.4, TAIL=2.2; // seconds; TOTAL set from audio duration
+let T=[]; // [{scene,cap,a,b}]
+function build(total){TOTAL=total;const w=SEG.map(s=>s[1].length+18);const sum=w.reduce((a,b)=>a+b,0);let t=LEAD;T=SEG.map((s,i)=>{const d=(TOTAL-LEAD-TAIL)*w[i]/sum;const o={scene:s[0],cap:s[1],a:t,b:t+d};t+=d;return o});T[T.length-1].b=TOTAL;}
+function sceneSpan(id){const xs=T.filter(x=>x.scene===id);return [xs[0].a,xs[xs.length-1].b]}
+
+function render(t){
+  // scene opacity with crossfade
+  for(const id in S){const [a,b]=sceneSpan(id);const f=0.45;let o=0;if(t>=a-f&&t<=b+f){o=Math.min(clamp((t-(a-f))/f),clamp((b+f-t)/f))}S[id].style.opacity=o;S[id].style.display=o>0?'block':'none'}
+  const cur=T.find(x=>t>=x.a&&t<x.b)||T[T.length-1];
+  const sub=document.getElementById('sub');sub.textContent=cur.cap;sub.style.opacity=(cur.scene==='end'||cur.scene==='statement')?0:1;
+  const p=id=>{const [a,b]=sceneSpan(id);return clamp((t-a)/(b-a))};
+  const g=(id)=>document.getElementById(id);
+  // intro
+  {const k=p('intro');g('introLogo').style.transform=`scale(${lerp(.85,1,ease(k*2))})`;g('introT').style.opacity=clamp(k*3-.6);g('introT').style.transform=`translateY(${lerp(30,0,ease(k*3-.6))}px)`}
+  // whats
+  {const k=p('whats');['w1','w2','w3','w4','w5'].forEach((id,i)=>{const v=clamp((k-.06-i*.12)*8);g(id).style.opacity=v;g(id).style.transform=`translateY(${(1-v)*20}px)`});const v=clamp((k-.68)*6);g('linkCard').style.opacity=v;g('linkCard').style.transform=`translateX(${(1-ease(v))*80}px)`}
+  // entrada
+  {const k=p('entrada');const cx=lerp(-600,820,ease(clamp(k/.45)));g('car1').style.left=cx+'px';const scan=clamp((k-.35)/.15);g('beam').style.opacity=k>.3&&k<.62?.5+.5*Math.sin(t*14):0;
+   g('ocr').style.opacity=clamp((k-.4)*6);g('scanbox').style.opacity=k<.55?(Math.sin(t*12)>0?1:.2):1;g('scanbox').style.borderColor=k<.55?'#3E9BDB':'#1F7A4D';
+   g('ocrOk').style.opacity=clamp((k-.55)*6);const arm=ease(clamp((k-.62)/.12));g('arm').style.transform=`rotate(${-80*arm}deg)`;if(k>.72){g('car1').style.left=lerp(820,2100,ease(clamp((k-.72)/.28)))+'px'}}
+  // recepcao
+  {const k=p('recepcao');g('rcard').style.opacity=clamp(k*5);g('rcard').style.transform=`translateY(${(1-ease(clamp(k*4)))*40}px)`;g('park').style.opacity=clamp((k-.3)*5);g('valid').style.transform=`scale(${k>.55?1+.06*Math.max(0,Math.sin((k-.55)*20)):0.001})`;g('valid').style.opacity=k>.55?1:0}
+  // tempo
+  {const k=p('tempo');const m=Math.round(lerp(0,54,ease(clamp(k/.85))));g('clock').textContent=m+' min';g('ring').setAttribute('stroke-dashoffset',1571*(1-m/120))}
+  // pagar
+  {const k=p('pagar');g('isento').style.opacity=clamp(k*5);g('phone2').style.opacity=clamp((k-.3)*5);g('phone2').style.transform=`translateY(${(1-ease(clamp((k-.3)*4)))*120}px) scale(.70)`;['p1','p2','p3'].forEach((id,i)=>g(id).style.opacity=clamp((k-.38-i*.14)*7));g('caixaTag').style.opacity=clamp((k-.8)*6)}
+  // saida
+  {const k=p('saida');g('car2').style.left=lerp(-560,340,ease(clamp(k/.3)))+'px';g('sumCard').style.opacity=clamp((k-.25)*6);g('libOk').style.opacity=clamp((k-.45)*8);const arm=ease(clamp((k-.45)/.12));g('arm2').style.transform=`rotate(${-80*arm}deg)`;if(k>.6)g('car2').style.left=lerp(340,2100,ease(clamp((k-.6)/.4)))+'px'}
+  // statement
+  {const k=p('statement');[...document.querySelectorAll('#stm .w')].forEach((el,i)=>{const v=clamp((k-i*.22)*5);el.style.opacity=v;el.style.transform=`translateY(${(1-ease(v))*40}px)`})}
+  // gestao
+  {const k=p('gestao');const v=ease(clamp(k*2));g('k1').textContent=Math.round(18*v);g('kb1').style.width=(45*v)+'%';g('k2').textContent=Math.round(54*v);g('k3').textContent=Math.round(184*v);[...spark.children].forEach((b,i)=>b.style.height=(10+ (20+((i*37)%60))*v)+'%');[...document.querySelectorAll('#kpis .card')].forEach((c,i)=>{const w=clamp((k-i*.08)*6);c.style.opacity=w;c.style.transform=`translateY(${(1-ease(w))*40}px)`})}
+  // end
+  {const k=p('end');g('endLogo').style.transform=`scale(${lerp(.9,1,ease(k*3))})`;g('endT').style.opacity=clamp(k*3-.5)}
+}
+function buildFixed(starts,total){TOTAL=total;T=SEG.map((x,i)=>({scene:x[0],cap:x[1],a:starts[i],b:i+1<starts.length?starts[i+1]:total}));}
+window.__buildFixed=buildFixed;window.__build=build;window.__render=render;
+</script></body></html>

@@ -22,6 +22,7 @@ do canvas; as cópias locais estão em `design/assets/` (veja
 | 5 | `Paciente.dc.html` | Paciente 360º + anatomia |
 | 6 | `Atendimento.dc.html` | Atendimento médico |
 | 7 | `Sala-Exame.dc.html` | Sala de exame |
+| 7b | `Aparelhos.dc.html` | Aparelhos e integração DICOM (imagem chega ao vivo) |
 | 8 | `Laudo.dc.html` | Laudar (estação do médico) |
 | 9 | `Visualizador.dc.html` | Visualizador de imagens (PACS) |
 | 10 | `Fluxo-Laudos.dc.html` | Fluxo de laudos, entrega e impressão |
@@ -58,3 +59,14 @@ do canvas; as cópias locais estão em `design/assets/` (veja
   responsável técnico.
 - Campos pendentes da clínica ficam entre colchetes: `[ENDEREÇO]`, `[CNPJ]`,
   `[CRM]`.
+
+## Vídeo comercial do estacionamento
+
+[`design/video/VidaCor-Estacionamento-Comercial.mp4`](../design/video/VidaCor-Estacionamento-Comercial.mp4)
+(69 s, 1080p, narração em português): confirmação pelo WhatsApp com a placa,
+vínculo da placa ao paciente, leitura na entrada, check-in que já mostra o
+veículo, permanência contada, cortesia ou pagamento por PIX, saída com a cancela
+abrindo sozinha e painel de gestão. Animação feita em HTML e renderizada quadro a
+quadro ([`tools/video-estacionamento/`](../tools/video-estacionamento/)). A
+narração foi gerada no ElevenLabs (voz "Isabela"). Valores e regras de cortesia
+são ilustrativos.

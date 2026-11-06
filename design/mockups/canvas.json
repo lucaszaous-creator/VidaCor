@@ -63,7 +63,7 @@
    "is_interactive": true
   },
   "Laudo.dc.html": {
-   "x": 3040,
+   "x": 4560,
    "y": 2720,
    "w": 1440,
    "h": 1800,
@@ -72,7 +72,7 @@
    "is_interactive": true
   },
   "Visualizador.dc.html": {
-   "x": 4560,
+   "x": 6080,
    "y": 2720,
    "w": 1440,
    "h": 1500,
@@ -81,7 +81,7 @@
    "is_interactive": true
   },
   "Fluxo-Laudos.dc.html": {
-   "x": 6080,
+   "x": 7600,
    "y": 2720,
    "w": 1440,
    "h": 1600,
@@ -91,7 +91,7 @@
   },
   "Faturamento.dc.html": {
    "x": 0,
-   "y": 4940,
+   "y": 5490,
    "w": 1440,
    "h": 2300,
    "title": "9 · Faturamento TISS (guias, lotes, glosas)",
@@ -100,7 +100,7 @@
   },
   "Financeiro.dc.html": {
    "x": 1520,
-   "y": 4940,
+   "y": 5490,
    "w": 1440,
    "h": 2250,
    "title": "10 · Financeiro (caixa, contas, DRE, repasse, NF)",
@@ -109,7 +109,7 @@
   },
   "Estoque.dc.html": {
    "x": 3040,
-   "y": 4940,
+   "y": 5490,
    "w": 1440,
    "h": 2150,
    "title": "11 · Estoque",
@@ -118,7 +118,7 @@
   },
   "Comunicacao.dc.html": {
    "x": 4560,
-   "y": 4940,
+   "y": 5490,
    "w": 1440,
    "h": 1900,
    "title": "12 · WhatsApp, automações, NPS e telemedicina",
@@ -127,7 +127,7 @@
   },
   "Indicadores.dc.html": {
    "x": 6080,
-   "y": 4940,
+   "y": 5490,
    "w": 1440,
    "h": 1950,
    "title": "13 · Indicadores",
@@ -136,7 +136,7 @@
   },
   "Configuracoes.dc.html": {
    "x": 7600,
-   "y": 4940,
+   "y": 5490,
    "w": 1440,
    "h": 2200,
    "title": "14 · Configurações, segurança e aparelhos",
@@ -145,7 +145,7 @@
   },
   "Portal-Web.dc.html": {
    "x": 0,
-   "y": 7660,
+   "y": 8210,
    "w": 1440,
    "h": 1950,
    "title": "15 · Portal do paciente (web)",
@@ -154,35 +154,35 @@
   },
   "App-Paciente.dc.html": {
    "x": 1520,
-   "y": 7660,
+   "y": 8210,
    "w": 390,
    "h": 844,
    "title": "16 · App do paciente"
   },
   "App-Bebe.dc.html": {
    "x": 1990,
-   "y": 7660,
+   "y": 8210,
    "w": 390,
    "h": 844,
    "title": "17 · Meus Exames Bebê"
   },
   "App-Medico.dc.html": {
    "x": 2460,
-   "y": 7660,
+   "y": 8210,
    "w": 390,
    "h": 844,
    "title": "18 · App do médico"
   },
   "Telao.dc.html": {
    "x": 2930,
-   "y": 7660,
+   "y": 8210,
    "w": 1280,
    "h": 720,
    "title": "19 · Painel de chamada (TV da sala de espera)"
   },
   "Laudo-Impresso.dc.html": {
    "x": 0,
-   "y": 10030,
+   "y": 10580,
    "w": 794,
    "h": 1123,
    "title": "20 · Laudo impresso (A4)",
@@ -190,7 +190,7 @@
   },
   "Preparo-Exame.dc.html": {
    "x": 874,
-   "y": 10030,
+   "y": 10580,
    "w": 794,
    "h": 1123,
    "title": "21 · Comprovante + preparo (A4)",
@@ -198,7 +198,7 @@
   },
   "Documentos.dc.html": {
    "x": 1748,
-   "y": 10030,
+   "y": 10580,
    "w": 794,
    "h": 1123,
    "title": "22 · Atestado, recibo e etiquetas (A4)",
@@ -221,6 +221,15 @@
    "title": "8b · Atendimento médico (evolução, prescrição, documentos)",
    "expand": "fill",
    "is_interactive": true
+  },
+  "Aparelhos.dc.html": {
+   "y": 2720,
+   "w": 1440,
+   "h": 2350,
+   "title": "Aparelhos e integração DICOM (imagem chega ao vivo)",
+   "expand": "fill",
+   "is_interactive": true,
+   "x": 3040
   }
  },
  "order": [
@@ -232,6 +241,7 @@
   "Paciente.dc.html",
   "Atendimento.dc.html",
   "Sala-Exame.dc.html",
+  "Aparelhos.dc.html",
   "Laudo.dc.html",
   "Visualizador.dc.html",
   "Fluxo-Laudos.dc.html",
@@ -263,32 +273,32 @@
    "y": 2420,
    "text": "Atendimento, exames, laudos e imagens",
    "kind": "title1",
-   "maxW": 7520
+   "maxW": 9040
   },
   "t3": {
    "x": 0,
-   "y": 4640,
+   "y": 5190,
    "text": "Gestão",
    "kind": "title1",
    "maxW": 9040
   },
   "t4": {
    "x": 0,
-   "y": 7360,
+   "y": 7910,
    "text": "Paciente e médico",
    "kind": "title1",
    "maxW": 4210
   },
   "t5": {
    "x": 0,
-   "y": 9730,
+   "y": 10280,
    "text": "Documentos impressos",
    "kind": "title1",
    "maxW": 2542
   },
   "n1": {
    "x": 4330,
-   "y": 7660,
+   "y": 8210,
    "w": 400,
    "fill": "blue",
    "size": "m",
@@ -296,7 +306,7 @@
   },
   "n2": {
    "x": 4770,
-   "y": 7660,
+   "y": 8210,
    "w": 400,
    "fill": "green",
    "size": "m",
@@ -304,7 +314,7 @@
   },
   "n3": {
    "x": 5210,
-   "y": 7660,
+   "y": 8210,
    "w": 400,
    "fill": "purple",
    "size": "m",
@@ -312,7 +322,7 @@
   },
   "n4": {
    "x": 4330,
-   "y": 8260,
+   "y": 8810,
    "w": 400,
    "fill": "orange",
    "size": "m",
@@ -320,7 +330,7 @@
   },
   "n5": {
    "x": 4770,
-   "y": 8260,
+   "y": 8810,
    "w": 400,
    "fill": "teal",
    "size": "m",

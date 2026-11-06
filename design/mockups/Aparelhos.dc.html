@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Aparelhos e integração DICOM — VidaCor Imagem</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F2F3F6}</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="aparelhos" userName="Bruno Teles" userRole="Técnico de TI / PACS" userInitials="BT" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><span>Exames</span><span aria-hidden="true">›</span><b>Aparelhos e integração DICOM</b></div>
+      <div class="grow"></div>
+      <button class="btn btn-sm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>Testar conexões (C-ECHO)</button>
+      <button class="btn btn-p btn-sm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Adicionar aparelho</button>
+    </div>
+
+    <div class="page-h">
+      <div class="grow">
+        <h1>Aparelhos conectados</h1>
+        <p>As imagens e as medidas chegam ao sistema enquanto o paciente ainda está na máquina. Sem pendrive, sem redigitar nome.</p>
+      </div>
+      <span class="chip c-green" style="height: 34px; padding: 0 14px"><span class="d"></span>Servidor de imagens online · VIDACOR_PACS</span>
+    </div>
+
+    <section class="card" aria-labelledby="fluxo-h">
+      <div class="card-h"><div><h2 id="fluxo-h">Como o exame chega ao sistema</h2><div class="sub">Caminho de cada paciente hoje, do check-in ao laudo</div></div></div>
+      <ol style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: 12px">
+        <li style="background: #F6F8FB; border-radius: 16px; padding: 16px">
+          <div class="row" style="gap: 10px"><span class="tile t-blue" style="width: 36px; height: 36px; font-weight: 700">1</span><span class="big" style="font-size: 26px">41</span></div>
+          <div class="t15 b" style="margin-top: 10px">Check-in na recepção</div>
+          <div class="t13 mute" style="margin-top: 4px">Gera o número do exame (accession) e a guia</div>
+        </li>
+        <li style="background: #F6F8FB; border-radius: 16px; padding: 16px">
+          <div class="row" style="gap: 10px"><span class="tile t-blue" style="width: 36px; height: 36px; font-weight: 700">2</span><span class="big" style="font-size: 26px">41</span></div>
+          <div class="t15 b" style="margin-top: 10px">Lista enviada ao aparelho</div>
+          <div class="t13 mute" style="margin-top: 4px">Worklist DICOM: nome, nascimento e exame já aparecem na máquina</div>
+        </li>
+        <li style="background: #F6F8FB; border-radius: 16px; padding: 16px">
+          <div class="row" style="gap: 10px"><span class="tile t-violet" style="width: 36px; height: 36px; font-weight: 700">3</span><span class="big" style="font-size: 26px">5</span></div>
+          <div class="t15 b" style="margin-top: 10px">Exame em andamento</div>
+          <div class="t13 mute" style="margin-top: 4px">O aparelho avisa início e fim (MPPS)</div>
+        </li>
+        <li style="background: #F6F8FB; border-radius: 16px; padding: 16px">
+          <div class="row" style="gap: 10px"><span class="tile t-teal" style="width: 36px; height: 36px; font-weight: 700">4</span><span class="big" style="font-size: 26px">1.284</span></div>
+          <div class="t15 b" style="margin-top: 10px">Imagens e medidas chegando</div>
+          <div class="t13 mute" style="margin-top: 4px">Envio automático a cada captura · média de 1,8 s</div>
+        </li>
+        <li style="background: #F6F8FB; border-radius: 16px; padding: 16px">
+          <div class="row" style="gap: 10px"><span class="tile t-amber" style="width: 36px; height: 36px; font-weight: 700">5</span><span class="big" style="font-size: 26px">1</span></div>
+          <div class="t15 b" style="margin-top: 10px">Conferência automática</div>
+          <div class="t13 mute" style="margin-top: 4px">Paciente × imagem; divergência vai para revisão</div>
+        </li>
+        <li style="background: #F6F8FB; border-radius: 16px; padding: 16px">
+          <div class="row" style="gap: 10px"><span class="tile t-green" style="width: 36px; height: 36px; font-weight: 700">6</span><span class="big" style="font-size: 26px">29</span></div>
+          <div class="t15 b" style="margin-top: 10px">Pronto para laudar</div>
+          <div class="t13 mute" style="margin-top: 4px">Entra no <a href="Fluxo-Laudos.dc.html">fluxo de laudos</a> com as medidas no laudo</div>
+        </li>
+      </ol>
+    </section>
+
+    <div class="split">
+      <section class="card main" aria-labelledby="live-h" style="padding: 0; overflow: hidden">
+        <div class="row wrap" style="padding: 20px 22px 14px; gap: 12px">
+          <div><h2 id="live-h" style="font-size: 18px; font-weight: 600">Ao vivo · Sala 1 · Ecocardiograma</h2><div class="t14 mute" style="margin-top: 3px">GE Vivid E95 · AE Title VIVID_S1 · 10.0.20.11</div></div>
+          <span class="chip c-rose" style="margin-left: auto"><span class="d"></span>Recebendo agora</span>
+          <div class="seg" role="tablist" aria-label="Sala ao vivo"><button class="on" role="tab" aria-selected="true">Sala 1</button><button role="tab" aria-selected="false">Sala 2</button><button role="tab" aria-selected="false">Sala 3</button><button role="tab" aria-selected="false">Sala 6</button></div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 0">
+          <div style="flex: 999 1 460px; min-width: 0; background: #05070B; position: relative; min-height: 380px; display: flex; align-items: center; justify-content: center">
+            <img src="/_blob/06906023f41361ed5100eedae375c38d" alt="Imagem de ecocardiograma recebida do aparelho (ilustrativa)" style="max-width: 100%; max-height: 380px; display: block">
+            <div style="position: absolute; left: 14px; top: 12px; font: 600 12px/1.5 Inter, sans-serif; color: #D6DEEA">SÔNIA MARIA CASTRO · 64 A · F<br>ACC 2026-118734 · Apical 4C</div>
+            <div style="position: absolute; right: 14px; top: 12px; font: 600 12px/1.5 Inter, sans-serif; color: #D6DEEA; text-align: right">Imagem 24 · 08:47:12<br>Recebida em 1,6 s</div>
+            <div style="position: absolute; left: 14px; bottom: 12px" class="chip c-green">✓ Paciente conferido: nome, nascimento e nº do exame</div>
+          </div>
+          <div style="flex: 1 1 300px; min-width: 0; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px">
+            <div>
+              <div class="lbl">Progresso do exame</div>
+              <div class="row" style="margin-top: 6px; align-items: flex-end"><span class="big" style="font-size: 30px">24<small>imagens</small></span><span class="t14 mute" style="margin-left: auto">+ 4 vídeos</span></div>
+              <div class="bar" style="margin-top: 8px"><i style="width: 63%"></i></div>
+              <div class="t13 mute" style="margin-top: 6px">Protocolo eco adulto: cerca de 38 imagens · início 08:41 (MPPS)</div>
+            </div>
+            <div>
+              <div class="lbl">Medidas que chegaram (DICOM SR)</div>
+              <ul style="list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 14px">
+                <li class="row"><span class="step ok">✓</span><span>Diâmetro diastólico VE</span><b class="num" style="margin-left: auto">48 mm</b></li>
+                <li class="row"><span class="step ok">✓</span><span>Átrio esquerdo</span><b class="num" style="margin-left: auto">36 mm</b></li>
+                <li class="row"><span class="step ok">✓</span><span>Fração de ejeção</span><b class="num" style="margin-left: auto">66%</b></li>
+                <li class="row"><span class="step ok">✓</span><span>Relação E/A</span><b class="num" style="margin-left: auto">0,7</b></li>
+                <li class="row"><span class="step todo">…</span><span class="mute">Doppler tecidual</span><span class="mute t13" style="margin-left: auto">aguardando</span></li>
+              </ul>
+            </div>
+            <a class="btn btn-b" href="Laudo.dc.html" style="margin-top: auto">Abrir no laudo enquanto o exame segue</a>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; padding: 14px 18px; overflow-x: auto; background: #0B0F17" aria-label="Últimas imagens recebidas">
+          <div class="dimg" style="flex: none; width: 112px; height: 84px"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt=""><span class="cap">24 · 08:47:12</span></div>
+          <div class="dimg" style="flex: none; width: 112px; height: 84px"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt=""><span class="cap">23 · 08:46:58</span></div>
+          <div class="dimg" style="flex: none; width: 112px; height: 84px"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt=""><span class="cap">Cine 4 · 08:46:31</span></div>
+          <div class="dimg" style="flex: none; width: 112px; height: 84px"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt=""><span class="cap">22 · 08:46:10</span></div>
+          <div class="dimg" style="flex: none; width: 112px; height: 84px"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt=""><span class="cap">21 · 08:45:52</span></div>
+          <div class="dimg" style="flex: none; width: 112px; height: 84px"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt=""><span class="cap">20 · 08:45:40</span></div>
+        </div>
+      </section>
+
+      <div class="aside col" style="gap: 16px">
+        <section class="card" aria-labelledby="rec-h">
+          <div class="card-h"><span class="tile t-amber"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg></span><div><h2 id="rec-h">Revisar vínculo</h2><div class="sub">1 estudo chegou sem correspondência exata</div></div></div>
+          <div style="background: #FFF8EC; border-radius: 14px; padding: 14px">
+            <div class="t13 mute">Tomografia · Sala 6 · 08:52 · digitado na máquina</div>
+            <div class="t15 b" style="margin-top: 4px">"LUCIA PRADO" · sem data de nascimento</div>
+            <div class="sep" style="margin: 10px 0"></div>
+            <div class="t13 mute">Sugestão do sistema (agenda 09:00, mesma sala)</div>
+            <div class="t15 b" style="margin-top: 4px">Lúcia Fernandes Prado · 02/07/1959</div>
+            <div class="row t13" style="margin-top: 6px; gap: 6px"><span class="chip c-blue">Nome parecido</span><span class="chip c-blue">Sala e horário batem</span></div>
+          </div>
+          <div class="row" style="margin-top: 12px; gap: 8px"><button class="btn btn-p btn-sm" style="flex: 1">Vincular e registrar</button><button class="btn btn-sm">Não é ela</button></div>
+          <p class="t12 mute" style="margin: 10px 0 0">O vínculo manual fica na auditoria com quem fez e o motivo. Imagem sem paciente nunca vai para laudo.</p>
+        </section>
+
+        <section class="card" aria-labelledby="conv-h">
+          <div class="card-h"><span class="tile t-teal"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4h10l6 6v10H4zM14 4v6h6M8 14h8M8 17h5"></path></svg></span><div><h2 id="conv-h">Conversor para DICOM</h2><div class="sub">Para o que o aparelho não envia sozinho</div></div></div>
+          <div class="li"><div style="flex: 1"><div class="t">Teste ergométrico · relatório PDF</div><div class="s">Micromed ErgoPC → DICOM encapsulado</div></div><span class="chip c-green">Automático</span></div>
+          <div class="li"><div style="flex: 1"><div class="t">MAPA · relatório PDF</div><div class="s">Pasta monitorada → anexado ao exame</div></div><span class="chip c-green">Automático</span></div>
+          <div class="li"><div style="flex: 1"><div class="t">Captura de vídeo (aparelho antigo)</div><div class="s">Placa de captura HDMI → imagens DICOM</div></div><span class="chip c-amber">Manual</span></div>
+        </section>
+      </div>
+    </div>
+
+    <section aria-labelledby="ap-h">
+      <div class="row" style="padding: 4px 8px 12px"><h2 id="ap-h" style="font-size: 20px; font-weight: 600">Todos os aparelhos</h2><span class="t14 mute" style="margin-left: 12px">6 de 7 online</span></div>
+      <div class="grid g3">
+        <article class="card">
+          <div class="row"><div class="dimg" style="width: 72px; height: 54px; flex: none"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt=""></div><div style="min-width: 0"><div class="t15 b clamp1">Ecocardiógrafo · Sala 1</div><div class="t13 mute clamp1">GE Vivid E95 · VIVID_S1</div></div></div>
+          <div class="row wrap" style="margin-top: 14px; gap: 8px"><span class="chip c-rose"><span class="d"></span>Em exame</span><span class="chip">Worklist ✓</span><span class="chip">SR ✓</span></div>
+          <div class="t14" style="margin-top: 12px">Sônia Maria Castro · 24 imagens</div>
+          <div class="bar" style="margin-top: 8px"><i style="width: 63%"></i></div>
+        </article>
+        <article class="card">
+          <div class="row"><div class="dimg" style="width: 72px; height: 54px; flex: none"><img src="/_blob/076a43844db07162429247531472081c" alt=""></div><div style="min-width: 0"><div class="t15 b clamp1">Ultrassom obstétrico · Sala 2</div><div class="t13 mute clamp1">Samsung V8 · USG_S2</div></div></div>
+          <div class="row wrap" style="margin-top: 14px; gap: 8px"><span class="chip c-rose"><span class="d"></span>Em exame</span><span class="chip">Worklist ✓</span><span class="chip">SR ✓</span></div>
+          <div class="t14" style="margin-top: 12px">Juliana Sampaio Rocha · 61 imagens · 3 vídeos</div>
+          <div class="bar" style="margin-top: 8px"><i style="width: 80%"></i></div>
+        </article>
+        <article class="card">
+          <div class="row"><div class="dimg" style="width: 72px; height: 54px; flex: none"><img src="/_blob/5d5abc0e3f9103b34da8cedf87fc15b2" alt=""></div><div style="min-width: 0"><div class="t15 b clamp1">Ultrassom e Doppler · Sala 3</div><div class="t13 mute clamp1">Philips Affiniti 70 · AFF_S3</div></div></div>
+          <div class="row wrap" style="margin-top: 14px; gap: 8px"><span class="chip c-rose"><span class="d"></span>Em exame</span><span class="chip">Worklist ✓</span><span class="chip">SR ✓</span></div>
+          <div class="t14" style="margin-top: 12px">Ivone R. Teixeira · Doppler de carótidas · 18 imagens</div>
+          <div class="bar" style="margin-top: 8px"><i style="width: 45%"></i></div>
+        </article>
+        <article class="card">
+          <div class="row"><span class="tile t-violet" style="width: 72px; height: 54px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h4l2-5 4 10 2-5h6"></path></svg></span><div style="min-width: 0"><div class="t15 b clamp1">Ergômetro · Sala 4</div><div class="t13 mute clamp1">Micromed ErgoPC · via conversor</div></div></div>
+          <div class="row wrap" style="margin-top: 14px; gap: 8px"><span class="chip c-rose"><span class="d"></span>Em exame</span><span class="chip">PDF → DICOM</span></div>
+          <div class="t14" style="margin-top: 12px">Gustavo H. Pires · esforço em andamento</div>
+          <div class="bar" style="margin-top: 8px"><i style="width: 55%"></i></div>
+        </article>
+        <article class="card">
+          <div class="row"><div class="dimg" style="width: 72px; height: 54px; flex: none"><img src="/_blob/f43a481a81537143aec82b37f7a14220" alt=""></div><div style="min-width: 0"><div class="t15 b clamp1">Raio X digital · Sala 5</div><div class="t13 mute clamp1">Carestream DRX · DRX_S5</div></div></div>
+          <div class="row wrap" style="margin-top: 14px; gap: 8px"><span class="chip c-green"><span class="d"></span>Livre</span><span class="chip">Worklist ✓</span><span class="chip">MPPS ✓</span></div>
+          <div class="t14" style="margin-top: 12px">Próximo: Rafael M. Lima · aguardando pagamento</div>
+          <div class="t13 mute" style="margin-top: 6px">Último estudo 08:32 · 2 imagens recebidas</div>
+        </article>
+        <article class="card">
+          <div class="row"><div class="dimg" style="width: 72px; height: 54px; flex: none"><img src="/_blob/61aa8c1eda64e280ef9de45e3cb63a07" alt=""></div><div style="min-width: 0"><div class="t15 b clamp1">Tomógrafo 16 canais · Sala 6</div><div class="t13 mute clamp1">Siemens Somatom go.Up · CT_S6</div></div></div>
+          <div class="row wrap" style="margin-top: 14px; gap: 8px"><span class="chip c-blue"><span class="d"></span>Enviando séries</span><span class="chip c-amber">1 vínculo a revisar</span></div>
+          <div class="t14" style="margin-top: 12px">Vera L. Antunes · série 3 de 4 · 412 imagens</div>
+          <div class="bar" style="margin-top: 8px"><i style="width: 75%"></i></div>
+        </article>
+        <article class="card" style="outline: 2px solid #F6C9D2">
+          <div class="row"><span class="tile t-rose" style="width: 72px; height: 54px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="2.5"></circle></svg></span><div style="min-width: 0"><div class="t15 b clamp1">Gravador de CD/DVD · Recepção</div><div class="t13 mute clamp1">Rimage · CD_REC</div></div></div>
+          <div class="row wrap" style="margin-top: 14px; gap: 8px"><span class="chip c-rose"><span class="d"></span>Offline desde 08:20</span></div>
+          <div class="t14" style="margin-top: 12px">2 CDs na fila · o técnico de TI foi avisado</div>
+          <button class="btn btn-sm" style="margin-top: 10px">Tentar reconectar</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="log-h">
+      <div class="card-h"><div><h2 id="log-h">Registro de comunicação</h2><div class="sub">Tudo o que os aparelhos trocaram com o sistema · atualiza sozinho</div></div><div class="seg" style="margin-left: auto"><button class="on btn-sm" style="height: 36px">Tudo</button><button style="height: 36px">Erros</button><button style="height: 36px">Sala 1</button></div></div>
+      <div class="scroll-x">
+        <table class="tb">
+          <thead><tr><th>Hora</th><th>Aparelho</th><th>O que aconteceu</th><th>Paciente · nº do exame</th><th>Resultado</th></tr></thead>
+          <tbody>
+            <tr><td class="nw num">08:52:40</td><td class="nw">Tomógrafo · S6</td><td>Estudo recebido com nome digitado na máquina</td><td class="nw">"LUCIA PRADO" · sem nº</td><td><span class="chip c-amber">Revisar vínculo</span></td></tr>
+            <tr><td class="nw num">08:47:12</td><td class="nw">Eco · S1</td><td>Imagem 24 recebida (Apical 4C)</td><td class="nw">Sônia M. Castro · 2026-118734</td><td><span class="chip c-green">OK · 1,6 s</span></td></tr>
+            <tr><td class="nw num">08:46:05</td><td class="nw">Eco · S1</td><td>Medidas recebidas (DICOM SR): 18 valores</td><td class="nw">Sônia M. Castro · 2026-118734</td><td><span class="chip c-green">Levadas ao laudo</span></td></tr>
+            <tr><td class="nw num">08:44:30</td><td class="nw">USG · S2</td><td>Vídeo de 12 s recebido</td><td class="nw">Juliana S. Rocha · 2026-118741</td><td><span class="chip c-green">OK</span></td></tr>
+            <tr><td class="nw num">08:41:02</td><td class="nw">Eco · S1</td><td>Exame iniciado no aparelho (MPPS)</td><td class="nw">Sônia M. Castro · 2026-118734</td><td><span class="chip c-blue">Em andamento</span></td></tr>
+            <tr><td class="nw num">08:40:51</td><td class="nw">Eco · S1</td><td>Aparelho consultou a lista de pacientes (worklist)</td><td class="nw">3 pacientes da sala 1</td><td><span class="chip c-green">OK</span></td></tr>
+            <tr><td class="nw num">08:32:18</td><td class="nw">Raio X · S5</td><td>Exame concluído no aparelho (MPPS) · 2 imagens</td><td class="nw">Caio V. Moraes · 2026-118722</td><td><span class="chip c-green">Pronto para laudar</span></td></tr>
+            <tr><td class="nw num">08:20:03</td><td class="nw">Gravador · Recepção</td><td>Sem resposta ao teste de conexão</td><td class="nw">—</td><td><span class="chip c-rose">Offline</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="cfg-h">
+      <div class="card-h"><div><h2 id="cfg-h">Configuração do servidor de imagens</h2><div class="sub">Dados para o técnico do aparelho cadastrar o VidaCor</div></div><a class="btn btn-sm" href="Configuracoes.dc.html" style="margin-left: auto">Abrir configurações</a></div>
+      <div class="grid g4">
+        <div><div class="lbl">AE Title do servidor</div><div class="t15 b" style="margin-top: 6px">VIDACOR_PACS</div></div>
+        <div><div class="lbl">Endereço e porta</div><div class="t15 b num" style="margin-top: 6px">10.0.20.2 · 11112</div></div>
+        <div><div class="lbl">Serviços ativos</div><div class="t15 b" style="margin-top: 6px">Worklist · MPPS · Envio · SR · Impressão</div></div>
+        <div><div class="lbl">Segurança</div><div class="t15 b" style="margin-top: 6px">Rede isolada · TLS · só aparelhos cadastrados</div></div>
+      </div>
+    </section>
+    <p class="t12 mute" style="margin: 0 8px">Mockup · dados e imagens ilustrativos · modelos de aparelho são exemplos, a confirmar no inventário da clínica</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2350}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
