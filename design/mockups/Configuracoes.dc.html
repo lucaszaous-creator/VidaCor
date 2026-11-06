@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Configurações — VidaCor Imagem</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F2F3F6}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="configuracoes" userName="Carla Mendes" userRole="Gerência" userInitials="CM" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><span>Gestão</span><span aria-hidden="true">›</span><b>Configurações</b></div>
+      <div class="grow"></div>
+      <button class="btn">Ver log de auditoria</button>
+      <button class="btn btn-p"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Convidar usuário</button>
+    </div>
+
+    <div class="page-h">
+      <div class="grow">
+        <h1>Configurações</h1>
+        <p>Usuários, segurança, aparelhos, exames, preços, salas, integrações, backup e LGPD</p>
+      </div>
+    </div>
+
+    <nav class="seg" aria-label="Seções das configurações" style="padding: 0 8px">
+      <a class="on" href="Configuracoes.dc.html" aria-current="page">Usuários e perfis</a>
+      <a href="Configuracoes.dc.html">Auditoria</a>
+      <a href="Configuracoes.dc.html">Aparelhos DICOM</a>
+      <a href="Configuracoes.dc.html">Exames, salas e horários</a>
+      <a href="Configuracoes.dc.html">Preços e convênios</a>
+      <a href="Configuracoes.dc.html">Modelos de laudo</a>
+      <a href="Configuracoes.dc.html">Impressoras e etiquetas</a>
+      <a href="Configuracoes.dc.html">Integrações e API</a>
+      <a href="Configuracoes.dc.html">Backup</a>
+      <a href="Configuracoes.dc.html">LGPD</a>
+      <a href="Configuracoes.dc.html">Clínica e marca</a>
+    </nav>
+
+    <section class="card" aria-labelledby="us-h">
+      <div class="card-h wrap"><div><h2 id="us-h">Usuários e perfis</h2><div class="sub">Permissão por ato · dado de saúde separado de dado cadastral · 2 fatores obrigatório</div></div>
+        <div class="row" style="margin-left: auto; gap: 8px"><span class="chip c-green">24 ativos · 100% com 2 fatores</span><label class="search" style="min-height: 40px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar usuário</span><input type="search" placeholder="Buscar usuário"></label></div>
+      </div>
+      <div class="scroll-x">
+        <table class="tb">
+          <thead><tr><th>Usuário</th><th>Perfil</th><th>2 fatores</th><th>Último acesso</th><th>Unidade</th><th class="r">Ações</th></tr></thead>
+          <tbody>
+            <tr><td><div class="row" style="gap: 10px"><span class="av av-sm" style="background: #0A1A4A; color: #fff">AS</span><div><b class="b nw">Ana Souza</b><div class="t13 mute nw">ana.souza@vidacor</div></div></div></td><td><span class="chip">Recepção</span></td><td><span class="chip c-green">App autenticador</span></td><td class="t14 nw">Hoje 06:52 · Recepção 1</td><td class="t14 nw">Centro</td><td class="r nw"><button class="btn btn-sm">Editar</button></td></tr>
+            <tr><td><div class="row" style="gap: 10px"><span class="av av-sm" style="background: #E8F2FB; color: #0C72B0">PM</span><div><b class="b nw">Dr. Paulo Medeiros</b><div class="t13 mute nw">CRM [UF 00000] · certificado A1 até 08/2027</div></div></div></td><td><span class="chip c-blue">Médico laudador</span></td><td><span class="chip c-green">App autenticador</span></td><td class="t14 nw">Hoje 07:40 · Sala 1</td><td class="t14 nw">Centro</td><td class="r nw"><button class="btn btn-sm">Editar</button></td></tr>
+            <tr><td><div class="row" style="gap: 10px"><span class="av av-sm" style="background: #EFEBFC; color: #5B45B5">RA</span><div><b class="b nw">Dra. Renata Alves</b><div class="t13 mute nw">CRM [UF 00000] · obstetrícia</div></div></div></td><td><span class="chip c-blue">Médico laudador</span></td><td><span class="chip c-green">App autenticador</span></td><td class="t14 nw">Hoje 07:12 · Sala 2</td><td class="t14 nw">Centro</td><td class="r nw"><button class="btn btn-sm">Editar</button></td></tr>
+            <tr><td><div class="row" style="gap: 10px"><span class="av av-sm" style="background: #FFF3DF; color: #9A5B00">CS</span><div><b class="b nw">Carla Sampaio</b><div class="t13 mute nw">Técnica de radiologia</div></div></div></td><td><span class="chip c-teal">Técnico de sala</span></td><td><span class="chip c-green">SMS</span></td><td class="t14 nw">Hoje 07:05 · Sala 6</td><td class="t14 nw">Centro</td><td class="r nw"><button class="btn btn-sm">Editar</button></td></tr>
+            <tr><td><div class="row" style="gap: 10px"><span class="av av-sm" style="background: #EFEBFC; color: #5B45B5">FB</span><div><b class="b nw">Fábio Brandão</b><div class="t13 mute nw">Faturista</div></div></div></td><td><span class="chip c-violet">Faturamento</span></td><td><span class="chip c-amber">Pendente · bloqueado até ativar</span></td><td class="t14 nw mute">Nunca acessou</td><td class="t14 nw">Centro</td><td class="r nw"><button class="btn btn-sm">Reenviar convite</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="split">
+      <section class="card half" aria-labelledby="pm-h">
+        <div class="card-h"><div><h2 id="pm-h">Permissões por perfil</h2><div class="sub">Cada ato é liberado separadamente</div></div><button class="btn btn-sm" style="margin-left: auto">Editar perfis</button></div>
+        <div class="scroll-x">
+          <table class="tb" style="min-width: 640px">
+            <thead><tr><th>Ato</th><th>Recepção</th><th>Técnico</th><th>Médico</th><th>Faturam.</th><th>Gerência</th></tr></thead>
+            <tbody>
+              <tr><td class="nw">Agendar e fazer check-in</td><td><span class="chip c-green">Sim</span></td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td><td><span class="chip c-green">Sim</span></td></tr>
+              <tr><td class="nw">Ver imagens e laudo</td><td><span class="chip">Não</span></td><td><span class="chip c-green">Sim</span></td><td><span class="chip c-green">Sim</span></td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td></tr>
+              <tr><td class="nw">Escrever evolução e prescrever</td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td><td><span class="chip c-green">Sim</span></td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td></tr>
+              <tr><td class="nw">Assinar e liberar laudo</td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td><td><span class="chip c-green">Sim</span></td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td></tr>
+              <tr><td class="nw">Abrir e fechar o caixa</td><td><span class="chip c-green">Sim</span></td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td><td><span class="chip c-green">Sim</span></td></tr>
+              <tr><td class="nw">Dar desconto acima de 10%</td><td><span class="chip c-amber">Com aprovação</span></td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td><td><span class="chip c-green">Sim</span></td></tr>
+              <tr><td class="nw">Gerar lote TISS e tratar glosa</td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td><td><span class="chip c-green">Sim</span></td><td><span class="chip c-green">Sim</span></td></tr>
+              <tr><td class="nw">Estornar pagamento</td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td><td><span class="chip c-green">Sim</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card half" aria-labelledby="au-h">
+        <div class="card-h"><div><h2 id="au-h">Auditoria</h2><div class="sub">Quem abriu prontuário, laudo ou imagem · guardado 20 anos</div></div><button class="btn btn-sm" style="margin-left: auto">Exportar</button></div>
+        <div class="li"><span class="tile t-blue" style="width: 38px; height: 38px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></span><div style="flex: 1; min-width: 0"><div class="t">Dr. Paulo abriu as imagens</div><div class="s">Sônia M. Castro · eco · 08:47 · Sala 1</div></div><span class="t13 mute nw">08:47</span></div>
+        <div class="li"><span class="tile t-violet" style="width: 38px; height: 38px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t">Laudo corrigido · versão 2</div><div class="s">Motivo: medida digitada errada · Dr. Marcos</div></div><span class="t13 mute nw">Ontem</span></div>
+        <div class="li"><span class="tile t-amber" style="width: 38px; height: 38px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8h18v12H3zM7 8V5h10v3"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t">Desconto de 15% aprovado</div><div class="s">Caixa 1 · aprovado por Carla Mendes · R$ 42,00</div></div><span class="t13 mute nw">Ontem</span></div>
+        <div class="li"><span class="tile t-rose" style="width: 38px; height: 38px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t">5 tentativas de senha erradas</div><div class="s">Usuário fabio.b · bloqueado por 15 min</div></div><span class="t13 mute nw">Ontem 19:12</span></div>
+      </section>
+    </div>
+
+    <div class="split">
+      <section class="card half" aria-labelledby="hr-h">
+        <div class="card-h"><div><h2 id="hr-h">Horários de funcionamento por sala</h2><div class="sub">A agenda só oferece horários dentro destes turnos</div></div><button class="btn btn-sm" style="margin-left: auto">Editar</button></div>
+        <div class="scroll-x">
+          <table class="tb" style="min-width: 640px">
+            <thead><tr><th>Sala</th><th>Seg a sex</th><th>Sábado</th><th>Intervalo</th><th>Duração padrão</th></tr></thead>
+            <tbody>
+              <tr><td class="nw"><b class="b">Sala 1 · Ecocardiograma</b></td><td class="nw num">07:00–19:00</td><td class="nw num">07:00–12:00</td><td class="nw num">12:00–13:00</td><td class="nw">30 min</td></tr>
+              <tr><td class="nw"><b class="b">Sala 2 · USG obstétrica</b></td><td class="nw num">07:00–19:00</td><td class="nw num">07:00–13:00</td><td class="nw num">12:30–13:30</td><td class="nw">30–60 min</td></tr>
+              <tr><td class="nw"><b class="b">Sala 3 · USG e Doppler</b></td><td class="nw num">07:00–18:00</td><td class="nw num">—</td><td class="nw num">12:00–13:00</td><td class="nw">20–40 min</td></tr>
+              <tr><td class="nw"><b class="b">Sala 4 · Ergométrico</b></td><td class="nw num">07:00–17:00</td><td class="nw num">—</td><td class="nw num">12:00–13:00</td><td class="nw">60 min</td></tr>
+              <tr><td class="nw"><b class="b">Sala 5 · Raio X</b></td><td class="nw num">07:00–21:00</td><td class="nw num">07:00–14:00</td><td class="nw num">Sem intervalo</td><td class="nw">10 min</td></tr>
+              <tr><td class="nw"><b class="b">Sala 6 · Tomografia</b></td><td class="nw num">07:00–21:00</td><td class="nw num">07:00–14:00</td><td class="nw num">Sem intervalo</td><td class="nw">20–40 min</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card half" aria-labelledby="fe-h">
+        <div class="card-h"><div><h2 id="fe-h">Feriados e bloqueios</h2><div class="sub">Pacientes já agendados são avisados por WhatsApp</div></div><button class="btn btn-sm" style="margin-left: auto">Novo bloqueio</button></div>
+        <div class="li"><span class="tile t-rose" style="width: 40px; height: 40px; font-weight: 700">15</span><div style="flex: 1"><div class="t">Proclamação da República</div><div class="s">15/11 · clínica fechada</div></div><span class="chip c-rose">Fechado</span></div>
+        <div class="li"><span class="tile t-amber" style="width: 40px; height: 40px; font-weight: 700">20</span><div style="flex: 1"><div class="t">Consciência Negra</div><div class="s">20/11 · plantão só Raio X e Tomografia</div></div><span class="chip c-amber">Meio período</span></div>
+        <div class="li"><span class="tile t-blue" style="width: 40px; height: 40px; font-weight: 700">27</span><div style="flex: 1"><div class="t">Manutenção do tomógrafo</div><div class="s">27/11 · 07:00–12:00 · Sala 6</div></div><span class="chip c-blue">Sala bloqueada</span></div>
+        <div class="li"><span class="tile t-gray" style="width: 40px; height: 40px; font-weight: 700">24</span><div style="flex: 1"><div class="t">Véspera de Natal</div><div class="s">24/12 · até 12:00</div></div><span class="chip">Meio período</span></div>
+      </section>
+    </div>
+
+    <div class="split">
+      <section class="card half" aria-labelledby="pr-h">
+        <div class="card-h"><div><h2 id="pr-h">Tabela de preços do particular</h2><div class="sub">Vigente desde 01/08/2026 · usada no orçamento e no caixa</div></div><button class="btn btn-sm" style="margin-left: auto">Nova tabela</button></div>
+        <div class="scroll-x">
+          <table class="tb" style="min-width: 600px">
+            <thead><tr><th>Exame</th><th>Código TUSS</th><th class="r">À vista (PIX)</th><th class="r">Cartão</th><th class="r">Desconto máx.</th></tr></thead>
+            <tbody>
+              <tr><td class="nw">Ecocardiograma transtorácico</td><td class="num nw">40901106</td><td class="r num nw">R$ 280,00</td><td class="r num nw">R$ 300,00</td><td class="r nw">10%</td></tr>
+              <tr><td class="nw">Doppler de carótidas</td><td class="num nw">40901386</td><td class="r num nw">R$ 240,00</td><td class="r num nw">R$ 260,00</td><td class="r nw">10%</td></tr>
+              <tr><td class="nw">USG obstétrica morfológica</td><td class="num nw">40901289</td><td class="r num nw">R$ 380,00</td><td class="r num nw">R$ 410,00</td><td class="r nw">5%</td></tr>
+              <tr><td class="nw">Teste ergométrico</td><td class="num nw">40101045</td><td class="r num nw">R$ 220,00</td><td class="r num nw">R$ 240,00</td><td class="r nw">10%</td></tr>
+              <tr><td class="nw">Raio X de tórax PA e perfil</td><td class="num nw">40805026</td><td class="r num nw">R$ 95,00</td><td class="r num nw">R$ 105,00</td><td class="r nw">10%</td></tr>
+              <tr><td class="nw">TC de crânio com contraste</td><td class="num nw">41001044</td><td class="r num nw">R$ 690,00</td><td class="r num nw">R$ 740,00</td><td class="r nw">5%</td></tr>
+              <tr><td class="nw">MAPA 24 horas</td><td class="num nw">20102038</td><td class="r num nw">R$ 210,00</td><td class="r num nw">R$ 230,00</td><td class="r nw">10%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="t13 mute" style="margin: 12px 0 0">Convênios usam a própria tabela (TUSS / CBHPM + porte) em Preços e convênios · 6 convênios ativos.</p>
+      </section>
+
+      <section class="card half" aria-labelledby="ap-h">
+        <div class="card-h"><div><h2 id="ap-h">Aparelhos DICOM</h2><div class="sub">Recebem a worklist e enviam imagens e medidas</div></div><button class="btn btn-sm" style="margin-left: auto">Adicionar</button></div>
+        <div class="scroll-x">
+          <table class="tb" style="min-width: 600px">
+            <thead><tr><th>Aparelho</th><th>AE Title · IP:porta</th><th>Recursos</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="nw"><b class="b">Ecocardiógrafo · Sala 1</b></td><td class="num t13 nw">ECO_S1 · 10.0.1.21:104</td><td class="nw t13">Worklist + SR</td><td><span class="chip c-green">Online</span></td></tr>
+              <tr><td class="nw"><b class="b">USG obstétrico · Sala 2</b></td><td class="num t13 nw">USG_S2 · 10.0.1.22:104</td><td class="nw t13">Worklist + SR</td><td><span class="chip c-green">Online</span></td></tr>
+              <tr><td class="nw"><b class="b">USG geral · Sala 3</b></td><td class="num t13 nw">USG_S3 · 10.0.1.23:104</td><td class="nw t13">Worklist + SR</td><td><span class="chip c-green">Online</span></td></tr>
+              <tr><td class="nw"><b class="b">Raio X digital · Sala 5</b></td><td class="num t13 nw">DR_S5 · 10.0.1.25:11112</td><td class="nw t13">Worklist</td><td><span class="chip c-green">Online</span></td></tr>
+              <tr><td class="nw"><b class="b">Tomógrafo · Sala 6</b></td><td class="num t13 nw">TC_S6 · 10.0.1.26:104</td><td class="nw t13">Worklist + MPPS</td><td><span class="chip c-amber">Sem resposta 3 min</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <div class="grid g3">
+      <section class="card" aria-labelledby="im-h">
+        <div class="card-h"><div><h2 id="im-h">Impressoras e etiquetas</h2><div class="sub">Onde cada documento sai</div></div></div>
+        <div class="li"><span class="tile t-gray" style="width: 38px; height: 38px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M8 14h8v7H8z"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t">Recepção 1 · laser</div><div class="s">Comprovante, recibo, preparo</div></div><span class="chip c-green">Pronta</span></div>
+        <div class="li"><span class="tile t-gray" style="width: 38px; height: 38px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16v12H4zM8 10h8M8 14h5"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t">Etiquetadora térmica</div><div class="s">Etiqueta 50 × 25 mm · código de barras</div></div><span class="chip c-green">Pronta</span></div>
+        <div class="li"><span class="tile t-gray" style="width: 38px; height: 38px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="2.5"></circle></svg></span><div style="flex: 1; min-width: 0"><div class="t">Robô de CD/DVD</div><div class="s">Gravação e impressão do disco</div></div><span class="chip c-amber">Tinta 12%</span></div>
+        <div class="li"><span class="tile t-gray" style="width: 38px; height: 38px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M8 14h8v7H8z"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t">Laudos · sala de entrega</div><div class="s">Papel timbrado A4</div></div><span class="chip c-green">Pronta</span></div>
+      </section>
+
+      <section class="card" aria-labelledby="in-h">
+        <div class="card-h"><div><h2 id="in-h">Integrações e API</h2><div class="sub">Chaves guardadas criptografadas</div></div></div>
+        <div class="li"><div style="flex: 1; min-width: 0"><div class="t">WhatsApp Business</div><div class="s">Número oficial · templates aprovados</div></div><span class="chip c-green">Conectado</span></div>
+        <div class="li"><div style="flex: 1; min-width: 0"><div class="t">NFS-e da prefeitura</div><div class="s">Emissão automática no particular</div></div><span class="chip c-green">Conectado</span></div>
+        <div class="li"><div style="flex: 1; min-width: 0"><div class="t">PIX e maquininha</div><div class="s">QR dinâmico, TEF e baixa automática</div></div><span class="chip c-green">Conectado</span></div>
+        <div class="li"><div style="flex: 1; min-width: 0"><div class="t">Memed e bulário</div><div class="s">Prescrição dos médicos</div></div><span class="chip c-green">Conectado</span></div>
+        <div class="li"><div style="flex: 1; min-width: 0"><div class="t">Estacionamento (placa)</div><div class="s">Valida a permanência no check-in</div></div><span class="chip c-green">Conectado</span></div>
+        <div class="li"><div style="flex: 1; min-width: 0"><div class="t">API da clínica</div><div class="s">2 chaves · agendamento online e site</div></div><button class="btn btn-sm">Gerenciar</button></div>
+      </section>
+
+      <div class="col" style="gap: 16px">
+        <section class="card" aria-labelledby="bk-h">
+          <div class="card-h"><span class="tile t-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"></path><path d="M8.5 12l2.5 2.5 4.5-5"></path></svg></span><div><h2 id="bk-h">Backup</h2><div class="sub">Servidor local + cópia criptografada externa</div></div></div>
+          <div class="li"><div style="flex: 1"><div class="t">Último backup completo</div><div class="s">Hoje 03:00 · 38 GB</div></div><span class="chip c-green">OK</span></div>
+          <div class="li"><div style="flex: 1"><div class="t">Teste de restauração</div><div class="s">01/11 · restaurado em 42 min</div></div><span class="chip c-green">Aprovado</span></div>
+          <div class="li"><div style="flex: 1"><div class="t">Espaço das imagens</div><div class="s">6,8 de 12 TB · ~14 meses livres</div></div><span class="chip c-blue">57%</span></div>
+        </section>
+        <section class="card" aria-labelledby="lg-h">
+          <div class="card-h"><div><h2 id="lg-h">LGPD e privacidade</h2><div class="sub">Encarregado (DPO): [NOME]</div></div></div>
+          <div class="li"><div style="flex: 1"><div class="t">Pedidos de titulares</div><div class="s">1 cópia de dados · prazo 15 dias</div></div><button class="btn btn-sm">Abrir</button></div>
+          <div class="li"><div style="flex: 1"><div class="t">Retenção de prontuário</div><div class="s">20 anos (Lei 13.787/2018)</div></div><span class="chip">Política ativa</span></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="split">
+      <section class="card half" aria-labelledby="ml-h">
+        <div class="card-h"><div><h2 id="ml-h">Exames, modelos e preparos</h2><div class="sub">O que mais se edita</div></div></div>
+        <div class="li"><div style="flex: 1"><div class="t">Modelos de laudo</div><div class="s">64 modelos · 1.120 frases · por médico e por exame</div></div><button class="btn btn-sm">Editar</button></div>
+        <div class="li"><div style="flex: 1"><div class="t">Exames e preparos</div><div class="s">58 exames · duração, sala, preparo, consumo de estoque</div></div><button class="btn btn-sm">Editar</button></div>
+        <div class="li"><div style="flex: 1"><div class="t">Modelos de documento</div><div class="s">Atestado, recibo, termo de contraste, termo de consentimento</div></div><button class="btn btn-sm">Editar</button></div>
+      </section>
+      <section class="card half" aria-labelledby="cl-h">
+        <div class="card-h"><div><h2 id="cl-h">Dados da clínica e marca</h2><div class="sub">Usados no laudo, nos documentos e no portal</div></div></div>
+        <div class="row wrap" style="gap: 16px">
+          <img src="/_blob/b7c4d276e5d12711e8acbc65374697af" alt="Logo atual da VidaCor Imagem" style="height: 84px; width: auto; border-radius: 12px; background: #fff">
+          <div class="col" style="gap: 6px; flex: 1 1 220px">
+            <div class="t14">CNPJ [00.000.000/0001-00]</div>
+            <div class="t14">Resp. técnico: [NOME] · CRM [UF 00000]</div>
+            <div class="t14">[ENDEREÇO] · [TELEFONE]</div>
+          </div>
+          <button class="btn btn-sm">Trocar logo</button>
+        </div>
+      </section>
+    </div>
+    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2200}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

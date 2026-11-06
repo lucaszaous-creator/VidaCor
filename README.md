@@ -1,0 +1,68 @@
+# VidaCor Imagem — sistema da clínica
+
+> **Tecnologia que cuida da sua vida.**
+
+Este repositório é o projeto **VidaCor**: um sistema próprio para a clínica de diagnóstico por imagem **VidaCor Imagem**. Ele vai substituir os
+sistemas que a clínica usa hoje (Medware, Mediworks e Medilab, mais o conversor
+para DICOM) e incluir o **estacionamento com leitura de placa**.
+
+## Estado atual
+
+| Etapa | Situação |
+|---|---|
+| Levantamento dos sistemas atuais (Medware, Medilab) | ✅ Feito — [docs/03](docs/03-levantamento-sistemas-atuais.md) |
+| Pesquisa do estacionamento com leitura de placa | ✅ Feita — [docs/02](docs/02-estacionamento-leitura-de-placa.md) |
+| Escopo funcional (todas as funções atuais + novas) | ✅ Primeira versão — [docs/04](docs/04-escopo-funcional.md) |
+| Design system | ✅ Primeira versão — [docs/05](docs/05-design-system.md) |
+| Mockups navegáveis (25 telas) | ✅ Terceira rodada aprovada — [docs/06](docs/06-mockups.md) |
+| Arquitetura proposta | ✅ Proposta — [docs/07](docs/07-arquitetura-proposta.md) |
+| Desenvolvimento | ⏳ Próximo passo — [docs/09](docs/09-proximos-passos.md) |
+
+**Mockup ao vivo:** https://claude.ai/artifact/NT2bm1UnVPJe9NGGs3HTii
+(privado; compartilhe pelo menu *Share* da página para outras pessoas abrirem).
+
+## Exames realizados pela clínica
+
+Ecocardiograma · Doppler de carótidas · USGs obstétricas e diversas (mais de 50
+tipos) · Teste ergométrico · Raio X · Tomografia · MAPA. A fachada também cita
+ressonância, mamografia e medicina nuclear.
+
+## O que tem aqui
+
+```
+README.md                    este arquivo
+docs/
+  01-historico-da-conversa.md   tudo o que foi discutido e decidido até agora
+  02-estacionamento-leitura-de-placa.md
+  03-levantamento-sistemas-atuais.md
+  04-escopo-funcional.md        módulos × funções, cobertura Medware/Medilab
+  05-design-system.md           cores, tipografia, componentes, regras de UX
+  06-mockups.md                 as 25 telas, rodadas de feedback e decisões
+  07-arquitetura-proposta.md    stack, servidor local, imagens (PACS), integrações
+  08-seguranca-lgpd-etica.md
+  09-proximos-passos.md
+  10-assets-e-licencas.md       origem do modelo 3D, imagens DICOM e logo
+design/
+  mockups/                   fonte das telas (.dc.html) + canvas.json
+  assets/vidacor.css         design system usado pelos mockups
+  assets/marca/              logo VidaCor (recortes) e imagem de referência
+  assets/anatomia/           renders anatômicos realistas (BodyParts3D)
+  assets/imagens-exame/      imagens ilustrativas de exame (DICOM de exemplo)
+  referencias/               referências de UI e prints de feedback do cliente
+tools/
+  render-anatomia/           como o mapa corporal 3D foi renderizado
+  imagens-dicom/             como as imagens de exame foram extraídas
+```
+
+## Princípios do produto
+
+- **Uma clínica, um sistema:** agenda, recepção, caixa, atendimento, exames,
+  laudos, imagens, faturamento TISS, financeiro, estoque, WhatsApp, portal e
+  estacionamento no mesmo lugar.
+- **Roda no servidor da clínica**, funciona sem internet (exceto PIX/WhatsApp),
+  com backup criptografado fora do local.
+- **Registro clínico nunca é apagado**: correção vira nova versão com motivo.
+- **Acessível e rápido no balcão**: contraste AA, status com cor + texto,
+  teclado, telas que não espremem.
+- **LGPD de verdade**: consentimento por finalidade, auditoria de acesso,
+  portal do paciente seguro.

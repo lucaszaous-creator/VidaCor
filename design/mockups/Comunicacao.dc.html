@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>WhatsApp, NPS e telemedicina — VidaCor Imagem</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F2F3F6}
+.conv{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:14px;color:#0F172A}
+.conv:hover{background:#F2F3F6;color:#0F172A}
+.conv.on{background:#E8F2FB}
+.msg{max-width:78%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.5}
+.msg.in{background:#F1F3F6;color:#0F172A;border-top-left-radius:4px}
+.msg.out{background:#0A1A4A;color:#fff;margin-left:auto;border-top-right-radius:4px}
+.msg .h{display:block;font-size:12px;margin-top:4px;opacity:.75;text-align:right}
+.sw{width:44px;height:26px;border-radius:999px;background:#0C72B0;position:relative;border:0;flex:none;cursor:pointer}
+.sw::after{content:"";position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff}
+.sw.off{background:#C9CFD8}.sw.off::after{right:auto;left:3px}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="comunicacao" userName="Carla Mendes" userRole="Gerência" userInitials="CM" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><span>Gestão</span><span aria-hidden="true">›</span><b>WhatsApp e NPS</b></div>
+      <div class="grow"></div>
+      <span class="chip c-green" style="height: 40px; padding: 0 14px"><span class="d"></span>WhatsApp Business conectado</span>
+      <button class="btn">Nova campanha</button>
+      <button class="btn btn-p">Nova conversa</button>
+    </div>
+
+    <div class="page-h">
+      <div class="grow">
+        <h1>Comunicação com pacientes</h1>
+        <p>Atendimento por WhatsApp em equipe, mensagens automáticas, pesquisa de satisfação e teleconsulta</p>
+      </div>
+      <div class="seg" role="tablist" aria-label="Seção"><button class="on" role="tab" aria-selected="true">Conversas</button><button role="tab" aria-selected="false">Automações</button><button role="tab" aria-selected="false">Campanhas</button><button role="tab" aria-selected="false">NPS</button><button role="tab" aria-selected="false">Telemedicina</button></div>
+    </div>
+
+    <section class="card" aria-label="Caixa de entrada do WhatsApp" style="padding: 0; display: flex; flex-wrap: wrap; overflow: hidden">
+      <div style="flex: 0 1 300px; min-width: 280px; border-right: 1px solid #E8EAEF; padding: 16px">
+        <div class="row" style="margin-bottom: 12px"><h2 style="font-size: 18px; font-weight: 600">Conversas</h2><span class="chip c-rose" style="margin-left: auto">5 sem resposta</span></div>
+        <div class="seg" style="margin-bottom: 10px"><button class="on" style="height: 34px">Minhas</button><button style="height: 34px">Fila</button><button style="height: 34px">Todas</button></div>
+        <a class="conv on" href="Comunicacao.dc.html"><span class="av" style="background: #EFEBFC; color: #5B45B5">PL</span><span style="flex: 1; min-width: 0"><span class="row"><b class="t15" style="font-weight: 600">Patrícia G. Lopes</b><span class="t12 mute" style="margin-left: auto">08:38</span></span><span class="t13 mute" style="display: block">Preciso ir de bexiga cheia?</span></span></a>
+        <a class="conv" href="Comunicacao.dc.html"><span class="av" style="background: #E8F2FB; color: #0C72B0">CN</span><span style="flex: 1; min-width: 0"><span class="row"><b class="t15" style="font-weight: 600">Cláudia B. Nunes</b><span class="t12 mute" style="margin-left: auto">08:31</span></span><span class="t13 mute" style="display: block">Confirmado ✓ (resposta automática)</span></span></a>
+        <a class="conv" href="Comunicacao.dc.html"><span class="av" style="background: #FFF3DF; color: #9A5B00">HM</span><span style="flex: 1; min-width: 0"><span class="row"><b class="t15" style="font-weight: 600">Hélio T. Mendes</b><span class="chip c-rose" style="margin-left: auto; height: 20px; font-size: 11px">2</span></span><span class="t13 mute" style="display: block">Quero remarcar o eco para segunda</span></span></a>
+        <a class="conv" href="Comunicacao.dc.html"><span class="av" style="background: #E5F5EC; color: #1F7A4D">BC</span><span style="flex: 1; min-width: 0"><span class="row"><b class="t15" style="font-weight: 600">Beatriz L. Cunha</b><span class="t12 mute" style="margin-left: auto">07:58</span></span><span class="t13 mute" style="display: block">Recebi o laudo, obrigada!</span></span></a>
+        <a class="conv" href="Comunicacao.dc.html"><span class="av" style="background: #F1F3F6; color: #334155">+55</span><span style="flex: 1; min-width: 0"><span class="row"><b class="t15" style="font-weight: 600">(21) 9 0000-0012</b><span class="t12 mute" style="margin-left: auto">ontem</span></span><span class="t13 mute" style="display: block">Vocês aceitam SulAmérica?</span></span></a>
+      </div>
+
+      <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; min-height: 600px">
+        <div class="row" style="padding: 14px 18px; border-bottom: 1px solid #E8EAEF">
+          <span class="av" style="background: #EFEBFC; color: #5B45B5">PL</span>
+          <div><b class="t15" style="font-weight: 600">Patrícia G. Lopes</b><div class="t13 mute">Atendida por Ana Souza · Recepção</div></div>
+          <button class="btn btn-sm" style="margin-left: auto">Transferir</button>
+          <button class="btn btn-sm">Encerrar</button>
+        </div>
+        <div style="flex: 1; padding: 18px; display: flex; flex-direction: column; gap: 10px; background: #FBFBFC">
+          <div class="msg out">Olá, Patrícia! Seu exame <b>USG obstétrica com Doppler</b> está marcado para hoje, 08:30, na VidaCor Imagem. Responda <b>1</b> para confirmar ou <b>2</b> para remarcar.<span class="h">Automática · ontem 18:00 ✓✓</span></div>
+          <div class="msg in">1<span class="h">ontem 18:04</span></div>
+          <div class="msg out">Confirmado! Veja o preparo: [link seguro]. O estacionamento libera a entrada pela placa.<span class="h">Automática · ontem 18:04 ✓✓</span></div>
+          <div class="msg in">Bom dia! Preciso ir de bexiga cheia?<span class="h">08:38</span></div>
+          <div class="msg out" style="background: #E8F2FB; color: #0F172A; border: 1px dashed #0C72B0">Sugestão de resposta: "Para obstétrica com Doppler acima de 14 semanas não é preciso bexiga cheia. Chegue 15 min antes." <span class="h" style="color: #0C72B0">Revise antes de enviar</span></div>
+        </div>
+        <div style="padding: 12px 18px; border-top: 1px solid #E8EAEF">
+          <div class="row wrap" style="gap: 8px; margin-bottom: 10px">
+            <button class="chip" style="border: 1px solid #D9DDE5; background: #fff; height: 32px; cursor: pointer">/preparo</button>
+            <button class="chip" style="border: 1px solid #D9DDE5; background: #fff; height: 32px; cursor: pointer">/endereco</button>
+            <button class="chip" style="border: 1px solid #D9DDE5; background: #fff; height: 32px; cursor: pointer">/convenios</button>
+            <button class="chip" style="border: 1px solid #D9DDE5; background: #fff; height: 32px; cursor: pointer">/remarcar</button>
+            <button class="chip" style="border: 1px solid #D9DDE5; background: #fff; height: 32px; cursor: pointer">/laudo-pronto</button>
+          </div>
+          <div class="row">
+            <label style="flex: 1"><span class="sr">Mensagem</span><input class="in" placeholder="Escreva uma mensagem ou digite / para respostas rápidas"></label>
+            <button class="icon-btn" aria-label="Anexar arquivo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 11l-9 9a5 5 0 0 1-7-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 0 1-3-3l8-8"></path></svg></button>
+            <button class="btn btn-p">Enviar</button>
+          </div>
+        </div>
+      </div>
+
+      <aside aria-label="Dados da paciente" style="flex: 1 1 300px; min-width: 280px; border-left: 1px solid #E8EAEF; border-top: 1px solid #E8EAEF; background: #FBFBFC; padding: 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px 24px; align-content: start">
+        <div class="stack-sm"><div class="lbl">Paciente</div><b class="t15" style="font-weight: 600; margin-top: 4px">Patrícia G. Lopes</b><div class="t13 mute">31 anos · Amil · gestante 28 semanas</div></div>
+        <div class="stack-sm"><div class="lbl">Hoje</div><div class="t14" style="margin-top: 4px">08:30 · USG obstétrica c/ Doppler · Sala 2</div><span class="chip c-green" style="align-self: flex-start; margin-top: 6px">Confirmado pelo WhatsApp</span></div>
+        <div class="stack-sm"><div class="lbl">Histórico</div><div class="t14" style="margin-top: 4px">Morfológica 2º tri · 12/09</div><div class="t14">Translucência nucal · 18/07</div></div>
+        <div class="stack-sm"><div class="lbl">Consentimentos (LGPD)</div><div class="t13 mute" style="margin-top: 4px">Lembretes: sim · Pesquisa: sim · Novidades: não</div><button class="btn btn-sm" style="align-self: flex-start; margin-top: 6px">Registrar opt-out</button></div>
+        <a class="btn btn-sm" href="Paciente.dc.html" style="align-self: end; justify-self: start">Abrir ficha</a>
+      </aside>
+    </section>
+
+    <div class="grid g2">
+      <section class="card" aria-labelledby="au-h">
+        <div class="card-h"><div><h2 id="au-h">Mensagens automáticas</h2><div class="sub">WhatsApp com SMS e e-mail se não for entregue</div></div></div>
+        <div class="li"><div style="flex: 1"><div class="t">Confirmação no dia anterior</div><div class="s">18:00 · 1 confirma, 2 remarca · <b class="b" style="color: #1F7A4D">87% confirmam</b></div></div><button class="sw" role="switch" aria-checked="true" aria-label="Confirmação ligada"></button></div>
+        <div class="li"><div style="flex: 1"><div class="t">Preparo do exame</div><div class="s">Junto com a confirmação · texto por tipo de exame</div></div><button class="sw" role="switch" aria-checked="true" aria-label="Preparo ligado"></button></div>
+        <div class="li"><div style="flex: 1"><div class="t">Laudo pronto</div><div class="s">Assim que o médico assina · link para o portal</div></div><button class="sw" role="switch" aria-checked="true" aria-label="Laudo pronto ligado"></button></div>
+        <div class="li"><div style="flex: 1"><div class="t">Pesquisa de satisfação (NPS)</div><div class="s">2 h após o atendimento · 41% respondem</div></div><button class="sw" role="switch" aria-checked="true" aria-label="NPS ligado"></button></div>
+        <div class="li"><div style="flex: 1"><div class="t">Aniversário</div><div class="s">Somente quem aceitou receber novidades</div></div><button class="sw off" role="switch" aria-checked="false" aria-label="Aniversário desligado"></button></div>
+        <div class="li"><div style="flex: 1"><div class="t">Retorno de exame periódico</div><div class="s">Ex.: eco anual · 30 dias antes</div></div><button class="sw off" role="switch" aria-checked="false" aria-label="Retorno desligado"></button></div>
+        <div class="li"><div style="flex: 1"><div class="t">Descadastro (opt-out) automático</div><div class="s">"SAIR" bloqueia novidades na hora · lembretes de exame continuam se o paciente quiser</div></div><button class="sw" role="switch" aria-checked="true" aria-label="Opt-out ligado"></button></div>
+      </section>
+
+      <div class="col" style="gap: 16px">
+        <section class="card" aria-labelledby="nps-h">
+          <div class="card-h"><div><h2 id="nps-h">NPS · novembro</h2><div class="sub">312 respostas</div></div><span class="chip c-green" style="margin-left: auto">78 · Excelente</span></div>
+          <div class="row" style="gap: 4px; height: 14px; border-radius: 999px; overflow: hidden" role="img" aria-label="82% promotores, 14% neutros, 4% detratores">
+            <i style="flex: 82; height: 100%; background: #1F7A4D"></i><i style="flex: 14; height: 100%; background: #C9CFD8"></i><i style="flex: 4; height: 100%; background: #C2334D"></i>
+          </div>
+          <div class="row t13" style="margin-top: 10px; gap: 16px"><span>Promotores <b class="b">82%</b></span><span>Neutros <b class="b">14%</b></span><span>Detratores <b class="b">4%</b></span></div>
+          <div class="li" style="margin-top: 8px"><span class="chip c-rose">3</span><div style="flex: 1"><div class="t">"Esperei 40 minutos na tomografia"</div><div class="s">Detrator · ontem · aguardando retorno da gerência</div></div><button class="btn btn-sm">Responder</button></div>
+        </section>
+
+        <section class="card" aria-labelledby="tm-h">
+          <div class="card-h"><span class="tile t-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 6h12v12H3zM15 10l6-3v10l-6-3"></path></svg></span><div><h2 id="tm-h">Telemedicina</h2><div class="sub">Entrega de resultado e orientação por vídeo · link seguro e gravação desligada</div></div></div>
+          <div class="li"><span class="av" style="background: #E8F2FB; color: #0C72B0">PM</span><div style="flex: 1"><div class="t">Dr. Paulo · Hélio T. Mendes</div><div class="s">Hoje 12:30 · resultado do ecocardiograma</div></div><button class="btn btn-sm btn-p">Entrar na sala</button></div>
+          <div class="li"><span class="av" style="background: #EFEBFC; color: #5B45B5">RA</span><div style="flex: 1"><div class="t">Dra. Renata · Fernanda A. Prado</div><div class="s">Seg 09:00 · orientação pós-exame</div></div><button class="btn btn-sm">Copiar link</button></div>
+        </section>
+      </div>
+    </div>
+    <div class="grid g2">
+      <section class="card" aria-labelledby="bot-h">
+        <div class="card-h"><span class="tile t-violet"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="8" width="16" height="12" rx="3"></rect><path d="M12 4v4M9 14h.01M15 14h.01M9.5 17h5"></path></svg></span><div><h2 id="bot-h">Robô de agendamento</h2><div class="sub">Marca, confirma e remarca 24 h · passa para a recepção quando precisa</div></div><button class="sw" role="switch" aria-checked="true" aria-label="Robô ligado" style="margin-left: auto"></button></div>
+        <div class="grid g3" style="gap: 12px">
+          <div><div class="lbl">Agendou sozinho</div><div class="big" style="font-size: 30px; margin-top: 4px">214<small>no mês</small></div></div>
+          <div><div class="lbl">Passou para humano</div><div class="big" style="font-size: 30px; margin-top: 4px">18%<small>das conversas</small></div></div>
+        </div>
+        <div class="sep" style="margin: 14px 0"></div>
+        <div class="t14 b" style="margin-bottom: 8px">Passa para a recepção quando</div>
+        <div class="row wrap" style="gap: 8px"><span class="chip">Paciente pede "atendente"</span><span class="chip">Exame com contraste</span><span class="chip">Convênio sem regra</span><span class="chip">Reclamação</span><span class="chip">Resultado alterado</span></div>
+      </section>
+      <section class="card" aria-labelledby="tp-h">
+        <div class="card-h"><div><h2 id="tp-h">Modelos de mensagem aprovados</h2><div class="sub">Templates oficiais do WhatsApp Business</div></div><button class="btn btn-sm" style="margin-left: auto">Novo modelo</button></div>
+        <div class="li"><div style="flex: 1; min-width: 0"><div class="t">confirmacao_exame_v3</div><div class="s">Utilidade · usado 1.284 vezes</div></div><span class="chip c-green">Aprovado</span></div>
+        <div class="li"><div style="flex: 1; min-width: 0"><div class="t">laudo_pronto_portal</div><div class="s">Utilidade · sem nome do exame (privacidade)</div></div><span class="chip c-green">Aprovado</span></div>
+        <div class="li"><div style="flex: 1; min-width: 0"><div class="t">preparo_tomografia_contraste</div><div class="s">Utilidade · com link seguro</div></div><span class="chip c-green">Aprovado</span></div>
+        <div class="li"><div style="flex: 1; min-width: 0"><div class="t">campanha_checkup_cardio</div><div class="s">Marketing · só quem aceitou novidades</div></div><span class="chip c-amber">Em análise</span></div>
+      </section>
+    </div>
+    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

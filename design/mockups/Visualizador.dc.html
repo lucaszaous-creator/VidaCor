@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Visualizador de imagens — VidaCor Imagem</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F2F3F6}
+.tool{width:44px;height:44px;border-radius:12px;border:0;background:transparent;color:#C9D3E2;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.tool:hover{background:#1A2333;color:#fff}
+.tool.on{background:#0C72B0;color:#fff}
+.vsep{width:1px;height:28px;background:#263045;margin:0 4px}
+.vp{position:relative;background:#000;border-radius:12px;overflow:hidden;min-height:0}
+.vp img{width:100%;height:100%;object-fit:contain;display:block}
+.vp.sel{outline:2px solid #3E9BDB;outline-offset:-2px}
+.ov{position:absolute;font-size:11.5px;line-height:1.5;color:#E3E9F2;text-shadow:0 1px 2px #000;font-variant-numeric:tabular-nums}
+.ser{display:block;border-radius:12px;padding:6px;color:#C9D3E2}
+.ser:hover{background:#1A2333;color:#fff}
+.ser.on{background:#16243A;outline:1px solid #3E9BDB}
+.ser .th{height:78px;background:#000;border-radius:8px;overflow:hidden}
+.ser .th img{width:100%;height:100%;object-fit:contain}
+.kv{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid #1E2738;font-size:13px}
+.kv span:first-child{color:#93A0B5;width:118px;flex:none}
+.kv span:last-child{color:#E6ECF5}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="visualizador" userName="Dr. Paulo Medeiros" userRole="Cardiologia" userInitials="PM" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><span>Exames</span><span aria-hidden="true">›</span><span>Visualizador</span><span aria-hidden="true">›</span><b>Vera Lúcia Antunes · TC de abdome com contraste</b></div>
+      <div class="grow"></div>
+      <div class="seg" role="tablist" aria-label="Layout"><button role="tab" aria-selected="false">1×1</button><button class="on" role="tab" aria-selected="true">2×2</button><button role="tab" aria-selected="false">1+3</button></div>
+      <a class="btn btn-p" href="Laudo.dc.html">Laudar este estudo</a>
+    </div>
+
+    <section aria-label="Visualizador DICOM" style="background: #0B0F17; border-radius: 22px; padding: 12px; color: #DCE3EE; display: flex; flex-direction: column; gap: 12px">
+      <div role="toolbar" aria-label="Ferramentas de imagem" class="row wrap" style="gap: 4px; padding: 4px 6px; background: #111827; border-radius: 14px">
+        <button class="tool on" aria-label="Janela e nível (W/L)" aria-pressed="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"></path></svg></button>
+        <button class="tool" aria-label="Zoom"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5M11 8v6M8 11h6"></path></svg></button>
+        <button class="tool" aria-label="Mover (pan)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 2v20M2 12h20M12 2l-3 3M12 2l3 3M12 22l-3-3M12 22l3-3M2 12l3-3M2 12l3 3M22 12l-3-3M22 12l-3 3"></path></svg></button>
+        <span class="vsep" aria-hidden="true"></span>
+        <button class="tool" aria-label="Medir distância"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 17L17 3l4 4L7 21zM7 13l2 2M10 10l2 2M13 7l2 2"></path></svg></button>
+        <button class="tool" aria-label="Medir ângulo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20L18 4M4 20h16M10 20a6 6 0 0 0-2-4.5"></path></svg></button>
+        <button class="tool" aria-label="Região de interesse (ROI) e densidade"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><ellipse cx="12" cy="12" rx="9" ry="6"></ellipse><path d="M12 12h.01"></path></svg></button>
+        <button class="tool" aria-label="Anotação de texto e seta"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20l7-7M4 20v-5M4 20h5M13 4h7v7h-7z"></path></svg></button>
+        <span class="vsep" aria-hidden="true"></span>
+        <button class="tool" aria-label="Reconstrução multiplanar (MPR)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5zM3 8v8l9 5 9-5V8M12 13v8"></path></svg></button>
+        <button class="tool" aria-label="Reconstrução 3D de volume"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11zM12 22V11M20 6.5L12 11 4 6.5"></path></svg></button>
+        <button class="tool" aria-label="Reproduzir cine"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 5l12 7-12 7z"></path></svg></button>
+        <button class="tool" aria-label="Comparar com exame anterior (sincronizar)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4h7v16H4zM13 4h7v16h-7zM8 9l-2 3 2 3M16 9l2 3-2 3"></path></svg></button>
+        <button class="tool" aria-label="Inverter cores"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"></rect><path d="M4 20L20 4" ></path></svg></button>
+        <button class="tool" aria-label="Rodar e espelhar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"></path></svg></button>
+        <button class="tool" aria-label="Marcar imagem-chave"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"></path></svg></button>
+        <div class="grow"></div>
+        <label class="row t13" style="gap: 8px; color: #AEB9CA">Janela
+          <select style="height: 36px; border-radius: 10px; border: 1px solid #2A3446; background: #141B27; color: #E6ECF5; padding: 0 10px; font: 500 13px Inter, sans-serif"><option>Partes moles 40/400</option><option>Cérebro 40/80</option><option>Pulmão −600/1500</option><option>Osso 400/1800</option></select>
+        </label>
+        <button class="btn btn-sm" style="background: #141B27; border-color: #2A3446; color: #E6ECF5">Exportar</button>
+        <button class="btn btn-sm" style="background: #141B27; border-color: #2A3446; color: #E6ECF5">Gravar CD/DVD</button>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch">
+        <nav aria-label="Séries do estudo" style="flex: 0 0 150px; display: flex; flex-direction: column; gap: 8px; overflow: hidden">
+          <span class="t12 b" style="color: #93A0B5; letter-spacing: .06em; text-transform: uppercase; padding: 2px 6px">Séries · 5</span>
+          <a class="ser on" href="Visualizador.dc.html"><div class="th"><img src="/_blob/b397e8ff60e8605ce0897e61b093b786" alt=""></div><div class="t12" style="margin-top: 6px">S3 · Axial portal<br><span style="color: #93A0B5">142 imagens</span></div></a>
+          <a class="ser" href="Visualizador.dc.html"><div class="th"><img src="/_blob/f43a481a81537143aec82b37f7a14220" alt=""></div><div class="t12" style="margin-top: 6px">S2 · Tórax axial<br><span style="color: #93A0B5">98 imagens</span></div></a>
+          <a class="ser" href="Visualizador.dc.html"><div class="th"><img src="/_blob/61aa8c1eda64e280ef9de45e3cb63a07" alt=""></div><div class="t12" style="margin-top: 6px">S1 · Crânio<br><span style="color: #93A0B5">36 imagens</span></div></a>
+          <a class="ser" href="Visualizador.dc.html"><div class="th"><img src="/_blob/cba5ba52fe397626d893b1a8488f752d" alt=""></div><div class="t12" style="margin-top: 6px">Anterior · Cintilografia<br><span style="color: #93A0B5">03/2025</span></div></a>
+          <a class="ser" href="Visualizador.dc.html"><div class="th" style="display: flex; align-items: center; justify-content: center; color: #93A0B5; font-size: 12px">Laudo PDF</div><div class="t12" style="margin-top: 6px">Documento<br><span style="color: #93A0B5">versão 1</span></div></a>
+        </nav>
+
+        <div style="flex: 999 1 560px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, 420px); gap: 8px; min-width: 0">
+          <div class="vp sel" role="img" aria-label="Viewport 1: RM de abdome axial, série 3, com medida de 38 milímetros">
+            <img src="/_blob/b397e8ff60e8605ce0897e61b093b786" alt="">
+            <span class="ov" style="top: 8px; left: 10px">ANTUNES, VERA LÚCIA<br>F · 58a · ID 2026-118690<br>TC abdome c/ contraste</span>
+            <span class="ov" style="top: 8px; right: 10px; text-align: right">06/11/2026 07:41<br>S3 · Im 64/142<br>Esp. 2,5 mm</span>
+            <span class="ov" style="bottom: 8px; left: 10px">W 400 · L 40<br>Zoom 112%</span>
+            <span class="ov" style="bottom: 8px; right: 10px; text-align: right">VidaCor Imagem<br>Sala 6</span>
+            <svg aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%"><line x1="22" y1="38" x2="36" y2="52" stroke="#FACC15" stroke-width="0.5"></line><circle cx="22" cy="38" r="0.9" fill="#FACC15"></circle><circle cx="36" cy="52" r="0.9" fill="#FACC15"></circle></svg>
+            <span class="ov" style="left: 37%; top: 52%; color: #FACC15; font-weight: 700">38,2 mm</span>
+          </div>
+          <div class="vp" role="img" aria-label="Viewport 2: TC de tórax axial, janela de partes moles">
+            <img src="/_blob/f43a481a81537143aec82b37f7a14220" alt="">
+            <span class="ov" style="top: 8px; left: 10px">S2 · Tórax axial<br>Im 48/98</span>
+            <span class="ov" style="bottom: 8px; left: 10px">W 400 · L 40</span>
+          </div>
+          <div class="vp" role="img" aria-label="Viewport 3: TC de crânio axial, janela de cérebro">
+            <img src="/_blob/61aa8c1eda64e280ef9de45e3cb63a07" alt="">
+            <span class="ov" style="top: 8px; left: 10px">S1 · Crânio axial<br>Im 18/36</span>
+            <span class="ov" style="bottom: 8px; left: 10px">W 80 · L 40</span>
+            <span class="ov" style="top: 8px; right: 10px; color: #7DD3FC">ROI 34 UH ±4</span>
+          </div>
+          <div class="vp" role="img" aria-label="Viewport 4: exame anterior, cintilografia de corpo inteiro de março de 2025, para comparação">
+            <img src="/_blob/cba5ba52fe397626d893b1a8488f752d" alt="">
+            <span class="ov" style="top: 8px; left: 10px">ANTERIOR · 14/03/2025<br>Cintilografia óssea</span>
+            <span class="ov" style="top: 8px; right: 10px; text-align: right; color: #FACC15">Comparação<br>sincronizada</span>
+          </div>
+        </div>
+
+        <aside aria-label="Informações do estudo" style="flex: 1 1 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 12px">
+          <div style="background: #111827; border-radius: 14px; padding: 14px">
+            <div class="t14 b" style="color: #fff; margin-bottom: 6px">Dados DICOM</div>
+            <div class="kv"><span>Modalidade</span><span>CT · Tomógrafo 16 canais</span></div>
+            <div class="kv"><span>Accession</span><span>2026-118690</span></div>
+            <div class="kv"><span>Protocolo</span><span>Abdome trifásico</span></div>
+            <div class="kv"><span>Contraste</span><span>Iohexol 300 · 90 mL</span></div>
+            <div class="kv"><span>Dose (DLP)</span><span>612 mGy·cm</span></div>
+            <div class="kv" style="border: 0"><span>Recebido</span><span>07:52 · 142 imagens</span></div>
+          </div>
+          <div style="background: #111827; border-radius: 14px; padding: 14px">
+            <div class="t14 b" style="color: #fff; margin-bottom: 8px">Estudos anteriores</div>
+            <a class="row" href="Visualizador.dc.html" style="color: #E6ECF5; padding: 8px 0; border-bottom: 1px solid #1E2738"><span class="t13 grow">Cintilografia óssea</span><span class="t12" style="color: #93A0B5">03/2025</span></a>
+            <a class="row" href="Visualizador.dc.html" style="color: #E6ECF5; padding: 8px 0; border-bottom: 1px solid #1E2738"><span class="t13 grow">USG abdome total</span><span class="t12" style="color: #93A0B5">11/2024</span></a>
+            <a class="row" href="Visualizador.dc.html" style="color: #E6ECF5; padding: 8px 0"><span class="t13 grow">TC abdome</span><span class="t12" style="color: #93A0B5">06/2023</span></a>
+          </div>
+          <div style="background: #111827; border-radius: 14px; padding: 14px">
+            <div class="row" style="margin-bottom: 8px"><span class="t14 b" style="color: #fff">Imagens-chave</span><span class="chip" style="margin-left: auto; background: #1A2333; color: #C9D3E2">2</span></div>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+              <div class="dimg" style="height: 70px"><img src="/_blob/b397e8ff60e8605ce0897e61b093b786" alt="Imagem-chave 1"><span class="cap">Im 64</span></div>
+              <div class="dimg" style="height: 70px"><img src="/_blob/b397e8ff60e8605ce0897e61b093b786" alt="Imagem-chave 2"><span class="cap">Im 71</span></div>
+            </div>
+            <p class="t12" style="color: #93A0B5; margin: 10px 0 0">Vão anexadas ao laudo e ao portal do paciente.</p>
+          </div>
+          <div style="background: #111827; border-radius: 14px; padding: 14px">
+            <div class="t14 b" style="color: #fff; margin-bottom: 6px">Acesso registrado</div>
+            <p class="t12" style="color: #AEB9CA; margin: 0; line-height: 1.6">Aberto por Dr. Paulo Medeiros às 08:41, estação Sala de laudo 2. Toda visualização fica na auditoria (LGPD).</p>
+          </div>
+        </aside>
+      </div>
+      <div class="row t13" style="color: #93A0B5; padding: 0 6px 2px; gap: 18px; flex-wrap: wrap"><span>Atalhos: W janela · Z zoom · M medir · ↑↓ trocar imagem · C cine</span><span style="margin-left: auto">Imagens de exemplo públicas (pydicom) · uso ilustrativo</span></div>
+    </section>
+    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · visualizador para laudo exige software registrado na Anvisa ou validação regulatória</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

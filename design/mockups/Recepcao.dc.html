@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Recepção — VidaCor Imagem</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F2F3F6}
+.tl{border-radius:10px;margin:3px;padding:6px 9px;display:flex;flex-direction:column;justify-content:center;gap:1px;font-size:12.5px;line-height:1.3;min-width:0;overflow:hidden}
+.tl b{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t-ag{background:#fff;border:1px solid #E1E5EB}
+.t-wait{background:#FFF3DF;border:1px solid #F5D49A}
+.t-exam{background:#E8F2FB;border:1px solid #B5D6F0}
+.t-laud{background:#EFEBFC;border:1px solid #D2C8F2}
+.t-ok{background:#E5F5EC;border:1px solid #B4DFC6}
+.t-blk{background:repeating-linear-gradient(135deg,#F1F3F6 0 8px,#E6E9EE 8px 16px);border:1px solid #E1E4EA;color:#5B6474}
+.pc{background:#fff;border-radius:20px;padding:18px 20px;box-shadow:0 1px 2px rgba(15,23,42,.04);display:flex;flex-direction:column;gap:14px;border:1.5px solid transparent}
+.pc.sel{border-color:#0C72B0;box-shadow:0 0 0 4px #E8F2FB}
+.cnt{flex:1;min-width:150px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14)}
+.doc{border-radius:12px;background:#F1F3F6;border:1px dashed #C3CAD5;aspect-ratio:3/2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px;color:#334155;text-align:center;padding:6px}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="recepcao" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><span>VidaCor</span><span aria-hidden="true">›</span><span>Clínica</span><span aria-hidden="true">›</span><b>Recepção e senhas</b></div>
+      <div class="grow"></div>
+      <a class="btn btn-sm" href="Telao.dc.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 5h18v12H3zM8 21h8M12 17v4"></path></svg>Abrir painel da TV</a>
+      <a class="btn btn-sm" href="Caixa.dc.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8h18v12H3zM7 8V5h10v3M12 12v4M10 14h4"></path></svg>Caixa</a>
+      <button class="btn btn-p"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Check-in <span class="kbd" style="background: transparent; color: #fff; border-color: rgba(255,255,255,.4)">F2</span></button>
+    </div>
+
+    <div class="page-h">
+      <div class="grow">
+        <h1>Recepção</h1>
+        <p>7 aguardando · espera média 12 min · 11 horários livres hoje · Guichê 2 · Ana Souza</p>
+      </div>
+    </div>
+
+    <section aria-labelledby="balcao-h" style="border-radius: 22px; padding: 22px 24px; background: linear-gradient(135deg, #0A1A4A 0%, #13285F 100%); color: #FFFFFF; display: flex; gap: 24px; flex-wrap: wrap; align-items: stretch">
+      <div style="flex: 1 1 420px; display: flex; flex-direction: column; gap: 14px; min-width: 0">
+        <div class="row" style="gap: 10px"><h2 id="balcao-h" style="font-size: 15px; font-weight: 600; color: #B9CCE8; letter-spacing: .02em">Agora no balcão</h2>
+          <label class="row" style="gap: 8px; margin-left: auto; font-size: 13px; color: #DCE6F5">Guichê
+            <select style="height: 34px; border-radius: 999px; border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.1); color: #fff; padding: 0 12px; font: 600 13px Inter, sans-serif"><option>Guichê 2</option><option>Guichê 1</option><option>Guichê 3</option></select>
+          </label>
+        </div>
+        <div class="row" style="gap: 18px; align-items: center">
+          <div style="font-size: 64px; font-weight: 700; letter-spacing: -.03em; line-height: 1">P012</div>
+          <div style="min-width: 0">
+            <div style="font-size: 19px; font-weight: 600" class="nw">Antônio Carlos Ribeiro</div>
+            <div class="t14" style="color: #DCE6F5">Preferencial 60+ · Eco + Doppler de carótidas · chamado há 1 min</div>
+          </div>
+        </div>
+        <div class="row wrap" style="gap: 10px">
+          <button class="btn" style="background: #FFFFFF; border-color: #FFFFFF; color: #0A1A4A">Chamar próxima · N034</button>
+          <button class="btn" style="background: transparent; border-color: rgba(255,255,255,.4); color: #FFFFFF">Rechamar</button>
+          <button class="btn" style="background: transparent; border-color: rgba(255,255,255,.4); color: #FFFFFF">Encaminhar para…</button>
+          <button class="btn" style="background: transparent; border-color: rgba(255,255,255,.4); color: #FFFFFF">Não compareceu</button>
+        </div>
+      </div>
+      <div style="flex: 1 1 420px; display: flex; gap: 12px; flex-wrap: wrap; align-content: center">
+        <div class="cnt"><div class="t13" style="color: #B9CCE8">Normal</div><div style="font-size: 34px; font-weight: 650" class="num">4</div><div class="t13" style="color: #DCE6F5">próxima N034 · espera 10 min</div></div>
+        <div class="cnt"><div class="t13" style="color: #B9CCE8">Preferencial</div><div style="font-size: 34px; font-weight: 650" class="num">2</div><div class="t13" style="color: #DCE6F5">próxima P013 · espera 4 min</div></div>
+        <div class="cnt"><div class="t13" style="color: #B9CCE8">Retirada de resultado</div><div style="font-size: 34px; font-weight: 650" class="num">1</div><div class="t13" style="color: #DCE6F5">R007 · laudo impresso pronto</div></div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="linha-h" style="padding: 20px 0 8px">
+      <div class="card-h" style="padding: 0 22px"><div><h2 id="linha-h">Linha do dia</h2><div class="sub">Todas as salas · os quadros tracejados são horários livres, toque para encaixar</div></div>
+        <div class="row wrap t13" style="gap: 12px; margin-left: auto; color: #334155">
+          <span class="row" style="gap: 6px"><i style="width: 12px; height: 12px; border-radius: 4px; background: #FFF3DF; border: 1px solid #F5D49A"></i>Aguardando</span>
+          <span class="row" style="gap: 6px"><i style="width: 12px; height: 12px; border-radius: 4px; background: #E8F2FB; border: 1px solid #B5D6F0"></i>Em exame</span>
+          <span class="row" style="gap: 6px"><i style="width: 12px; height: 12px; border-radius: 4px; background: #EFEBFC; border: 1px solid #D2C8F2"></i>Laudando</span>
+          <span class="row" style="gap: 6px"><i style="width: 12px; height: 12px; border-radius: 4px; background: #E5F5EC; border: 1px solid #B4DFC6"></i>Concluído</span>
+          <span class="row" style="gap: 6px"><i style="width: 12px; height: 12px; border-radius: 4px; border: 1.5px dashed #9CC7E8; background: #F5FAFE"></i>Livre</span>
+        </div>
+      </div>
+      <div class="scroll-x">
+        <div style="display: grid; grid-template-columns: 170px repeat(10, minmax(104px, 1fr)); grid-template-rows: 34px repeat(7, 62px); min-width: 1220px; position: relative; padding: 0 12px 0 0">
+          <div class="t12 mute num" style="grid-column: 2; grid-row: 1; padding: 8px 6px">07:00</div>
+          <div class="t12 mute num" style="grid-column: 3; grid-row: 1; padding: 8px 6px">07:30</div>
+          <div class="t12 mute num" style="grid-column: 4; grid-row: 1; padding: 8px 6px">08:00</div>
+          <div class="t12 mute num" style="grid-column: 5; grid-row: 1; padding: 8px 6px">08:30</div>
+          <div class="t12 mute num" style="grid-column: 6; grid-row: 1; padding: 8px 6px">09:00</div>
+          <div class="t12 mute num" style="grid-column: 7; grid-row: 1; padding: 8px 6px">09:30</div>
+          <div class="t12 mute num" style="grid-column: 8; grid-row: 1; padding: 8px 6px">10:00</div>
+          <div class="t12 mute num" style="grid-column: 9; grid-row: 1; padding: 8px 6px">10:30</div>
+          <div class="t12 mute num" style="grid-column: 10; grid-row: 1; padding: 8px 6px">11:00</div>
+          <div class="t12 mute num" style="grid-column: 11; grid-row: 1; padding: 8px 6px">11:30</div>
+
+          <div style="grid-column: 1; grid-row: 2; padding: 10px 22px; line-height: 1.3; border-top: 1px solid #EEF0F3"><b class="t14 nw" style="font-weight: 600">Ecocardiograma</b><br><span class="t12 mute">Sala 1 · Dr. Paulo</span></div>
+          <div style="grid-column: 1; grid-row: 3; padding: 10px 22px; line-height: 1.3; border-top: 1px solid #EEF0F3"><b class="t14 nw" style="font-weight: 600">USG obstétrica</b><br><span class="t12 mute">Sala 2 · Dra. Renata</span></div>
+          <div style="grid-column: 1; grid-row: 4; padding: 10px 22px; line-height: 1.3; border-top: 1px solid #EEF0F3"><b class="t14 nw" style="font-weight: 600">USG e Doppler</b><br><span class="t12 mute">Sala 3 · Dr. Marcos</span></div>
+          <div style="grid-column: 1; grid-row: 5; padding: 10px 22px; line-height: 1.3; border-top: 1px solid #EEF0F3"><b class="t14 nw" style="font-weight: 600">Ergométrico</b><br><span class="t12 mute">Sala 4 · Dr. Paulo</span></div>
+          <div style="grid-column: 1; grid-row: 6; padding: 10px 22px; line-height: 1.3; border-top: 1px solid #EEF0F3"><b class="t14 nw" style="font-weight: 600">Raio X</b><br><span class="t12 mute">Sala 5 · Téc. Bruno</span></div>
+          <div style="grid-column: 1; grid-row: 7; padding: 10px 22px; line-height: 1.3; border-top: 1px solid #EEF0F3"><b class="t14 nw" style="font-weight: 600">Tomografia</b><br><span class="t12 mute">Sala 6 · Téc. Carla</span></div>
+          <div style="grid-column: 1; grid-row: 8; padding: 10px 22px; line-height: 1.3; border-top: 1px solid #EEF0F3"><b class="t14 nw" style="font-weight: 600">MAPA e Holter</b><br><span class="t12 mute">Sala 7 · Enf. Lívia</span></div>
+
+          <div class="tl t-ok" style="grid-column: 2; grid-row: 2"><b>Maria H. Duarte</b><span class="mute">Concluído</span></div>
+          <div class="tl t-laud" style="grid-column: 3; grid-row: 2"><b>João P. Alves</b><span class="mute">Laudando</span></div>
+          <div class="tl t-exam" style="grid-column: 4; grid-row: 2"><b>Sônia M. Castro</b><span class="mute">Em exame</span></div>
+          <div class="tl t-wait" style="grid-column: 5; grid-row: 2"><b>Antônio C. Ribeiro</b><span style="color: #9A5B00">P012 · 19 min</span></div>
+          <div class="tl t-ag" style="grid-column: 6; grid-row: 2"><b>Cláudia B. Nunes</b><span class="mute">Confirmada</span></div>
+          <button class="slot-free" style="margin: 3px; grid-column: 7; grid-row: 2" aria-label="Encaixar às 09:30 no ecocardiograma">09:30 livre</button>
+          <div class="tl t-ag" style="grid-column: 8; grid-row: 2"><b>Hélio T. Mendes</b><span class="mute">Particular</span></div>
+          <button class="slot-free" style="margin: 3px; grid-column: 9; grid-row: 2" aria-label="Encaixar às 10:30 no ecocardiograma">10:30 livre</button>
+          <div class="tl t-blk" style="grid-column: 10 / span 2; grid-row: 2"><b>Reunião clínica</b><span>Bloqueado</span></div>
+
+          <div class="tl t-ok" style="grid-column: 2; grid-row: 3"><b>Beatriz L. Cunha</b><span class="mute">Concluído</span></div>
+          <div class="tl t-exam" style="grid-column: 3 / span 2; grid-row: 3"><b>Juliana S. Rocha</b><span class="mute">Morfológica · 60 min</span></div>
+          <div class="tl t-ag" style="grid-column: 5; grid-row: 3"><b>Patrícia G. Lopes</b><span class="mute">Confirmada</span></div>
+          <button class="slot-free" style="margin: 3px; grid-column: 6; grid-row: 3" aria-label="Encaixar às 09:00 na USG obstétrica">09:00 livre · Encaixar</button>
+          <div class="tl t-ag" style="grid-column: 7; grid-row: 3"><b>Fernanda A. Prado</b><span class="mute">Transluc. nucal</span></div>
+          <div class="tl t-ag" style="grid-column: 8 / span 2; grid-row: 3"><b>Carla M. Teles</b><span class="mute">Morfológica 1º tri</span></div>
+          <div class="tl t-ag" style="grid-column: 10; grid-row: 3"><b>Débora S. Lins</b><span class="mute">Perfil biofísico</span></div>
+          <button class="slot-free" style="margin: 3px; grid-column: 11; grid-row: 3" aria-label="Encaixar às 11:30 na USG obstétrica">11:30 livre</button>
+
+          <div class="tl t-laud" style="grid-column: 2; grid-row: 4"><b>Roberto F. Lima</b><span class="mute">Laudando</span></div>
+          <div class="tl t-exam" style="grid-column: 3; grid-row: 4"><b>Ivone R. Teixeira</b><span class="mute">Em exame</span></div>
+          <div class="tl t-ag" style="grid-column: 4; grid-row: 4"><b>Sérgio A. Moura</b><span class="mute">Doppler venoso</span></div>
+          <div class="tl t-wait" style="grid-column: 5; grid-row: 4"><b>Marcelo D. Faria</b><span style="color: #9A5B00">N036 · jejum ok</span></div>
+          <div class="tl t-ag" style="grid-column: 6; grid-row: 4"><b>Rita C. Barbosa</b><span class="mute">Tireoide</span></div>
+          <button class="slot-free" style="margin: 3px; grid-column: 7; grid-row: 4" aria-label="Encaixar às 09:30 na USG e Doppler">09:30 livre</button>
+          <button class="slot-free" style="margin: 3px; grid-column: 8; grid-row: 4" aria-label="Encaixar às 10:00 na USG e Doppler">10:00 livre</button>
+          <div class="tl t-ag" style="grid-column: 9; grid-row: 4"><b>Paula R. Dias</b><span class="mute">Mamas</span></div>
+          <div class="tl t-ag" style="grid-column: 10; grid-row: 4"><b>Enzo M. Castro</b><span class="mute">Rins</span></div>
+          <button class="slot-free" style="margin: 3px; grid-column: 11; grid-row: 4" aria-label="Encaixar às 11:30 na USG e Doppler">11:30 livre</button>
+
+          <div class="tl t-ok" style="grid-column: 2 / span 2; grid-row: 5"><b>Eduardo M. Vaz</b><span class="mute">Concluído</span></div>
+          <div class="tl t-exam" style="grid-column: 4 / span 2; grid-row: 5"><b>Gustavo H. Pires</b><span class="mute">Em exame</span></div>
+          <button class="slot-free" style="margin: 3px; grid-column: 6; grid-row: 5" aria-label="Encaixar às 09:00 no ergométrico">09:00 livre</button>
+          <div class="tl t-ag" style="grid-column: 7 / span 2; grid-row: 5"><b>Simone A. Reis</b><span class="mute">Trazer tênis</span></div>
+          <div class="tl t-ag" style="grid-column: 9 / span 2; grid-row: 5"><b>Henrique Matos</b><span class="mute">Particular</span></div>
+          <button class="slot-free" style="margin: 3px; grid-column: 11; grid-row: 5" aria-label="Encaixar às 11:30 no ergométrico">11:30 livre</button>
+
+          <div class="tl t-ok" style="grid-column: 2; grid-row: 6"><b>Caio V. Moraes</b><span class="mute">Concluído</span></div>
+          <div class="tl t-laud" style="grid-column: 3; grid-row: 6"><b>Denise P. Gomes</b><span class="mute">Laudando</span></div>
+          <div class="tl t-wait" style="grid-column: 4; grid-row: 6"><b>Rafael M. Lima</b><span style="color: #9A5B00">N035 · pagar</span></div>
+          <div class="tl t-ag" style="grid-column: 5; grid-row: 6"><b>Tiago S. Braga</b><span class="mute">Tórax</span></div>
+          <div class="tl t-ag" style="grid-column: 6; grid-row: 6"><b>Laura N. Costa</b><span class="mute">Coluna</span></div>
+          <button class="slot-free" style="margin: 3px; grid-column: 7; grid-row: 6" aria-label="Encaixar às 09:30 no raio X">09:30 livre</button>
+          <div class="tl t-ag" style="grid-column: 8; grid-row: 6"><b>Pedro H. Sales</b><span class="mute">Seios da face</span></div>
+          <button class="slot-free" style="margin: 3px; grid-column: 9 / span 3; grid-row: 6" aria-label="Raio X por ordem de chegada das 10:30 às 12:00">Ordem de chegada · 10:30–12:00</button>
+
+          <div class="tl t-laud" style="grid-column: 2 / span 2; grid-row: 7"><b>Vera L. Antunes</b><span class="mute">TC abdome · laudando</span></div>
+          <div class="tl t-wait" style="grid-column: 4 / span 2; grid-row: 7"><b>Lúcia F. Prado</b><span style="color: #C2334D">Alergia a iodo · avaliar</span></div>
+          <button class="slot-free" style="margin: 3px; grid-column: 6; grid-row: 7" aria-label="Encaixar às 09:00 na tomografia">09:00 livre</button>
+          <div class="tl t-ag" style="grid-column: 7; grid-row: 7"><b>Otávio R. Sales</b><span class="mute">TC tórax</span></div>
+          <button class="slot-free" style="margin: 3px; grid-column: 8; grid-row: 7" aria-label="Encaixar às 10:00 na tomografia">10:00 livre</button>
+          <button class="slot-free" style="margin: 3px; grid-column: 9 / span 2; grid-row: 7" aria-label="Encaixar às 10:30 na tomografia, 60 minutos">10:30 livre · 60 min</button>
+
+          <div class="tl t-ok" style="grid-column: 2; grid-row: 8"><b>Mário J. Pinto</b><span class="mute">Retirada</span></div>
+          <div class="tl t-exam" style="grid-column: 4; grid-row: 8"><b>Neusa A. Freitas</b><span class="mute">Instalação</span></div>
+          <div class="tl t-ag" style="grid-column: 6; grid-row: 8"><b>Jorge L. Batista</b><span class="mute">Holter 24 h</span></div>
+          <button class="slot-free" style="margin: 3px; grid-column: 8; grid-row: 8" aria-label="Encaixar às 10:00 no MAPA">10:00 livre</button>
+          <button class="slot-free" style="margin: 3px; grid-column: 10; grid-row: 8" aria-label="Encaixar às 11:00 no MAPA">11:00 livre</button>
+
+          <div aria-hidden="true" style="grid-column: 5; grid-row: 1 / -1; width: 2px; margin-left: 33%; background: #C2334D; z-index: 3"></div>
+          <div class="num" style="grid-column: 5; grid-row: 1; margin-left: calc(33% - 22px); align-self: center; z-index: 4; justify-self: start; background: #C2334D; color: #fff; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 2px 7px">08:40</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="split">
+      <section class="main col" aria-labelledby="ck-h" style="gap: 12px">
+        <div class="row wrap" style="padding: 4px 8px 0; gap: 10px">
+          <div><h2 id="ck-h" style="font-size: 20px; font-weight: 600">Check-in</h2><div class="t14 mute" style="margin-top: 3px">Cada etapa também pode ser feita antes, pelo app ou pelo WhatsApp</div></div>
+          <div class="seg" style="margin-left: auto"><button class="on">Aguardando · 5</button><button>Na sala · 5</button><button>Concluídos · 14</button></div>
+        </div>
+
+        <article class="pc sel" aria-label="Antônio Carlos Ribeiro, selecionado">
+          <div class="row" style="gap: 14px; align-items: flex-start">
+            <span class="av" style="background: #E8F2FB; color: #0C72B0">AR</span>
+            <div style="flex: 1; min-width: 0">
+              <div class="row wrap" style="gap: 8px"><b class="t15 nw" style="font-weight: 600; font-size: 16px">Antônio Carlos Ribeiro</b><span class="chip c-navy" style="height: 24px; font-size: 12px">P012 · 60+</span></div>
+              <div class="t14 mute" style="margin-top: 3px">Eco + Doppler de carótidas · 08:30 · Unimed · placa QRT4B21 validada</div>
+            </div>
+            <div style="text-align: right; flex: none"><div class="t13 mute">Esperando</div><div class="t15 b num" style="color: #9A5B00">19 min</div></div>
+          </div>
+          <div class="row wrap" style="gap: 12px">
+            <div class="row wrap" style="gap: 6px; flex: 1 1 360px">
+              <span class="step ok">✓ Identidade</span><span class="step ok">✓ Elegível</span><span class="step ok">✓ Guia</span><span class="step ok">✓ Pedido</span><span class="step todo">Termo · não se aplica</span><span class="step ok">✓ Convênio</span>
+            </div>
+            <button class="btn btn-b btn-sm">Enviar para a Sala 1</button>
+          </div>
+        </article>
+
+        <article class="pc" aria-label="Juliana Sampaio Rocha">
+          <div class="row" style="gap: 14px; align-items: flex-start">
+            <span class="av" style="background: #EFEBFC; color: #5B45B5">JR</span>
+            <div style="flex: 1; min-width: 0">
+              <div class="row wrap" style="gap: 8px"><b class="nw" style="font-weight: 600; font-size: 16px">Juliana Sampaio Rocha</b><span class="chip c-navy" style="height: 24px; font-size: 12px">P014 · gestante</span></div>
+              <div class="t14 mute" style="margin-top: 3px">USG morfológica 2º trimestre · 08:45 · Bradesco Saúde · 22 semanas</div>
+            </div>
+            <div style="text-align: right; flex: none"><div class="t13 mute">Esperando</div><div class="t15 b num">10 min</div></div>
+          </div>
+          <div class="row wrap" style="gap: 12px">
+            <div class="row wrap" style="gap: 6px; flex: 1 1 360px">
+              <span class="step ok">✓ Identidade</span><span class="step ok">✓ Elegível</span><span class="step ok">✓ Guia</span><span class="step warn">! Pedido médico</span><span class="step todo">Termo · não se aplica</span><span class="step ok">✓ Convênio</span>
+            </div>
+            <button class="btn btn-b btn-sm">Fotografar pedido</button>
+          </div>
+        </article>
+
+        <article class="pc" aria-label="Rafael Monteiro Lima">
+          <div class="row" style="gap: 14px; align-items: flex-start">
+            <span class="av" style="background: #E5F5EC; color: #1F7A4D">RL</span>
+            <div style="flex: 1; min-width: 0">
+              <div class="row wrap" style="gap: 8px"><b class="nw" style="font-weight: 600; font-size: 16px">Rafael Monteiro Lima</b><span class="chip" style="height: 24px; font-size: 12px">N035</span></div>
+              <div class="t14 mute" style="margin-top: 3px">Raio X de tórax PA e perfil · 08:50 · Particular · orçamento R$ 120,00</div>
+            </div>
+            <div style="text-align: right; flex: none"><div class="t13 mute">Esperando</div><div class="t15 b num">6 min</div></div>
+          </div>
+          <div class="row wrap" style="gap: 12px">
+            <div class="row wrap" style="gap: 6px; flex: 1 1 360px">
+              <span class="step ok">✓ Identidade</span><span class="step todo">Elegível · particular</span><span class="step ok">✓ Pedido</span><span class="step todo">Termo · não se aplica</span><span class="step warn">! Pagamento</span>
+            </div>
+            <a class="btn btn-b btn-sm" href="Caixa.dc.html">Receber no caixa</a>
+          </div>
+        </article>
+
+        <article class="pc" aria-label="Lúcia Fernandes Prado">
+          <div class="row" style="gap: 14px; align-items: flex-start">
+            <span class="av" style="background: #FDEEF1; color: #C2334D">LP</span>
+            <div style="flex: 1; min-width: 0">
+              <div class="row wrap" style="gap: 8px"><b class="nw" style="font-weight: 600; font-size: 16px">Lúcia Fernandes Prado</b><span class="chip c-navy" style="height: 24px; font-size: 12px">P013 · 60+</span><span class="chip c-rose" style="height: 24px; font-size: 12px">Alergia a iodo</span></div>
+              <div class="t14 mute" style="margin-top: 3px">Tomografia de crânio com contraste · 09:00 · SulAmérica</div>
+            </div>
+            <div style="text-align: right; flex: none"><div class="t13 mute">Esperando</div><div class="t15 b num">4 min</div></div>
+          </div>
+          <div class="row wrap" style="gap: 12px">
+            <div class="row wrap" style="gap: 6px; flex: 1 1 360px">
+              <span class="step ok">✓ Identidade</span><span class="step ok">✓ Elegível</span><span class="step warn">! Guia em autorização</span><span class="step ok">✓ Pedido</span><span class="step bad">Termo · médico deve avaliar</span>
+            </div>
+            <button class="btn btn-b btn-sm">Avisar o médico</button>
+          </div>
+        </article>
+
+        <article class="pc" aria-label="Marcelo Dias Faria">
+          <div class="row" style="gap: 14px; align-items: flex-start">
+            <span class="av" style="background: #FFF3DF; color: #9A5B00">MF</span>
+            <div style="flex: 1; min-width: 0">
+              <div class="row wrap" style="gap: 8px"><b class="nw" style="font-weight: 600; font-size: 16px">Marcelo Dias Faria</b><span class="chip" style="height: 24px; font-size: 12px">N036</span><span class="chip c-green" style="height: 24px; font-size: 12px">Jejum 8 h confirmado</span></div>
+              <div class="t14 mute" style="margin-top: 3px">USG de abdome total · 09:00 · Unimed</div>
+            </div>
+            <div style="text-align: right; flex: none"><div class="t13 mute">Chegou</div><div class="t15 b num">agora</div></div>
+          </div>
+          <div class="row wrap" style="gap: 12px">
+            <div class="row wrap" style="gap: 6px; flex: 1 1 360px">
+              <span class="step warn">! Identidade</span><span class="step ok">✓ Elegível</span><span class="step ok">✓ Guia</span><span class="step ok">✓ Pedido</span><span class="step todo">Termo · não se aplica</span><span class="step ok">✓ Convênio</span>
+            </div>
+            <button class="btn btn-b btn-sm">Conferir documento</button>
+          </div>
+        </article>
+      </section>
+
+      <aside class="aside col" style="gap: 16px">
+        <section class="card" aria-labelledby="det-h">
+          <div class="card-h"><span class="av" style="background: #E8F2FB; color: #0C72B0">AR</span><div style="min-width: 0"><h2 id="det-h" class="nw" style="font-size: 17px">Antônio Carlos Ribeiro</h2><div class="sub">72 anos · Unimed · protocolo 2026-118790</div></div><a class="t13 b" href="Paciente.dc.html" style="margin-left: auto">Ficha</a></div>
+          <div class="lbl" style="margin-bottom: 8px">Documentos do check-in</div>
+          <div class="grid" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+            <div class="doc"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F7A4D" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg>Documento com foto</div>
+            <div class="doc"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F7A4D" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg>Carteirinha Unimed</div>
+            <div class="doc"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F7A4D" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg>Pedido · Dr. Hugo Lemos</div>
+          </div>
+          <div class="row" style="gap: 10px; margin-top: 14px; padding: 12px 14px; border-radius: 14px; background: #E5F5EC">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F7A4D" stroke-width="2" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"></path><path d="M8.5 12l2.5 2.5 4.5-5"></path></svg>
+            <div class="t14" style="color: #14532D"><b>Elegível</b> · consulta às 08:21 · guia 88412011 autorizada (2 procedimentos)</div>
+          </div>
+          <div class="row" style="gap: 10px; margin-top: 10px; padding: 12px 14px; border-radius: 14px; background: #F1F3F6">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2" aria-hidden="true"><path d="M5 17h14l-1.5-6.5A2 2 0 0 0 15.6 9H8.4a2 2 0 0 0-1.9 1.5zM7 17v2M17 17v2"></path></svg>
+            <div class="t14" style="color: #334155"><b>QRT4B21</b> · entrou 08:12 · saída liberada até 11:30</div>
+          </div>
+
+          <div class="lbl" style="margin: 18px 0 8px">Etiqueta de identificação</div>
+          <div style="border: 1px solid #D9DDE5; border-radius: 10px; padding: 10px 12px; display: flex; gap: 12px; align-items: center; background: #fff">
+            <svg width="96" height="40" viewBox="0 0 96 40" role="img" aria-label="Código de barras do protocolo"><path fill="#0F172A" d="M0 0h2v40H0zM4 0h1v40H4zM7 0h3v40H7zM12 0h1v40h-1zM15 0h2v40h-2zM19 0h1v40h-1zM22 0h3v40h-3zM27 0h1v40h-1zM30 0h2v40h-2zM34 0h1v40h-1zM37 0h3v40h-3zM42 0h1v40h-1zM45 0h2v40h-2zM49 0h3v40h-3zM54 0h1v40h-1zM57 0h2v40h-2zM61 0h1v40h-1zM64 0h3v40h-3zM69 0h1v40h-1zM72 0h2v40h-2zM76 0h1v40h-1zM79 0h3v40h-3zM84 0h1v40h-1zM87 0h2v40h-2zM91 0h1v40h-1zM94 0h2v40h-2z"></path></svg>
+            <div class="t12" style="line-height: 1.45; min-width: 0"><b class="t13 nw" style="display: block">ANTÔNIO CARLOS RIBEIRO</b>Nasc. 14/05/1954 · 2026-118790<br>Eco + Doppler carótidas · 06/11/2026</div>
+          </div>
+          <div class="row wrap" style="gap: 8px; margin-top: 12px">
+            <button class="btn btn-sm">Imprimir etiqueta (2 vias)</button>
+            <button class="btn btn-sm btn-b">Enviar para a Sala 1</button>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="disp-h">
+          <div class="card-h"><span class="tile t-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><div><h2 id="disp-h" style="font-size: 17px">Próximos horários disponíveis</h2><div class="sub">Para encaixe ou agendamento no balcão</div></div></div>
+          <div class="li"><div style="flex: 1; min-width: 0"><div class="t">Ecocardiograma</div><div class="row wrap" style="gap: 6px; margin-top: 6px"><span class="chip c-blue">09:30</span><span class="chip c-blue">10:30</span></div></div><a class="btn btn-sm" href="Agenda.dc.html">Agendar</a></div>
+          <div class="li"><div style="flex: 1; min-width: 0"><div class="t">USG obstétrica</div><div class="row wrap" style="gap: 6px; margin-top: 6px"><span class="chip c-blue">09:00</span><span class="chip c-blue">11:30</span></div></div><a class="btn btn-sm" href="Agenda.dc.html">Agendar</a></div>
+          <div class="li"><div style="flex: 1; min-width: 0"><div class="t">USG e Doppler</div><div class="row wrap" style="gap: 6px; margin-top: 6px"><span class="chip c-blue">09:30</span><span class="chip c-blue">10:00</span><span class="chip c-blue">11:30</span></div></div><a class="btn btn-sm" href="Agenda.dc.html">Agendar</a></div>
+          <div class="li"><div style="flex: 1; min-width: 0"><div class="t">Raio X</div><div class="t13 mute" style="margin-top: 4px">Livre por ordem de chegada até 12:00</div></div><a class="btn btn-sm" href="Agenda.dc.html">Encaixar</a></div>
+          <div class="li"><div style="flex: 1; min-width: 0"><div class="t">Tomografia</div><div class="row wrap" style="gap: 6px; margin-top: 6px"><span class="chip c-blue">09:00</span><span class="chip c-blue">10:00</span><span class="chip c-blue">14:00</span></div></div><a class="btn btn-sm" href="Agenda.dc.html">Agendar</a></div>
+          <div class="li"><div style="flex: 1; min-width: 0"><div class="t">Teste ergométrico</div><div class="row wrap" style="gap: 6px; margin-top: 6px"><span class="chip c-blue">09:00</span><span class="chip c-blue">15:30</span></div></div><a class="btn btn-sm" href="Agenda.dc.html">Agendar</a></div>
+          <div class="li"><div style="flex: 1; min-width: 0"><div class="t">MAPA e Holter</div><div class="row wrap" style="gap: 6px; margin-top: 6px"><span class="chip c-blue">10:00</span><span class="chip">Amanhã 08:00</span></div></div><a class="btn btn-sm" href="Agenda.dc.html">Agendar</a></div>
+        </section>
+      </aside>
+    </div>
+    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2100}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

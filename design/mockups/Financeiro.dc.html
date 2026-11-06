@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Financeiro — VidaCor Imagem</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F2F3F6}</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="financeiro" userName="Carla Mendes" userRole="Gerência" userInitials="CM" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><span>Gestão</span><span aria-hidden="true">›</span><b>Financeiro</b></div>
+      <div class="grow"></div>
+      <a class="btn" href="Caixa.dc.html">Caixa do particular</a>
+      <a class="btn" href="Configuracoes.dc.html">Plano de contas</a>
+      <button class="btn">Conciliar extrato</button>
+      <button class="btn btn-p"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Novo lançamento</button>
+    </div>
+
+    <div class="page-h">
+      <div class="grow">
+        <h1>Financeiro</h1>
+        <p>Caixa, contas, conciliação, DRE, notas fiscais e repasse aos médicos</p>
+      </div>
+      <div class="seg" role="tablist" aria-label="Período"><button role="tab" aria-selected="false">Hoje</button><button class="on" role="tab" aria-selected="true">Mês</button><button role="tab" aria-selected="false">Trimestre</button><button role="tab" aria-selected="false">Ano</button></div>
+    </div>
+
+    <section class="grid g4" aria-label="Resumo financeiro">
+      <div class="card"><span class="tile t-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"></path></svg></span><div class="lbl" style="margin-top: 18px">Entradas</div><div class="big" style="margin-top: 6px">R$ 412,7<small>mil</small></div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-green">+9%</span><span class="t13 mute">vs. outubro</span></div></div>
+      <div class="card"><span class="tile t-rose"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"></path></svg></span><div class="lbl" style="margin-top: 18px">Saídas</div><div class="big" style="margin-top: 6px">R$ 287,3<small>mil</small></div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip">+2%</span><span class="t13 mute">vs. outubro</span></div></div>
+      <div class="card"><span class="tile t-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h18v13H3zM3 7l3-4h12l3 4M16 13.5h2"></path></svg></span><div class="lbl" style="margin-top: 18px">Saldo em contas</div><div class="big" style="margin-top: 6px">R$ 538,9<small>mil</small></div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-blue">2 bancos</span><span class="t13 mute">conciliado até ontem</span></div></div>
+      <div class="card"><span class="tile t-violet"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M2 20h20"></path></svg></span><div class="lbl" style="margin-top: 18px">Margem líquida</div><div class="big" style="margin-top: 6px">24,6<small>%</small></div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-green">+1,9 p.p.</span><span class="t13 mute">meta 22%</span></div></div>
+    </section>
+
+    <div class="split">
+      <section class="card main" aria-labelledby="fc-h">
+        <div class="card-h"><div><h2 id="fc-h">Fluxo de caixa</h2><div class="sub">Últimos 6 meses · realizado</div></div>
+          <div class="row t14" style="margin-left: auto; gap: 16px"><span class="row" style="gap: 6px"><i style="width: 10px; height: 10px; border-radius: 50%; background: #0C72B0"></i>Entradas</span><span class="row" style="gap: 6px"><i style="width: 10px; height: 10px; border-radius: 50%; background: #8B7BE0"></i>Saídas</span></div></div>
+        <figure role="img" aria-label="Gráfico de área: entradas cresceram de 338 mil em junho para 413 mil em novembro; saídas ficaram entre 262 e 287 mil" style="margin: 0">
+          <svg viewBox="0 0 760 240" width="100%" height="240" aria-hidden="true" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="ge" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#3E9BDB" stop-opacity=".35"></stop><stop offset="1" stop-color="#3E9BDB" stop-opacity="0"></stop></linearGradient>
+              <linearGradient id="gs" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#8B7BE0" stop-opacity=".28"></stop><stop offset="1" stop-color="#8B7BE0" stop-opacity="0"></stop></linearGradient>
+            </defs>
+            <g stroke="#E8EAEF" stroke-width="1"><path d="M0 40H760M0 100H760M0 160H760M0 220H760"></path></g>
+            <path d="M0 98 C70 94 110 86 152 84 S250 76 304 70 S400 62 456 58 S560 44 608 40 S700 30 760 26 V220 H0Z" fill="url(#ge)"></path>
+            <path d="M0 98 C70 94 110 86 152 84 S250 76 304 70 S400 62 456 58 S560 44 608 40 S700 30 760 26" fill="none" stroke="#0C72B0" stroke-width="3"></path>
+            <path d="M0 142 C70 140 110 138 152 140 S250 132 304 134 S400 130 456 128 S560 126 608 126 S700 122 760 120 V220 H0Z" fill="url(#gs)"></path>
+            <path d="M0 142 C70 140 110 138 152 140 S250 132 304 134 S400 130 456 128 S560 126 608 126 S700 122 760 120" fill="none" stroke="#8B7BE0" stroke-width="3"></path>
+            <circle cx="608" cy="40" r="6" fill="#fff" stroke="#0C72B0" stroke-width="3"></circle>
+          </svg>
+          <figcaption class="row t13 mute" style="justify-content: space-between; padding: 4px 2px 0"><span>Jun</span><span>Jul</span><span>Ago</span><span>Set</span><span>Out</span><span>Nov</span></figcaption>
+        </figure>
+      </section>
+
+      <section class="card aside" aria-labelledby="cx-h">
+        <div class="card-h"><div><h2 id="cx-h">Caixas de hoje</h2><div class="sub">Integrado ao caixa do particular · 2 caixas abertos</div></div><a class="t14 b" href="Caixa.dc.html" style="margin-left: auto">Abrir caixa</a></div>
+        <div class="big">R$ 6.842<small>,50</small></div>
+        <div class="col" style="gap: 12px; margin-top: 16px">
+          <div><div class="row t14"><span>PIX</span><span class="num b" style="margin-left: auto">R$ 3.910,00</span></div><div class="bar" style="margin-top: 6px"><i style="width: 57%"></i></div></div>
+          <div><div class="row t14"><span>Cartão de crédito</span><span class="num b" style="margin-left: auto">R$ 1.982,50</span></div><div class="bar" style="margin-top: 6px"><i style="width: 29%"></i></div></div>
+          <div><div class="row t14"><span>Cartão de débito</span><span class="num b" style="margin-left: auto">R$ 640,00</span></div><div class="bar" style="margin-top: 6px"><i style="width: 9%"></i></div></div>
+          <div><div class="row t14"><span>Dinheiro</span><span class="num b" style="margin-left: auto">R$ 310,00</span></div><div class="bar" style="margin-top: 6px"><i style="width: 5%"></i></div></div>
+        </div>
+        <div class="sep" style="margin: 16px 0 6px"></div>
+        <div class="li"><span class="av av-sm" style="background: #0A1A4A; color: #fff">AS</span><div style="flex: 1; min-width: 0"><div class="t">Caixa 1 · Ana Souza</div><div class="s">Aberto 06:52 · troco R$ 200,00</div></div><span class="chip c-green">Aberto</span></div>
+        <div class="li"><span class="av av-sm" style="background: #E5F5EC; color: #1F7A4D">JM</span><div style="flex: 1; min-width: 0"><div class="t">Caixa 2 · Joana Matos</div><div class="s">Aberto 07:00 · 1 sangria R$ 500,00</div></div><span class="chip c-green">Aberto</span></div>
+        <div class="li"><span class="av av-sm" style="background: #F1F3F6; color: #334155">AS</span><div style="flex: 1; min-width: 0"><div class="t">Ontem · fechamento</div><div class="s">Conferido por Carla · diferença R$ 0,00</div></div><span class="chip c-blue">Conferido</span></div>
+      </section>
+    </div>
+
+    <div class="grid g3">
+      <section class="card" aria-labelledby="cp-h">
+        <div class="card-h"><h2 id="cp-h">Contas a pagar</h2><span class="chip c-amber" style="margin-left: auto">4 nesta semana</span></div>
+        <div class="li"><div style="flex: 1"><div class="t">Manutenção tomógrafo</div><div class="s">Fornecedor de equipamentos · vence 09/11</div></div><span class="num b t15">R$ 18.400,00</span></div>
+        <div class="li"><div style="flex: 1"><div class="t">Contraste iodado (lote)</div><div class="s">Distribuidora hospitalar · vence 10/11</div></div><span class="num b t15">R$ 6.920,00</span></div>
+        <div class="li"><div style="flex: 1"><div class="t">Energia elétrica</div><div class="s">Débito automático · 12/11</div></div><span class="num b t15">R$ 9.315,40</span></div>
+        <div class="li"><div style="flex: 1"><div class="t">Licença PACS / backup externo</div><div class="s">Mensal · 15/11</div></div><span class="num b t15">R$ 1.480,00</span></div>
+      </section>
+      <section class="card" aria-labelledby="cr-h">
+        <div class="card-h"><h2 id="cr-h">Contas a receber</h2><span class="chip c-blue" style="margin-left: auto">R$ 312,8 mil</span></div>
+        <div class="li"><div style="flex: 1"><div class="t">Unimed · lote 0148</div><div class="s">Previsto 14/11 · 32 dias</div></div><span class="num b t15">R$ 96.210,00</span></div>
+        <div class="li"><div style="flex: 1"><div class="t">Bradesco Saúde · lote 0146</div><div class="s">Previsto 18/11</div></div><span class="num b t15">R$ 51.880,40</span></div>
+        <div class="li"><div style="flex: 1"><div class="t">Cartão · antecipação</div><div class="s">Adquirente · D+30</div></div><span class="num b t15">R$ 22.430,00</span></div>
+        <div class="li"><div style="flex: 1"><div class="t">Petrobras · lote 0145</div><div class="s">Atrasado 6 dias</div></div><span class="chip c-rose">R$ 18.900,00</span></div>
+      </section>
+      <section class="card" aria-labelledby="cb-h">
+        <div class="card-h"><h2 id="cb-h">Conciliação bancária</h2><button class="more" aria-label="Opções">•••</button></div>
+        <div class="row" style="align-items: flex-end"><div class="big">96<small>%</small></div><span class="t14 mute" style="margin-left: 12px; margin-bottom: 6px">dos lançamentos casados</span></div>
+        <div class="bar" style="margin: 14px 0"><i style="width: 96%"></i></div>
+        <div class="li"><div style="flex: 1"><div class="t">PIX recebido sem identificação</div><div class="s">05/11 · R$ 350,00</div></div><button class="btn btn-sm">Vincular</button></div>
+        <div class="li"><div style="flex: 1"><div class="t">Tarifa bancária</div><div class="s">04/11 · R$ 89,90</div></div><button class="btn btn-sm">Classificar</button></div>
+      </section>
+    </div>
+
+    <div class="grid g2">
+      <section class="card" aria-labelledby="dre-h">
+        <div class="card-h"><div><h2 id="dre-h">DRE resumido · novembro</h2><div class="sub">Regime de competência</div></div><button class="btn btn-sm" style="margin-left: auto">Exportar</button></div>
+        <table class="tb">
+          <tbody>
+            <tr><td>Receita bruta</td><td class="r num b">R$ 448.300,00</td></tr>
+            <tr><td class="mute">(−) Impostos sobre serviço</td><td class="r num nw">R$ 35.640,00</td></tr>
+            <tr><td class="mute">(−) Glosas</td><td class="r num nw">R$ 9.600,00</td></tr>
+            <tr><td class="mute">(−) Repasse médico</td><td class="r num nw">R$ 121.040,00</td></tr>
+            <tr><td class="mute">(−) Custos e despesas operacionais</td><td class="r num nw">R$ 171.700,00</td></tr>
+            <tr><td><b class="b">Resultado líquido</b></td><td class="r"><span class="chip c-green" style="font-size: 14px">R$ 110.320,00 · 24,6%</span></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card" aria-labelledby="rp-h">
+        <div class="card-h"><div><h2 id="rp-h">Repasse aos médicos</h2><div class="sub">Fechamento em 10/11 · regra por exame e convênio</div></div><button class="btn btn-sm btn-p" style="margin-left: auto">Gerar demonstrativos</button></div>
+        <div class="li"><span class="av" style="background: #E8F2FB; color: #0C72B0">PM</span><div style="flex: 1"><div class="t">Dr. Paulo Medeiros</div><div class="s">Eco e ergométrico · 40% do líquido · 312 exames</div></div><span class="num b t15">R$ 38.420,00</span></div>
+        <div class="li"><span class="av" style="background: #EFEBFC; color: #5B45B5">RA</span><div style="flex: 1"><div class="t">Dra. Renata Alves</div><div class="s">USG obstétrica · 45% · 268 exames</div></div><span class="num b t15">R$ 34.180,00</span></div>
+        <div class="li"><span class="av" style="background: #E5F5EC; color: #1F7A4D">MF</span><div style="flex: 1"><div class="t">Dr. Marcos Freire</div><div class="s">USG geral e Doppler · 40% · 241 exames</div></div><span class="num b t15">R$ 26.610,00</span></div>
+        <div class="li"><span class="av" style="background: #FFF3DF; color: #9A5B00">LT</span><div style="flex: 1"><div class="t">Dr. Luís Tavares</div><div class="s">Raio X e tomografia · R$ por laudo · 410 laudos</div></div><span class="num b t15">R$ 21.830,00</span></div>
+      </section>
+    </div>
+
+    <section class="card" aria-labelledby="nf-h">
+      <div class="card-h"><div><h2 id="nf-h">Notas fiscais de serviço (NFS-e)</h2><div class="sub">Emitidas automaticamente no pagamento particular · 148 em novembro</div></div><button class="btn btn-sm btn-p" style="margin-left: auto">Emitir NFS-e</button></div>
+      <div class="scroll-x">
+        <table class="tb" style="min-width: 860px">
+          <thead><tr><th>Número</th><th>Tomador</th><th>Serviço</th><th class="r">Valor</th><th>Situação</th><th class="r"></th></tr></thead>
+          <tbody>
+            <tr><td class="num nw">2026/004812</td><td class="nw">Rafael Monteiro Lima</td><td>Raio X de tórax PA e perfil</td><td class="r num nw">R$ 120,00</td><td><span class="chip c-green">Autorizada</span></td><td class="r"><button class="btn btn-sm">Enviar por WhatsApp</button></td></tr>
+            <tr><td class="num nw">2026/004811</td><td class="nw">Hélio T. Mendes</td><td>Ecocardiograma transtorácico</td><td class="r num nw">R$ 380,00</td><td><span class="chip c-green">Autorizada</span></td><td class="r"><button class="btn btn-sm">Baixar PDF</button></td></tr>
+            <tr><td class="num nw">—</td><td class="nw">Laura N. Costa</td><td>Raio X coluna lombar</td><td class="r num nw">R$ 140,00</td><td><span class="chip c-amber">Prefeitura fora do ar</span><div class="t13 mute" style="margin-top: 4px">Nova tentativa 09:10</div></td><td class="r"><button class="btn btn-sm">Tentar agora</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <div class="grid g2">
+      <section class="card" aria-labelledby="pv-h">
+        <div class="card-h"><div><h2 id="pv-h">Previsão de caixa</h2><div class="sub">Contas a receber dos convênios − contas a pagar</div></div><div class="seg" style="margin-left: auto"><button class="on" style="height: 36px">30 dias</button><button style="height: 36px">60</button><button style="height: 36px">90</button></div></div>
+        <div class="bars" style="height: 210px; padding-top: 56px">
+          <div class="bc"><span class="bn">R$ 568 mil</span><div class="bv" style="height: 70%"></div><span class="bl">Hoje</span></div>
+          <div class="bc"><span class="bn">R$ 612 mil</span><div class="bv" style="height: 76%"></div><span class="bl">+7 d</span></div>
+          <div class="bc"><span class="bn">R$ 701 mil</span><div class="bv on" style="height: 87%"><div class="tip">14/11 · entra Unimed<br><b>+ R$ 96,2 mil</b></div></div><span class="bl" style="color: #0F172A; font-weight: 600">+14 d</span></div>
+          <div class="bc"><span class="bn">R$ 655 mil</span><div class="bv" style="height: 81%"></div><span class="bl">+21 d</span></div>
+          <div class="bc"><span class="bn">R$ 690 mil</span><div class="bv" style="height: 85%"></div><span class="bl">+30 d</span></div>
+        </div>
+      </section>
+      <section class="card" aria-labelledby="cc-h">
+        <div class="card-h"><div><h2 id="cc-h">Por centro de custo</h2><div class="sub">Novembro · receita, custo e margem por área</div></div></div>
+        <div class="scroll-x">
+          <table class="tb" style="min-width: 560px">
+            <thead><tr><th>Centro de custo</th><th class="r">Receita</th><th class="r">Custo</th><th>Margem</th></tr></thead>
+            <tbody>
+              <tr><td class="nw"><b class="b">Cardiologia</b> <span class="t13 mute">eco, ergo, MAPA</span></td><td class="r num nw">R$ 142.300</td><td class="r num nw">R$ 98.400</td><td><span class="chip c-green">30,9%</span></td></tr>
+              <tr><td class="nw"><b class="b">Ultrassonografia</b> <span class="t13 mute">obstétrica e geral</span></td><td class="r num nw">R$ 168.900</td><td class="r num nw">R$ 121.700</td><td><span class="chip c-green">27,9%</span></td></tr>
+              <tr><td class="nw"><b class="b">Raio X</b></td><td class="r num nw">R$ 38.600</td><td class="r num nw">R$ 31.200</td><td><span class="chip c-amber">19,2%</span></td></tr>
+              <tr><td class="nw"><b class="b">Tomografia</b></td><td class="r num nw">R$ 98.500</td><td class="r num nw">R$ 86.040</td><td><span class="chip c-amber">12,6%</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2250}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

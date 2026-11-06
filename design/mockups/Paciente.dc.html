@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Paciente — VidaCor Imagem</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F2F3F6}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid #E8EAEF;padding:0 8px}
+.tabs a{display:inline-flex;align-items:center;gap:6px;min-height:46px;padding:0 14px;color:#5B6474;font-size:15px;font-weight:500;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs a.on{color:#0A1A4A;font-weight:600;border-bottom-color:#0A1A4A}
+.tabs a .ct{font-size:12px;font-weight:600;background:#F1F3F6;color:#334155;border-radius:999px;padding:1px 7px}
+.lb{max-width:170px;white-space:normal}
+.tl{display:flex;gap:14px;position:relative;padding-bottom:16px}
+.tl::before{content:"";position:absolute;left:19px;top:44px;bottom:0;width:2px;background:#E8EAEF}
+.tl:last-child::before{display:none}
+.kv{display:grid;grid-template-columns:120px 1fr;gap:8px 12px;font-size:14px}
+.kv dt{color:#5B6474}.kv dd{margin:0;color:#0F172A;font-weight:500}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="pacientes" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><span>VidaCor</span><span aria-hidden="true">›</span><a href="Paciente.dc.html">Pacientes</a><span aria-hidden="true">›</span><b>Sônia Maria Castro</b></div>
+      <div class="grow"></div>
+      <button class="btn btn-sm">Editar cadastro</button>
+      <a class="btn btn-sm" href="Caixa.dc.html">Caixa e financeiro</a>
+      <a class="btn btn-sm" href="Agenda.dc.html">Agendar exame</a>
+      <a class="btn btn-p" href="Atendimento.dc.html">Abrir atendimento</a>
+    </div>
+
+    <section class="card" aria-label="Identificação do paciente" style="padding: 22px 24px">
+      <div class="row wrap" style="gap: 18px; align-items: flex-start">
+        <span class="av av-lg" style="background: linear-gradient(135deg,#0A1A4A,#3E9BDB); color: #fff; width: 72px; height: 72px; font-size: 22px">SC</span>
+        <div style="flex: 1 1 320px">
+          <h1 style="font-size: 28px; font-weight: 650; letter-spacing: -.025em">Sônia Maria Castro</h1>
+          <div class="t15 mute" style="margin-top: 4px">64 anos · feminino · nasc. 03/02/1962 · CPF ***.***.***-17 · prontuário 0048213</div>
+          <div class="row wrap" style="gap: 6px; margin-top: 12px">
+            <span class="chip c-blue">Unimed · carteirinha válida até 12/2027</span>
+            <span class="chip c-rose"><span class="d"></span>Hipertensa · losartana 50 mg</span>
+            <span class="chip c-rose"><span class="d"></span>Alergia: dipirona</span>
+            <span class="chip c-green">Portal ativo · último acesso ontem 21:14</span>
+            <span class="chip">LGPD: 3 de 4 consentimentos</span>
+          </div>
+        </div>
+        <div class="grid" style="grid-template-columns: repeat(3, minmax(110px, 1fr)); gap: 10px; flex: 1 1 380px">
+          <div style="background: #F2F3F6; border-radius: 16px; padding: 12px 14px"><div class="lbl">Exames</div><div class="big" style="font-size: 26px">14</div><div class="t12 mute">desde 2019</div></div>
+          <div style="background: #F2F3F6; border-radius: 16px; padding: 12px 14px"><div class="lbl">Faltas</div><div class="big" style="font-size: 26px">0</div><div class="t12 mute">pontual</div></div>
+          <div style="background: #F2F3F6; border-radius: 16px; padding: 12px 14px"><div class="lbl">NPS</div><div class="big" style="font-size: 26px">10</div><div class="t12 mute">último</div></div>
+        </div>
+      </div>
+      <nav class="tabs" aria-label="Seções do paciente" style="margin: 18px -8px -8px">
+        <a class="on" href="Paciente.dc.html" aria-current="page">Resumo</a>
+        <a href="Paciente.dc.html">Exames e laudos <span class="ct">14</span></a>
+        <a href="Visualizador.dc.html">Imagens <span class="ct">612</span></a>
+        <a href="Paciente.dc.html">Documentos <span class="ct">9</span></a>
+        <a href="Paciente.dc.html">Financeiro</a>
+        <a href="Paciente.dc.html">Consentimentos</a>
+        <a href="Paciente.dc.html">Auditoria</a>
+      </nav>
+    </section>
+
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start">
+      <section class="anat" aria-labelledby="mapa-h" style="flex: 1 1 640px; min-width: 0; padding: 22px">
+        <div class="row wrap" style="gap: 12px">
+          <div><h2 id="mapa-h" style="font-size: 18px; font-weight: 600; color: #FFFFFF">Mapa anatômico</h2><div class="t14" style="color: #AFC0DD; margin-top: 3px">Achados dos exames por órgão · clique para abrir o laudo</div></div>
+          <div class="row wrap" style="gap: 6px; margin-left: auto" role="tablist" aria-label="Vista anatômica"><button class="tool on" role="tab" aria-selected="true">Corpo inteiro</button><button class="tool" role="tab" aria-selected="false">Cardio</button><button class="tool" role="tab" aria-selected="false">Abdome</button></div>
+        </div>
+        <div style="display: flex; justify-content: center; padding: 14px 0 4px">
+          <div style="position: relative; width: 330px">
+            <img class="body" src="/_blob/0ff44fe1ec4c215b11a7c763dbfeea82" alt="Modelo anatômico realista do corpo humano, vista de frente, com pele translúcida, esqueleto e órgãos">
+            <button class="hs" aria-label="Coração: ecocardiograma de 06/11, fração de ejeção 66%" style="left: 53.1%; top: 27.5%"></button>
+            <button class="hs warn" aria-label="Carótidas: Doppler, placa menor que 50% à esquerda" style="left: 50.2%; top: 20.9%"></button>
+            <button class="hs" aria-label="Fígado e abdome: ultrassom de 22/04, normal" style="left: 47.6%; top: 34.5%"></button>
+            <button class="hs" aria-label="Rins: ultrassom de 22/04, normal" style="left: 49.3%; top: 38%"></button>
+            <button class="hs" aria-label="Pelve: sem exames" style="left: 50%; top: 52.1%; opacity: .6"></button>
+
+            <div class="hs-lb" style="left: 84%; top: 27.5%; transform: translateY(-50%)"><b>Coração</b><br><span class="mute">Eco 06/11 · FE 66%</span><br><span style="color: #9A5B00">Disf. diastólica grau I</span></div>
+            <div class="hs-lb" style="right: 84%; top: 19%; transform: translateY(-50%); border: 1.5px solid #F2B8C3"><b style="color: #C2334D">Carótidas</b><br><span class="mute">Doppler 06/11</span><br>Placa &lt; 50% à esq.</div>
+            <div class="hs-lb" style="right: 84%; top: 35.5%; transform: translateY(-50%)"><b>Fígado e rins</b><br><span class="mute">USG 22/04 · normal</span></div>
+            <div class="hs-lb" style="left: 84%; top: 52%; transform: translateY(-50%)"><b>Pelve</b><br><span class="mute">Sem exames</span></div>
+          </div>
+        </div>
+        <div class="row wrap t13" style="gap: 16px; justify-content: center; margin-top: 10px; color: #D5DEEE">
+          <span class="row" style="gap: 6px"><i style="width: 12px; height: 12px; border-radius: 50%; background: #3E9BDB; box-shadow: 0 0 8px 2px rgba(62,155,219,.7)"></i>Sem alteração importante</span>
+          <span class="row" style="gap: 6px"><i style="width: 12px; height: 12px; border-radius: 50%; background: #F2755E; box-shadow: 0 0 8px 2px rgba(242,117,94,.7)"></i>Achado para acompanhar</span>
+          <span class="row" style="gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"></path></svg>Arraste para girar · role para aproximar</span>
+        </div>
+        <p class="t12" style="margin: 12px 0 0; text-align: center; color: #AFC0DD">Modelo anatômico: BodyParts3D © DBCLS (CC BY-SA 2.1 JP)</p>
+      </section>
+
+      <div style="flex: 1 1 400px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+        <section class="card" aria-labelledby="hist-h">
+          <div class="card-h"><div><h2 id="hist-h">Histórico de exames</h2><div class="sub">Mais recentes primeiro</div></div><a class="t14 b" href="Paciente.dc.html" style="margin-left: auto">Ver todos</a></div>
+          <div class="tl">
+            <a class="dimg" href="Laudo.dc.html" style="width: 40px; height: 40px; flex: none; border-radius: 10px"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt=""></a>
+            <div style="flex: 1; min-width: 0"><div class="row"><b class="t15">Ecocardiograma transtorácico</b><span class="chip c-violet" style="margin-left: auto">Laudando</span></div><div class="t13 mute">Hoje · Dr. Paulo Medeiros · 38 imagens · 4 vídeos</div></div>
+          </div>
+          <div class="tl">
+            <a class="dimg" href="Visualizador.dc.html" style="width: 40px; height: 40px; flex: none; border-radius: 10px"><img src="/_blob/5d5abc0e3f9103b34da8cedf87fc15b2" alt=""></a>
+            <div style="flex: 1; min-width: 0"><div class="row"><b class="t15">Doppler de carótidas</b><span class="chip c-rose" style="margin-left: auto">Achado</span></div><div class="t13 mute">Hoje · Dr. Marcos Freire · placa &lt; 50% à esquerda</div></div>
+          </div>
+          <div class="tl">
+            <a class="dimg" href="Visualizador.dc.html" style="width: 40px; height: 40px; flex: none; border-radius: 10px"><img src="/_blob/b397e8ff60e8605ce0897e61b093b786" alt=""></a>
+            <div style="flex: 1; min-width: 0"><div class="row"><b class="t15">USG de abdome total</b><span class="chip c-green" style="margin-left: auto">Entregue</span></div><div class="t13 mute">22/04/2026 · Dr. Marcos Freire · visto no portal</div></div>
+          </div>
+          <div class="tl">
+            <span class="tile t-gray" style="width: 40px; height: 40px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"></path></svg></span>
+            <div style="flex: 1; min-width: 0"><div class="row"><b class="t15">Teste ergométrico</b><span class="chip c-green" style="margin-left: auto">Entregue</span></div><div class="t13 mute">14/03/2025 · Dr. Paulo · negativo para isquemia</div></div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="fe-h">
+          <div class="card-h"><div><h2 id="fe-h">Fração de ejeção</h2><div class="sub">Evolução nos ecocardiogramas</div></div><span class="chip c-green" style="margin-left: auto">Estável</span></div>
+          <svg viewBox="0 0 360 120" width="100%" height="120" role="img" aria-label="Fração de ejeção: 2021 62%, 2023 63%, 2025 64%, 2026 66%">
+            <defs><linearGradient id="feg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#3E9BDB" stop-opacity=".28"></stop><stop offset="1" stop-color="#3E9BDB" stop-opacity="0"></stop></linearGradient></defs>
+            <line x1="0" y1="96" x2="360" y2="96" stroke="#E8EAEF"></line>
+            <line x1="0" y1="66" x2="360" y2="66" stroke="#E8EAEF" stroke-dasharray="4 4"></line>
+            <text x="356" y="61" text-anchor="end" font-size="11" fill="#5B6474" font-family="Inter">referência ≥ 54%</text>
+            <path d="M20 58 L130 52 L240 46 L340 34 L340 96 L20 96 Z" fill="url(#feg)"></path>
+            <path d="M20 58 L130 52 L240 46 L340 34" fill="none" stroke="#0C72B0" stroke-width="2.5" stroke-linecap="round"></path>
+            <circle cx="20" cy="58" r="4" fill="#fff" stroke="#0C72B0" stroke-width="2"></circle><circle cx="130" cy="52" r="4" fill="#fff" stroke="#0C72B0" stroke-width="2"></circle><circle cx="240" cy="46" r="4" fill="#fff" stroke="#0C72B0" stroke-width="2"></circle><circle cx="340" cy="34" r="5" fill="#0A1A4A"></circle>
+            <g font-size="12" fill="#334155" font-family="Inter" text-anchor="middle"><text x="20" y="114">2021 · 62%</text><text x="130" y="114">2023 · 63%</text><text x="240" y="114">2025 · 64%</text><text x="335" y="114">hoje · 66%</text></g>
+          </svg>
+        </section>
+
+        <section class="card" aria-labelledby="prox-h">
+          <div class="card-h"><h2 id="prox-h">Próximos agendamentos</h2></div>
+          <div class="li"><span class="tile t-blue" style="flex-direction: column; width: 48px; height: 48px; line-height: 1"><b class="t15">12</b><span class="t12">nov</span></span><div style="flex: 1"><div class="t">MAPA 24 h · instalação</div><div class="s">08:00 · Sala 7 · confirmado no WhatsApp</div></div><span class="chip c-green">✓</span></div>
+          <div class="li"><span class="tile t-gray" style="flex-direction: column; width: 48px; height: 48px; line-height: 1"><b class="t15">10</b><span class="t12">mar</span></span><div style="flex: 1"><div class="t">Retorno · eco de controle</div><div class="s">Lembrete automático em fev/2027</div></div></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="grid g3">
+      <section class="card" aria-labelledby="doc-h">
+        <div class="card-h"><h2 id="doc-h">Documentos</h2><button class="btn btn-sm" style="margin-left: auto">+ Anexar</button></div>
+        <div class="li"><span class="tile t-blue" style="width: 36px; height: 36px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6v18h12V7zM14 3v4h4"></path></svg></span><div style="flex: 1"><div class="t">Pedido médico · Dr. Hugo Lemos</div><div class="s">Foto no balcão · hoje 07:58</div></div></div>
+        <div class="li"><span class="tile t-violet" style="width: 36px; height: 36px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20h4l10-10-4-4L4 16zM13 7l4 4"></path></svg></span><div style="flex: 1"><div class="t">Termo de uso do portal</div><div class="s">Assinado no tablet · 22/04/2026</div></div></div>
+        <div class="li"><span class="tile t-green" style="width: 36px; height: 36px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path></svg></span><div style="flex: 1"><div class="t">Guia TISS 88410022</div><div class="s">Unimed · autorizada</div></div></div>
+      </section>
+      <section class="card" aria-labelledby="cad-h">
+        <div class="card-h"><h2 id="cad-h">Cadastro</h2><a class="t14 b" href="Paciente.dc.html" style="margin-left: auto">Editar</a></div>
+        <dl class="kv">
+          <dt>Celular</dt><dd>(21) 9 0000-0017 · WhatsApp</dd>
+          <dt>E-mail</dt><dd>sonia.castro@exemplo.com</dd>
+          <dt>Endereço</dt><dd>[Rua], Centro · [Cidade]</dd>
+          <dt>Médico</dt><dd>Dr. Hugo Lemos · cardiologia</dd>
+          <dt>Veículo</dt><dd>Placa LMN3F55 (estacionamento)</dd>
+          <dt>Origem</dt><dd>Importado do sistema anterior</dd>
+        </dl>
+      </section>
+      <section class="card" aria-labelledby="por-h">
+        <div class="card-h"><span class="tile t-teal"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"></rect><path d="M11 18h2"></path></svg></span><div><h2 id="por-h">Portal Meu VidaCor</h2><div class="sub">Criado sozinho no 1º cadastro</div></div></div>
+        <div class="li"><div style="flex: 1"><div class="t">Convite enviado</div><div class="s">WhatsApp + e-mail · 22/04 08:12</div></div><span class="chip c-green">✓</span></div>
+        <div class="li"><div style="flex: 1"><div class="t">Senha criada pela paciente</div><div class="s">22/04 08:40 · 2 fatores ativo</div></div><span class="chip c-green">✓</span></div>
+        <div class="li"><div style="flex: 1"><div class="t">Laudos visíveis</div><div class="s">Só depois de assinados</div></div><span class="chip">Regra</span></div>
+        <div class="row" style="gap: 8px; margin-top: 12px"><button class="btn btn-sm">Reenviar convite</button><button class="btn btn-sm">Bloquear acesso</button></div>
+      </section>
+    </div>
+    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · modelo anatômico BodyParts3D © DBCLS (CC BY-SA 2.1 JP) · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1600}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

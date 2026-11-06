@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Estoque — VidaCor Imagem</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F2F3F6}</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="estoque" userName="Carla Mendes" userRole="Gerência" userInitials="CM" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><span>Gestão</span><span aria-hidden="true">›</span><b>Estoque</b></div>
+      <div class="grow"></div>
+      <button class="btn">Inventário</button>
+      <button class="btn">Pedido de compra</button>
+      <button class="btn btn-p"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Registrar entrada</button>
+    </div>
+
+    <div class="page-h">
+      <div class="grow">
+        <h1>Estoque</h1>
+        <p>Baixa automática pelo exame realizado · saída pelo vencimento mais próximo primeiro (FEFO)</p>
+      </div>
+      <div class="seg" role="tablist" aria-label="Local"><button class="on" role="tab" aria-selected="true">Todos os locais</button><button role="tab" aria-selected="false">Almoxarifado</button><button role="tab" aria-selected="false">Tomografia</button><button role="tab" aria-selected="false">Salas de USG</button></div>
+    </div>
+
+    <section class="grid g4" aria-label="Resumo do estoque">
+      <div class="card"><span class="tile t-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7l9-4 9 4v10l-9 4-9-4zM3 7l9 4 9-4M12 11v10"></path></svg></span><div class="lbl" style="margin-top: 18px">Itens cadastrados</div><div class="big" style="margin-top: 6px">186</div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip">R$ 74,3 mil em estoque</span></div></div>
+      <div class="card"><span class="tile t-rose"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg></span><div class="lbl" style="margin-top: 18px">Abaixo do mínimo</div><div class="big" style="margin-top: 6px">2<small>itens</small></div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-rose">Contraste e eletrodos</span></div></div>
+      <div class="card"><span class="tile t-amber"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><div class="lbl" style="margin-top: 18px">Vencem em 30 dias</div><div class="big" style="margin-top: 6px">5<small>lotes</small></div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-amber">R$ 2.140 em risco</span></div></div>
+      <div class="card"><span class="tile t-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M2 20h20"></path></svg></span><div class="lbl" style="margin-top: 18px">Custo por exame</div><div class="big" style="margin-top: 6px">R$ 11,40</div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-green">−6%</span><span class="t13 mute">vs. outubro</span></div></div>
+    </section>
+
+    <section class="card" aria-labelledby="it-h">
+      <div class="card-h wrap">
+        <div><h2 id="it-h">Itens</h2><div class="sub">Saldo, mínimo e próximo vencimento</div></div>
+        <label class="search" style="min-height: 40px; margin-left: auto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar item</span><input type="search" placeholder="Item, lote ou código de barras"></label>
+      </div>
+      <div class="scroll-x">
+        <table class="tb" style="min-width: 1080px">
+          <thead><tr><th>Item</th><th>Local</th><th class="r">Saldo</th><th style="width: 180px">Nível</th><th>Lote · validade (FEFO)</th><th>Situação</th><th class="r"></th></tr></thead>
+          <tbody>
+            <tr><td><b class="b">Contraste iodado não iônico 350 · 100 ml</b><br><span class="t13 mute">Usado em TC com contraste · 1 frasco por exame</span></td><td class="nw">Tomografia</td><td class="r num nw">8 fr.</td><td><div class="bar"><i style="width: 20%; background: #C2334D"></i></div><span class="t12 mute">mínimo 20</span></td><td class="num nw">L2408-77 · 03/2027</td><td><span class="chip c-rose">Abaixo do mínimo</span></td><td class="r"><button class="btn btn-sm btn-p">Comprar</button></td></tr>
+            <tr><td><b class="b">Eletrodos descartáveis adulto</b><br><span class="t13 mute">Teste ergométrico e Holter · 10 por exame</span></td><td class="nw">Sala 4</td><td class="r num nw">180 un.</td><td><div class="bar"><i style="width: 30%; background: #C2334D"></i></div><span class="t12 mute">mínimo 400</span></td><td class="num nw">E5512 · 08/2027</td><td><span class="chip c-rose">Abaixo do mínimo</span></td><td class="r"><button class="btn btn-sm btn-p">Comprar</button></td></tr>
+            <tr><td><b class="b">Gel para ultrassom · 5 L</b></td><td class="nw">Salas de USG</td><td class="r num nw">14 gal.</td><td><div class="bar"><i style="width: 70%"></i></div><span class="t12 mute">mínimo 6</span></td><td class="num nw">G0911 · 12/2026</td><td><span class="chip c-amber">Lote vence em 25 dias</span></td><td class="r"><button class="btn btn-sm">Transferir</button></td></tr>
+            <tr><td><b class="b">Papel termossensível para impressora de vídeo</b></td><td class="nw">Salas de USG</td><td class="r num nw">36 rolos</td><td><div class="bar"><i style="width: 80%"></i></div><span class="t12 mute">mínimo 12</span></td><td class="num nw">P2201 · 06/2028</td><td><span class="chip c-green">Normal</span></td><td class="r"><button class="btn btn-sm">Movimentar</button></td></tr>
+            <tr><td><b class="b">Seringa 20 ml + scalp 21G</b></td><td class="nw">Tomografia</td><td class="r num nw">240 kits</td><td><div class="bar"><i style="width: 75%"></i></div><span class="t12 mute">mínimo 80</span></td><td class="num nw">S8820 · 02/2029</td><td><span class="chip c-green">Normal</span></td><td class="r"><button class="btn btn-sm">Movimentar</button></td></tr>
+            <tr><td><b class="b">CD/DVD com estojo e capa VidaCor</b></td><td class="nw">Recepção</td><td class="r num nw">410 un.</td><td><div class="bar"><i style="width: 65%"></i></div><span class="t12 mute">mínimo 150</span></td><td class="num nw">—</td><td><span class="chip c-green">Normal</span></td><td class="r"><button class="btn btn-sm">Movimentar</button></td></tr>
+            <tr><td><b class="b">Luvas de procedimento M (caixa 100)</b></td><td class="nw">Almoxarifado</td><td class="r num nw">52 cx.</td><td><div class="bar"><i style="width: 58%"></i></div><span class="t12 mute">mínimo 25</span></td><td class="num nw">LV771 · 10/2027</td><td><span class="chip c-green">Normal</span></td><td class="r"><button class="btn btn-sm">Movimentar</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="grid g3">
+      <section class="card" aria-labelledby="ce-h">
+        <div class="card-h"><div><h2 id="ce-h">Consumo por exame</h2><div class="sub">Baixa automática ao concluir o exame</div></div></div>
+        <div class="li"><span class="tile t-blue" style="width: 40px; height: 40px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle></svg></span><div style="flex: 1"><div class="t">TC com contraste</div><div class="s">1 contraste · 1 kit seringa · 1 par de luvas</div></div><a class="t14 b" href="Configuracoes.dc.html">Editar</a></div>
+        <div class="li"><span class="tile t-violet" style="width: 40px; height: 40px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"></path></svg></span><div style="flex: 1"><div class="t">Teste ergométrico</div><div class="s">10 eletrodos · 1 lixa · papel ECG</div></div><a class="t14 b" href="Configuracoes.dc.html">Editar</a></div>
+        <div class="li"><span class="tile t-teal" style="width: 40px; height: 40px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z"></path></svg></span><div style="flex: 1"><div class="t">USG obstétrica</div><div class="s">40 ml de gel · 1 papel termossensível</div></div><a class="t14 b" href="Configuracoes.dc.html">Editar</a></div>
+      </section>
+
+      <section class="card" aria-labelledby="mv-h">
+        <div class="card-h"><div><h2 id="mv-h">Movimentações recentes</h2><div class="sub">Quem fez, quando e por quê</div></div></div>
+        <div class="li"><span class="chip c-rose" style="width: 64px; justify-content: center">Saída</span><div style="flex: 1"><div class="t">Contraste iodado · 1 fr.</div><div class="s">TC abdome · Vera L. Antunes · 08:12 · Téc. Carla</div></div></div>
+        <div class="li"><span class="chip c-green" style="width: 64px; justify-content: center">Entrada</span><div style="flex: 1"><div class="t">Gel para ultrassom · 10 gal.</div><div class="s">NF 33.891 · ontem · Carla Mendes</div></div></div>
+        <div class="li"><span class="chip c-blue" style="width: 64px; justify-content: center">Transf.</span><div style="flex: 1"><div class="t">Luvas M · 4 cx.</div><div class="s">Almoxarifado → Sala 6 · ontem</div></div></div>
+        <div class="li"><span class="chip" style="width: 64px; justify-content: center">Perda</span><div style="flex: 1"><div class="t">Seringa 20 ml · 2 kits</div><div class="s">Embalagem violada · motivo registrado</div></div></div>
+      </section>
+
+      <section class="card" aria-labelledby="fo-h">
+        <div class="card-h"><div><h2 id="fo-h">Compras e fornecedores</h2><div class="sub">Sugestão pelo consumo dos últimos 60 dias</div></div></div>
+        <div class="li"><div style="flex: 1"><div class="t">Pedido 0219 · contraste</div><div class="s">Distribuidora hospitalar · 40 fr. · entrega 10/11</div></div><span class="chip c-blue">Aprovado</span></div>
+        <div class="li"><div style="flex: 1"><div class="t">Pedido 0220 · eletrodos</div><div class="s">3 cotações recebidas · menor R$ 0,38/un.</div></div><button class="btn btn-sm">Aprovar</button></div>
+        <div class="li"><div style="flex: 1"><div class="t">Inventário trimestral</div><div class="s">Agendado para 30/11 · contagem pelo celular</div></div><span class="chip">Agendado</span></div>
+      </section>
+    </div>
+    <div class="grid g2">
+      <section class="card" aria-labelledby="pc-h">
+        <div class="card-h"><div><h2 id="pc-h">Pedido de compra 0220</h2><div class="sub">Gerado pelo mínimo + consumo previsto da agenda</div></div><span class="chip c-amber" style="margin-left: auto">Aguardando aprovação</span></div>
+        <div class="scroll-x">
+          <table class="tb" style="min-width: 600px">
+            <thead><tr><th>Item</th><th class="r">Qtd.</th><th>Melhor cotação</th><th class="r">Total</th></tr></thead>
+            <tbody>
+              <tr><td class="nw"><b class="b">Eletrodos descartáveis adulto</b></td><td class="r num nw">2.000 un.</td><td class="nw">Fornecedor A · R$ 0,38</td><td class="r num nw">R$ 760,00</td></tr>
+              <tr><td class="nw"><b class="b">Papel ECG 80 mm</b></td><td class="r num nw">40 rolos</td><td class="nw">Fornecedor B · R$ 9,90</td><td class="r num nw">R$ 396,00</td></tr>
+              <tr><td class="nw"><b class="b">Lixa para preparo de pele</b></td><td class="r num nw">500 un.</td><td class="nw">Fornecedor A · R$ 0,22</td><td class="r num nw">R$ 110,00</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row wrap" style="margin-top: 14px; gap: 10px"><span class="t15 b">Total R$ 1.266,00</span><span class="t13 mute">3 cotações · entrega em 3 dias úteis</span><div class="grow"></div><button class="btn btn-sm">Recusar</button><button class="btn btn-sm btn-p">Aprovar e enviar</button></div>
+      </section>
+
+      <section class="card" aria-labelledby="abc-h">
+        <div class="card-h"><div><h2 id="abc-h">Curva ABC</h2><div class="sub">Itens que concentram o valor consumido · últimos 90 dias</div></div></div>
+        <div class="row" style="gap: 4px; height: 16px; border-radius: 999px; overflow: hidden" role="img" aria-label="Classe A 78% do valor, classe B 16%, classe C 6%">
+          <i style="flex: 78; height: 100%; background: #0A1A4A"></i><i style="flex: 16; height: 100%; background: #3E9BDB"></i><i style="flex: 6; height: 100%; background: #C9CFD8"></i>
+        </div>
+        <div class="row wrap t13" style="margin-top: 10px; gap: 16px"><span><b class="b">A</b> · 9 itens · 78% do valor</span><span><b class="b">B</b> · 24 itens · 16%</span><span><b class="b">C</b> · 153 itens · 6%</span></div>
+        <div class="sep" style="margin: 14px 0 4px"></div>
+        <div class="li"><span class="chip c-navy">A</span><div style="flex: 1; min-width: 0"><div class="t">Contraste iodado 350</div><div class="s">R$ 27.680 · 46% do total</div></div></div>
+        <div class="li"><span class="chip c-navy">A</span><div style="flex: 1; min-width: 0"><div class="t">Kit seringa injetora</div><div class="s">R$ 6.240 · 10%</div></div></div>
+        <div class="li"><span class="chip c-navy">A</span><div style="flex: 1; min-width: 0"><div class="t">Gel para ultrassom</div><div class="s">R$ 4.980 · 8%</div></div></div>
+      </section>
+    </div>
+
+    <section class="card" aria-labelledby="rl-h">
+      <div class="card-h wrap"><div><h2 id="rl-h">Rastreio de lote por paciente</h2><div class="sub">Contraste e medicamentos: em caso de alerta da Anvisa, a clínica sabe quem recebeu cada lote</div></div>
+        <label class="search" style="min-height: 40px; margin-left: auto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar lote</span><input type="search" value="L2408-77"></label></div>
+      <div class="scroll-x">
+        <table class="tb">
+          <thead><tr><th>Data</th><th>Paciente</th><th>Exame</th><th>Item · lote</th><th class="r">Volume</th><th>Aplicado por</th><th>Reação</th></tr></thead>
+          <tbody>
+            <tr><td class="nw num">06/11 08:12</td><td class="nw"><b class="b">Vera L. Antunes</b></td><td class="nw">TC abdome c/ contraste</td><td class="nw">Contraste 350 · L2408-77</td><td class="r num nw">90 ml</td><td class="nw">Téc. Carla Sampaio</td><td><span class="chip c-green">Nenhuma</span></td></tr>
+            <tr><td class="nw num">05/11 16:40</td><td class="nw"><b class="b">Otávio R. Sales</b></td><td class="nw">TC tórax c/ contraste</td><td class="nw">Contraste 350 · L2408-77</td><td class="r num nw">80 ml</td><td class="nw">Téc. Carla Sampaio</td><td><span class="chip c-amber">Leve · urticária</span></td></tr>
+            <tr><td class="nw num">05/11 10:05</td><td class="nw"><b class="b">Mário J. Pinto</b></td><td class="nw">Angio-TC de carótidas</td><td class="nw">Contraste 350 · L2408-77</td><td class="r num nw">100 ml</td><td class="nw">Téc. Bruno Lima</td><td><span class="chip c-green">Nenhuma</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2150}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

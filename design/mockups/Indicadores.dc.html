@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Indicadores — VidaCor Imagem</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F2F3F6}
+.hm{display:grid;grid-template-columns:44px repeat(12,minmax(0,1fr));gap:4px;align-items:center}
+.hm .c{height:30px;border-radius:7px}
+.hbar{height:12px;border-radius:999px;background:#E9ECF1;overflow:hidden}
+.hbar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#0A1A4A,#3E9BDB)}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="indicadores" userName="Carla Mendes" userRole="Gerência" userInitials="CM" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><span>Gestão</span><span aria-hidden="true">›</span><b>Indicadores</b></div>
+      <div class="grow"></div>
+      <button class="btn">Exportar Excel</button>
+      <button class="btn">Exportar PDF</button>
+      <button class="btn btn-p">Agendar relatório por e-mail</button>
+    </div>
+
+    <div class="page-h">
+      <div class="grow">
+        <h1>Indicadores</h1>
+        <p>Produção, prazos, faltas, ocupação, glosas e satisfação · atualizado às 08:40</p>
+      </div>
+      <div class="seg" role="tablist" aria-label="Período"><button role="tab" aria-selected="false">Semana</button><button class="on" role="tab" aria-selected="true">Mês</button><button role="tab" aria-selected="false">Trimestre</button><button role="tab" aria-selected="false">Ano</button></div>
+    </div>
+
+    <section class="card" aria-label="Filtros" style="padding: 16px 18px">
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 12px; align-items: end">
+        <label class="field">Período<select class="in"><option>01/11 a 06/11/2026</option><option>Últimos 30 dias</option></select></label>
+        <label class="field">Comparar com<select class="in"><option>Mesmo período de outubro</option><option>Novembro de 2025</option></select></label>
+        <label class="field">Unidade<select class="in"><option>Unidade Centro</option><option>Todas</option></select></label>
+        <label class="field">Médico<select class="in"><option>Todos os médicos</option><option>Dr. Paulo Medeiros</option></select></label>
+        <label class="field">Convênio<select class="in"><option>Todos</option><option>Particular</option></select></label>
+        <label class="field">Exame<select class="in"><option>Todos os exames</option><option>Ecocardiograma</option></select></label>
+      </div>
+      <div class="row wrap" style="gap: 8px; margin-top: 12px"><span class="t13 mute">Filtros salvos:</span><button class="chip" style="border: 1px solid #D9DDE5; background: #fff; cursor: pointer; height: 30px">Reunião de diretoria</button><button class="chip" style="border: 1px solid #D9DDE5; background: #fff; cursor: pointer; height: 30px">Cardiologia · mês</button><button class="chip" style="border: 1px solid #D9DDE5; background: #fff; cursor: pointer; height: 30px">Particular x convênio</button></div>
+    </section>
+
+    <section class="grid g4" aria-label="Indicadores principais">
+      <div class="card"><div class="lbl">Receita x meta</div><div class="big" style="margin-top: 8px">72<small>% da meta</small></div><div class="bar" style="margin-top: 14px"><i style="width: 72%"></i></div><div class="t13 mute" style="margin-top: 8px">R$ 448 mil de R$ 620 mil · faltam 17 dias úteis</div></div>
+      <div class="card"><div class="lbl">Tempo médio de laudo</div><div class="big" style="margin-top: 8px">5,2<small>horas</small></div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-green">96% no prazo</span><span class="t13 mute">meta 24 h</span></div></div>
+      <div class="card"><div class="lbl">Faltas (no-show)</div><div class="big" style="margin-top: 8px">4,8<small>%</small></div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-green">−2,1 p.p.</span><span class="t13 mute">desde a confirmação automática</span></div></div>
+      <div class="card"><div class="lbl">Ticket médio</div><div class="big" style="margin-top: 8px">R$ 214</div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-amber">Glosa 3,1%</span><span class="t13 mute">convênios</span></div></div>
+    </section>
+
+    <div class="grid g2">
+      <section class="card" aria-labelledby="rv-h">
+        <div class="card-h"><div><h2 id="rv-h">Receita mensal</h2><div class="sub">Realizado x meta · 2026</div></div>
+          <div class="row t14" style="margin-left: auto; gap: 16px"><span class="row" style="gap: 6px"><i style="width: 10px; height: 10px; border-radius: 50%; background: #0C72B0"></i>Realizado</span><span class="row" style="gap: 6px"><i style="width: 16px; border-top: 2px dashed #5B6474"></i>Meta</span></div></div>
+        <figure role="img" aria-label="Receita mensal de maio a novembro, subindo de 470 mil para uma projeção de 640 mil, acima da meta desde agosto" style="margin: 0">
+          <svg viewBox="0 0 640 220" width="100%" height="220" aria-hidden="true" preserveAspectRatio="none">
+            <defs><linearGradient id="gr" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#3E9BDB" stop-opacity=".32"></stop><stop offset="1" stop-color="#3E9BDB" stop-opacity="0"></stop></linearGradient></defs>
+            <g stroke="#E8EAEF"><path d="M0 40H640M0 100H640M0 160H640"></path></g>
+            <path d="M0 150 C60 146 80 132 106 128 S180 120 213 112 S290 96 320 92 S400 82 426 78 S500 66 533 60 S600 50 640 44 V210 H0Z" fill="url(#gr)"></path>
+            <path d="M0 150 C60 146 80 132 106 128 S180 120 213 112 S290 96 320 92 S400 82 426 78 S500 66 533 60" fill="none" stroke="#0C72B0" stroke-width="3"></path>
+            <path d="M533 60 S600 50 640 44" fill="none" stroke="#0C72B0" stroke-width="3" stroke-dasharray="6 6"></path>
+            <path d="M0 120 H640" stroke="#5B6474" stroke-width="2" stroke-dasharray="6 6"></path>
+            <circle cx="533" cy="60" r="6" fill="#fff" stroke="#0C72B0" stroke-width="3"></circle>
+          </svg>
+          <figcaption class="row t13 mute" style="justify-content: space-between"><span>Mai</span><span>Jun</span><span>Jul</span><span>Ago</span><span>Set</span><span>Out</span><span>Nov (proj.)</span></figcaption>
+        </figure>
+      </section>
+
+      <section class="card" aria-labelledby="pe-h">
+        <div class="card-h"><div><h2 id="pe-h">Produção por exame</h2><div class="sub">Quantidade no mês</div></div></div>
+        <div class="col" style="gap: 12px">
+          <div><div class="row t14"><span>USG (todas)</span><span class="num b" style="margin-left: auto">612</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 100%"></i></div></div>
+          <div><div class="row t14"><span>Ecocardiograma</span><span class="num b" style="margin-left: auto">284</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 46%"></i></div></div>
+          <div><div class="row t14"><span>Raio X</span><span class="num b" style="margin-left: auto">356</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 58%"></i></div></div>
+          <div><div class="row t14"><span>Tomografia</span><span class="num b" style="margin-left: auto">198</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 32%"></i></div></div>
+          <div><div class="row t14"><span>Doppler de carótidas</span><span class="num b" style="margin-left: auto">141</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 23%"></i></div></div>
+          <div><div class="row t14"><span>Teste ergométrico</span><span class="num b" style="margin-left: auto">118</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 19%"></i></div></div>
+          <div><div class="row t14"><span>MAPA / Holter</span><span class="num b" style="margin-left: auto">86</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 14%"></i></div></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="grid g2">
+      <section class="card" aria-labelledby="hm-h">
+        <div class="card-h"><div><h2 id="hm-h">Ocupação por dia e hora</h2><div class="sub">Todas as salas · quanto mais escuro, mais cheio</div></div></div>
+        <div class="scroll-x">
+          <div class="hm" style="min-width: 520px" role="img" aria-label="Mapa de calor: picos entre 8h e 11h de segunda a sexta; sábado cheio só pela manhã">
+            <span></span>
+            <sc-for list="{{hours}}" as="h" hint-placeholder-count="12"><span class="t12 mute" style="text-align: center">{{h}}</span></sc-for>
+            <sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+              <span class="t13 mute">{{r.day}}</span>
+              <sc-for list="{{r.cells}}" as="c" hint-placeholder-count="12"><span class="c" style="{{c.style}}"></span></sc-for>
+            </sc-for>
+          </div>
+        </div>
+        <div class="row t12 mute" style="margin-top: 12px; gap: 8px"><span>Vazio</span><i style="width: 18px; height: 12px; border-radius: 4px; background: rgba(12,114,176,.08)"></i><i style="width: 18px; height: 12px; border-radius: 4px; background: rgba(12,114,176,.35)"></i><i style="width: 18px; height: 12px; border-radius: 4px; background: rgba(12,114,176,.65)"></i><i style="width: 18px; height: 12px; border-radius: 4px; background: #0A1A4A"></i><span>Lotado</span></div>
+      </section>
+
+      <section class="card" aria-labelledby="pm-h">
+        <div class="card-h"><div><h2 id="pm-h">Por médico</h2><div class="sub">Exames, prazo de laudo e NPS</div></div></div>
+        <div class="scroll-x"><table class="tb" style="min-width: 480px">
+          <thead><tr><th>Médico</th><th class="r">Exames</th><th class="r">Laudo médio</th><th class="r">NPS</th></tr></thead>
+          <tbody>
+            <tr><td><div class="row nw" style="gap: 10px"><span class="av av-sm" style="background: #E8F2FB; color: #0C72B0">PM</span>Dr. Paulo Medeiros</div></td><td class="r num">402</td><td class="r num">3,1 h</td><td class="r"><span class="chip c-green">84</span></td></tr>
+            <tr><td><div class="row nw" style="gap: 10px"><span class="av av-sm" style="background: #EFEBFC; color: #5B45B5">RA</span>Dra. Renata Alves</div></td><td class="r num">268</td><td class="r num">2,4 h</td><td class="r"><span class="chip c-green">88</span></td></tr>
+            <tr><td><div class="row nw" style="gap: 10px"><span class="av av-sm" style="background: #E5F5EC; color: #1F7A4D">MF</span>Dr. Marcos Freire</div></td><td class="r num">241</td><td class="r num">6,8 h</td><td class="r"><span class="chip c-green">76</span></td></tr>
+            <tr><td><div class="row nw" style="gap: 10px"><span class="av av-sm" style="background: #FFF3DF; color: #9A5B00">LT</span>Dr. Luís Tavares</div></td><td class="r num">554</td><td class="r num">11,2 h</td><td class="r"><span class="chip c-amber">64</span></td></tr>
+          </tbody>
+        </table></div>
+      </section>
+    </div>
+
+    <div class="grid g3">
+      <section class="card" aria-labelledby="or-h">
+        <div class="card-h"><h2 id="or-h">Origem dos pacientes</h2></div>
+        <div class="col" style="gap: 10px">
+          <div class="row t14"><i style="width: 10px; height: 10px; border-radius: 50%; background: #0A1A4A"></i>Indicação médica<span class="num b" style="margin-left: auto">46%</span></div>
+          <div class="row t14"><i style="width: 10px; height: 10px; border-radius: 50%; background: #0C72B0"></i>Convênio (rede credenciada)<span class="num b" style="margin-left: auto">28%</span></div>
+          <div class="row t14"><i style="width: 10px; height: 10px; border-radius: 50%; background: #3E9BDB"></i>Google e site<span class="num b" style="margin-left: auto">14%</span></div>
+          <div class="row t14"><i style="width: 10px; height: 10px; border-radius: 50%; background: #8B7BE0"></i>Instagram<span class="num b" style="margin-left: auto">8%</span></div>
+          <div class="row t14"><i style="width: 10px; height: 10px; border-radius: 50%; background: #C9CFD8"></i>Outros<span class="num b" style="margin-left: auto">4%</span></div>
+        </div>
+      </section>
+      <section class="card" aria-labelledby="gc-h">
+        <div class="card-h"><h2 id="gc-h">Glosa por convênio</h2></div>
+        <div class="col" style="gap: 12px">
+          <div><div class="row t14"><span>Amil</span><span class="num b" style="margin-left: auto">5,4%</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 54%; background: #C2334D"></i></div></div>
+          <div><div class="row t14"><span>SulAmérica</span><span class="num b" style="margin-left: auto">3,6%</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 36%; background: #9A5B00"></i></div></div>
+          <div><div class="row t14"><span>Bradesco Saúde</span><span class="num b" style="margin-left: auto">2,9%</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 29%"></i></div></div>
+          <div><div class="row t14"><span>Unimed</span><span class="num b" style="margin-left: auto">2,4%</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 24%"></i></div></div>
+          <div><div class="row t14"><span>Petrobras</span><span class="num b" style="margin-left: auto">1,2%</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 12%"></i></div></div>
+        </div>
+      </section>
+      <section class="card" aria-labelledby="nt-h">
+        <div class="card-h"><h2 id="nt-h">NPS nos últimos 6 meses</h2></div>
+        <div class="bars" style="height: 180px; padding-top: 20px">
+          <div class="bc"><span class="bn">69</span><div class="bv" style="height: 69%"></div><span class="bl">Jun</span></div>
+          <div class="bc"><span class="bn">71</span><div class="bv" style="height: 71%"></div><span class="bl">Jul</span></div>
+          <div class="bc"><span class="bn">70</span><div class="bv" style="height: 70%"></div><span class="bl">Ago</span></div>
+          <div class="bc"><span class="bn">73</span><div class="bv" style="height: 73%"></div><span class="bl">Set</span></div>
+          <div class="bc"><span class="bn">74</span><div class="bv" style="height: 74%"></div><span class="bl">Out</span></div>
+          <div class="bc"><span class="bn">78</span><div class="bv on" style="height: 78%"></div><span class="bl" style="color: #0F172A; font-weight: 600">Nov</span></div>
+        </div>
+      </section>
+    </div>
+    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1950}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const hours = ['7h','8h','9h','10h','11h','12h','13h','14h','15h','16h','17h','18h'];
+    const base = [
+      ['Seg',[.5,.9,1,.95,.8,.4,.35,.7,.75,.65,.5,.25]],
+      ['Ter',[.45,.85,.95,.9,.75,.35,.3,.65,.7,.6,.45,.2]],
+      ['Qua',[.5,.9,.95,1,.85,.4,.3,.6,.7,.65,.5,.3]],
+      ['Qui',[.55,1,1,1,.9,.45,.4,.75,.8,.7,.55,.3]],
+      ['Sex',[.5,.95,1,.9,.8,.4,.35,.6,.65,.55,.4,.2]],
+      ['Sáb',[.6,.9,.85,.7,.5,.1,0,0,0,0,0,0]]
+    ];
+    const rows = base.map(([day, v]) => ({
+      day,
+      cells: v.map(x => ({ style: x >= .97 ? 'background:#0A1A4A' : 'background:rgba(12,114,176,' + (0.06 + x * 0.7).toFixed(2) + ')' }))
+    }));
+    return { hours, rows };
+  }
+}
+</script>
+</body>
+</html>

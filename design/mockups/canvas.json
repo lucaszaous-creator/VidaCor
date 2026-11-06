@@ -1,0 +1,331 @@
+{
+ "v": 3,
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-11-06T22:10:00Z"
+ },
+ "title": "VidaCor Imagem — Mockup do Sistema",
+ "launch": {
+  "view": "canvas"
+ },
+ "pages": [],
+ "boards": {
+  "Sidebar.dc.html": {
+   "x": -400,
+   "y": 0,
+   "w": 280,
+   "h": 1400,
+   "title": "Componente · menu lateral"
+  },
+  "Main.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1550,
+   "title": "1 · Início (painel do dia)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Agenda.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 2000,
+   "title": "2 · Agenda por sala e agendamento",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Recepcao.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 1440,
+   "h": 2100,
+   "title": "3 · Recepção, senhas e check-in",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Paciente.dc.html": {
+   "x": 6080,
+   "y": 0,
+   "w": 1440,
+   "h": 1600,
+   "title": "4 · Paciente 360º + mapa corporal 3D",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Sala-Exame.dc.html": {
+   "x": 1520,
+   "y": 2720,
+   "w": 1440,
+   "h": 1700,
+   "title": "5 · Sala de exame (worklist, captura, medidas)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Laudo.dc.html": {
+   "x": 3040,
+   "y": 2720,
+   "w": 1440,
+   "h": 1800,
+   "title": "6 · Laudar (workstation do médico)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Visualizador.dc.html": {
+   "x": 4560,
+   "y": 2720,
+   "w": 1440,
+   "h": 1500,
+   "title": "7 · Visualizador de imagens (PACS)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Fluxo-Laudos.dc.html": {
+   "x": 6080,
+   "y": 2720,
+   "w": 1440,
+   "h": 1600,
+   "title": "8 · Fluxo de laudos, entrega e impressão",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Faturamento.dc.html": {
+   "x": 0,
+   "y": 4940,
+   "w": 1440,
+   "h": 2300,
+   "title": "9 · Faturamento TISS (guias, lotes, glosas)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Financeiro.dc.html": {
+   "x": 1520,
+   "y": 4940,
+   "w": 1440,
+   "h": 2250,
+   "title": "10 · Financeiro (caixa, contas, DRE, repasse, NF)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Estoque.dc.html": {
+   "x": 3040,
+   "y": 4940,
+   "w": 1440,
+   "h": 2150,
+   "title": "11 · Estoque",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Comunicacao.dc.html": {
+   "x": 4560,
+   "y": 4940,
+   "w": 1440,
+   "h": 1900,
+   "title": "12 · WhatsApp, automações, NPS e telemedicina",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Indicadores.dc.html": {
+   "x": 6080,
+   "y": 4940,
+   "w": 1440,
+   "h": 1950,
+   "title": "13 · Indicadores",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Configuracoes.dc.html": {
+   "x": 7600,
+   "y": 4940,
+   "w": 1440,
+   "h": 2200,
+   "title": "14 · Configurações, segurança e aparelhos",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Portal-Web.dc.html": {
+   "x": 0,
+   "y": 7660,
+   "w": 1440,
+   "h": 1950,
+   "title": "15 · Portal do paciente (web)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "App-Paciente.dc.html": {
+   "x": 1520,
+   "y": 7660,
+   "w": 390,
+   "h": 844,
+   "title": "16 · App do paciente"
+  },
+  "App-Bebe.dc.html": {
+   "x": 1990,
+   "y": 7660,
+   "w": 390,
+   "h": 844,
+   "title": "17 · Meus Exames Bebê"
+  },
+  "App-Medico.dc.html": {
+   "x": 2460,
+   "y": 7660,
+   "w": 390,
+   "h": 844,
+   "title": "18 · App do médico"
+  },
+  "Telao.dc.html": {
+   "x": 2930,
+   "y": 7660,
+   "w": 1280,
+   "h": 720,
+   "title": "19 · Painel de chamada (TV da sala de espera)"
+  },
+  "Laudo-Impresso.dc.html": {
+   "x": 0,
+   "y": 10030,
+   "w": 794,
+   "h": 1123,
+   "title": "20 · Laudo impresso (A4)",
+   "paper": "a4"
+  },
+  "Preparo-Exame.dc.html": {
+   "x": 874,
+   "y": 10030,
+   "w": 794,
+   "h": 1123,
+   "title": "21 · Comprovante + preparo (A4)",
+   "paper": "a4"
+  },
+  "Documentos.dc.html": {
+   "x": 1748,
+   "y": 10030,
+   "w": 794,
+   "h": 1123,
+   "title": "22 · Atestado, recibo e etiquetas (A4)",
+   "paper": "a4"
+  },
+  "Caixa.dc.html": {
+   "x": 4560,
+   "y": 0,
+   "w": 1440,
+   "h": 2300,
+   "title": "4b · Caixa do particular",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Atendimento.dc.html": {
+   "x": 0,
+   "y": 2720,
+   "w": 1440,
+   "h": 1700,
+   "title": "8b · Atendimento médico (evolução, prescrição, documentos)",
+   "expand": "fill",
+   "is_interactive": true
+  }
+ },
+ "order": [
+  "Sidebar.dc.html",
+  "Main.dc.html",
+  "Agenda.dc.html",
+  "Recepcao.dc.html",
+  "Caixa.dc.html",
+  "Paciente.dc.html",
+  "Atendimento.dc.html",
+  "Sala-Exame.dc.html",
+  "Laudo.dc.html",
+  "Visualizador.dc.html",
+  "Fluxo-Laudos.dc.html",
+  "Faturamento.dc.html",
+  "Financeiro.dc.html",
+  "Estoque.dc.html",
+  "Comunicacao.dc.html",
+  "Indicadores.dc.html",
+  "Configuracoes.dc.html",
+  "Portal-Web.dc.html",
+  "App-Paciente.dc.html",
+  "App-Bebe.dc.html",
+  "App-Medico.dc.html",
+  "Telao.dc.html",
+  "Laudo-Impresso.dc.html",
+  "Preparo-Exame.dc.html",
+  "Documentos.dc.html"
+ ],
+ "notes": {
+  "t1": {
+   "x": 0,
+   "y": -300,
+   "text": "Clínica — recepção, agenda e paciente",
+   "kind": "title1",
+   "maxW": 7520
+  },
+  "t2": {
+   "x": 0,
+   "y": 2420,
+   "text": "Atendimento, exames, laudos e imagens",
+   "kind": "title1",
+   "maxW": 7520
+  },
+  "t3": {
+   "x": 0,
+   "y": 4640,
+   "text": "Gestão",
+   "kind": "title1",
+   "maxW": 9040
+  },
+  "t4": {
+   "x": 0,
+   "y": 7360,
+   "text": "Paciente e médico",
+   "kind": "title1",
+   "maxW": 4210
+  },
+  "t5": {
+   "x": 0,
+   "y": 9730,
+   "text": "Documentos impressos",
+   "kind": "title1",
+   "maxW": 2542
+  },
+  "n1": {
+   "x": 4330,
+   "y": 7660,
+   "w": 400,
+   "fill": "blue",
+   "size": "m",
+   "text": "SEGURANÇA\n• Login individual com 2 fatores, nada de usuário compartilhado.\n• Bloqueio de tela automático.\n• Perfis por função: a recepção não lê o laudo, o faturamento não lê a evolução clínica.\n• Toda abertura de prontuário e de imagem fica registrada.\n• Laudo assinado com ICP-Brasil + QR para conferir.\n• Backup criptografado fora do servidor local."
+  },
+  "n2": {
+   "x": 4770,
+   "y": 7660,
+   "w": 400,
+   "fill": "green",
+   "size": "m",
+   "text": "ÉTICA E LGPD\n• Registro clínico nunca é apagado: a correção vira nova versão, com o motivo.\n• Consentimento por finalidade.\n• Laudo só aparece no portal depois de assinado.\n• Resultado delicado (ex.: óbito fetal) não vai direto ao portal: o médico conversa antes.\n• O paciente baixa e pede a exclusão dos próprios dados."
+  },
+  "n3": {
+   "x": 5210,
+   "y": 7660,
+   "w": 400,
+   "fill": "purple",
+   "size": "m",
+   "text": "ACESSIBILIDADE\n• Contraste AA em todo texto.\n• Status com cor + texto, nunca só a cor.\n• Tudo pelo teclado (Ctrl+K busca, F2 check-in, F9 ditado).\n• Pensado para 1366×768 e zoom de 150%.\n• Portal e app com letra ajustável e leitor de tela."
+  },
+  "n4": {
+   "x": 4330,
+   "y": 8260,
+   "w": 400,
+   "fill": "orange",
+   "size": "m",
+   "text": "FUNÇÕES MEDWARE + MEDILAB COBERTAS\nAgenda, recepção, senhas, telão, etiquetas, orçamentos, autorizações, elegibilidade, prontuário, captura de imagem, worklist, DICOM SR, PACS, visualizador, laudos com frases, ditado e IA, fluxo de laudos, impressão/CD, faturamento TISS, glosas, financeiro, DRE, NF, repasse médico, estoque, WhatsApp, NPS, telemedicina, agendamento online, portal e apps (paciente, bebê, médico), indicadores, API."
+  },
+  "n5": {
+   "x": 4770,
+   "y": 8260,
+   "w": 400,
+   "fill": "teal",
+   "size": "m",
+   "text": "DX (nosso time)\n• Base: suíte Clinica (.NET 8 + PostgreSQL), com agenda, TISS, financeiro e prontuário prontos.\n• Imagens: Orthanc (PACS) + OHIF (visualizador) + DCMTK (worklist).\n• Um servidor local, backup externo, deploy automático.\n\nImagens ilustrativas: arquivos de exemplo públicos da biblioteca pydicom + modelo 3D renderizado aqui."
+  }
+ },
+ "designSystems": []
+}

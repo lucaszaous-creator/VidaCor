@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Caixa — VidaCor Imagem</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F2F3F6}
+.tog{width:46px;height:28px;border-radius:999px;background:#0C72B0;position:relative;border:0;flex:none;cursor:pointer}
+.tog::after{content:"";position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:#fff}
+.tog.off{background:#C3CAD5}.tog.off::after{right:auto;left:3px}
+.pay{border:1px solid #E1E5EB;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;background:#fff;min-width:0}
+.pay.on{border-color:#0C72B0;box-shadow:0 0 0 4px #E8F2FB}
+.money{font-size:22px;font-weight:650;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="caixa" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><span>VidaCor</span><span aria-hidden="true">›</span><span>Gestão</span><span aria-hidden="true">›</span><b>Caixa do particular</b></div>
+      <div class="grow"></div>
+      <button class="btn btn-sm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"></path></svg>Suprimento</button>
+      <button class="btn btn-sm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"></path></svg>Sangria</button>
+      <button class="btn btn-p"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>Fechar caixa</button>
+    </div>
+
+    <div class="page-h">
+      <div class="grow">
+        <h1>Caixa</h1>
+        <p>Recebimentos de pacientes particulares, sinal de pacotes e coparticipação · tudo vai para o Financeiro no fechamento</p>
+      </div>
+    </div>
+
+    <section class="card" aria-label="Situação do caixa" style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center">
+      <span class="tile t-green" style="width: 56px; height: 56px; border-radius: 16px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 8h18v12H3zM7 8V5h10v3M12 12v4M10 14h4"></path></svg></span>
+      <div style="flex: 1 1 360px; min-width: 0">
+        <div class="row wrap" style="gap: 10px"><h2 style="font-size: 22px; font-weight: 650">Caixa 1 · Guichê 2</h2><span class="chip c-green"><span class="d"></span>Aberto</span></div>
+        <div class="t14 mute" style="margin-top: 4px">Aberto por Ana Souza às 07:02 com fundo de troco de R$ 200,00 · conferido por Carla Mendes</div>
+      </div>
+      <div style="display: flex; gap: 28px; flex-wrap: wrap">
+        <div><div class="lbl">Dinheiro na gaveta</div><div class="money" style="margin-top: 4px">R$ 740,00</div></div>
+        <div><div class="lbl">Última sangria</div><div class="money" style="margin-top: 4px">08:30</div></div>
+        <div><div class="lbl">Operador</div><div class="row" style="gap: 8px; margin-top: 6px"><span class="av av-sm" style="background: #0A1A4A; color: #fff">AS</span><span class="t15 b">Ana Souza</span></div></div>
+      </div>
+    </section>
+
+    <section class="grid g4" aria-label="Resumo do dia">
+      <div class="card"><div class="row"><span class="tile t-navy"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M2 20h20"></path></svg></span></div><div class="lbl" style="margin-top: 16px">Recebido hoje</div><div class="big" style="margin-top: 6px">R$ 3.784<small>,00</small></div><div class="t13 mute" style="margin-top: 8px">17 recebimentos · ticket médio R$ 222,59</div></div>
+      <div class="card"><div class="row"><span class="tile t-teal"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l4 4-4 4-4-4zM12 13l4 4-4 4-4-4zM3 12l4-4 4 4-4 4zM13 12l4-4 4 4-4 4z"></path></svg></span></div><div class="lbl" style="margin-top: 16px">PIX</div><div class="big" style="margin-top: 6px">R$ 1.640<small>,00</small></div><div class="t13 mute" style="margin-top: 8px">9 · conciliado com o banco</div></div>
+      <div class="card"><div class="row"><span class="tile t-violet"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20M6 15h4"></path></svg></span></div><div class="lbl" style="margin-top: 16px">Cartão</div><div class="big" style="margin-top: 6px">R$ 1.204<small>,00</small></div><div class="t13 mute" style="margin-top: 8px">Crédito R$ 860,00 · débito R$ 344,00</div></div>
+      <div class="card"><div class="row"><span class="tile t-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="3"></circle></svg></span></div><div class="lbl" style="margin-top: 16px">Dinheiro</div><div class="big" style="margin-top: 6px">R$ 940<small>,00</small></div><div class="t13 mute" style="margin-top: 8px">sangria R$ 500,00 · suprimento R$ 100,00</div></div>
+      <div class="card"><div class="row"><span class="tile t-amber"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span></div><div class="lbl" style="margin-top: 16px">A receber hoje</div><div class="big" style="margin-top: 6px">R$ 760<small>,00</small></div><div class="t13 mute" style="margin-top: 8px">3 pacientes ainda não pagaram</div></div>
+    </section>
+
+    <div class="split">
+      <section class="card main" aria-labelledby="rec-h" style="display: flex; flex-direction: column; gap: 18px">
+        <div class="row wrap" style="gap: 12px">
+          <div><h2 id="rec-h" style="font-size: 20px; font-weight: 600">Novo recebimento</h2><div class="t14 mute" style="margin-top: 3px">Puxado do agendamento N035 · orçamento enviado em 04/11 pelo WhatsApp</div></div>
+          <label class="search" style="margin-left: auto; min-width: 280px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar paciente ou orçamento</span><input type="search" placeholder="Paciente, CPF ou nº do orçamento"></label>
+        </div>
+
+        <div class="row wrap" style="gap: 14px; padding: 14px 16px; border-radius: 16px; background: #F2F3F6">
+          <span class="av" style="background: #E5F5EC; color: #1F7A4D">RL</span>
+          <div style="flex: 1; min-width: 220px"><div class="t15 b nw">Rafael Monteiro Lima</div><div class="t13 mute">CPF •••.456.789-•• · 41 anos · senha N035 · Raio X às 08:50</div></div>
+          <span class="chip">Particular</span>
+          <a class="t13 b" href="Paciente.dc.html">Ficha</a>
+        </div>
+
+        <div class="scroll-x">
+          <table class="tb" style="min-width: 640px">
+            <thead><tr><th>Procedimento</th><th>Código</th><th class="r">Qtd</th><th class="r">Valor</th><th class="r">Total</th><th><span class="sr">Remover</span></th></tr></thead>
+            <tbody>
+              <tr><td><b style="font-weight: 600">Raio X de tórax PA e perfil</b><div class="t13 mute">Sala 5 · laudo em até 24 h</div></td><td class="nw mute">RX-0102</td><td class="r num">1</td><td class="r num nw">R$ 140,00</td><td class="r num nw">R$ 140,00</td><td class="r"><button class="more" aria-label="Remover raio X de tórax">✕</button></td></tr>
+              <tr><td><b style="font-weight: 600">Cópia do exame em CD</b><div class="t13 mute">Imagens DICOM + visualizador</div></td><td class="nw mute">GER-CD</td><td class="r num">1</td><td class="r num nw">R$ 20,00</td><td class="r num nw">R$ 20,00</td><td class="r"><button class="more" aria-label="Remover cópia em CD">✕</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="btn btn-sm" style="align-self: flex-start">+ Adicionar procedimento</button>
+
+        <div class="split" style="gap: 14px">
+          <div class="half" style="padding: 16px; border-radius: 16px; background: #FFF3DF; display: flex; flex-direction: column; gap: 10px">
+            <div class="row" style="gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9A5B00" stroke-width="2" aria-hidden="true"><path d="M12 3l9 16H3zM12 10v4M12 17h.01"></path></svg><b class="t14" style="color: #6B3F00">Desconto de 25% · requer autorização do gerente</b></div>
+            <div class="row wrap" style="gap: 10px">
+              <label class="field" style="flex: 1 1 120px">Desconto<input class="in" value="R$ 40,00"></label>
+              <label class="field" style="flex: 2 1 200px">Motivo<input class="in" value="Tabela social · sem cobertura do convênio"></label>
+            </div>
+            <div class="row wrap" style="gap: 8px"><button class="btn btn-sm">Pedir autorização a Carla Mendes</button><span class="t13" style="color: #6B3F00">Até 10% o operador libera sozinho</span></div>
+          </div>
+          <div class="half" style="padding: 16px; border-radius: 16px; border: 1px solid #E8EAEF; display: flex; flex-direction: column; gap: 8px">
+            <div class="row t15"><span class="mute">Subtotal</span><span class="num" style="margin-left: auto">R$ 160,00</span></div>
+            <div class="row t15"><span class="mute">Desconto (aguardando)</span><span class="num" style="margin-left: auto; color: #1F7A4D">− R$ 40,00</span></div>
+            <div class="sep"></div>
+            <div class="row" style="align-items: baseline"><span class="t15 b">Total a pagar</span><span class="big num" style="margin-left: auto; font-size: 32px">R$ 120,00</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="row wrap" style="gap: 10px; margin-bottom: 12px"><span class="lbl">Forma de pagamento</span><div class="seg" style="margin-left: auto"><button>PIX</button><button>Cartão</button><button>Dinheiro</button><button class="on">Dividir</button></div></div>
+          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 12px">
+            <div class="pay on">
+              <div class="row"><b class="t15">PIX</b><span class="chip c-amber" style="margin-left: auto">Aguardando · 9:42</span></div>
+              <div class="money">R$ 80,00</div>
+              <div class="row" style="gap: 12px; align-items: center">
+                <svg width="96" height="96" viewBox="0 0 25 25" role="img" aria-label="QR code PIX de R$ 80,00" style="flex: none; border-radius: 8px">
+                  <rect width="25" height="25" fill="#fff"></rect>
+                  <path fill="#0F172A" d="M1 1h7v7H1zM2 2v5h5V2zM3 3h3v3H3zM17 1h7v7h-7zm1 1v5h5V2zm1 1h3v3h-3zM1 17h7v7H1zm1 1v5h5v-5zm1 1h3v3H3zM10 1h2v2h-2zM13 2h2v3h-2zM10 5h2v2h-2zM9 9h3v1H9zM13 8h2v3h-2zM16 10h3v1h-3zM20 9h4v2h-4zM1 10h3v1H1zM5 11h3v2H5zM10 12h2v2h-2zM14 13h3v1h-3zM18 12h2v3h-2zM21 13h3v1h-3zM2 14h3v1H2zM9 15h3v1H9zM13 16h2v2h-2zM16 16h3v1h-3zM21 16h3v2h-3zM10 18h3v1h-3zM14 19h2v3h-2zM17 19h3v1h-3zM21 20h3v1h-3zM10 21h2v3h-2zM13 23h3v1h-3zM17 22h2v2h-2zM20 23h4v1h-4z"></path>
+                </svg>
+                <div class="t13 mute" style="min-width: 0">Mostrar ao paciente na tela do balcão ou enviar pelo WhatsApp</div>
+              </div>
+              <button class="btn btn-sm">Copiar "copia e cola"</button>
+            </div>
+            <div class="pay">
+              <div class="row"><b class="t15">Cartão</b><span class="chip" style="margin-left: auto">Maquininha 2</span></div>
+              <div class="money" style="color: #5B6474">R$ 0,00</div>
+              <label class="field">Tipo<select class="in"><option>Crédito</option><option>Débito</option></select></label>
+              <label class="field">Parcelas<select class="in"><option>1x sem juros</option><option>2x sem juros</option><option>3x sem juros</option></select></label>
+            </div>
+            <div class="pay on">
+              <div class="row"><b class="t15">Dinheiro</b><span class="chip c-green" style="margin-left: auto">Recebido</span></div>
+              <div class="money">R$ 40,00</div>
+              <label class="field">Valor entregue<input class="in" value="R$ 50,00"></label>
+              <div class="row t15" style="padding: 10px 12px; border-radius: 12px; background: #E5F5EC; color: #14532D"><span>Troco</span><b class="num" style="margin-left: auto">R$ 10,00</b></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col" style="gap: 12px; padding: 16px; border-radius: 16px; background: #F7F8FA">
+          <div class="row" style="gap: 12px"><div style="flex: 1"><div class="t15 b">CPF na nota</div><div class="t13 mute">Usa o CPF do cadastro</div></div><button class="tog" role="switch" aria-checked="true" aria-label="CPF na nota"></button></div>
+          <div class="row" style="gap: 12px"><div style="flex: 1"><div class="t15 b">Emitir NFS-e automaticamente</div><div class="t13 mute">Prefeitura do Rio de Janeiro · série 2026</div></div><button class="tog" role="switch" aria-checked="true" aria-label="Emitir NFS-e automaticamente"></button></div>
+          <div class="row" style="gap: 12px"><div style="flex: 1"><div class="t15 b">Enviar comprovante pelo WhatsApp</div><div class="t13 mute">Recibo + nota em PDF para (21) 9 ••••-4417</div></div><button class="tog" role="switch" aria-checked="true" aria-label="Enviar comprovante pelo WhatsApp"></button></div>
+        </div>
+
+        <div class="row wrap" style="gap: 10px; justify-content: flex-end">
+          <button class="btn">Recibo em PDF</button>
+          <button class="btn">Nota fiscal</button>
+          <button class="btn btn-p">Confirmar recebimento · R$ 120,00</button>
+        </div>
+      </section>
+
+      <aside class="aside col" style="gap: 16px">
+        <section class="card" aria-labelledby="fech-h">
+          <div class="card-h"><span class="tile t-navy"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></span><div><h2 id="fech-h" style="font-size: 17px">Prévia do fechamento</h2><div class="sub">Esperado pelo sistema × contado</div></div></div>
+          <table class="tb">
+            <thead><tr><th>Forma</th><th class="r">Esperado</th><th class="r">Contado</th></tr></thead>
+            <tbody>
+              <tr><td>Dinheiro</td><td class="r num nw">R$ 740,00</td><td class="r num nw"><b style="color: #9A5B00">R$ 735,00</b></td></tr>
+              <tr><td>PIX</td><td class="r num nw">R$ 1.640,00</td><td class="r num nw">✓ banco</td></tr>
+              <tr><td>Crédito</td><td class="r num nw">R$ 860,00</td><td class="r num nw">✓ adquirente</td></tr>
+              <tr><td>Débito</td><td class="r num nw">R$ 344,00</td><td class="r num nw">✓ adquirente</td></tr>
+            </tbody>
+          </table>
+          <div class="row" style="gap: 10px; margin-top: 12px; padding: 12px 14px; border-radius: 14px; background: #FFF3DF">
+            <span class="t14" style="flex: 1; color: #6B3F00"><b>Diferença − R$ 5,00</b> em dinheiro · acima de R$ 2,00 exige justificativa</span>
+          </div>
+          <label class="field" style="margin-top: 12px">Observação<textarea class="in" rows="2">Troco dado a mais às 08:16 (Caio V. Moraes). Paciente avisado.</textarea></label>
+          <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px">
+            <div style="padding: 10px 12px; border-radius: 12px; border: 1px dashed #C3CAD5"><div class="t12 mute">Operador</div><div class="t14 b">Ana Souza</div><div class="t12" style="color: #1F7A4D">✓ assinado</div></div>
+            <div style="padding: 10px 12px; border-radius: 12px; border: 1px dashed #C3CAD5"><div class="t12 mute">Conferente</div><div class="t14 b">Carla Mendes</div><div class="t12 mute">pendente</div></div>
+          </div>
+          <div class="row wrap" style="gap: 8px; margin-top: 14px"><button class="btn btn-p btn-sm">Fechar e enviar ao Financeiro</button><a class="btn btn-sm" href="Financeiro.dc.html">Ver no Financeiro</a></div>
+        </section>
+
+        <section class="card" aria-labelledby="orc-h">
+          <div class="card-h"><span class="tile t-violet"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6v18h12V7zM14 3v4h4M9 13h6M9 17h4"></path></svg></span><div><h2 id="orc-h" style="font-size: 17px">Orçamentos abertos</h2><div class="sub">Enviados pelo WhatsApp</div></div><span class="chip c-violet" style="margin-left: auto">4</span></div>
+          <div class="li"><div style="flex: 1; min-width: 0"><div class="t nw">Henrique Matos</div><div class="s">Ergométrico · R$ 280,00 · vale até 10/11 · visualizado</div></div><button class="btn btn-sm">Receber</button></div>
+          <div class="li"><div style="flex: 1; min-width: 0"><div class="t nw">Luiz Bastos</div><div class="s">TC tórax · R$ 650,00 · vale até 13/11 · enviado</div></div><button class="btn btn-sm">Reenviar</button></div>
+          <div class="li"><div style="flex: 1; min-width: 0"><div class="t nw">Tatiane Araújo</div><div class="s">Pacote gestante · R$ 1.200,00 · sinal pago R$ 300,00</div></div><button class="btn btn-sm">Parcela</button></div>
+          <div class="li"><div style="flex: 1; min-width: 0"><div class="t nw">Glória Nascimento</div><div class="s">Check-up cardio · R$ 820,00 · vence hoje</div></div><button class="btn btn-sm">Ligar</button></div>
+        </section>
+
+        <section class="card" aria-labelledby="tab-h">
+          <div class="card-h"><div><h2 id="tab-h" style="font-size: 17px">Tabela do particular</h2><div class="sub">Vigente desde 01/08/2026</div></div><a class="t13 b" href="Configuracoes.dc.html" style="margin-left: auto">Editar</a></div>
+          <div class="li"><span class="t14" style="flex: 1">Ecocardiograma transtorácico</span><span class="t14 b num nw">R$ 380,00</span></div>
+          <div class="li"><span class="t14" style="flex: 1">Doppler de carótidas</span><span class="t14 b num nw">R$ 320,00</span></div>
+          <div class="li"><span class="t14" style="flex: 1">USG obstétrica</span><span class="t14 b num nw">R$ 250,00</span></div>
+          <div class="li"><span class="t14" style="flex: 1">Morfológica 2º trimestre</span><span class="t14 b num nw">R$ 450,00</span></div>
+          <div class="li"><span class="t14" style="flex: 1">Teste ergométrico</span><span class="t14 b num nw">R$ 280,00</span></div>
+          <div class="li"><span class="t14" style="flex: 1">TC de crânio sem contraste</span><span class="t14 b num nw">R$ 650,00</span></div>
+          <div class="li"><span class="t14" style="flex: 1">MAPA 24 h</span><span class="t14 b num nw">R$ 260,00</span></div>
+          <div class="li"><span class="t14" style="flex: 1"><b>Pacote check-up cardio</b><br><span class="t13 mute">Eco + ergométrico + MAPA</span></span><span class="t14 b num nw">R$ 820,00</span></div>
+        </section>
+      </aside>
+    </div>
+
+    <section class="card" aria-labelledby="mov-h">
+      <div class="card-h"><div><h2 id="mov-h">Movimentações do dia</h2><div class="sub">Cada linha registra quem fez, quem autorizou e o documento emitido</div></div>
+        <div class="seg" style="margin-left: auto"><button class="on">Todas</button><button>Recebimentos</button><button>Sangria e suprimento</button><button>Estornos</button></div>
+        <button class="btn btn-sm">Exportar</button>
+      </div>
+      <div class="scroll-x">
+        <table class="tb" style="min-width: 1040px">
+          <thead><tr><th>Hora</th><th>Paciente ou descrição</th><th>Forma</th><th class="r">Valor</th><th>Operador</th><th>Documento</th><th>Situação</th></tr></thead>
+          <tbody>
+            <tr><td class="num">07:02</td><td><b style="font-weight: 600">Abertura do caixa</b><div class="t13 mute">Fundo de troco</div></td><td>Dinheiro</td><td class="r num nw">R$ 200,00</td><td class="nw">Ana Souza</td><td class="mute">—</td><td><span class="chip c-blue">Aberto</span></td></tr>
+            <tr><td class="num">07:41</td><td><b style="font-weight: 600" class="nw">Hélio T. Mendes</b><div class="t13 mute">Ecocardiograma</div></td><td>PIX</td><td class="r num nw">R$ 380,00</td><td class="nw">Ana Souza</td><td class="nw">NFS-e 004812</td><td><span class="chip c-green">Pago</span></td></tr>
+            <tr><td class="num">07:58</td><td><b style="font-weight: 600" class="nw">Eduardo M. Vaz</b><div class="t13 mute">Teste ergométrico</div></td><td class="nw">Crédito 2x</td><td class="r num nw">R$ 280,00</td><td class="nw">Ana Souza</td><td class="nw">NFS-e 004813</td><td><span class="chip c-green">Pago</span></td></tr>
+            <tr><td class="num">08:05</td><td><b style="font-weight: 600">Suprimento</b><div class="t13 mute">Troco em moedas</div></td><td>Dinheiro</td><td class="r num nw" style="color: #1F7A4D">+ R$ 100,00</td><td class="nw">Carla Mendes</td><td class="nw">Termo 0007</td><td><span class="chip c-teal">Conferido</span></td></tr>
+            <tr><td class="num">08:16</td><td><b style="font-weight: 600" class="nw">Caio V. Moraes</b><div class="t13 mute">Raio X de tórax PA</div></td><td>Dinheiro</td><td class="r num nw">R$ 120,00</td><td class="nw">Ana Souza</td><td class="nw">NFS-e 004814</td><td><span class="chip c-green">Pago</span></td></tr>
+            <tr><td class="num">08:22</td><td><b style="font-weight: 600" class="nw">Paula R. Dias</b><div class="t13 mute">Estorno · cobrança em duplicidade</div></td><td>Débito</td><td class="r num nw" style="color: #C2334D">− R$ 180,00</td><td>Ana Souza<div class="t13 mute nw">autorizado por Carla Mendes</div></td><td class="nw">NFS-e 004809 cancelada</td><td><span class="chip c-rose">Estornado</span></td></tr>
+            <tr><td class="num">08:30</td><td><b style="font-weight: 600">Sangria</b><div class="t13 mute">Envio ao cofre</div></td><td>Dinheiro</td><td class="r num nw" style="color: #C2334D">− R$ 500,00</td><td>Ana Souza<div class="t13 mute nw">conferido por Carla Mendes</div></td><td class="nw">Termo 0008</td><td><span class="chip c-teal">Conferido</span></td></tr>
+            <tr><td class="num">08:38</td><td><b style="font-weight: 600" class="nw">Tatiane Araújo</b><div class="t13 mute">Pacote gestante · sinal</div></td><td>PIX</td><td class="r num nw">R$ 300,00</td><td class="nw">Ana Souza</td><td class="nw">Recibo 0391</td><td><span class="chip c-green">Pago</span></td></tr>
+            <tr><td class="num">08:40</td><td><b style="font-weight: 600" class="nw">Rafael Monteiro Lima</b><div class="t13 mute">Raio X de tórax PA e perfil</div></td><td class="nw">PIX + dinheiro</td><td class="r num nw">R$ 120,00</td><td class="nw">Ana Souza</td><td class="mute">—</td><td><span class="chip c-amber">Aguardando PIX</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2300}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

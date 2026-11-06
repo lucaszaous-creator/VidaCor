@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fluxo de laudos — VidaCor Imagem</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F2F3F6}
+.kcol{background:#E9ECF1;border-radius:20px;padding:12px;display:flex;flex-direction:column;gap:10px;min-width:220px}
+.kh{display:flex;align-items:center;gap:8px;padding:4px 6px 2px}
+.kh b{font-size:15px;font-weight:600}
+.kh .n{margin-left:auto;font-size:13px;font-weight:600;color:#5B6474}
+.kc{display:block;background:#fff;border-radius:16px;padding:14px;box-shadow:0 1px 2px rgba(15,23,42,.05);color:#0F172A}
+.kc:hover{box-shadow:0 6px 18px rgba(15,23,42,.08);color:#0F172A}
+.kc .p{font-size:15px;font-weight:600}
+.kc .e{font-size:13px;color:#5B6474;margin-top:2px}
+.kc .m{display:flex;align-items:center;gap:6px;margin-top:10px;flex-wrap:wrap}
+.dl{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #E8EAEF}
+.dl:last-child{border-bottom:0}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="fluxo" userName="Dr. Paulo Medeiros" userRole="Cardiologia" userInitials="PM" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><span>Exames</span><span aria-hidden="true">›</span><b>Fluxo de laudos</b></div>
+      <div class="grow"></div>
+      <label class="search" style="flex: 0 1 320px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar exame</span><input type="search" placeholder="Paciente, protocolo ou médico"></label>
+      <button class="btn">Exportar produção</button>
+    </div>
+
+    <div class="page-h">
+      <div class="grow">
+        <h1>Fluxo de laudos</h1>
+        <p>Do exame feito até o laudo nas mãos do paciente · 64 exames hoje · tempo médio até assinar 3 h 40</p>
+      </div>
+      <div class="seg" role="group" aria-label="Filtros">
+        <button class="on">Todos</button><button>Urgentes · 2</button><button>Fora do prazo · 3</button><button>Ecocardiograma</button><button>Tomografia</button><button>USG</button>
+      </div>
+    </div>
+
+    <section class="card" aria-label="Filtros e prazos" style="padding: 16px 18px">
+      <div class="row wrap" style="gap: 12px; align-items: flex-end">
+        <label class="field" style="flex: 1 1 180px">Médico<select class="in"><option>Todos os médicos</option><option>Dr. Paulo Medeiros</option><option>Dra. Renata Alves</option><option>Dr. Marcos Freire</option><option>Dra. Cecília Souto</option></select></label>
+        <label class="field" style="flex: 1 1 180px">Convênio<select class="in"><option>Todos</option><option>Unimed</option><option>Bradesco Saúde</option><option>SulAmérica</option><option>Particular</option></select></label>
+        <label class="field" style="flex: 1 1 180px">Modalidade<select class="in"><option>Todas</option><option>Ecocardiograma</option><option>USG</option><option>Raio X</option><option>Tomografia</option><option>MAPA / ergométrico</option></select></label>
+        <label class="field" style="flex: 1 1 160px">Período<select class="in"><option>Hoje</option><option>Últimos 7 dias</option></select></label>
+        <div class="row wrap" style="gap: 8px; flex: 2 1 360px; justify-content: flex-end">
+          <div style="background: #E5F5EC; border-radius: 14px; padding: 8px 14px"><div class="lbl" style="color: #1F7A4D">No prazo</div><div class="t15 b num">87%</div></div>
+          <div style="background: #FFF3DF; border-radius: 14px; padding: 8px 14px"><div class="lbl" style="color: #9A5B00">Vencem em 2 h</div><div class="t15 b num">5</div></div>
+          <div style="background: #FDEEF1; border-radius: 14px; padding: 8px 14px"><div class="lbl" style="color: #C2334D">Atrasados</div><div class="t15 b num">3</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Etapas do laudo" class="scroll-x" style="padding-bottom: 4px">
+      <div style="display: grid; grid-template-columns: repeat(5, minmax(240px, 1fr)); gap: 12px; min-width: 1240px">
+        <div class="kcol">
+          <div class="kh"><span class="chip" style="height: 24px"><span class="d"></span></span><b>Aguardando laudo</b><span class="n">14</span></div>
+          <a class="kc" href="Laudo.dc.html" style="outline: 2px solid #F2B8C3"><div class="row"><span class="p">Antônio C. Ribeiro</span></div><div class="e">Doppler de carótidas · Unimed</div><div class="m"><span class="chip c-rose">Urgente</span><span class="chip c-rose num">Vence em 50 min</span></div><div class="row t13 mute" style="margin-top: 10px; gap: 8px"><span class="av av-sm" style="background: #E5F5EC; color: #1F7A4D">MF</span>Dr. Marcos Freire</div></a>
+          <a class="kc" href="Laudo.dc.html"><div class="p">Juliana S. Rocha</div><div class="e">USG morfológica 2º tri · Bradesco</div><div class="m"><span class="chip c-amber num">Prazo hoje 17:00</span><span class="chip">Sensível</span></div><div class="row t13 mute" style="margin-top: 10px; gap: 8px"><span class="av av-sm" style="background: #EFEBFC; color: #5B45B5">RA</span>Dra. Renata Alves</div></a>
+          <a class="kc" href="Laudo.dc.html"><div class="p">Tiago S. Braga</div><div class="e">Raio X de tórax · Particular</div><div class="m"><span class="chip num">24 h</span><span class="chip c-blue">Telerradiologia</span></div><div class="row t13 mute" style="margin-top: 10px; gap: 8px"><span class="av av-sm" style="background: #F1F3F6; color: #334155">TR</span>Equipe externa</div></a>
+          <button class="btn btn-sm btn-g" style="align-self: flex-start">+ 11 exames</button>
+        </div>
+
+        <div class="kcol">
+          <div class="kh"><span class="chip c-violet" style="height: 24px"><span class="d"></span></span><b>Em laudo</b><span class="n">6</span></div>
+          <a class="kc" href="Laudo.dc.html"><div class="p">Sônia M. Castro</div><div class="e">Ecocardiograma · Unimed</div><div class="m"><span class="chip c-amber num">Prazo hoje 18:00</span><span class="chip c-violet">Rascunho</span></div><div class="row t13 mute" style="margin-top: 10px; gap: 8px"><span class="av av-sm" style="background: #E8F2FB; color: #0C72B0">PM</span>Dr. Paulo Medeiros</div></a>
+          <a class="kc" href="Laudo.dc.html"><div class="p">Vera L. Antunes</div><div class="e">TC abdome c/ contraste · SulAmérica</div><div class="m"><span class="chip c-rose num">Atrasado 1 h 20</span></div><div class="row t13 mute" style="margin-top: 10px; gap: 8px"><span class="av av-sm" style="background: #FDEEF1; color: #C2334D">CS</span>Dra. Cecília Souto</div></a>
+          <a class="kc" href="Laudo.dc.html"><div class="p">Mário J. Pinto</div><div class="e">MAPA 24 h · Internado</div><div class="m"><span class="chip c-blue">Internado</span><span class="chip num">2 h</span></div><div class="row t13 mute" style="margin-top: 10px; gap: 8px"><span class="av av-sm" style="background: #E8F2FB; color: #0C72B0">PM</span>Dr. Paulo Medeiros</div></a>
+        </div>
+
+        <div class="kcol">
+          <div class="kh"><span class="chip c-amber" style="height: 24px"><span class="d"></span></span><b>Revisão por par</b><span class="n">2</span></div>
+          <a class="kc" href="Laudo.dc.html"><div class="p">Denise P. Gomes</div><div class="e">Raio X coluna lombar</div><div class="m"><span class="chip c-amber">Revisor: Dr. Marcos</span></div><p class="t13 mute" style="margin: 10px 0 0">“Conferir descrição de L4-L5 antes de assinar.”</p></a>
+          <a class="kc" href="Laudo.dc.html"><div class="p">Roberto F. Lima</div><div class="e">Doppler venoso MMII</div><div class="m"><span class="chip c-amber">Revisor: Dra. Renata</span></div></a>
+        </div>
+
+        <div class="kcol">
+          <div class="kh"><span class="chip c-blue" style="height: 24px"><span class="d"></span></span><b>Assinado</b><span class="n">9</span></div>
+          <a class="kc" href="Laudo-Impresso.dc.html"><div class="p">Maria H. Duarte</div><div class="e">Ecocardiograma</div><div class="m"><span class="chip c-blue">ICP-Brasil 07:58</span></div><div class="row" style="margin-top: 10px; gap: 6px"><button class="btn btn-sm" style="min-height: 32px">Liberar portal</button><button class="btn btn-sm" style="min-height: 32px">Imprimir</button></div></a>
+          <a class="kc" href="Laudo-Impresso.dc.html"><div class="p">Beatriz L. Cunha</div><div class="e">USG obstétrica</div><div class="m"><span class="chip c-amber">Aguarda conversa médica</span></div><p class="t13 mute" style="margin: 10px 0 0">Não vai ao portal antes do retorno com a médica.</p></a>
+        </div>
+
+        <div class="kcol">
+          <div class="kh"><span class="chip c-green" style="height: 24px"><span class="d"></span></span><b>Entregue</b><span class="n">33</span></div>
+          <a class="kc" href="Portal-Web.dc.html"><div class="p">Eduardo M. Vaz</div><div class="e">Teste ergométrico</div><div class="m"><span class="chip c-green">Portal · lido 09:12</span><span class="chip">WhatsApp</span></div></a>
+          <a class="kc" href="Portal-Web.dc.html"><div class="p">Caio V. Moraes</div><div class="e">Raio X de tórax</div><div class="m"><span class="chip c-green">Retirado no balcão</span><span class="chip">CD</span></div></a>
+          <a class="kc" href="Portal-Web.dc.html"><div class="p">Laura N. Costa</div><div class="e">Raio X coluna</div><div class="m"><span class="chip c-green">Médico solicitante</span></div></a>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid g3">
+      <section class="card" aria-labelledby="pr-h">
+        <div class="card-h"><div><h2 id="pr-h">Produção por médico</h2><div class="sub">Hoje · laudos assinados e tempo médio</div></div><button class="more" aria-label="Opções">•••</button></div>
+        <div class="li"><span class="av" style="background: #E8F2FB; color: #0C72B0">PM</span><div class="grow"><div class="t">Dr. Paulo Medeiros</div><div class="bar" style="margin-top: 8px"><i style="width: 72%"></i></div></div><div style="text-align: right"><div class="t15 b num">13</div><div class="t13 mute num">2 h 10</div></div></div>
+        <div class="li"><span class="av" style="background: #EFEBFC; color: #5B45B5">RA</span><div class="grow"><div class="t">Dra. Renata Alves</div><div class="bar" style="margin-top: 8px"><i style="width: 61%"></i></div></div><div style="text-align: right"><div class="t15 b num">11</div><div class="t13 mute num">2 h 45</div></div></div>
+        <div class="li"><span class="av" style="background: #E5F5EC; color: #1F7A4D">MF</span><div class="grow"><div class="t">Dr. Marcos Freire</div><div class="bar" style="margin-top: 8px"><i style="width: 44%"></i></div></div><div style="text-align: right"><div class="t15 b num">8</div><div class="t13 mute num">3 h 30</div></div></div>
+        <div class="li"><span class="av" style="background: #FDEEF1; color: #C2334D">CS</span><div class="grow"><div class="t">Dra. Cecília Souto</div><div class="bar" style="margin-top: 8px"><i style="width: 28%"></i></div></div><div style="text-align: right"><div class="t15 b num">5</div><div class="t13 mute num">5 h 05</div></div></div>
+      </section>
+
+      <section class="card" aria-labelledby="en-h">
+        <div class="card-h"><div><h2 id="en-h">Entrega e impressão</h2><div class="sub">Maria Helena Duarte · Ecocardiograma</div></div></div>
+        <div class="dl"><span class="tile t-blue" style="width: 40px; height: 40px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 21h8"></path></svg></span><div class="grow"><div class="t15 b">Portal do paciente</div><div class="t13 mute">Laudo + 2 imagens-chave · aviso no WhatsApp</div></div><span class="chip c-green">Liberado</span></div>
+        <div class="dl"><span class="tile t-teal" style="width: 40px; height: 40px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"></path></svg></span><div class="grow"><div class="t15 b">Médico solicitante</div><div class="t13 mute">Link seguro válido por 30 dias</div></div><button class="btn btn-sm">Enviar</button></div>
+        <div class="dl"><span class="tile t-gray" style="width: 40px; height: 40px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M7 14h10v7H7z"></path></svg></span><div class="grow"><div class="t15 b">Impressão sob demanda</div><div class="t13 mute">Laudo timbrado + imagens selecionadas</div></div><button class="btn btn-sm">Imprimir</button></div>
+        <div class="dl"><span class="tile t-violet" style="width: 40px; height: 40px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="2.5"></circle></svg></span><div class="grow"><div class="t15 b">CD/DVD com visualizador</div><div class="t13 mute">Capa e etiqueta com a identidade VidaCor</div></div><button class="btn btn-sm">Gravar</button></div>
+      </section>
+
+      <section class="card" aria-labelledby="au-h">
+        <div class="card-h"><div><h2 id="au-h">Histórico de versões</h2><div class="sub">Laudo retificado · nada é apagado</div></div></div>
+        <div class="li"><span class="chip c-navy">v2</span><div class="grow"><div class="t">Retificação · Caio V. Moraes</div><div class="s">Motivo: lateralidade corrigida (direita → esquerda) · Dra. Cecília · 10:22</div></div></div>
+        <div class="li"><span class="chip">v1</span><div class="grow"><div class="t">Laudo original</div><div class="s">Assinado 08:05 · mantido para consulta e auditoria</div></div></div>
+        <div class="sep" style="margin: 10px 0"></div>
+        <div class="li"><span class="tile t-blue" style="width: 40px; height: 40px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5zM3 13l9 5 9-5"></path></svg></span><div class="grow"><div class="t">Telerradiologia externa</div><div class="s">4 exames enviados · prazo contratual 6 h</div></div><button class="btn btn-sm">Atribuir</button></div>
+      </section>
+    </div>
+    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1600}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

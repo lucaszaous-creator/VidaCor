@@ -1,0 +1,60 @@
+# 06 · Mockups
+
+**Ao vivo (canvas navegável):** https://claude.ai/artifact/NT2bm1UnVPJe9NGGs3HTii
+— privado; compartilhe pelo menu *Share* para o cliente ou o time abrirem. As
+telas de sistema são clicáveis no modo *Play* (o menu leva de uma tela à outra).
+
+**Fonte:** [`design/mockups/`](../design/mockups/). Cada tela é um arquivo
+`.dc.html` (HTML com marcação de componente). O `canvas.json` guarda a posição
+das telas e as notas. Imagens e CSS são referenciados por endereço `/_blob/…`
+do canvas; as cópias locais estão em `design/assets/` (veja
+[10](10-assets-e-licencas.md)).
+
+## As telas (rodada 3, aprovada)
+
+| # | Arquivo | Tela |
+|---|---|---|
+| — | `Sidebar.dc.html` | Menu lateral compartilhado |
+| 1 | `Main.dc.html` | Início (painel do dia) |
+| 2 | `Agenda.dc.html` | Agenda por sala e agendamento |
+| 3 | `Recepcao.dc.html` | Recepção, senhas e check-in |
+| 4 | `Caixa.dc.html` | Caixa do particular |
+| 5 | `Paciente.dc.html` | Paciente 360º + anatomia |
+| 6 | `Atendimento.dc.html` | Atendimento médico |
+| 7 | `Sala-Exame.dc.html` | Sala de exame |
+| 8 | `Laudo.dc.html` | Laudar (estação do médico) |
+| 9 | `Visualizador.dc.html` | Visualizador de imagens (PACS) |
+| 10 | `Fluxo-Laudos.dc.html` | Fluxo de laudos, entrega e impressão |
+| 11 | `Faturamento.dc.html` | Faturamento TISS |
+| 12 | `Financeiro.dc.html` | Financeiro |
+| 13 | `Estoque.dc.html` | Estoque |
+| 14 | `Comunicacao.dc.html` | WhatsApp, automações, NPS e telemedicina |
+| 15 | `Indicadores.dc.html` | Indicadores |
+| 16 | `Configuracoes.dc.html` | Configurações e segurança |
+| 17 | `Portal-Web.dc.html` | Portal do paciente (web) |
+| 18 | `App-Paciente.dc.html` | App do paciente |
+| 19 | `App-Bebe.dc.html` | Meus Exames Bebê |
+| 20 | `App-Medico.dc.html` | App do médico |
+| 21 | `Telao.dc.html` | TV de chamada |
+| 22 | `Laudo-Impresso.dc.html` | Laudo A4 |
+| 23 | `Preparo-Exame.dc.html` | Comprovante + preparo A4 |
+| 24 | `Documentos.dc.html` | Atestado, recibo e etiquetas A4 |
+
+## Rodadas
+
+| Rodada | Resultado | O que mudou |
+|---|---|---|
+| 1 | Reprovada no visual | 7 telas simples, totem; "UI amadora" |
+| 2 | "Caminho perfeito" | Design system novo, 22 telas, 3D de manequim, DICOM reais |
+| 3 | **"Perfeito!"** | Anatomia realista, Atendimento, Caixa, Recepção refeita, layout sem aperto, funções extras |
+
+## Convenções do mockup
+
+- Dados **fictícios** e consistentes entre telas (pacientes Sônia Maria Castro,
+  Maria Helena Duarte, Antônio Carlos Ribeiro, Juliana Sampaio Rocha, Rafael
+  Monteiro Lima, Lúcia Fernandes Prado; médicos Dr. Paulo Medeiros, Dra. Renata
+  Alves, Dr. Marcos Freire).
+- Textos clínicos e preparos são **ilustrativos** e precisam ser revisados pelo
+  responsável técnico.
+- Campos pendentes da clínica ficam entre colchetes: `[ENDEREÇO]`, `[CNPJ]`,
+  `[CRM]`.

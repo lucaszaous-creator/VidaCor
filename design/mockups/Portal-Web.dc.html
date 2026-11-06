@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Portal do paciente — Meu VidaCor</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F2F3F6}
+.tn{display:inline-flex;align-items:center;height:42px;padding:0 16px;border-radius:999px;color:#334155;font-size:15px;font-weight:550}
+.tn.on{background:#0A1A4A;color:#fff}
+.day{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:60px;height:72px;border-radius:16px;border:1px solid #E8EAEF;background:#fff;color:#334155;cursor:pointer}
+.day b{font-size:20px;font-weight:650;color:#0F172A}
+.day.on{background:#0A1A4A;border-color:#0A1A4A;color:#DCE6F5}
+.day.on b{color:#fff}
+.day[disabled]{opacity:.45;cursor:not-allowed}
+.hr{height:44px;padding:0 16px;border-radius:12px;border:1px solid #D9DDE5;background:#fff;font-size:15px;font-weight:600;color:#0F172A;cursor:pointer}
+.hr.on{background:#E8F2FB;border-color:#0C72B0;color:#0A1A4A}
+.sw{width:46px;height:28px;border-radius:999px;background:#D9DDE5;position:relative;flex:none;border:0;cursor:pointer}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw.on{background:#0C72B0}.sw.on::after{left:21px}
+</style>
+</helmet>
+<div style="font-family: Inter, sans-serif; min-height: 100vh; background: #F2F3F6">
+  <header style="display: flex; align-items: center; gap: 20px; padding: 14px 32px; flex-wrap: wrap">
+    <img src="/_blob/69e27b6caf70295083c2b311e1218937" alt="VidaCor Imagem" style="height: 46px; width: auto">
+    <span style="font-size: 16px; font-weight: 650; color: #0A1A4A; padding-left: 16px; border-left: 1px solid #D9DDE5">Meu VidaCor</span>
+    <nav aria-label="Portal" style="display: flex; gap: 4px; flex-wrap: wrap; margin-left: 12px">
+      <a class="tn on" href="Portal-Web.dc.html" aria-current="page">Início</a>
+      <a class="tn" href="Portal-Web.dc.html">Exames e laudos</a>
+      <a class="tn" href="Portal-Web.dc.html">Agendar</a>
+      <a class="tn" href="Portal-Web.dc.html">Documentos</a>
+      <a class="tn" href="Portal-Web.dc.html">Privacidade</a>
+    </nav>
+    <div class="grow"></div>
+    <div class="row" role="group" aria-label="Tamanho da letra" style="gap: 4px; background: #fff; border-radius: 999px; padding: 4px">
+      <button class="btn-g" style="height: 36px; width: 40px; border: 0; border-radius: 999px; background: transparent; font-size: 14px; font-weight: 700; color: #334155" aria-label="Diminuir letra">A−</button>
+      <button style="height: 36px; width: 40px; border: 0; border-radius: 999px; background: #0A1A4A; font-size: 16px; font-weight: 700; color: #fff" aria-label="Letra normal" aria-pressed="true">A</button>
+      <button style="height: 36px; width: 40px; border: 0; border-radius: 999px; background: transparent; font-size: 18px; font-weight: 700; color: #334155" aria-label="Aumentar letra">A+</button>
+    </div>
+    <div class="row" style="gap: 10px"><span class="av" style="background: #0A1A4A; color: #fff">MH</span><span class="t14" style="line-height: 1.3"><b style="display: block">Maria Helena</b><span class="mute">CPF •••.•••.•••-41</span></span></div>
+  </header>
+
+  <main style="max-width: 1360px; margin: 0 auto; padding: 8px 32px 40px; display: flex; flex-direction: column; gap: 16px">
+    <div class="grid g2">
+      <section aria-labelledby="hero-h" style="border-radius: 24px; padding: 28px; color: #fff; background: radial-gradient(120% 140% at 100% 0%, #1E5FA0 0%, #0A1A4A 55%, #081438 100%); display: flex; flex-direction: column; gap: 14px; min-height: 320px">
+        <span style="font-size: 12px; font-weight: 600; letter-spacing: .08em; color: #B9CCE8">SEU PRÓXIMO EXAME</span>
+        <h1 id="hero-h" style="font-size: 34px; font-weight: 650; letter-spacing: -.025em">Teste ergométrico</h1>
+        <div class="row wrap" style="gap: 10px">
+          <span class="chip" style="background: rgba(255,255,255,.14); color: #fff; height: 32px">Qui, 12 de novembro · 08:30</span>
+          <span class="chip" style="background: rgba(255,255,255,.14); color: #fff; height: 32px">Sala 4 · Dr. Paulo Medeiros</span>
+          <span class="chip" style="background: #E5F5EC; color: #1F7A4D; height: 32px">Guia autorizada pela Unimed</span>
+        </div>
+        <div style="background: rgba(255,255,255,.08); border-radius: 16px; padding: 14px 16px; font-size: 15px; line-height: 1.55; color: #E3ECF8">
+          <b style="color: #fff">Preparo:</b> venha de tênis e roupa leve, faça uma refeição leve até 2 h antes e não pare nenhum remédio por conta própria.
+        </div>
+        <div class="grow"></div>
+        <div class="row wrap" style="gap: 10px">
+          <button class="btn" style="background: #fff; border-color: #fff; color: #0A1A4A">Confirmar presença</button>
+          <button class="btn" style="background: transparent; border-color: rgba(255,255,255,.45); color: #fff">Remarcar</button>
+          <a class="btn" href="Preparo-Exame.dc.html" style="background: transparent; border-color: rgba(255,255,255,.45); color: #fff">Baixar comprovante</a>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="ag-h">
+        <div class="card-h"><span class="tile t-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 5h16v16H4zM4 10h16M9 3v4M15 3v4"></path></svg></span><div><h2 id="ag-h">Agendar online</h2><div class="sub">Sem ligar: escolha o exame, o dia e o horário</div></div></div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px">
+          <label class="field">Exame<select class="in"><option>Doppler de carótidas</option></select></label>
+          <label class="field">Convênio<select class="in"><option>Unimed · carteirinha •••• 0000</option></select></label>
+        </div>
+        <div class="row" style="margin: 16px 0 10px"><b class="t15">Novembro 2026</b><div class="grow"></div><button class="icon-btn" aria-label="Semana anterior" style="width: 36px; height: 36px">‹</button><button class="icon-btn" aria-label="Próxima semana" style="width: 36px; height: 36px">›</button></div>
+        <div class="row wrap" role="radiogroup" aria-label="Dia" style="gap: 8px">
+          <button class="day" disabled aria-label="Domingo 15, fechado"><span class="t12">Dom</span><b>15</b></button>
+          <button class="day"><span class="t12">Seg</span><b>16</b></button>
+          <button class="day on" aria-pressed="true"><span class="t12">Ter</span><b>17</b></button>
+          <button class="day"><span class="t12">Qua</span><b>18</b></button>
+          <button class="day"><span class="t12">Qui</span><b>19</b></button>
+          <button class="day"><span class="t12">Sex</span><b>20</b></button>
+          <button class="day"><span class="t12">Sáb</span><b>21</b></button>
+        </div>
+        <div class="t13 mute" style="margin: 14px 0 8px">Horários livres na terça, 17</div>
+        <div class="row wrap" style="gap: 8px">
+          <button class="hr">07:30</button><button class="hr on" aria-pressed="true">08:15</button><button class="hr">09:00</button><button class="hr">10:30</button><button class="hr">14:00</button><button class="hr">15:45</button>
+        </div>
+        <div class="row wrap" style="margin-top: 18px; gap: 12px"><span class="t14 mute" style="flex: 1 1 240px">Precisa do pedido médico. Você pode fotografar agora.</span><button class="btn btn-p">Agendar às 08:15</button></div>
+      </section>
+    </div>
+
+    <div class="split">
+      <section class="card main" aria-labelledby="hist-h">
+        <div class="card-h wrap"><div><h2 id="hist-h">Meu histórico</h2><div class="sub">Tudo que você fez na VidaCor desde 2021</div></div>
+          <div class="seg" style="margin-left: auto"><button class="on" style="height: 36px">Tudo</button><button style="height: 36px">Laudos</button><button style="height: 36px">Imagens</button><button style="height: 36px">Documentos</button><button style="height: 36px">Recibos</button></div>
+        </div>
+        <div class="scroll-x">
+          <table class="tb" style="min-width: 760px">
+            <thead><tr><th>Data</th><th>Exame ou documento</th><th>Médico</th><th>Situação</th><th class="r">Ações</th></tr></thead>
+            <tbody>
+              <tr><td class="num nw">06/11/2026</td><td><b>Ecocardiograma transtorácico</b><div class="t13 mute">Laudo + 38 imagens</div></td><td class="nw">Dr. Paulo Medeiros</td><td><span class="chip c-green"><span class="d"></span>Laudo pronto</span></td><td class="r"><div class="row" style="justify-content: flex-end; gap: 8px"><a class="btn btn-sm" href="Laudo-Impresso.dc.html">Ver laudo</a><button class="btn btn-sm">Imagens</button></div></td></tr>
+              <tr><td class="num nw">06/11/2026</td><td><b>Doppler de carótidas</b><div class="t13 mute">Previsão: hoje até 18:00</div></td><td class="nw">Dr. Marcos Freire</td><td><span class="chip c-violet"><span class="d"></span>Em laudo</span></td><td class="r"><button class="btn btn-sm">Avise-me</button></td></tr>
+              <tr><td class="num nw">06/11/2026</td><td><b>Atestado de comparecimento</b><div class="t13 mute">PDF assinado digitalmente</div></td><td>Recepção</td><td><span class="chip"><span class="d"></span>Documento</span></td><td class="r"><a class="btn btn-sm" href="Documentos.dc.html">Baixar</a></td></tr>
+              <tr><td class="num nw">22/04/2026</td><td><b>USG de abdome total</b><div class="t13 mute">Laudo + 24 imagens</div></td><td class="nw">Dr. Marcos Freire</td><td><span class="chip c-green"><span class="d"></span>Laudo pronto</span></td><td class="r"><div class="row" style="justify-content: flex-end; gap: 8px"><button class="btn btn-sm">Ver laudo</button><button class="btn btn-sm">Imagens</button></div></td></tr>
+              <tr><td class="num nw">22/04/2026</td><td><b>Recibo e nota fiscal</b><div class="t13 mute">Particular · R$ 280,00 · PIX</div></td><td>Financeiro</td><td><span class="chip"><span class="d"></span>Pago</span></td><td class="r"><button class="btn btn-sm">Baixar NF</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sep" style="margin: 16px 0"></div>
+        <div class="row wrap" style="margin-bottom: 10px; gap: 8px"><b class="t15">Imagens do ecocardiograma · 06/11</b><span class="chip" style="margin-left: 8px">Visualizador simples</span><div class="grow"></div><button class="btn btn-sm">Baixar tudo (DICOM)</button></div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px">
+          <div class="dimg" style="aspect-ratio: 4/3"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt="Ecocardiograma, apical 4 câmaras"><span class="cap">Apical 4 câmaras</span></div>
+          <div class="dimg" style="aspect-ratio: 4/3"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt="Ecocardiograma, apical 2 câmaras" style="transform: scaleX(-1)"><span class="cap">Apical 2 câmaras</span></div>
+          <div class="dimg" style="aspect-ratio: 4/3"><img src="/_blob/5d5abc0e3f9103b34da8cedf87fc15b2" alt="Doppler colorido"><span class="cap">Doppler</span></div>
+          <div class="dimg" style="aspect-ratio: 4/3"><img src="/_blob/b397e8ff60e8605ce0897e61b093b786" alt="Ressonância de abdome, exame anterior"><span class="cap">Exame anterior</span></div>
+        </div>
+      </section>
+
+      <section class="card aside" aria-labelledby="map-h">
+        <div class="card-h"><div><h2 id="map-h">Seus exames no corpo</h2><div class="sub">Toque numa região para ver o histórico</div></div></div>
+        <div class="anat" style="padding: 18px 12px 12px">
+          <div class="row" style="gap: 6px; justify-content: center; margin-bottom: 10px" role="group" aria-label="Vista do corpo"><button class="tool on" aria-pressed="true">Órgãos</button><button class="tool">Esqueleto</button><button class="tool">Pele</button></div>
+          <div style="position: relative; width: min(100%, 300px); margin: 0 auto; aspect-ratio: 574/1378">
+            <img class="body" src="/_blob/0ff44fe1ec4c215b11a7c763dbfeea82" alt="Modelo anatômico realista do corpo humano com os órgãos visíveis">
+            <button class="hs" aria-label="Coração: ecocardiograma de 06/11, laudo pronto" style="left: 53.1%; top: 27.5%"></button>
+            <button class="hs warn" aria-label="Carótidas: Doppler de 06/11, em laudo" style="left: 50.2%; top: 20.9%"></button>
+            <button class="hs" aria-label="Fígado e abdome: ultrassom de abril de 2026" style="left: 47.6%; top: 34.5%"></button>
+            <button class="hs" aria-label="Rins: ultrassom de abril de 2026" style="left: 49.3%; top: 38%"></button>
+          </div>
+          <p class="t12" style="margin: 8px 4px 0; color: #B9C6DE; text-align: center">Modelo anatômico: BodyParts3D © DBCLS (CC BY-SA 2.1 JP)</p>
+        </div>
+        <div class="li" style="margin-top: 6px"><span class="chip c-green">Pronto</span><div style="flex: 1; min-width: 0"><div class="t">Coração</div><div class="s">Ecocardiograma · 06/11 · laudo pronto</div></div><a class="btn btn-sm" href="Laudo-Impresso.dc.html">Ver</a></div>
+        <div class="li"><span class="chip c-violet">Em laudo</span><div style="flex: 1; min-width: 0"><div class="t">Carótidas</div><div class="s">Doppler · 06/11 · previsão hoje</div></div></div>
+        <div class="li"><span class="chip c-green">Pronto</span><div style="flex: 1; min-width: 0"><div class="t">Fígado e rins</div><div class="s">USG de abdome total · 22/04</div></div><button class="btn btn-sm">Ver</button></div>
+      </section>
+    </div>
+
+    <div class="grid g3">
+      <section class="card" aria-labelledby="sh-h">
+        <div class="card-h"><span class="tile t-violet"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"></path></svg></span><div><h2 id="sh-h">Compartilhar com meu médico</h2><div class="sub">Você decide quem vê e até quando</div></div></div>
+        <div class="li"><span class="av" style="background: #E8F2FB; color: #0C72B0">HL</span><div style="flex: 1"><div class="t">Dr. Hugo Lemos</div><div class="s">Ecocardiograma · expira em 6 dias</div></div><button class="btn btn-sm">Revogar</button></div>
+        <div class="li"><span class="av" style="background: #F1F3F6; color: #334155">+</span><div style="flex: 1"><div class="t">Novo link seguro</div><div class="s">Vale 7 dias · exige data de nascimento</div></div><button class="btn btn-sm btn-p">Criar</button></div>
+      </section>
+
+      <section class="card" aria-labelledby="lg-h">
+        <div class="card-h"><span class="tile t-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"></path><path d="M8.5 12l2.5 2.5 4.5-5"></path></svg></span><div><h2 id="lg-h">Privacidade (LGPD)</h2><div class="sub">Seus consentimentos</div></div></div>
+        <div class="li"><div style="flex: 1"><div class="t">Lembretes por WhatsApp</div><div class="s">Confirmação e preparo</div></div><button class="sw on" role="switch" aria-checked="true" aria-label="Lembretes por WhatsApp"></button></div>
+        <div class="li"><div style="flex: 1"><div class="t">Enviar laudo ao médico solicitante</div><div class="s">Por e-mail seguro</div></div><button class="sw" role="switch" aria-checked="false" aria-label="Enviar laudo ao médico solicitante"></button></div>
+        <div class="row wrap" style="gap: 8px; margin-top: 12px"><button class="btn btn-sm">Baixar meus dados</button><button class="btn btn-sm" style="color: #C2334D">Pedir exclusão</button></div>
+      </section>
+
+      <section class="card" aria-labelledby="sg-h">
+        <div class="card-h"><span class="tile t-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></span><div><h2 id="sg-h">Segurança e acessibilidade</h2><div class="sub">Conta protegida</div></div></div>
+        <div class="li"><div style="flex: 1"><div class="t">Verificação em 2 etapas</div><div class="s">Código por SMS · (21) •••• -0000</div></div><span class="chip c-green">Ativa</span></div>
+        <div class="li"><div style="flex: 1"><div class="t">Dispositivos conectados</div><div class="s">iPhone · Chrome no Windows</div></div><button class="btn btn-sm">Gerenciar</button></div>
+        <div class="li"><div style="flex: 1"><div class="t">Alto contraste</div><div class="s">Cores mais fortes e bordas</div></div><button class="sw" role="switch" aria-checked="false" aria-label="Alto contraste"></button></div>
+      </section>
+    </div>
+    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · imagens ilustrativas · Meu VidaCor</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1950}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

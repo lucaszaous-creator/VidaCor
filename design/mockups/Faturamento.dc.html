@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Faturamento TISS — VidaCor Imagem</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F2F3F6}</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="faturamento" userName="Carla Mendes" userRole="Gerência" userInitials="CM" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><span>Gestão</span><span aria-hidden="true">›</span><b>Faturamento TISS</b></div>
+      <div class="grow"></div>
+      <span class="chip" style="height: 40px; padding: 0 14px; background: #fff">Competência: novembro/2026</span>
+      <a class="btn" href="Configuracoes.dc.html">Tabela TUSS / CBHPM</a>
+      <button class="btn">Conferir guias</button>
+      <button class="btn btn-p"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Gerar lote XML</button>
+    </div>
+
+    <div class="page-h">
+      <div class="grow">
+        <h1>Faturamento de convênios</h1>
+        <p>Padrão TISS 4.01 · guia de consulta e SP/SADT · validação no schema oficial da ANS antes do envio</p>
+      </div>
+      <div class="seg" role="tablist" aria-label="Seção"><button class="on" role="tab" aria-selected="true">Visão geral</button><button role="tab" aria-selected="false">Guias</button><button role="tab" aria-selected="false">Lotes</button><button role="tab" aria-selected="false">Glosas</button><button role="tab" aria-selected="false">Recebimentos</button></div>
+    </div>
+
+    <section class="grid g4" aria-label="Resumo do faturamento">
+      <div class="card">
+        <div class="row" style="align-items: flex-start"><span class="tile t-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6"></path></svg></span><button class="more" aria-label="Opções">•••</button></div>
+        <div class="lbl" style="margin-top: 18px">A faturar</div>
+        <div class="big" style="margin-top: 6px">R$ 94,2<small>mil · 612 guias</small></div>
+        <div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-amber">38 com pendência</span></div>
+      </div>
+      <div class="card">
+        <div class="row" style="align-items: flex-start"><span class="tile t-violet"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"></path></svg></span><button class="more" aria-label="Opções">•••</button></div>
+        <div class="lbl" style="margin-top: 18px">Enviado</div>
+        <div class="big" style="margin-top: 6px">R$ 312,8<small>mil · 14 lotes</small></div>
+        <div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-blue">Aguardando retorno</span></div>
+      </div>
+      <div class="card">
+        <div class="row" style="align-items: flex-start"><span class="tile t-rose"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg></span><button class="more" aria-label="Opções">•••</button></div>
+        <div class="lbl" style="margin-top: 18px">Glosado</div>
+        <div class="big" style="margin-top: 6px">R$ 9,6<small>mil · 3,1%</small></div>
+        <div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-green">−0,8 p.p.</span><span class="t13 mute">vs. outubro</span></div>
+      </div>
+      <div class="card">
+        <div class="row" style="align-items: flex-start"><span class="tile t-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><button class="more" aria-label="Opções">•••</button></div>
+        <div class="lbl" style="margin-top: 18px">Recebido no mês</div>
+        <div class="big" style="margin-top: 6px">R$ 241,5<small>mil</small></div>
+        <div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-green">+12%</span><span class="t13 mute">conciliado no banco</span></div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="gp-h">
+      <div class="card-h wrap">
+        <div><h2 id="gp-h">Guias pendentes</h2><div class="sub">Ordenadas pelo prazo de envio de cada convênio</div></div>
+        <div class="row" style="margin-left: auto; gap: 8px">
+          <label class="search" style="min-height: 40px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar guia</span><input type="search" placeholder="Nº da guia, paciente, senha"></label>
+          <select class="in" aria-label="Filtrar por convênio" style="min-height: 40px; width: 180px"><option>Todos os convênios</option><option>Unimed</option><option>Bradesco Saúde</option></select>
+        </div>
+      </div>
+      <div class="scroll-x">
+        <table class="tb" style="min-width: 1040px">
+          <thead><tr><th>Prazo</th><th>Guia</th><th>Paciente</th><th>Procedimento (TUSS)</th><th>Convênio</th><th class="r">Valor</th><th>Situação</th><th class="r">Ação</th></tr></thead>
+          <tbody>
+            <tr><td><span class="chip c-rose"><span class="d"></span>Vence hoje</span></td><td class="num nw">2026-1107-0042</td><td class="nw"><b class="b">Vera L. Antunes</b></td><td>41001230 · TC abdome total c/ contraste</td><td class="nw">SulAmérica</td><td class="r num nw">R$ 1.184,00</td><td><span class="chip c-rose">Sem senha de autorização</span></td><td class="r"><button class="btn btn-sm">Solicitar senha</button></td></tr>
+            <tr><td><span class="chip c-rose"><span class="d"></span>1 dia</span></td><td class="num nw">2026-1106-0018</td><td class="nw"><b class="b">Juliana S. Rocha</b></td><td>40901300 · USG morfológica 2º tri</td><td class="nw">Bradesco Saúde</td><td class="r num nw">R$ 412,50</td><td><span class="chip c-amber">Falta pedido médico</span></td><td class="r"><button class="btn btn-sm">Anexar</button></td></tr>
+            <tr><td><span class="chip c-amber"><span class="d"></span>3 dias</span></td><td class="num nw">2026-1105-0091</td><td class="nw"><b class="b">Antônio C. Ribeiro</b></td><td>40901220 · Eco transtorácico + 40901386 Doppler carótidas</td><td class="nw">Unimed</td><td class="r num nw">R$ 698,40</td><td><span class="chip c-amber">Laudo não assinado</span></td><td class="r"><a class="btn btn-sm" href="Fluxo-Laudos.dc.html">Ver laudo</a></td></tr>
+            <tr><td><span class="chip c-green"><span class="d"></span>8 dias</span></td><td class="num nw">2026-1104-0007</td><td class="nw"><b class="b">Gustavo H. Pires</b></td><td>40101045 · Teste ergométrico</td><td class="nw">Petrobras</td><td class="r num nw">R$ 265,00</td><td><span class="chip c-green">Pronta para lote</span></td><td class="r"><button class="btn btn-sm btn-p">Incluir no lote</button></td></tr>
+            <tr><td><span class="chip c-green"><span class="d"></span>12 dias</span></td><td class="num nw">2026-1104-0033</td><td class="nw"><b class="b">Neusa A. Freitas</b></td><td>20102038 · MAPA 24 horas</td><td class="nw">Amil</td><td class="r num nw">R$ 182,00</td><td><span class="chip c-green">Pronta para lote</span></td><td class="r"><button class="btn btn-sm btn-p">Incluir no lote</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="grid g2">
+      <section class="card" aria-labelledby="lt-h">
+        <div class="card-h"><div><h2 id="lt-h">Lotes</h2><div class="sub">Gerar → validar schema ANS → transmitir → protocolo</div></div><button class="more" aria-label="Opções">•••</button></div>
+        <div class="li"><span class="tile t-gray"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6v18h12V7zM14 3v4h4"></path></svg></span><div style="flex: 1"><div class="t">Lote 0153 · Unimed</div><div class="s">86 guias · R$ 31.420,00 · XML gerado agora</div></div><span class="chip c-amber">Validando no schema</span></div>
+        <div class="li"><span class="tile t-gray"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6v18h12V7zM14 3v4h4"></path></svg></span><div style="flex: 1"><div class="t">Lote 0152 · Bradesco Saúde</div><div class="s">42 guias · R$ 18.906,30 · schema OK</div></div><button class="btn btn-sm btn-p">Transmitir</button></div>
+        <div class="li"><span class="tile t-blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"></path></svg></span><div style="flex: 1"><div class="t">Lote 0151 · SulAmérica</div><div class="s">Protocolo 88120554 · enviado em 03/11</div></div><span class="chip c-blue">Aguardando retorno</span></div>
+        <div class="li"><span class="tile t-green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><div style="flex: 1"><div class="t">Lote 0149 · Amil</div><div class="s">Demonstrativo recebido · 2 glosas</div></div><span class="chip c-green">Conciliado</span></div>
+      </section>
+
+      <section class="card" aria-labelledby="gl-h">
+        <div class="card-h"><div><h2 id="gl-h">Glosas e recursos</h2><div class="sub">Prazo de recurso conforme contrato</div></div><a class="t14 b" href="Faturamento.dc.html" style="margin-left: auto">Ver todas</a></div>
+        <div class="scroll-x">
+          <table class="tb" style="min-width: 560px">
+            <thead><tr><th>Guia</th><th>Motivo</th><th class="r">Valor</th><th>Recurso até</th><th></th></tr></thead>
+            <tbody>
+              <tr><td class="num">0149-017</td><td class="nw"><b class="b">1801</b> · Procedimento sem autorização<br><span class="t13 mute">Amil · USG abdome total</span></td><td class="r num nw">R$ 212,00</td><td><span class="chip c-rose">2 dias</span></td><td class="r"><button class="btn btn-sm">Recorrer</button></td></tr>
+              <tr><td class="num">0149-031</td><td class="nw"><b class="b">1714</b> · Valor acima da tabela<br><span class="t13 mute">Amil · Doppler venoso MMII</span></td><td class="r num nw">R$ 64,80</td><td><span class="chip c-amber">5 dias</span></td><td class="r"><button class="btn btn-sm">Recorrer</button></td></tr>
+              <tr><td class="num">0147-102</td><td class="nw"><b class="b">2002</b> · Carteirinha vencida<br><span class="t13 mute">Unimed · Raio X tórax</span></td><td class="r num nw">R$ 58,00</td><td><span class="chip c-amber">5 dias</span></td><td class="r"><button class="btn btn-sm">Recorrer</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <section class="card" aria-labelledby="cv-h">
+      <div class="card-h"><div><h2 id="cv-h">Por convênio</h2><div class="sub">Produção de novembro, glosa e prazo médio de pagamento</div></div><div class="seg" style="margin-left: auto"><button class="on" style="height: 36px">Valor</button><button style="height: 36px">Guias</button></div></div>
+      <div class="bars" style="height: 230px; padding-top: 60px">
+        <div class="bc"><span class="bn">R$ 128 mil</span><div class="bv on" style="height: 88%"><div class="tip">Unimed · 1.204 guias<br>Glosa 2,4% · paga em 32 dias</div></div><span class="bl" style="color: #0F172A; font-weight: 600">Unimed</span></div>
+        <div class="bc"><span class="bn">R$ 74 mil</span><div class="bv" style="height: 52%"></div><span class="bl">Bradesco</span></div>
+        <div class="bc"><span class="bn">R$ 58 mil</span><div class="bv" style="height: 41%"></div><span class="bl">SulAmérica</span></div>
+        <div class="bc"><span class="bn">R$ 41 mil</span><div class="bv" style="height: 30%"></div><span class="bl">Amil</span></div>
+        <div class="bc"><span class="bn">R$ 36 mil</span><div class="bv" style="height: 26%"></div><span class="bl">Petrobras</span></div>
+        <div class="bc"><span class="bn">R$ 52 mil</span><div class="bv" style="height: 37%; background: #CFE4F4"></div><span class="bl">Particular</span></div>
+      </div>
+    </section>
+    <div class="grid g2">
+      <section class="card" aria-labelledby="cf-h">
+        <div class="card-h"><span class="tile t-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"></path></svg></span><div><h2 id="cf-h">Conferência antes do lote</h2><div class="sub">Lote 0153 · Unimed · 86 guias</div></div><span class="chip c-amber" style="margin-left: auto">4 bloqueiam</span></div>
+        <div class="li"><span class="step ok">OK</span><div style="flex: 1; min-width: 0"><div class="t">Carteirinha válida na data do exame</div><div class="s">86 de 86 guias</div></div></div>
+        <div class="li"><span class="step ok">OK</span><div style="flex: 1; min-width: 0"><div class="t">Senha de autorização registrada</div><div class="s">Exames que exigem senha: 31 de 31</div></div></div>
+        <div class="li"><span class="step warn">2</span><div style="flex: 1; min-width: 0"><div class="t">Laudo assinado anexado</div><div class="s">2 guias com laudo ainda em revisão</div></div><a class="btn btn-sm" href="Fluxo-Laudos.dc.html">Ver</a></div>
+        <div class="li"><span class="step warn">1</span><div style="flex: 1; min-width: 0"><div class="t">Valor igual à tabela do contrato</div><div class="s">1 guia com valor de 2025</div></div><button class="btn btn-sm">Corrigir</button></div>
+        <div class="li"><span class="step bad">1</span><div style="flex: 1; min-width: 0"><div class="t">Pedido médico digitalizado</div><div class="s">Juliana S. Rocha · USG morfológica</div></div><button class="btn btn-sm">Anexar</button></div>
+        <div class="li"><span class="step ok">OK</span><div style="flex: 1; min-width: 0"><div class="t">XML válido no schema TISS 4.01</div><div class="s">Validação automática da ANS</div></div></div>
+      </section>
+
+      <section class="card" aria-labelledby="dm-h">
+        <div class="card-h"><div><h2 id="dm-h">Demonstrativos de pagamento</h2><div class="sub">Retorno XML do convênio conciliado guia a guia</div></div><button class="btn btn-sm" style="margin-left: auto">Importar XML</button></div>
+        <div class="scroll-x">
+          <table class="tb" style="min-width: 600px">
+            <thead><tr><th>Lote</th><th>Convênio</th><th class="r">Apresentado</th><th class="r">Pago</th><th class="r">Glosa</th><th>Situação</th></tr></thead>
+            <tbody>
+              <tr><td class="num nw">0149</td><td class="nw">Amil</td><td class="r num nw">R$ 22.410,00</td><td class="r num nw">R$ 22.133,20</td><td class="r num nw">R$ 276,80</td><td><span class="chip c-green">Conciliado</span></td></tr>
+              <tr><td class="num nw">0148</td><td class="nw">Unimed</td><td class="r num nw">R$ 38.902,40</td><td class="r num nw">R$ 38.240,40</td><td class="r num nw">R$ 662,00</td><td><span class="chip c-green">Conciliado</span></td></tr>
+              <tr><td class="num nw">0146</td><td class="nw">Petrobras</td><td class="r num nw">R$ 11.725,00</td><td class="r num nw">—</td><td class="r num nw">—</td><td><span class="chip c-amber">Pagamento previsto 12/11</span></td></tr>
+              <tr><td class="num nw">0145</td><td class="nw">Bradesco Saúde</td><td class="r num nw">R$ 19.380,10</td><td class="r num nw">R$ 18.120,10</td><td class="r num nw">R$ 1.260,00</td><td><span class="chip c-rose">Glosa acima de 5%</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <section class="card" aria-labelledby="tb-h">
+      <div class="card-h wrap"><div><h2 id="tb-h">Tabelas e contratos</h2><div class="sub">TUSS, CBHPM com porte e UCO, e regras por convênio</div></div><div class="row" style="margin-left: auto; gap: 8px"><button class="btn btn-sm">Importar tabela</button><button class="btn btn-sm">Reajuste em lote</button></div></div>
+      <div class="scroll-x">
+        <table class="tb" style="min-width: 900px">
+          <thead><tr><th>Convênio</th><th>Tabela</th><th>Porte / UCO</th><th>Reajuste</th><th>Autorização exigida</th><th>Prazo de envio</th><th class="r"></th></tr></thead>
+          <tbody>
+            <tr><td class="nw"><b class="b">Unimed</b></td><td class="nw">CBHPM 5ª ed. − 10%</td><td class="nw num">Porte 3A · UCO R$ 18,42</td><td class="nw">IPCA · mar/2026</td><td class="nw">TC, RM, eco fetal</td><td class="nw">30 dias</td><td class="r nw"><button class="btn btn-sm">Editar</button></td></tr>
+            <tr><td class="nw"><b class="b">Bradesco Saúde</b></td><td class="nw">Tabela própria 2026</td><td class="nw num">—</td><td class="nw">Anual · jan/2026</td><td class="nw">TC, morfológica</td><td class="nw">60 dias</td><td class="r nw"><button class="btn btn-sm">Editar</button></td></tr>
+            <tr><td class="nw"><b class="b">SulAmérica</b></td><td class="nw">TUSS + CBHPM 4ª ed.</td><td class="nw num">Porte 2C · UCO R$ 17,90</td><td class="nw">IGP-M · jul/2026</td><td class="nw">Todos com contraste</td><td class="nw">45 dias</td><td class="r nw"><button class="btn btn-sm">Editar</button></td></tr>
+            <tr><td class="nw"><b class="b">Petrobras (AMS)</b></td><td class="nw">Tabela AMS</td><td class="nw num">—</td><td class="nw">Anual</td><td class="nw">Ergométrico, MAPA</td><td class="nw">30 dias</td><td class="r nw"><button class="btn btn-sm">Editar</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2300}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
