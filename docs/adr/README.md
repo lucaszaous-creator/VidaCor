@@ -1,0 +1,17 @@
+# ADRs — decisões de arquitetura
+
+| ADR | Decisão | Status |
+|---|---|---|
+| [0001](0001-registrar-decisoes-em-adr.md) | Registrar decisões de arquitetura em ADR | Proposto |
+| [0002](0002-rust-no-nucleo.md) | Rust no núcleo do sistema | Proposto |
+| [0003](0003-poliglota-por-componente.md) | Poliglota por componente, com contratos explícitos | Proposto |
+| [0004](0004-monolito-modular.md) | Monólito modular em vez de microserviços | Proposto |
+| [0005](0005-frontend-typescript-react.md) | Frontend em TypeScript + React, casca desktop em Tauri | Proposto |
+| [0006](0006-pacs-orthanc-ohif.md) | PACS com Orthanc e visualização com OHIF | Proposto |
+| [0007](0007-mensageria-outbox-nats.md) | Mensageria com outbox transacional e NATS JetStream | Proposto |
+| [0008](0008-assinatura-icp-servico-jvm.md) | Assinatura ICP-Brasil em serviço JVM dedicado | Proposto |
+| [0009](0009-postgresql.md) | PostgreSQL como banco principal | Proposto |
+| [0010](0010-identidade-keycloak.md) | Identidade com Keycloak (OIDC) | Proposto |
+| [0011](0011-portal-fora-do-servidor-local.md) | Portal do paciente fora do servidor local | Proposto |
+
+Visão geral em [11 · Arquitetura e infraestrutura](../11-arquitetura-e-infraestrutura.md).

@@ -1,5 +1,9 @@
 # 07 · Arquitetura proposta
 
+> **Substituída** por [11 · Arquitetura e infraestrutura](11-arquitetura-e-infraestrutura.md):
+> o time optou por núcleo em Rust e arquitetura poliglota. Este documento fica
+> como histórico.
+
 > Proposta inicial para discutir com o time. Nada aqui está implementado ainda.
 
 ## Visão geral

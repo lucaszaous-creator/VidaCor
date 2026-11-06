@@ -15,7 +15,7 @@ para DICOM) e incluir o **estacionamento com leitura de placa**.
 | Escopo funcional (todas as funções atuais + novas) | ✅ Primeira versão — [docs/04](docs/04-escopo-funcional.md) |
 | Design system | ✅ Primeira versão — [docs/05](docs/05-design-system.md) |
 | Mockups navegáveis (25 telas) | ✅ Terceira rodada aprovada — [docs/06](docs/06-mockups.md) |
-| Arquitetura proposta | ✅ Proposta — [docs/07](docs/07-arquitetura-proposta.md) |
+| Arquitetura e infraestrutura (Rust, on-premises) | 📝 Proposta para revisão — [docs/11](docs/11-arquitetura-e-infraestrutura.md) · [ADRs](docs/adr/) |
 | Desenvolvimento | ⏳ Próximo passo — [docs/09](docs/09-proximos-passos.md) |
 
 **Mockup ao vivo:** https://claude.ai/artifact/NT2bm1UnVPJe9NGGs3HTii
@@ -38,10 +38,12 @@ docs/
   04-escopo-funcional.md        módulos × funções, cobertura Medware/Medilab
   05-design-system.md           cores, tipografia, componentes, regras de UX
   06-mockups.md                 as 25 telas, rodadas de feedback e decisões
-  07-arquitetura-proposta.md    stack, servidor local, imagens (PACS), integrações
+  07-arquitetura-proposta.md    (substituída pela 11)
   08-seguranca-lgpd-etica.md
   09-proximos-passos.md
   10-assets-e-licencas.md       origem do modelo 3D, imagens DICOM e logo
+  11-arquitetura-e-infraestrutura.md  núcleo em Rust, poliglota, servidor local
+  adr/                          decisões de arquitetura (ADR-0001 a 0011)
 design/
   mockups/                   fonte das telas (.dc.html) + canvas.json
   assets/vidacor.css         design system usado pelos mockups
