@@ -4,65 +4,82 @@
 <meta charset="utf-8">
 <title>Chat da equipe — VidaCor</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style>body{margin:0}</style>
+<style>
+body{margin:0}
+.gt{font-size:12px;font-weight:600;color:#5B6474;padding:14px 16px 6px}
+.ftab{display:flex;gap:2px;border-bottom:1px solid #E8EAEF;margin:0 -14px;padding:0 8px}
+.ftab button{height:36px;padding:0 8px;border:0;background:transparent;font:500 13px Inter,sans-serif;color:#5B6474;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.ftab button.on{color:#0F172A;border-bottom-color:#0A1A4A;font-weight:600}
+.ib{width:40px;height:40px;border:0;border-radius:12px;background:transparent;color:#5B6474;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.ib:hover{background:#F2F3F6}
+.ib.on{background:#ECE8FB;color:#5B45B5}
+.pl{display:flex;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px solid #E8EAEF;background:#F6F7F9}
+.fl{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #E8EAEF}
+.fl:last-child{border-bottom:0}
+</style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="chat" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="chat" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="row wrap" style="gap: 12px">
-      <div style="flex: 1; min-width: 0"><h1 style="margin: 0; font-size: 28px; font-weight: 650; letter-spacing: -.01em">Chat da equipe</h1><div class="t14 mute" style="margin-top: 4px">Conversa interna da clínica · fica registrada no sistema · nada de WhatsApp pessoal para assunto de paciente</div></div>
-      <button class="btn" onClick="{{novaUrgente}}"><span class="ni k-rose" style="width: 26px; height: 26px; border-radius: 8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 8v5M12 16.5h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg></span>Pedir ajuda urgente</button>
+    <header class="row wrap" style="gap: 12px">
+      <div style="flex: 1 1 auto; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Chat da equipe</h1>
+        <div class="t13 mute" style="margin-top: 2px">Conversa interna, registrada no sistema</div>
+      </div>
+      <button class="btn" onClick="{{novaUrgente}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C2334D" stroke-width="2" aria-hidden="true"><path d="M12 8v5M12 16.5h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg>Pedir ajuda urgente</button>
       <button class="btn btn-p">Nova conversa</button>
-    </div>
+    </header>
 
-    <div style="display: grid; grid-template-columns: minmax(260px, 320px) minmax(0, 1fr) minmax(240px, 300px); gap: 16px; align-items: stretch; min-height: 720px">
-      <section class="card" style="padding: 0; display: flex; flex-direction: column; overflow: hidden" aria-label="Conversas">
-        <div style="padding: 14px; display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid #E8EAEF">
-          <label class="search" style="min-height: 42px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar</span><input type="search" placeholder="Pessoa, grupo ou mensagem" value="{{busca}}" onChange="{{onBusca}}"></label>
-          <div class="qr"><sc-for list="{{filtros}}" as="f" hint-placeholder-count="4"><button class="{{f.cls}}" aria-pressed="{{f.sel}}" onClick="{{f.pick}}">{{f.label}}</button></sc-for></div>
+    <div class="fill" style="display: grid; grid-template-columns: 280px minmax(0, 1fr) 240px; gap: 16px">
+      <section class="card pane" style="padding: 0" aria-label="Conversas">
+        <div style="padding: 14px 14px 0; display: flex; flex-direction: column; gap: 10px">
+          <label class="search" style="min-height: 42px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar conversa</span><input type="search" placeholder="Pessoa, grupo ou mensagem" value="{{busca}}" onChange="{{onBusca}}"></label>
+          <nav class="ftab" aria-label="Filtro de conversas"><sc-for list="{{filtros}}" as="f" hint-placeholder-count="4"><button class="{{f.cls}}" aria-pressed="{{f.sel}}" onClick="{{f.pick}}">{{f.label}}</button></sc-for></nav>
         </div>
-        <div style="flex: 1; overflow: auto">
+        <div class="scroll">
           <sc-for list="{{grupos}}" as="g" hint-placeholder-count="3">
-            <div class="lbl" style="padding: 14px 16px 6px">{{g.titulo}}</div>
+            <div class="gt">{{g.titulo}}</div>
             <sc-for list="{{g.itens}}" as="c" hint-placeholder-count="3">
               <button class="{{c.cls}}" onClick="{{c.abrir}}" aria-current="{{c.atual}}" aria-label="{{c.aria}}">
                 <span class="avw"><span class="av" style="background: var(--kb); color: var(--k)">{{c.ini}}</span><span class="{{c.presCls}}"></span></span>
                 <span style="flex: 1; min-width: 0">
-                  <span class="row" style="gap: 6px"><span class="nm" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.nome}}</span><span class="t12 mute" style="margin-left: auto">{{c.hora}}</span></span>
+                  <span class="row" style="gap: 6px"><span class="nm" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.nome}}</span><span class="t12 mute num" style="margin-left: auto">{{c.hora}}</span></span>
                   <span class="row" style="gap: 8px; margin-top: 2px"><span class="pv" style="flex: 1">{{c.preview}}</span><sc-if value="{{c.temNaoLidas}}" hint-placeholder-val="{{ false }}"><span class="un">{{c.naoLidas}}</span></sc-if></span>
                 </span>
               </button>
             </sc-for>
           </sc-for>
+          <sc-if value="{{semConv}}" hint-placeholder-val="{{ false }}">
+            <div class="state"><div class="b">Nenhuma conversa encontrada</div><div class="t13 mute">Tente outro filtro ou outro nome.</div></div>
+          </sc-if>
         </div>
       </section>
 
-      <section class="card" style="padding: 0; display: flex; flex-direction: column; overflow: hidden" aria-label="Conversa">
-        <div class="row" style="padding: 14px 18px; border-bottom: 1px solid #E8EAEF; gap: 12px">
+      <section class="card pane" style="padding: 0" aria-label="Conversa">
+        <div class="row" style="padding: 12px 18px; border-bottom: 1px solid #E8EAEF; gap: 12px">
           <span class="avw {{atual.kCls}}"><span class="av" style="background: var(--kb); color: var(--k)">{{atual.ini}}</span><span class="{{atual.presCls}}"></span></span>
-          <div style="flex: 1; min-width: 0"><div class="b" style="font-size: 17px">{{atual.nome}}</div><div class="t13 mute">{{atual.status}}</div></div>
-          <a class="icon-btn" href="Lastro.dc.html" aria-label="Ver registro da conversa" title="Registro da conversa"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></a>
+          <div style="flex: 1; min-width: 0"><div class="b" style="font-size: 16px">{{atual.nome}}</div><div class="t13 mute">{{atual.status}}</div></div>
         </div>
         <sc-if value="{{atual.temPaciente}}" hint-placeholder-val="{{ false }}">
-          <a href="Paciente.dc.html" class="row" style="gap: 12px; padding: 10px 18px; background: #F2F5FA; border-bottom: 1px solid #E8EAEF; color: #0F172A">
-            <span class="ni k-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg></span>
-            <span style="flex: 1; min-width: 0"><b class="t14">{{atual.paciente}}</b><span class="t13 mute" style="display: block">{{atual.pacienteInfo}}</span></span>
-            <span class="chip c-violet">Conversa ligada à paciente</span>
-          </a>
+          <div class="pl">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5B45B5" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg>
+            <div style="flex: 1; min-width: 0"><div class="t14 b">{{atual.paciente}}</div><div class="t13 mute">{{atual.pacienteInfo}}</div></div>
+            <a class="btn btn-sm" href="Paciente.dc.html">Abrir ficha</a>
+          </div>
         </sc-if>
-        <div class="cp-b" style="flex: 1">
-          <div class="msgs" aria-live="polite" style="padding: 18px">
+        <div class="scroll" style="background: #F6F7F9; display: flex; flex-direction: column-reverse">
+          <div class="msgs" aria-live="polite" style="padding: 16px 18px">
             <span class="day">Hoje</span>
             <sc-for list="{{msgs}}" as="m" hint-placeholder-count="4">
-              <div class="{{m.cls}}" style="max-width: 70%">
+              <div class="{{m.cls}}" style="max-width: 78%">
                 <sc-if value="{{m.mostrarAutor}}" hint-placeholder-val="{{ true }}"><div class="who">{{m.autor}}</div></sc-if>
-                <sc-if value="{{m.urgente}}" hint-placeholder-val="{{ false }}"><div class="t12 b" style="color: #C2334D; margin-bottom: 2px">URGENTE</div></sc-if>
+                <sc-if value="{{m.urgente}}" hint-placeholder-val="{{ false }}"><div class="t12 b" style="color: #C2334D; margin-bottom: 2px">Urgente</div></sc-if>
                 {{m.texto}}
                 <sc-if value="{{m.temPaciente}}" hint-placeholder-val="{{ false }}"><div class="pt-chip"><b>{{m.paciente}}</b></div></sc-if>
                 <div class="meta">{{m.meta}}</div>
@@ -70,47 +87,43 @@
             </sc-for>
           </div>
         </div>
-        <div class="cmp" style="padding: 12px 18px 16px">
+        <div class="cmp" style="padding: 10px 18px 12px">
           <div class="qr"><sc-for list="{{rapidas}}" as="r" hint-placeholder-count="3"><button onClick="{{r.usar}}">{{r.label}}</button></sc-for><button class="{{urgCls}}" aria-pressed="{{urgente}}" onClick="{{toggleUrg}}" style="margin-left: auto">Urgente</button></div>
           <div class="in">
             <span class="sr" id="ci-msg-l">Mensagem</span>
             <input aria-labelledby="ci-msg-l" placeholder="{{placeholder}}" value="{{rascunho}}" onChange="{{onTexto}}" onKeyDown="{{onEnter}}">
-            <button aria-label="Ligar a mensagem a um paciente" title="Ligar a um paciente (nome + nascimento)" style="width: 40px; height: 40px; border: 0; border-radius: 12px; background: transparent; color: #5B45B5; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg></button>
-            <button aria-label="Anexar arquivo" style="width: 40px; height: 40px; border: 0; border-radius: 12px; background: transparent; color: #5B6474; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M21 11.5l-8.6 8.6a5 5 0 0 1-7-7l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l8-8"></path></svg></button>
+            <button class="{{ligCls}}" aria-pressed="{{ligar}}" onClick="{{toggleLigar}}" aria-label="Ligar a mensagem a um paciente" title="Ligar a um paciente (nome e nascimento)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg></button>
+            <button class="ib" aria-label="Anexar arquivo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M21 11.5l-8.6 8.6a5 5 0 0 1-7-7l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l8-8"></path></svg></button>
             <button class="send" aria-label="Enviar mensagem" onClick="{{enviar}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"></path></svg></button>
           </div>
+          <div class="t12 mute">{{rodape}}</div>
         </div>
       </section>
 
-      <aside class="col" style="gap: 16px; min-width: 0">
-        <section class="card" style="padding: 18px">
-          <div class="t15 b">Quem está na conversa</div>
-          <div class="col" style="gap: 8px; margin-top: 12px">
+      <aside class="card pane" style="padding: 0" aria-label="Detalhes da conversa">
+        <div class="scroll" style="padding: 16px 18px">
+          <div class="t14 b">Na conversa</div>
+          <div class="col" style="gap: 10px; margin-top: 10px">
             <sc-for list="{{membros}}" as="p" hint-placeholder-count="3">
-              <div class="row" style="gap: 10px"><span class="avw {{p.kCls}}"><span class="av av-sm" style="background: var(--kb); color: var(--k)">{{p.ini}}</span><span class="{{p.presCls}}"></span></span><span class="t14" style="flex: 1; min-width: 0">{{p.nome}}</span><span class="t12 mute">{{p.onde}}</span></div>
+              <div class="row" style="gap: 10px"><span class="avw {{p.kCls}}"><span class="av av-sm" style="background: var(--kb); color: var(--k)">{{p.ini}}</span><span class="{{p.presCls}}"></span></span><span style="flex: 1; min-width: 0"><span class="t14" style="display: block">{{p.nome}}</span><span class="t12 mute">{{p.onde}}</span></span></div>
             </sc-for>
           </div>
-        </section>
-        <section class="card" style="padding: 18px">
-          <div class="t15 b">Regras do chat</div>
-          <ul class="t13" style="margin: 10px 0 0; padding-left: 18px; line-height: 1.55; color: #334155">
-            <li>Assunto de paciente: ligue a mensagem a ele (nome + nascimento). Só quem atende o paciente vê.</li>
-            <li>Urgente avisa com som, fica no topo e pede confirmação de leitura.</li>
-            <li>Nada é apagado: editar mostra "editada" e guarda a versão anterior.</li>
-            <li>Sem resultado de exame ou diagnóstico em grupo geral.</li>
-            <li>Arquivos ficam no servidor da clínica, não no celular.</li>
-          </ul>
-        </section>
-        <section class="card" style="padding: 18px">
-          <div class="t15 b">Arquivos e links</div>
-          <div class="col" style="gap: 8px; margin-top: 10px">
-            <div class="li" style="padding: 8px 0"><span class="ni k-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6v18h12V7zM14 3v4h4"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t14">Creatinina 06-11.pdf</div><div class="s">Bruno · 09:02 · ligado à paciente</div></div></div>
-            <div class="li" style="padding: 8px 0"><span class="ni k-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t14">Triagem de segurança</div><div class="s">Aberta pelo sistema</div></div></div>
+          <div class="t14 b" style="margin-top: 22px">Arquivos e links</div>
+          <div style="margin-top: 4px">
+            <sc-for list="{{arquivos}}" as="a" hint-placeholder-count="2">
+              <div class="fl">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5B6474" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6v18h12V7zM14 3v4h4"></path></svg>
+                <div style="flex: 1; min-width: 0"><div class="t14">{{a.t}}</div><div class="t12 mute">{{a.s}}</div></div>
+              </div>
+            </sc-for>
+            <sc-if value="{{semArquivos}}" hint-placeholder-val="{{ false }}"><div class="t13 mute" style="padding: 8px 0">Nenhum arquivo nesta conversa.</div></sc-if>
           </div>
-        </section>
+        </div>
+        <div style="padding: 12px 18px; border-top: 1px solid #E8EAEF">
+          <a class="btn btn-sm" href="Lastro.dc.html" style="width: 100%">Ver registro no lastro</a>
+        </div>
       </aside>
     </div>
-    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
   </main>
 </div>
 </x-dc>
@@ -119,20 +132,21 @@ class Component extends DCLogic {
   constructor(props) {
     super(props);
     this.state = {
-      aberta: 's6', filtro: 'tudo', busca: '', rascunho: '', urgente: false,
+      aberta: 's6', filtro: 'tudo', busca: '', rascunho: '', urgente: false, ligar: false,
       convs: [
-        { id: 's6', tipo: 'Salas', nome: 'Sala 6 · Tomografia', ini: 'S6', k: 'teal', pres: 'on', status: '3 pessoas · conversa ligada à paciente', grupo: true, urgente: true, naoLidas: 0,
-          paciente: 'Lúcia Fernandes Prado · 02/07/1959', pacienteInfo: 'TC de crânio com contraste · Sala 6 · triagem: precisa de aprovação médica',
+        { id: 's6', tipo: 'Salas', nome: 'Sala 6, Tomografia', ini: 'S6', k: 'teal', pres: 'on', status: '3 pessoas, conversa ligada à paciente', grupo: true, urgente: true, naoLidas: 0,
+          paciente: 'Lúcia Fernandes Prado, 02/07/1959', pacienteInfo: 'TC de crânio com contraste',
+          arquivos: [['Creatinina 06-11.pdf', 'Bruno, 09:02, ligado à paciente'], ['Triagem de segurança', 'Aberta pelo sistema']],
           membros: [['Dra. Cecília Souto', 'CS', 'rose', 'on', 'Médica'], ['Bruno Lima', 'BL', 'teal', 'on', 'Técnico'], ['Ana Souza', 'AS', 'navy', 'on', 'Recepção']],
           msgs: [
             { de: 'Bruno (técnico)', k: 'teal', t: 'Paciente chegou para a TC com contraste. Creatinina de ontem 1,6 e TFG 42.', h: '09:02' },
-            { de: 'Bruno (técnico)', k: 'teal', t: 'Preciso da avaliação do médico antes de injetar. Exame bloqueado na triagem.', h: '09:03', urg: true, pac: 'Lúcia F. Prado · 02/07/1959' },
+            { de: 'Bruno (técnico)', k: 'teal', t: 'Preciso da avaliação do médico antes de injetar. Exame bloqueado na triagem.', h: '09:03', urg: true, pac: 'Lúcia F. Prado, 02/07/1959' },
             { de: 'Dra. Cecília Souto', k: 'rose', t: 'Estou indo. Faz sem contraste a primeira fase enquanto isso.', h: '09:05' }
           ] },
-        { id: 'ra', tipo: 'Diretas', nome: 'Dra. Renata Alves', ini: 'RA', k: 'violet', pres: 'busy', status: 'Em exame · Sala 2', naoLidas: 1,
+        { id: 'ra', tipo: 'Diretas', nome: 'Dra. Renata Alves', ini: 'RA', k: 'violet', pres: 'busy', status: 'Em exame na Sala 2', naoLidas: 1, arquivos: [],
           membros: [['Dra. Renata Alves', 'RA', 'violet', 'busy', 'Sala 2'], ['Você', 'AS', 'navy', 'on', 'Recepção']],
           msgs: [{ de: 'Dra. Renata Alves', k: 'violet', t: 'Consegue encaixar uma obstétrica às 10h40? A paciente está com sangramento leve.', h: '08:57' }] },
-        { id: 'rec', tipo: 'Grupos', nome: 'Recepção', ini: 'RE', k: 'blue', pres: 'on', status: '5 pessoas', grupo: true, naoLidas: 1,
+        { id: 'rec', tipo: 'Grupos', nome: 'Recepção', ini: 'RE', k: 'blue', pres: 'on', status: '5 pessoas', grupo: true, naoLidas: 1, arquivos: [],
           membros: [['Carla Mendes', 'CM', 'blue', 'on', 'Guichê 2'], ['Ana Souza', 'AS', 'navy', 'on', 'Guichê 1'], ['Pedro Reis', 'PR', 'green', 'off', 'Caixa']],
           msgs: [
             { de: 'Carla (guichê 2)', k: 'blue', t: 'A impressora de etiquetas do guichê 2 parou. Estou imprimindo pelo guichê 1.', h: '08:22' },
@@ -140,15 +154,16 @@ class Component extends DCLogic {
             { de: 'Carla (guichê 2)', k: 'blue', t: 'Voltou a funcionar, obrigada!', h: '08:41' }
           ] },
         { id: 'fat', tipo: 'Grupos', nome: 'Faturamento', ini: 'FA', k: 'orange', pres: 'on', status: '2 pessoas', grupo: true, naoLidas: 0,
+          arquivos: [['Guia Unimed 88231.pdf', 'Marcos, 08:10']],
           membros: [['Marcos Teixeira', 'MT', 'orange', 'on', 'Faturamento'], ['Você', 'AS', 'navy', 'on', 'Recepção']],
           msgs: [
-            { de: 'Marcos (faturamento)', k: 'orange', t: 'A guia da Unimed do Sr. Antônio foi autorizada, já está no agendamento.', h: '08:10', pac: 'Antônio C. Ribeiro · 15/06/1954' },
+            { de: 'Marcos (faturamento)', k: 'orange', t: 'A guia da Unimed do Sr. Antônio foi autorizada, já está no agendamento.', h: '08:10', pac: 'Antônio C. Ribeiro, 15/06/1954' },
             { de: 'Você', me: true, t: 'Perfeito, obrigada.', h: '08:12', lida: true }
           ] },
-        { id: 'tudo', tipo: 'Grupos', nome: 'Toda a clínica', ini: 'VC', k: 'navy', pres: 'on', status: '38 pessoas · avisos gerais', grupo: true, naoLidas: 0,
+        { id: 'tudo', tipo: 'Grupos', nome: 'Toda a clínica', ini: 'VC', k: 'navy', pres: 'on', status: '38 pessoas, avisos gerais', grupo: true, naoLidas: 0, arquivos: [],
           membros: [['Coordenação', 'CO', 'navy', 'on', 'Avisos']],
           msgs: [{ de: 'Coordenação', k: 'navy', t: 'Treinamento do novo sistema de etiquetas na sexta às 18h, sala de reunião.', h: '07:30' }] },
-        { id: 'pm', tipo: 'Diretas', nome: 'Dr. Paulo Medeiros', ini: 'PM', k: 'blue', pres: 'off', status: 'Ausente desde 08:40', naoLidas: 0,
+        { id: 'pm', tipo: 'Diretas', nome: 'Dr. Paulo Medeiros', ini: 'PM', k: 'blue', pres: 'off', status: 'Ausente desde 08:40', naoLidas: 0, arquivos: [],
           membros: [['Dr. Paulo Medeiros', 'PM', 'blue', 'off', 'Ausente'], ['Você', 'AS', 'navy', 'on', 'Recepção']],
           msgs: [
             { de: 'Dr. Paulo Medeiros', k: 'blue', t: 'Pode liberar o laudo da Sra. Maria Helena no portal, já conversei com ela.', h: '07:58' },
@@ -158,13 +173,15 @@ class Component extends DCLogic {
     };
   }
   conv(id) { return this.state.convs.find(c => c.id === id); }
-  abrir(id) { this.setState(s => ({ aberta: id, rascunho: '', urgente: false, convs: s.convs.map(c => c.id === id ? Object.assign({}, c, { naoLidas: 0 }) : c) })); }
+  abrir(id) { this.setState(s => ({ aberta: id, rascunho: '', urgente: false, ligar: false, convs: s.convs.map(c => c.id === id ? Object.assign({}, c, { naoLidas: 0 }) : c) })); }
   enviar(texto) {
     const t = (texto ?? this.state.rascunho).trim();
     if (!t) return;
     const h = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     const id = this.state.aberta, urg = this.state.urgente, n = Date.now();
-    this.setState(s => ({ rascunho: '', urgente: false, convs: s.convs.map(c => c.id === id ? Object.assign({}, c, { msgs: c.msgs.concat([{ de: 'Você', me: true, t, h, urg, n }]) }) : c) }));
+    const c0 = this.conv(id);
+    const pac = this.state.ligar && c0.paciente ? c0.paciente : '';
+    this.setState(s => ({ rascunho: '', urgente: false, ligar: false, convs: s.convs.map(c => c.id === id ? Object.assign({}, c, { msgs: c.msgs.concat([{ de: 'Você', me: true, t, h, urg, n, pac }]) }) : c) }));
     setTimeout(() => this.setState(s => ({ convs: s.convs.map(c => c.id === id ? Object.assign({}, c, { msgs: c.msgs.map(m => m.n === n ? Object.assign({}, m, { lida: true }) : m) }) : c) })), 1400);
   }
   renderVals() {
@@ -183,27 +200,33 @@ class Component extends DCLogic {
     const grupos = [['Urgentes', c => c.urgente], ['Salas', c => !c.urgente && c.tipo === 'Salas'], ['Grupos', c => !c.urgente && c.tipo === 'Grupos'], ['Diretas', c => !c.urgente && c.tipo === 'Diretas']]
       .map(([t, f]) => ({ titulo: t, itens: vis.filter(f).map(item) })).filter(g => g.itens.length);
     const c = this.conv(st.aberta);
-    const F = [['tudo', 'Tudo'], ['nl', 'Não lidas'], ['urg', 'Urgentes'], ['pac', 'Com paciente']];
+    const F = [['tudo', 'Tudo'], ['nl', 'Não lidas'], ['urg', 'Urgentes'], ['pac', 'Paciente']];
+    const podeLigar = !!c.paciente;
     return {
       busca: st.busca, onBusca: e => this.setState({ busca: e.target.value }),
       filtros: F.map(([k, l]) => ({ label: l, sel: st.filtro === k ? 'true' : 'false', cls: st.filtro === k ? 'on' : '', pick: () => this.setState({ filtro: k }) })),
-      grupos,
+      grupos, semConv: grupos.length === 0,
       novaUrgente: () => { this.abrir('s6'); this.setState({ urgente: true }); },
       atual: { nome: c.nome, ini: c.ini, kCls: 'k-' + c.k, presCls: 'pres ' + c.pres, status: c.status,
         temPaciente: !!c.paciente, paciente: c.paciente || '', pacienteInfo: c.pacienteInfo || '' },
       membros: c.membros.map(([nome, ini, k, p, onde]) => ({ nome, ini, kCls: 'k-' + k, presCls: 'pres ' + p, onde })),
+      arquivos: (c.arquivos || []).map(([t, s]) => ({ t, s })), semArquivos: !(c.arquivos || []).length,
       msgs: c.msgs.map(m => ({
         cls: 'msg' + (m.me ? ' me' : '') + (m.urg && !m.me ? ' urg' : '') + (m.k ? ' k-' + m.k : ''),
         mostrarAutor: !m.me && !!c.grupo, autor: m.de, texto: m.t, urgente: !!m.urg,
         temPaciente: !!m.pac, paciente: m.pac || '',
-        meta: m.h + (m.me ? (m.lida ? ' · lida' : ' · enviada') : '')
+        meta: m.h + (m.me ? (m.lida ? ', lida' : ', enviada') : '')
       })),
       rapidas: (c.id === 's6' ? ['Estou indo', 'Pode suspender o contraste', 'Ligue no ramal 214'] : ['Ok', 'Já vejo', 'Pode encaixar']).map(r => ({ label: r, usar: () => this.enviar(r) })),
       rascunho: st.rascunho, onTexto: e => this.setState({ rascunho: e.target.value }),
       onEnter: e => { if (e.key === 'Enter') { e.preventDefault(); this.enviar(); } },
       enviar: () => this.enviar(),
       urgente: st.urgente ? 'true' : 'false', urgCls: st.urgente ? 'on' : '', toggleUrg: () => this.setState(s => ({ urgente: !s.urgente })),
-      placeholder: st.urgente ? 'Mensagem urgente (avisa com som e no topo)' : 'Escreva para ' + c.nome
+      ligar: st.ligar ? 'true' : 'false', ligCls: st.ligar ? 'ib on' : 'ib',
+      toggleLigar: () => this.setState(s => ({ ligar: podeLigar ? !s.ligar : false })),
+      rodape: st.ligar ? 'A mensagem vai ligada a ' + c.paciente + '; só quem atende a paciente vê.'
+        : (podeLigar ? 'Fica no lastro. Assunto de paciente: ligue a ele.' : 'Fica no lastro. Sem resultado de exame aqui.'),
+      placeholder: st.urgente ? 'Mensagem urgente (avisa com som e fica no topo)' : 'Escreva para ' + c.nome
     };
   }
 }

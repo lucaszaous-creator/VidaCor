@@ -4,138 +4,215 @@
 <meta charset="utf-8">
 <title>Início — VidaCor Imagem</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style>body{margin:0;background:#F2F3F6}</style>
+<style>
+body{margin:0;background:#F2F3F6}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:0}
+.kpi{padding:14px 18px;border-left:1px solid #E8EAEF;min-width:0}
+.kpi:first-child{border-left:0}
+.kpi .v{font-size:26px;font-weight:650;letter-spacing:-.02em;line-height:1.15;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;font-weight:500;color:#5B6474;letter-spacing:0;margin-left:4px}
+.np{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid #E8EAEF}
+.np:last-child{border-bottom:0}
+.pd{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #E8EAEF}
+.pd:last-child{border-bottom:0}
+.pd .n{font-size:20px;font-weight:650;font-variant-numeric:tabular-nums;text-align:center}
+.mt{height:8px;border-radius:999px;background:#EEF0F3;overflow:hidden}
+.mt i{display:block;height:100%;border-radius:999px;background:#13285F}
+.mt.hi i{background:#9A5B00}
+.cols{display:flex;align-items:flex-end;gap:14px;height:100%;min-height:150px}
+.cols .c{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.cols .bk{width:100%;max-width:44px;border-radius:10px;background:#DCE1E8}
+.cols .bk.on{background:#13285F}
+.cols .bk.hj{background:#9CC7E8}
+.pane-h{display:flex;align-items:center;gap:10px;padding-bottom:12px}
+.pane-h h2{font-size:17px;font-weight:600}
+.tabs.tbi{margin:-4px -18px 0;padding:0 8px;flex-wrap:nowrap}
+.tabs.tbi button{white-space:nowrap;padding:0 12px}
+</style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="inicio" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="inicio" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <div class="crumb"><span>VidaCor</span><span aria-hidden="true">›</span><b>Início</b></div>
-      <div class="grow"></div>
-      <span class="chip" style="height: 40px; padding: 0 14px; background: #fff">Sex, 6 de novembro · 08:40</span>
+    <header class="row wrap" style="gap: 14px">
+      <div style="flex: 1 1 auto; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Bom dia, Ana</h1>
+        <div class="t13 mute" style="margin-top: 2px">Sexta, 6 de novembro, 08:40. Próximo encaixe livre às 09:00 na USG obstétrica.</div>
+      </div>
+      <div class="seg" role="group" aria-label="Período dos indicadores">
+        <sc-for list="{{periodos}}" as="p" hint-placeholder-count="3"><button class="{{p.cls}}" aria-pressed="{{p.on}}" onClick="{{p.ir}}" style="height: 40px">{{p.t}}</button></sc-for>
+      </div>
       <button class="icon-btn" aria-label="Notificações, 4 novas" style="position: relative">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10 20a2 2 0 0 0 4 0"></path></svg>
         <span style="position: absolute; top: 9px; right: 10px; width: 8px; height: 8px; border-radius: 50%; background: #C2334D; box-shadow: 0 0 0 2px #fff"></span>
       </button>
-      <a class="btn btn-p" href="Agenda.dc.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Novo agendamento</a>
-    </div>
+      <a class="btn btn-p" href="Agendamento-Guia.dc.html">Novo agendamento</a>
+    </header>
 
-    <div class="page-h">
-      <div class="grow">
-        <h1>Bom dia, Ana</h1>
-        <p>42 exames hoje em 7 salas · 6 pacientes aguardando · próximo encaixe livre às 09:00 na USG obstétrica</p>
-      </div>
-      <div class="seg" role="tablist" aria-label="Período"><button class="on" role="tab" aria-selected="true">Hoje</button><button role="tab" aria-selected="false">Semana</button><button role="tab" aria-selected="false">Mês</button></div>
-    </div>
-
-    <section class="grid g4" aria-label="Resumo do dia">
-      <div class="card">
-        <div class="row" style="align-items: flex-start"><span class="tile t-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 5h16v16H4zM4 10h16M9 3v4M15 3v4"></path></svg></span><button class="more" aria-label="Opções">•••</button></div>
-        <div class="lbl" style="margin-top: 18px">Exames hoje</div>
-        <div class="big" style="margin-top: 6px">42<small>agendados</small></div>
-        <div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-green">+8%</span><span class="t13 mute">vs. sexta passada</span></div>
-      </div>
-      <div class="card">
-        <div class="row" style="align-items: flex-start"><span class="tile t-amber"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><button class="more" aria-label="Opções">•••</button></div>
-        <div class="lbl" style="margin-top: 18px">Aguardando</div>
-        <div class="big" style="margin-top: 6px">6<small>pacientes</small></div>
-        <div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-amber">12 min</span><span class="t13 mute">espera média</span></div>
-      </div>
-      <div class="card">
-        <div class="row" style="align-items: flex-start"><span class="tile t-rose"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6v18h12V7zM14 3v4h4M9 13h6M9 17h4"></path></svg></span><button class="more" aria-label="Opções">•••</button></div>
-        <div class="lbl" style="margin-top: 18px">Laudos para liberar</div>
-        <div class="big" style="margin-top: 6px">11<small>exames</small></div>
-        <div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-rose">3 fora do prazo</span><a class="t13 b" href="Fluxo-Laudos.dc.html">Ver</a></div>
-      </div>
-      <div class="card">
-        <div class="row" style="align-items: flex-start"><span class="tile t-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h18v13H3zM3 7l3-4h12l3 4M16 13.5h2"></path></svg></span><button class="more" aria-label="Opções">•••</button></div>
-        <div class="lbl" style="margin-top: 18px">Faturado em novembro</div>
-        <div class="big" style="margin-top: 6px">R$ 186,4<small>mil</small></div>
-        <div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-green">+12%</span><span class="t13 mute">meta R$ 620 mil</span></div>
-      </div>
+    <section class="card kpis" aria-label="Resumo">
+      <div class="kpi"><div class="t13 mute">Exames</div><div class="v">{{k.exames}}<small>agendados</small></div><div class="t13 mute">{{k.examesSub}}</div></div>
+      <div class="kpi"><div class="t13 mute">Aguardando agora</div><div class="v">6<small>pacientes</small></div><div class="t13 mute">espera média de 12 min</div></div>
+      <div class="kpi"><div class="t13 mute">Laudos para liberar</div><div class="v">11</div><a class="t13 b" href="Fluxo-Laudos.dc.html" style="color: #C2334D">3 fora do prazo</a></div>
+      <div class="kpi"><div class="t13 mute">Faturado</div><div class="v">{{k.fat}}</div><div class="t13 mute">{{k.fatSub}}</div></div>
     </section>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px">
-      <section class="card" aria-labelledby="prod-h" style="grid-column: span 1">
-        <div class="card-h"><div><h2 id="prod-h">Produção da semana</h2><div class="sub">Exames realizados por dia</div></div>
-          <div style="margin-left: auto" class="seg"><button class="on btn-sm" style="height: 36px">Exames</button><button style="height: 36px">Receita</button><button style="height: 36px">Faltas</button></div>
-        </div>
-        <div class="bars" style="height: 240px; padding-top: 70px">
-          <div class="bc"><span class="bn">31</span><div class="bv" style="height: 52%"></div><span class="bl">Seg</span></div>
-          <div class="bc"><span class="bn">38</span><div class="bv" style="height: 64%"></div><span class="bl">Ter</span></div>
-          <div class="bc"><span class="bn">35</span><div class="bv" style="height: 59%"></div><span class="bl">Qua</span></div>
-          <div class="bc"><span class="bn">44</span><div class="bv on" style="height: 76%"><div class="tip">Qui, 5 de novembro<br><b>44 exames</b> · R$ 21,8 mil<br>2 faltas · 1 encaixe</div></div><span class="bl" style="color: #0F172A; font-weight: 600">Qui</span></div>
-          <div class="bc"><span class="bn">42</span><div class="bv" style="height: 72%; background: repeating-linear-gradient(135deg,#E9ECF1 0 6px,#DCE1E8 6px 12px)"></div><span class="bl">Sex · hoje</span></div>
-          <div class="bc"><span class="bn">18</span><div class="bv" style="height: 30%"></div><span class="bl">Sáb</span></div>
-        </div>
-      </section>
-
-      <section class="card" aria-labelledby="prox-h">
-        <div class="card-h"><div><h2 id="prox-h">Próximos pacientes</h2><div class="sub">Ordem de chamada · preferenciais primeiro</div></div><a class="t14 b" href="Recepcao.dc.html" style="margin-left: auto">Ver fila</a></div>
-        <div class="li"><span class="av" style="background: #E8F2FB; color: #0C72B0">AR</span><div style="flex: 1; min-width: 0"><div class="t">Antônio Carlos Ribeiro <span class="chip c-navy" style="height: 22px; font-size: 12px; margin-left: 4px">P012</span></div><div class="s">Eco + Doppler de carótidas · Unimed · 72 anos</div></div><div style="text-align: right"><div class="t14 b num">08:30</div><span class="chip c-amber" style="margin-top: 4px">Aguardando 19 min</span></div></div>
-        <div class="li"><span class="av" style="background: #EFEBFC; color: #5B45B5">JR</span><div style="flex: 1; min-width: 0"><div class="t">Juliana Sampaio Rocha</div><div class="s">USG morfológica 2º tri · Bradesco Saúde</div></div><div style="text-align: right"><div class="t14 b num">08:45</div><span class="chip c-rose" style="margin-top: 4px">Falta pedido</span></div></div>
-        <div class="li"><span class="av" style="background: #E5F5EC; color: #1F7A4D">RL</span><div style="flex: 1; min-width: 0"><div class="t">Rafael Monteiro Lima</div><div class="s">Raio X de tórax PA e perfil · Particular</div></div><div style="text-align: right"><div class="t14 b num">08:50</div><span class="chip c-amber" style="margin-top: 4px">Pagamento</span></div></div>
-        <div class="li"><span class="av" style="background: #FDEEF1; color: #C2334D">LP</span><div style="flex: 1; min-width: 0"><div class="t">Lúcia Fernandes Prado</div><div class="s">TC de crânio com contraste · alergia a iodo</div></div><div style="text-align: right"><div class="t14 b num">09:00</div><span class="chip c-rose" style="margin-top: 4px">Revisar contraste</span></div></div>
-      </section>
-    </div>
-
-    <div class="grid g2">
-      <section class="card" aria-labelledby="oc-h">
-        <div class="card-h"><h2 id="oc-h">Ocupação por sala</h2><button class="more" aria-label="Opções">•••</button></div>
-        <div class="col" style="gap: 14px">
-          <div><div class="row t14"><span>Ecocardiograma</span><span class="num b" style="margin-left: auto">82%</span></div><div class="bar" style="margin-top: 6px"><i style="width: 82%"></i></div></div>
-          <div><div class="row t14"><span>USG obstétrica</span><span class="num b" style="margin-left: auto">94%</span></div><div class="bar" style="margin-top: 6px"><i style="width: 94%"></i></div></div>
-          <div><div class="row t14"><span>USG geral e Doppler</span><span class="num b" style="margin-left: auto">76%</span></div><div class="bar" style="margin-top: 6px"><i style="width: 76%"></i></div></div>
-          <div><div class="row t14"><span>Teste ergométrico</span><span class="num b" style="margin-left: auto">67%</span></div><div class="bar" style="margin-top: 6px"><i style="width: 67%"></i></div></div>
-          <div><div class="row t14"><span>Raio X</span><span class="num b" style="margin-left: auto">58%</span></div><div class="bar" style="margin-top: 6px"><i style="width: 58%"></i></div></div>
-          <div><div class="row t14"><span>Tomografia</span><span class="num b" style="margin-left: auto">71%</span></div><div class="bar" style="margin-top: 6px"><i style="width: 71%"></i></div></div>
-          <div><div class="row t14"><span>MAPA e Holter</span><span class="num b" style="margin-left: auto">50%</span></div><div class="bar" style="margin-top: 6px"><i style="width: 50%"></i></div></div>
+    <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px">
+      <section class="card pane" aria-labelledby="prox-h">
+        <div class="pane-h"><h2 id="prox-h">Próximos pacientes</h2><span class="t13 mute">preferenciais primeiro</span><div class="grow"></div><a class="t14 b" href="Recepcao.dc.html">Ver fila</a></div>
+        <div class="scroll" style="border-top: 1px solid #E8EAEF">
+          <sc-for list="{{proximos}}" as="p" hint-placeholder-count="6">
+            <div class="np">
+              <div class="t14 b num">{{p.hora}}</div>
+              <div style="min-width: 0">
+                <div class="t14 b">{{p.nome}}</div>
+                <div class="t13 mute">{{p.sub}}</div>
+              </div>
+              <span class="{{p.stCls}}">{{p.st}}</span>
+            </div>
+          </sc-for>
         </div>
       </section>
 
-      <section class="card" aria-labelledby="pd-h">
-        <div class="card-h"><div><h2 id="pd-h">Pendências que travam o faturamento</h2><div class="sub">Resolva antes do paciente ir embora</div></div></div>
-        <div class="li"><span class="tile t-rose" style="width: 40px; height: 40px">3</span><div style="flex: 1"><div class="t">Guias sem autorização</div><div class="s">Unimed (2) · SulAmérica (1)</div></div><a class="btn btn-sm" href="Faturamento.dc.html">Resolver</a></div>
-        <div class="li"><span class="tile t-amber" style="width: 40px; height: 40px">2</span><div style="flex: 1"><div class="t">Pedido médico faltando</div><div class="s">Fotografar no balcão</div></div><a class="btn btn-sm" href="Recepcao.dc.html">Anexar</a></div>
-        <div class="li"><span class="tile t-amber" style="width: 40px; height: 40px">1</span><div style="flex: 1"><div class="t">Termo de contraste</div><div class="s">Assinatura no tablet</div></div><a class="btn btn-sm" href="Recepcao.dc.html">Assinar</a></div>
-        <div class="li"><span class="tile t-violet" style="width: 40px; height: 40px">3</span><div style="flex: 1"><div class="t">Glosas com prazo de recurso</div><div class="s">Vencem em até 5 dias</div></div><a class="btn btn-sm" href="Faturamento.dc.html">Recorrer</a></div>
-      </section>
+      <section class="card pane" aria-label="Painel da unidade">
+        <nav class="tabs tbi" aria-label="Painel da unidade">
+          <sc-for list="{{abas}}" as="a" hint-placeholder-count="4"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for>
+        </nav>
 
-    </div>
-
-    <div class="grid g3">
-        <section class="card" aria-labelledby="es-h">
-          <div class="card-h"><span class="tile t-gray"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 17h14l-1.5-6.5A2 2 0 0 0 15.6 9H8.4a2 2 0 0 0-1.9 1.5zM7 17v2M17 17v2"></path></svg></span><div><h2 id="es-h">Estacionamento</h2><div class="sub">Leitura de placa na cancela</div></div></div>
-          <div class="row" style="align-items: flex-end"><div class="big">18<small>de 40 vagas</small></div><div style="margin-left: auto; text-align: right"><div class="t13 mute">Permanência média</div><div class="t15 b num">54 min</div></div></div>
-          <div class="row t13 mute" style="margin-top: 12px; gap: 8px"><span class="chip c-green">14 validados pelo exame</span><span class="chip">4 avulsos</span></div>
-        </section>
-        <section class="card" aria-labelledby="nps-h">
-          <div class="card-h"><span class="tile t-teal"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"></path></svg></span><div><h2 id="nps-h">NPS do mês</h2><div class="sub">Pesquisa enviada após o laudo</div></div></div>
-          <div class="row" style="align-items: flex-end"><div class="big">78</div><span class="chip c-green" style="margin-left: 10px; margin-bottom: 6px">Excelente · +4</span></div>
-          <div aria-hidden="true" style="display: flex; align-items: flex-end; gap: 4px; height: 44px; margin-top: 14px">
-            <i style="flex: 1; height: 40%; border-radius: 3px; background: #DCE1E8"></i><i style="flex: 1; height: 55%; border-radius: 3px; background: #DCE1E8"></i><i style="flex: 1; height: 48%; border-radius: 3px; background: #DCE1E8"></i><i style="flex: 1; height: 70%; border-radius: 3px; background: #DCE1E8"></i><i style="flex: 1; height: 62%; border-radius: 3px; background: #DCE1E8"></i><i style="flex: 1; height: 80%; border-radius: 3px; background: #DCE1E8"></i><i style="flex: 1; height: 66%; border-radius: 3px; background: #DCE1E8"></i><i style="flex: 1; height: 85%; border-radius: 3px; background: #3E9BDB"></i><i style="flex: 1; height: 74%; border-radius: 3px; background: #3E9BDB"></i><i style="flex: 1; height: 92%; border-radius: 3px; background: #0C72B0"></i><i style="flex: 1; height: 88%; border-radius: 3px; background: #0A1A4A"></i>
+        <sc-if value="{{abaPend}}" hint-placeholder-val="{{ true }}">
+          <div class="scroll" style="padding-top: 4px">
+            <sc-for list="{{pendencias}}" as="d" hint-placeholder-count="4">
+              <div class="pd">
+                <div class="n" style="{{d.cor}}">{{d.n}}</div>
+                <div style="min-width: 0"><div class="t14 b">{{d.t}}</div><div class="t13 mute">{{d.s}}</div></div>
+                <a class="btn btn-sm" href="{{d.href}}">{{d.acao}}</a>
+              </div>
+            </sc-for>
           </div>
-        </section>
-        <section class="card" aria-labelledby="cx-h">
-          <div class="card-h"><span class="tile t-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 8h18v12H3zM7 8V5h10v3M12 12v4M10 14h4"></path></svg></span><div><h2 id="cx-h">Caixa do dia</h2><div class="sub">Caixa 1 · aberto às 07:02 por Ana Souza</div></div></div>
-          <div class="row" style="align-items: flex-end"><div class="big">R$ 3.784<small>recebidos</small></div></div>
-          <div class="row wrap" style="gap: 8px; margin-top: 12px"><span class="chip c-teal">PIX R$ 1.640</span><span class="chip c-violet">Cartão R$ 1.204</span><span class="chip c-green">Dinheiro R$ 940</span></div>
-          <div class="row" style="gap: 8px; margin-top: 14px"><span class="chip c-amber">3 a receber · R$ 760</span><a class="btn btn-sm" href="Caixa.dc.html" style="margin-left: auto">Abrir caixa</a></div>
-        </section>
+          <div class="t13 mute" style="padding-top: 10px; border-top: 1px solid #E8EAEF">Itens que travam o faturamento. Resolva antes de o paciente ir embora.</div>
+        </sc-if>
+
+        <sc-if value="{{abaProd}}" hint-placeholder-val="{{ false }}">
+          <div class="row" style="gap: 8px; padding: 6px 0 10px">
+            <span class="t13 mute">Mostrar</span>
+            <div class="seg" role="group" aria-label="Métrica">
+              <sc-for list="{{metricas}}" as="m" hint-placeholder-count="3"><button class="{{m.cls}}" aria-pressed="{{m.on}}" onClick="{{m.ir}}" style="height: 34px; padding: 0 12px; font-size: 13px">{{m.t}}</button></sc-for>
+            </div>
+          </div>
+          <div class="scroll" style="display: flex; flex-direction: column; padding: 8px 4px 0">
+            <div class="cols" style="flex: 1">
+              <sc-for list="{{barras}}" as="b" hint-placeholder-count="6">
+                <div class="c" title="{{b.tip}}">
+                  <span class="t13 b num">{{b.v}}</span>
+                  <div class="{{b.cls}}" style="{{b.h}}"></div>
+                  <span class="t13 mute">{{b.d}}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div class="t13 mute" style="padding-top: 12px">{{metricaNota}}</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{abaSalas}}" hint-placeholder-val="{{ false }}">
+          <div class="scroll" style="padding-top: 8px">
+            <div class="col" style="gap: 14px">
+              <sc-for list="{{salas}}" as="o" hint-placeholder-count="7">
+                <div><div class="row t14"><span>{{o.t}}</span><span class="num b" style="margin-left: auto">{{o.p}}</span></div><div class="{{o.cls}}" style="margin-top: 6px"><i style="{{o.w}}"></i></div></div>
+              </sc-for>
+            </div>
+          </div>
+          <div class="t13 mute" style="padding-top: 10px; border-top: 1px solid #E8EAEF">Ocupação de hoje: horários marcados sobre horários abertos.</div>
+        </sc-if>
+
+        <sc-if value="{{abaUnid}}" hint-placeholder-val="{{ false }}">
+          <div class="scroll" style="padding-top: 8px; display: flex; flex-direction: column; gap: 18px">
+            <div>
+              <div class="row"><h3 class="t15 b">Caixa 1</h3><span class="chip c-green" style="margin-left: 8px">Aberto</span><div class="grow"></div><a class="btn btn-sm" href="Caixa.dc.html">Abrir caixa</a></div>
+              <dl class="kv" style="margin: 10px 0 0">
+                <dt>Recebido</dt><dd class="num b">R$ 3.784,00</dd>
+                <dt>Por forma</dt><dd class="num">PIX R$ 1.640, cartão R$ 1.204, dinheiro R$ 940</dd>
+                <dt>A receber</dt><dd class="num">3 pacientes, R$ 760,00</dd>
+                <dt>Abertura</dt><dd>07:02 por Ana Souza</dd>
+              </dl>
+            </div>
+            <div style="border-top: 1px solid #E8EAEF; padding-top: 14px">
+              <h3 class="t15 b">Estacionamento</h3>
+              <dl class="kv" style="margin: 10px 0 0">
+                <dt>Ocupação</dt><dd class="num">18 de 40 vagas</dd>
+                <dt>Validados</dt><dd class="num">14 pelo exame, 4 avulsos</dd>
+                <dt>Permanência</dt><dd class="num">54 min em média</dd>
+              </dl>
+            </div>
+            <div style="border-top: 1px solid #E8EAEF; padding-top: 14px">
+              <h3 class="t15 b">Satisfação do mês</h3>
+              <dl class="kv" style="margin: 10px 0 0">
+                <dt>NPS</dt><dd class="num"><b>78</b>, 4 pontos acima de outubro</dd>
+                <dt>Respostas</dt><dd class="num">212 pesquisas após o laudo</dd>
+              </dl>
+            </div>
+          </div>
+        </sc-if>
+      </section>
     </div>
-    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · VidaCor Imagem</p>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1550}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = { per: 'hoje', aba: 'pend', met: 'exames' };
+  }
+  renderVals() {
+    const s = this.state;
+    const K = {
+      hoje: { exames: '42', examesSub: '8% acima da sexta passada', fat: 'R$ 21,8 mil', fatSub: 'hoje, até 08:40' },
+      semana: { exames: '208', examesSub: 'de segunda a sábado', fat: 'R$ 98,2 mil', fatSub: 'nesta semana' },
+      mes: { exames: '1.164', examesSub: 'novembro até hoje', fat: 'R$ 186,4 mil', fatSub: 'meta de R$ 620 mil, 12% acima de outubro' }
+    };
+    const P = [
+      ['08:30', 'Antônio Carlos Ribeiro', '15/06/1954, eco e Doppler de carótidas, senha P012', 'Aguardando 19 min', 'chip c-amber'],
+      ['08:45', 'Juliana Sampaio Rocha', '12/04/1993, USG morfológica do 2º trimestre', 'Falta pedido', 'chip c-rose'],
+      ['08:50', 'Rafael Monteiro Lima', '09/11/1988, raio X de tórax PA e perfil', 'Pagamento', 'chip c-amber'],
+      ['09:00', 'Lúcia Fernandes Prado', '02/07/1959, TC de crânio com contraste, alergia a iodo', 'Revisar contraste', 'chip c-rose'],
+      ['09:00', 'Cláudia Bastos Nunes', '22/08/1965, eco com Doppler', 'Confirmada', 'chip c-green'],
+      ['09:00', 'Patrícia Gomes Lopes', '03/05/1991, obstétrica com Doppler', 'Confirmada', 'chip c-green'],
+      ['09:00', 'Marcelo D. Faria', '17/02/1979, USG de abdome', 'Sem resposta', 'chip'],
+      ['09:30', 'Laura N. Costa', '30/10/1983, raio X de coluna lombar', 'Confirmada', 'chip c-green'],
+      ['10:00', 'Hélio T. Mendes', '08/05/1956, ecocardiograma transtorácico', 'Confirmado', 'chip c-green']
+    ];
+    const D = [
+      ['3', 'Guias sem autorização', 'Unimed (2) e SulAmérica (1)', 'Resolver', 'Autorizacao.dc.html', 'color: #C2334D'],
+      ['2', 'Pedido médico faltando', 'Fotografar no balcão', 'Anexar', 'Recepcao.dc.html', 'color: #9A5B00'],
+      ['1', 'Termo de contraste sem assinatura', 'Assinatura no tablet do guichê', 'Assinar', 'Recepcao.dc.html', 'color: #9A5B00'],
+      ['3', 'Glosas com prazo de recurso', 'Vencem em até 5 dias', 'Recorrer', 'Faturamento.dc.html', 'color: #5B45B5']
+    ];
+    const A = [['pend', 'Pendências 9'], ['prod', 'Produção'], ['salas', 'Salas'], ['unid', 'Caixa e unidade']];
+    const M = {
+      exames: { nota: 'Exames realizados por dia. Quinta, 5/11: 44 exames, 2 faltas e 1 encaixe.', v: [31, 38, 35, 44, 42, 18], max: 50, fmt: x => String(x) },
+      receita: { nota: 'Receita por dia em mil reais, convênio e particular.', v: [15.2, 18.9, 17.1, 21.8, 20.4, 8.7], max: 25, fmt: x => String(x).replace('.', ',') },
+      faltas: { nota: 'Pacientes que não vieram. A confirmação pelo WhatsApp sai 24 h antes.', v: [3, 1, 2, 2, 1, 0], max: 4, fmt: x => String(x) }
+    };
+    const dias = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex, hoje', 'Sáb'];
+    const m = M[s.met];
+    const S = [['Ecocardiograma, Sala 1', 82], ['USG obstétrica, Sala 2', 94], ['USG geral e Doppler, Sala 3', 76], ['Teste ergométrico, Sala 4', 67], ['Raio X, Sala 5', 58], ['Tomografia, Sala 6', 71], ['MAPA e Holter, Sala 7', 50]];
+    return {
+      periodos: [['hoje', 'Hoje'], ['semana', 'Semana'], ['mes', 'Mês']].map(([k, t]) => ({ t, cls: s.per === k ? 'on' : '', on: s.per === k ? 'true' : 'false', ir: () => this.setState({ per: k }) })),
+      k: K[s.per],
+      proximos: P.map(([hora, nome, sub, st, stCls]) => ({ hora, nome, sub, st, stCls })),
+      abas: A.map(([k, t]) => ({ t, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      abaPend: s.aba === 'pend', abaProd: s.aba === 'prod', abaSalas: s.aba === 'salas', abaUnid: s.aba === 'unid',
+      pendencias: D.map(([n, t, sub, acao, href, cor]) => ({ n, t, s: sub, acao, href, cor })),
+      metricas: [['exames', 'Exames'], ['receita', 'Receita'], ['faltas', 'Faltas']].map(([k, t]) => ({ t, cls: s.met === k ? 'on' : '', on: s.met === k ? 'true' : 'false', ir: () => this.setState({ met: k }) })),
+      barras: m.v.map((v, i) => ({ v: m.fmt(v), d: dias[i], tip: dias[i] + ': ' + m.fmt(v), cls: i === 3 ? 'bk on' : (i === 4 ? 'bk hj' : 'bk'), h: 'height: ' + Math.max(4, Math.round(v / m.max * 100)) + '%' })),
+      metricaNota: m.nota,
+      salas: S.map(([t, p]) => ({ t, p: p + '%', w: 'width: ' + p + '%', cls: p >= 90 ? 'mt hi' : 'mt' }))
+    };
+  }
 }
 </script>
 </body>

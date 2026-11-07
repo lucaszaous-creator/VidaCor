@@ -4,55 +4,147 @@
 <meta charset="utf-8">
 <title>Importar exame externo — VidaCor</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>body{margin:0;background:#F2F3F6}
-.ck{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:12px;font-weight:700}
-.ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.warn{background:#FFF3DF;color:#9A5B00}.ck.bad{background:#FDEEF1;color:#B4233C}.ck.todo{background:#fff;border:1.5px solid #CBD2DC;color:#8A93A3}.ck.cur{background:#0A1A4A;color:#fff}
-.q{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid #F1F3F6}
-.q:last-child{border-bottom:0}
-.yn{display:inline-flex;gap:6px}.yn button{height:36px;min-width:64px;border-radius:999px;border:1px solid #D9DDE5;background:#fff;font:600 14px Inter,sans-serif;color:#334155;cursor:pointer}
-.yn button.on{background:#0A1A4A;border-color:#0A1A4A;color:#fff}
-.hint{font-size:12.5px;margin-top:4px}
-.sec-t{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5B6474;margin:22px 0 4px}
-.li2{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #F1F3F6}.li2:last-child{border-bottom:0}
-.rowsel{background:#F3F6FB}
+.ex-st{display:inline-flex;align-items:center;gap:8px}
+.ex-ok{width:18px;height:18px;border-radius:50%;background:#E5F5EC;color:#1F7A4D;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.ex-op{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border:1px solid #E8EAEF;border-radius:14px;cursor:pointer}
+.ex-op.on{border-color:#0A1A4A;box-shadow:0 0 0 1px #0A1A4A}
+.ex-op input,.ex-it input{width:20px;height:20px;accent-color:#0A1A4A;flex:none;margin:2px 0 0}
+.ex-it{display:flex;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid #F1F3F6;cursor:pointer}
+.ex-it:last-child{border-bottom:0}
+.ex-cmp{background:#F6F8FB;border-radius:14px;padding:16px}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="pacientes" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="pacientes" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar"><h1 style="font-size:22px;font-weight:650">Importar exame externo</h1><div class="grow"></div><span class="t13 mute">Recepção · Ana Souza</span></div>
-    <ol class="card row wrap" style="list-style:none;margin:0;gap:12px;padding:16px 22px"><li class="row" style="gap:10px;flex:1 1 180px"><span class="ck ok">✓</span><div><div class="t14 b">Receber o exame</div><div class="t12 mute">link do portal da outra clínica</div></div></li><li class="row" style="gap:10px;flex:1 1 180px"><span class="ck ok">✓</span><div><div class="t14 b">Conferir paciente</div><div class="t12 mute"></div></div></li><li class="row" style="gap:10px;flex:1 1 180px"><span class="ck cur">3</span><div><div class="t14 b">Escolher estudos</div><div class="t12 mute"></div></div></li><li class="row" style="gap:10px;flex:1 1 180px"><span class="ck todo">4</span><div><div class="t14 b">Importar</div><div class="t12 mute"></div></div></li></ol>
-    <div class="split">
-      <section class="card main" style="padding:22px 28px">
-        <h2 style="font-size:18px;font-weight:600">Conferência do paciente</h2>
-        <div class="grid g2" style="margin-top:14px">
-          <div style="background:#F6F8FB;border-radius:14px;padding:16px"><div class="lbl">No exame recebido</div><div class="t15 b" style="margin-top:6px">PRADO^LUCIA^F</div><div class="t14 mute">Nasc. 02/07/1959 · ID externo HSL-552190</div></div>
-          <div style="background:#F6F8FB;border-radius:14px;padding:16px"><div class="lbl">Cadastro VidaCor</div><div class="t15 b" style="margin-top:6px">Lúcia Fernandes Prado</div><div class="t14 mute">Nasc. 02/07/1959 · prontuário 2026-004417</div></div>
+    <header class="row wrap" style="gap: 14px; min-height: 44px">
+      <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Importar exame externo</h1>
+      <div class="grow"></div>
+      <span class="t13 mute">Recepção, Ana Souza</span>
+    </header>
+
+    <nav class="tabs" aria-label="Etapas">
+      <sc-for list="{{etapas}}" as="e" hint-placeholder-count="4">
+        <button class="{{e.cls}}" aria-current="{{e.atual}}" onClick="{{e.ir}}" disabled="{{e.bloq}}"><span class="ex-st"><sc-if value="{{e.feita}}" hint-placeholder-val="{{ false }}"><span class="ex-ok"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg><span class="sr">concluída:</span></span></sc-if>{{e.t}}</span></button>
+      </sc-for>
+    </nav>
+
+    <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px">
+      <section class="card pane" aria-label="{{etapaNome}}" style="padding: 0">
+        <div class="scroll" style="padding: 20px 26px">
+          <sc-if value="{{p1}}" hint-placeholder-val="{{ false }}">
+            <div class="col" style="gap: 12px">
+              <h2 style="font-size: 17px; font-weight: 600">De onde vem o exame</h2>
+              <sc-for list="{{origens}}" as="o" hint-placeholder-count="3">
+                <label class="{{o.cls}}"><input type="radio" name="origem" checked="{{o.sel}}" onChange="{{o.ir}}"><span><span class="t15 b" style="display: block">{{o.t}}</span><span class="t13 mute">{{o.s}}</span></span></label>
+              </sc-for>
+              <label class="field" style="margin-top: 6px">Link recebido<input class="in" value="https://portal.hsaolucas.exemplo/exame/HSL-552190"></label>
+              <div class="t14" style="color: #14532D">Link lido às 08:31: Hospital São Lucas, 3 estudos de PRADO^LUCIA^F.</div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{p2}}" hint-placeholder-val="{{ false }}">
+            <div class="col" style="gap: 14px">
+              <h2 style="font-size: 17px; font-weight: 600">Conferência do paciente</h2>
+              <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+                <div class="ex-cmp"><div class="t13 mute">No exame recebido</div><div class="t15 b" style="margin-top: 6px">PRADO^LUCIA^F</div><div class="t14 num" style="color: #334155">02/07/1959</div><div class="t13 mute">ID externo HSL-552190</div></div>
+                <div class="ex-cmp"><div class="t13 mute">Cadastro VidaCor</div><div class="t15 b" style="margin-top: 6px">Lúcia Fernandes Prado</div><div class="t14 num" style="color: #334155">02/07/1959</div><div class="t13 mute">Prontuário 2026-004417</div></div>
+              </div>
+              <div class="t14">Nascimento confere. Nome compatível, abreviado na origem.</div>
+              <label class="ex-it" style="border: 0"><input type="checkbox" checked="{{conferido}}" onChange="{{onConf}}"><span class="t14">Conferi com o documento da paciente</span></label>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{p3}}" hint-placeholder-val="{{ true }}">
+            <h2 style="font-size: 17px; font-weight: 600; margin-bottom: 4px">Estudos encontrados</h2>
+            <sc-for list="{{estudos}}" as="e" hint-placeholder-count="3">
+              <label class="ex-it"><input type="checkbox" checked="{{e.sel}}" onChange="{{e.tog}}"><div style="flex: 1; min-width: 0"><div class="t15 b">{{e.t}}</div><div class="t13 mute">{{e.s}}</div></div><span class="t13 mute">{{e.extra}}</span></label>
+            </sc-for>
+          </sc-if>
+
+          <sc-if value="{{p4}}" hint-placeholder-val="{{ false }}">
+            <div class="col" style="gap: 14px">
+              <h2 style="font-size: 17px; font-weight: 600">Importar</h2>
+              <sc-if value="{{naoImportado}}" hint-placeholder-val="{{ true }}">
+                <p class="t14" style="margin: 0">{{resumoImp}}</p>
+              </sc-if>
+              <sc-if value="{{importado}}" hint-placeholder-val="{{ false }}">
+                <div class="banner ok" role="status"><div class="t14"><b>{{okTitulo}}</b> A cópia está no PACS da VidaCor com a origem e o hash de cada arquivo. O Dr. Paulo já vê a TC externa ao lado do exame de hoje.</div></div>
+                <a class="btn btn-sm" href="Paciente.dc.html" style="align-self: flex-start">Abrir ficha de Lúcia Fernandes Prado</a>
+              </sc-if>
+            </div>
+          </sc-if>
         </div>
-        <div class="li2" style="margin-top:8px"><span class="ck ok">✓</span><div><div class="t14">Nascimento confere · nome compatível (abreviado na origem)</div><div class="t12 mute">Confirmado por Ana Souza com o documento da paciente</div></div></div>
-        <div class="sec-t">De onde pode vir</div><div class="row wrap t14" style="gap:10px;margin-top:6px"><span class="chip c-blue">Link ou QR do portal de outra clínica</span><span class="chip">Arquivos enviados pelo paciente (portal ou WhatsApp)</span><span class="chip">Rede parceira (DICOMweb)</span></div><h2 style="font-size:18px;font-weight:600;margin-top:22px">Estudos encontrados</h2>
-        <div style="margin-top:6px"><label class="li2" style="align-items:center"><input type="checkbox" checked style="width:20px;height:20px;accent-color:#0A1A4A"><div style="flex:1"><div class="t15 b">TC de crânio sem contraste</div><div class="t13 mute">10/03/2025 · Hospital São Lucas · 1 série · 32 imagens</div></div><span class="t13 mute">Laudo em PDF</span></label><label class="li2" style="align-items:center"><input type="checkbox" checked style="width:20px;height:20px;accent-color:#0A1A4A"><div style="flex:1"><div class="t15 b">TC de seios da face</div><div class="t13 mute">10/03/2025 · Hospital São Lucas · 2 séries · 88 imagens</div></div><span class="t13 mute">—</span></label><label class="li2" style="align-items:center"><input type="checkbox"  style="width:20px;height:20px;accent-color:#0A1A4A"><div style="flex:1"><div class="t15 b">Raio X de tórax (fotos enviadas pela paciente)</div><div class="t13 mute">02/01/2024 · WhatsApp · 2 fotos + laudo PDF</div></div><span class="t13 mute">Só como anexo</span></label></div>
+        <footer class="row" style="gap: 10px; padding: 12px 20px; border-top: 1px solid #E8EAEF">
+          <span class="t13 mute grow">{{rodape}}</span>
+          <button class="btn btn-sm" onClick="{{voltar}}" disabled="{{semVoltar}}">Voltar</button>
+          <sc-if value="{{temAvancar}}" hint-placeholder-val="{{ true }}"><button class="btn btn-sm btn-p" onClick="{{avancar}}" disabled="{{semAvancar}}">Continuar</button></sc-if>
+          <sc-if value="{{temImportar}}" hint-placeholder-val="{{ false }}"><button class="btn btn-sm btn-p" onClick="{{importar}}" disabled="{{semImportar}}">{{importarTxt}}</button></sc-if>
+        </footer>
       </section>
-      <aside class="aside col" style="gap:16px;flex:1 1 320px;min-width:0">
-        <section class="card"><div class="t15 b">Como entra no VidaCor</div><ul class="t13" style="margin:10px 0 0;padding-left:18px;line-height:1.7"><li>Marcado como <b>exame externo</b>, com a instituição de origem</li><li>Somente leitura: não vira laudo da VidaCor</li><li>Disponível como <b>exame anterior</b> para comparação</li><li>Hash de cada imagem e do PDF; lastro de quem importou</li><li>Identificação corrigida nas imagens (perfil IHE PIR), com o original guardado</li></ul></section>
-        <section class="card"><div class="t15 b">Vai ser comparado com</div><div class="li2"><span class="ck cur">→</span><div><div class="t14">TC de crânio com contraste · hoje · Sala 6</div><div class="t12 mute">O médico verá a TC externa lado a lado</div></div></div></section>
-        <button class="btn btn-p">Importar 2 estudos</button>
-        <p class="t12 mute" style="margin:0">O link expira na origem; a cópia fica no PACS da VidaCor, com a origem registrada.</p>
+
+      <aside class="card pane" aria-label="Resumo da importação">
+        <h2 style="font-size: 16px; font-weight: 600; margin-bottom: 12px">Resumo</h2>
+        <div class="scroll">
+          <dl class="kv" style="margin: 0; grid-template-columns: 104px minmax(0, 1fr)">
+            <dt>Paciente</dt><dd>Lúcia Fernandes Prado, <span class="num">02/07/1959</span></dd>
+            <dt>Origem</dt><dd>Hospital São Lucas, por link</dd>
+            <dt>Estudos</dt><dd>{{nSelTxt}}</dd>
+            <dt>Entra como</dt><dd>Exame externo, só leitura; nunca vira laudo da VidaCor</dd>
+            <dt>Comparar com</dt><dd>TC de crânio com contraste, hoje, Sala 6</dd>
+            <dt>Identificação</dt><dd>Corrigida nas imagens (IHE PIR), com o original guardado</dd>
+          </dl>
+        </div>
       </aside>
     </div>
-    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios</p>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1150}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = { passo: 3, origem: 'link', conferido: true, sel: { a: true, b: true, c: false }, importado: false };
+  }
+  renderVals() {
+    const s = this.state;
+    const T = ['Receber o exame', 'Conferir paciente', 'Escolher estudos', 'Importar'];
+    const ES = [
+      { k: 'a', t: 'TC de crânio sem contraste', s: '10/03/2025, Hospital São Lucas, 1 série, 32 imagens', extra: 'Laudo em PDF' },
+      { k: 'b', t: 'TC de seios da face', s: '10/03/2025, Hospital São Lucas, 2 séries, 88 imagens', extra: '' },
+      { k: 'c', t: 'Raio X de tórax, fotos enviadas pela paciente', s: '02/01/2024, WhatsApp, 2 fotos e laudo em PDF', extra: 'Só como anexo' }
+    ];
+    const n = ES.filter(e => s.sel[e.k]).length;
+    const nTxt = n === 1 ? '1 estudo' : n + ' estudos';
+    const pode = p => p === 1 || (p === 2) || (p === 3 && s.conferido) || (p === 4 && s.conferido && n > 0);
+    const rod = { 1: 'O link expira na origem; a cópia fica no PACS da VidaCor.', 2: 'Dois identificadores: nome e data de nascimento.', 3: 'Só o que for marcado entra no prontuário.', 4: 'A importação registra quem fez, quando e de onde veio.' };
+    return {
+      etapas: T.map((t, i) => ({ t, feita: i + 1 < s.passo || (i === 3 && s.importado), cls: s.passo === i + 1 ? 'on' : '', atual: s.passo === i + 1 ? 'step' : 'false', bloq: !pode(i + 1), ir: () => this.setState({ passo: i + 1 }) })),
+      etapaNome: T[s.passo - 1],
+      p1: s.passo === 1, p2: s.passo === 2, p3: s.passo === 3, p4: s.passo === 4,
+      origens: [['link', 'Link ou QR do portal de outra clínica', 'Lido direto da origem, com as imagens originais'], ['paciente', 'Arquivos enviados pelo paciente', 'Pelo portal ou pelo WhatsApp'], ['rede', 'Rede parceira (DICOMweb)', 'Clínicas com acordo de troca de imagens']]
+        .map(([k, t, sub]) => ({ t, s: sub, sel: s.origem === k, cls: 'ex-op' + (s.origem === k ? ' on' : ''), ir: () => this.setState({ origem: k }) })),
+      conferido: s.conferido, onConf: e => this.setState({ conferido: e.target.checked }),
+      estudos: ES.map(e => ({ t: e.t, s: e.s, extra: e.extra, sel: !!s.sel[e.k], tog: ev => { const v = ev.target.checked; this.setState(st => ({ sel: Object.assign({}, st.sel, { [e.k]: v }) })); } })),
+      nSelTxt: n === 0 ? 'Nenhum marcado' : nTxt + ' marcado' + (n === 1 ? '' : 's'),
+      resumoImp: n === 0 ? 'Nenhum estudo marcado. Volte e marque o que deve entrar.' : 'Vão entrar ' + nTxt + ' de PRADO^LUCIA^F no prontuário de Lúcia Fernandes Prado, 02/07/1959, marcados como exame externo do Hospital São Lucas.',
+      importado: s.importado, naoImportado: !s.importado,
+      okTitulo: nTxt.charAt(0).toUpperCase() + nTxt.slice(1) + (n === 1 ? ' importado às 08:36.' : ' importados às 08:36.'),
+      rodape: rod[s.passo],
+      semVoltar: s.passo === 1 || s.importado, voltar: () => this.setState(st => ({ passo: Math.max(1, st.passo - 1) })),
+      temAvancar: s.passo < 4, semAvancar: !pode(s.passo + 1), avancar: () => this.setState(st => ({ passo: st.passo + 1 })),
+      temImportar: s.passo === 4, semImportar: n === 0 || s.importado || !s.conferido,
+      importarTxt: s.importado ? 'Importado' : 'Importar ' + nTxt,
+      importar: () => this.setState({ importado: true })
+    };
+  }
 }
 </script>
 </body>

@@ -4,139 +4,179 @@
 <meta charset="utf-8">
 <title>Ouvidoria — VidaCor</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style>body{margin:0}</style>
+<style>
+body{margin:0}
+.kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:12px 4px}
+.kpi>div{padding:0 16px;border-left:1px solid #E8EAEF}
+.kpi>div:first-child{border-left:0}
+.kpi .v{font-size:22px;font-weight:650;letter-spacing:-.01em}
+.pf{display:flex;gap:8px;padding:12px 18px;border-top:1px solid #E8EAEF;flex-wrap:wrap;align-items:center}
+.ov{position:fixed;inset:0;background:rgba(15,23,42,.32);z-index:50;display:flex;justify-content:flex-end}
+.dw{width:440px;max-width:100%;height:100%;background:#fff;display:flex;flex-direction:column;box-shadow:-8px 0 24px rgba(15,23,42,.12)}
+.msg.me .who{color:#C9D3EA}
+.toastw{position:fixed;right:24px;bottom:24px;z-index:40;max-width:460px}
+</style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="ouvidoria" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="ouvidoria" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="page-h">
-      <div class="grow"><h1>Ouvidoria</h1><p>Reclamações, elogios, sugestões, denúncias e pedidos LGPD do titular · de qualquer canal, com prazo contado pelo servidor</p></div>
-      <button class="btn btn-p">Registrar manifestação</button>
-    </div>
+    <header class="row wrap" style="gap: 12px">
+      <div style="flex: 1 1 auto; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Ouvidoria</h1>
+        <div class="t13 mute" style="margin-top: 2px">Manifestações de qualquer canal, com prazo contado pelo servidor</div>
+      </div>
+      <button class="btn btn-p" onClick="{{abrirNova}}">Registrar manifestação</button>
+    </header>
 
-    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr))">
-      <div class="card" style="padding: 18px"><div class="lbl">Tempo médio de resposta</div><div class="big" style="font-size: 28px">2,4 <small>dias úteis</small></div><div class="t13 mute">Outubro · meta 5</div></div>
-      <div class="card" style="padding: 18px"><div class="lbl">Respondidas no prazo</div><div class="big" style="font-size: 28px">94%</div><div class="t13 mute">47 de 50 em outubro</div></div>
-      <div class="card" style="padding: 18px"><div class="lbl">Abertas agora</div><div class="big" style="font-size: 28px">{{nAbertas}}</div><div class="t13 mute">1 vence hoje</div></div>
-      <div class="card" style="padding: 18px"><div class="lbl">Temas mais citados</div><div class="t14" style="margin-top: 6px; line-height: 1.6"><b>Espera na recepção</b> 31% · <b>Prazo do laudo</b> 22% · <b>Estacionamento</b> 14%</div></div>
-    </div>
+    <section class="card kpi" aria-label="Resumo">
+      <div><div class="t13 mute">Tempo médio de resposta</div><div class="v num">2,4 dias úteis</div><div class="t12 mute">Outubro, meta 5</div></div>
+      <div><div class="t13 mute">Respondidas no prazo</div><div class="v num">94%</div><div class="t12 mute">47 de 50 em outubro</div></div>
+      <div><div class="t13 mute">Abertas agora</div><div class="v num">{{nAbertas}}</div><div class="t12 mute">1 vence hoje</div></div>
+      <div><div class="t13 mute">Tema mais citado</div><div class="v" style="font-size: 17px; line-height: 1.6">Espera na recepção</div><div class="t12 mute">31% das reclamações</div></div>
+    </section>
 
-    <div class="seg" role="tablist" aria-label="Tipo">
-      <sc-for list="{{filtros}}" as="f" hint-placeholder-count="6"><button class="{{f.cls}}" role="tab" aria-selected="{{f.sel}}" onClick="{{f.ir}}">{{f.t}}</button></sc-for>
-    </div>
+    <nav class="tabs" aria-label="Tipo de manifestação">
+      <sc-for list="{{filtros}}" as="f" hint-placeholder-count="6"><button class="{{f.cls}}" aria-current="{{f.atual}}" onClick="{{f.ir}}">{{f.t}} <span class="mute" style="font-weight: 500">{{f.n}}</span></button></sc-for>
+    </nav>
 
-    <div style="display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); gap: 16px; align-items: start">
-      <section class="card" style="padding: 8px" aria-label="Manifestações">
-        <sc-for list="{{lista}}" as="m" hint-placeholder-count="6">
-          <button class="{{m.cls}}" onClick="{{m.abrir}}" aria-current="{{m.atual}}">
-            <span class="{{m.ni}}">{{m.ini}}</span>
-            <span style="flex: 1; min-width: 0">
-              <span class="nm" style="display: block">{{m.titulo}}</span>
-              <span class="pv" style="display: block">{{m.cod}} · {{m.tipo}} · {{m.canal}}</span>
-              <span class="row wrap" style="gap: 6px; margin-top: 6px"><span class="{{m.prazoCls}}" style="height: 22px; font-size: 12px">{{m.prazo}}</span></span>
-            </span>
-          </button>
-        </sc-for>
-        <sc-if value="{{vazio}}" hint-placeholder-val="{{ false }}"><div class="state"><span class="t14 b">Nada aberto neste tipo</span><span class="t13 mute">As encerradas ficam no histórico.</span></div></sc-if>
+    <div class="fill" style="display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 16px">
+      <section class="card pane" style="padding: 0" aria-label="Manifestações">
+        <div class="scroll">
+          <sc-for list="{{lista}}" as="m" hint-placeholder-count="6">
+            <button class="{{m.cls}}" onClick="{{m.abrir}}" aria-current="{{m.atual}}">
+              <span style="flex: 1; min-width: 0">
+                <span class="row" style="gap: 8px"><span class="nm" style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{m.titulo}}</span></span>
+                <span class="pv" style="display: block">{{m.cod}}, {{m.tipo}}</span>
+                <span class="row" style="gap: 6px; margin-top: 6px"><span class="{{m.prazoCls}}" style="height: 22px; font-size: 12px">{{m.prazo}}</span></span>
+              </span>
+            </button>
+          </sc-for>
+          <sc-if value="{{vazio}}" hint-placeholder-val="{{ false }}"><div class="state"><span class="t14 b">Nada aberto neste tipo</span><span class="t13 mute">As encerradas ficam no histórico.</span></div></sc-if>
+        </div>
       </section>
 
-      <section class="card" aria-label="Manifestação" style="display: flex; flex-direction: column; gap: 16px">
-        <div class="row wrap" style="gap: 10px">
-          <div style="flex: 1 1 280px; min-width: 0"><div style="font-size: 20px; font-weight: 650">{{sel.titulo}}</div><div class="t14 mute">{{sel.cod}} · {{sel.tipo}} · recebida {{sel.receb}} via {{sel.canal}}</div></div>
-          <span class="{{sel.sitCls}}">{{sel.sit}}</span>
+      <section class="card pane" style="padding: 0" aria-label="Manifestação selecionada">
+        <div style="padding: 16px 20px 14px; border-bottom: 1px solid #E8EAEF">
+          <div class="row" style="gap: 10px; align-items: flex-start">
+            <div style="flex: 1; min-width: 0"><div style="font-size: 18px; font-weight: 650">{{sel.titulo}}</div><div class="t13 mute">{{sel.cod}}, {{sel.tipo}}, recebida {{sel.receb}} pelo {{sel.canal}}</div></div>
+            <span class="{{sel.sitCls}}">{{sel.sit}}</span>
+          </div>
+          <div class="grid" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 12px">
+            <div><div class="t12 mute">Quem</div><div class="t14 b">{{sel.quem}}</div><div class="t13 mute">{{sel.quemSub}}</div></div>
+            <div><div class="t12 mute">Prazo ({{sel.prazoRegra}})</div><div class="t14 b">{{sel.prazoData}}</div></div>
+            <div><div class="t12 mute">Responsável</div><div class="t14 b">{{sel.resp}}</div><div class="t13 mute">{{sel.enc}}</div></div>
+          </div>
         </div>
-        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 10px">
-          <div style="padding: 12px; border-radius: 14px; background: #F6F7F9"><div class="lbl">Quem</div><div class="t14 b">{{sel.quem}}</div><div class="t13 mute">{{sel.quemSub}}</div></div>
-          <div style="padding: 12px; border-radius: 14px; background: #F6F7F9"><div class="lbl">Prazo</div><div class="t14 b">{{sel.prazoData}}</div><div class="t13 mute">{{sel.prazoRegra}}</div></div>
-          <div style="padding: 12px; border-radius: 14px; background: #F6F7F9"><div class="lbl">Responsável</div><div class="t14 b">{{sel.resp}}</div><div class="t13 mute">{{sel.enc}}</div></div>
-        </div>
-        <sc-if value="{{sel.lgpd}}" hint-placeholder-val="{{ false }}">
-          <div class="banner info"><div class="t14" style="line-height: 1.5"><b>Pedido do titular (LGPD).</b> Identidade confirmada pelo portal com nome, nascimento e CPF. O relatório de dados é gerado pelo servidor e entregue só no portal, com link de uso único. Prontuário não é apagado: a lei exige guarda por 20 anos; a resposta explica isso.</div></div>
-        </sc-if>
-        <sc-if value="{{sel.denuncia}}" hint-placeholder-val="{{ false }}">
-          <div class="banner off"><div class="t14" style="line-height: 1.5"><b>Denúncia.</b> Vista só pela ouvidora e pela diretoria; a pessoa citada não tem acesso. Quem denunciou pode acompanhar pelo protocolo sem se identificar.</div></div>
-        </sc-if>
-
-        <div class="col" style="gap: 10px; padding: 14px; border-radius: 16px; background: #F6F7F9">
+        <div class="scroll" style="background: #F6F7F9; padding: 14px 20px; display: flex; flex-direction: column; gap: 10px">
+          <sc-if value="{{sel.lgpd}}" hint-placeholder-val="{{ false }}">
+            <div class="banner info" style="padding: 10px 14px"><div class="t13" style="line-height: 1.5"><b>Pedido do titular (LGPD).</b> Identidade confirmada no portal. O relatório sai só no portal, com link de uso único. Prontuário é guardado por 20 anos por lei; a resposta explica isso.</div></div>
+          </sc-if>
+          <sc-if value="{{sel.denuncia}}" hint-placeholder-val="{{ false }}">
+            <div class="banner off" style="padding: 10px 14px"><div class="t13" style="line-height: 1.5"><b>Denúncia sigilosa.</b> Vista só pela ouvidora e pela diretoria; quem denunciou acompanha pelo protocolo.</div></div>
+          </sc-if>
           <sc-for list="{{sel.msgs}}" as="x" hint-placeholder-count="3">
-            <div class="{{x.cls}}" style="max-width: 88%"><div class="who">{{x.who}}</div>{{x.t}}<div class="meta">{{x.h}}</div></div>
+            <div class="{{x.cls}}" style="max-width: 80%"><div class="who">{{x.who}}</div>{{x.t}}<div class="meta">{{x.h}}</div></div>
           </sc-for>
         </div>
-
-        <div class="col" style="gap: 10px">
-          <div class="row wrap" style="gap: 8px"><span class="t14 b" style="flex: 1">Responder ao paciente</span>
-            <label class="field" style="flex-direction: row; align-items: center; gap: 8px">Modelo<select class="in" style="min-height: 38px; width: auto" onChange="{{usarModelo}}"><option value="">Escolher…</option><option value="desc">Pedido de desculpas e providência</option><option value="elog">Agradecimento por elogio</option><option value="lgpd">Resposta LGPD</option></select></label>
+        <div class="col" style="gap: 8px; padding: 12px 20px 14px; border-top: 1px solid #E8EAEF">
+          <div class="row" style="gap: 8px">
+            <label class="sr" for="ouv-modelo">Modelo de resposta</label>
+            <select id="ouv-modelo" class="in" style="min-height: 38px; width: auto; flex: 0 1 300px" onChange="{{usarModelo}}"><option value="">Modelo de resposta</option><option value="desc">Desculpas e providência</option><option value="elog">Agradecimento por elogio</option><option value="lgpd">Resposta LGPD</option></select>
+            <span class="t12 mute" style="flex: 1">Diga o que aconteceu, o que foi feito e o que muda.</span>
           </div>
-          <label class="field"><span class="sr">Resposta</span><textarea class="in" rows="4" value="{{resposta}}" onChange="{{onResp}}" placeholder="Escreva ou escolha um modelo · diga o que aconteceu, o que foi feito e o que muda"></textarea></label>
-          <div class="row wrap" style="gap: 8px">
-            <button class="btn btn-p" onClick="{{responder}}">Enviar pelo {{sel.canal}}</button>
+          <label><span class="sr">Resposta</span><textarea class="in" rows="2" style="padding-top: 10px; resize: none" value="{{resposta}}" onChange="{{onResp}}" placeholder="Escreva a resposta ao paciente"></textarea></label>
+          <div class="row" style="gap: 8px">
+            <button class="btn btn-sm btn-p" onClick="{{responder}}">{{sel.btnEnviar}}</button>
             <button class="btn btn-sm" onClick="{{encaminhar}}">Encaminhar internamente</button>
-            <span class="t13 mute">A resposta vai pelo mesmo canal e fica no histórico.</span>
+            <span class="grow"></span>
+            <a class="btn btn-sm btn-g" href="Lastro.dc.html">Histórico no lastro</a>
           </div>
-          <sc-if value="{{enviado}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status"><span style="flex: 1">Resposta enviada a {{sel.quem}} · prazo cumprido · registrado no lastro</span></div></sc-if>
-          <sc-if value="{{encaminhado}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status"><span style="flex: 1">Encaminhado à Dra. Cecília Souto pelo chat interno · prazo interno: 2 dias úteis · o prazo ao paciente continua contando</span></div></sc-if>
         </div>
       </section>
     </div>
-    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+
+    <sc-if value="{{temToast}}" hint-placeholder-val="{{ false }}">
+      <div class="toastw"><div class="toast" role="status"><span style="flex: 1">{{toast}}</span><button onClick="{{fecharToast}}">Fechar</button></div></div>
+    </sc-if>
+
+    <sc-if value="{{nova}}" hint-placeholder-val="{{ false }}">
+      <div class="ov">
+        <aside class="dw" role="dialog" aria-label="Registrar manifestação">
+          <div class="row" style="padding: 16px 20px; border-bottom: 1px solid #E8EAEF"><h2 style="margin: 0; font-size: 18px; font-weight: 600; flex: 1">Registrar manifestação</h2><button class="btn btn-sm btn-g" onClick="{{fecharNova}}">Fechar</button></div>
+          <div class="scroll" style="flex: 1; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px">
+            <label class="field">Tipo<select class="in"><option>Reclamação</option><option>Elogio</option><option>Sugestão</option><option>Denúncia</option><option>Pedido LGPD</option></select></label>
+            <label class="field">Canal<select class="in"><option>Telefone</option><option>Presencial</option><option>E-mail</option></select></label>
+            <label class="field">Nome do paciente<input class="in" placeholder="Nome completo"></label>
+            <label class="field">Data de nascimento<input class="in num" placeholder="dd/mm/aaaa"></label>
+            <label class="field">O que a pessoa relatou<textarea class="in" rows="4" style="padding-top: 10px"></textarea></label>
+            <div class="t13 mute">O prazo é calculado pelo servidor conforme o tipo.</div>
+          </div>
+          <div class="pf"><button class="btn btn-p" style="flex: 1" onClick="{{registrarNova}}">Registrar e gerar protocolo</button></div>
+        </aside>
+      </div>
+    </sc-if>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { filtro: 'todos', sel: 'o1', resp: '', env: {}, enc: {} };
+    this.state = { filtro: 'todos', sel: 'o1', resp: '', env: {}, enc: {}, toast: '', nova: false };
   }
   renderVals() {
     const s = this.state;
     const L = [
-      { id: 'o1', cod: 'OUV-0918', tipo: 'Reclamação', k: 'rec', ni: 'ni k-rose', ini: 'R', titulo: 'Laudo de TC atrasado', canal: 'WhatsApp', receb: '03/11 14:20', quem: 'Antônio Carlos Ribeiro', quemSub: 'Nasc. 15/06/1954 · paciente', prazoData: '10/11 · faltam 2 dias úteis', prazoRegra: '5 dias úteis', prazo: 'Faltam 2 dias úteis', prazoCls: 'chip c-amber', resp: 'Patrícia Lemos', encTxt: 'Encaminhado à radiologia',
-        msgs: [['p', 'Antônio (paciente)', 'Fiz a tomografia dia 28 e até agora nada do resultado. Meu médico precisa ver na consulta de terça.', '03/11 14:20'], ['c', 'Ouvidoria · Patrícia', 'Sr. Antônio, recebemos sua mensagem (protocolo OUV-0918). Já pedimos prioridade à radiologia e voltamos a falar até amanhã.', '03/11 15:02']] },
-      { id: 'o2', cod: 'OUV-0921', tipo: 'Pedido LGPD', k: 'lgpd', ni: 'ni k-indigo', ini: 'L', titulo: 'Cópia dos meus dados e exclusão do cadastro', canal: 'Portal', receb: '05/11 09:10', quem: 'Rafael Monteiro Lima', quemSub: 'Nasc. 09/11/1988 · titular', prazoData: '20/11 · faltam 9 dias', prazoRegra: '15 dias (LGPD)', prazo: 'Faltam 9 dias', prazoCls: 'chip c-blue', resp: 'Encarregado de dados', encTxt: 'TI gera o relatório', lgpd: true,
+      { id: 'o1', cod: 'OUV-0918', tipo: 'Reclamação', k: 'rec', titulo: 'Laudo de TC atrasado', canal: 'WhatsApp', receb: '03/11 14:20', quem: 'Antônio Carlos Ribeiro', quemSub: '15/06/1954, paciente', prazoData: '10/11, faltam 2 dias úteis', prazoRegra: '5 dias úteis', prazo: 'Faltam 2 dias úteis', prazoCls: 'chip c-amber', resp: 'Patrícia Lemos', encTxt: 'Encaminhado à radiologia',
+        msgs: [['p', 'Antônio (paciente)', 'Fiz a tomografia dia 28 e até agora nada do resultado. Meu médico precisa ver na consulta de terça.', '03/11 14:20'], ['c', 'Ouvidoria, Patrícia', 'Sr. Antônio, recebemos sua mensagem (protocolo OUV-0918). Já pedimos prioridade à radiologia e voltamos a falar até amanhã.', '03/11 15:02']] },
+      { id: 'o2', cod: 'OUV-0921', tipo: 'Pedido LGPD', k: 'lgpd', titulo: 'Cópia dos meus dados e exclusão do cadastro', canal: 'portal', receb: '05/11 09:10', quem: 'Rafael Monteiro Lima', quemSub: '09/11/1988, titular', prazoData: '20/11, faltam 9 dias', prazoRegra: '15 dias, LGPD', prazo: 'Faltam 9 dias', prazoCls: 'chip c-blue', resp: 'Encarregado de dados', encTxt: 'TI gera o relatório', lgpd: true,
         msgs: [['p', 'Rafael (titular)', 'Quero saber quais dados meus vocês têm e pedir que apaguem meu cadastro.', '05/11 09:10']] },
-      { id: 'o3', cod: 'OUV-0915', tipo: 'Reclamação', k: 'rec', ni: 'ni k-rose', ini: 'R', titulo: 'Espera de 50 min na recepção', canal: 'NPS (nota 3)', receb: '31/10 18:00', quem: 'Sônia Maria Castro', quemSub: 'Nasc. 03/02/1962 · paciente', prazoData: '07/11 · vence hoje', prazoRegra: '5 dias úteis', prazo: 'Vence hoje', prazoCls: 'chip c-rose', resp: 'Ana Souza', encTxt: 'Recepção',
+      { id: 'o3', cod: 'OUV-0915', tipo: 'Reclamação', k: 'rec', titulo: 'Espera de 50 min na recepção', canal: 'WhatsApp', receb: '31/10 18:00 (NPS nota 3)', quem: 'Sônia Maria Castro', quemSub: '03/02/1962, paciente', prazoData: '07/11, vence hoje', prazoRegra: '5 dias úteis', prazo: 'Vence hoje', prazoCls: 'chip c-rose', resp: 'Ana Souza', encTxt: 'Recepção',
         msgs: [['p', 'Sônia (pesquisa NPS)', 'Nota 3. Esperei quase uma hora com horário marcado e ninguém explicou o motivo.', '31/10 18:00']] },
-      { id: 'o4', cod: 'OUV-0919', tipo: 'Elogio', k: 'elo', ni: 'ni k-green', ini: 'E', titulo: 'Atendimento da Dra. Renata na morfológica', canal: 'Telefone', receb: '04/11 11:30', quem: 'Juliana Sampaio Rocha', quemSub: 'Nasc. 12/04/1993 · paciente', prazoData: '11/11', prazoRegra: '5 dias úteis', prazo: 'Faltam 3 dias úteis', prazoCls: 'chip c-green', resp: 'Patrícia Lemos', encTxt: 'Repassar à equipe',
+      { id: 'o4', cod: 'OUV-0919', tipo: 'Elogio', k: 'elo', titulo: 'Atendimento da Dra. Renata na morfológica', canal: 'telefone', receb: '04/11 11:30', quem: 'Juliana Sampaio Rocha', quemSub: '12/04/1993, paciente', prazoData: '11/11', prazoRegra: '5 dias úteis', prazo: 'Faltam 3 dias úteis', prazoCls: 'chip c-green', resp: 'Patrícia Lemos', encTxt: 'Repassar à equipe',
         msgs: [['p', 'Juliana (por telefone, anotado por Carla Mendes)', 'Quer agradecer a paciência da Dra. Renata e da equipe da sala 2 no exame morfológico.', '04/11 11:30']] },
-      { id: 'o5', cod: 'OUV-0920', tipo: 'Sugestão', k: 'sug', ni: 'ni k-teal', ini: 'S', titulo: 'Avisar atraso pelo WhatsApp', canal: 'Portal', receb: '04/11 20:15', quem: 'Vera Lúcia Antunes', quemSub: 'Nasc. 18/09/1957 · paciente', prazoData: '11/11', prazoRegra: '5 dias úteis', prazo: 'Faltam 3 dias úteis', prazoCls: 'chip c-green', resp: 'Patrícia Lemos', encTxt: 'Comunicação',
+      { id: 'o5', cod: 'OUV-0920', tipo: 'Sugestão', k: 'sug', titulo: 'Avisar atraso pelo WhatsApp', canal: 'portal', receb: '04/11 20:15', quem: 'Vera Lúcia Antunes', quemSub: '18/09/1957, paciente', prazoData: '11/11', prazoRegra: '5 dias úteis', prazo: 'Faltam 3 dias úteis', prazoCls: 'chip c-green', resp: 'Patrícia Lemos', encTxt: 'Comunicação',
         msgs: [['p', 'Vera (portal)', 'Seria ótimo receber uma mensagem quando a agenda estiver atrasada.', '04/11 20:15']] },
-      { id: 'o6', cod: 'OUV-0917', tipo: 'Denúncia', k: 'den', ni: 'ni k-amber', ini: 'D', titulo: 'Comentário inadequado na sala de espera', canal: 'Portal (anônimo)', receb: '02/11 10:05', quem: 'Anônimo', quemSub: 'Acompanha pelo protocolo', prazoData: '09/11 · faltam 1 dia útil', prazoRegra: '5 dias úteis', prazo: 'Falta 1 dia útil', prazoCls: 'chip c-amber', resp: 'Ouvidora · diretoria', encTxt: 'Sigiloso', denuncia: true,
+      { id: 'o6', cod: 'OUV-0917', tipo: 'Denúncia', k: 'den', titulo: 'Comentário inadequado na sala de espera', canal: 'portal', receb: '02/11 10:05, anônima', quem: 'Anônimo', quemSub: 'Acompanha pelo protocolo', prazoData: '09/11, falta 1 dia útil', prazoRegra: '5 dias úteis', prazo: 'Falta 1 dia útil', prazoCls: 'chip c-amber', resp: 'Ouvidora e diretoria', encTxt: 'Sigiloso', denuncia: true,
         msgs: [['p', 'Anônimo (portal)', 'Um funcionário comentou em voz alta o exame de outra paciente na sala de espera.', '02/11 10:05']] }
     ];
-    const FL = [['todos', 'Todas · 6'], ['rec', 'Reclamações'], ['elo', 'Elogios'], ['sug', 'Sugestões'], ['den', 'Denúncias'], ['lgpd', 'LGPD']];
+    const FL = [['todos', 'Todas'], ['rec', 'Reclamações'], ['elo', 'Elogios'], ['sug', 'Sugestões'], ['den', 'Denúncias'], ['lgpd', 'LGPD']];
     const vis = L.filter(m => s.filtro === 'todos' || m.k === s.filtro);
     const cur = L.find(m => m.id === s.sel);
     const env = !!s.env[cur.id], enc = !!s.enc[cur.id];
     const msgs = cur.msgs.map(([w, who, t, h]) => ({ cls: w === 'p' ? 'msg' : 'msg me', who, t, h }));
-    if (env) msgs.push({ cls: 'msg me', who: 'Ouvidoria · você', t: s.resp || 'Resposta enviada.', h: 'agora' });
+    if (env) msgs.push({ cls: 'msg me', who: 'Ouvidoria, você', t: s.env[cur.id], h: 'agora' });
+    const nome = cur.quem.split(' ')[0];
     const MOD = {
-      desc: 'Olá, ' + cur.quem.split(' ')[0] + '. Pedimos desculpas pelo ocorrido. O que fizemos: ... O que muda daqui para frente: ... Protocolo ' + cur.cod + '.',
-      elog: 'Olá, ' + cur.quem.split(' ')[0] + '. Muito obrigado pelo carinho! Repassamos sua mensagem à equipe. Protocolo ' + cur.cod + '.',
-      lgpd: 'Olá, ' + cur.quem.split(' ')[0] + '. Seu relatório de dados está disponível no portal. O cadastro de contato foi removido; o prontuário precisa ser guardado por 20 anos por lei. Protocolo ' + cur.cod + '.'
+      desc: 'Olá, ' + nome + '. Pedimos desculpas pelo ocorrido. O que fizemos: ... O que muda daqui para frente: ... Protocolo ' + cur.cod + '.',
+      elog: 'Olá, ' + nome + '. Muito obrigado pelo carinho! Repassamos sua mensagem à equipe. Protocolo ' + cur.cod + '.',
+      lgpd: 'Olá, ' + nome + '. Seu relatório de dados está no portal. O cadastro de contato foi removido; o prontuário precisa ser guardado por 20 anos por lei. Protocolo ' + cur.cod + '.'
     };
     return {
       nAbertas: String(L.length - Object.keys(s.env).length),
-      filtros: FL.map(([k, t]) => ({ t, cls: s.filtro === k ? 'on' : '', sel: s.filtro === k ? 'true' : 'false', ir: () => this.setState({ filtro: k }) })),
-      lista: vis.map(m => ({ titulo: m.titulo, cod: m.cod, tipo: m.tipo, canal: m.canal, ni: m.ni, ini: m.ini, atual: m.id === s.sel ? 'true' : 'false',
+      filtros: FL.map(([k, t]) => ({ t, n: k === 'todos' ? String(L.length) : String(L.filter(m => m.k === k).length), cls: s.filtro === k ? 'on' : '', atual: s.filtro === k ? 'page' : 'false', ir: () => this.setState({ filtro: k }) })),
+      lista: vis.map(m => ({ titulo: m.titulo, cod: m.cod, tipo: m.tipo, atual: m.id === s.sel ? 'true' : 'false',
         cls: 'cv' + (m.id === s.sel ? ' sel' : ''), prazo: s.env[m.id] ? 'Respondida' : m.prazo, prazoCls: s.env[m.id] ? 'chip c-green' : m.prazoCls,
         abrir: () => this.setState({ sel: m.id, resp: '' }) })),
       vazio: vis.length === 0,
       sel: { titulo: cur.titulo, cod: cur.cod, tipo: cur.tipo, canal: cur.canal, receb: cur.receb, quem: cur.quem, quemSub: cur.quemSub, prazoData: cur.prazoData, prazoRegra: cur.prazoRegra,
-        resp: cur.resp, enc: enc ? 'Encaminhado: Dra. Cecília Souto' : cur.encTxt, lgpd: !!cur.lgpd, denuncia: !!cur.denuncia, msgs,
+        btnEnviar: 'Enviar pelo ' + cur.canal, resp: cur.resp, enc: enc ? 'Encaminhado à Dra. Cecília Souto' : cur.encTxt, lgpd: !!cur.lgpd, denuncia: !!cur.denuncia, msgs,
         sit: env ? 'Respondida' : 'Em andamento', sitCls: env ? 'chip c-green' : 'chip c-blue' },
       resposta: s.resp,
       onResp: (e) => this.setState({ resp: e && e.target ? e.target.value : '' }),
       usarModelo: (e) => { const v = e && e.target ? e.target.value : ''; if (MOD[v]) this.setState({ resp: MOD[v] }); },
-      responder: () => this.setState(st => { const n = Object.assign({}, st.env); n[st.sel] = true; return { env: n }; }),
-      encaminhar: () => this.setState(st => { const n = Object.assign({}, st.enc); n[st.sel] = true; return { enc: n }; }),
-      enviado: env, encaminhado: enc && !env
+      responder: () => this.setState(st => { if (!(st.resp || '').trim()) return { toast: 'A resposta está vazia. Escreva ou escolha um modelo; nada foi enviado.' };
+        const n = Object.assign({}, st.env); n[st.sel] = st.resp; return { env: n, resp: '', toast: 'Resposta enviada a ' + cur.quem + ' pelo ' + cur.canal + ', dentro do prazo. Registrado no lastro.' }; }),
+      encaminhar: () => this.setState(st => { const n = Object.assign({}, st.enc); n[st.sel] = true; return { enc: n, toast: 'Encaminhado à Dra. Cecília Souto pelo chat, prazo interno de 2 dias úteis. O prazo ao paciente continua contando.' }; }),
+      temToast: !!s.toast, toast: s.toast, fecharToast: () => this.setState({ toast: '' }),
+      nova: s.nova, abrirNova: () => this.setState({ nova: true }), fecharNova: () => this.setState({ nova: false }),
+      registrarNova: () => this.setState({ nova: false, toast: 'Manifestação OUV-0922 registrada. O prazo foi calculado e o protocolo pode ser informado à pessoa.' })
     };
   }
 }

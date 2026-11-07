@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Atendimento médico — VidaCor Imagem</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
@@ -12,99 +12,172 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0;background:#F2F3F6}
-.sec{display:flex;flex-direction:column;gap:8px;padding:22px 0;border-bottom:1px solid #F1F3F6}
-.sec:last-of-type{border-bottom:0}
-.sec label{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5B6474}
+.at-sec{display:flex;flex-direction:column;gap:8px;padding:18px 0;border-bottom:1px solid #F1F3F6}
+.at-sec:last-child{border-bottom:0}
+.at-sec label{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5B6474}
 .ed{width:100%;border:0;outline:0;resize:vertical;font:400 16px/1.65 Inter,sans-serif;color:#0F172A;background:transparent;padding:0;min-height:52px}
 .ed:focus{background:#FAFBFC;box-shadow:0 0 0 8px #FAFBFC;border-radius:4px}
-.tab{height:44px;padding:0 4px;border:0;background:none;font:500 15px Inter,sans-serif;color:#5B6474;border-bottom:2px solid transparent;cursor:pointer}
-.tab.on{color:#0A1A4A;font-weight:600;border-bottom-color:#0A1A4A}
-.kv{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:6px 0}
-.kv span{color:#5B6474}
+.at-kv{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:6px 0}
+.at-kv span{color:#5B6474}
+.at-h{font-size:15px;font-weight:600;margin:0 0 6px}
+.at-blk{padding:14px 0;border-bottom:1px solid #F1F3F6}
+.at-blk:first-child{padding-top:0}
+.at-blk:last-child{border-bottom:0}
+.at-li{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #F1F3F6;font-size:14px}
+.at-li:last-child{border-bottom:0}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="atendimento" userName="Dr. Paulo Medeiros" userRole="Cardiologia" userInitials="PM" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="atendimento" userName="Dr. Paulo Medeiros" userRole="Cardiologia" userInitials="PM" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <a class="t14 b" href="Agenda-Medico.dc.html">← Minha agenda</a>
+    <header class="row" style="gap: 14px; min-height: 44px">
+      <a class="btn btn-sm btn-g" href="Agenda-Medico.dc.html" style="padding-left: 6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>Minha agenda</a>
+      <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Atendimento</h1>
       <div class="grow"></div>
-      <span class="t13 mute">Rascunho salvo às 09:12</span>
+      <span class="t13 mute">{{salvoTxt}}</span>
       <a class="btn btn-sm" href="Atendimento.dc.html">Próximo: Antônio C. Ribeiro</a>
-    </div>
+    </header>
 
-    <dc-import name="Barra-Paciente" ini="SC" nome="Sônia Maria Castro" nasc="03/02/1962" idade="64 anos" sexo="feminino" convenio="Unimed" exame="Consulta cardiológica" local="Consultório 3" alergia="iodo" alertas="Hipertensa · losartana 50 mg" conferida="08:31" hint-size="100%,84px"></dc-import>
-    <section class="card" aria-label="Sinais vitais de hoje" style="padding: 14px 24px">
-      <div class="row wrap t14 mute" style="gap: 22px">
-        <span>PA <b style="color: #0F172A">138/86</b></span>
-        <span>FC <b style="color: #0F172A">72</b></span>
-        <span>SpO₂ <b style="color: #0F172A">97%</b></span>
-        <span>Peso <b style="color: #0F172A">68 kg</b> · Altura <b style="color: #0F172A">1,62 m</b> · IMC <b style="color: #0F172A">25,9</b></span>
-      </div>
-    </section>
+    <dc-import name="Barra-Paciente" ini="SC" nome="Sônia Maria Castro" nasc="03/02/1962" idade="64 anos" sexo="feminino" convenio="Unimed" exame="Consulta cardiológica" local="Consultório 3" alergia="dipirona" alertas="Hipertensa em uso de losartana 50 mg" conferida="08:31" hint-size="100%,84px"></dc-import>
 
-    <nav class="row" aria-label="Seções do atendimento" style="gap: 26px; padding: 0 8px; border-bottom: 1px solid #E3E7ED">
-      <button class="tab on" aria-current="page">Evolução</button>
-      <button class="tab">Anamnese</button>
-      <button class="tab">Prescrição</button>
-      <button class="tab">Pedidos</button>
-      <button class="tab">Documentos</button>
-      <button class="tab">Histórico</button>
+    <nav class="tabs" aria-label="Seções do atendimento">
+      <sc-for list="{{abas}}" as="a" hint-placeholder-count="6"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for>
     </nav>
 
-    <div class="split">
-      <section class="card main" aria-label="Evolução" style="padding: 8px 32px 20px">
-        <div class="row" style="padding-top: 16px">
-          <button class="btn btn-sm btn-g" style="padding-left: 0">Modelo: retorno cardiológico <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
-          <div class="grow"></div>
-          <button class="btn btn-sm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg>Ditar</button>
-        </div>
-        <div class="sec">
-          <label for="s">Subjetivo</label>
-          <textarea id="s" class="ed" rows="2">Retorno para avaliar o ecocardiograma. Nega dor torácica e dispneia. Refere boa adesão à losartana.</textarea>
-        </div>
-        <div class="sec">
-          <label for="o">Objetivo</label>
-          <textarea id="o" class="ed" rows="2">Bom estado geral. Ausculta cardíaca com ritmo regular, sem sopros. Eco de hoje: FE 66%, disfunção diastólica grau I.</textarea>
-        </div>
-        <div class="sec">
-          <label for="a">Avaliação</label>
-          <textarea id="a" class="ed" rows="2">Hipertensão arterial controlada. Disfunção diastólica leve, compatível com a idade e a hipertensão.</textarea>
-          <div class="row wrap" style="gap: 8px; margin-top: 4px"><span class="chip">I10 · Hipertensão essencial</span><button class="btn btn-g btn-sm" style="min-height: 26px; padding: 0 6px">+ CID</button></div>
-        </div>
-        <div class="sec">
-          <label for="p">Plano</label>
-          <textarea id="p" class="ed" rows="2">Manter losartana. Doppler de carótidas em 12 meses. Retorno em 6 meses.</textarea>
-        </div>
+    <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px">
+      <section class="card pane" aria-label="{{abaNome}}" style="padding: 0">
+        <sc-if value="{{abaEvo}}" hint-placeholder-val="{{ true }}">
+          <div class="row" style="padding: 10px 32px 0">
+            <button class="btn btn-sm btn-g" style="padding-left: 0">Modelo: retorno cardiológico <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+            <div class="grow"></div>
+            <button class="btn btn-sm" onClick="{{ditar}}" aria-pressed="{{ditandoAria}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg>{{ditarTxt}}</button>
+          </div>
+          <div class="scroll" style="padding: 0 32px">
+            <div class="at-sec">
+              <label for="s">Subjetivo</label>
+              <textarea id="s" class="ed" rows="2" readOnly="{{assinada}}">Retorno para avaliar o ecocardiograma. Nega dor torácica e dispneia. Refere boa adesão à losartana.</textarea>
+            </div>
+            <div class="at-sec">
+              <label for="o">Objetivo</label>
+              <textarea id="o" class="ed" rows="2" readOnly="{{assinada}}">Bom estado geral. Ausculta cardíaca com ritmo regular, sem sopros. Eco de hoje: FE 66%, disfunção diastólica grau I.</textarea>
+            </div>
+            <div class="at-sec">
+              <label for="a">Avaliação</label>
+              <textarea id="a" class="ed" rows="2" readOnly="{{assinada}}">Hipertensão arterial controlada. Disfunção diastólica leve, compatível com a idade e a hipertensão.</textarea>
+              <div class="row wrap" style="gap: 8px; margin-top: 4px"><span class="t14" style="color: #334155">CID I10, hipertensão essencial</span><button class="btn btn-g btn-sm" style="min-height: 28px; padding: 0 6px">Adicionar CID</button></div>
+            </div>
+            <div class="at-sec">
+              <label for="p">Plano</label>
+              <textarea id="p" class="ed" rows="2" readOnly="{{assinada}}">Manter losartana. Doppler de carótidas em 12 meses. Retorno em 6 meses.</textarea>
+            </div>
+          </div>
+          <footer style="padding: 12px 20px 14px 32px; border-top: 1px solid #E8EAEF">
+            <sc-if value="{{pRascunho}}" hint-placeholder-val="{{ true }}">
+              <div class="row wrap" style="gap: 12px">
+                <span class="t13 mute" style="flex: 1 1 260px">Ao assinar, a evolução fica bloqueada. Correções viram nova versão com motivo.</span>
+                <button class="btn" onClick="{{salvar}}">Salvar rascunho</button>
+                <button class="btn btn-p" onClick="{{abrirAss}}">Finalizar e assinar</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{pConfirma}}" hint-placeholder-val="{{ false }}">
+              <div class="row wrap" style="gap: 12px">
+                <div style="flex: 1 1 280px; min-width: 0"><div class="t14 b">Assinar a evolução de Sônia Maria Castro, 03/02/1962?</div><div class="t13 mute">Confirme com o PIN do seu certificado ICP-Brasil.</div></div>
+                <label class="sr" for="pin">PIN do certificado</label>
+                <input id="pin" class="in" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN" value="{{pin}}" onChange="{{onPin}}" style="width: 120px; min-height: 44px">
+                <button class="btn" onClick="{{cancelarAss}}">Voltar</button>
+                <button class="btn btn-p" onClick="{{assinar}}" disabled="{{semPin}}">Assinar</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{pAssinada}}" hint-placeholder-val="{{ false }}">
+              <div class="row wrap" style="gap: 12px">
+                <span class="t14" style="flex: 1 1 280px; color: #14532D">Evolução assinada às 09:20 e bloqueada para edição. Para corrigir, abra uma nova versão com o motivo.</span>
+                <button class="btn" onClick="{{novaVersao}}">Nova versão</button>
+                <a class="btn btn-p" href="Atendimento.dc.html">Chamar próximo</a>
+              </div>
+            </sc-if>
+          </footer>
+        </sc-if>
+
+        <sc-if value="{{abaAna}}" hint-placeholder-val="{{ false }}">
+          <div class="scroll" style="padding: 18px 32px">
+            <div class="at-sec"><label for="an1">Queixa e história</label><textarea id="an1" class="ed" rows="3">Hipertensa há 12 anos, diagnóstico em consulta de rotina. Sem internações. Pai com infarto aos 61 anos.</textarea></div>
+            <div class="at-sec"><label for="an2">Medicamentos em uso</label><textarea id="an2" class="ed" rows="2">Losartana 50 mg, 1 comprimido pela manhã.</textarea></div>
+            <div class="at-sec"><label for="an3">Hábitos</label><textarea id="an3" class="ed" rows="2">Não fuma. Caminhada 3 vezes por semana.</textarea></div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{abaLista}}" hint-placeholder-val="{{ false }}">
+          <div class="scroll" style="padding: 8px 24px">
+            <sc-for list="{{itensAba}}" as="i" hint-placeholder-count="3">
+              <div class="at-li"><div style="flex: 1; min-width: 0"><div class="b">{{i.t}}</div><div class="t13 mute">{{i.s}}</div></div><span class="t13 mute">{{i.st}}</span></div>
+            </sc-for>
+          </div>
+          <footer class="row" style="gap: 8px; padding: 12px 24px; border-top: 1px solid #E8EAEF"><span class="t13 mute grow">{{abaRodape}}</span><button class="btn btn-sm btn-p">{{abaAcao}}</button></footer>
+        </sc-if>
       </section>
 
-      <aside class="aside col" style="gap: 16px; flex: 0 1 320px; min-width: 300px">
-        <section class="card" aria-labelledby="ex-h">
-          <h2 id="ex-h" style="font-size: 16px; font-weight: 600; margin-bottom: 8px">Exames recentes</h2>
-          <div class="kv"><span>Eco · hoje</span><b>FE 66%</b></div>
-          <div class="kv"><span>Doppler carótidas · 03/2025</span><b>placa &lt; 50% esq.</b></div>
-          <div class="kv"><span>Eco · 03/2025</span><b>FE 64%</b></div>
-          <a class="t14 b" href="Paciente.dc.html" style="display: inline-block; margin-top: 8px">Ver no mapa do corpo</a>
-        </section>
-        <section class="card" aria-labelledby="ev-h">
-          <h2 id="ev-h" style="font-size: 16px; font-weight: 600; margin-bottom: 8px">Evoluções anteriores</h2>
-          <div class="kv"><span>14/03/2025 · Dr. Paulo</span><a class="b" href="Atendimento.dc.html">Abrir</a></div>
-          <div class="kv"><span>02/09/2024 · Dr. Paulo</span><a class="b" href="Atendimento.dc.html">Abrir</a></div>
-        </section>
+      <aside class="card pane" aria-label="Dados de apoio">
+        <div class="scroll">
+          <div class="at-blk">
+            <h2 class="at-h">Sinais vitais de hoje</h2>
+            <div class="at-kv"><span>Pressão arterial</span><b class="num">138/86</b></div>
+            <div class="at-kv"><span>Frequência cardíaca</span><b class="num">72</b></div>
+            <div class="at-kv"><span>Saturação</span><b class="num">97%</b></div>
+            <div class="at-kv"><span>Peso e altura</span><b class="num">68 kg, 1,62 m</b></div>
+            <div class="at-kv"><span>IMC</span><b class="num">25,9</b></div>
+          </div>
+          <div class="at-blk">
+            <h2 class="at-h">Exames recentes</h2>
+            <div class="at-kv"><span>Eco, hoje</span><b>FE 66%</b></div>
+            <div class="at-kv"><span>Doppler, 03/2025</span><b>placa &lt; 50% esq.</b></div>
+            <div class="at-kv"><span>Eco, 03/2025</span><b>FE 64%</b></div>
+            <a class="t14 b" href="Paciente.dc.html" style="display: inline-block; margin-top: 6px">Ver no mapa do corpo</a>
+          </div>
+          <div class="at-blk">
+            <h2 class="at-h">Evoluções anteriores</h2>
+            <div class="at-kv"><span>14/03/2025, Dr. Paulo</span><a class="b" href="Atendimento.dc.html">Abrir</a></div>
+            <div class="at-kv"><span>02/09/2024, Dr. Paulo</span><a class="b" href="Atendimento.dc.html">Abrir</a></div>
+          </div>
+        </div>
       </aside>
-    </div>
-
-    <div class="row wrap" style="gap: 12px; background: #FFFFFF; border-radius: 18px; padding: 14px 20px; box-shadow: 0 1px 2px rgba(15,23,42,.05)">
-      <span class="t14 mute" style="flex: 1 1 300px">Ao finalizar, a evolução é assinada e fica bloqueada. Correções viram nova versão com motivo.</span>
-      <button class="btn">Salvar rascunho</button>
-      <button class="btn btn-p">Finalizar e assinar</button>
     </div>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = { aba: 'evo', passo: 'rascunho', pin: '', salvo: '09:12', ditando: false };
+  }
+  renderVals() {
+    const s = this.state;
+    const A = [['evo', 'Evolução'], ['ana', 'Anamnese'], ['pre', 'Prescrição'], ['ped', 'Pedidos'], ['doc', 'Documentos'], ['his', 'Histórico']];
+    const L = {
+      pre: { itens: [{ t: 'Losartana 50 mg', s: '1 comprimido pela manhã, uso contínuo', st: 'Receita de 06/11' }], rod: 'A receita é assinada junto com a evolução.', acao: 'Prescrever' },
+      ped: { itens: [{ t: 'Doppler de carótidas', s: 'Controle de placa, em 12 meses', st: 'Rascunho' }, { t: 'Ecocardiograma transtorácico', s: 'Controle, em 12 meses', st: 'Rascunho' }], rod: 'Pedidos vão para a recepção agendar.', acao: 'Novo pedido' },
+      doc: { itens: [{ t: 'Pedido médico, Dr. Hugo Lemos', s: 'Foto no balcão, hoje 07:58', st: 'Anexado' }, { t: 'Atestado de comparecimento', s: 'Modelo padrão', st: 'Não emitido' }], rod: 'Documentos assinados não podem ser apagados.', acao: 'Emitir documento' },
+      his: { itens: [{ t: 'Retorno cardiológico', s: '14/03/2025, Dr. Paulo Medeiros', st: 'Assinada' }, { t: 'Primeira consulta', s: '02/09/2024, Dr. Paulo Medeiros', st: 'Assinada' }, { t: 'Teste ergométrico', s: '14/03/2025, negativo para isquemia', st: 'Laudo' }], rod: 'Histórico de atendimentos nesta clínica.', acao: 'Abrir linha do tempo' }
+    };
+    const cur = L[s.aba] || L.pre;
+    return {
+      salvoTxt: 'Rascunho salvo às ' + s.salvo,
+      abas: A.map(([k, t]) => ({ t, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      abaNome: (A.find(a => a[0] === s.aba) || A[0])[1],
+      abaEvo: s.aba === 'evo', abaAna: s.aba === 'ana', abaLista: !!L[s.aba],
+      itensAba: cur.itens, abaRodape: cur.rod, abaAcao: cur.acao,
+      assinada: s.passo === 'assinada',
+      pRascunho: s.passo === 'rascunho', pConfirma: s.passo === 'confirma', pAssinada: s.passo === 'assinada',
+      ditarTxt: s.ditando ? 'Parar ditado' : 'Ditar', ditandoAria: s.ditando ? 'true' : 'false',
+      ditar: () => this.setState(st => ({ ditando: !st.ditando })),
+      salvar: () => this.setState({ salvo: '09:16' }),
+      abrirAss: () => this.setState({ passo: 'confirma', pin: '' }),
+      cancelarAss: () => this.setState({ passo: 'rascunho' }),
+      pin: s.pin, onPin: e => this.setState({ pin: e.target.value }), semPin: s.pin.length < 4,
+      assinar: () => this.setState({ passo: 'assinada' }),
+      novaVersao: () => this.setState({ passo: 'rascunho' })
+    };
+  }
 }
 </script>
 </body>

@@ -4,196 +4,269 @@
 <meta charset="utf-8">
 <title>Qualidade — VidaCor</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style>body{margin:0}</style>
+<style>
+body{margin:0}
+.rowp{cursor:pointer}
+.rowp:hover td{background:#F8FAFC}
+.rowp.sel td{background:#EEF4FB}
+.rowp.sel td:first-child{box-shadow:inset 3px 0 0 #0A1A4A}
+.bar i{background:#0C72B0}
+.kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:12px 4px}
+.kpi>div{padding:0 16px;border-left:1px solid #E8EAEF}
+.kpi>div:first-child{border-left:0}
+.kpi .v{font-size:22px;font-weight:650;letter-spacing:-.01em}
+.h2{margin:0;font-size:17px;font-weight:600}
+.pf{display:flex;gap:8px;padding:12px 18px;border-top:1px solid #E8EAEF;flex-wrap:wrap;align-items:center}
+.pr{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #E8EAEF}
+.pr:last-child{border-bottom:0}
+.toastw{position:fixed;right:24px;bottom:24px;z-index:40;max-width:460px}
+</style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="qualidade" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="qualidade" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="page-h">
-      <div class="grow"><h1>Qualidade e acreditação</h1><p>PADI e ONA · procedimentos, não conformidades, eventos adversos e indicadores num só lugar · nada é apagado, tudo tem versão</p></div>
+    <header class="row wrap" style="gap: 12px">
+      <div style="flex: 1 1 auto; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Qualidade e acreditação</h1>
+        <div class="t13 mute" style="margin-top: 2px">PADI e ONA; nada é apagado, tudo tem versão</div>
+      </div>
       <a class="btn" href="Indicadores.dc.html">Painel de indicadores</a>
-    </div>
+    </header>
 
-    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr))">
-      <sc-for list="{{resumo}}" as="r" hint-placeholder-count="4">
-        <div class="card" style="padding: 18px; display: flex; gap: 12px; align-items: center"><span class="{{r.ni}}">{{r.i}}</span><div><div class="lbl">{{r.l}}</div><div style="font-size: 24px; font-weight: 650" class="num">{{r.v}}</div><div class="t13 mute">{{r.s}}</div></div></div>
-      </sc-for>
-    </div>
+    <section class="card kpi" aria-label="Resumo">
+      <div><div class="t13 mute">POPs vigentes</div><div class="v num">42</div><div class="t12 mute">3 com leitura abaixo de 80%</div></div>
+      <div><div class="t13 mute">Não conformidades abertas</div><div class="v num">{{nNc}}</div><div class="t12 mute">1 com prazo vencido</div></div>
+      <div><div class="t13 mute">Eventos no mês</div><div class="v num">4</div><div class="t12 mute">Nenhum grave, 3 quase-erros</div></div>
+      <div><div class="t13 mute">Acreditação PADI</div><div class="v">Nível 2</div><div class="t12 mute">Visita de manutenção em 03/2027</div></div>
+    </section>
 
-    <nav class="seg" role="tablist" aria-label="Seções da qualidade">
-      <sc-for list="{{abas}}" as="a" hint-placeholder-count="4"><button class="{{a.cls}}" role="tab" aria-selected="{{a.sel}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for>
+    <nav class="tabs" aria-label="Seções da qualidade">
+      <sc-for list="{{abas}}" as="a" hint-placeholder-count="4"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}} <span class="mute" style="font-weight: 500">{{a.n}}</span></button></sc-for>
     </nav>
 
     <sc-if value="{{tPop}}" hint-placeholder-val="{{ true }}">
-      <section class="card" aria-label="Procedimentos operacionais padrão">
-        <div class="card-h"><div class="grow"><h2>POPs</h2><div class="sub">Nova versão exige nova leitura: quem leu a versão anterior volta para "pendente" até ler e confirmar</div></div><button class="btn btn-sm btn-p">Novo POP</button></div>
-        <table class="tb">
-          <thead><tr><th>POP</th><th>Quem precisa ler</th><th>Leitura e treinamento</th><th class="r">Ação</th></tr></thead>
-          <tbody>
-            <sc-for list="{{pops}}" as="p" hint-placeholder-count="5">
-              <tr>
-                <td><div class="b">{{p.cod}} · {{p.t}}</div><div class="t13 mute">Versão {{p.v}} · vigente desde {{p.desde}} · aprovado por {{p.aprov}}</div></td>
-                <td class="t14">{{p.quem}}</td>
-                <td style="width: 34%"><div class="row" style="gap: 8px"><div class="bar" style="flex: 1"><i style="{{p.w}}"></i></div><b class="num t13 nw">{{p.pct}}</b></div><div class="t13 mute" style="margin-top: 4px">{{p.det}}</div></td>
-                <td class="r"><button class="btn btn-sm" onClick="{{p.ver}}">Ver</button></td>
-              </tr>
-            </sc-for>
-          </tbody>
-        </table>
-      </section>
-      <section class="card" aria-label="Detalhe do POP">
-        <div class="card-h"><div class="grow"><h2>{{popSel.cod}} · {{popSel.t}}</h2><div class="sub">Versão {{popSel.v}} · {{popSel.det}}</div></div><button class="btn btn-sm">Cobrar pendentes no chat</button></div>
-        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 14px">
-          <div class="col" style="gap: 0"><span class="lbl">Pendentes de leitura</span>
-            <sc-for list="{{popSel.pend}}" as="n" hint-placeholder-count="3"><div class="li"><span class="av av-sm" style="background: #FDF0D9; color: #9A5B00">{{n.ini}}</span><div style="flex: 1"><div class="t14 b">{{n.nome}}</div><div class="s">{{n.s}}</div></div></div></sc-for>
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px">
+        <section class="card pane" style="padding: 0" aria-label="Procedimentos operacionais padrão">
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>POP</th><th>Quem precisa ler</th><th style="width: 30%">Leitura</th></tr></thead>
+              <tbody>
+                <sc-for list="{{pops}}" as="p" hint-placeholder-count="5">
+                  <tr class="{{p.cls}}" onClick="{{p.ver}}" aria-selected="{{p.atual}}">
+                    <td><div class="b t14">{{p.cod}} {{p.t}}</div><div class="t13 mute">Versão {{p.v}}, desde {{p.desde}}</div></td>
+                    <td class="t14">{{p.quem}}</td>
+                    <td><div class="row" style="gap: 8px"><div class="bar" style="flex: 1"><i style="{{p.w}}"></i></div><b class="num t13 nw">{{p.pct}}</b></div></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
           </div>
-          <div class="col" style="gap: 0"><span class="lbl">Versões</span>
-            <sc-for list="{{popSel.versoes}}" as="v" hint-placeholder-count="3"><div class="li"><div style="flex: 1"><div class="t14 b">{{v.t}}</div><div class="s">{{v.s}}</div></div></div></sc-for>
+          <div class="pf"><span class="t13 mute" style="flex: 1">Versão nova volta todos para leitura pendente.</span><button class="btn btn-sm btn-p">Novo POP</button></div>
+        </section>
+        <aside class="card pane" style="padding: 0" aria-label="Detalhe do POP">
+          <div class="scroll" style="padding: 18px">
+            <div class="t13 mute">{{popSel.cod}}</div>
+            <div style="font-size: 17px; font-weight: 650; line-height: 1.35">{{popSel.t}}</div>
+            <dl class="kv" style="margin: 12px 0 0; grid-template-columns: 104px minmax(0, 1fr)">
+              <dt>Versão</dt><dd>{{popSel.v}}, desde {{popSel.desde}}</dd>
+              <dt>Aprovado por</dt><dd>{{popSel.aprov}}</dd>
+              <dt>Leitura</dt><dd>{{popSel.det}}</dd>
+            </dl>
+            <div class="t14 b" style="margin-top: 18px">Pendentes de leitura</div>
+            <sc-for list="{{popSel.pend}}" as="n" hint-placeholder-count="3"><div class="pr"><span class="av av-sm" style="background: #F1F3F6; color: #334155">{{n.ini}}</span><div style="flex: 1; min-width: 0"><div class="t14">{{n.nome}}</div><div class="t12 mute">{{n.s}}</div></div></div></sc-for>
+            <sc-if value="{{popSel.semPend}}" hint-placeholder-val="{{ false }}"><div class="t13 mute" style="padding: 8px 0">Toda a equipe leu a versão vigente.</div></sc-if>
+            <div class="t14 b" style="margin-top: 18px">Versões</div>
+            <sc-for list="{{popSel.versoes}}" as="v" hint-placeholder-count="3"><div class="pr"><div style="flex: 1; min-width: 0"><div class="t14">{{v.t}}</div><div class="t12 mute">{{v.s}}</div></div></div></sc-for>
           </div>
-        </div>
-      </section>
+          <div class="pf" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr))">
+            <button class="btn btn-sm btn-p" onClick="{{cobrar}}" disabled="{{popSel.semPend}}">Cobrar no chat</button>
+            <button class="btn btn-sm">Nova versão</button>
+          </div>
+        </aside>
+      </div>
     </sc-if>
 
     <sc-if value="{{tNc}}" hint-placeholder-val="{{ false }}">
-      <section class="card" aria-label="Não conformidades">
-        <div class="card-h"><div class="grow"><h2>Não conformidades</h2><div class="sub">Abrir → classificar → responsável e prazo → ação corretiva/preventiva → verificar eficácia</div></div><button class="btn btn-sm btn-p" onClick="{{abrirNc}}">Abrir não conformidade</button></div>
-        <sc-if value="{{ncAberta}}" hint-placeholder-val="{{ false }}">
-          <div style="padding: 16px; border-radius: 16px; background: #F6F7F9; margin-bottom: 16px">
-            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px">
-              <label class="field" style="grid-column: 1 / -1">O que aconteceu<textarea class="in" rows="2" placeholder="Fato, sem nome de paciente no título"></textarea></label>
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px">
+        <section class="card pane" style="padding: 0" aria-label="Não conformidades">
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Não conformidade</th><th>Responsável</th><th>Situação</th></tr></thead>
+              <tbody>
+                <sc-for list="{{ncs}}" as="n" hint-placeholder-count="4">
+                  <tr class="{{n.rcls}}" onClick="{{n.ver}}" aria-selected="{{n.atual}}">
+                    <td><div class="b t14">{{n.cod}} {{n.t}}</div><div class="t13 mute">{{n.cl}}</div></td>
+                    <td><div class="t14">{{n.resp}}</div><div class="t13 mute num">Prazo {{n.prazo}}</div></td>
+                    <td><span class="{{n.cls}}">{{n.sit}}</span></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+          <div class="pf"><span class="t13 mute" style="flex: 1">Abrir, classificar, agir e verificar a eficácia.</span><button class="btn btn-sm btn-p" onClick="{{abrirNc}}">Abrir não conformidade</button></div>
+        </section>
+        <aside class="card pane" style="padding: 0" aria-label="Detalhe da não conformidade">
+          <sc-if value="{{ncVer}}" hint-placeholder-val="{{ true }}">
+            <div class="scroll" style="padding: 18px">
+              <div class="t13 mute">{{ncSel.cod}}</div>
+              <div style="font-size: 17px; font-weight: 650; line-height: 1.35">{{ncSel.t}}</div>
+              <dl class="kv" style="margin: 12px 0 0; grid-template-columns: 104px minmax(0, 1fr)">
+                <dt>Aberta</dt><dd>{{ncSel.ab}} por {{ncSel.por}}</dd>
+                <dt>Classificação</dt><dd>{{ncSel.cl}}</dd>
+                <dt>Responsável</dt><dd>{{ncSel.resp}}</dd>
+                <dt>Prazo</dt><dd class="num">{{ncSel.prazo}}</dd>
+                <dt>Situação</dt><dd>{{ncSel.sit}}</dd>
+              </dl>
+              <div class="t14 b" style="margin-top: 18px">Ação</div>
+              <p class="t14" style="margin: 6px 0 0; line-height: 1.5; color: #334155">{{ncSel.acao}}</p>
+            </div>
+            <div class="pf"><button class="btn btn-sm" style="flex: 1">Registrar andamento</button><a class="btn btn-sm" href="Lastro.dc.html">Lastro</a></div>
+          </sc-if>
+          <sc-if value="{{ncForm}}" hint-placeholder-val="{{ false }}">
+            <div class="scroll" style="padding: 18px; display: flex; flex-direction: column; gap: 12px">
+              <h2 class="h2">Nova não conformidade</h2>
+              <label class="field">O que aconteceu<textarea class="in" rows="3" style="padding-top: 10px" placeholder="O fato, sem nome de paciente no título" value="{{ncTxt}}" onChange="{{onNcTxt}}"></textarea></label>
               <label class="field">Classificação<select class="in"><option>Processo</option><option>Equipamento</option><option>Documentação</option><option>Fornecedor</option></select></label>
               <label class="field">Gravidade<select class="in"><option>Leve</option><option>Moderada</option><option>Grave</option></select></label>
               <label class="field">Responsável<select class="in"><option>Patrícia Lemos</option><option>Dra. Cecília Souto</option><option>Marcos Teixeira</option></select></label>
               <label class="field">Prazo<input class="in num" value="21/11/2026"></label>
             </div>
-            <div class="row wrap" style="gap: 8px; margin-top: 12px"><button class="btn btn-sm btn-p" onClick="{{fecharNc}}">Registrar</button><button class="btn btn-sm" onClick="{{fecharNc}}">Cancelar</button></div>
-          </div>
-        </sc-if>
-        <table class="tb">
-          <thead><tr><th>NC</th><th>Classificação e responsável</th><th>Ação</th><th>Situação</th></tr></thead>
-          <tbody>
-            <sc-for list="{{ncs}}" as="n" hint-placeholder-count="4">
-              <tr>
-                <td><div class="b">{{n.cod}} · {{n.t}}</div><div class="t13 mute">Aberta {{n.ab}} por {{n.por}}</div></td>
-                <td><div>{{n.cl}}</div><div class="t13 mute">{{n.resp}} · prazo {{n.prazo}}</div></td>
-                <td class="t14">{{n.acao}}</td>
-                <td><span class="{{n.cls}}">{{n.sit}}</span></td>
-              </tr>
-            </sc-for>
-          </tbody>
-        </table>
-      </section>
+            <div class="pf"><button class="btn btn-sm btn-p" style="flex: 1" onClick="{{registrarNc}}">Registrar</button><button class="btn btn-sm" onClick="{{fecharNc}}">Cancelar</button></div>
+          </sc-if>
+        </aside>
+      </div>
     </sc-if>
 
     <sc-if value="{{tEa}}" hint-placeholder-val="{{ false }}">
-      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); align-items: start">
-        <section class="card" aria-label="Notificar evento">
-          <div class="card-h"><div class="grow"><h2>Notificar evento ou quase-erro</h2><div class="sub">Qualquer pessoa da equipe pode notificar · cultura justa, sem punição por notificar</div></div></div>
-          <div class="col" style="gap: 14px">
-            <label class="row" style="gap: 10px; cursor: pointer"><input type="checkbox" checked="{{anon}}" onChange="{{tgAnon}}" style="width: 20px; height: 20px"><span class="t14"><b>Notificar de forma anônima</b><br><span class="mute">{{anonTxt}}</span></span></label>
-            <label class="field">Tipo<select class="in"><option>Reação a contraste</option><option>Queda</option><option>Erro de identificação</option><option>Exame no paciente ou lado errado</option><option>Falha de equipamento</option><option>Quase-erro (não chegou ao paciente)</option></select></label>
-            <div class="field"><span>Gravidade</span><div class="seg" role="radiogroup" aria-label="Gravidade"><sc-for list="{{grav}}" as="g" hint-placeholder-count="4"><button class="{{g.cls}}" role="radio" aria-checked="{{g.sel}}" onClick="{{g.ir}}">{{g.t}}</button></sc-for></div></div>
-            <label class="field">Descrição<textarea class="in" rows="3"></textarea></label>
-            <sc-if value="{{vaiNotivisa}}" hint-placeholder-val="{{ false }}">
-              <div class="banner off"><div class="t14" style="line-height: 1.5"><b>Vai para o Notivisa (Anvisa).</b> Evento grave ou óbito: o Núcleo de Segurança do Paciente precisa notificar em até 72 horas. O sistema já cria a tarefa para Dra. Cecília Souto com prazo.</div></div>
-            </sc-if>
-            <button class="btn btn-p" style="align-self: flex-start">Enviar notificação</button>
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 16px">
+        <section class="card pane" style="padding: 0" aria-label="Eventos notificados">
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Evento</th><th>Local</th><th>Situação</th></tr></thead>
+              <tbody>
+                <sc-for list="{{eventos}}" as="e" hint-placeholder-count="4">
+                  <tr><td><div class="b t14">{{e.t}}</div><div class="t13 mute">{{e.d}}</div></td><td class="t14">{{e.s}}</td><td><span class="{{e.cls}}">{{e.tag}}</span></td></tr>
+                </sc-for>
+              </tbody>
+            </table>
           </div>
+          <div class="pf"><span class="t13 mute">Visível só ao Núcleo de Segurança do Paciente.</span></div>
         </section>
-        <section class="card" aria-label="Eventos notificados">
-          <div class="card-h"><div class="grow"><h2>Eventos notificados</h2><div class="sub">Visível só ao Núcleo de Segurança do Paciente</div></div></div>
-          <sc-for list="{{eventos}}" as="e" hint-placeholder-count="4">
-            <div class="li"><span class="{{e.ni}}">!</span><div style="flex: 1; min-width: 0"><div class="t14 b">{{e.t}}</div><div class="s">{{e.s}}</div></div><span class="{{e.cls}}" style="white-space: normal; height: auto; min-height: 26px; padding: 4px 10px">{{e.tag}}</span></div>
-          </sc-for>
-        </section>
+        <aside class="card pane" style="padding: 0" aria-label="Notificar evento">
+          <div class="scroll" style="padding: 18px; display: flex; flex-direction: column; gap: 12px">
+            <h2 class="h2">Notificar evento ou quase-erro</h2>
+            <label class="row" style="gap: 10px; cursor: pointer; align-items: flex-start"><input type="checkbox" checked="{{anon}}" onChange="{{tgAnon}}" style="width: 20px; height: 20px; margin: 0"><span class="t14"><b>Anônimo</b><br><span class="mute t13">{{anonTxt}}</span></span></label>
+            <label class="field">Tipo<select class="in"><option>Reação a contraste</option><option>Queda</option><option>Erro de identificação</option><option>Exame no paciente ou lado errado</option><option>Falha de equipamento</option><option>Quase-erro (não chegou ao paciente)</option></select></label>
+            <div class="field"><span>Gravidade</span><div class="seg" role="radiogroup" aria-label="Gravidade" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr))"><sc-for list="{{grav}}" as="g" hint-placeholder-count="4"><button class="{{g.cls}}" role="radio" aria-checked="{{g.sel}}" onClick="{{g.ir}}" style="height: 36px; padding: 0 4px; font-size: 13px; justify-content: center">{{g.t}}</button></sc-for></div></div>
+            <label class="field">Descrição<textarea class="in" rows="3" style="padding-top: 10px"></textarea></label>
+            <sc-if value="{{vaiNotivisa}}" hint-placeholder-val="{{ false }}">
+              <div class="banner off"><div class="t13" style="line-height: 1.5"><b>Vai para o Notivisa.</b> O Núcleo tem até 72 horas para notificar a Anvisa; o sistema já criou a tarefa para a Dra. Cecília Souto.</div></div>
+            </sc-if>
+          </div>
+          <div class="pf"><button class="btn btn-p" style="flex: 1" onClick="{{notificar}}">Enviar notificação</button></div>
+        </aside>
       </div>
     </sc-if>
 
     <sc-if value="{{tInd}}" hint-placeholder-val="{{ false }}">
-      <section class="card" aria-label="Indicadores exigidos">
-        <div class="card-h"><div class="grow"><h2>Indicadores exigidos · outubro/2026</h2><div class="sub">Calculados pelo servidor a partir do lastro · fórmula com versão · meta definida pela comissão de qualidade</div></div></div>
-        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr))">
-          <sc-for list="{{inds}}" as="i" hint-placeholder-count="5">
-            <div style="padding: 16px; border-radius: 16px; background: #F6F7F9; display: flex; flex-direction: column; gap: 8px">
-              <div class="row" style="gap: 8px"><span class="t14 b" style="flex: 1">{{i.t}}</span><span class="{{i.cls}}">{{i.sit}}</span></div>
-              <div class="row" style="gap: 8px; align-items: baseline"><span style="font-size: 28px; font-weight: 650" class="num">{{i.v}}</span><span class="t13 mute">meta {{i.meta}}</span></div>
-              <div class="t13 mute">{{i.s}}</div>
-            </div>
-          </sc-for>
-        </div>
-      </section>
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px">
+        <section class="card pane" style="padding: 0" aria-label="Indicadores exigidos">
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Indicador, outubro de 2026</th><th class="r">Valor</th><th class="r">Meta</th><th>Detalhe</th><th>Situação</th></tr></thead>
+              <tbody>
+                <sc-for list="{{inds}}" as="i" hint-placeholder-count="5">
+                  <tr><td class="b t14">{{i.t}}</td><td class="r num b t15 nw">{{i.v}}</td><td class="r num t14 nw">{{i.meta}}</td><td class="t14">{{i.s}}</td><td><span class="{{i.cls}}">{{i.sit}}</span></td></tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+          <div class="pf"><span class="t13 mute" style="flex: 1">Calculados pelo servidor a partir do lastro, com fórmula versionada. Metas da comissão de qualidade.</span><a class="btn btn-sm" href="Indicadores.dc.html">Abrir painel</a></div>
+        </section>
+      </div>
     </sc-if>
-    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+
+    <sc-if value="{{temToast}}" hint-placeholder-val="{{ false }}">
+      <div class="toastw"><div class="toast" role="status"><span style="flex: 1">{{toast}}</span><button onClick="{{fecharToast}}">Fechar</button></div></div>
+    </sc-if>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { aba: 'pop', pop: 0, nc: false, anon: true, g: 'leve' };
+    this.state = { aba: 'pop', pop: 0, nc: 'NC-034', ncForm: false, ncTxt: '', novas: [], anon: true, g: 'leve', toast: '' };
   }
   renderVals() {
     const s = this.state;
     const P = [
-      { cod: 'POP-007', t: 'Identificação do paciente (nome + nascimento)', v: '4', desde: '02/11/2026', aprov: 'Dra. Cecília Souto', quem: 'Todos (38 pessoas)', pct: 71, det: '27 de 38 leram · 24 fizeram o treinamento · versão nova há 5 dias',
-        pend: [['CM', 'Carla Mendes', 'Recepção · leu a v3, falta a v4'], ['RA', 'Dra. Renata Alves', 'Médica · leu a v3, falta a v4'], ['JS', 'João Silva', 'Técnico de raio X · nunca leu']],
-        versoes: [['v4 · 02/11/2026', 'Inclui pulseira bipada na sala · motivo: NC-031'], ['v3 · 10/03/2026', 'Dois identificadores também no telefone'], ['v2 · 05/08/2025', 'Revisão anual']] },
-      { cod: 'POP-012', t: 'Administração de contraste iodado', v: '2', desde: '14/06/2026', aprov: 'Dra. Cecília Souto', quem: 'TC, enfermagem e médicos (12)', pct: 100, det: '12 de 12 leram e fizeram o treinamento',
-        pend: [], versoes: [['v2 · 14/06/2026', 'Triagem de alergia bloqueante'], ['v1 · 01/02/2025', 'Primeira versão']] },
-      { cod: 'POP-018', t: 'Desinfecção de transdutores', v: '3', desde: '20/09/2026', aprov: 'Patrícia Lemos', quem: 'Salas de USG e eco (16)', pct: 88, det: '14 de 16 leram · 14 treinados',
-        pend: [['FA', 'Dr. Felipe Andrade', 'Médico novo · prazo 14/11'], ['LP', 'Luana Pires', 'Auxiliar · prazo 14/11']], versoes: [['v3 · 20/09/2026', 'Novo desinfetante de alto nível'], ['v2 · 11/01/2026', 'Registro por transdutor']] },
-      { cod: 'POP-021', t: 'Contingência: atendimento em papel', v: '1', desde: '01/07/2026', aprov: 'Patrícia Lemos', quem: 'Recepção e salas (24)', pct: 96, det: '23 de 24 leram · simulado de 16/10 conta como treinamento',
-        pend: [['FA', 'Dr. Felipe Andrade', 'Médico novo · prazo 14/11']], versoes: [['v1 · 01/07/2026', 'Primeira versão']] },
-      { cod: 'POP-025', t: 'Comunicação de resultado crítico', v: '2', desde: '28/10/2026', aprov: 'Dra. Cecília Souto', quem: 'Médicos (9)', pct: 56, det: '5 de 9 leram · treinamento marcado para 12/11',
-        pend: [['PM', 'Dr. Paulo Medeiros', 'Leu a v1, falta a v2'], ['MF', 'Dr. Marcos Freire', 'Leu a v1, falta a v2']], versoes: [['v2 · 28/10/2026', 'Prazo de 1 hora para ligar ao solicitante'], ['v1 · 03/03/2026', 'Primeira versão']] }
+      { cod: 'POP-007', t: 'Identificação do paciente (nome e nascimento)', v: '4', desde: '02/11/2026', aprov: 'Dra. Cecília Souto', quem: 'Todos (38)', pct: 71, det: '27 de 38 leram; 24 treinados',
+        pend: [['CM', 'Carla Mendes', 'Leu a v3, falta a v4'], ['RA', 'Dra. Renata Alves', 'Leu a v3, falta a v4'], ['JS', 'João Silva', 'Técnico de raio X, nunca leu']],
+        versoes: [['v4, 02/11/2026', 'Pulseira bipada na sala, motivo NC-031'], ['v3, 10/03/2026', 'Dois identificadores também no telefone'], ['v2, 05/08/2025', 'Revisão anual']] },
+      { cod: 'POP-012', t: 'Administração de contraste iodado', v: '2', desde: '14/06/2026', aprov: 'Dra. Cecília Souto', quem: 'TC, enfermagem e médicos (12)', pct: 100, det: '12 de 12 leram e foram treinados',
+        pend: [], versoes: [['v2, 14/06/2026', 'Triagem de alergia bloqueante'], ['v1, 01/02/2025', 'Primeira versão']] },
+      { cod: 'POP-018', t: 'Desinfecção de transdutores', v: '3', desde: '20/09/2026', aprov: 'Patrícia Lemos', quem: 'Salas de USG e eco (16)', pct: 88, det: '14 de 16 leram; 14 treinados',
+        pend: [['FA', 'Dr. Felipe Andrade', 'Médico novo, prazo 14/11'], ['LP', 'Luana Pires', 'Auxiliar, prazo 14/11']], versoes: [['v3, 20/09/2026', 'Novo desinfetante de alto nível'], ['v2, 11/01/2026', 'Registro por transdutor']] },
+      { cod: 'POP-021', t: 'Contingência: atendimento em papel', v: '1', desde: '01/07/2026', aprov: 'Patrícia Lemos', quem: 'Recepção e salas (24)', pct: 96, det: '23 de 24 leram; o simulado de 16/10 conta como treinamento',
+        pend: [['FA', 'Dr. Felipe Andrade', 'Médico novo, prazo 14/11']], versoes: [['v1, 01/07/2026', 'Primeira versão']] },
+      { cod: 'POP-025', t: 'Comunicação de resultado crítico', v: '2', desde: '28/10/2026', aprov: 'Dra. Cecília Souto', quem: 'Médicos (9)', pct: 56, det: '5 de 9 leram; treinamento em 12/11',
+        pend: [['PM', 'Dr. Paulo Medeiros', 'Leu a v1, falta a v2'], ['MF', 'Dr. Marcos Freire', 'Leu a v1, falta a v2']], versoes: [['v2, 28/10/2026', 'Prazo de 1 hora para ligar ao solicitante'], ['v1, 03/03/2026', 'Primeira versão']] }
     ];
     const cur = P[s.pop];
-    const A = [['pop', 'POPs · 42'], ['nc', 'Não conformidades · 6 abertas'], ['ea', 'Eventos adversos'], ['ind', 'Indicadores exigidos']];
+    const NC = s.novas.concat([
+      { cod: 'NC-034', t: 'Etiqueta reimpressa sem motivo', ab: '04/11', por: 'Ana Souza', cl: 'Processo, leve', resp: 'Patrícia Lemos', prazo: '18/11', acao: 'Corretiva: bloquear reimpressão sem motivo (pedido à TI).', sit: 'Em ação', cls: 'chip c-blue' },
+      { cod: 'NC-033', t: 'Laudo de TC acima de 72 h', ab: '29/10', por: 'Sistema (indicador)', cl: 'Processo, moderada', resp: 'Dra. Cecília Souto', prazo: '05/11', acao: 'Corretiva: redistribuir a fila. Preventiva: alerta às 48 h.', sit: 'Prazo vencido', cls: 'chip c-rose' },
+      { cod: 'NC-031', t: 'Pulseira não conferida na sala 3', ab: '12/10', por: 'Anônimo', cl: 'Processo, moderada', resp: 'Patrícia Lemos', prazo: '26/10', acao: 'POP-007 v4 e bipe obrigatório da pulseira. Eficácia verificada até 12/12.', sit: 'Verificando eficácia', cls: 'chip c-violet' },
+      { cod: 'NC-028', t: 'Termômetro do refrigerador de contraste sem registro', ab: '20/09', por: 'Auditoria interna', cl: 'Equipamento, leve', resp: 'Dra. Cecília Souto', prazo: '04/10', acao: 'Registro automático de temperatura.', sit: 'Encerrada, eficaz', cls: 'chip c-green' }
+    ]);
+    const abertas = NC.filter(n => n.sit.indexOf('Encerrada') < 0).length;
+    const nc = NC.find(n => n.cod === s.nc) || NC[0];
+    const A = [['pop', 'POPs', '42'], ['nc', 'Não conformidades', String(abertas) + ' abertas'], ['ea', 'Eventos adversos', '4'], ['ind', 'Indicadores exigidos', '']];
     const G = [['leve', 'Sem dano'], ['moderado', 'Dano leve'], ['grave', 'Dano grave'], ['obito', 'Óbito']];
     return {
-      resumo: [
-        { ni: 'ni k-blue', i: 'P', l: 'POPs vigentes', v: '42', s: '3 com leitura abaixo de 80%' },
-        { ni: 'ni k-amber', i: 'N', l: 'NCs abertas', v: '6', s: '1 com prazo vencido' },
-        { ni: 'ni k-rose', i: 'E', l: 'Eventos no mês', v: '4', s: '0 graves · 3 quase-erros' },
-        { ni: 'ni k-green', i: 'A', l: 'Acreditação PADI', v: 'Nível 2', s: 'Visita de manutenção em 03/2027' }
-      ],
-      abas: A.map(([k, t]) => ({ t, cls: s.aba === k ? 'on' : '', sel: s.aba === k ? 'true' : 'false', ir: () => this.setState({ aba: k }) })),
+      nNc: String(abertas),
+      abas: A.map(([k, t, n]) => ({ t, n, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
       tPop: s.aba === 'pop', tNc: s.aba === 'nc', tEa: s.aba === 'ea', tInd: s.aba === 'ind',
-      pops: P.map((p, i) => ({ cod: p.cod, t: p.t, v: p.v, desde: p.desde, aprov: p.aprov, quem: p.quem, pct: p.pct + '%', w: 'width: ' + p.pct + '%', det: p.det, ver: () => this.setState({ pop: i }) })),
-      popSel: { cod: cur.cod, t: cur.t, v: cur.v, det: cur.det,
-        pend: cur.pend.length ? cur.pend.map(([ini, nome, sub]) => ({ ini, nome, s: sub })) : [{ ini: '✓', nome: 'Ninguém pendente', s: 'Toda a equipe leu a versão vigente' }],
+      pops: P.map((p, i) => ({ cod: p.cod, t: p.t, v: p.v, desde: p.desde, quem: p.quem, pct: p.pct + '%', w: 'width: ' + p.pct + '%',
+        cls: 'rowp' + (s.pop === i ? ' sel' : ''), atual: s.pop === i ? 'true' : 'false', ver: () => this.setState({ pop: i }) })),
+      popSel: { cod: cur.cod, t: cur.t, v: cur.v, desde: cur.desde, aprov: cur.aprov, det: cur.det,
+        pend: cur.pend.map(([ini, nome, sub]) => ({ ini, nome, s: sub })), semPend: cur.pend.length === 0,
         versoes: cur.versoes.map(([t, sub]) => ({ t, s: sub })) },
-      ncAberta: s.nc, abrirNc: () => this.setState({ nc: true }), fecharNc: () => this.setState({ nc: false }),
-      ncs: [
-        { cod: 'NC-034', t: 'Etiqueta reimpressa sem motivo', ab: '04/11', por: 'Ana Souza', cl: 'Processo · leve', resp: 'Patrícia Lemos', prazo: '18/11', acao: 'Corretiva: bloquear reimpressão sem motivo (pedido à TI)', sit: 'Em ação', cls: 'chip c-blue' },
-        { cod: 'NC-033', t: 'Laudo de TC acima de 72 h', ab: '29/10', por: 'Sistema (indicador)', cl: 'Processo · moderada', resp: 'Dra. Cecília Souto', prazo: '05/11', acao: 'Corretiva: redistribuir fila · preventiva: alerta às 48 h', sit: 'Prazo vencido', cls: 'chip c-rose' },
-        { cod: 'NC-031', t: 'Pulseira não conferida na sala 3', ab: '12/10', por: 'Anônimo', cl: 'Processo · moderada', resp: 'Patrícia Lemos', prazo: '26/10', acao: 'POP-007 v4 + bipe obrigatório da pulseira', sit: 'Verificando eficácia até 12/12', cls: 'chip c-violet' },
-        { cod: 'NC-028', t: 'Termômetro do refrigerador de contraste sem registro', ab: '20/09', por: 'Auditoria interna', cl: 'Equipamento · leve', resp: 'Dra. Cecília Souto', prazo: '04/10', acao: 'Registro automático de temperatura', sit: 'Eficaz · encerrada', cls: 'chip c-green' }
-      ],
-      anon: s.anon, tgAnon: () => this.setState({ anon: !s.anon }),
-      anonTxt: s.anon ? 'Seu nome não é gravado. O Núcleo não consegue pedir detalhes a você.' : 'Seu nome fica visível só ao Núcleo de Segurança do Paciente.',
+      cobrar: () => this.setState({ toast: 'Lembrete enviado no chat a ' + cur.pend.length + ' pessoa(s) para ler o ' + cur.cod + '. A leitura só conta depois da confirmação de cada uma.' }),
+      ncs: NC.map(n => ({ cod: n.cod, t: n.t, cl: n.cl, resp: n.resp, prazo: n.prazo, sit: n.sit, cls: n.cls,
+        rcls: 'rowp' + (!s.ncForm && n.cod === nc.cod ? ' sel' : ''), atual: n.cod === nc.cod ? 'true' : 'false', ver: () => this.setState({ nc: n.cod, ncForm: false }) })),
+      ncSel: nc, ncVer: !s.ncForm, ncForm: s.ncForm,
+      abrirNc: () => this.setState({ ncForm: true }), fecharNc: () => this.setState({ ncForm: false }),
+      ncTxt: s.ncTxt, onNcTxt: e => this.setState({ ncTxt: e.target.value }),
+      registrarNc: () => this.setState(st => { const cod = 'NC-0' + (35 + st.novas.length);
+        const n = { cod, t: (st.ncTxt || 'Não conformidade sem descrição').slice(0, 60), ab: '07/11', por: 'Você', cl: 'Processo, leve', resp: 'Patrícia Lemos', prazo: '21/11', acao: 'A definir pelo responsável.', sit: 'Aberta', cls: 'chip c-amber' };
+        return { novas: [n].concat(st.novas), nc: cod, ncForm: false, ncTxt: '', toast: cod + ' registrada e enviada a Patrícia Lemos, prazo 21/11. Registrado no lastro.' }; }),
+      anon: s.anon, tgAnon: () => this.setState(st => ({ anon: !st.anon })),
+      anonTxt: s.anon ? 'Seu nome não é gravado; o Núcleo não poderá pedir detalhes a você.' : 'Seu nome fica visível só ao Núcleo de Segurança do Paciente.',
       grav: G.map(([k, t]) => ({ t, cls: s.g === k ? 'on' : '', sel: s.g === k ? 'true' : 'false', ir: () => this.setState({ g: k }) })),
       vaiNotivisa: s.g === 'grave' || s.g === 'obito',
+      notificar: () => this.setState({ toast: 'Notificação recebida pelo Núcleo de Segurança do Paciente. Análise em até 5 dias úteis. Obrigado por notificar.' }),
       eventos: [
-        { ni: 'ni k-amber', t: 'Reação leve a contraste iodado (urticária)', s: 'TC · 28/10 · tratada na sala · sem dano permanente', tag: 'Notivisa: não obrigatório', cls: 'chip c-green' },
-        { ni: 'ni k-gray', t: 'Quase-erro: pedido de USG com nome trocado', s: 'Recepção · 30/10 · barrado pela conferência de nascimento', tag: 'Quase-erro', cls: 'chip' },
-        { ni: 'ni k-amber', t: 'Queda na saída do vestiário', s: 'Sala 4 · 02/11 · sem lesão · piso molhado', tag: 'Análise em 10/11', cls: 'chip c-amber' },
-        { ni: 'ni k-gray', t: 'Quase-erro: lado do Doppler trocado no pedido', s: 'Sala 2 · 05/11 · médico conferiu com o paciente', tag: 'Anônimo', cls: 'chip' }
+        { t: 'Reação leve a contraste iodado', d: 'Urticária tratada na sala, sem dano permanente', s: 'TC, 28/10', tag: 'Notivisa não obrigatório', cls: 'chip c-green' },
+        { t: 'Quase-erro: pedido de USG com nome trocado', d: 'Barrado na conferência de nascimento', s: 'Recepção, 30/10', tag: 'Quase-erro', cls: 'chip' },
+        { t: 'Queda na saída do vestiário', d: 'Sem lesão; piso molhado', s: 'Sala 4, 02/11', tag: 'Análise em 10/11', cls: 'chip c-amber' },
+        { t: 'Quase-erro: lado do Doppler trocado no pedido', d: 'Médico conferiu com o paciente; notificação anônima', s: 'Sala 2, 05/11', tag: 'Quase-erro', cls: 'chip' }
       ],
       inds: [
-        { t: 'Tempo de laudo (TC)', v: '41 h', meta: '≤ 48 h', s: 'Mediana · 92% dentro da meta', sit: 'Na meta', cls: 'chip c-green' },
-        { t: 'Repetição de exame (raio X)', v: '3,8%', meta: '≤ 3%', s: '19 de 502 · principal causa: posicionamento', sit: 'Acima', cls: 'chip c-rose' },
-        { t: 'Reação a contraste', v: '0,3%', meta: '≤ 0,6%', s: '1 de 318 com contraste · leve', sit: 'Na meta', cls: 'chip c-green' },
-        { t: 'Quedas de paciente', v: '1', meta: '0', s: 'Sem lesão · NC em análise', sit: 'Atenção', cls: 'chip c-amber' },
-        { t: 'Identificação correta', v: '99,7%', meta: '100%', s: 'Pulseira bipada na sala · 4 bloqueios corretos', sit: 'Atenção', cls: 'chip c-amber' }
-      ]
+        { t: 'Tempo de laudo (TC)', v: '41 h', meta: '≤ 48 h', s: 'Mediana; 92% dentro da meta', sit: 'Na meta', cls: 'chip c-green' },
+        { t: 'Repetição de exame (raio X)', v: '3,8%', meta: '≤ 3%', s: '19 de 502; principal causa: posicionamento', sit: 'Acima da meta', cls: 'chip c-rose' },
+        { t: 'Reação a contraste', v: '0,3%', meta: '≤ 0,6%', s: '1 de 318 com contraste, leve', sit: 'Na meta', cls: 'chip c-green' },
+        { t: 'Quedas de paciente', v: '1', meta: '0', s: 'Sem lesão; NC em análise', sit: 'Atenção', cls: 'chip c-amber' },
+        { t: 'Identificação correta', v: '99,7%', meta: '100%', s: 'Pulseira bipada na sala; 4 bloqueios corretos', sit: 'Atenção', cls: 'chip c-amber' }
+      ],
+      temToast: !!s.toast, toast: s.toast, fecharToast: () => this.setState({ toast: '' })
     };
   }
 }

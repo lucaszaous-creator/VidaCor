@@ -3,3 +3,5 @@ node_modules/
 tools/render-anatomia/bp/
 *.stl
 .DS_Store
+tools/verificacao/render/
+tools/verificacao/shots/

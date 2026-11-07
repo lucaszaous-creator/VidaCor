@@ -4,219 +4,399 @@
 <meta charset="utf-8">
 <title>Caixa — VidaCor Imagem</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
-body{margin:0;background:#F2F3F6}
-.tog{width:46px;height:28px;border-radius:999px;background:#0C72B0;position:relative;border:0;flex:none;cursor:pointer}
-.tog::after{content:"";position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:#fff}
+body{margin:0}
+.hd h1{margin:0;font-size:24px;font-weight:650;letter-spacing:-.02em}
+.strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:12px 4px}
+.strip>div{padding:0 16px;border-left:1px solid #E8EAEF;min-width:0}
+.strip>div:first-child{border-left:0}
+.strip .v{font-size:20px;font-weight:650;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:2px}
+.ph{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid #E8EAEF;flex:none}
+.ph h2{font-size:16px;font-weight:650}
+.pf{flex:none;padding:14px 18px;border-top:1px solid #E8EAEF;display:flex;flex-direction:column;gap:8px}
+.sub-h{font-size:14px;font-weight:650;margin:18px 0 8px}
+.sub-h:first-child{margin-top:0}
+.ln{display:flex;justify-content:space-between;gap:12px;font-size:14px}
+.ix{width:36px;height:36px;border-radius:10px;border:0;background:transparent;color:#5B6474;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.ix:hover{background:#F1F3F6;color:#0F172A}
+.pk{display:flex;align-items:center;gap:12px;width:100%;min-height:44px;padding:6px 10px;border:0;border-radius:10px;background:transparent;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.pk:hover{background:#F2F5FA}
+.blk{border:1px solid #E8EAEF;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;padding:8px 0}
+.tog{width:44px;height:26px;border-radius:999px;background:#0C72B0;position:relative;border:0;flex:none;cursor:pointer}
+.tog::after{content:"";position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff}
 .tog.off{background:#C3CAD5}.tog.off::after{right:auto;left:3px}
-.pay{border:1px solid #E1E5EB;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;background:#fff;min-width:0}
-.pay.on{border-color:#0C72B0;box-shadow:0 0 0 4px #E8F2FB}
-.money{font-size:22px;font-weight:650;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.dbg{position:fixed;inset:0;background:rgba(15,23,42,.32);z-index:40;border:0;padding:0;cursor:default}
+.drw{position:fixed;top:12px;right:12px;bottom:12px;width:480px;max-width:calc(100vw - 24px);background:#fff;border-radius:22px;z-index:41;display:flex;flex-direction:column;box-shadow:0 8px 24px rgba(15,23,42,.12)}
+.drw>header{display:flex;align-items:center;gap:10px;padding:16px 16px 16px 20px;border-bottom:1px solid #E8EAEF}
+.drw>header h2{font-size:18px;font-weight:650}
+.drw>.scroll{flex:1 1 auto;padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.drw>footer{display:flex;gap:8px;flex-wrap:wrap;padding:14px 20px;border-top:1px solid #E8EAEF}
+.tst{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:50;max-width:560px}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="caixa" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="caixa" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <div class="crumb"><span>VidaCor</span><span aria-hidden="true">›</span><span>Gestão</span><span aria-hidden="true">›</span><b>Caixa do particular</b></div>
-      <div class="grow"></div>
-      <button class="btn btn-sm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"></path></svg>Suprimento</button>
-      <button class="btn btn-sm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"></path></svg>Sangria</button>
-      <button class="btn btn-p"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>Fechar caixa</button>
-    </div>
+    <header class="hd row wrap" style="gap: 12px">
+      <div style="flex: 1 1 auto; min-width: 0">
+        <div class="row" style="gap: 10px"><h1>Caixa 1</h1><span class="{{stCls}}">{{stTxt}}</span></div>
+        <div class="t13 mute" style="margin-top: 2px">Guichê 2, aberto por Ana Souza às 07:02 com troco de R$ 200,00</div>
+      </div>
+      <button class="btn btn-sm" onClick="{{abrirSup}}">Suprimento</button>
+      <button class="btn btn-sm" onClick="{{abrirSan}}">Sangria</button>
+      <button class="btn btn-p" onClick="{{abrirFech}}" disabled="{{fechado}}">Fechar caixa</button>
+    </header>
 
-    <div class="page-h">
-      <div class="grow">
-        <h1>Caixa</h1>
-        <p>Recebimentos de pacientes particulares, sinal de pacotes e coparticipação · tudo vai para o Financeiro no fechamento</p>
-      </div>
-    </div>
-
-    <section class="card" aria-label="Situação do caixa" style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center">
-      <span class="tile t-green" style="width: 56px; height: 56px; border-radius: 16px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 8h18v12H3zM7 8V5h10v3M12 12v4M10 14h4"></path></svg></span>
-      <div style="flex: 1 1 360px; min-width: 0">
-        <div class="row wrap" style="gap: 10px"><h2 style="font-size: 22px; font-weight: 650">Caixa 1 · Guichê 2</h2><span class="chip c-green"><span class="d"></span>Aberto</span></div>
-        <div class="t14 mute" style="margin-top: 4px">Aberto por Ana Souza às 07:02 com fundo de troco de R$ 200,00 · conferido por Carla Mendes</div>
-      </div>
-      <div style="display: flex; gap: 28px; flex-wrap: wrap">
-        <div><div class="lbl">Dinheiro na gaveta</div><div class="money" style="margin-top: 4px">R$ 740,00</div></div>
-        <div><div class="lbl">Última sangria</div><div class="money" style="margin-top: 4px">08:30</div></div>
-        <div><div class="lbl">Operador</div><div class="row" style="gap: 8px; margin-top: 6px"><span class="av av-sm" style="background: #0A1A4A; color: #fff">AS</span><span class="t15 b">Ana Souza</span></div></div>
-      </div>
+    <section class="card strip" aria-label="Resumo do dia">
+      <div><div class="t13 mute">Recebido hoje</div><div class="v">R$ 3.784,00</div><div class="t12 mute">17 recebimentos</div></div>
+      <div><div class="t13 mute">PIX</div><div class="v">R$ 1.640,00</div><div class="t12 mute">conciliado com o banco</div></div>
+      <div><div class="t13 mute">Cartão</div><div class="v">R$ 1.204,00</div><div class="t12 mute">crédito e débito</div></div>
+      <div><div class="t13 mute">Dinheiro na gaveta</div><div class="v">R$ 740,00</div><div class="t12 mute">última sangria às 08:30</div></div>
+      <div><div class="t13 mute">A receber hoje</div><div class="v">R$ 760,00</div><div class="t12 mute">3 pacientes</div></div>
     </section>
 
-    <section class="grid g4" aria-label="Resumo do dia">
-      <div class="card"><div class="row"><span class="tile t-navy"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M2 20h20"></path></svg></span></div><div class="lbl" style="margin-top: 16px">Recebido hoje</div><div class="big" style="margin-top: 6px">R$ 3.784<small>,00</small></div><div class="t13 mute" style="margin-top: 8px">17 recebimentos · ticket médio R$ 222,59</div></div>
-      <div class="card"><div class="row"><span class="tile t-teal"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l4 4-4 4-4-4zM12 13l4 4-4 4-4-4zM3 12l4-4 4 4-4 4zM13 12l4-4 4 4-4 4z"></path></svg></span></div><div class="lbl" style="margin-top: 16px">PIX</div><div class="big" style="margin-top: 6px">R$ 1.640<small>,00</small></div><div class="t13 mute" style="margin-top: 8px">9 · conciliado com o banco</div></div>
-      <div class="card"><div class="row"><span class="tile t-violet"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20M6 15h4"></path></svg></span></div><div class="lbl" style="margin-top: 16px">Cartão</div><div class="big" style="margin-top: 6px">R$ 1.204<small>,00</small></div><div class="t13 mute" style="margin-top: 8px">Crédito R$ 860,00 · débito R$ 344,00</div></div>
-      <div class="card"><div class="row"><span class="tile t-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="3"></circle></svg></span></div><div class="lbl" style="margin-top: 16px">Dinheiro</div><div class="big" style="margin-top: 6px">R$ 940<small>,00</small></div><div class="t13 mute" style="margin-top: 8px">sangria R$ 500,00 · suprimento R$ 100,00</div></div>
-      <div class="card"><div class="row"><span class="tile t-amber"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span></div><div class="lbl" style="margin-top: 16px">A receber hoje</div><div class="big" style="margin-top: 6px">R$ 760<small>,00</small></div><div class="t13 mute" style="margin-top: 8px">3 pacientes ainda não pagaram</div></div>
-    </section>
+    <nav class="tabs" aria-label="Seções do caixa">
+      <sc-for list="{{abas}}" as="a" hint-placeholder-count="4"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}} <span class="mute" style="font-weight: 500">{{a.n}}</span></button></sc-for>
+    </nav>
 
-    <div class="split">
-      <section class="card main" aria-labelledby="rec-h" style="display: flex; flex-direction: column; gap: 18px">
-        <div class="row wrap" style="gap: 12px">
-          <div><h2 id="rec-h" style="font-size: 20px; font-weight: 600">Novo recebimento</h2><div class="t14 mute" style="margin-top: 3px">Puxado do agendamento N035 · orçamento enviado em 04/11 pelo WhatsApp</div></div>
-          <label class="search" style="margin-left: auto; min-width: 280px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar paciente ou orçamento</span><input type="search" placeholder="Paciente, CPF ou nº do orçamento"></label>
+    <sc-if value="{{tRec}}" hint-placeholder-val="{{ true }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 16px">
+        <section class="card pane" style="padding: 0" aria-labelledby="h-itens">
+          <div class="ph">
+            <div style="flex: 1; min-width: 0">
+              <h2 id="h-itens">Rafael Monteiro Lima</h2>
+              <div class="t13 mute num">09/11/1988, 37 anos. Senha N035</div>
+            </div>
+            <a class="btn btn-sm" href="Paciente.dc.html">Ficha</a>
+            <a class="btn btn-sm" href="Orcamento.dc.html">Orçamento</a>
+          </div>
+          <div class="scroll" style="padding: 6px 18px 18px">
+            <table class="tb">
+              <thead><tr><th>Procedimento</th><th class="r">Valor</th><th class="r"><span class="sr">Remover</span></th></tr></thead>
+              <tbody>
+                <sc-for list="{{itens}}" as="i" hint-placeholder-count="2">
+                  <tr><td><div class="b">{{i.nome}}</div><div class="t13 mute num">{{i.cod}}</div></td><td class="r num nw">{{i.v}}</td>
+                    <td class="r"><button class="ix" aria-label="{{i.rem}}" onClick="{{i.tirar}}" disabled="{{pago}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></td></tr>
+                </sc-for>
+              </tbody>
+            </table>
+            <sc-if value="{{semItens}}" hint-placeholder-val="{{ false }}"><div class="state"><div class="b">Nenhum procedimento</div><div class="t13 mute">Adicione o que o paciente vai pagar.</div></div></sc-if>
+            <sc-if value="{{podeAdd}}" hint-placeholder-val="{{ true }}"><button class="btn btn-sm" style="margin-top: 10px" onClick="{{togAdd}}">{{addTxt}}</button></sc-if>
+            <sc-if value="{{addAberto}}" hint-placeholder-val="{{ false }}">
+              <div class="col" style="gap: 2px; margin-top: 8px; padding: 6px; border-radius: 14px; background: #F6F7F9">
+                <sc-for list="{{opcoes}}" as="o" hint-placeholder-count="3"><button class="pk" onClick="{{o.add}}"><span class="grow t14">{{o.nome}}</span><span class="t14 num">{{o.v}}</span></button></sc-for>
+              </div>
+            </sc-if>
+
+            <h3 class="sub-h">Desconto</h3>
+            <sc-if value="{{dOk}}" hint-placeholder-val="{{ true }}">
+              <div class="row wrap" style="gap: 10px">
+                <div class="t14" style="flex: 1 1 260px">{{descPctTxt}} autorizado por Carla Mendes às 08:39. Motivo: tabela social.</div>
+                <button class="btn btn-sm" onClick="{{tirarDesc}}" disabled="{{pago}}">Retirar desconto</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{dNenhum}}" hint-placeholder-val="{{ false }}">
+              <div class="row wrap" style="gap: 10px; align-items: flex-end">
+                <div class="col" style="gap: 6px"><span class="t13 mute">Percentual</span>
+                  <div class="seg" role="group" aria-label="Percentual de desconto"><sc-for list="{{pcts}}" as="p" hint-placeholder-count="3"><button class="{{p.cls}}" aria-pressed="{{p.pr}}" onClick="{{p.ir}}">{{p.t}}</button></sc-for></div>
+                </div>
+                <label class="field" style="flex: 1 1 200px">Motivo<select class="in"><option>Tabela social</option><option>Paciente frequente</option><option>Funcionário ou familiar</option></select></label>
+                <button class="btn btn-sm btn-p" onClick="{{pedirDesc}}">{{pedirTxt}}</button>
+              </div>
+              <div class="t13 mute" style="margin-top: 8px">Até 10% você libera; acima disso a gerência autoriza.</div>
+            </sc-if>
+            <sc-if value="{{dPedido}}" hint-placeholder-val="{{ false }}">
+              <div class="banner info" role="status" style="flex-direction: column; gap: 10px">
+                <div class="t14" style="line-height: 1.5"><b>Desconto de {{descPctTxt}} aguardando Carla Mendes.</b> Ela recebeu o pedido no chat às 08:41. O total só muda depois da autorização. Se ela estiver no balcão, pode autorizar aqui com a própria senha.</div>
+                <div class="row wrap" style="gap: 8px">
+                  <label class="sr" for="senha-desc">Senha de Carla Mendes</label>
+                  <input id="senha-desc" class="in" type="password" placeholder="Senha de Carla Mendes" style="flex: 1 1 180px; min-height: 40px">
+                  <button class="btn btn-sm btn-p" onClick="{{autorizar}}">Autorizar</button>
+                  <button class="btn btn-sm" onClick="{{tirarDesc}}">Cancelar pedido</button>
+                </div>
+              </div>
+            </sc-if>
+
+            <h3 class="sub-h" >Recibo e nota</h3>
+            <sc-for list="{{opts}}" as="o" hint-placeholder-count="3">
+              <div class="opt"><div style="flex: 1; min-width: 0"><div class="t14 b">{{o.t}}</div><div class="t13 mute">{{o.s}}</div></div><button class="{{o.cls}}" role="switch" aria-checked="{{o.on}}" aria-label="{{o.t}}" onClick="{{o.ir}}" disabled="{{pago}}"></button></div>
+            </sc-for>
+          </div>
+        </section>
+
+        <section class="card pane" style="padding: 0" aria-labelledby="h-pag">
+          <div class="ph"><h2 id="h-pag">Pagamento</h2></div>
+          <sc-if value="{{naoPago}}" hint-placeholder-val="{{ true }}">
+            <div class="scroll" style="padding: 14px 18px">
+              <div class="seg" role="group" aria-label="Forma de pagamento"><sc-for list="{{formas}}" as="f" hint-placeholder-count="4"><button class="{{f.cls}}" aria-pressed="{{f.pr}}" onClick="{{f.ir}}">{{f.t}}</button></sc-for></div>
+              <div class="col" style="gap: 10px; margin-top: 14px">
+                <sc-if value="{{temPix}}" hint-placeholder-val="{{ true }}">
+                  <div class="blk">
+                    <div class="row"><b class="t15">PIX</b><span class="t15 num b" style="margin-left: auto">{{vPix}}</span></div>
+                    <div class="row" style="gap: 12px">
+                      <svg width="88" height="88" viewBox="0 0 25 25" role="img" aria-label="QR code PIX" style="flex: none; border-radius: 6px">
+                        <rect width="25" height="25" fill="#fff"></rect>
+                        <path fill="#0F172A" d="M1 1h7v7H1zM2 2v5h5V2zM3 3h3v3H3zM17 1h7v7h-7zm1 1v5h5V2zm1 1h3v3h-3zM1 17h7v7H1zm1 1v5h5v-5zm1 1h3v3H3zM10 1h2v2h-2zM13 2h2v3h-2zM10 5h2v2h-2zM9 9h3v1H9zM13 8h2v3h-2zM16 10h3v1h-3zM20 9h4v2h-4zM1 10h3v1H1zM5 11h3v2H5zM10 12h2v2h-2zM14 13h3v1h-3zM18 12h2v3h-2zM21 13h3v1h-3zM2 14h3v1H2zM9 15h3v1H9zM13 16h2v2h-2zM16 16h3v1h-3zM21 16h3v2h-3zM10 18h3v1h-3zM14 19h2v3h-2zM17 19h3v1h-3zM21 20h3v1h-3zM10 21h2v3h-2zM13 23h3v1h-3zM17 22h2v2h-2zM20 23h4v1h-4z"></path>
+                      </svg>
+                      <div class="col" style="gap: 6px; min-width: 0">
+                        <span class="t13 mute">Aparece na tela do balcão. Expira em 9:42.</span>
+                        <button class="btn btn-sm">Copiar código</button>
+                      </div>
+                    </div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{temCartao}}" hint-placeholder-val="{{ false }}">
+                  <div class="blk">
+                    <div class="row"><b class="t15">Cartão, maquininha 2</b><span class="t15 num b" style="margin-left: auto">{{vCartao}}</span></div>
+                    <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+                      <label class="field">Tipo<select class="in"><option>Crédito</option><option>Débito</option></select></label>
+                      <label class="field">Parcelas<select class="in"><option>1x</option><option>2x sem juros</option><option>3x sem juros</option></select></label>
+                    </div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{temDin}}" hint-placeholder-val="{{ true }}">
+                  <div class="blk">
+                    <div class="row"><b class="t15">Dinheiro</b><span class="t15 num b" style="margin-left: auto">{{vDin}}</span></div>
+                    <div class="row" style="gap: 10px; align-items: flex-end">
+                      <label class="field" style="flex: 1">Valor entregue<input class="in num" inputmode="decimal" value="{{entregue}}" onChange="{{onEntregue}}"></label>
+                      <div style="flex: 1; padding-bottom: 12px"><div class="t13 mute">{{trocoLbl}}</div><div class="t15 b num" style="{{trocoStyle}}">{{troco}}</div></div>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+
+            </div>
+            <div class="pf">
+              <div class="ln"><span class="mute">Subtotal</span><span class="num">{{sub}}</span></div>
+              <div class="ln"><span class="mute">{{descLbl}}</span><span class="num">{{descV}}</span></div>
+              <div class="row" style="align-items: baseline; margin-top: 2px"><span class="t15 b">Total</span><span class="num" style="margin-left: auto; font-size: 28px; font-weight: 650; letter-spacing: -.02em">{{total}}</span></div>
+              <button class="btn btn-p" onClick="{{receber}}" disabled="{{bloq}}">{{btnPagar}}</button>
+              <sc-if value="{{temMotivo}}" hint-placeholder-val="{{ false }}"><div class="t13" style="color: #9A5B00">{{motivo}}</div></sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{pago}}" hint-placeholder-val="{{ false }}">
+            <div class="scroll" style="padding: 18px">
+              <div class="banner ok" role="status"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true" style="flex: none; margin-top: 1px"><path d="M5 12l5 5L20 7"></path></svg><div class="t14" style="line-height: 1.5"><b>Recebido {{total}} às 08:42.</b> {{pagoTxt}}</div></div>
+              <dl class="kv" style="margin: 16px 0 0">
+                <dt>Recibo</dt><dd class="num">0392</dd>
+                <dt>NFS-e</dt><dd class="num">{{nfTxt}}</dd>
+                <dt>Comprovante</dt><dd>{{zapTxt}}</dd>
+                <dt>Registrado por</dt><dd>Ana Souza, guichê 2</dd>
+              </dl>
+            </div>
+            <div class="pf">
+              <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+                <button class="btn btn-sm">Recibo em PDF</button>
+                <button class="btn btn-sm" disabled="{{semNf}}">Nota fiscal</button>
+              </div>
+              <button class="btn btn-p" onClick="{{novo}}">Novo recebimento</button>
+            </div>
+          </sc-if>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{tMov}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Movimentações do dia">
+        <div class="ph">
+          <div class="seg" role="group" aria-label="Filtrar movimentações"><sc-for list="{{movF}}" as="f" hint-placeholder-count="4"><button class="{{f.cls}}" aria-pressed="{{f.pr}}" onClick="{{f.ir}}" style="height: 36px">{{f.t}}</button></sc-for></div>
+          <div class="grow"></div>
+          <button class="btn btn-sm">Exportar</button>
         </div>
-
-        <div class="row wrap" style="gap: 14px; padding: 14px 16px; border-radius: 16px; background: #F2F3F6">
-          <span class="av" style="background: #E5F5EC; color: #1F7A4D">RL</span>
-          <div style="flex: 1; min-width: 220px"><div class="t15 b nw">Rafael Monteiro Lima</div><div class="t13 mute">CPF •••.456.789-•• · 41 anos · senha N035 · Raio X às 08:50</div></div>
-          <span class="chip">Particular</span>
-          <a class="t13 b" href="Paciente.dc.html">Ficha</a>
-        </div>
-
-        <div class="scroll-x">
-          <table class="tb">
-            <thead><tr><th>Procedimento</th><th>Código</th><th class="r">Qtd</th><th class="r">Valor</th><th class="r">Total</th><th><span class="sr">Remover</span></th></tr></thead>
+        <div class="scroll">
+          <table class="tb sticky">
+            <thead><tr><th>Hora</th><th>Paciente ou descrição</th><th>Forma</th><th class="r">Valor</th><th>Quem fez</th><th>Documento</th><th>Situação</th></tr></thead>
             <tbody>
-              <tr><td><b style="font-weight: 600">Raio X de tórax PA e perfil</b><div class="t13 mute">Sala 5 · laudo em até 24 h</div></td><td class="nw mute">RX-0102</td><td class="r num">1</td><td class="r num nw">R$ 140,00</td><td class="r num nw">R$ 140,00</td><td class="r"><button class="more" aria-label="Remover raio X de tórax">✕</button></td></tr>
+              <sc-for list="{{movs}}" as="m" hint-placeholder-count="6">
+                <tr><td class="num">{{m.h}}</td><td><div class="b">{{m.d}}</div><div class="t13 mute">{{m.s}}</div></td><td>{{m.f}}</td><td class="r num nw" style="{{m.vs}}">{{m.v}}</td><td>{{m.op}}<div class="t13 mute">{{m.aut}}</div></td><td>{{m.doc}}</td><td><span class="{{m.cls}}">{{m.st}}</span></td></tr>
+              </sc-for>
             </tbody>
           </table>
         </div>
-        <button class="btn btn-sm" style="align-self: flex-start">+ Adicionar procedimento</button>
+      </section>
+    </sc-if>
 
-        <div class="split" style="gap: 14px">
-          <div class="half" style="padding: 16px; border-radius: 16px; background: #FFF3DF; display: flex; flex-direction: column; gap: 10px">
-            <div class="row" style="gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9A5B00" stroke-width="2" aria-hidden="true"><path d="M12 3l9 16H3zM12 10v4M12 17h.01"></path></svg><b class="t14" style="color: #6B3F00">Desconto de 25% · requer autorização do gerente</b></div>
-            <div class="row wrap" style="gap: 10px">
-              <label class="field" style="flex: 1 1 120px">Desconto<input class="in" value="R$ 40,00"></label>
-              <label class="field" style="flex: 2 1 200px">Motivo<input class="in" value="Tabela social · sem cobertura do convênio"></label>
-            </div>
-            <div class="row wrap" style="gap: 8px"><button class="btn btn-sm">Pedir autorização a Carla Mendes</button><span class="t13" style="color: #6B3F00">Até 10% o operador libera sozinho</span></div>
-          </div>
-          <div class="half" style="padding: 16px; border-radius: 16px; border: 1px solid #E8EAEF; display: flex; flex-direction: column; gap: 8px">
-            <div class="row t15"><span class="mute">Subtotal</span><span class="num" style="margin-left: auto">R$ 160,00</span></div>
-            <div class="row t15"><span class="mute">Desconto (aguardando)</span><span class="num" style="margin-left: auto; color: #1F7A4D">− R$ 40,00</span></div>
-            <div class="sep"></div>
-            <div class="row" style="align-items: baseline"><span class="t15 b">Total a pagar</span><span class="big num" style="margin-left: auto; font-size: 32px">R$ 120,00</span></div>
-          </div>
+    <sc-if value="{{tOrc}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Orçamentos abertos">
+        <div class="scroll">
+          <table class="tb sticky">
+            <thead><tr><th>Paciente</th><th>Exames</th><th class="r">Valor</th><th>Validade</th><th>Situação</th><th class="r"><span class="sr">Ação</span></th></tr></thead>
+            <tbody>
+              <sc-for list="{{orcs}}" as="o" hint-placeholder-count="4">
+                <tr><td><div class="b">{{o.nome}}</div><div class="t13 mute num">{{o.nasc}}</div></td><td>{{o.ex}}<div class="t13 mute">{{o.obs}}</div></td><td class="r num nw">{{o.v}}</td><td class="num">{{o.val}}</td><td><span class="{{o.cls}}">{{o.st}}</span></td><td class="r"><button class="btn btn-sm" onClick="{{o.ir}}">{{o.acao}}</button></td></tr>
+              </sc-for>
+            </tbody>
+          </table>
         </div>
+        <div class="pf" style="flex-direction: row; align-items: center"><span class="t13 mute">Orçamentos enviados pelo WhatsApp que ainda não viraram pagamento.</span><div class="grow"></div><a class="btn btn-sm" href="Orcamento.dc.html">Abrir orçamentos</a></div>
+      </section>
+    </sc-if>
 
-        <div>
-          <div class="row wrap" style="gap: 10px; margin-bottom: 12px"><span class="lbl">Forma de pagamento</span><div class="seg" style="margin-left: auto"><button>PIX</button><button>Cartão</button><button>Dinheiro</button><button class="on">Dividir</button></div></div>
-          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 12px">
-            <div class="pay on">
-              <div class="row"><b class="t15">PIX</b><span class="chip c-amber" style="margin-left: auto">Aguardando · 9:42</span></div>
-              <div class="money">R$ 80,00</div>
-              <div class="row" style="gap: 12px; align-items: center">
-                <svg width="96" height="96" viewBox="0 0 25 25" role="img" aria-label="QR code PIX de R$ 80,00" style="flex: none; border-radius: 8px">
-                  <rect width="25" height="25" fill="#fff"></rect>
-                  <path fill="#0F172A" d="M1 1h7v7H1zM2 2v5h5V2zM3 3h3v3H3zM17 1h7v7h-7zm1 1v5h5V2zm1 1h3v3h-3zM1 17h7v7H1zm1 1v5h5v-5zm1 1h3v3H3zM10 1h2v2h-2zM13 2h2v3h-2zM10 5h2v2h-2zM9 9h3v1H9zM13 8h2v3h-2zM16 10h3v1h-3zM20 9h4v2h-4zM1 10h3v1H1zM5 11h3v2H5zM10 12h2v2h-2zM14 13h3v1h-3zM18 12h2v3h-2zM21 13h3v1h-3zM2 14h3v1H2zM9 15h3v1H9zM13 16h2v2h-2zM16 16h3v1h-3zM21 16h3v2h-3zM10 18h3v1h-3zM14 19h2v3h-2zM17 19h3v1h-3zM21 20h3v1h-3zM10 21h2v3h-2zM13 23h3v1h-3zM17 22h2v2h-2zM20 23h4v1h-4z"></path>
-                </svg>
-                <div class="t13 mute" style="min-width: 0">Mostrar ao paciente na tela do balcão ou enviar pelo WhatsApp</div>
-              </div>
-              <button class="btn btn-sm">Copiar "copia e cola"</button>
-            </div>
-            <div class="pay">
-              <div class="row"><b class="t15">Cartão</b><span class="chip" style="margin-left: auto">Maquininha 2</span></div>
-              <div class="money" style="color: #5B6474">R$ 0,00</div>
-              <label class="field">Tipo<select class="in"><option>Crédito</option><option>Débito</option></select></label>
-              <label class="field">Parcelas<select class="in"><option>1x sem juros</option><option>2x sem juros</option><option>3x sem juros</option></select></label>
-            </div>
-            <div class="pay on">
-              <div class="row"><b class="t15">Dinheiro</b><span class="chip c-green" style="margin-left: auto">Recebido</span></div>
-              <div class="money">R$ 40,00</div>
-              <label class="field">Valor entregue<input class="in" value="R$ 50,00"></label>
-              <div class="row t15" style="padding: 10px 12px; border-radius: 12px; background: #E5F5EC; color: #14532D"><span>Troco</span><b class="num" style="margin-left: auto">R$ 10,00</b></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col" style="gap: 12px; padding: 16px; border-radius: 16px; background: #F7F8FA">
-          <div class="row" style="gap: 12px"><div style="flex: 1"><div class="t15 b">CPF na nota</div><div class="t13 mute">Usa o CPF do cadastro</div></div><button class="tog" role="switch" aria-checked="true" aria-label="CPF na nota"></button></div>
-          <div class="row" style="gap: 12px"><div style="flex: 1"><div class="t15 b">Emitir NFS-e automaticamente</div><div class="t13 mute">Prefeitura do Rio de Janeiro · série 2026</div></div><button class="tog" role="switch" aria-checked="true" aria-label="Emitir NFS-e automaticamente"></button></div>
-          <div class="row" style="gap: 12px"><div style="flex: 1"><div class="t15 b">Enviar comprovante pelo WhatsApp</div><div class="t13 mute">Recibo + nota em PDF para (21) 9 ••••-4417</div></div><button class="tog" role="switch" aria-checked="true" aria-label="Enviar comprovante pelo WhatsApp"></button></div>
-        </div>
-
-        <div class="row wrap" style="gap: 10px; justify-content: flex-end">
-          <button class="btn">Recibo em PDF</button>
-          <button class="btn">Nota fiscal</button>
-          <button class="btn btn-p">Confirmar recebimento · R$ 120,00</button>
+    <sc-if value="{{tTab}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Tabela do particular">
+        <div class="ph"><span class="t14 mute" style="flex: 1">Versão 11, vigente desde 01/08/2026. O valor cobrado vem desta tabela, calculado pelo servidor.</span><a class="btn btn-sm" href="Configuracoes.dc.html">Editar tabela</a></div>
+        <div class="scroll">
+          <table class="tb sticky">
+            <thead><tr><th>Código</th><th>Procedimento</th><th class="r">Valor</th></tr></thead>
+            <tbody>
+              <sc-for list="{{tabela}}" as="t" hint-placeholder-count="6"><tr><td class="num mute nw">{{t.cod}}</td><td><div class="b">{{t.nome}}</div><div class="t13 mute">{{t.obs}}</div></td><td class="r num nw">{{t.v}}</td></tr></sc-for>
+            </tbody>
+          </table>
         </div>
       </section>
+    </sc-if>
 
-      <aside class="aside col" style="gap: 16px">
-        <section class="card" aria-labelledby="fech-h">
-          <div class="card-h"><span class="tile t-navy"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></span><div><h2 id="fech-h" style="font-size: 17px">Prévia do fechamento</h2><div class="sub">Esperado pelo sistema × contado</div></div></div>
+    <sc-if value="{{drwFech}}" hint-placeholder-val="{{ false }}">
+      <button class="dbg" aria-label="Fechar painel" onClick="{{fecharDrw}}"></button>
+      <aside class="drw" role="dialog" aria-modal="true" aria-labelledby="h-fech">
+        <header><h2 id="h-fech" style="flex: 1">Fechar caixa 1</h2><button class="ix" aria-label="Fechar" onClick="{{fecharDrw}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></header>
+        <div class="scroll">
           <table class="tb">
             <thead><tr><th>Forma</th><th class="r">Esperado</th><th class="r">Contado</th></tr></thead>
             <tbody>
-              <tr><td>Dinheiro</td><td class="r num nw">R$ 740,00</td><td class="r num nw"><b style="color: #9A5B00">R$ 735,00</b></td></tr>
-              <tr><td>PIX</td><td class="r num nw">R$ 1.640,00</td><td class="r num nw">✓ banco</td></tr>
-              <tr><td>Crédito</td><td class="r num nw">R$ 860,00</td><td class="r num nw">✓ adquirente</td></tr>
-              <tr><td>Débito</td><td class="r num nw">R$ 344,00</td><td class="r num nw">✓ adquirente</td></tr>
+              <tr><td>Dinheiro</td><td class="r num nw">R$ 740,00</td><td class="r num nw b" style="color: #9A5B00">R$ 735,00</td></tr>
+              <tr><td>PIX</td><td class="r num nw">R$ 1.640,00</td><td class="r t13 mute">confere com o banco</td></tr>
+              <tr><td>Crédito</td><td class="r num nw">R$ 860,00</td><td class="r t13 mute">confere com a adquirente</td></tr>
+              <tr><td>Débito</td><td class="r num nw">R$ 344,00</td><td class="r t13 mute">confere com a adquirente</td></tr>
             </tbody>
           </table>
-          <div class="row" style="gap: 10px; margin-top: 12px; padding: 12px 14px; border-radius: 14px; background: #FFF3DF">
-            <span class="t14" style="flex: 1; color: #6B3F00"><b>Diferença − R$ 5,00</b> em dinheiro · acima de R$ 2,00 exige justificativa</span>
-          </div>
-          <label class="field" style="margin-top: 12px">Observação<textarea class="in" rows="2">Troco dado a mais às 08:16 (Caio V. Moraes). Paciente avisado.</textarea></label>
-          <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px">
-            <div style="padding: 10px 12px; border-radius: 12px; border: 1px dashed #C3CAD5"><div class="t12 mute">Operador</div><div class="t14 b">Ana Souza</div><div class="t12" style="color: #1F7A4D">✓ assinado</div></div>
-            <div style="padding: 10px 12px; border-radius: 12px; border: 1px dashed #C3CAD5"><div class="t12 mute">Conferente</div><div class="t14 b">Carla Mendes</div><div class="t12 mute">pendente</div></div>
-          </div>
-          <div class="row wrap" style="gap: 8px; margin-top: 14px"><button class="btn btn-p btn-sm">Fechar e enviar ao Financeiro</button><a class="btn btn-sm" href="Financeiro.dc.html">Ver no Financeiro</a></div>
-        </section>
-
-        <section class="card" aria-labelledby="orc-h">
-          <div class="card-h"><span class="tile t-violet"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6v18h12V7zM14 3v4h4M9 13h6M9 17h4"></path></svg></span><div><h2 id="orc-h" style="font-size: 17px">Orçamentos abertos</h2><div class="sub">Enviados pelo WhatsApp</div></div><span class="chip c-violet" style="margin-left: auto">4</span></div>
-          <div class="li"><div style="flex: 1; min-width: 0"><div class="t nw">Henrique Matos</div><div class="s">Ergométrico · R$ 280,00 · vale até 10/11 · visualizado</div></div><button class="btn btn-sm">Receber</button></div>
-          <div class="li"><div style="flex: 1; min-width: 0"><div class="t nw">Luiz Bastos</div><div class="s">TC tórax · R$ 650,00 · vale até 13/11 · enviado</div></div><button class="btn btn-sm">Reenviar</button></div>
-          <div class="li"><div style="flex: 1; min-width: 0"><div class="t nw">Tatiane Araújo</div><div class="s">Pacote gestante · R$ 1.200,00 · sinal pago R$ 300,00</div></div><button class="btn btn-sm">Parcela</button></div>
-          <div class="li"><div style="flex: 1; min-width: 0"><div class="t nw">Glória Nascimento</div><div class="s">Check-up cardio · R$ 820,00 · vence hoje</div></div><button class="btn btn-sm">Ligar</button></div>
-        </section>
-
-        <section class="card" aria-labelledby="tab-h">
-          <div class="card-h"><div><h2 id="tab-h" style="font-size: 17px">Tabela do particular</h2><div class="sub">Vigente desde 01/08/2026</div></div><a class="t13 b" href="Configuracoes.dc.html" style="margin-left: auto">Editar</a></div>
-          <div class="li"><span class="t14" style="flex: 1">Ecocardiograma transtorácico</span><span class="t14 b num nw">R$ 380,00</span></div>
-          <div class="li"><span class="t14" style="flex: 1">Doppler de carótidas</span><span class="t14 b num nw">R$ 320,00</span></div>
-          <div class="li"><span class="t14" style="flex: 1">USG obstétrica</span><span class="t14 b num nw">R$ 250,00</span></div>
-          <div class="li"><span class="t14" style="flex: 1">Morfológica 2º trimestre</span><span class="t14 b num nw">R$ 450,00</span></div>
-          <div class="li"><span class="t14" style="flex: 1">Teste ergométrico</span><span class="t14 b num nw">R$ 280,00</span></div>
-          <div class="li"><span class="t14" style="flex: 1">TC de crânio sem contraste</span><span class="t14 b num nw">R$ 650,00</span></div>
-          <div class="li"><span class="t14" style="flex: 1">MAPA 24 h</span><span class="t14 b num nw">R$ 260,00</span></div>
-          <div class="li"><span class="t14" style="flex: 1"><b>Pacote check-up cardio</b><br><span class="t13 mute">Eco + ergométrico + MAPA</span></span><span class="t14 b num nw">R$ 820,00</span></div>
-        </section>
+          <div class="banner off"><div class="t14" style="line-height: 1.5"><b>Faltam R$ 5,00 no dinheiro.</b> Acima de R$ 2,00 a justificativa é obrigatória e vai para o Financeiro junto com o fechamento.</div></div>
+          <label class="field">Justificativa<textarea class="in" rows="3" style="padding: 10px 14px">Troco dado a mais às 08:16 (Caio V. Moraes). Paciente avisado.</textarea></label>
+          <dl class="kv" style="margin: 0">
+            <dt>Operadora</dt><dd>Ana Souza, assinado às 17:58</dd>
+            <dt>Conferente</dt><dd>{{confTxt}}</dd>
+          </dl>
+          <sc-if value="{{semConf}}" hint-placeholder-val="{{ true }}">
+            <div class="row wrap" style="gap: 8px">
+              <label class="sr" for="senha-conf">Senha de Carla Mendes</label>
+              <input id="senha-conf" class="in" type="password" placeholder="Senha de Carla Mendes" style="flex: 1 1 180px; min-height: 40px">
+              <button class="btn btn-sm" onClick="{{conferir}}">Conferir</button>
+            </div>
+          </sc-if>
+        </div>
+        <footer><button class="btn btn-p" onClick="{{fecharCaixa}}" disabled="{{semConf}}">Fechar e enviar ao Financeiro</button><a class="btn" href="Financeiro.dc.html">Ver no Financeiro</a></footer>
       </aside>
-    </div>
+    </sc-if>
 
-    <section class="card" aria-labelledby="mov-h">
-      <div class="card-h"><div><h2 id="mov-h">Movimentações do dia</h2><div class="sub">Cada linha registra quem fez, quem autorizou e o documento emitido</div></div>
-        <div class="seg" style="margin-left: auto"><button class="on">Todas</button><button>Recebimentos</button><button>Sangria e suprimento</button><button>Estornos</button></div>
-        <button class="btn btn-sm">Exportar</button>
-      </div>
-      <div class="scroll-x">
-        <table class="tb">
-          <thead><tr><th>Hora</th><th>Paciente ou descrição</th><th>Forma</th><th class="r">Valor</th><th>Operador</th><th>Documento</th><th>Situação</th></tr></thead>
-          <tbody>
-            <tr><td class="num">07:02</td><td><b style="font-weight: 600">Abertura do caixa</b><div class="t13 mute">Fundo de troco</div></td><td>Dinheiro</td><td class="r num nw">R$ 200,00</td><td class="nw">Ana Souza</td><td class="mute">—</td><td><span class="chip c-blue">Aberto</span></td></tr>
-            <tr><td class="num">07:41</td><td><b style="font-weight: 600" class="nw">Hélio T. Mendes</b><div class="t13 mute">Ecocardiograma</div></td><td>PIX</td><td class="r num nw">R$ 380,00</td><td class="nw">Ana Souza</td><td class="nw">NFS-e 004812</td><td><span class="chip c-green">Pago</span></td></tr>
-            <tr><td class="num">07:58</td><td><b style="font-weight: 600" class="nw">Eduardo M. Vaz</b><div class="t13 mute">Teste ergométrico</div></td><td class="nw">Crédito 2x</td><td class="r num nw">R$ 280,00</td><td class="nw">Ana Souza</td><td class="nw">NFS-e 004813</td><td><span class="chip c-green">Pago</span></td></tr>
-            <tr><td class="num">08:05</td><td><b style="font-weight: 600">Suprimento</b><div class="t13 mute">Troco em moedas</div></td><td>Dinheiro</td><td class="r num nw" style="color: #1F7A4D">+ R$ 100,00</td><td class="nw">Carla Mendes</td><td class="nw">Termo 0007</td><td><span class="chip c-teal">Conferido</span></td></tr>
-            <tr><td class="num">08:16</td><td><b style="font-weight: 600" class="nw">Caio V. Moraes</b><div class="t13 mute">Raio X de tórax PA</div></td><td>Dinheiro</td><td class="r num nw">R$ 120,00</td><td class="nw">Ana Souza</td><td class="nw">NFS-e 004814</td><td><span class="chip c-green">Pago</span></td></tr>
-            <tr><td class="num">08:22</td><td><b style="font-weight: 600" class="nw">Paula R. Dias</b><div class="t13 mute">Estorno · cobrança em duplicidade</div></td><td>Débito</td><td class="r num nw" style="color: #C2334D">− R$ 180,00</td><td>Ana Souza<div class="t13 mute nw">autorizado por Carla Mendes</div></td><td class="nw">NFS-e 004809 cancelada</td><td><span class="chip c-rose">Estornado</span></td></tr>
-            <tr><td class="num">08:30</td><td><b style="font-weight: 600">Sangria</b><div class="t13 mute">Envio ao cofre</div></td><td>Dinheiro</td><td class="r num nw" style="color: #C2334D">− R$ 500,00</td><td>Ana Souza<div class="t13 mute nw">conferido por Carla Mendes</div></td><td class="nw">Termo 0008</td><td><span class="chip c-teal">Conferido</span></td></tr>
-            <tr><td class="num">08:38</td><td><b style="font-weight: 600" class="nw">Tatiane Araújo</b><div class="t13 mute">Pacote gestante · sinal</div></td><td>PIX</td><td class="r num nw">R$ 300,00</td><td class="nw">Ana Souza</td><td class="nw">Recibo 0391</td><td><span class="chip c-green">Pago</span></td></tr>
-            <tr><td class="num">08:40</td><td><b style="font-weight: 600" class="nw">Rafael Monteiro Lima</b><div class="t13 mute">Raio X de tórax PA e perfil</div></td><td class="nw">PIX + dinheiro</td><td class="r num nw">R$ 120,00</td><td class="nw">Ana Souza</td><td class="mute">—</td><td><span class="chip c-amber">Aguardando PIX</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · VidaCor Imagem</p>
+    <sc-if value="{{drwMov}}" hint-placeholder-val="{{ false }}">
+      <button class="dbg" aria-label="Fechar painel" onClick="{{fecharDrw}}"></button>
+      <aside class="drw" role="dialog" aria-modal="true" aria-labelledby="h-mov">
+        <header><h2 id="h-mov" style="flex: 1">{{movTit}}</h2><button class="ix" aria-label="Fechar" onClick="{{fecharDrw}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></header>
+        <div class="scroll">
+          <label class="field">Valor<input class="in num" inputmode="decimal" value="R$ 300,00"></label>
+          <label class="field">Motivo<input class="in" value="{{movMotivo}}"></label>
+          <label class="field">Conferente<select class="in"><option>Carla Mendes</option><option>Patrícia Lemos</option></select></label>
+          <label class="field">Senha do conferente<input class="in" type="password"></label>
+          <div class="t13 mute">Gera um termo numerado assinado pelos dois.</div>
+        </div>
+        <footer><button class="btn btn-p" onClick="{{registrarMov}}">{{movBtn}}</button><button class="btn" onClick="{{fecharDrw}}">Cancelar</button></footer>
+      </aside>
+    </sc-if>
+
+    <sc-if value="{{temToast}}" hint-placeholder-val="{{ false }}">
+      <div class="toast tst" role="status"><span style="flex: 1">{{toast}}</span><button onClick="{{fecharToast}}">Ok</button></div>
+    </sc-if>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2300}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = { aba: 'rec', itens: ['rxt', 'cd'], add: false, desc: 'ok', pct: 25, forma: 'dividir', entregue: 'R$ 50,00', cpf: true, nfse: true, zap: true, pago: false, drw: '', conf: false, fechado: false, mov: 'todas', toast: '', orc: {} };
+  }
+  renderVals() {
+    const s = this.state;
+    const brl = v => 'R$ ' + v.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    const C = {
+      rxt: ['Raio X de tórax PA e perfil', 'RX-0102', 140, 'Sala 5'], cd: ['Segunda via do laudo impresso', 'AD-0007', 20, ''],
+      eco: ['Ecocardiograma transtorácico', 'EC-0101', 380, ''], carot: ['Doppler de carótidas', 'DP-0204', 320, ''],
+      obst: ['USG obstétrica', 'US-0310', 250, ''], morf: ['Morfológica do 2º trimestre', 'US-0312', 450, ''],
+      ergo: ['Teste ergométrico', 'TE-0101', 280, ''], tcc: ['TC de crânio sem contraste', 'TC-0101', 650, ''],
+      mapa: ['MAPA 24 horas', 'MP-0101', 260, ''], chk: ['Pacote check-up cardio', 'PC-0003', 820, 'Ecocardiograma, ergométrico e MAPA']
+    };
+    const sub = s.itens.reduce((a, k) => a + C[k][2], 0);
+    const descV = s.desc === 'ok' ? Math.round(sub * s.pct) / 100 : 0;
+    const total = sub - descV;
+    let din = 0, pix = 0, car = 0;
+    if (s.forma === 'pix') pix = total; else if (s.forma === 'cartao') car = total; else if (s.forma === 'dinheiro') din = total; else { din = Math.min(40, total); pix = total - din; }
+    const ent = parseFloat(String(s.entregue).replace(/[^\d,]/g, '').replace(',', '.')) || 0;
+    const falta = din > 0 && ent < din;
+    let motivo = '';
+    if (!s.itens.length) motivo = 'Adicione ao menos um procedimento.';
+    else if (s.desc === 'pedido') motivo = 'Aguardando a autorização do desconto. Para cobrar o valor cheio, cancele o pedido.';
+    else if (falta) motivo = 'O valor entregue em dinheiro é menor que a parte em dinheiro.';
+    else if (s.fechado) motivo = 'Caixa fechado. Abra um novo caixa para receber.';
+    const seg = (lista, cur, f) => lista.map(([k, t]) => ({ t, cls: cur === k ? 'on' : '', pr: cur === k ? 'true' : 'false', ir: () => f(k) }));
+    const A = [['rec', 'Recebimento', ''], ['mov', 'Movimentações do dia', '10'], ['orc', 'Orçamentos abertos', '4'], ['tab', 'Tabela do particular', '']];
+    const M = [
+      { h: '07:02', d: 'Abertura do caixa', s: 'Fundo de troco', f: 'Dinheiro', v: 'R$ 200,00', op: 'Ana Souza', aut: '', doc: '', st: 'Aberto', cls: 'chip c-blue', t: 'ss' },
+      { h: '07:41', d: 'Hélio T. Mendes', s: 'Ecocardiograma', f: 'PIX', v: 'R$ 380,00', op: 'Ana Souza', aut: '', doc: 'NFS-e 004812', st: 'Pago', cls: 'chip c-green', t: 'rec' },
+      { h: '07:58', d: 'Eduardo M. Vaz', s: 'Teste ergométrico', f: 'Crédito 2x', v: 'R$ 280,00', op: 'Ana Souza', aut: '', doc: 'NFS-e 004813', st: 'Pago', cls: 'chip c-green', t: 'rec' },
+      { h: '08:05', d: 'Suprimento', s: 'Troco em moedas', f: 'Dinheiro', v: '+ R$ 100,00', vs: 'color: #1F7A4D', op: 'Carla Mendes', aut: '', doc: 'Termo 0007', st: 'Conferido', cls: 'chip c-teal', t: 'ss' },
+      { h: '08:16', d: 'Caio V. Moraes', s: 'Raio X de tórax PA', f: 'Dinheiro', v: 'R$ 120,00', op: 'Ana Souza', aut: '', doc: 'NFS-e 004814', st: 'Pago', cls: 'chip c-green', t: 'rec' },
+      { h: '08:22', d: 'Paula R. Dias', s: 'Estorno de cobrança em duplicidade', f: 'Débito', v: '− R$ 180,00', vs: 'color: #C2334D', op: 'Ana Souza', aut: 'autorizado por Carla Mendes', doc: 'NFS-e 004809 cancelada', st: 'Estornado', cls: 'chip c-rose', t: 'est' },
+      { h: '08:30', d: 'Sangria', s: 'Envio ao cofre', f: 'Dinheiro', v: '− R$ 500,00', vs: 'color: #C2334D', op: 'Ana Souza', aut: 'conferido por Carla Mendes', doc: 'Termo 0008', st: 'Conferido', cls: 'chip c-teal', t: 'ss' },
+      { h: '08:38', d: 'Tatiane Araújo', s: 'Sinal do pacote gestante', f: 'PIX', v: 'R$ 300,00', op: 'Ana Souza', aut: '', doc: 'Recibo 0391', st: 'Pago', cls: 'chip c-green', t: 'rec' },
+      { h: '08:40', d: 'Rafael Monteiro Lima', s: 'Raio X de tórax PA e perfil', f: 'PIX e dinheiro', v: brl(total), op: 'Ana Souza', aut: '', doc: s.pago ? 'Recibo 0392' : '', st: s.pago ? 'Pago' : 'Em andamento', cls: s.pago ? 'chip c-green' : 'chip c-amber', t: 'rec' }
+    ];
+    const O = [
+      { id: 'hm', nome: 'Henrique Matos', nasc: '22/01/1971', ex: 'Teste ergométrico', obs: 'Visualizado ontem', v: 'R$ 280,00', val: '10/11', st: 'Enviado', cls: 'chip c-blue', acao: 'Receber' },
+      { id: 'lb', nome: 'Luiz Bastos', nasc: '14/08/1960', ex: 'TC de tórax', obs: 'Não visualizado', v: 'R$ 650,00', val: '13/11', st: 'Enviado', cls: 'chip c-blue', acao: 'Reenviar' },
+      { id: 'ta', nome: 'Tatiane Araújo', nasc: '30/05/1994', ex: 'Pacote gestante', obs: 'Sinal de R$ 300,00 pago hoje', v: 'R$ 1.200,00', val: '30/04/2027', st: 'Em parcelas', cls: 'chip c-teal', acao: 'Receber parcela' },
+      { id: 'gn', nome: 'Glória Nascimento', nasc: '02/12/1958', ex: 'Check-up cardio', obs: 'Vence hoje', v: 'R$ 820,00', val: 'Hoje', st: 'Vencendo', cls: 'chip c-amber', acao: 'Reenviar' }
+    ];
+    const formaTxt = { pix: 'PIX confirmado pelo banco.', cartao: 'Cartão aprovado na maquininha 2.', dinheiro: 'Dinheiro conferido.', dividir: 'PIX confirmado pelo banco e dinheiro com troco entregue.' };
+    const opts = [
+      ['cpf', 'CPF na nota', 'Usa o CPF do cadastro'], ['nfse', 'Emitir NFS-e', 'Prefeitura, série 2026'], ['zap', 'Comprovante pelo WhatsApp', 'Recibo e nota para (48) *****-5566']
+    ];
+    const close = () => this.setState({ drw: '' });
+    return {
+      stTxt: s.fechado ? 'Fechado' : 'Aberto', stCls: s.fechado ? 'chip' : 'chip c-green', fechado: s.fechado,
+      abrirSup: () => this.setState({ drw: 'sup' }), abrirSan: () => this.setState({ drw: 'san' }), abrirFech: () => this.setState({ drw: 'fech' }),
+      abas: A.map(([k, t, n]) => ({ t, n, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      tRec: s.aba === 'rec', tMov: s.aba === 'mov', tOrc: s.aba === 'orc', tTab: s.aba === 'tab',
+      itens: s.itens.map(k => ({ nome: C[k][0], cod: C[k][1], v: brl(C[k][2]), rem: 'Remover ' + C[k][0], tirar: () => this.setState(st => ({ itens: st.itens.filter(x => x !== k) })) })),
+      semItens: s.itens.length === 0, podeAdd: !s.pago, addAberto: s.add && !s.pago, addTxt: s.add ? 'Fechar lista' : 'Adicionar procedimento', togAdd: () => this.setState(st => ({ add: !st.add })),
+      opcoes: Object.keys(C).filter(k => s.itens.indexOf(k) < 0).map(k => ({ nome: C[k][0], v: brl(C[k][2]), add: () => this.setState(st => ({ itens: st.itens.concat([k]), add: false })) })),
+      dOk: s.desc === 'ok', dNenhum: s.desc === 'nenhum', dPedido: s.desc === 'pedido', descPctTxt: s.pct + '%',
+      tirarDesc: () => this.setState({ desc: 'nenhum' }),
+      pcts: [5, 10, 25].map(p => ({ t: p + '%', cls: s.pct === p ? 'on' : '', pr: s.pct === p ? 'true' : 'false', ir: () => this.setState({ pct: p }) })),
+      pedirTxt: s.pct > 10 ? 'Pedir autorização' : 'Aplicar desconto',
+      pedirDesc: () => this.setState(st => ({ desc: st.pct > 10 ? 'pedido' : 'ok' })),
+      autorizar: () => this.setState({ desc: 'ok' }),
+      naoPago: !s.pago, pago: s.pago,
+      formas: seg([['pix', 'PIX'], ['cartao', 'Cartão'], ['dinheiro', 'Dinheiro'], ['dividir', 'Dividir']], s.forma, k => this.setState({ forma: k })),
+      temPix: pix > 0, temCartao: car > 0, temDin: din > 0, vPix: brl(pix), vCartao: brl(car), vDin: brl(din),
+      entregue: s.entregue, onEntregue: e => this.setState({ entregue: e.target.value }),
+      trocoLbl: falta ? 'Falta' : 'Troco', troco: brl(Math.abs(ent - din)), trocoStyle: falta ? 'color: #C2334D' : 'color: #1F7A4D',
+      opts: opts.map(([k, t, sub2]) => ({ t, s: sub2, on: s[k] ? 'true' : 'false', cls: s[k] ? 'tog' : 'tog off', ir: () => this.setState(st => ({ [k]: !st[k] })) })),
+      sub: brl(sub), descLbl: s.desc === 'ok' ? 'Desconto ' + s.pct + '%' : (s.desc === 'pedido' ? 'Desconto aguardando' : 'Desconto'), descV: descV ? '− ' + brl(descV) : 'R$ 0,00', total: brl(total),
+      bloq: motivo !== '', temMotivo: motivo !== '', motivo, btnPagar: 'Receber ' + brl(total),
+      receber: () => { if (!motivo) this.setState({ pago: true, add: false }); },
+      pagoTxt: formaTxt[s.forma] + (s.nfse ? ' NFS-e emitida.' : ' Sem NFS-e.') + (s.zap ? ' Comprovante enviado pelo WhatsApp.' : ''),
+      nfTxt: s.nfse ? '004815' + (s.cpf ? ', com CPF' : ', sem CPF') : 'Não emitida', zapTxt: s.zap ? 'Enviado pelo WhatsApp às 08:42' : 'Não enviado', semNf: !s.nfse,
+      novo: () => this.setState({ pago: false, itens: [], desc: 'nenhum', forma: 'pix', add: true }),
+      movF: seg([['todas', 'Todas'], ['rec', 'Recebimentos'], ['ss', 'Sangria e suprimento'], ['est', 'Estornos']], s.mov, k => this.setState({ mov: k })),
+      movs: M.filter(m => s.mov === 'todas' || m.t === s.mov).map(m => Object.assign({ vs: '' }, m)),
+      orcs: O.map(o => Object.assign({}, o, { st: s.orc[o.id] ? 'Reenviado 08:44' : o.st, cls: s.orc[o.id] ? 'chip c-blue' : o.cls,
+        ir: () => { if (o.acao === 'Reenviar') this.setState(st => ({ orc: Object.assign({}, st.orc, { [o.id]: true }) })); else this.setState({ aba: 'rec' }); } })),
+      tabela: Object.keys(C).map(k => ({ cod: C[k][1], nome: C[k][0], obs: C[k][3], v: brl(C[k][2]) })),
+      drwFech: s.drw === 'fech', drwMov: s.drw === 'san' || s.drw === 'sup', fecharDrw: close,
+      semConf: !s.conf, confTxt: s.conf ? 'Carla Mendes, conferido às 18:02' : 'Carla Mendes, aguardando senha', conferir: () => this.setState({ conf: true }),
+      fecharCaixa: () => this.setState({ drw: '', fechado: true, toast: 'Caixa 1 fechado às 18:02 e enviado ao Financeiro com a justificativa da diferença.' }),
+      movTit: s.drw === 'san' ? 'Sangria' : 'Suprimento', movMotivo: s.drw === 'san' ? 'Envio ao cofre' : 'Troco em notas de R$ 10,00', movBtn: s.drw === 'san' ? 'Registrar sangria' : 'Registrar suprimento',
+      registrarMov: () => this.setState(st => ({ drw: '', toast: (st.drw === 'san' ? 'Sangria' : 'Suprimento') + ' de R$ 300,00 registrado às 08:45. Termo 0009 assinado por Ana Souza e Carla Mendes.' })),
+      temToast: s.toast !== '', toast: s.toast, fecharToast: () => this.setState({ toast: '' })
+    };
+  }
 }
 </script>
 </body>

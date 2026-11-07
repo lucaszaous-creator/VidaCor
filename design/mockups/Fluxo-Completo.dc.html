@@ -4,49 +4,59 @@
 <meta charset="utf-8">
 <title>Fluxo completo do paciente (protótipo)</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style>body{margin:0}</style>
+<style>
+body{margin:0;background:#F2F3F6}
+.stp{display:inline-flex;align-items:center;gap:8px}
+.stp:disabled{opacity:.45}
+.ok-ic{width:16px;height:16px;color:#1F7A4D}
+.ckr{display:flex;align-items:center;gap:10px;font-size:14px}
+.ckr svg{width:18px;height:18px;flex:none}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;margin-top:5px;background:var(--k)}
+.h2{margin:0;font-size:20px;font-weight:650}
+.foot{display:flex;align-items:center;gap:8px;padding:12px 18px;border-top:1px solid #E8EAEF}
+</style>
 </helmet>
-<div style="font-family: Inter, sans-serif; color: #0F172A; background: #F2F3F6; padding: 28px 32px 40px; display: flex; flex-direction: column; gap: 18px">
-  <div class="row wrap" style="gap: 12px">
-    <div style="flex: 1 1 420px; min-width: 0">
-      <div class="lbl">Protótipo para teste com a equipe</div>
-      <h1 style="margin: 4px 0 0; font-size: 28px; font-weight: 650">Do agendamento ao laudo no portal</h1>
-      <div class="t14 mute" style="margin-top: 4px">Antônio Carlos Ribeiro · 15/06/1954 · Eco + Doppler de carótidas · Unimed</div>
+<div style="font-family: Inter, sans-serif; color: #0F172A; background: #F2F3F6; height: 100vh; overflow: hidden; box-sizing: border-box; padding: 18px 28px 20px; display: flex; flex-direction: column; gap: 12px">
+  <header class="row" style="gap: 16px">
+    <div style="flex: 1 1 auto; min-width: 0">
+      <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Do agendamento ao laudo no portal</h1>
+      <div class="t13 mute" style="margin-top: 2px">Antônio Carlos Ribeiro, 15/06/1954. Eco e Doppler de carótidas pela Unimed.</div>
     </div>
     <label class="row t14" style="gap: 8px; cursor: pointer"><input type="checkbox" checked="{{erroLigado}}" onChange="{{toggleErro}}" style="width: 18px; height: 18px">Simular pulseira errada na sala</label>
     <button class="btn btn-sm" onClick="{{reiniciar}}">Recomeçar</button>
-  </div>
+  </header>
 
-  <nav aria-label="Etapas" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px">
+  <nav class="tabs" aria-label="Etapas">
     <sc-for list="{{etapas}}" as="e" hint-placeholder-count="5">
-      <button onClick="{{e.ir}}" aria-current="{{e.atual}}" disabled="{{e.bloq}}" style="{{e.style}}">
-        <span class="{{e.niCls}}" style="width: 28px; height: 28px; border-radius: 9px; font-size: 13px; font-weight: 700">{{e.n}}</span>
-        <span style="min-width: 0; text-align: left; line-height: 1.25"><b class="t14" style="display: block">{{e.titulo}}</b><span class="t12 mute">{{e.sub}}</span></span>
-      </button>
+      <button class="{{e.cls}}" onClick="{{e.ir}}" aria-current="{{e.atual}}" disabled="{{e.bloq}}"><sc-if value="{{e.ok}}" hint-placeholder-val="{{ false }}"><svg class="ok-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></sc-if>{{e.titulo}}<span class="mute" style="font-weight: 400">{{e.sub}}</span></button>
     </sc-for>
   </nav>
 
-  <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 340px); gap: 16px; align-items: start">
-    <section class="card" style="min-height: 520px; display: flex; flex-direction: column; gap: 16px">
+  <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px">
+    <section class="card pane" style="padding: 0">
+      <div class="scroll" style="padding: 20px 22px; display: flex; flex-direction: column; gap: 16px">
 
       <sc-if value="{{s1}}" hint-placeholder-val="{{ true }}">
-        <h2 class="t15 b" style="margin: 0; font-size: 20px">1 · Agendar com guia do convênio</h2>
-        <div class="grid g2" style="gap: 12px">
-          <div class="col" style="gap: 6px"><span class="lbl">Exame e horário</span><div class="t15 b">Eco + Doppler de carótidas</div><div class="t14 mute">Sala 1 · sexta 07/11 · 09:00 (40 min)</div></div>
-          <div class="col" style="gap: 6px"><span class="lbl">Guia (obrigatória no convênio)</span><div class="t14">Carteirinha <b class="num">0 865 000123456 7</b> · Guia <b class="num">1180-77231</b></div><div class="t14">Senha <b class="num">UN-88231-X</b> · válida até <b>20/11</b></div></div>
-        </div>
+        <h2 class="h2">Agendar com guia do convênio</h2>
+        <dl class="kv" style="margin: 0; grid-template-columns: 140px minmax(0, 1fr)">
+          <dt>Exame</dt><dd>Eco e Doppler de carótidas, 40 min</dd>
+          <dt>Horário</dt><dd>Sexta, 07/11, 09:00, sala 1</dd>
+          <dt>Carteirinha</dt><dd class="num">0 865 000123456 7</dd>
+          <dt>Guia e senha</dt><dd class="num">1180-77231, senha UN-88231-X</dd>
+          <dt>Validade</dt><dd>Até 20/11</dd>
+        </dl>
         <div class="col" style="gap: 8px">
           <sc-for list="{{checks}}" as="c" hint-placeholder-count="5">
-            <div class="row" style="gap: 10px"><span class="{{c.cls}}" style="width: 26px; height: 26px; border-radius: 8px">{{c.ic}}</span><span class="t14">{{c.t}}</span></div>
+            <div class="ckr"><sc-if value="{{c.ok}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="#1F7A4D" stroke-width="2.4" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></sc-if><sc-if value="{{c.nao}}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 24 24" fill="none" stroke="#A0A8B6" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle></svg></sc-if><span>{{c.t}}</span></div>
           </sc-for>
         </div>
-        <div class="row" style="gap: 8px; margin-top: auto">
+        <div class="row" style="gap: 8px">
           <button class="btn" onClick="{{conferir}}" disabled="{{conferido}}">Conferir guia</button>
           <button class="{{btnAgendarCls}}" onClick="{{agendar}}" disabled="{{naoConferido}}">Agendar</button>
           <span class="t13 mute">{{dica1}}</span>
@@ -54,35 +64,35 @@
       </sc-if>
 
       <sc-if value="{{s2}}" hint-placeholder-val="{{ false }}">
-        <h2 class="t15 b" style="margin: 0; font-size: 20px">2 · Check-in na recepção</h2>
-        <div class="banner info"><div class="t14" style="line-height: 1.5">Pergunte ao paciente <b>nome completo</b> e <b>data de nascimento</b> e confira com o documento. Nunca leia os dados para ele confirmar.</div></div>
+        <h2 class="h2">Check-in na recepção</h2>
+        <p class="t14" style="margin: 0; color: #334155">Pergunte nome completo e data de nascimento e confira com o documento. Não leia os dados para o paciente confirmar.</p>
         <div class="col" style="gap: 10px">
           <label class="row t15" style="gap: 10px; cursor: pointer"><input type="checkbox" checked="{{idNome}}" onChange="{{tNome}}" style="width: 20px; height: 20px">Nome confere: Antônio Carlos Ribeiro</label>
           <label class="row t15" style="gap: 10px; cursor: pointer"><input type="checkbox" checked="{{idNasc}}" onChange="{{tNasc}}" style="width: 20px; height: 20px">Nascimento confere: 15/06/1954</label>
           <label class="row t15" style="gap: 10px; cursor: pointer"><input type="checkbox" checked="{{idDoc}}" onChange="{{tDoc}}" style="width: 20px; height: 20px">Documento com foto e pedido médico vistos</label>
         </div>
         <sc-if value="{{temSenha}}" hint-placeholder-val="{{ false }}">
-          <div class="row wrap" style="gap: 12px; padding: 14px; border-radius: 16px; background: #E5F5EC"><span class="chip c-navy" style="height: 40px; font-size: 18px; padding: 0 16px">P012</span><div class="t14" style="flex: 1">Senha preferencial emitida · pulseira <b class="num">ETQ-2026-018742</b> impressa no Guichê 1</div></div>
+          <div class="row wrap" style="gap: 12px; padding: 14px; border-radius: 16px; background: #E5F5EC"><b class="num" style="font-size: 22px">P012</b><div class="t14" style="flex: 1">Senha preferencial emitida. Pulseira <b class="num">ETQ-2026-018742</b> impressa no Guichê 1.</div></div>
         </sc-if>
-        <div class="row" style="gap: 8px; margin-top: auto">
+        <div class="row" style="gap: 8px">
           <button class="{{btnCheckinCls}}" onClick="{{checkin}}" disabled="{{checkinBloq}}">Fazer check-in e imprimir pulseira</button>
           <span class="t13 mute">{{dica2}}</span>
         </div>
       </sc-if>
 
       <sc-if value="{{s3}}" hint-placeholder-val="{{ false }}">
-        <h2 class="t15 b" style="margin: 0; font-size: 20px">3 · Sala de exame</h2>
-        <div class="row wrap" style="gap: 8px"><span class="chip c-blue">Sala 1 · Vivid E95</span><span class="chip">Worklist: aguardando conferência</span></div>
+        <h2 class="h2">Sala de exame</h2>
+        <div class="row" style="gap: 12px"><span class="t14">Sala 1, Vivid E95</span><span class="chip c-amber">Worklist aguarda conferência</span></div>
         <sc-if value="{{bloqueio}}" hint-placeholder-val="{{ false }}">
           <div class="banner err" role="alert"><div class="t14" style="line-height: 1.5"><b>Bloqueado: a pulseira bipada é de Juliana S. Rocha (12/04/1993), não do exame desta sala.</b> A worklist não foi enviada ao aparelho e uma divergência foi aberta. Confira o paciente na porta da sala.</div></div>
         </sc-if>
         <sc-if value="{{pulseiraOk}}" hint-placeholder-val="{{ false }}">
-          <div class="banner ok" role="status"><div class="t14"><b>Pulseira confere:</b> Antônio Carlos Ribeiro · 15/06/1954. Worklist enviada ao aparelho às {{horaBipe}}.</div></div>
+          <div class="banner ok" role="status"><div class="t14"><b>Pulseira confere:</b> Antônio Carlos Ribeiro, 15/06/1954. Worklist enviada ao aparelho às {{horaBipe}}.</div></div>
         </sc-if>
         <sc-if value="{{emExame}}" hint-placeholder-val="{{ false }}">
-          <div class="col" style="gap: 6px"><div class="row t14"><span>Imagens chegando ao PACS</span><b class="num" style="margin-left: auto">{{imgs}} de 48</b></div><div class="bar"><i style="width: {{imgPct}}"></i></div></div>
+          <div class="col" style="gap: 6px"><div class="row t14"><span>Imagens chegando ao PACS</span><b class="num" style="margin-left: auto">{{imgs}} de 48</b></div><div class="bar"><i style="{{imgSt}}"></i></div></div>
         </sc-if>
-        <div class="row wrap" style="gap: 8px; margin-top: auto">
+        <div class="row" style="gap: 8px">
           <button class="btn" onClick="{{bipar}}" disabled="{{bipeBloq}}">Bipar pulseira</button>
           <button class="{{btnIniciarCls}}" onClick="{{iniciar}}" disabled="{{iniciarBloq}}">Iniciar exame</button>
           <button class="{{btnFinalizarCls}}" onClick="{{finalizar}}" disabled="{{finalizarBloq}}">Finalizar exame</button>
@@ -90,8 +100,8 @@
       </sc-if>
 
       <sc-if value="{{s4}}" hint-placeholder-val="{{ false }}">
-        <h2 class="t15 b" style="margin: 0; font-size: 20px">4 · Laudo</h2>
-        <div class="t14 mute">Dr. Paulo Medeiros · prazo hoje 18:00 · 48 imagens · comparado com o exame de 2024</div>
+        <h2 class="h2">Laudo</h2>
+        <div class="t14 mute">Dr. Paulo Medeiros, prazo hoje às 18:00. 48 imagens, comparado com o exame de 2024.</div>
         <div style="border: 1px solid #E8EAEF; border-radius: 16px; padding: 16px; line-height: 1.6" class="t15">
           <b>Carótidas:</b> espessamento médio-intimal de 1,1 mm à direita. Placa fibrocalcificada no bulbo direito, estenose estimada inferior a 50%. Fluxo anterógrado em artérias vertebrais.<br><b>Ecocardiograma:</b> função sistólica preservada, FEVE 62%. Disfunção diastólica grau I.<br><b>Conclusão:</b> ateromatose carotídea leve à direita, sem estenose significativa.
         </div>
@@ -102,36 +112,38 @@
         <sc-if value="{{assinado}}" hint-placeholder-val="{{ false }}">
           <div class="banner ok"><div class="t14"><b>Laudo assinado</b> com ICP-Brasil às {{horaAssinatura}}. Liberado no portal e o paciente foi avisado no WhatsApp.</div></div>
         </sc-if>
-        <div class="row" style="gap: 8px; margin-top: auto"><button class="btn btn-p" onClick="{{pedirAssinatura}}" disabled="{{assinarBloq}}">Assinar</button><span class="t13 mute">Rascunho salvo automaticamente</span></div>
+        <div class="row" style="gap: 8px"><button class="btn btn-p" onClick="{{pedirAssinatura}}" disabled="{{assinarBloq}}">Assinar</button><span class="t13 mute">Rascunho salvo automaticamente</span></div>
       </sc-if>
 
       <sc-if value="{{s5}}" hint-placeholder-val="{{ false }}">
-        <h2 class="t15 b" style="margin: 0; font-size: 20px">5 · O que o paciente vê no portal</h2>
+        <h2 class="h2">O que o paciente vê no portal</h2>
         <div style="max-width: 520px; border-radius: 22px; padding: 20px; background: #F6F7F9; display: flex; flex-direction: column; gap: 12px">
           <div class="t14 mute">Olá, Antônio</div>
-          <div class="card" style="padding: 16px"><div class="row"><span class="ni k-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span><div style="flex: 1"><div class="t15 b">Seu laudo está pronto</div><div class="t13 mute">Eco + Doppler de carótidas · 07/11</div></div></div>
-            <div class="row" style="gap: 8px; margin-top: 12px"><button class="btn btn-sm btn-p">Ver laudo</button><button class="btn btn-sm">Ver imagens</button><button class="btn btn-sm">Compartilhar com meu médico</button></div></div>
-          <div class="t12 mute">Acesso com login e 2 fatores · o link enviado não abre nada sem login</div>
+          <div class="card" style="padding: 16px"><div class="row"><div style="flex: 1"><div class="t15 b">Seu laudo está pronto</div><div class="t13 mute">Eco e Doppler de carótidas, 07/11</div></div><span class="chip c-green">Pronto</span></div>
+            <div class="row" style="gap: 8px; margin-top: 12px"><button class="btn btn-sm btn-p">Ver laudo</button><button class="btn btn-sm">Ver imagens</button><button class="btn btn-sm">Compartilhar</button></div></div>
+          <div class="t12 mute">Acesso com login e segundo fator; o link enviado não abre nada sem login.</div>
         </div>
         <div class="banner ok"><div class="t14"><b>Fluxo completo.</b> Cada passo ficou no lastro ao lado, com quem, onde e quando.</div></div>
       </sc-if>
 
-      <div class="row" style="gap: 8px; border-top: 1px solid #E8EAEF; padding-top: 14px">
+      </div>
+      <div class="foot">
         <button class="btn btn-sm" onClick="{{voltar}}" disabled="{{primeira}}">Voltar</button>
         <span class="t13 mute" style="margin-left: auto">{{rodape}}</span>
         <button class="{{btnProxCls}}" onClick="{{avancar}}" disabled="{{proxBloq}}">Próxima etapa</button>
       </div>
     </section>
 
-    <aside class="card" aria-label="Lastro do atendimento" style="padding: 18px">
-      <div class="row"><div class="t15 b">Lastro</div><span class="chip" style="margin-left: auto">{{nEventos}} eventos</span></div>
-      <div class="t12 mute" style="margin-top: 4px">Gravado pelo servidor · imutável</div>
-      <ol style="list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px" aria-live="polite">
-        <sc-for list="{{lastro}}" as="l" hint-placeholder-count="3">
-          <li class="row" style="gap: 10px; align-items: flex-start"><span class="{{l.cls}}" style="width: 26px; height: 26px; border-radius: 8px; font-size: 12px; font-weight: 700">{{l.ic}}</span><div style="min-width: 0"><div class="t14">{{l.t}}</div><div class="t12 mute">{{l.h}} · {{l.quem}}</div></div></li>
-        </sc-for>
-      </ol>
-      <a class="btn btn-sm" href="Lastro.dc.html" style="margin-top: 16px; width: 100%">Abrir no explorador de lastro</a>
+    <aside class="card pane" aria-label="Lastro do atendimento">
+      <div class="row"><div class="t15 b">Lastro</div><span class="t13 mute" style="margin-left: auto">{{nEventos}} eventos, imutável</span></div>
+      <div class="scroll" style="margin-top: 12px">
+        <ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px" aria-live="polite">
+          <sc-for list="{{lastro}}" as="l" hint-placeholder-count="3">
+            <li class="row" style="gap: 10px; align-items: flex-start"><span class="{{l.cls}}"></span><div style="min-width: 0"><div class="t14">{{l.t}}</div><div class="t12 mute">{{l.h}}, {{l.quem}}</div></div></li>
+          </sc-for>
+        </ol>
+      </div>
+      <a class="btn btn-sm" href="Lastro.dc.html" style="margin-top: 12px">Abrir no explorador de lastro</a>
     </aside>
   </div>
 </div>
@@ -142,28 +154,27 @@ class Component extends DCLogic {
   inicial() {
     return { passo: 1, feito: 0, erro: false, conferido: false, agendado: false, nome: false, nasc: false, doc: false, senha: false,
       bloqueio: false, pulseira: false, exame: false, imgs: 0, fim: false, pedePin: false, pin: '', assinado: false, min: 0,
-      lastro: [{ ic: '1', k: 'gray', t: 'Pedido de autorização enviado pelo webservice TISS', quem: 'sistema', h: '05/11 16:05' }, { ic: '✓', k: 'green', t: 'Unimed autorizou · senha UN-88231-X', quem: 'operadora', h: '05/11 17:40' }] };
+      lastro: [{ k: 'gray', t: 'Pedido de autorização enviado pelo webservice TISS', quem: 'sistema', h: '05/11 16:05' }, { k: 'green', t: 'Unimed autorizou, senha UN-88231-X', quem: 'operadora', h: '05/11 17:40' }] };
   }
   hora() { const m = 8 * 60 + 20 + this.state.min; return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); }
   ev(t, quem, k, ic, mais) {
     this.setState(s => {
       const m = 8 * 60 + 20 + s.min + (mais || 2);
       const h = String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
-      return { min: s.min + (mais || 2), lastro: s.lastro.concat([{ ic: ic || '•', k: k || 'blue', t, quem, h }]) };
+      return { min: s.min + (mais || 2), lastro: s.lastro.concat([{ k: k || 'blue', t, quem, h }]) };
     });
   }
   renderVals() {
     const s = this.state, p = s.passo;
     const pronto = { 1: s.agendado, 2: s.senha, 3: s.fim, 4: s.assinado, 5: true };
-    const T = [['Agendar', 'convênio e guia'], ['Check-in', 'dois identificadores'], ['Sala', 'pulseira e imagens'], ['Laudo', 'assinatura'], ['Portal', 'o que o paciente vê']];
+    const T = [['Agendar', ''], ['Check-in', ''], ['Sala de exame', ''], ['Laudo', ''], ['Portal do paciente', '']];
     const etapas = T.map(([t, sub], i) => {
       const n = i + 1, at = n === p, ok = pronto[n] && n < p, bloq = n > s.feito + 1;
-      return { n: ok ? '✓' : String(n), titulo: t, sub, atual: at ? 'step' : 'false', bloq,
-        niCls: 'ni ' + (at ? 'k-navy' : ok ? 'k-green' : 'k-gray'),
-        style: 'display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 16px; font: inherit; color: inherit; text-align: left; cursor: ' + (bloq ? 'not-allowed' : 'pointer') + '; border: ' + (at ? '2px solid #0A1A4A' : '1px solid #E3E7ED') + '; background: ' + (bloq ? '#F6F7F9' : '#fff') + '; opacity: ' + (bloq ? '.6' : '1'),
+      return { ok: !!(pronto[n] && n <= s.feito), titulo: t, sub, atual: at ? 'step' : 'false', bloq,
+        cls: 'stp' + (at ? ' on' : ''),
         ir: () => { if (!bloq) this.setState({ passo: n }); } };
     });
-    const ck = (ok, t) => ({ cls: 'ni ' + (ok ? 'k-green' : 'k-gray'), ic: ok ? '✓' : '·', t });
+    const ck = (ok, t) => ({ ok: !!ok, nao: !ok, t });
     const c = s.conferido;
     const pin4 = s.pin.replace(/\D/g, '').length >= 4;
     const prim = cls => 'btn ' + cls;
@@ -172,44 +183,44 @@ class Component extends DCLogic {
       reiniciar: () => this.setState(this.inicial()),
       etapas,
       s1: p === 1, s2: p === 2, s3: p === 3, s4: p === 4, s5: p === 5,
-      checks: [ck(c, 'Carteirinha ativa e elegível hoje'), ck(c, 'Procedimentos TUSS 40901114 e 40901300 autorizados, saldo 1 de cada'), ck(c, 'Senha válida até 20/11 (o exame é antes)'), ck(c, 'Pedido médico anexado · solicitante CRM-SC 12345'), ck(c, 'Guia não usada por outro atendimento')],
+      checks: [ck(c, 'Carteirinha ativa e elegível hoje'), ck(c, 'Procedimentos TUSS 40901114 e 40901300 autorizados, saldo 1 de cada'), ck(c, 'Senha válida até 20/11 (o exame é antes)'), ck(c, 'Pedido médico anexado, solicitante CRM-SC 12345'), ck(c, 'Guia não usada por outro atendimento')],
       conferido: c, naoConferido: !c,
-      conferir: () => { this.setState({ conferido: true }); this.ev('Guia conferida: 5 de 5 itens ok', 'Ana Souza · Recepção', 'green', '✓', 1); },
-      agendar: () => { if (s.agendado) return; this.setState({ agendado: true, feito: Math.max(s.feito, 1) }); this.ev('Agendado · Sala 1 · 07/11 09:00 · guia reservada para este atendimento', 'Ana Souza · Recepção', 'blue', '1', 1); },
+      conferir: () => { this.setState({ conferido: true }); this.ev('Guia conferida: 5 de 5 itens ok', 'Ana Souza, recepção', 'green', '', 1); },
+      agendar: () => { if (s.agendado) return; this.setState({ agendado: true, feito: Math.max(s.feito, 1) }); this.ev('Agendado na sala 1 para 07/11, 09:00; guia reservada para este atendimento', 'Ana Souza, recepção', 'blue', '', 1); },
       btnAgendarCls: prim(s.agendado ? '' : 'btn-p'), dica1: s.agendado ? 'Agendado. Siga para o check-in.' : (c ? 'Tudo certo, pode agendar.' : 'Agendar só libera depois de conferir a guia.'),
       idNome: s.nome, idNasc: s.nasc, idDoc: s.doc,
       tNome: () => this.setState(st => ({ nome: !st.nome })), tNasc: () => this.setState(st => ({ nasc: !st.nasc })), tDoc: () => this.setState(st => ({ doc: !st.doc })),
       checkinBloq: !(s.nome && s.nasc && s.doc) || s.senha, temSenha: s.senha,
       btnCheckinCls: prim('btn-p'),
-      checkin: () => { this.setState({ senha: true, feito: Math.max(s.feito, 2) }); this.ev('Check-in com nome + nascimento conferidos · senha P012', 'Ana Souza · Guichê 1', 'teal', '2', 20); this.ev('Pulseira ETQ-2026-018742 impressa', 'Impressora Guichê 1', 'amber', '▣', 1); },
+      checkin: () => { this.setState({ senha: true, feito: Math.max(s.feito, 2) }); this.ev('Check-in com nome e nascimento conferidos, senha P012', 'Ana Souza, Guichê 1', 'teal', '', 20); this.ev('Pulseira ETQ-2026-018742 impressa', 'Impressora do Guichê 1', 'amber', '', 1); },
       dica2: s.senha ? 'Paciente encaminhado à espera da Sala 1.' : 'Marque as três conferências para liberar.',
       bloqueio: s.bloqueio, pulseiraOk: s.pulseira, horaBipe: this.hora(),
-      emExame: s.exame, imgs: String(s.imgs), imgPct: Math.round(s.imgs / 48 * 100) + '%',
+      emExame: s.exame, imgs: String(s.imgs), imgSt: 'background: #0C72B0; width: ' + Math.round(s.imgs / 48 * 100) + '%',
       bipeBloq: s.pulseira,
       bipar: () => {
-        if (s.erro && !s.bloqueio) { this.setState({ bloqueio: true }); this.ev('BLOQUEIO: pulseira de outro paciente bipada na Sala 1 · divergência aberta', 'Bruno · Sala 1', 'rose', '!', 3); return; }
-        this.setState({ bloqueio: false, pulseira: true }); this.ev('Pulseira bipada e conferida · worklist enviada ao Vivid E95', 'Bruno · Sala 1', 'teal', '3', 3);
+        if (s.erro && !s.bloqueio) { this.setState({ bloqueio: true }); this.ev('Bloqueio: pulseira de outro paciente bipada na sala 1; divergência aberta', 'Bruno, sala 1', 'rose', '', 3); return; }
+        this.setState({ bloqueio: false, pulseira: true }); this.ev('Pulseira bipada e conferida; worklist enviada ao Vivid E95', 'Bruno, sala 1', 'teal', '', 3);
       },
       iniciarBloq: !s.pulseira || s.exame, btnIniciarCls: prim(s.pulseira && !s.exame ? 'btn-p' : ''),
       iniciar: () => {
-        this.setState({ exame: true }); this.ev('Exame iniciado (MPPS em andamento)', 'Vivid E95 · Sala 1', 'teal', '▶', 1);
+        this.setState({ exame: true }); this.ev('Exame iniciado (MPPS em andamento)', 'Vivid E95, sala 1', 'teal', '', 1);
         let n = 0; clearInterval(this._iv);
         this._iv = setInterval(() => { n += 8; this.setState({ imgs: Math.min(48, n) }); if (n >= 48) clearInterval(this._iv); }, 350);
       },
       finalizarBloq: s.imgs < 48 || s.fim, btnFinalizarCls: prim(s.imgs >= 48 && !s.fim ? 'btn-p' : ''),
-      finalizar: () => { this.setState({ fim: true, feito: Math.max(s.feito, 3) }); this.ev('Exame concluído · 48 imagens no PACS com hash conferido', 'Vivid E95 · Sala 1', 'teal', '✓', 35); },
+      finalizar: () => { this.setState({ fim: true, feito: Math.max(s.feito, 3) }); this.ev('Exame concluído: 48 imagens no PACS com hash conferido', 'Vivid E95, sala 1', 'teal', '', 35); },
       pedePin: s.pedePin && !s.assinado, pin: s.pin, onPin: e => this.setState({ pin: e.target.value }), pinCurto: !pin4,
       btnAssinarCls: prim('btn-p'),
       assinarBloq: s.assinado || s.pedePin,
       pedirAssinatura: () => this.setState({ pedePin: true }),
-      assinar: () => { this.setState({ assinado: true, feito: Math.max(s.feito, 4) }); this.ev('Laudo assinado (ICP-Brasil) · versão 1', 'Dr. Paulo Medeiros', 'violet', '4', 90); this.ev('Liberado no portal · aviso no WhatsApp enviado', 'sistema', 'green', '5', 1); },
+      assinar: () => { this.setState({ assinado: true, feito: Math.max(s.feito, 4) }); this.ev('Laudo assinado (ICP-Brasil), versão 1', 'Dr. Paulo Medeiros', 'violet', '', 90); this.ev('Liberado no portal; aviso enviado no WhatsApp', 'sistema', 'green', '', 1); },
       assinado: s.assinado, horaAssinatura: this.hora(),
       primeira: p === 1, voltar: () => this.setState({ passo: Math.max(1, p - 1) }),
       proxBloq: p === 5 || !pronto[p], btnProxCls: prim(pronto[p] && p < 5 ? 'btn-p' : ''),
       avancar: () => this.setState({ passo: Math.min(5, p + 1) }),
       rodape: p === 5 ? 'Fim do fluxo' : (pronto[p] ? 'Etapa concluída' : 'Conclua esta etapa para avançar'),
       nEventos: String(s.lastro.length),
-      lastro: s.lastro.slice().reverse().map(l => ({ ic: l.ic, t: l.t, quem: l.quem, h: l.h, cls: 'ni k-' + l.k }))
+      lastro: s.lastro.slice().reverse().map(l => ({ t: l.t, quem: l.quem, h: l.h, cls: 'dot k-' + l.k }))
     };
   }
   componentWillUnmount() { clearInterval(this._iv); }

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Preferências — VidaCor</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
@@ -13,132 +13,142 @@
 <style>
 body{margin:0}
 .sw{width:46px;height:28px;border-radius:999px;background:#C5CBD5;position:relative;flex:none;border:0;cursor:pointer}
-.sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2)}
 .sw.on{background:#0C72B0}.sw.on::after{left:21px}
 .sw:disabled{opacity:.6}
-.opt{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #E8EAEF}
+.opt{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid #E8EAEF}
 .opt:last-child{border-bottom:0}
-.opt .t{font-size:15px;font-weight:600}
+.opt .t{font-size:15px;font-weight:600;color:#0F172A}
 .opt .s{font-size:13px;color:#5B6474;margin-top:2px;line-height:1.45}
-.thm{display:flex;flex-direction:column;gap:8px;padding:10px;border-radius:16px;border:1px solid #D9DDE5;background:#fff;font:inherit;color:#0F172A;cursor:pointer;text-align:left;min-width:0}
+.thm{display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:14px;border:1px solid #D9DDE5;background:#fff;font:inherit;color:#0F172A;cursor:pointer;text-align:left;min-width:0}
 .thm.on{border:2px solid #0C72B0;padding:9px;background:#F5FAFE}
-.thm .pv{height:64px;border-radius:10px;display:flex;gap:6px;padding:8px;overflow:hidden}
+.thm .pv{height:52px;border-radius:10px;display:flex;gap:6px;padding:8px;overflow:hidden}
 .pv-row{display:flex;align-items:center;gap:10px;border-bottom:1px solid #E8EAEF}
 .pv-row:last-child{border-bottom:0}
+.ft{display:flex;align-items:center;gap:8px;padding:12px 18px;border-top:1px solid #E8EAEF;flex-wrap:wrap}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="preferencias" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="preferencias" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <div class="crumb"><b>Preferências</b></div>
-      <div class="grow"></div>
+    <header class="row wrap" style="gap: 16px">
+      <div style="flex: 1 1 0; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Preferências</h1>
+        <div class="t13 mute" style="margin-top: 2px">Ficam na sua conta e valem em qualquer computador. Não mudam regra, preço nem permissão.</div>
+      </div>
       <span class="t13 mute" role="status">{{salvoTxt}}</span>
-    </div>
-    <div class="page-h">
-      <div class="grow"><h1>Preferências</h1><p>Do seu jeito, sem mudar nada para os colegas.</p></div>
-      <button class="btn" onClick="{{restaurarTudo}}">Restaurar tudo ao padrão</button>
-    </div>
+      <button class="btn" onClick="{{restaurarTudo}}">Restaurar padrão</button>
+    </header>
 
-    <div class="banner info"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M7 18a5 5 0 1 1 .9-9.9A6 6 0 0 1 19 10a4 4 0 0 1-1 7.9z"></path></svg><div class="t14" style="line-height: 1.5"><b>Fica salvo na sua conta, no servidor da clínica.</b> Vale em qualquer computador em que você entrar, inclusive no Desktop. Não guardamos nada disso no navegador, e nenhuma preferência muda regra, preço ou permissão.</div></div>
+    <nav class="tabs" aria-label="Seções">
+      <sc-for list="{{abas}}" as="a" hint-placeholder-count="5"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for>
+    </nav>
 
-    <div class="split">
-      <div class="main col" style="gap: 16px">
-        <section class="card" aria-labelledby="vis-h">
-          <div class="card-h"><span class="ni k-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"></rect><path d="M3 9h18M8 21h8"></path></svg></span><div><h2 id="vis-h">Aparência</h2><div class="sub">A prévia ao lado muda na hora</div></div></div>
-          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 20px; align-items: start">
-            <div class="col" style="gap: 16px">
-              <div class="field">Densidade<div class="seg" role="radiogroup" aria-label="Densidade"><sc-for list="{{densidades}}" as="d" hint-placeholder-count="2"><button class="{{d.cls}}" role="radio" aria-checked="{{d.on}}" onClick="{{d.ir}}">{{d.t}}</button></sc-for></div><span class="t12 mute" style="font-weight: 400">Compacta mostra mais linhas; os alvos de clique continuam com 36 px ou mais.</span></div>
-              <div class="field">Tamanho do texto<div class="seg" role="radiogroup" aria-label="Tamanho do texto"><sc-for list="{{tamanhos}}" as="d" hint-placeholder-count="3"><button class="{{d.cls}}" role="radio" aria-checked="{{d.on}}" onClick="{{d.ir}}">{{d.t}}</button></sc-for></div></div>
-            </div>
-            <div aria-label="Prévia" style="border: 1px solid #E8EAEF; border-radius: 16px; padding: 12px 14px; background: #fff">
-              <div class="lbl" style="margin-bottom: 6px">Prévia · esteira da recepção</div>
-              <div style="{{prevFonte}}">
-                <sc-for list="{{previa}}" as="p" hint-placeholder-count="3">
-                  <div class="pv-row" style="{{prevLinha}}"><span class="av {{p.k}}" style="{{prevAv}}">{{p.ini}}</span><span style="flex: 1; min-width: 0"><span class="b" style="display: block">{{p.nome}}</span><span class="mute" style="font-size: .87em">{{p.sub}}</span></span><span class="{{p.cls}}">{{p.st}}</span></div>
+    <sc-if value="{{tAparencia}}" hint-placeholder-val="{{ true }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 16px">
+        <section class="card pane" style="padding: 0" aria-label="Aparência">
+          <div class="scroll" style="padding: 4px 18px">
+            <div class="opt"><div style="flex: 1"><div class="t">Densidade</div><div class="s">Compacta mostra mais linhas; os alvos de clique continuam com 36 px ou mais.</div></div><div class="seg" role="radiogroup" aria-label="Densidade"><sc-for list="{{densidades}}" as="d" hint-placeholder-count="2"><button class="{{d.cls}}" role="radio" aria-checked="{{d.on}}" onClick="{{d.ir}}">{{d.t}}</button></sc-for></div></div>
+            <div class="opt"><div style="flex: 1"><div class="t">Tamanho do texto</div></div><div class="seg" role="radiogroup" aria-label="Tamanho do texto"><sc-for list="{{tamanhos}}" as="d" hint-placeholder-count="3"><button class="{{d.cls}}" role="radio" aria-checked="{{d.on}}" onClick="{{d.ir}}">{{d.t}}</button></sc-for></div></div>
+            <div class="opt" style="flex-direction: column; align-items: stretch; gap: 10px">
+              <div class="t">Tema</div>
+              <div class="grid" role="radiogroup" aria-label="Tema" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+                <sc-for list="{{temas}}" as="t" hint-placeholder-count="3">
+                  <button class="{{t.cls}}" role="radio" aria-checked="{{t.on}}" onClick="{{t.ir}}">
+                    <span class="pv" style="{{t.bg}}"><span style="{{t.a}}"></span><span style="{{t.b}}"></span></span>
+                    <span class="t14 b">{{t.t}}</span><span class="t12 mute">{{t.s}}</span>
+                  </button>
                 </sc-for>
               </div>
             </div>
-          </div>
-
-          <div class="field" style="margin-top: 20px">Tema</div>
-          <div class="grid" role="radiogroup" aria-label="Tema" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 10px; margin-top: 8px">
-            <sc-for list="{{temas}}" as="t" hint-placeholder-count="3">
-              <button class="{{t.cls}}" role="radio" aria-checked="{{t.on}}" onClick="{{t.ir}}">
-                <span class="pv" style="{{t.bg}}"><span style="{{t.a}}"></span><span style="{{t.b}}"></span></span>
-                <span class="t14 b">{{t.t}}</span><span class="t12 mute">{{t.s}}</span>
-              </button>
-            </sc-for>
-          </div>
-
-          <div class="col" style="gap: 0; margin-top: 12px">
-            <div class="opt"><div style="flex: 1"><div class="t">Menu lateral recolhido por padrão</div><div class="s">Só os ícones; o nome aparece ao passar o mouse ou com o foco do teclado.</div></div><button class="{{menuCls}}" role="switch" aria-checked="{{menuAria}}" aria-label="Menu lateral recolhido por padrão" onClick="{{tgMenu}}"></button></div>
-            <div class="opt"><div style="flex: 1"><label class="t" for="pf-ini">Tela inicial</label><div class="s">Abre ao entrar. Só aparecem telas que o seu perfil pode ver.</div></div><select id="pf-ini" class="in" value="{{inicial}}" onChange="{{onInicial}}" style="width: 220px; max-width: 100%"><option>Painel do dia</option><option>Recepção</option><option>Agenda</option><option>Caixa</option></select></div>
+            <div class="opt"><div style="flex: 1"><div class="t">Menu lateral recolhido</div><div class="s">Só os ícones; o nome aparece ao passar o mouse ou com o foco do teclado.</div></div><button class="{{menuCls}}" role="switch" aria-checked="{{menuAria}}" aria-label="Menu lateral recolhido por padrão" onClick="{{tgMenu}}"></button></div>
+            <div class="opt"><div style="flex: 1"><label class="t" for="pf-ini">Tela inicial</label><div class="s">Só aparecem telas que o seu perfil pode ver.</div></div><select id="pf-ini" class="in" value="{{inicial}}" onChange="{{onInicial}}" style="width: 200px"><option>Painel do dia</option><option>Recepção</option><option>Agenda</option><option>Caixa</option></select></div>
           </div>
         </section>
 
-        <section class="card" aria-labelledby="col-h">
-          <div class="card-h"><span class="ni k-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 5h16M7 12h10M10 19h4"></path></svg></span><div><h2 id="col-h">Colunas e filtros salvos</h2><div class="sub">O que você ajustou em cada tela. Restaurar volta ao padrão da clínica.</div></div></div>
-          <sc-if value="{{temSalvos}}" hint-placeholder-val="{{ true }}">
-            <div class="col" style="gap: 0">
-              <sc-for list="{{salvos}}" as="x" hint-placeholder-count="4">
-                <div class="opt" style="flex-wrap: wrap"><div style="flex: 1 1 260px; min-width: 0"><div class="t">{{x.tela}}</div><div class="s">{{x.desc}}</div></div><span class="t12 mute">{{x.quando}}</span><button class="btn btn-sm" onClick="{{x.restaurar}}">Restaurar padrão</button></div>
+        <aside class="card pane" aria-label="Prévia">
+          <h2 class="t15 b">Prévia da esteira da recepção</h2>
+          <div class="scroll" style="margin-top: 10px">
+            <div style="{{prevFonte}}">
+              <sc-for list="{{previa}}" as="p" hint-placeholder-count="3">
+                <div class="pv-row" style="{{prevLinha}}"><span style="flex: 1; min-width: 0"><span class="b" style="display: block">{{p.nome}}</span><span class="mute" style="font-size: .87em">{{p.sub}}</span></span><span class="{{p.cls}}">{{p.st}}</span></div>
               </sc-for>
             </div>
+          </div>
+        </aside>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{tSalvos}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Colunas e filtros salvos">
+        <div class="scroll">
+          <sc-if value="{{temSalvos}}" hint-placeholder-val="{{ true }}">
+            <table class="tb sticky">
+              <thead><tr><th>Tela</th><th>O que você ajustou</th><th>Quando</th><th class="r"><span class="sr">Ações</span></th></tr></thead>
+              <tbody>
+                <sc-for list="{{salvos}}" as="x" hint-placeholder-count="4">
+                  <tr><td class="b">{{x.tela}}</td><td>{{x.desc}}</td><td class="mute nw">{{x.quando}}</td><td class="r"><button class="btn btn-sm" onClick="{{x.restaurar}}">Restaurar padrão</button></td></tr>
+                </sc-for>
+              </tbody>
+            </table>
           </sc-if>
           <sc-if value="{{semSalvos}}" hint-placeholder-val="{{ false }}">
-            <div class="state" style="border: 1px dashed #D9DDE5; border-radius: 16px"><div class="b">Todas as telas estão no padrão</div><div class="t13 mute">Quando você esconder uma coluna ou salvar um filtro, ele aparece aqui.</div></div>
+            <div class="state"><div class="b">Todas as telas estão no padrão da clínica</div><div class="t13 mute">Quando você esconder uma coluna ou salvar um filtro, ele aparece aqui.</div></div>
           </sc-if>
-        </section>
+        </div>
+      </section>
+    </sc-if>
 
-        <section class="card" aria-labelledby="som-h">
-          <div class="card-h"><span class="ni k-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4"></path></svg></span><div><h2 id="som-h">Sons e notificações</h2><div class="sub">Notificação nunca mostra dado de saúde na tela de bloqueio</div></div></div>
-          <div class="col" style="gap: 0">
-            <div class="opt"><div style="flex: 1"><div class="t">Urgente <span class="chip c-rose" style="height: 22px; font-size: 12px; margin-left: 6px">sempre toca</span></div><div class="s">Resultado crítico, paciente passando mal, chamado da sala. Não dá para desligar: é segurança do paciente.</div></div><button class="sw on" role="switch" aria-checked="true" aria-label="Urgente, sempre ligado" disabled></button></div>
-            <sc-for list="{{notifs}}" as="n" hint-placeholder-count="3">
-              <div class="opt"><div style="flex: 1"><div class="t">{{n.t}}</div><div class="s">{{n.s}}</div></div><button class="{{n.cls}}" role="switch" aria-checked="{{n.on}}" aria-label="{{n.t}}" onClick="{{n.tg}}"></button></div>
-            </sc-for>
+    <sc-if value="{{tNotif}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Sons e notificações">
+        <div class="scroll" style="padding: 4px 18px">
+          <div class="opt"><div style="flex: 1"><div class="t">Urgente</div><div class="s">Resultado crítico, paciente passando mal, chamado da sala. Sempre toca: é segurança do paciente.</div></div><button class="sw on" role="switch" aria-checked="true" aria-label="Urgente, sempre ligado" disabled></button></div>
+          <sc-for list="{{notifs}}" as="n" hint-placeholder-count="3">
+            <div class="opt"><div style="flex: 1"><div class="t">{{n.t}}</div><div class="s">{{n.s}}</div></div><button class="{{n.cls}}" role="switch" aria-checked="{{n.on}}" aria-label="{{n.t}}" onClick="{{n.tg}}"></button></div>
+          </sc-for>
+        </div>
+        <div class="ft"><span class="t13 mute">A notificação nunca mostra dado de saúde na tela de bloqueio.</span></div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{tTeclado}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Atalhos de teclado">
+        <div class="scroll">
+          <table class="tb sticky">
+            <thead><tr><th>Ação</th><th>Atalho</th></tr></thead>
+            <tbody><sc-for list="{{atalhos}}" as="a" hint-placeholder-count="7"><tr><td>{{a.t}}</td><td><span class="kbd">{{a.k}}</span></td></tr></sc-for></tbody>
+          </table>
+        </div>
+        <div class="ft"><span class="t14" style="flex: 1">Mostrar esta lista com a tecla <span class="kbd">?</span> fora de campos de texto</span><button class="{{interCls}}" role="switch" aria-checked="{{interAria}}" aria-label="Mostrar atalhos com a tecla de interrogação" onClick="{{tgInter}}"></button></div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{tLaudo}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Laudo e assinatura">
+        <div class="scroll" style="padding: 4px 18px">
+          <div class="opt"><div style="flex: 1"><label class="t" for="pf-dit">Idioma do ditado</label><div class="s">O texto ditado entra como rascunho; o laudo sempre é revisado por quem assina.</div></div><select id="pf-dit" class="in" style="width: 300px"><option>Português (Brasil), termos médicos</option><option>Português (Brasil), geral</option></select></div>
+          <div class="opt" style="flex-direction: column; align-items: stretch; gap: 10px">
+            <div><div class="t">Assinatura digital padrão</div><div class="s">Assinar sempre pede o PIN do certificado; a escolha só evita perguntar qual usar.</div></div>
+            <div class="grid" role="radiogroup" aria-label="Assinatura padrão" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+              <sc-for list="{{assinaturas}}" as="a" hint-placeholder-count="2">
+                <button class="{{a.cls}}" role="radio" aria-checked="{{a.on}}" onClick="{{a.ir}}"><span class="t14 b">{{a.t}}</span><span class="t12 mute">{{a.s}}</span></button>
+              </sc-for>
+            </div>
           </div>
-        </section>
-      </div>
-
-      <aside class="aside col" style="gap: 16px">
-        <section class="card" aria-labelledby="at-h">
-          <div class="card-h" style="margin-bottom: 8px"><span class="ni k-gray"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"></path></svg></span><h2 id="at-h">Atalhos de teclado</h2></div>
-          <div class="col" style="gap: 0">
-            <sc-for list="{{atalhos}}" as="a" hint-placeholder-count="7"><div class="li" style="padding: 9px 0"><span class="t14" style="flex: 1">{{a.t}}</span><span class="kbd">{{a.k}}</span></div></sc-for>
-          </div>
-          <div class="opt" style="border-bottom: 0; padding-bottom: 0"><div style="flex: 1"><div class="t" style="font-size: 14px">Mostrar esta lista com <span class="kbd">?</span></div><div class="s">Em qualquer tela, fora de campos de texto.</div></div><button class="{{interCls}}" role="switch" aria-checked="{{interAria}}" aria-label="Mostrar atalhos com interrogação" onClick="{{tgInter}}"></button></div>
-        </section>
-
-        <section class="card" aria-labelledby="dit-h">
-          <div class="card-h" style="margin-bottom: 8px"><span class="ni k-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg></span><h2 id="dit-h">Ditado</h2></div>
-          <label class="field">Idioma do ditado<select class="in"><option>Português (Brasil) · termos médicos</option><option>Português (Brasil) · geral</option></select></label>
-          <p class="t12 mute" style="margin: 8px 0 0; line-height: 1.5">O texto ditado entra como rascunho; o laudo sempre é revisado por quem assina.</p>
-        </section>
-
-        <section class="card" aria-labelledby="ass-h">
-          <div class="card-h" style="margin-bottom: 8px"><span class="ni k-indigo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20c3-1 4-4 6-4s1 3 4 3 3-3 6-3M15 4l5 5-8 8H7v-5z"></path></svg></span><h2 id="ass-h">Assinatura digital padrão</h2></div>
-          <div class="col" role="radiogroup" aria-label="Assinatura padrão" style="gap: 8px">
-            <sc-for list="{{assinaturas}}" as="a" hint-placeholder-count="2">
-              <button class="{{a.cls}}" role="radio" aria-checked="{{a.on}}" onClick="{{a.ir}}"><span class="t14 b">{{a.t}}</span><span class="t12 mute">{{a.s}}</span></button>
-            </sc-for>
-          </div>
-          <p class="t12 mute" style="margin: 10px 0 0; line-height: 1.5">Aparece para quem assina laudo ou documento. Assinar sempre pede o PIN do certificado. A escolha aqui só evita perguntar qual usar.</p>
-        </section>
-      </aside>
-    </div>
-    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+        </div>
+      </section>
+    </sc-if>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
     this.state = this.padrao();
     this.state.salvoEm = '09:14';
     this.state.salvos = ['agenda', 'fila', 'fat', 'pac'];
+    this.state.aba = 'aparencia';
   }
   padrao() {
     return { dens: 'conf', tam: 100, tema: 'claro', menu: false, inicial: 'Painel do dia', inter: true, n: { chat: true, laudo: true, fila: false }, ass: 'nuvem' };
@@ -149,29 +159,32 @@ class Component extends DCLogic {
     const sw = v => v ? 'sw on' : 'sw';
     const comp = s.dens === 'comp';
     const SALVOS = {
-      agenda: ['Agenda', 'Sem a coluna “convênio”; agrupada por sala', 'há 3 dias'],
-      fila: ['Recepção · esteira', 'Filtro salvo: “só preferenciais primeiro”', 'ontem'],
-      fat: ['Faturamento', 'Colunas: guia, operadora, valor, situação', '12/10'],
-      pac: ['Pacientes', 'Visualização em cartões', 'hoje']
+      agenda: ['Agenda', 'Sem a coluna convênio; agrupada por sala', 'Há 3 dias'],
+      fila: ['Recepção, esteira', 'Filtro salvo: preferenciais primeiro', 'Ontem'],
+      fat: ['Faturamento', 'Colunas: guia, operadora, valor e situação', '12/10'],
+      pac: ['Pacientes', 'Visualização em cartões', 'Hoje']
     };
-    const NT = [['chat', 'Chat da equipe', 'Mensagem direta e menção. Som discreto.'], ['laudo', 'Laudo pronto', 'Quando um laudo que você acompanha é assinado.'], ['fila', 'Novo paciente na fila', 'Cada check-in na sua unidade.']];
-    const P = [['MH', 'k-violet', 'Maria Helena Duarte', '12/03/1968 · Doppler 09:20', 'Aguardando', 'chip c-amber'],
-      ['AC', 'k-blue', 'Antônio Carlos Ribeiro', '15/06/1954 · MAPA 10:40', 'Em exame', 'chip c-blue'],
-      ['JS', 'k-pink', 'Juliana Sampaio Rocha', '12/04/1993 · USG 10:40', 'Chegou', 'chip c-teal']];
+    const NT = [['chat', 'Chat da equipe', 'Mensagem direta e menção, com som discreto.'], ['laudo', 'Laudo pronto', 'Quando um laudo que você acompanha é assinado.'], ['fila', 'Novo paciente na fila', 'Cada check-in na sua unidade.']];
+    const P = [['Maria Helena Duarte', '12/03/1968, Doppler 09:20', 'Aguardando', 'chip c-amber'],
+      ['Antônio Carlos Ribeiro', '15/06/1954, MAPA 10:40', 'Em exame', 'chip c-blue'],
+      ['Juliana Sampaio Rocha', '12/04/1993, USG 10:40', 'Chegou', 'chip c-teal'],
+      ['Vera Lúcia Antunes', '18/09/1957, Eco 14:10', 'Agendada', 'chip']];
     const TEMAS = [
       ['claro', 'Claro', 'Padrão da clínica', 'background: #F2F3F6', 'flex: 0 0 26%; border-radius: 6px; background: #fff', 'flex: 1; border-radius: 6px; background: #fff'],
       ['escuro', 'Escuro', 'Todas as telas', 'background: #0B0F17', 'flex: 0 0 26%; border-radius: 6px; background: #1A2232', 'flex: 1; border-radius: 6px; background: #1A2232'],
-      ['laudo', 'Escuro só no laudo', 'Laudo e visualizador de imagens', 'background: #F2F3F6', 'flex: 0 0 26%; border-radius: 6px; background: #fff', 'flex: 1; border-radius: 6px; background: #0B0F17']
+      ['laudo', 'Escuro no laudo', 'Laudo e visualizador', 'background: #F2F3F6', 'flex: 0 0 26%; border-radius: 6px; background: #fff', 'flex: 1; border-radius: 6px; background: #0B0F17']
     ];
+    const A = [['aparencia', 'Aparência'], ['salvos', 'Colunas e filtros salvos'], ['notif', 'Sons e notificações'], ['teclado', 'Atalhos de teclado'], ['laudo', 'Ditado e assinatura']];
     return {
+      abas: A.map(([k, t]) => ({ t, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      tAparencia: s.aba === 'aparencia', tSalvos: s.aba === 'salvos', tNotif: s.aba === 'notif', tTeclado: s.aba === 'teclado', tLaudo: s.aba === 'laudo',
       salvoTxt: s.salvoEm === 'agora' ? 'Salvo na sua conta agora' : 'Salvo na sua conta às ' + s.salvoEm,
       restaurarTudo: () => this.setState(Object.assign(this.padrao(), { salvoEm: 'agora', salvos: [] })),
       densidades: [['conf', 'Confortável'], ['comp', 'Compacta']].map(([k, t]) => ({ t, cls: s.dens === k ? 'on' : '', on: s.dens === k ? 'true' : 'false', ir: () => salvar({ dens: k }) })),
       tamanhos: [100, 115, 130].map(v => ({ t: v + '%', cls: s.tam === v ? 'on' : '', on: s.tam === v ? 'true' : 'false', ir: () => salvar({ tam: v }) })),
       prevFonte: 'font-size: ' + Math.round(14 * s.tam / 100) + 'px',
-      prevLinha: comp ? 'padding: 5px 0; gap: 8px' : 'padding: 11px 0',
-      prevAv: comp ? 'width: 26px; height: 26px; font-size: 10px; background: var(--kb); color: var(--k)' : 'width: 36px; height: 36px; font-size: 12px; background: var(--kb); color: var(--k)',
-      previa: P.map(([ini, k, nome, sub, st, cls]) => ({ ini, k, nome, sub, st, cls })),
+      prevLinha: comp ? 'padding: 6px 0; gap: 8px' : 'padding: 12px 0',
+      previa: P.map(([nome, sub, st, cls]) => ({ nome, sub, st, cls })),
       temas: TEMAS.map(([k, t, sub, bg, a, b]) => ({ t, s: sub, bg, a, b, cls: s.tema === k ? 'thm on' : 'thm', on: s.tema === k ? 'true' : 'false', ir: () => salvar({ tema: k }) })),
       menuCls: sw(s.menu), menuAria: s.menu ? 'true' : 'false', tgMenu: () => salvar({ menu: !s.menu }),
       inicial: s.inicial, onInicial: e => salvar({ inicial: e.target.value }),
@@ -180,7 +193,7 @@ class Component extends DCLogic {
       notifs: NT.map(([k, t, sub]) => ({ t, s: sub, cls: sw(s.n[k]), on: s.n[k] ? 'true' : 'false', tg: () => salvar({ n: Object.assign({}, s.n, { [k]: !s.n[k] }) }) })),
       atalhos: [['Busca global', 'Ctrl K'], ['Novo agendamento', 'N'], ['Novo paciente', 'Ctrl Shift N'], ['Ir para Agenda', 'G A'], ['Ir para Recepção', 'G R'], ['Menu de contexto', 'Shift F10'], ['Bloquear a tela', 'Ctrl L']].map(([t, k]) => ({ t, k })),
       interCls: sw(s.inter), interAria: s.inter ? 'true' : 'false', tgInter: () => salvar({ inter: !s.inter }),
-      assinaturas: [['nuvem', 'Certificado em nuvem ICP-Brasil', 'A1 · válido até 03/2027 · funciona em qualquer computador'], ['token', 'Token A3 neste computador', 'Só na estação com o leitor instalado']].map(([k, t, sub]) => ({ t, s: sub, cls: s.ass === k ? 'thm on' : 'thm', on: s.ass === k ? 'true' : 'false', ir: () => salvar({ ass: k }) }))
+      assinaturas: [['nuvem', 'Certificado em nuvem ICP-Brasil', 'A1, válido até 03/2027; funciona em qualquer computador'], ['token', 'Token A3 neste computador', 'Só na estação com o leitor instalado']].map(([k, t, sub]) => ({ t, s: sub, cls: s.ass === k ? 'thm on' : 'thm', on: s.ass === k ? 'true' : 'false', ir: () => salvar({ ass: k }) }))
     };
   }
 }

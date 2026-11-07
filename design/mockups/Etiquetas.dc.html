@@ -4,84 +4,207 @@
 <meta charset="utf-8">
 <title>Etiquetas e rastreio — VidaCor</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>body{margin:0;background:#F2F3F6}
-.tb tr.sel td{background:#F3F6FB}
-.tli{display:flex;gap:12px;align-items:flex-start;padding:10px 0;position:relative}
-.ck{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:12px;font-weight:700}
-.ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.todo{background:#fff;border:1.5px solid #CBD2DC}
-.lbl-prev{border:1px solid #CBD2DC;border-radius:10px;background:#fff;padding:12px 14px;display:flex;gap:12px;align-items:center}
+.et-tr{cursor:pointer}
+.et-tr:hover td{background:#F8FAFC}
+.et-tr.sel td{background:#EEF4FB}
+.et-tr.sel td:first-child{box-shadow:inset 3px 0 0 #0A1A4A}
+.et-prev{border:1px solid #CBD2DC;border-radius:10px;background:#fff;padding:12px 14px;display:flex;gap:12px;align-items:center}
+.et-ev{display:flex;gap:12px;align-items:flex-start;padding:9px 0}
+.et-ck{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+.et-ck.ok{background:#E5F5EC;color:#1F7A4D}
+.et-ck.bad{background:#FDEEF1;color:#B4233C}
+.et-ck.todo{background:#fff;border:1.5px solid #CBD2DC}
+.et-num{display:flex;align-items:baseline;gap:6px;font-size:14px;color:#5B6474}
+.et-num b{font-size:20px;font-weight:650;color:#0F172A;font-variant-numeric:tabular-nums}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="etiquetas" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="etiquetas" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <h1 style="font-size: 24px; font-weight: 650">Etiquetas e rastreio</h1>
-      <div class="grow"></div>
-      <label class="search" style="max-width: 380px; flex: 1 1 300px; min-height: 44px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 5v14M6 5v14M9 5v14M13 5v14M16 5v14M20 5v14"></path></svg><span class="sr">Bipar etiqueta</span><input type="search" placeholder="Bipe a etiqueta ou digite o código"></label>
+    <header class="row wrap" style="gap: 14px">
+      <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em; flex: 1 1 auto">Etiquetas e rastreio</h1>
+      <label class="search" style="flex: 0 1 400px; min-height: 44px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 5v14M6 5v14M9 5v14M13 5v14M16 5v14M20 5v14"></path></svg><span class="sr">Bipar etiqueta</span><input type="search" value="{{q}}" onChange="{{onQ}}" placeholder="Bipe a etiqueta ou digite código ou nome"></label>
       <a class="btn btn-sm" href="Etiquetas-Modelos.dc.html">Modelos</a>
       <button class="btn btn-p">Imprimir etiqueta</button>
+    </header>
+
+    <div class="row wrap" style="gap: 28px; padding: 0 4px">
+      <span class="et-num"><b>86</b>impressas hoje</span>
+      <span class="et-num"><b>41</b>bipadas nas salas</span>
+      <span class="et-num"><b style="color: #9A5B00">{{nReimp}}</b>reimpressões com motivo</span>
+      <span class="et-num"><b style="color: #C2334D">{{nDiv}}</b>divergência aberta</span>
+      <span class="et-num"><b>3 de 4</b>impressoras online</span>
     </div>
 
-    <div class="row wrap t14 mute" style="gap: 24px; padding: 0 8px">
-      <span><b style="color:#0F172A">86</b> impressas hoje</span>
-      <span><b style="color:#0F172A">41</b> bipadas nas salas</span>
-      <span><b style="color:#9A5B00">3</b> reimpressões com motivo</span>
-      <span><b style="color:#C2334D">1</b> divergência aberta</span>
-      <span><b style="color:#0F172A">3 de 4</b> impressoras online</span>
-    </div>
-
-    <section class="card" aria-labelledby="div-h" style="padding: 18px 22px; border: 1px solid #F6C9D2; box-shadow: none; background: #FFF7F8">
-      <div class="row wrap" style="gap: 16px">
-        <span class="tile t-rose"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg></span>
-        <div style="flex: 1 1 420px; min-width: 0">
-          <h2 id="div-h" style="font-size: 16px; font-weight: 600">Etiqueta bipada na sala errada · exame bloqueado</h2>
-          <p class="t14" style="margin: 4px 0 0">A pulseira de <b>Juliana Sampaio Rocha</b> (12/04/1993, morfológica, Sala 2) foi bipada na <b>Sala 1 · Ecocardiograma</b> às 08:44. O aparelho não recebeu a lista e nenhuma imagem foi aceita.</p>
-        </div>
-        <div class="row" style="gap: 8px"><button class="btn btn-sm">Ver detalhes</button><button class="btn btn-p btn-sm">Encaminhar à Sala 2</button></div>
+    <sc-if value="{{divAberta}}" hint-placeholder-val="{{ true }}">
+      <div class="banner err" role="alert" style="align-items: center">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="flex: none"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg>
+        <div class="t14" style="flex: 1 1 auto; min-width: 0"><b>Exame bloqueado na Sala 1.</b> A pulseira de Juliana Sampaio Rocha (12/04/1993, morfológica, Sala 2) foi bipada no ecocardiograma às 08:44. O aparelho não recebeu a lista e nenhuma imagem foi aceita.</div>
+        <button class="btn btn-sm" onClick="{{verDiv}}">Ver etiqueta</button>
+        <button class="btn btn-sm btn-p" onClick="{{encaminhar}}">Encaminhar à Sala 2</button>
       </div>
-    </section>
+    </sc-if>
+    <sc-if value="{{divResolvida}}" hint-placeholder-val="{{ false }}">
+      <div class="banner ok" role="status"><div class="t14">Juliana Sampaio Rocha foi encaminhada à Sala 2 às 08:46. A Sala 1 voltou a aceitar a própria lista e a divergência ficou no lastro.</div></div>
+    </sc-if>
 
-    <div class="col" style="gap: 16px">
-      <section class="card" aria-labelledby="ras-h" style="padding: 20px 8px 8px">
-        <div class="row" style="padding: 0 14px 10px"><h2 id="ras-h" style="font-size: 18px; font-weight: 600">Etiquetas de hoje</h2><div class="grow"></div><div class="seg"><button class="on btn-sm" style="height: 36px">Todas</button><button style="height: 36px">Pulseiras</button><button style="height: 36px">Exame</button><button style="height: 36px">Seringa</button><button style="height: 36px">Envelope</button></div></div>
-        <div class="scroll-x"><table class="tb"><thead><tr><th>Código</th><th>Tipo</th><th>Paciente</th><th>Para</th><th>Impressa</th><th>Último evento</th><th>Situação</th></tr></thead><tbody><tr class="sel"><td class="nw"><b class="num">ETQ-2026-018734</b></td><td>Pulseira</td><td class="nw"><b>Antônio Carlos Ribeiro</b><div class="t12 mute">15/06/1954</div></td><td>Eco + Doppler · ACC 2026-118790</td><td class="t13 mute">Guichê 2 · Ana · 08:24</td><td class="t13">Bipada na Sala 1 · 08:41</td><td><span class="chip c-green">Em uso</span></td></tr><tr class=""><td class="nw"><b class="num">ETQ-2026-018733</b></td><td>Exame</td><td class="nw"><b>Antônio Carlos Ribeiro</b><div class="t12 mute">15/06/1954</div></td><td>Eco + Doppler · ACC 2026-118790</td><td class="t13 mute">Guichê 2 · Ana · 08:24</td><td class="t13">Colada no pedido</td><td><span class="chip c-green">Em uso</span></td></tr><tr class=""><td class="nw"><b class="num">ETQ-2026-018731</b></td><td>Pulseira</td><td class="nw"><b>Juliana Sampaio Rocha</b><div class="t12 mute">12/04/1993</div></td><td>Morfológica · ACC 2026-118741</td><td class="t13 mute">Guichê 1 · Carla · 08:19</td><td class="t13">Bipada na Sala 1 · 08:44</td><td><span class="chip c-rose">Divergência</span></td></tr><tr class=""><td class="nw"><b class="num">ETQ-2026-018729</b></td><td>Seringa</td><td class="nw"><b>Vera L. Antunes</b><div class="t12 mute">20/02/1968</div></td><td>Contraste iodado · lote IOP-2611</td><td class="t13 mute">Sala 6 · Téc. Carla · 07:58</td><td class="t13">Bipada no tomógrafo · 08:02</td><td><span class="chip c-green">Usada</span></td></tr><tr class=""><td class="nw"><b class="num">ETQ-2026-018722</b></td><td>Pulseira</td><td class="nw"><b>Rafael Monteiro Lima</b><div class="t12 mute">09/11/1988</div></td><td>Raio X de tórax · ACC 2026-118722</td><td class="t13 mute">Guichê 2 · Ana · 08:10</td><td class="t13">Reimpressa · motivo: rasgou</td><td><span class="chip c-amber">Invalidada</span></td></tr><tr class=""><td class="nw"><b class="num">ETQ-2026-018723</b></td><td>Pulseira</td><td class="nw"><b>Rafael Monteiro Lima</b><div class="t12 mute">09/11/1988</div></td><td>Raio X de tórax · ACC 2026-118722</td><td class="t13 mute">Guichê 2 · Ana · 08:12</td><td class="t13">Aguardando bipe na Sala 5</td><td><span class="chip c-blue">Impressa</span></td></tr><tr class=""><td class="nw"><b class="num">ETQ-2026-018699</b></td><td>MAPA</td><td class="nw"><b>Neusa A. Freitas</b><div class="t12 mute">18/09/1957</div></td><td>MAPA 24 h · aparelho nº 07</td><td class="t13 mute">Sala 7 · Enf. Lívia · 07:55</td><td class="t13">Devolução prevista 07/11 08:00</td><td><span class="chip c-blue">Em uso</span></td></tr></tbody></table></div>
-      </section>
+    <nav class="tabs" aria-label="Tipo de etiqueta">
+      <sc-for list="{{abas}}" as="a" hint-placeholder-count="6"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}} <span class="mute" style="font-weight: 500">{{a.n}}</span></button></sc-for>
+    </nav>
 
-      <div class="grid g2">
-        <section class="card" aria-labelledby="tl-h">
-          <div class="lbl">Lastro da etiqueta</div>
-          <h2 id="tl-h" style="font-size: 18px; font-weight: 650; margin-top: 6px" class="num">ETQ-2026-018734</h2>
-          <div class="lbl-prev" style="margin-top: 12px">
-            <svg width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="QR code da etiqueta"><path fill="#111" fill-rule="evenodd" d="M0.0 0.0h17.92v17.92h-17.92z M2.56 2.56v12.8h12.8v-12.8z M5.12 5.12h7.68v7.68h-7.68z M46.08 0.0h17.92v17.92h-17.92z M48.64 2.56v12.8h12.8v-12.8z M51.2 5.12h7.68v7.68h-7.68z M0.0 46.08h17.92v17.92h-17.92z M2.56 48.64v12.8h12.8v-12.8z M5.12 51.2h7.68v7.68h-7.68z M0.00 20.48h2.56v2.56h-2.56z M0.00 23.04h2.56v2.56h-2.56z M0.00 28.16h2.56v2.56h-2.56z M0.00 33.28h2.56v2.56h-2.56z M0.00 35.84h2.56v2.56h-2.56z M0.00 40.96h2.56v2.56h-2.56z M2.56 20.48h2.56v2.56h-2.56z M2.56 23.04h2.56v2.56h-2.56z M2.56 25.60h2.56v2.56h-2.56z M2.56 28.16h2.56v2.56h-2.56z M2.56 33.28h2.56v2.56h-2.56z M2.56 35.84h2.56v2.56h-2.56z M5.12 23.04h2.56v2.56h-2.56z M5.12 28.16h2.56v2.56h-2.56z M5.12 33.28h2.56v2.56h-2.56z M5.12 35.84h2.56v2.56h-2.56z M5.12 38.40h2.56v2.56h-2.56z M5.12 40.96h2.56v2.56h-2.56z M7.68 23.04h2.56v2.56h-2.56z M7.68 30.72h2.56v2.56h-2.56z M7.68 35.84h2.56v2.56h-2.56z M7.68 38.40h2.56v2.56h-2.56z M7.68 40.96h2.56v2.56h-2.56z M10.24 23.04h2.56v2.56h-2.56z M10.24 25.60h2.56v2.56h-2.56z M10.24 33.28h2.56v2.56h-2.56z M10.24 40.96h2.56v2.56h-2.56z M12.80 30.72h2.56v2.56h-2.56z M12.80 35.84h2.56v2.56h-2.56z M12.80 38.40h2.56v2.56h-2.56z M15.36 20.48h2.56v2.56h-2.56z M15.36 25.60h2.56v2.56h-2.56z M15.36 38.40h2.56v2.56h-2.56z M17.92 38.40h2.56v2.56h-2.56z M20.48 7.68h2.56v2.56h-2.56z M20.48 10.24h2.56v2.56h-2.56z M20.48 15.36h2.56v2.56h-2.56z M20.48 20.48h2.56v2.56h-2.56z M20.48 23.04h2.56v2.56h-2.56z M20.48 25.60h2.56v2.56h-2.56z M20.48 30.72h2.56v2.56h-2.56z M20.48 33.28h2.56v2.56h-2.56z M20.48 35.84h2.56v2.56h-2.56z M20.48 40.96h2.56v2.56h-2.56z M20.48 43.52h2.56v2.56h-2.56z M20.48 56.32h2.56v2.56h-2.56z M20.48 58.88h2.56v2.56h-2.56z M20.48 61.44h2.56v2.56h-2.56z M23.04 5.12h2.56v2.56h-2.56z M23.04 7.68h2.56v2.56h-2.56z M23.04 10.24h2.56v2.56h-2.56z M23.04 12.80h2.56v2.56h-2.56z M23.04 20.48h2.56v2.56h-2.56z M23.04 23.04h2.56v2.56h-2.56z M23.04 25.60h2.56v2.56h-2.56z M23.04 28.16h2.56v2.56h-2.56z M23.04 46.08h2.56v2.56h-2.56z M23.04 58.88h2.56v2.56h-2.56z M23.04 61.44h2.56v2.56h-2.56z M25.60 0.00h2.56v2.56h-2.56z M25.60 5.12h2.56v2.56h-2.56z M25.60 7.68h2.56v2.56h-2.56z M25.60 10.24h2.56v2.56h-2.56z M25.60 12.80h2.56v2.56h-2.56z M25.60 15.36h2.56v2.56h-2.56z M25.60 17.92h2.56v2.56h-2.56z M25.60 20.48h2.56v2.56h-2.56z M25.60 23.04h2.56v2.56h-2.56z M25.60 25.60h2.56v2.56h-2.56z M25.60 28.16h2.56v2.56h-2.56z M25.60 30.72h2.56v2.56h-2.56z M25.60 38.40h2.56v2.56h-2.56z M25.60 40.96h2.56v2.56h-2.56z M25.60 43.52h2.56v2.56h-2.56z M25.60 46.08h2.56v2.56h-2.56z M25.60 48.64h2.56v2.56h-2.56z M25.60 61.44h2.56v2.56h-2.56z M28.16 0.00h2.56v2.56h-2.56z M28.16 2.56h2.56v2.56h-2.56z M28.16 5.12h2.56v2.56h-2.56z M28.16 10.24h2.56v2.56h-2.56z M28.16 12.80h2.56v2.56h-2.56z M28.16 20.48h2.56v2.56h-2.56z M28.16 25.60h2.56v2.56h-2.56z M28.16 38.40h2.56v2.56h-2.56z M28.16 40.96h2.56v2.56h-2.56z M28.16 43.52h2.56v2.56h-2.56z M28.16 53.76h2.56v2.56h-2.56z M28.16 56.32h2.56v2.56h-2.56z M30.72 10.24h2.56v2.56h-2.56z M30.72 15.36h2.56v2.56h-2.56z M30.72 17.92h2.56v2.56h-2.56z M30.72 20.48h2.56v2.56h-2.56z M30.72 23.04h2.56v2.56h-2.56z M30.72 25.60h2.56v2.56h-2.56z M30.72 33.28h2.56v2.56h-2.56z M30.72 43.52h2.56v2.56h-2.56z M30.72 46.08h2.56v2.56h-2.56z M30.72 48.64h2.56v2.56h-2.56z M30.72 51.20h2.56v2.56h-2.56z M30.72 53.76h2.56v2.56h-2.56z M33.28 7.68h2.56v2.56h-2.56z M33.28 23.04h2.56v2.56h-2.56z M33.28 28.16h2.56v2.56h-2.56z M33.28 35.84h2.56v2.56h-2.56z M33.28 38.40h2.56v2.56h-2.56z M33.28 46.08h2.56v2.56h-2.56z M33.28 48.64h2.56v2.56h-2.56z M33.28 51.20h2.56v2.56h-2.56z M33.28 58.88h2.56v2.56h-2.56z M35.84 5.12h2.56v2.56h-2.56z M35.84 10.24h2.56v2.56h-2.56z M35.84 12.80h2.56v2.56h-2.56z M35.84 25.60h2.56v2.56h-2.56z M35.84 33.28h2.56v2.56h-2.56z M35.84 35.84h2.56v2.56h-2.56z M35.84 38.40h2.56v2.56h-2.56z M35.84 40.96h2.56v2.56h-2.56z M35.84 46.08h2.56v2.56h-2.56z M35.84 48.64h2.56v2.56h-2.56z M35.84 51.20h2.56v2.56h-2.56z M35.84 56.32h2.56v2.56h-2.56z M38.40 2.56h2.56v2.56h-2.56z M38.40 15.36h2.56v2.56h-2.56z M38.40 17.92h2.56v2.56h-2.56z M38.40 20.48h2.56v2.56h-2.56z M38.40 23.04h2.56v2.56h-2.56z M38.40 28.16h2.56v2.56h-2.56z M38.40 38.40h2.56v2.56h-2.56z M38.40 48.64h2.56v2.56h-2.56z M38.40 53.76h2.56v2.56h-2.56z M38.40 56.32h2.56v2.56h-2.56z M40.96 7.68h2.56v2.56h-2.56z M40.96 38.40h2.56v2.56h-2.56z M40.96 48.64h2.56v2.56h-2.56z M40.96 51.20h2.56v2.56h-2.56z M40.96 53.76h2.56v2.56h-2.56z M40.96 56.32h2.56v2.56h-2.56z M40.96 58.88h2.56v2.56h-2.56z M40.96 61.44h2.56v2.56h-2.56z M43.52 28.16h2.56v2.56h-2.56z M43.52 35.84h2.56v2.56h-2.56z M43.52 43.52h2.56v2.56h-2.56z M43.52 48.64h2.56v2.56h-2.56z M43.52 58.88h2.56v2.56h-2.56z M43.52 61.44h2.56v2.56h-2.56z M46.08 23.04h2.56v2.56h-2.56z M46.08 25.60h2.56v2.56h-2.56z M46.08 28.16h2.56v2.56h-2.56z M46.08 33.28h2.56v2.56h-2.56z M46.08 38.40h2.56v2.56h-2.56z M46.08 40.96h2.56v2.56h-2.56z M46.08 43.52h2.56v2.56h-2.56z M46.08 51.20h2.56v2.56h-2.56z M46.08 61.44h2.56v2.56h-2.56z M48.64 20.48h2.56v2.56h-2.56z M48.64 23.04h2.56v2.56h-2.56z M48.64 28.16h2.56v2.56h-2.56z M48.64 30.72h2.56v2.56h-2.56z M48.64 33.28h2.56v2.56h-2.56z M48.64 40.96h2.56v2.56h-2.56z M48.64 43.52h2.56v2.56h-2.56z M48.64 53.76h2.56v2.56h-2.56z M48.64 56.32h2.56v2.56h-2.56z M48.64 61.44h2.56v2.56h-2.56z M51.20 20.48h2.56v2.56h-2.56z M51.20 30.72h2.56v2.56h-2.56z M51.20 35.84h2.56v2.56h-2.56z M51.20 43.52h2.56v2.56h-2.56z M51.20 51.20h2.56v2.56h-2.56z M51.20 53.76h2.56v2.56h-2.56z M51.20 58.88h2.56v2.56h-2.56z M51.20 61.44h2.56v2.56h-2.56z M53.76 20.48h2.56v2.56h-2.56z M53.76 23.04h2.56v2.56h-2.56z M53.76 25.60h2.56v2.56h-2.56z M53.76 28.16h2.56v2.56h-2.56z M53.76 30.72h2.56v2.56h-2.56z M53.76 35.84h2.56v2.56h-2.56z M53.76 40.96h2.56v2.56h-2.56z M53.76 43.52h2.56v2.56h-2.56z M53.76 46.08h2.56v2.56h-2.56z M53.76 48.64h2.56v2.56h-2.56z M53.76 51.20h2.56v2.56h-2.56z M53.76 58.88h2.56v2.56h-2.56z M56.32 23.04h2.56v2.56h-2.56z M56.32 28.16h2.56v2.56h-2.56z M56.32 35.84h2.56v2.56h-2.56z M56.32 46.08h2.56v2.56h-2.56z M56.32 56.32h2.56v2.56h-2.56z M56.32 58.88h2.56v2.56h-2.56z M56.32 61.44h2.56v2.56h-2.56z M58.88 20.48h2.56v2.56h-2.56z M58.88 23.04h2.56v2.56h-2.56z M58.88 28.16h2.56v2.56h-2.56z M58.88 30.72h2.56v2.56h-2.56z M58.88 33.28h2.56v2.56h-2.56z M58.88 43.52h2.56v2.56h-2.56z M58.88 46.08h2.56v2.56h-2.56z M58.88 48.64h2.56v2.56h-2.56z M58.88 53.76h2.56v2.56h-2.56z M58.88 56.32h2.56v2.56h-2.56z M58.88 58.88h2.56v2.56h-2.56z M61.44 25.60h2.56v2.56h-2.56z M61.44 30.72h2.56v2.56h-2.56z M61.44 33.28h2.56v2.56h-2.56z M61.44 35.84h2.56v2.56h-2.56z M61.44 38.40h2.56v2.56h-2.56z M61.44 46.08h2.56v2.56h-2.56z M61.44 51.20h2.56v2.56h-2.56z M61.44 53.76h2.56v2.56h-2.56z M61.44 56.32h2.56v2.56h-2.56z M61.44 58.88h2.56v2.56h-2.56z M61.44 61.44h2.56v2.56h-2.56z"></path></svg>
-            <div style="min-width:0"><div class="t14 b">ANTÔNIO CARLOS RIBEIRO</div><div class="t13">Nasc. 15/06/1954 · P</div><div class="t12 mute num">ACC 2026-118790 · ETQ-018734</div></div>
+    <sc-if value="{{modoEtq}}" hint-placeholder-val="{{ true }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px">
+        <section class="card pane" style="padding: 0" aria-label="Etiquetas de hoje">
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Etiqueta</th><th>Paciente</th><th>Último evento</th><th>Situação</th></tr></thead>
+              <tbody>
+                <sc-for list="{{lista}}" as="e" hint-placeholder-count="7">
+                  <tr class="{{e.cls}}" onClick="{{e.ir}}" aria-selected="{{e.atual}}">
+                    <td class="nw"><div class="b num">{{e.cod}}</div><div class="t13 mute">{{e.tipo}}</div></td>
+                    <td><div class="b">{{e.nome}}</div><div class="t13 mute num">{{e.nasc}}</div></td>
+                    <td><div class="t14">{{e.ultimo}}</div><div class="t13 mute">{{e.para}}</div></td>
+                    <td><span class="{{e.stCls}}">{{e.st}}</span></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+            <sc-if value="{{vazio}}" hint-placeholder-val="{{ false }}"><div class="state"><div class="b">Nenhuma etiqueta encontrada</div><div class="t13 mute">Confira o código bipado ou busque pelo nome do paciente.</div></div></sc-if>
           </div>
-          <ol style="list-style: none; margin: 12px 0 0; padding: 0"><li class="tli"><span class="ck ok">✓</span><div style="flex:1;min-width:0"><div class="t14 b">Impressa</div><div class="t12 mute">Guichê 2 · impressora Zebra G2 · Ana Souza</div></div><span class="t12 mute num">08:24</span></li><li class="tli"><span class="ck ok">✓</span><div style="flex:1;min-width:0"><div class="t14 b">Colocada no paciente</div><div class="t12 mute">Recepção conferiu nome + nascimento</div></div><span class="t12 mute num">08:25</span></li><li class="tli"><span class="ck ok">✓</span><div style="flex:1;min-width:0"><div class="t14 b">Bipada na Sala 1</div><div class="t12 mute">Téc. Carla · paciente e exame conferem</div></div><span class="t12 mute num">08:41</span></li><li class="tli"><span class="ck ok">✓</span><div style="flex:1;min-width:0"><div class="t14 b">Vinculada ao exame</div><div class="t12 mute">Imagens recebidas com o ACC 2026-118790</div></div><span class="t12 mute num">08:47</span></li><li class="tli"><span class="ck todo"></span><div style="flex:1;min-width:0"><div class="t14 mute">Envelope (se impresso)</div><div class="t12 mute">Ao liberar o laudo</div></div><span class="t12 mute num"></span></li><li class="tli"><span class="ck todo"></span><div style="flex:1;min-width:0"><div class="t14 mute">Retirada pelo paciente</div><div class="t12 mute">Assinatura no tablet</div></div><span class="t12 mute num"></span></li></ol>
-          <div class="row wrap" style="gap: 8px; margin-top: 10px"><button class="btn btn-sm">Reimprimir…</button><button class="btn btn-sm">Invalidar…</button><a class="btn btn-g btn-sm" href="Paciente.dc.html">Abrir ficha</a></div>
-          <p class="t12 mute" style="margin: 10px 0 0">Reimprimir pede motivo e invalida esta etiqueta: se a antiga for bipada depois, o sistema bloqueia e avisa.</p>
         </section>
-        <section class="card" aria-labelledby="imp-h">
-          <h2 id="imp-h" style="font-size: 16px; font-weight: 600; margin-bottom: 6px">Impressoras</h2>
-          <div class="li"><span class="chip c-green"><span class="d"></span>Online</span><div style="flex:1"><div class="t t14">Guichê 1 · Zebra ZD421</div><div class="s">pulseiras e exame · ribbon 64%</div></div></div>
-          <div class="li"><span class="chip c-green"><span class="d"></span>Online</span><div style="flex:1"><div class="t t14">Guichê 2 · Zebra ZD421</div><div class="s">pulseiras e exame · ribbon 81%</div></div></div>
-          <div class="li"><span class="chip c-green"><span class="d"></span>Online</span><div style="flex:1"><div class="t t14">Sala 6 · Brother QL</div><div class="s">seringas</div></div></div>
-          <div class="li"><span class="chip c-rose"><span class="d"></span>Offline</span><div style="flex:1"><div class="t t14">Recepção · impressora A4</div><div class="s">laudos e envelopes · 2 na fila</div></div></div>
-        </section>
+
+        <aside class="card pane" aria-label="Lastro da etiqueta">
+          <div class="scroll">
+            <div class="row" style="gap: 10px"><h2 class="num" style="font-size: 17px; font-weight: 650">{{sel.cod}}</h2><span class="{{sel.stCls}}" style="margin-left: auto">{{sel.st}}</span></div>
+            <div class="et-prev" style="margin-top: 12px">
+              <svg width="56" height="56" viewBox="0 0 64 64" role="img" aria-label="QR code da etiqueta"><path fill="#111" fill-rule="evenodd" d="M0.0 0.0h17.92v17.92h-17.92z M2.56 2.56v12.8h12.8v-12.8z M5.12 5.12h7.68v7.68h-7.68z M46.08 0.0h17.92v17.92h-17.92z M48.64 2.56v12.8h12.8v-12.8z M51.2 5.12h7.68v7.68h-7.68z M0.0 46.08h17.92v17.92h-17.92z M2.56 48.64v12.8h12.8v-12.8z M5.12 51.2h7.68v7.68h-7.68z M0.00 20.48h2.56v2.56h-2.56z M0.00 23.04h2.56v2.56h-2.56z M0.00 28.16h2.56v2.56h-2.56z M0.00 33.28h2.56v2.56h-2.56z M0.00 35.84h2.56v2.56h-2.56z M0.00 40.96h2.56v2.56h-2.56z M2.56 20.48h2.56v2.56h-2.56z M2.56 23.04h2.56v2.56h-2.56z M2.56 25.60h2.56v2.56h-2.56z M2.56 28.16h2.56v2.56h-2.56z M2.56 33.28h2.56v2.56h-2.56z M2.56 35.84h2.56v2.56h-2.56z M5.12 23.04h2.56v2.56h-2.56z M5.12 28.16h2.56v2.56h-2.56z M5.12 33.28h2.56v2.56h-2.56z M5.12 35.84h2.56v2.56h-2.56z M5.12 38.40h2.56v2.56h-2.56z M5.12 40.96h2.56v2.56h-2.56z M7.68 23.04h2.56v2.56h-2.56z M7.68 30.72h2.56v2.56h-2.56z M7.68 35.84h2.56v2.56h-2.56z M7.68 38.40h2.56v2.56h-2.56z M7.68 40.96h2.56v2.56h-2.56z M10.24 23.04h2.56v2.56h-2.56z M10.24 25.60h2.56v2.56h-2.56z M10.24 33.28h2.56v2.56h-2.56z M10.24 40.96h2.56v2.56h-2.56z M12.80 30.72h2.56v2.56h-2.56z M12.80 35.84h2.56v2.56h-2.56z M12.80 38.40h2.56v2.56h-2.56z M15.36 20.48h2.56v2.56h-2.56z M15.36 25.60h2.56v2.56h-2.56z M15.36 38.40h2.56v2.56h-2.56z M17.92 38.40h2.56v2.56h-2.56z M20.48 7.68h2.56v2.56h-2.56z M20.48 10.24h2.56v2.56h-2.56z M20.48 15.36h2.56v2.56h-2.56z M20.48 20.48h2.56v2.56h-2.56z M20.48 23.04h2.56v2.56h-2.56z M20.48 25.60h2.56v2.56h-2.56z M20.48 30.72h2.56v2.56h-2.56z M20.48 33.28h2.56v2.56h-2.56z M20.48 35.84h2.56v2.56h-2.56z M20.48 40.96h2.56v2.56h-2.56z M20.48 43.52h2.56v2.56h-2.56z M20.48 56.32h2.56v2.56h-2.56z M20.48 58.88h2.56v2.56h-2.56z M20.48 61.44h2.56v2.56h-2.56z M23.04 5.12h2.56v2.56h-2.56z M23.04 7.68h2.56v2.56h-2.56z M23.04 10.24h2.56v2.56h-2.56z M23.04 12.80h2.56v2.56h-2.56z M23.04 20.48h2.56v2.56h-2.56z M23.04 23.04h2.56v2.56h-2.56z M23.04 25.60h2.56v2.56h-2.56z M23.04 28.16h2.56v2.56h-2.56z M23.04 46.08h2.56v2.56h-2.56z M23.04 58.88h2.56v2.56h-2.56z M23.04 61.44h2.56v2.56h-2.56z M25.60 0.00h2.56v2.56h-2.56z M25.60 5.12h2.56v2.56h-2.56z M25.60 7.68h2.56v2.56h-2.56z M25.60 10.24h2.56v2.56h-2.56z M25.60 12.80h2.56v2.56h-2.56z M25.60 15.36h2.56v2.56h-2.56z M25.60 17.92h2.56v2.56h-2.56z M25.60 20.48h2.56v2.56h-2.56z M25.60 23.04h2.56v2.56h-2.56z M25.60 25.60h2.56v2.56h-2.56z M25.60 28.16h2.56v2.56h-2.56z M25.60 30.72h2.56v2.56h-2.56z M25.60 38.40h2.56v2.56h-2.56z M25.60 40.96h2.56v2.56h-2.56z M25.60 43.52h2.56v2.56h-2.56z M25.60 46.08h2.56v2.56h-2.56z M25.60 48.64h2.56v2.56h-2.56z M25.60 61.44h2.56v2.56h-2.56z M28.16 0.00h2.56v2.56h-2.56z M28.16 2.56h2.56v2.56h-2.56z M28.16 5.12h2.56v2.56h-2.56z M28.16 10.24h2.56v2.56h-2.56z M28.16 12.80h2.56v2.56h-2.56z M28.16 20.48h2.56v2.56h-2.56z M28.16 25.60h2.56v2.56h-2.56z M28.16 38.40h2.56v2.56h-2.56z M28.16 40.96h2.56v2.56h-2.56z M28.16 43.52h2.56v2.56h-2.56z M28.16 53.76h2.56v2.56h-2.56z M28.16 56.32h2.56v2.56h-2.56z M30.72 10.24h2.56v2.56h-2.56z M30.72 15.36h2.56v2.56h-2.56z M30.72 17.92h2.56v2.56h-2.56z M30.72 20.48h2.56v2.56h-2.56z M30.72 23.04h2.56v2.56h-2.56z M30.72 25.60h2.56v2.56h-2.56z M30.72 33.28h2.56v2.56h-2.56z M30.72 43.52h2.56v2.56h-2.56z M30.72 46.08h2.56v2.56h-2.56z M30.72 48.64h2.56v2.56h-2.56z M30.72 51.20h2.56v2.56h-2.56z M30.72 53.76h2.56v2.56h-2.56z M33.28 7.68h2.56v2.56h-2.56z M33.28 23.04h2.56v2.56h-2.56z M33.28 28.16h2.56v2.56h-2.56z M33.28 35.84h2.56v2.56h-2.56z M33.28 38.40h2.56v2.56h-2.56z M33.28 46.08h2.56v2.56h-2.56z M33.28 48.64h2.56v2.56h-2.56z M33.28 51.20h2.56v2.56h-2.56z M33.28 58.88h2.56v2.56h-2.56z M35.84 5.12h2.56v2.56h-2.56z M35.84 10.24h2.56v2.56h-2.56z M35.84 12.80h2.56v2.56h-2.56z M35.84 25.60h2.56v2.56h-2.56z M35.84 33.28h2.56v2.56h-2.56z M35.84 35.84h2.56v2.56h-2.56z M35.84 38.40h2.56v2.56h-2.56z M35.84 40.96h2.56v2.56h-2.56z M35.84 46.08h2.56v2.56h-2.56z M35.84 48.64h2.56v2.56h-2.56z M35.84 51.20h2.56v2.56h-2.56z M35.84 56.32h2.56v2.56h-2.56z M38.40 2.56h2.56v2.56h-2.56z M38.40 15.36h2.56v2.56h-2.56z M38.40 17.92h2.56v2.56h-2.56z M38.40 20.48h2.56v2.56h-2.56z M38.40 23.04h2.56v2.56h-2.56z M38.40 28.16h2.56v2.56h-2.56z M38.40 38.40h2.56v2.56h-2.56z M38.40 48.64h2.56v2.56h-2.56z M38.40 53.76h2.56v2.56h-2.56z M38.40 56.32h2.56v2.56h-2.56z M40.96 7.68h2.56v2.56h-2.56z M40.96 38.40h2.56v2.56h-2.56z M40.96 48.64h2.56v2.56h-2.56z M40.96 51.20h2.56v2.56h-2.56z M40.96 53.76h2.56v2.56h-2.56z M40.96 56.32h2.56v2.56h-2.56z M40.96 58.88h2.56v2.56h-2.56z M40.96 61.44h2.56v2.56h-2.56z M43.52 28.16h2.56v2.56h-2.56z M43.52 35.84h2.56v2.56h-2.56z M43.52 43.52h2.56v2.56h-2.56z M43.52 48.64h2.56v2.56h-2.56z M43.52 58.88h2.56v2.56h-2.56z M43.52 61.44h2.56v2.56h-2.56z M46.08 23.04h2.56v2.56h-2.56z M46.08 25.60h2.56v2.56h-2.56z M46.08 28.16h2.56v2.56h-2.56z M46.08 33.28h2.56v2.56h-2.56z M46.08 38.40h2.56v2.56h-2.56z M46.08 40.96h2.56v2.56h-2.56z M46.08 43.52h2.56v2.56h-2.56z M46.08 51.20h2.56v2.56h-2.56z M46.08 61.44h2.56v2.56h-2.56z M48.64 20.48h2.56v2.56h-2.56z M48.64 23.04h2.56v2.56h-2.56z M48.64 28.16h2.56v2.56h-2.56z M48.64 30.72h2.56v2.56h-2.56z M48.64 33.28h2.56v2.56h-2.56z M48.64 40.96h2.56v2.56h-2.56z M48.64 43.52h2.56v2.56h-2.56z M48.64 53.76h2.56v2.56h-2.56z M48.64 56.32h2.56v2.56h-2.56z M48.64 61.44h2.56v2.56h-2.56z M51.20 20.48h2.56v2.56h-2.56z M51.20 30.72h2.56v2.56h-2.56z M51.20 35.84h2.56v2.56h-2.56z M51.20 43.52h2.56v2.56h-2.56z M51.20 51.20h2.56v2.56h-2.56z M51.20 53.76h2.56v2.56h-2.56z M51.20 58.88h2.56v2.56h-2.56z M51.20 61.44h2.56v2.56h-2.56z M53.76 20.48h2.56v2.56h-2.56z M53.76 23.04h2.56v2.56h-2.56z M53.76 25.60h2.56v2.56h-2.56z M53.76 28.16h2.56v2.56h-2.56z M53.76 30.72h2.56v2.56h-2.56z M53.76 35.84h2.56v2.56h-2.56z M53.76 40.96h2.56v2.56h-2.56z M53.76 43.52h2.56v2.56h-2.56z M53.76 46.08h2.56v2.56h-2.56z M53.76 48.64h2.56v2.56h-2.56z M53.76 51.20h2.56v2.56h-2.56z M53.76 58.88h2.56v2.56h-2.56z M56.32 23.04h2.56v2.56h-2.56z M56.32 28.16h2.56v2.56h-2.56z M56.32 35.84h2.56v2.56h-2.56z M56.32 46.08h2.56v2.56h-2.56z M56.32 56.32h2.56v2.56h-2.56z M56.32 58.88h2.56v2.56h-2.56z M56.32 61.44h2.56v2.56h-2.56z M58.88 20.48h2.56v2.56h-2.56z M58.88 23.04h2.56v2.56h-2.56z M58.88 28.16h2.56v2.56h-2.56z M58.88 30.72h2.56v2.56h-2.56z M58.88 33.28h2.56v2.56h-2.56z M58.88 43.52h2.56v2.56h-2.56z M58.88 46.08h2.56v2.56h-2.56z M58.88 48.64h2.56v2.56h-2.56z M58.88 53.76h2.56v2.56h-2.56z M58.88 56.32h2.56v2.56h-2.56z M58.88 58.88h2.56v2.56h-2.56z M61.44 25.60h2.56v2.56h-2.56z M61.44 30.72h2.56v2.56h-2.56z M61.44 33.28h2.56v2.56h-2.56z M61.44 35.84h2.56v2.56h-2.56z M61.44 38.40h2.56v2.56h-2.56z M61.44 46.08h2.56v2.56h-2.56z M61.44 51.20h2.56v2.56h-2.56z M61.44 53.76h2.56v2.56h-2.56z M61.44 56.32h2.56v2.56h-2.56z M61.44 58.88h2.56v2.56h-2.56z M61.44 61.44h2.56v2.56h-2.56z"></path></svg>
+              <div style="min-width: 0"><div class="t14 b">{{sel.nomeUp}}</div><div class="t13 num">Nasc. {{sel.nasc}}</div><div class="t12 mute num">{{sel.acc}}</div></div>
+            </div>
+            <ol style="list-style: none; margin: 10px 0 0; padding: 0">
+              <sc-for list="{{sel.eventos}}" as="v" hint-placeholder-count="5">
+                <li class="et-ev">
+                  <span class="{{v.ck}}"><sc-if value="{{v.ok}}" hint-placeholder-val="{{ true }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></sc-if><sc-if value="{{v.bad}}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></sc-if></span>
+                  <div style="flex: 1; min-width: 0"><div class="{{v.tCls}}">{{v.t}}</div><div class="t12 mute">{{v.s}}</div></div>
+                  <span class="t12 mute num">{{v.h}}</span>
+                </li>
+              </sc-for>
+            </ol>
+          </div>
+          <div style="padding-top: 12px; border-top: 1px solid #E8EAEF">
+            <sc-if value="{{acaoLivre}}" hint-placeholder-val="{{ true }}">
+              <div class="row wrap" style="gap: 8px"><button class="btn btn-sm" onClick="{{pedirReimp}}" disabled="{{sel.inativa}}">Reimprimir</button><button class="btn btn-sm" onClick="{{pedirInval}}" disabled="{{sel.inativa}}">Invalidar</button><a class="btn btn-sm btn-g" href="Paciente.dc.html">Abrir ficha</a></div>
+            </sc-if>
+            <sc-if value="{{acaoMotivo}}" hint-placeholder-val="{{ false }}">
+              <div class="col" style="gap: 10px">
+                <div class="t14 b">{{acaoTitulo}}</div>
+                <label class="field">Motivo<select class="in" onChange="{{onMotivo}}"><option value="">Escolha o motivo</option><option value="rasgou">Rasgou ou apagou</option><option value="erro">Dado impresso errado</option><option value="perdida">Paciente perdeu</option></select></label>
+                <div class="t12 mute">A etiqueta atual deixa de valer. Se for bipada depois, o sistema bloqueia e avisa.</div>
+                <div class="row" style="gap: 8px"><button class="btn btn-sm" onClick="{{cancelar}}">Voltar</button><button class="btn btn-sm btn-p" onClick="{{confirmar}}" disabled="{{semMotivo}}">Confirmar</button></div>
+              </div>
+            </sc-if>
+          </div>
+        </aside>
       </div>
-    </div>
-    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · códigos ilustrativos</p>
+    </sc-if>
+
+    <sc-if value="{{modoImp}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Impressoras">
+        <div class="scroll">
+          <table class="tb sticky">
+            <thead><tr><th>Impressora</th><th>Uso</th><th>Situação</th></tr></thead>
+            <tbody>
+              <tr><td><div class="b">Guichê 1, Zebra ZD421</div><div class="t13 mute">Ribbon 64%</div></td><td>Pulseiras e etiquetas de exame</td><td><span class="chip c-green">Online</span></td></tr>
+              <tr><td><div class="b">Guichê 2, Zebra ZD421</div><div class="t13 mute">Ribbon 81%</div></td><td>Pulseiras e etiquetas de exame</td><td><span class="chip c-green">Online</span></td></tr>
+              <tr><td><div class="b">Sala 6, Brother QL</div><div class="t13 mute">Rolo 40%</div></td><td>Seringas</td><td><span class="chip c-green">Online</span></td></tr>
+              <tr><td><div class="b">Recepção, impressora A4</div><div class="t13 mute">2 documentos na fila, desviados para o Guichê 1</div></td><td>Laudos e envelopes</td><td><span class="chip c-rose">Offline</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <footer class="row" style="gap: 10px; padding: 12px 16px; border-top: 1px solid #E8EAEF"><span class="t13 mute grow">O técnico de TI foi avisado da impressora offline às 08:20.</span><a class="btn btn-sm" href="Aparelhos.dc.html">Ver em Aparelhos</a></footer>
+      </section>
+    </sc-if>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = { q: '', aba: 'todas', sel: '018734', acao: '', motivo: '', div: 'aberta', reimp: {}, inval: {} };
+  }
+  norm(t) { return (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+  renderVals() {
+    const s = this.state;
+    const ev = (t, sub, h, k) => ({ t, s: sub, h, k: k || 'ok' });
+    const base = [
+      { id: '018734', tipo: 'Pulseira', nome: 'Antônio Carlos Ribeiro', nasc: '15/06/1954', para: 'Eco + Doppler, ACC 2026-118790', acc: 'ACC 2026-118790', ultimo: 'Bipada na Sala 1, 08:41', st: ['Em uso', 'chip c-green'],
+        ev: [ev('Impressa', 'Guichê 2, Zebra, Ana Souza', '08:24'), ev('Colocada no paciente', 'Recepção conferiu nome e nascimento', '08:25'), ev('Bipada na Sala 1', 'Téc. Carla, paciente e exame conferem', '08:41'), ev('Vinculada ao exame', 'Imagens recebidas com o ACC 2026-118790', '08:47'), ev('Envelope', 'Ao liberar o laudo', '', 'todo'), ev('Retirada pelo paciente', 'Assinatura no tablet', '', 'todo')] },
+      { id: '018733', tipo: 'Exame', nome: 'Antônio Carlos Ribeiro', nasc: '15/06/1954', para: 'Eco + Doppler, ACC 2026-118790', acc: 'ACC 2026-118790', ultimo: 'Colada no pedido, 08:24', st: ['Em uso', 'chip c-green'],
+        ev: [ev('Impressa', 'Guichê 2, Zebra, Ana Souza', '08:24'), ev('Colada no pedido médico', 'Ana Souza', '08:24')] },
+      { id: '018731', tipo: 'Pulseira', nome: 'Juliana Sampaio Rocha', nasc: '12/04/1993', para: 'Morfológica, Sala 2, ACC 2026-118741', acc: 'ACC 2026-118741', ultimo: 'Bipada na Sala 1, 08:44', st: ['Divergência', 'chip c-rose'], div: true,
+        ev: [ev('Impressa', 'Guichê 1, Zebra, Carla Mendes', '08:19'), ev('Colocada no paciente', 'Recepção conferiu nome e nascimento', '08:20'), ev('Bipada na sala errada', 'Sala 1, ecocardiograma: exame bloqueado', '08:44', 'bad')] },
+      { id: '018729', tipo: 'Seringa', nome: 'Vera Lúcia Antunes', nasc: '18/09/1957', para: 'Contraste iodado, lote IOP-2611', acc: 'ACC 2026-118702', ultimo: 'Bipada no tomógrafo, 08:02', st: ['Usada', 'chip c-green'],
+        ev: [ev('Impressa', 'Sala 6, Brother, Téc. Carla', '07:58'), ev('Bipada no tomógrafo', 'Lote IOP-2611 ligado à paciente', '08:02')] },
+      { id: '018722', tipo: 'Pulseira', nome: 'Rafael Monteiro Lima', nasc: '09/11/1988', para: 'Raio X de tórax, ACC 2026-118722', acc: 'ACC 2026-118722', ultimo: 'Reimpressa, motivo: rasgou', st: ['Invalidada', 'chip c-amber'], inativa: true,
+        ev: [ev('Impressa', 'Guichê 2, Zebra, Ana Souza', '08:10'), ev('Invalidada', 'Reimpressão pedida por Ana Souza, motivo: rasgou', '08:12', 'bad')] },
+      { id: '018723', tipo: 'Pulseira', nome: 'Rafael Monteiro Lima', nasc: '09/11/1988', para: 'Raio X de tórax, ACC 2026-118722', acc: 'ACC 2026-118722', ultimo: 'Aguardando bipe na Sala 5', st: ['Impressa', 'chip c-blue'],
+        ev: [ev('Impressa', 'Guichê 2, Zebra, Ana Souza; substitui ETQ-2026-018722', '08:12'), ev('Bipada na Sala 5', 'Aguardando', '', 'todo')] },
+      { id: '018699', tipo: 'MAPA', nome: 'Neusa Aparecida Freitas', nasc: '21/05/1961', para: 'MAPA 24 h, aparelho nº 07', acc: 'ACC 2026-118655', ultimo: 'Devolução prevista 07/11 08:00', st: ['Em uso', 'chip c-blue'],
+        ev: [ev('Impressa', 'Sala 7, Enf. Lívia', '07:55'), ev('Presa ao gravador nº 07', 'Enf. Lívia', '07:58'), ev('Devolução do gravador', 'Prevista para 07/11 08:00', '', 'todo')] }
+    ];
+    const E = [];
+    base.forEach(e => {
+      if (e.div && s.div === 'resolvida') {
+        e = Object.assign({}, e, { ultimo: 'Encaminhada à Sala 2, 08:46', st: ['Em uso', 'chip c-green'], ev: e.ev.concat([ev('Encaminhada à Sala 2', 'Carla Mendes, motivo registrado', '08:46')]) });
+      }
+      const r = s.reimp[e.id], iv = s.inval[e.id];
+      if (r || iv) {
+        E.push(Object.assign({}, e, { ultimo: (r ? 'Reimpressa' : 'Invalidada') + ', motivo: ' + (r || iv), st: ['Invalidada', 'chip c-amber'], inativa: true,
+          ev: e.ev.filter(x => x.k !== 'todo').concat([ev('Invalidada', (r ? 'Reimpressão' : 'Invalidação') + ' por Ana Souza, motivo: ' + (r || iv), '09:05', 'bad')]) }));
+        if (r) E.push(Object.assign({}, e, { id: e.id + 'R', ultimo: 'Impressa no Guichê 2, 09:05', st: ['Impressa', 'chip c-blue'],
+          ev: [ev('Impressa', 'Guichê 2, Ana Souza; substitui ETQ-2026-' + e.id, '09:05'), ev('Colocada no paciente', 'Conferir nome e nascimento', '', 'todo')] }));
+      } else E.push(e);
+    });
+    const A = [['todas', 'Todas', () => true], ['Pulseira', 'Pulseiras'], ['Exame', 'Exame'], ['Seringa', 'Seringa'], ['MAPA', 'MAPA'], ['imp', 'Impressoras']];
+    const termos = this.norm(s.q).split(/\s+/).filter(Boolean);
+    const busca = e => !termos.length || termos.every(t => this.norm(['ETQ-2026-' + e.id, e.nome, e.nasc, e.acc].join(' ')).includes(t));
+    const filtro = e => s.aba === 'todas' || e.tipo === s.aba;
+    const res = E.filter(e => filtro(e) && busca(e));
+    const cur = E.find(e => e.id === s.sel) || res[0] || E[0];
+    const motivos = { rasgou: 'rasgou', erro: 'dado impresso errado', perdida: 'paciente perdeu' };
+    const map = e => ({ cod: e.id.endsWith('R') ? 'ETQ-2026-0' + (Number(e.id.slice(0, -1)) + 80) : 'ETQ-2026-' + e.id, tipo: e.tipo, nome: e.nome, nasc: e.nasc, para: e.para.split(', ACC')[0], ultimo: e.ultimo, st: e.st[0], stCls: e.st[1],
+      cls: 'et-tr' + (e.id === cur.id ? ' sel' : ''), atual: e.id === cur.id ? 'true' : 'false', ir: () => this.setState({ sel: e.id, acao: '' }) });
+    const selV = Object.assign(map(cur), { nomeUp: cur.nome.toUpperCase(), acc: cur.acc, inativa: !!cur.inativa,
+      eventos: cur.ev.map(v => ({ t: v.t, s: v.s, h: v.h, ok: v.k === 'ok', bad: v.k === 'bad', ck: 'et-ck ' + v.k, tCls: v.k === 'todo' ? 't14 mute' : 't14 b' })) });
+    const nReimp = 3 + Object.keys(s.reimp).length;
+    return {
+      q: s.q, onQ: e => this.setState({ q: e.target.value }),
+      nReimp: String(nReimp), nDiv: s.div === 'aberta' ? '1' : '0',
+      divAberta: s.div === 'aberta', divResolvida: s.div === 'resolvida',
+      verDiv: () => this.setState({ aba: 'todas', q: '', sel: '018731', acao: '' }),
+      encaminhar: () => this.setState({ div: 'resolvida' }),
+      abas: A.map(([k, t]) => ({ t, n: (k === 'todas' || k === 'imp') ? '' : String(E.filter(e => e.tipo === k).length), cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      modoEtq: s.aba !== 'imp', modoImp: s.aba === 'imp',
+      lista: res.map(map), vazio: res.length === 0, sel: selV,
+      acaoLivre: !s.acao, acaoMotivo: !!s.acao,
+      acaoTitulo: s.acao === 'reimp' ? 'Reimprimir ' + selV.cod + ' de ' + cur.nome + '?' : 'Invalidar ' + selV.cod + ' de ' + cur.nome + '?',
+      pedirReimp: () => this.setState({ acao: 'reimp', motivo: '' }), pedirInval: () => this.setState({ acao: 'inval', motivo: '' }),
+      cancelar: () => this.setState({ acao: '' }),
+      onMotivo: e => this.setState({ motivo: e.target.value }), semMotivo: !s.motivo,
+      confirmar: () => this.setState(st => {
+        const m = motivos[st.motivo];
+        if (st.acao === 'reimp') return { acao: '', reimp: Object.assign({}, st.reimp, { [cur.id]: m }), sel: cur.id + 'R' };
+        return { acao: '', inval: Object.assign({}, st.inval, { [cur.id]: m }) };
+      })
+    };
+  }
 }
 </script>
 </body>

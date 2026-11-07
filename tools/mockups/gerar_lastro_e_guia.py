@@ -1,5 +1,5 @@
 P='/tmp/claude-0/-home-user/4fd689ae-5e0d-5bbd-bb63-c60bbbb26a18/scratchpad/vidacor-canvas/project/'
-CSS='/_blob/fb2dedb8954c196c1d9a9203c0ff5693'
+CSS='/_blob/3428af26abb0af564c467191e42d3475'
 def page(title,style,body,h):
     return f'''<!doctype html>
 <html lang="pt-BR">

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Agendar exame online</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
@@ -12,144 +12,153 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0;background:#F2F3F6}
-.stp{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#5B6474;white-space:nowrap}
-.stp i{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-style:normal;background:#E9ECF1;color:#5B6474}
-.stp.ok i{background:#E5F5EC;color:#1F7A4D}
-.stp.on{color:#0A1A4A}.stp.on i{background:#0A1A4A;color:#fff}
-.op{display:flex;align-items:center;gap:14px;width:100%;min-height:64px;padding:12px 16px;border-radius:16px;border:1px solid #E8EAEF;background:#fff;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.stp{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border-radius:12px;font-size:14px;font-weight:500;color:#5B6474}
+.stp .ck{width:18px;height:18px;flex:none;color:#1F7A4D;display:none}
+.stp .n{width:18px;flex:none;text-align:center;font-variant-numeric:tabular-nums}
+.stp.ok{color:#0F172A}.stp.ok .ck{display:block}.stp.ok .n{display:none}
+.stp.on{background:#fff;color:#0A1A4A;font-weight:600;box-shadow:0 1px 2px rgba(15,23,42,.06)}
+.op{display:flex;align-items:center;gap:14px;width:100%;min-height:60px;padding:10px 16px;border-radius:14px;border:1px solid #E8EAEF;background:#fff;text-align:left;font:inherit;color:inherit;cursor:pointer}
 .op:hover{border-color:#9CC7E8}
 .op.on{border-color:#0C72B0;background:#F5FAFE;box-shadow:inset 0 0 0 1px #0C72B0}
-.day{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:72px;border-radius:16px;border:1px solid #E8EAEF;background:#fff;color:#334155;cursor:pointer;font:inherit}
+.day{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:68px;border-radius:14px;border:1px solid #E8EAEF;background:#fff;color:#334155;cursor:pointer;font:inherit}
 .day b{font-size:20px;font-weight:650;color:#0F172A}
 .day.on{background:#0A1A4A;border-color:#0A1A4A;color:#DCE6F5}.day.on b{color:#fff}
 .day[disabled]{opacity:.45;cursor:not-allowed}
 .hr{height:48px;border-radius:12px;border:1px solid #D9DDE5;background:#fff;font:600 15px Inter,sans-serif;color:#0F172A;cursor:pointer}
 .hr.on{background:#E8F2FB;border-color:#0C72B0;color:#0A1A4A}
+.h2{font-size:20px;font-weight:650;margin:0 0 14px}
+.foot{display:flex;align-items:center;gap:10px;padding:14px 22px;border-top:1px solid #E8EAEF}
 </style>
 </helmet>
-<div style="font-family: Inter, sans-serif; min-height: 100vh; background: #F2F3F6">
-  <header style="display: flex; align-items: center; gap: 16px; padding: 14px 32px; flex-wrap: wrap; background: #fff; border-bottom: 1px solid #E8EAEF">
-    <img src="/_blob/69e27b6caf70295083c2b311e1218937" alt="VidaCor Imagem" style="height: 42px; width: auto">
+<div style="font-family: Inter, sans-serif; height: 100vh; overflow: hidden; background: #F2F3F6; display: flex; flex-direction: column">
+  <header class="row" style="gap: 16px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid #E8EAEF; flex: none">
+    <img src="/_blob/69e27b6caf70295083c2b311e1218937" alt="VidaCor Imagem" style="height: 40px; width: auto">
+    <h1 style="font-size: 20px; font-weight: 650; margin-left: 8px">Agendar exame</h1>
     <div class="grow"></div>
     <a class="t14 b" href="Portal-Web.dc.html">Já sou paciente: entrar no Meu VidaCor</a>
-    <a class="btn btn-sm" href="tel:+554800000000">Prefiro ligar · (48) 0000-0000</a>
+    <a class="btn btn-sm" href="tel:+554800000000">Prefiro ligar: (48) 0000-0000</a>
   </header>
 
-  <main style="max-width: 720px; margin: 0 auto; padding: 28px 16px 40px; display: flex; flex-direction: column; gap: 16px">
-    <div>
-      <h1 style="font-size: 30px; font-weight: 650; letter-spacing: -.025em">Agendar exame</h1>
-      <p class="t15 mute" style="margin: 6px 0 0">Leva uns 2 minutos. Só pedimos o necessário para o seu exame.</p>
-    </div>
+  <main style="flex: 1 1 auto; min-height: 0; padding: 20px 28px; display: grid; grid-template-columns: 220px minmax(0, 1fr) 320px; gap: 20px; max-width: 1360px; width: 100%; margin: 0 auto">
+    <nav aria-label="Etapas">
+      <ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px">
+        <sc-for list="{{passos}}" as="p" hint-placeholder-count="6"><li class="{{p.cls}}" aria-current="{{p.atual}}"><svg class="ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg><span class="n">{{p.n}}</span>{{p.t}}</li></sc-for>
+      </ol>
+    </nav>
 
-    <ol aria-label="Etapas" style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 16px">
-      <sc-for list="{{passos}}" as="p" hint-placeholder-count="6"><li class="{{p.cls}}" aria-current="{{p.atual}}"><i>{{p.n}}</i>{{p.t}}</li></sc-for>
-    </ol>
-
-    <sc-if value="{{temResumo}}" hint-placeholder-val="{{ false }}">
-      <div class="row wrap" style="gap: 8px"><sc-for list="{{resumo}}" as="r" hint-placeholder-count="2"><span class="chip c-blue" style="height: 32px">{{r}}</span></sc-for></div>
-    </sc-if>
-
-    <sc-if value="{{p1}}" hint-placeholder-val="{{ true }}">
-      <section class="card" aria-labelledby="s1">
-        <h2 id="s1" class="t15 b" style="font-size: 20px; margin-bottom: 14px">Qual exame?</h2>
-        <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar exame</span><input type="search" placeholder="Ex.: ultrassom de abdome, eco, Doppler" value="{{busca}}" onChange="{{onBusca}}"></label>
-        <div class="lbl" style="margin: 16px 0 8px">{{rotLista}}</div>
-        <div class="col" style="gap: 8px">
-          <sc-for list="{{exames}}" as="e" hint-placeholder-count="5">
-            <button class="{{e.cls}}" aria-pressed="{{e.sel}}" onClick="{{e.pick}}"><span style="flex: 1; min-width: 0"><span class="t15 b" style="display: block">{{e.t}}</span><span class="t13 mute">{{e.s}}</span></span><span class="t14 b num">{{e.preco}}</span></button>
-          </sc-for>
-        </div>
-        <sc-if value="{{semExame}}" hint-placeholder-val="{{ false }}"><p class="t14 mute" style="margin: 12px 0 0">Não achamos esse exame. Ligue para (48) 0000-0000 que a gente ajuda.</p></sc-if>
-        <p class="t13 mute" style="margin: 14px 0 0">Tomografia com contraste e alguns exames só são marcados pela central, porque precisam de avaliação antes.</p>
-      </section>
-    </sc-if>
-
-    <sc-if value="{{p2}}" hint-placeholder-val="{{ false }}">
-      <section class="card" aria-labelledby="s2">
-        <h2 id="s2" class="t15 b" style="font-size: 20px; margin-bottom: 14px">Como vai pagar?</h2>
-        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 10px">
-          <button class="{{partCls}}" aria-pressed="{{partSel}}" onClick="{{escPart}}"><span style="flex: 1"><span class="t15 b" style="display: block">Particular</span><span class="t13 mute">{{precoPart}} · paga no dia, PIX ou cartão</span></span></button>
-          <button class="{{convCls}}" aria-pressed="{{convSel}}" onClick="{{escConv}}"><span style="flex: 1"><span class="t15 b" style="display: block">Convênio</span><span class="t13 mute">Unimed, Bradesco Saúde, SulAmérica, Amil, Petrobras</span></span></button>
-        </div>
-        <sc-if value="{{ehConv}}" hint-placeholder-val="{{ true }}">
-          <div class="col" style="gap: 12px; margin-top: 16px">
-            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px">
-              <label class="field">Operadora<select class="in"><option>Unimed</option><option>Bradesco Saúde</option><option>SulAmérica</option><option>Amil</option><option>Petrobras</option></select></label>
-              <label class="field">Número da carteirinha<input class="in num" inputmode="numeric" placeholder="Como está no cartão"></label>
-            </div>
-            <div class="row wrap" style="gap: 10px">
-              <sc-if value="{{semFoto}}" hint-placeholder-val="{{ true }}"><button class="btn" onClick="{{tirarFoto}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>Fotografar o pedido médico</button></sc-if>
-              <sc-if value="{{temFoto}}" hint-placeholder-val="{{ false }}"><span class="chip c-green" style="height: 32px">Pedido médico recebido · foto legível</span></sc-if>
-            </div>
-            <div class="banner info"><div class="t14" style="line-height: 1.5"><b>Alguns exames precisam de autorização do convênio.</b> A gente pede por você e confirma pelo WhatsApp antes do dia. Se não sair a tempo, você escolhe: remarcar ou fazer particular.</div></div>
+    <section class="card pane" style="padding: 0" aria-live="polite">
+      <sc-if value="{{p1}}" hint-placeholder-val="{{ true }}">
+        <div class="scroll" style="padding: 22px">
+          <h2 class="h2">Qual exame?</h2>
+          <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar exame</span><input type="search" placeholder="Ex.: ultrassom de abdome, eco, Doppler" value="{{busca}}" onChange="{{onBusca}}"></label>
+          <div class="t14 b" style="margin: 16px 0 8px">{{rotLista}}</div>
+          <div class="col" style="gap: 8px">
+            <sc-for list="{{exames}}" as="e" hint-placeholder-count="5">
+              <button class="{{e.cls}}" aria-pressed="{{e.sel}}" onClick="{{e.pick}}"><span style="flex: 1; min-width: 0"><span class="t15 b" style="display: block">{{e.t}}</span><span class="t13 mute">{{e.s}}</span></span><span class="t14 b num">{{e.preco}}</span></button>
+            </sc-for>
           </div>
-        </sc-if>
-        <div class="row" style="gap: 10px; margin-top: 18px"><button class="btn" onClick="{{voltar}}">Voltar</button><div class="grow"></div><button class="btn btn-p" disabled="{{bloq2}}" onClick="{{avancar}}">Continuar</button></div>
-        <sc-if value="{{bloq2}}" hint-placeholder-val="{{ false }}"><p class="t13 mute" style="margin: 8px 0 0; text-align: right">Para convênio, fotografe o pedido médico.</p></sc-if>
-      </section>
-    </sc-if>
-
-    <sc-if value="{{p3}}" hint-placeholder-val="{{ false }}">
-      <section class="card" aria-labelledby="s3">
-        <div class="row" style="margin-bottom: 14px"><h2 id="s3" class="t15 b grow" style="font-size: 20px">Dia e horário</h2><button class="icon-btn" aria-label="Semana anterior" style="width: 40px; height: 40px">‹</button><button class="icon-btn" aria-label="Próxima semana" style="width: 40px; height: 40px">›</button></div>
-        <div class="grid" role="radiogroup" aria-label="Dia" style="grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px">
-          <sc-for list="{{dias}}" as="d" hint-placeholder-count="6"><button class="{{d.cls}}" role="radio" aria-checked="{{d.sel}}" aria-label="{{d.aria}}" disabled="{{d.off}}" onClick="{{d.pick}}"><span class="t12">{{d.sem}}</span><b>{{d.n}}</b></button></sc-for>
+          <sc-if value="{{semExame}}" hint-placeholder-val="{{ false }}"><p class="t14 mute" style="margin: 12px 0 0">Não achamos esse exame. Ligue para (48) 0000-0000 que a gente ajuda.</p></sc-if>
         </div>
-        <div class="t13 mute" style="margin: 16px 0 8px">{{rotHoras}}</div>
-        <div class="grid" role="radiogroup" aria-label="Horário" style="grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px">
-          <sc-for list="{{horas}}" as="h" hint-placeholder-count="6"><button class="{{h.cls}}" role="radio" aria-checked="{{h.sel}}" onClick="{{h.pick}}">{{h.t}}</button></sc-for>
+        <div class="foot"><span class="t13 mute">Tomografia com contraste é marcada pela central, porque precisa de avaliação antes.</span></div>
+      </sc-if>
+
+      <sc-if value="{{p2}}" hint-placeholder-val="{{ false }}">
+        <div class="scroll" style="padding: 22px">
+          <h2 class="h2">Como vai pagar?</h2>
+          <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+            <button class="{{partCls}}" aria-pressed="{{partSel}}" onClick="{{escPart}}"><span style="flex: 1"><span class="t15 b" style="display: block">Particular</span><span class="t13 mute">{{precoPart}}, paga no dia por PIX ou cartão</span></span></button>
+            <button class="{{convCls}}" aria-pressed="{{convSel}}" onClick="{{escConv}}"><span style="flex: 1"><span class="t15 b" style="display: block">Convênio</span><span class="t13 mute">Unimed, Bradesco Saúde, SulAmérica, Amil, Petrobras</span></span></button>
+          </div>
+          <sc-if value="{{ehConv}}" hint-placeholder-val="{{ true }}">
+            <div class="col" style="gap: 12px; margin-top: 16px">
+              <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+                <label class="field">Operadora<select class="in"><option>Unimed</option><option>Bradesco Saúde</option><option>SulAmérica</option><option>Amil</option><option>Petrobras</option></select></label>
+                <label class="field">Número da carteirinha<input class="in num" inputmode="numeric" placeholder="Como está no cartão"></label>
+              </div>
+              <div class="row" style="gap: 10px">
+                <sc-if value="{{semFoto}}" hint-placeholder-val="{{ true }}"><button class="btn" onClick="{{tirarFoto}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>Fotografar o pedido médico</button></sc-if>
+                <sc-if value="{{temFoto}}" hint-placeholder-val="{{ false }}"><span class="t14" style="color: #1F7A4D; font-weight: 600">Pedido médico recebido, foto legível</span></sc-if>
+              </div>
+              <div class="banner info"><div class="t14" style="line-height: 1.5">Se o exame precisar de autorização, a clínica pede ao convênio e confirma pelo WhatsApp antes do dia. Se não sair a tempo, você escolhe remarcar ou fazer particular.</div></div>
+            </div>
+          </sc-if>
         </div>
-        <p class="t13 mute" style="margin: 12px 0 0">Só aparecem horários livres de verdade. Ao escolher, seguramos o horário para você por 10 minutos.</p>
-        <div class="row" style="gap: 10px; margin-top: 18px"><button class="btn" onClick="{{voltar}}">Voltar</button><div class="grow"></div><button class="btn btn-p" disabled="{{bloq3}}" onClick="{{avancar}}">Continuar</button></div>
-      </section>
-    </sc-if>
+        <div class="foot"><button class="btn" onClick="{{voltar}}">Voltar</button><div class="grow"></div><sc-if value="{{bloq2}}" hint-placeholder-val="{{ false }}"><span class="t13 mute">Para convênio, fotografe o pedido médico.</span></sc-if><button class="btn btn-p" disabled="{{bloq2}}" onClick="{{avancar}}">Continuar</button></div>
+      </sc-if>
 
-    <sc-if value="{{p4}}" hint-placeholder-val="{{ false }}">
-      <section class="card" aria-labelledby="s4">
-        <h2 id="s4" class="t15 b" style="font-size: 20px; margin-bottom: 4px">Quem vai fazer o exame?</h2>
-        <p class="t14 mute" style="margin: 0 0 14px">Nome e nascimento confirmam que é a pessoa certa no dia.</p>
-        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px">
-          <label class="field" style="grid-column: 1 / -1">Nome completo<input class="in" value="{{nome}}" onChange="{{onNome}}" autocomplete="name"></label>
-          <label class="field">Data de nascimento<input class="in num" value="{{nasc}}" onChange="{{onNasc}}" placeholder="dd/mm/aaaa" inputmode="numeric" autocomplete="bday"></label>
-          <label class="field">Celular com WhatsApp<input class="in num" value="{{cel}}" onChange="{{onCel}}" placeholder="(00) 00000-0000" inputmode="tel" autocomplete="tel"></label>
-          <label class="field">CPF<input class="in num" placeholder="000.000.000-00" inputmode="numeric"><span class="t12 mute" style="font-weight: 400">{{cpfNota}}</span></label>
+      <sc-if value="{{p3}}" hint-placeholder-val="{{ false }}">
+        <div class="scroll" style="padding: 22px">
+          <div class="row" style="margin-bottom: 14px"><h2 class="h2 grow" style="margin: 0">Dia e horário</h2>
+            <button class="icon-btn" aria-label="Semana anterior" style="width: 40px; height: 40px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
+            <button class="icon-btn" aria-label="Próxima semana" style="width: 40px; height: 40px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+          </div>
+          <div class="grid" role="radiogroup" aria-label="Dia" style="grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px">
+            <sc-for list="{{dias}}" as="d" hint-placeholder-count="6"><button class="{{d.cls}}" role="radio" aria-checked="{{d.sel}}" aria-label="{{d.aria}}" disabled="{{d.off}}" onClick="{{d.pick}}"><span class="t12">{{d.sem}}</span><b>{{d.n}}</b></button></sc-for>
+          </div>
+          <div class="t14 mute" style="margin: 18px 0 8px">{{rotHoras}}</div>
+          <div class="grid" role="radiogroup" aria-label="Horário" style="grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px">
+            <sc-for list="{{horas}}" as="h" hint-placeholder-count="6"><button class="{{h.cls}}" role="radio" aria-checked="{{h.sel}}" onClick="{{h.pick}}">{{h.t}}</button></sc-for>
+          </div>
+          <p class="t13 mute" style="margin: 14px 0 0">Ao escolher, o horário fica reservado para você por 10 minutos.</p>
         </div>
-        <label class="row t14" style="gap: 10px; margin-top: 14px; cursor: pointer"><input type="checkbox" checked="{{zap}}" onChange="{{tgZap}}" style="width: 20px; height: 20px">Quero receber confirmação e preparo pelo WhatsApp</label>
-        <div class="row" style="gap: 10px; margin-top: 18px"><button class="btn" onClick="{{voltar}}">Voltar</button><div class="grow"></div><button class="btn btn-p" disabled="{{bloq4}}" onClick="{{avancar}}">Continuar</button></div>
-        <sc-if value="{{bloq4}}" hint-placeholder-val="{{ false }}"><p class="t13 mute" style="margin: 8px 0 0; text-align: right">Preencha nome, nascimento e celular.</p></sc-if>
-      </section>
-    </sc-if>
+        <div class="foot"><button class="btn" onClick="{{voltar}}">Voltar</button><div class="grow"></div><button class="btn btn-p" disabled="{{bloq3}}" onClick="{{avancar}}">Continuar</button></div>
+      </sc-if>
 
-    <sc-if value="{{p5}}" hint-placeholder-val="{{ false }}">
-      <section class="card" aria-labelledby="s5">
-        <h2 id="s5" class="t15 b" style="font-size: 20px; margin-bottom: 4px">Preparo do exame</h2>
-        <p class="t14 mute" style="margin: 0 0 14px">Leia antes de confirmar. Sem o preparo, o exame pode ter de ser remarcado.</p>
-        <div class="col" style="gap: 0">
-          <sc-for list="{{preparo}}" as="x" hint-placeholder-count="3"><div class="li"><span class="ni k-blue">{{x.n}}</span><div class="t15" style="flex: 1; line-height: 1.5">{{x.t}}</div></div></sc-for>
+      <sc-if value="{{p4}}" hint-placeholder-val="{{ false }}">
+        <div class="scroll" style="padding: 22px">
+          <h2 class="h2" style="margin-bottom: 4px">Quem vai fazer o exame?</h2>
+          <p class="t14 mute" style="margin: 0 0 14px">Nome e nascimento confirmam que é a pessoa certa no dia.</p>
+          <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+            <label class="field" style="grid-column: 1 / -1">Nome completo<input class="in" value="{{nome}}" onChange="{{onNome}}" autocomplete="name"></label>
+            <label class="field">Data de nascimento<input class="in num" value="{{nasc}}" onChange="{{onNasc}}" placeholder="dd/mm/aaaa" inputmode="numeric" autocomplete="bday"></label>
+            <label class="field">Celular com WhatsApp<input class="in num" value="{{cel}}" onChange="{{onCel}}" placeholder="(00) 00000-0000" inputmode="tel" autocomplete="tel"></label>
+            <label class="field">CPF<input class="in num" placeholder="000.000.000-00" inputmode="numeric"><span class="t12 mute" style="font-weight: 400">{{cpfNota}}</span></label>
+          </div>
+          <label class="row t14" style="gap: 10px; margin-top: 14px; cursor: pointer"><input type="checkbox" checked="{{zap}}" onChange="{{tgZap}}" style="width: 20px; height: 20px">Quero receber confirmação e preparo pelo WhatsApp</label>
         </div>
-        <label class="row t14" style="gap: 10px; margin-top: 14px; cursor: pointer"><input type="checkbox" checked="{{leu}}" onChange="{{tgLeu}}" style="width: 20px; height: 20px">Li o preparo e consigo seguir</label>
-        <div class="row" style="gap: 10px; margin-top: 18px"><button class="btn" onClick="{{voltar}}">Voltar</button><div class="grow"></div><button class="btn btn-p" disabled="{{bloq5}}" onClick="{{confirmar}}">Confirmar agendamento</button></div>
-      </section>
-    </sc-if>
+        <div class="foot"><button class="btn" onClick="{{voltar}}">Voltar</button><div class="grow"></div><sc-if value="{{bloq4}}" hint-placeholder-val="{{ false }}"><span class="t13 mute">Preencha nome, nascimento e celular.</span></sc-if><button class="btn btn-p" disabled="{{bloq4}}" onClick="{{avancar}}">Continuar</button></div>
+      </sc-if>
 
-    <sc-if value="{{p6}}" hint-placeholder-val="{{ false }}">
-      <section class="card" aria-labelledby="s6" style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 32px 22px">
-        <span class="ni k-green" style="width: 56px; height: 56px; border-radius: 18px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="width: 28px; height: 28px"><path d="M5 12l5 5 9-10"></path></svg></span>
-        <h2 id="s6" style="font-size: 24px">Exame agendado</h2>
-        <div class="t15" style="line-height: 1.6">{{exNome}}<br><b>{{quando}}</b><br>Unidade Centro · Rua Exemplo, 100</div>
-        <div style="padding: 12px 20px; border-radius: 14px; background: #F6F7F9"><div class="lbl">Código do agendamento</div><div class="num" style="font-size: 26px; font-weight: 700; letter-spacing: .08em">AG-7K3M-2Q</div></div>
-        <sc-if value="{{zap}}" hint-placeholder-val="{{ true }}"><p class="t14 mute" style="margin: 0">Enviamos a confirmação e o preparo no WhatsApp {{celMask}}. Um dia antes, mandamos um lembrete.</p></sc-if>
-        <sc-if value="{{ehConvFim}}" hint-placeholder-val="{{ false }}"><div class="banner off" style="text-align: left"><div class="t14" style="line-height: 1.5"><b>Aguardando autorização do convênio.</b> Já pedimos. Você recebe a resposta no WhatsApp; se não sair até a véspera, oferecemos remarcar ou fazer particular.</div></div></sc-if>
-        <div class="row wrap" style="gap: 10px; justify-content: center; margin-top: 4px"><a class="btn btn-p" href="Portal-Web.dc.html">Acompanhar no Meu VidaCor</a><button class="btn">Adicionar à agenda do celular</button><button class="btn" onClick="{{reiniciar}}">Agendar outro exame</button></div>
-      </section>
-    </sc-if>
+      <sc-if value="{{p5}}" hint-placeholder-val="{{ false }}">
+        <div class="scroll" style="padding: 22px">
+          <h2 class="h2" style="margin-bottom: 4px">Preparo do exame</h2>
+          <p class="t14 mute" style="margin: 0 0 10px">Sem o preparo, o exame pode ter de ser remarcado.</p>
+          <ol style="margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 10px">
+            <sc-for list="{{preparo}}" as="x" hint-placeholder-count="3"><li class="t15" style="line-height: 1.5">{{x.t}}</li></sc-for>
+          </ol>
+          <label class="row t14" style="gap: 10px; margin-top: 18px; cursor: pointer"><input type="checkbox" checked="{{leu}}" onChange="{{tgLeu}}" style="width: 20px; height: 20px">Li o preparo e consigo seguir</label>
+        </div>
+        <div class="foot"><button class="btn" onClick="{{voltar}}">Voltar</button><div class="grow"></div><button class="btn btn-p" disabled="{{bloq5}}" onClick="{{confirmar}}">Confirmar agendamento</button></div>
+      </sc-if>
 
-    <p class="t13 mute" style="margin: 0; text-align: center; line-height: 1.5">Seus dados são usados só para o agendamento e o exame (LGPD). <a href="Portal-Web.dc.html">Política de privacidade</a></p>
-    <p class="t12 mute" style="margin: 0; text-align: center">Mockup · dados fictícios · VidaCor Imagem</p>
+      <sc-if value="{{p6}}" hint-placeholder-val="{{ false }}">
+        <div class="scroll" style="padding: 32px 28px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px">
+          <h2 style="font-size: 24px">Exame agendado</h2>
+          <div class="t15" style="line-height: 1.6">{{exNome}}<br><b>{{quando}}</b><br>Unidade Centro, Rua Exemplo, 100</div>
+          <div style="padding: 12px 20px; border-radius: 14px; background: #F6F7F9"><div class="t13 mute">Código do agendamento</div><div class="num" style="font-size: 26px; font-weight: 700; letter-spacing: .08em">AG-7K3M-2Q</div></div>
+          <sc-if value="{{zap}}" hint-placeholder-val="{{ true }}"><p class="t14 mute" style="margin: 0">Confirmação e preparo enviados no WhatsApp {{celMask}}. Um dia antes, mandamos um lembrete.</p></sc-if>
+          <sc-if value="{{ehConvFim}}" hint-placeholder-val="{{ false }}"><div class="banner off" style="text-align: left"><div class="t14" style="line-height: 1.5">Aguardando autorização do convênio. Já pedimos; a resposta chega no WhatsApp. Se não sair até a véspera, oferecemos remarcar ou fazer particular.</div></div></sc-if>
+        </div>
+        <div class="foot" style="justify-content: center"><a class="btn btn-p" href="Portal-Web.dc.html">Acompanhar no Meu VidaCor</a><button class="btn">Adicionar à agenda</button><button class="btn" onClick="{{reiniciar}}">Agendar outro</button></div>
+      </sc-if>
+    </section>
+
+    <aside class="card pane" aria-label="Resumo">
+      <h2 class="t15 b" style="margin-bottom: 12px">Resumo</h2>
+      <div class="scroll">
+        <dl class="kv" style="margin: 0; grid-template-columns: 96px minmax(0, 1fr)">
+          <dt>Exame</dt><dd>{{rs.ex}}</dd>
+          <dt>Pagamento</dt><dd>{{rs.pag}}</dd>
+          <dt>Quando</dt><dd>{{rs.quando}}</dd>
+          <dt>Onde</dt><dd>Unidade Centro</dd>
+        </dl>
+      </div>
+      <p class="t13 mute" style="margin: 0; padding-top: 12px; border-top: 1px solid #E8EAEF; line-height: 1.5">Seus dados servem só para o agendamento e o exame (LGPD). <a href="Portal-Web.dc.html">Política de privacidade</a></p>
+    </aside>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
@@ -158,13 +167,13 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state;
     const EX = [
-      { id: 'abd', t: 'Ultrassom de abdome total', s: '30 min · jejum de 8 h', p: 'R$ 280,00', top: 1, prep: ['Jejum de 8 horas, inclusive de chiclete e café.', 'Pode beber água até 2 h antes.', 'Traga exames anteriores, se tiver.'] },
-      { id: 'eco', t: 'Ecocardiograma', s: '40 min · sem preparo', p: 'R$ 380,00', top: 1, prep: ['Não precisa de jejum.', 'Venha com roupa fácil de abrir na frente.', 'Tome seus remédios normalmente.'] },
-      { id: 'obs', t: 'Ultrassom obstétrico', s: '30 min · bexiga cheia até 12 semanas', p: 'R$ 260,00', top: 1, prep: ['Até 12 semanas: beba 4 copos de água 1 h antes e não urine.', 'Depois de 12 semanas não precisa.', 'Pode trazer um acompanhante.'] },
-      { id: 'dop', t: 'Doppler de carótidas', s: '40 min · sem preparo', p: 'R$ 320,00', top: 1, prep: ['Não precisa de jejum.', 'Evite colar e gola alta.', 'Tome seus remédios normalmente.'] },
-      { id: 'tir', t: 'Ultrassom de tireoide', s: '20 min · sem preparo', p: 'R$ 190,00', top: 0, prep: ['Não precisa de jejum.', 'Evite colar.'] },
-      { id: 'erg', t: 'Teste ergométrico', s: '45 min · tênis e roupa leve', p: 'R$ 190,00', top: 0, prep: ['Venha de tênis e roupa leve.', 'Refeição leve até 2 h antes.', 'Não pare nenhum remédio por conta própria.'] },
-      { id: 'rxt', t: 'Raio X de tórax', s: '10 min · sem preparo', p: 'R$ 90,00', top: 0, prep: ['Não precisa de preparo.', 'Gestante ou suspeita de gravidez: avise antes.'] }
+      { id: 'abd', t: 'Ultrassom de abdome total', s: '30 min, jejum de 8 horas', p: 'R$ 280,00', top: 1, prep: ['Jejum de 8 horas, inclusive de chiclete e café.', 'Pode beber água até 2 h antes.', 'Traga exames anteriores, se tiver.'] },
+      { id: 'eco', t: 'Ecocardiograma', s: '40 min, sem preparo', p: 'R$ 380,00', top: 1, prep: ['Não precisa de jejum.', 'Venha com roupa fácil de abrir na frente.', 'Tome seus remédios normalmente.'] },
+      { id: 'obs', t: 'Ultrassom obstétrico', s: '30 min, bexiga cheia até 12 semanas', p: 'R$ 260,00', top: 1, prep: ['Até 12 semanas: beba 4 copos de água 1 h antes e não urine.', 'Depois de 12 semanas não precisa.', 'Pode trazer um acompanhante.'] },
+      { id: 'dop', t: 'Doppler de carótidas', s: '40 min, sem preparo', p: 'R$ 320,00', top: 1, prep: ['Não precisa de jejum.', 'Evite colar e gola alta.', 'Tome seus remédios normalmente.'] },
+      { id: 'tir', t: 'Ultrassom de tireoide', s: '20 min, sem preparo', p: 'R$ 190,00', top: 0, prep: ['Não precisa de jejum.', 'Evite colar.'] },
+      { id: 'erg', t: 'Teste ergométrico', s: '45 min, tênis e roupa leve', p: 'R$ 190,00', top: 0, prep: ['Venha de tênis e roupa leve.', 'Refeição leve até 2 h antes.', 'Não pare nenhum remédio por conta própria.'] },
+      { id: 'rxt', t: 'Raio X de tórax', s: '10 min, sem preparo', p: 'R$ 90,00', top: 0, prep: ['Não precisa de preparo.', 'Gestante ou suspeita de gravidez: avise antes.'] }
     ];
     const q = (s.busca || '').toLowerCase().trim();
     const lista = q ? EX.filter(e => e.t.toLowerCase().indexOf(q) >= 0) : EX.filter(e => e.top);
@@ -174,14 +183,11 @@ class Component extends DCLogic {
     const H = { 16: ['07:30', '09:00', '14:00'], 17: ['07:30', '08:15', '09:00', '10:30', '14:00', '15:45'], 18: ['10:30', '16:20'], 20: ['07:30', '08:15', '11:00', '13:30'], 21: ['08:00', '08:40'] };
     const semNome = { 16: 'segunda', 17: 'terça', 18: 'quarta', 19: 'quinta', 20: 'sexta', 21: 'sábado' };
     const go = n => this.setState({ passo: n });
-    const resumo = [];
-    if (ex && s.passo > 1) resumo.push(ex.t);
-    if (s.passo > 2) resumo.push(s.pag === 'conv' ? 'Convênio' : 'Particular · ' + ex.p);
-    if (s.passo > 3 && s.hora) resumo.push(semNome[s.dia] + ', ' + s.dia + '/11 às ' + s.hora);
+    const rs = { ex: ex ? ex.t : 'A escolher', pag: s.passo > 2 ? (s.pag === 'conv' ? 'Convênio' : 'Particular, ' + ex.p) : 'A escolher', quando: s.passo > 2 && s.hora ? semNome[s.dia] + ', ' + s.dia + '/11 às ' + s.hora : 'A escolher' };
     const cel = s.cel || '';
     return {
-      passos: T.map((t, i) => { const n = i + 1; return { t, n: n < s.passo ? '✓' : String(n), cls: 'stp' + (n === s.passo ? ' on' : (n < s.passo ? ' ok' : '')), atual: n === s.passo ? 'step' : 'false' }; }),
-      temResumo: resumo.length > 0 && s.passo < 6, resumo,
+      passos: T.map((t, i) => { const n = i + 1; return { t, n: String(n), cls: 'stp' + (n === s.passo ? ' on' : (n < s.passo ? ' ok' : '')), atual: n === s.passo ? 'step' : 'false' }; }),
+      rs,
       p1: s.passo === 1, p2: s.passo === 2, p3: s.passo === 3, p4: s.passo === 4, p5: s.passo === 5, p6: s.passo === 6,
       busca: s.busca, onBusca: e => this.setState({ busca: e.target.value }),
       rotLista: q ? 'Resultados' : 'Mais procurados',
@@ -199,7 +205,7 @@ class Component extends DCLogic {
       bloq3: !s.hora,
       nome: s.nome, nasc: s.nasc, cel: s.cel,
       onNome: e => this.setState({ nome: e.target.value }), onNasc: e => this.setState({ nasc: e.target.value }), onCel: e => this.setState({ cel: e.target.value }),
-      cpfNota: s.pag === 'conv' ? 'Obrigatório para convênio' : 'Opcional · só para a nota fiscal',
+      cpfNota: s.pag === 'conv' ? 'Obrigatório para convênio' : 'Opcional, só para a nota fiscal',
       zap: s.zap, tgZap: () => this.setState({ zap: !s.zap }),
       bloq4: !(s.nome.trim() && s.nasc.trim() && s.cel.trim()),
       preparo: (ex ? ex.prep : []).map((t, i) => ({ t, n: String(i + 1) })),
@@ -207,7 +213,7 @@ class Component extends DCLogic {
       voltar: () => go(Math.max(1, s.passo - 1)), avancar: () => go(s.passo + 1),
       confirmar: () => go(6),
       exNome: ex ? ex.t : '', quando: s.hora ? semNome[s.dia] + ', ' + s.dia + ' de novembro às ' + s.hora : '',
-      celMask: cel ? '•••• ' + cel.slice(-4) : 'informado',
+      celMask: cel ? 'terminado em ' + cel.slice(-4) : 'informado',
       ehConvFim: s.pag === 'conv',
       reiniciar: () => this.setState({ passo: 1, ex: '', hora: '', leu: false, foto: false, busca: '' })
     };

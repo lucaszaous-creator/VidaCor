@@ -2,116 +2,203 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<title>Novo agendamento · guia — VidaCor</title>
+<title>Novo agendamento com guia — VidaCor</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style>body{margin:0;background:#F2F3F6}
-.sp{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:12px;min-width:0}
-.sp.cur{background:#EEF3FA}
-.ck{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:13px;font-weight:700}
-.ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.todo{background:#fff;border:1.5px solid #CBD2DC;color:#8A93A3}.ck.cur{background:#0A1A4A;color:#fff}.ck.warn{background:#FFF3DF;color:#9A5B00}
-.vl{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:1px solid #F1F3F6}.vl:last-child{border-bottom:0}
-.fs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px}
-.att{display:flex;gap:10px;align-items:center;border:1px solid #E3E7ED;border-radius:12px;padding:10px 12px;background:#fff}
-.thumb{width:44px;height:56px;border-radius:6px;background:linear-gradient(180deg,#F1F3F6,#E3E7ED);display:flex;align-items:center;justify-content:center;font-size:10px;color:#5B6474;flex:none}
+<style>
+body{margin:0;background:#F2F3F6}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.sp{display:flex;gap:10px;align-items:center;padding:8px 12px;border-radius:12px;min-width:0}
+.sp.cur{background:#fff;box-shadow:0 1px 2px rgba(15,23,42,.05)}
+.ck{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:12px;font-weight:700}
+.ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.todo{border:1.5px solid #CBD2DC;color:#8A93A3}.ck.cur{background:#0A1A4A;color:#fff}
+.vl{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;align-items:start;padding:10px 0;border-bottom:1px solid #F1F3F6}
+.vl:last-child{border-bottom:0}
+.vi{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.vi.ok{background:#E5F5EC;color:#1F7A4D}.vi.at{background:#FFF3DF;color:#9A5B00}.vi.no{background:#FDEEF1;color:#C2334D}
+.fs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.att{display:flex;gap:12px;align-items:center;border:1px solid #E3E7ED;border-radius:12px;padding:10px 12px;background:#fff}
+.doc{width:36px;height:44px;border-radius:6px;background:#F1F3F6;border:1px solid #E3E7ED;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#5B6474;flex:none}
+.sub-h{font-size:15px;font-weight:600;margin:0 0 10px}
+.tabs.tbi{margin:-4px -18px 0;padding:0 8px;flex-wrap:nowrap}
+.tabs.tbi button{white-space:nowrap;padding:0 12px}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="agenda" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="agenda" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <a class="t14 b" href="Agenda.dc.html">← Agenda</a>
-      <h1 style="font-size: 24px; font-weight: 650; margin-left: 12px">Novo agendamento</h1>
-      <div class="grow"></div>
-      <span class="t13 mute">Rascunho salvo · reserva do horário por 10 min</span>
-    </div>
-    <ol class="card" style="list-style: none; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; padding: 10px" aria-label="Etapas do agendamento"><li class="sp ok"><span class="ck ok">✓</span><div style="min-width:0"><div class="t14 b">Paciente</div><div class="t12 mute clamp1">Antônio Carlos Ribeiro · 15/06/1954</div></div></li><li class="sp ok"><span class="ck ok">✓</span><div style="min-width:0"><div class="t14 b">Exame e horário</div><div class="t12 mute clamp1">Eco + Doppler · 12/11 08:30 · Sala 1</div></div></li><li class="sp cur"><span class="ck cur">3</span><div style="min-width:0"><div class="t14 b">Convênio e guia</div><div class="t12 mute clamp1"></div></div></li><li class="sp todo"><span class="ck todo">4</span><div style="min-width:0"><div class="t14 b">Preparo e confirmação</div><div class="t12 mute clamp1"></div></div></li></ol>
+    <header class="row wrap" style="gap: 14px">
+      <a class="btn btn-sm btn-g" href="Agenda.dc.html" style="padding: 0 10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>Agenda</a>
+      <div style="flex: 1 1 auto; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Novo agendamento</h1>
+        <div class="t13 mute" style="margin-top: 2px">Antônio Carlos Ribeiro, 15/06/1954. Eco e Doppler de carótidas em 12/11 às 08:30, Sala 1.</div>
+      </div>
+      <span class="t13 mute">Rascunho salvo. Horário reservado por 10 min.</span>
+    </header>
 
-    <div class="split">
-      <section class="card main" aria-labelledby="g-h" style="padding: 24px 28px">
-        <div class="row wrap" style="gap: 12px">
-          <div><h2 id="g-h" style="font-size: 20px; font-weight: 650">Convênio e guia de autorização</h2>
-          <p class="t14 mute" style="margin: 4px 0 0">A VidaCor só atende convênio com a guia já autorizada. Sem guia, o horário fica só como reserva provisória.</p></div>
-          <div class="grow"></div>
-          <div class="seg" role="radiogroup" aria-label="Forma de pagamento"><button class="on" role="radio" aria-checked="true">Convênio</button><button role="radio" aria-checked="false">Particular</button></div>
+    <ol class="steps" aria-label="Etapas do agendamento">
+      <li class="sp"><span class="ck ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="t14">Paciente</span><span class="sr">concluída</span></li>
+      <li class="sp"><span class="ck ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="t14">Exame e horário</span><span class="sr">concluída</span></li>
+      <li class="sp cur" aria-current="step"><span class="ck cur">3</span><span class="t14 b">Convênio e guia</span></li>
+      <li class="sp"><span class="ck todo">4</span><span class="t14 mute">Preparo e confirmação</span></li>
+    </ol>
+
+    <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .5fr); gap: 16px">
+      <section class="card pane" aria-label="Convênio e guia">
+        <div class="row" style="gap: 12px; padding-bottom: 12px">
+          <h2 style="font-size: 17px; font-weight: 600; flex: 1">Convênio e guia de autorização</h2>
+          <div class="seg" role="radiogroup" aria-label="Forma de pagamento">
+            <sc-for list="{{formas}}" as="f" hint-placeholder-count="2"><button class="{{f.cls}}" role="radio" aria-checked="{{f.on}}" onClick="{{f.ir}}" style="height: 36px">{{f.t}}</button></sc-for>
+          </div>
         </div>
 
-        <h3 class="lbl" style="margin: 22px 0 10px">Beneficiário</h3>
-        <div class="fs">
-          <label class="field">Operadora<select class="in"><option>Unimed Costa do Sol</option></select></label>
-          <label class="field">Plano<input class="in" value="Unimed Pleno · Apartamento"></label>
-          <label class="field">Carteirinha<input class="in num" value="0 064 123456789012 3"></label>
-          <label class="field">Validade da carteirinha<input class="in" value="12/2027"></label>
-        </div>
+        <sc-if value="{{convenio}}" hint-placeholder-val="{{ true }}">
+          <nav class="tabs tbi" aria-label="Seções da guia" style="margin-top: 0">
+            <sc-for list="{{abas}}" as="a" hint-placeholder-count="4"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for>
+          </nav>
+          <div class="scroll" style="padding-top: 16px">
+            <sc-if value="{{abaGuia}}" hint-placeholder-val="{{ true }}">
+              <h3 class="sub-h">Beneficiário</h3>
+              <div class="fs" style="grid-template-columns: repeat(2, minmax(0, 1fr))">
+                <label class="field">Operadora<select class="in"><option>Unimed Costa do Sol</option><option>Bradesco Saúde</option><option>SulAmérica</option></select></label>
+                <label class="field">Plano<input class="in" value="Unimed Pleno, apartamento"></label>
+                <label class="field">Carteirinha<input class="in num" value="0 064 123456789012 3"></label>
+                <label class="field">Validade da carteirinha<input class="in num" value="12/2027"></label>
+              </div>
+              <h3 class="sub-h" style="margin-top: 22px">Guia de autorização</h3>
+              <div class="fs">
+                <label class="field">Nº da guia na operadora<input class="in num" value="4471230"></label>
+                <label class="field">Senha de autorização<input class="in num" value="UN-88231-X"></label>
+                <label class="field">Data da autorização<input class="in num" value="30/10/2026"></label>
+                <label class="field">Senha válida até<input class="in num" value="20/11/2026"></label>
+                <label class="field">Caráter do atendimento<select class="in"><option>Eletivo</option><option>Urgência</option></select></label>
+                <label class="field">Tipo de guia TISS<select class="in"><option>SP/SADT</option></select></label>
+              </div>
+            </sc-if>
+            <sc-if value="{{abaProc}}" hint-placeholder-val="{{ false }}">
+              <table class="tb">
+                <thead><tr><th class="nw">TUSS</th><th>Procedimento</th><th class="r nw">Autorizado</th><th class="r nw">Agendado</th><th class="r nw">Saldo</th></tr></thead>
+                <tbody>
+                  <tr><td class="num nw">40901114</td><td>Ecocardiograma transtorácico</td><td class="r num">1</td><td class="r num">1</td><td class="r num">0</td></tr>
+                  <tr><td class="num nw">40901300</td><td>Doppler colorido de carótidas</td><td class="r num">1</td><td class="r num">1</td><td class="r num">0</td></tr>
+                </tbody>
+              </table>
+              <p class="t13 mute" style="margin: 14px 0 0">Saldo conferido pelo servidor com a autorização da operadora. A quantidade não é editável aqui.</p>
+            </sc-if>
+            <sc-if value="{{abaSol}}" hint-placeholder-val="{{ false }}">
+              <div class="fs">
+                <label class="field">Médico solicitante<input class="in" value="Dr. Hugo Lemos"></label>
+                <label class="field">CRM e UF<input class="in num" value="000000, RJ"></label>
+                <label class="field">CBO<input class="in num" value="225120, cardiologista"></label>
+                <label class="field">Data do pedido<input class="in num" value="28/10/2026"></label>
+                <label class="field">CID-10, se a operadora exigir<input class="in" value="I10, hipertensão essencial"></label>
+                <label class="field">Indicação clínica<input class="in" value="Controle de HAS; avaliar função"></label>
+              </div>
+            </sc-if>
+            <sc-if value="{{abaAnx}}" hint-placeholder-val="{{ false }}">
+              <div class="col" style="gap: 10px">
+                <sc-for list="{{anexos}}" as="x" hint-placeholder-count="2">
+                  <div class="att"><span class="doc">PDF</span><div style="flex: 1; min-width: 0"><div class="t14 b">{{x.t}}</div><div class="t13 mute">{{x.s}}</div></div><span class="t12 mute num">{{x.h}}</span></div>
+                </sc-for>
+                <button class="btn btn-sm" style="align-self: flex-start" onClick="{{anexar}}">Fotografar ou anexar</button>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
 
-        <h3 class="lbl" style="margin: 24px 0 10px">Guia de autorização</h3>
-        <div class="fs">
-          <label class="field">Nº da guia na operadora<input class="in num" value="4471230"></label>
-          <label class="field">Senha de autorização<input class="in num" value="UN-88231-X"></label>
-          <label class="field">Data da autorização<input class="in" value="30/10/2026"></label>
-          <label class="field">Senha válida até<input class="in" value="20/11/2026"></label>
-          <label class="field">Caráter do atendimento<select class="in"><option>Eletivo</option></select></label>
-          <label class="field">Tipo de guia TISS<select class="in"><option>SP/SADT</option></select></label>
-        </div>
+        <sc-if value="{{particular}}" hint-placeholder-val="{{ false }}">
+          <div class="scroll" style="padding-top: 8px">
+            <dl class="kv" style="margin: 0">
+              <dt>Procedimentos</dt><dd>Ecocardiograma transtorácico e Doppler de carótidas</dd>
+              <dt>Valor</dt><dd class="num">R$ 640,00, calculado pela tabela particular vigente</dd>
+              <dt>Desconto</dt><dd>Só com autorização da coordenação, no caixa</dd>
+            </dl>
+            <p class="t13 mute" style="margin: 14px 0 0">O valor é definido pelo servidor e cobrado no check-in. Não é digitado nesta tela.</p>
+          </div>
+        </sc-if>
 
-        <h3 class="lbl" style="margin: 24px 0 10px">Procedimentos autorizados</h3>
-        <div class="scroll-x"><table class="tb"><thead><tr><th>Código TUSS</th><th>Procedimento</th><th class="r">Autorizado</th><th class="r">Neste agendamento</th><th class="r">Saldo</th></tr></thead><tbody>
-          <tr><td class="num nw">40901114</td><td>Ecocardiograma transtorácico</td><td class="r num">1</td><td class="r num">1</td><td class="r num">0</td></tr>
-          <tr><td class="num nw">40901300</td><td>Doppler colorido de carótidas</td><td class="r num">1</td><td class="r num">1</td><td class="r num">0</td></tr>
-        </tbody></table></div>
+        <sc-if value="{{temMsg}}" hint-placeholder-val="{{ false }}">
+          <div class="{{msgCls}}" role="status" style="margin-top: 12px"><div class="t14" style="line-height: 1.5">{{msg}}</div></div>
+        </sc-if>
 
-        <h3 class="lbl" style="margin: 24px 0 10px">Solicitante</h3>
-        <div class="fs">
-          <label class="field">Médico solicitante<input class="in" value="Dr. Hugo Lemos"></label>
-          <label class="field">CRM / UF<input class="in" value="[000000] / RJ"></label>
-          <label class="field">CBO<input class="in" value="225120 · Cardiologista"></label>
-          <label class="field">Data do pedido<input class="in" value="28/10/2026"></label>
-          <label class="field">CID-10 (se a operadora exigir)<input class="in" value="I10 · Hipertensão essencial"></label>
-          <label class="field">Indicação clínica<input class="in" value="Controle de HAS; avaliar função"></label>
-        </div>
-
-        <h3 class="lbl" style="margin: 24px 0 10px">Anexos</h3>
-        <div class="row wrap" style="gap: 10px">
-          <div class="att"><span class="thumb">PDF</span><div><div class="t14 b">Pedido médico</div><div class="t12 mute">foto · 28/10 · SHA-256 3f9a…c21</div></div></div>
-          <div class="att"><span class="thumb">PDF</span><div><div class="t14 b">Autorização Unimed</div><div class="t12 mute">PDF do portal · 30/10 · SHA-256 a71d…09e</div></div></div>
-          <button class="btn btn-sm">+ Fotografar ou anexar</button>
+        <div class="row wrap" style="gap: 10px; padding-top: 14px; margin-top: 12px; border-top: 1px solid #E8EAEF">
+          <span class="t13 mute" style="flex: 1 1 140px">{{rodape}}</span>
+          <a class="btn" href="Agenda.dc.html">Voltar</a>
+          <sc-if value="{{convenio}}" hint-placeholder-val="{{ true }}"><button class="btn" onClick="{{semGuia}}">Reservar sem guia (48 h)</button></sc-if>
+          <button class="btn btn-p" onClick="{{continuar}}">Continuar</button>
         </div>
       </section>
 
-      <aside class="aside col" style="gap: 16px; flex: 0 1 380px; min-width: 340px">
-        <section class="card" aria-labelledby="v-h">
-          <h2 id="v-h" style="font-size: 16px; font-weight: 600; margin-bottom: 4px">Conferência automática</h2>
-          <ul style="list-style: none; margin: 0; padding: 0"><li class="vl"><span class="ck ok">✓</span><div><div class="t14">Carteirinha confere com o paciente</div><div class="t12 mute">0 064 123456789012 3 · válida até 12/2027</div></div></li><li class="vl"><span class="ck ok">✓</span><div><div class="t14">Elegível hoje</div><div class="t12 mute">consultado na Unimed às 10:14</div></div></li><li class="vl"><span class="ck ok">✓</span><div><div class="t14">Procedimentos autorizados cobrem o agendado</div><div class="t12 mute">TUSS 40901114 e 40901300 · 1 de cada</div></div></li><li class="vl"><span class="ck ok">✓</span><div><div class="t14">Senha válida na data do exame</div><div class="t12 mute">válida até 20/11 · exame em 12/11</div></div></li><li class="vl"><span class="ck ok">✓</span><div><div class="t14">Guia ainda não usada</div><div class="t12 mute">nenhum outro atendimento com esta guia</div></div></li><li class="vl"><span class="ck warn">!</span><div><div class="t14">Pedido médico com mais de 30 dias?</div><div class="t12 mute">emitido em 28/10 · dentro do prazo da Unimed (60 dias)</div></div></li></ul>
-        </section>
-        <section class="card" aria-labelledby="l-h" style="background: #F6F8FB; box-shadow: none">
-          <h2 id="l-h" style="font-size: 15px; font-weight: 600">Lastro desta guia</h2>
-          <div class="t13" style="margin-top: 8px; line-height: 1.6">Digitada por <b>Ana Souza</b> · Guichê 2 · 10:16<br>Elegibilidade: protocolo <span class="num">ELG-77120</span><br>Vai ligar: agendamento → check-in → exame (ACC) → guia TISS → lote → pagamento</div>
-          <a class="t14 b" href="Lastro.dc.html" style="display: inline-block; margin-top: 8px">Ver no explorador de lastro</a>
-        </section>
-        <section class="card" aria-label="Sem guia" style="border: 1px dashed #F3C98B; box-shadow: none">
-          <div class="t14 b">Ainda sem guia?</div>
-          <p class="t13 mute" style="margin: 6px 0 10px">O horário vira <b>reserva provisória por 48 h</b>. O paciente recebe pelo WhatsApp o pedido para enviar a autorização. Sem guia até o prazo, a vaga é liberada e oferecida à lista de espera.</p>
-          <button class="btn btn-sm">Reservar sem guia (48 h)</button>
-        </section>
+      <aside class="card pane" aria-label="Conferência automática">
+        <h2 style="font-size: 17px; font-weight: 600; padding-bottom: 4px">Conferência automática</h2>
+        <div class="scroll">
+          <ul style="list-style: none; margin: 0; padding: 0">
+            <sc-for list="{{checks}}" as="c" hint-placeholder-count="6">
+              <li class="vl">
+                <span class="{{c.cls}}">
+                  <sc-if value="{{c.ok}}" hint-placeholder-val="{{ true }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></sc-if>
+                  <sc-if value="{{c.at}}" hint-placeholder-val="{{ false }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M12 5v9M12 18.5v.5"></path></svg></sc-if>
+                </span>
+                <div><div class="t14">{{c.t}}</div><div class="t13 mute">{{c.s}}</div><span class="sr">{{c.sr}}</span></div>
+              </li>
+            </sc-for>
+          </ul>
+        </div>
+        <div style="border-top: 1px solid #E8EAEF; padding-top: 12px">
+          <dl class="kv" style="margin: 0; grid-template-columns: 96px minmax(0, 1fr); font-size: 13px">
+            <dt>Digitada por</dt><dd>Ana Souza, Guichê 2, 10:16</dd>
+            <dt>Elegibilidade</dt><dd class="num">Protocolo ELG-77120</dd>
+          </dl>
+          <a class="t13 b" href="Lastro.dc.html" style="display: inline-block; margin-top: 8px">Ver no explorador de lastro</a>
+        </div>
       </aside>
-    </div>
-
-    <div class="row wrap" style="gap: 12px; background: #fff; border-radius: 18px; padding: 14px 20px; box-shadow: 0 1px 2px rgba(15,23,42,.05)">
-      <span class="t14 mute" style="flex: 1 1 300px">A guia fica reservada para este agendamento: outro atendimento não consegue usá-la.</span>
-      <button class="btn">Voltar</button>
-      <button class="btn btn-p">Continuar para preparo e confirmação</button>
     </div>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1600}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = { forma: 'conv', aba: 'guia', msg: '', anexos: 2 };
+  }
+  renderVals() {
+    const s = this.state;
+    const conv = s.forma === 'conv';
+    const ok = (t, sub) => ({ t, s: sub, cls: 'vi ok', ok: true, at: false, sr: 'conferido' });
+    const at = (t, sub) => ({ t, s: sub, cls: 'vi at', ok: false, at: true, sr: 'atenção' });
+    const C = conv ? [
+      ok('Carteirinha confere com o paciente', 'Válida até 12/2027'),
+      ok('Elegível hoje', 'Consultado na Unimed às 10:14'),
+      ok('Procedimentos autorizados cobrem o agendado', 'TUSS 40901114 e 40901300, 1 de cada'),
+      ok('Senha válida na data do exame', 'Válida até 20/11, exame em 12/11'),
+      ok('Guia ainda não usada', 'Nenhum outro atendimento com esta guia'),
+      at('Pedido médico de 28/10', 'Dentro do prazo da Unimed, que aceita até 60 dias')
+    ] : [
+      ok('Paciente identificado', 'Antônio Carlos Ribeiro, 15/06/1954'),
+      ok('Valor pela tabela particular vigente', 'Versão 2026.11, calculado pelo servidor'),
+      at('Orçamento ainda não aceito', 'O paciente aceita no check-in ou pelo WhatsApp')
+    ];
+    const AX = [['Pedido médico', 'Foto, 28/10', 'SHA-256 3f9a c21'], ['Autorização Unimed', 'PDF do portal, 30/10', 'SHA-256 a71d 09e'], ['Carteirinha frente e verso', 'Foto, hoje 10:17', 'SHA-256 5be0 7f2']];
+    return {
+      formas: [['conv', 'Convênio'], ['part', 'Particular']].map(([k, t]) => ({ t, cls: s.forma === k ? 'on' : '', on: s.forma === k ? 'true' : 'false', ir: () => this.setState({ forma: k, msg: '' }) })),
+      convenio: conv, particular: !conv,
+      abas: [['guia', 'Beneficiário e guia'], ['proc', 'Procedimentos 2'], ['sol', 'Solicitante'], ['anx', 'Anexos ' + s.anexos]].map(([k, t]) => ({ t, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      abaGuia: s.aba === 'guia', abaProc: s.aba === 'proc', abaSol: s.aba === 'sol', abaAnx: s.aba === 'anx',
+      anexos: AX.slice(0, s.anexos).map(([t, sub, h]) => ({ t, s: sub, h })),
+      anexar: () => this.setState(p => ({ anexos: Math.min(3, p.anexos + 1) })),
+      checks: C,
+      rodape: conv ? 'A guia fica presa a este agendamento.' : 'Particular: o valor aparece no check-in, já calculado.',
+      temMsg: s.msg !== '', msg: s.msg === 'sem' ? 'Reserva provisória criada até 09/11 às 10:16. O paciente recebeu pelo WhatsApp o pedido para enviar a autorização. Sem guia até lá, a vaga volta para a lista de espera.' : 'Guia 4471230 reservada para este agendamento. Próxima etapa: preparo e confirmação.',
+      msgCls: s.msg === 'sem' ? 'banner off' : 'banner ok',
+      semGuia: () => this.setState({ msg: 'sem' }), continuar: () => this.setState({ msg: 'ok' })
+    };
+  }
 }
 </script>
 </body>

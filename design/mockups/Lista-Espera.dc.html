@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Lista de espera</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
@@ -12,125 +12,165 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
-.vg{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border:1px solid #E8EAEF;border-radius:16px;background:#fff;text-align:left;font:inherit;color:inherit;cursor:pointer;min-height:56px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:0}
+.kpi{padding:12px 18px;border-left:1px solid #E8EAEF;min-width:0}
+.kpi:first-child{border-left:0}
+.kpi .v{font-size:24px;font-weight:650;letter-spacing:-.02em;line-height:1.2;font-variant-numeric:tabular-nums}
+.vg{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center;width:100%;padding:12px 14px;border:1px solid #E8EAEF;border-radius:14px;background:#fff;text-align:left;font:inherit;color:inherit;cursor:pointer}
 .vg:hover{border-color:#B8C2D3}
-.vg.sel{border:2px solid #0A1A4A;background:#F7F9FD}
-.sug{border:1px solid #E8EAEF;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
-.sug.top{border:2px solid #1F7A4D}
+.vg.sel{border-color:#0A1A4A;box-shadow:0 0 0 1px #0A1A4A;background:#F7F9FD}
+.sug{border:1px solid #E8EAEF;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.sug.top{border-color:#1F7A4D;box-shadow:0 0 0 1px #1F7A4D}
 .sug.fora{background:#F8F9FB}
-.ck{display:inline-flex;align-items:center;gap:6px;font-size:13px}
+.pos{width:28px;font-size:15px;font-weight:650;color:#334155;font-variant-numeric:tabular-nums;flex:none}
+.cks{list-style:none;margin:0;padding:0 0 0 40px;display:flex;flex-wrap:wrap;gap:4px 18px}
+.cks li{display:flex;align-items:center;gap:6px;font-size:13px;color:#334155}
+.ci{width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.ci.ok{background:#E5F5EC;color:#1F7A4D}.ci.at{background:#FFF3DF;color:#9A5B00}.ci.no{background:#FDEEF1;color:#C2334D}
+.pane-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-bottom:12px}
+.pane-h h2{font-size:17px;font-weight:600}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="espera" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="espera" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <div class="crumb"><a href="Agenda.dc.html">Agenda</a><span aria-hidden="true">›</span><b>Lista de espera e encaixe</b></div>
-      <div class="grow"></div>
-      <span class="t13 mute">Sábado, 07/11/2026 · 10:20 · Carla Mendes</span>
-    </div>
-
-    <div class="page-h">
-      <div class="grow"><h1>Lista de espera</h1><p>Quando uma vaga abre, o sistema sugere quem encaixar por prioridade clínica, preparo possível a tempo e validade da guia.</p></div>
-      <button class="btn">Incluir paciente na espera</button>
-    </div>
-
-    <div class="grid g4">
-      <div class="card row" style="gap: 14px; padding: 18px"><span class="ni k-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg></span><div><div class="lbl">Aguardando vaga</div><div class="t15 b">23 pacientes</div></div></div>
-      <div class="card row" style="gap: 14px; padding: 18px"><span class="ni k-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"></rect><path d="M4 10h16M9 3v4M15 3v4"></path></svg></span><div><div class="lbl">Vagas abertas hoje</div><div class="t15 b">3 vagas</div></div></div>
-      <div class="card row" style="gap: 14px; padding: 18px"><span class="ni k-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><div><div class="lbl">Ofertas aguardando</div><div class="t15 b">{{nAguardando}}</div></div></div>
-      <div class="card row" style="gap: 14px; padding: 18px"><span class="ni k-rose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 9v4M12 17h.01M10.3 3.9L2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg></span><div><div class="lbl">Guias vencendo em 7 dias</div><div class="t15 b">4 pacientes</div></div></div>
-    </div>
-
-    <section class="card" aria-labelledby="h-vagas">
-      <div class="card-h"><div class="grow"><h2 id="h-vagas">Vagas que abriram hoje</h2><div class="sub">Cancelamentos e desistências · a vaga fica reservada enquanto a oferta aguarda resposta</div></div></div>
-      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 10px">
-        <sc-for list="{{vagas}}" as="v" hint-placeholder-count="3">
-          <button class="{{v.cls}}" onClick="{{v.abrir}}" aria-current="{{v.atual}}">
-            <span class="ni {{v.k}}" style="font-weight: 700; font-size: 12px">{{v.sala}}</span>
-            <span style="flex: 1; min-width: 0"><span class="t15 b" style="display: block">{{v.hora}} · {{v.dur}}</span><span class="t13 mute" style="display: block">{{v.tipo}} · {{v.orig}}</span></span>
-            <span class="{{v.stCls}}" style="height: 24px; font-size: 12px">{{v.st}}</span>
-          </button>
-        </sc-for>
+    <header class="row wrap" style="gap: 14px">
+      <div style="flex: 1 1 auto; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Lista de espera</h1>
+        <div class="t13 mute" style="margin-top: 2px">Sábado, 7 de novembro, 10:20. Carla Mendes, recepção.</div>
       </div>
+      <a class="btn" href="Agenda.dc.html">Ver agenda</a>
+      <button class="btn btn-p">Incluir paciente na espera</button>
+    </header>
 
-      <div class="col" style="gap: 12px; margin-top: 18px">
-        <div class="row wrap" style="gap: 10px"><div class="grow"><div class="t15 b">Sugestões para {{vaga.sala}} às {{vaga.hora}}</div><div class="t13 mute">Ordem calculada pelo servidor: prioridade clínica, preparo possível até o horário, validade da guia e preferência do paciente</div></div>
-          <div class="row" style="gap: 8px"><span class="lbl">Prazo de resposta</span><div class="seg" role="group" aria-label="Prazo de resposta"><sc-for list="{{prazos}}" as="p" hint-placeholder-count="3"><button class="{{p.cls}}" aria-pressed="{{p.p}}" onClick="{{p.ir}}">{{p.t}}</button></sc-for></div></div>
-        </div>
+    <section class="card kpis" aria-label="Resumo">
+      <div class="kpi"><div class="t13 mute">Aguardando vaga</div><div class="v">23</div></div>
+      <div class="kpi"><div class="t13 mute">Vagas abertas hoje</div><div class="v">3</div></div>
+      <div class="kpi"><div class="t13 mute">Ofertas aguardando resposta</div><div class="v">{{nAguardando}}</div></div>
+      <div class="kpi"><div class="t13 mute">Guias vencendo em 7 dias</div><div class="v" style="color: #C2334D">4</div></div>
+    </section>
 
-        <sc-if value="{{ofertaAguardando}}" hint-placeholder-val="{{ false }}">
-          <div class="banner info" role="status" style="flex-wrap: wrap"><div class="t14" style="line-height: 1.5; flex: 1 1 320px"><b>Aguardando resposta de {{ofertado.nome}} ({{ofertado.nasc}}).</b> Mensagem enviada às 10:22 pelo WhatsApp; ela tem até {{limite}} para responder. A vaga fica reservada para ela até lá. Sem resposta, oferecemos ao próximo da lista automaticamente.</div>
-            <div class="row" style="gap: 8px"><button class="btn btn-sm" onClick="{{semResposta}}">Simular: não respondeu</button><button class="btn btn-sm btn-p" onClick="{{aceitou}}">Simular: aceitou</button></div></div>
-        </sc-if>
-        <sc-if value="{{ofertaAceita}}" hint-placeholder-val="{{ false }}">
-          <div class="banner ok" role="status"><div class="t14" style="line-height: 1.5"><b>Encaixado: {{ofertado.nome}} ({{ofertado.nasc}}) · {{vaga.sala}} às {{vaga.hora}}.</b> Saiu da lista de espera, recebeu o preparo no WhatsApp e a guia foi reservada para este atendimento. Registrado no lastro.</div></div>
-        </sc-if>
-        <sc-if value="{{ofertaExpirou}}" hint-placeholder-val="{{ false }}">
-          <div class="banner off" role="status"><div class="t14" style="line-height: 1.5"><b>{{ofertado.nome}} não respondeu no prazo.</b> Ela continua na lista de espera, na mesma posição. A vaga voltou a ficar livre: ofereça ao próximo abaixo.</div></div>
-        </sc-if>
+    <nav class="tabs" aria-label="Visão">
+      <sc-for list="{{abas}}" as="a" hint-placeholder-count="2"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}} <span class="mute" style="font-weight: 500">{{a.n}}</span></button></sc-for>
+    </nav>
 
-        <sc-for list="{{sugestoes}}" as="g" hint-placeholder-count="3">
-          <div class="{{g.cls}}">
-            <div class="row wrap" style="gap: 12px">
-              <span class="ni {{g.k}}" style="font-weight: 700; font-size: 13px">{{g.pos}}</span>
-              <div style="flex: 1 1 240px; min-width: 0"><div class="t15 b">{{g.nome}} <span class="mute" style="font-weight: 500">· {{g.nasc}}</span></div><div class="t13 mute">{{g.exame}} · na espera desde {{g.desde}}</div></div>
-              <span class="{{g.prioCls}}">{{g.prio}}</span>
-            </div>
-            <div class="row wrap" style="gap: 6px 16px"><sc-for list="{{g.checks}}" as="c" hint-placeholder-count="3"><span class="ck"><span class="{{c.cls}}" style="height: 22px; font-size: 12px">{{c.st}}</span>{{c.t}}</span></sc-for></div>
-            <sc-if value="{{g.podeOferecer}}" hint-placeholder-val="{{ true }}">
-              <div class="row wrap" style="gap: 8px"><button class="btn btn-sm btn-p" onClick="{{g.oferecer}}">Oferecer vaga pelo WhatsApp ({{prazoTxt}})</button><button class="btn btn-sm" onClick="{{g.manual}}">Encaixe manual</button></div>
+    <sc-if value="{{abaVagas}}" hint-placeholder-val="{{ true }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, .62fr) minmax(0, 1fr); gap: 16px">
+        <section class="card pane" aria-labelledby="h-vagas">
+          <div class="pane-h"><h2 id="h-vagas">Vagas que abriram hoje</h2></div>
+          <div class="scroll" style="display: flex; flex-direction: column; gap: 10px">
+            <sc-for list="{{vagas}}" as="v" hint-placeholder-count="3">
+              <button class="{{v.cls}}" onClick="{{v.abrir}}" aria-current="{{v.atual}}">
+                <span class="t15 b num">{{v.hora}}, {{v.sala}}</span>
+                <span class="{{v.stCls}}" style="grid-row: span 2">{{v.st}}</span>
+                <span class="t13" style="color: #334155">{{v.tipo}}, {{v.dur}}</span>
+                <span class="t13 mute" style="grid-column: 1 / -1">{{v.orig}}</span>
+              </button>
+            </sc-for>
+          </div>
+          <div class="t13 mute" style="padding-top: 10px; border-top: 1px solid #E8EAEF">A vaga fica reservada enquanto a oferta aguarda resposta.</div>
+        </section>
+
+        <section class="card pane" aria-labelledby="h-sug">
+          <div class="pane-h">
+            <h2 id="h-sug" style="flex: 1 1 auto">Sugestões para {{vaga.sala}} às {{vaga.hora}}</h2>
+            <span class="t13 mute">Prazo de resposta</span>
+            <div class="seg" role="group" aria-label="Prazo de resposta"><sc-for list="{{prazos}}" as="p" hint-placeholder-count="3"><button class="{{p.cls}}" aria-pressed="{{p.p}}" onClick="{{p.ir}}" style="height: 34px; padding: 0 12px; font-size: 13px">{{p.t}}</button></sc-for></div>
+          </div>
+          <div class="scroll" style="display: flex; flex-direction: column; gap: 12px">
+            <div class="t13 mute">Ordem calculada pelo servidor: prioridade clínica, preparo possível até o horário, validade da guia e preferência do paciente.</div>
+            <sc-if value="{{ofertaAguardando}}" hint-placeholder-val="{{ false }}">
+              <div class="banner info" role="status" style="flex-wrap: wrap"><div class="t14" style="line-height: 1.5; flex: 1 1 320px"><b>Aguardando resposta de {{ofertado.nome}} ({{ofertado.nasc}}).</b> Mensagem enviada às 10:22 pelo WhatsApp, com prazo até {{limite}}. A vaga fica reservada até lá. Sem resposta, oferecemos ao próximo da lista.</div>
+                <div class="row" style="gap: 8px"><button class="btn btn-sm" onClick="{{semResposta}}">Simular: não respondeu</button><button class="btn btn-sm btn-p" onClick="{{aceitou}}">Simular: aceitou</button></div></div>
+            </sc-if>
+            <sc-if value="{{ofertaAceita}}" hint-placeholder-val="{{ false }}">
+              <div class="banner ok" role="status"><div class="t14" style="line-height: 1.5"><b>Encaixado: {{ofertado.nome}} ({{ofertado.nasc}}), {{vaga.sala}} às {{vaga.hora}}.</b> Saiu da lista de espera, recebeu o preparo no WhatsApp e a guia foi reservada para este atendimento. Registrado no lastro.</div></div>
+            </sc-if>
+            <sc-if value="{{ofertaExpirou}}" hint-placeholder-val="{{ false }}">
+              <div class="banner off" role="status"><div class="t14" style="line-height: 1.5"><b>{{ofertado.nome}} não respondeu no prazo.</b> Continua na lista de espera, na mesma posição. A vaga voltou a ficar livre: ofereça ao próximo abaixo.</div></div>
+            </sc-if>
+
+            <sc-for list="{{sugestoes}}" as="g" hint-placeholder-count="3">
+              <article class="{{g.cls}}">
+                <div class="row" style="gap: 12px; align-items: flex-start">
+                  <span class="pos">{{g.pos}}</span>
+                  <div style="flex: 1 1 auto; min-width: 0"><div class="t15 b">{{g.nome}}</div><div class="t13 mute"><span class="num">{{g.nasc}}</span>, {{g.exame}}, na espera desde {{g.desde}}</div></div>
+                  <span class="{{g.prioCls}}">{{g.prio}}</span>
+                </div>
+                <ul class="cks">
+                  <sc-for list="{{g.checks}}" as="c" hint-placeholder-count="3">
+                    <li>
+                      <span class="{{c.cls}}">
+                        <sc-if value="{{c.ok}}" hint-placeholder-val="{{ true }}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></sc-if>
+                        <sc-if value="{{c.at}}" hint-placeholder-val="{{ false }}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" aria-hidden="true"><path d="M12 5v9M12 18.5v.5"></path></svg></sc-if>
+                        <sc-if value="{{c.no}}" hint-placeholder-val="{{ false }}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></sc-if>
+                      </span>
+                      <span class="sr">{{c.st}}:</span>{{c.t}}
+                    </li>
+                  </sc-for>
+                </ul>
+                <sc-if value="{{g.podeOferecer}}" hint-placeholder-val="{{ true }}">
+                  <div class="row wrap" style="gap: 8px; padding-left: 40px"><button class="btn btn-sm btn-p" onClick="{{g.oferecer}}">Oferecer pelo WhatsApp</button><button class="btn btn-sm" onClick="{{g.manual}}">Encaixe manual</button></div>
+                </sc-if>
+              </article>
+            </sc-for>
+
+            <sc-if value="{{manualAberto}}" hint-placeholder-val="{{ false }}">
+              <div style="border: 1px solid #E9B44C; background: #FFFBF3; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+                <div class="t15 b">Encaixe manual: {{manual.nome}}, {{manual.nasc}}</div>
+                <div class="grid" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+                  <label class="field">Sala<select class="in"><option>Sala 2, Voluson E10</option><option>Sala 3, Voluson E8</option></select></label>
+                  <label class="field">Horário<input class="in num" value="11:10"></label>
+                  <label class="field">Motivo do encaixe<input class="in" value="Pedido da Dra. Renata, 37 semanas"></label>
+                </div>
+                <div class="t14" style="line-height: 1.5; color: #5A3A00">A Sala 2 já está 12 min atrasada. Este encaixe de 30 min deve atrasar os próximos 4 pacientes em cerca de 25 min. Eles serão avisados pelo WhatsApp.</div>
+                <div class="row wrap" style="gap: 8px"><button class="btn btn-sm" onClick="{{fecharManual}}">Cancelar</button><button class="btn btn-sm btn-p" onClick="{{confirmarManual}}">Encaixar {{manual.nome}} às 11:10</button></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{manualFeito}}" hint-placeholder-val="{{ false }}">
+              <div class="toast" role="status"><span style="flex: 1">Encaixe feito na Sala 2 às 11:10 por Carla Mendes. Os 4 pacientes seguintes foram avisados do atraso. Registrado no lastro.</span></div>
             </sc-if>
           </div>
-        </sc-for>
+        </section>
+      </div>
+    </sc-if>
 
-        <sc-if value="{{manualAberto}}" hint-placeholder-val="{{ false }}">
-          <div style="border: 2px solid #9A5B00; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
-            <div class="t15 b">Encaixe manual · {{manual.nome}} ({{manual.nasc}})</div>
-            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 12px">
-              <label class="field">Sala<select class="in"><option>Sala 2 · Voluson E10</option><option>Sala 3 · Voluson E8</option></select></label>
-              <label class="field">Horário<input class="in num" value="11:10"></label>
-              <label class="field">Motivo do encaixe<input class="in" value="Pedido da Dra. Renata · gestante 37 semanas"></label>
-            </div>
-            <div class="banner off"><div class="t14" style="line-height: 1.5"><b>Impacto na sala:</b> a Sala 2 já está 12 min atrasada. Este encaixe (30 min) deve atrasar os próximos 4 pacientes em cerca de 25 min. Eles serão avisados pelo WhatsApp e o painel da recepção mostra o novo tempo de espera.</div></div>
-            <div class="row wrap" style="gap: 8px"><button class="btn btn-sm" onClick="{{fecharManual}}">Cancelar</button><button class="btn btn-sm btn-p" onClick="{{confirmarManual}}">Encaixar {{manual.nome}} às 11:10</button></div>
+    <sc-if value="{{abaLista}}" hint-placeholder-val="{{ false }}">
+      <div class="fill" style="display: flex; flex-direction: column">
+        <section class="card pane" aria-labelledby="h-lista" style="padding: 0; flex: 1 1 auto">
+          <div class="pane-h" style="padding: 14px 18px 12px">
+            <h2 id="h-lista" style="flex: 1 1 auto">Aguardando vaga</h2>
+            <span class="t13 mute">Por prioridade clínica e tempo de espera</span>
+            <div class="seg" role="group" aria-label="Filtrar por prioridade"><sc-for list="{{filtros}}" as="f" hint-placeholder-count="4"><button class="{{f.cls}}" aria-pressed="{{f.p}}" onClick="{{f.ir}}" style="height: 34px; padding: 0 12px; font-size: 13px">{{f.t}}</button></sc-for></div>
           </div>
-        </sc-if>
-        <sc-if value="{{manualFeito}}" hint-placeholder-val="{{ false }}">
-          <div class="toast" role="status"><span style="flex: 1">Encaixe feito na Sala 2 às 11:10 por Carla Mendes · 4 pacientes avisados do atraso · registrado no lastro</span></div>
-        </sc-if>
+          <div class="scroll" style="border-top: 1px solid #E8EAEF">
+            <table class="tb sticky">
+              <thead><tr><th style="padding-left: 18px">Paciente</th><th>Exame e preferência</th><th>Prioridade</th><th>Convênio e guia</th></tr></thead>
+              <tbody>
+                <sc-for list="{{lista}}" as="p" hint-placeholder-count="7">
+                  <tr><td style="padding-left: 18px"><div class="b">{{p.nome}}</div><div class="t13 mute num">{{p.nasc}}, na espera desde {{p.desde}}</div></td>
+                    <td><div class="t14">{{p.exame}}</div><div class="t13 mute">{{p.pref}}</div></td>
+                    <td><span class="{{p.prioCls}}">{{p.prio}}</span></td>
+                    <td><div class="t14">{{p.conv}}</div><div class="t13" style="{{p.guiaSt}}">{{p.guia}}</div></td></tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
-    </section>
-
-    <section class="card" aria-labelledby="h-lista">
-      <div class="card-h"><div class="grow"><h2 id="h-lista">Aguardando vaga</h2><div class="sub">Ordenado por prioridade clínica e depois por tempo de espera</div></div>
-        <div class="seg" role="group" aria-label="Filtrar por prioridade"><sc-for list="{{filtros}}" as="f" hint-placeholder-count="4"><button class="{{f.cls}}" aria-pressed="{{f.p}}" onClick="{{f.ir}}">{{f.t}}</button></sc-for></div>
-      </div>
-      <table class="tb">
-        <thead><tr><th>Paciente</th><th>Exame e preferência</th><th>Prioridade</th><th>Convênio e guia</th></tr></thead>
-        <tbody>
-          <sc-for list="{{lista}}" as="p" hint-placeholder-count="6">
-            <tr><td><span class="b">{{p.nome}}</span><div class="t13 mute">Nasc. {{p.nasc}} · espera desde {{p.desde}}</div></td>
-              <td><span class="t14">{{p.exame}}</span><div class="t13 mute">{{p.pref}}</div></td>
-              <td><span class="{{p.prioCls}}">{{p.prio}}</span></td>
-              <td><span class="t14">{{p.conv}}</span><div class="t13" style="{{p.guiaSt}}">{{p.guia}}</div></td></tr>
-          </sc-for>
-        </tbody>
-      </table>
-    </section>
-    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+    </sc-if>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { vaga: 'v1', prazo: 20, oferta: {}, quem: {}, manual: '', manualFeito: false, filtro: 'todos' };
+    this.state = { aba: 'vagas', vaga: 'v1', prazo: 20, oferta: {}, quem: {}, manual: '', manualFeito: false, filtro: 'todos' };
   }
   renderVals() {
     const s = this.state;
-    const ok = t => ({ t, st: 'OK', cls: 'chip c-green' }), at = t => ({ t, st: 'Atenção', cls: 'chip c-amber' }), no = t => ({ t, st: 'Não dá', cls: 'chip c-rose' });
+    const ok = t => ({ t, st: 'OK', cls: 'ci ok', ok: true, at: false, no: false }), at = t => ({ t, st: 'Atenção', cls: 'ci at', ok: false, at: true, no: false }), no = t => ({ t, st: 'Não dá', cls: 'ci no', ok: false, at: false, no: true });
     const P = {
       ju: { nome: 'Juliana Sampaio Rocha', nasc: '12/04/1993', exame: 'USG obstétrica', desde: '04/11', prio: 'Gestante', prioCls: 'chip c-violet' },
       ve: { nome: 'Vera Lúcia Antunes', nasc: '18/09/1957', exame: 'USG de tireoide', desde: '29/10', prio: 'Rotina', prioCls: 'chip' },
@@ -141,12 +181,12 @@ class Component extends DCLogic {
       lu: { nome: 'Lúcia Fernandes Prado', nasc: '02/07/1959', exame: 'TC de abdome com contraste', desde: '02/11', prio: 'Oncológico', prioCls: 'chip c-rose' }
     };
     const V = [
-      { id: 'v1', sala: 'Sala 2', hora: '14:30', dur: '30 min', tipo: 'USG', orig: 'Cancelou pelo WhatsApp às 09:58', k: 'k-violet',
+      { id: 'v1', sala: 'Sala 2', hora: '14:30', dur: '30 min', tipo: 'USG', orig: 'Cancelou pelo WhatsApp às 09:58',
         sug: [['ju', [ok('Sem preparo'), ok('Guia Unimed válida até 15/11'), ok('Prefere tarde')]], ['ve', [ok('Sem preparo'), ok('Particular'), at('Prefere manhã')]], ['so', [no('Jejum de 8 h não dá tempo até 14:30'), ok('Guia SulAmérica válida até 28/11')]]] },
-      { id: 'v2', sala: 'Sala 1', hora: '15:20', dur: '40 min', tipo: 'Ecocardiograma', orig: 'Remarcado pela paciente às 10:05', k: 'k-rose',
-        sug: [['an', [ok('Sem preparo'), at('Guia Bradesco vence em 09/11: encaixar hoje evita nova autorização'), ok('Qualquer horário')]], ['ma', [ok('Sem preparo'), ok('Particular · orçamento aceito'), ok('Prefere tarde')]]] },
-      { id: 'v3', sala: 'Sala 5', hora: '16:40', dur: '20 min', tipo: 'Tomografia', orig: 'Desistência às 08:40', k: 'k-indigo',
-        sug: [['ra', [ok('Sem contraste: sem preparo'), ok('Guia Amil válida até 30/11'), ok('Triagem de segurança completa')]], ['lu', [no('Alergia a iodo: pré-medicação de 13 h não cabe até 16:40'), ok('Guia Petrobras válida até 20/11')]]] }
+      { id: 'v2', sala: 'Sala 1', hora: '15:20', dur: '40 min', tipo: 'Ecocardiograma', orig: 'Remarcado pela paciente às 10:05',
+        sug: [['an', [ok('Sem preparo'), at('Guia Bradesco vence em 09/11: encaixar hoje evita nova autorização'), ok('Qualquer horário')]], ['ma', [ok('Sem preparo'), ok('Particular, orçamento aceito'), ok('Prefere tarde')]]] },
+      { id: 'v3', sala: 'Sala 6', hora: '16:40', dur: '20 min', tipo: 'Tomografia', orig: 'Desistência às 08:40',
+        sug: [['ra', [ok('Sem contraste, sem preparo'), ok('Guia Amil válida até 30/11'), ok('Triagem de segurança completa')]], ['lu', [no('Alergia a iodo: pré-medicação de 13 h não cabe até 16:40'), ok('Guia Petrobras válida até 20/11')]]] }
     ];
     const vaga = V.find(v => v.id === s.vaga);
     const ofv = s.oferta[vaga.id] || '';
@@ -162,36 +202,38 @@ class Component extends DCLogic {
       if (!fora) pos += 1;
       const pode = !fora && !ativa && !expirou;
       return { nome: p.nome, nasc: p.nasc, exame: p.exame, desde: p.desde, prio: p.prio, prioCls: p.prioCls, checks: expirou ? checks.concat([at('Não respondeu à oferta de hoje')]) : checks,
-        pos: fora ? '–' : String(pos), k: fora ? 'k-gray' : (pos === 1 ? 'k-green' : 'k-blue'),
+        pos: fora ? '' : pos + 'º',
         cls: 'sug' + (fora ? ' fora' : (pos === 1 && !expirou ? ' top' : '')), podeOferecer: pode,
         oferecer: () => setOf('aguardando', pid), manual: () => this.setState({ manual: pid, manualFeito: false }) };
     });
     const hhmm = m => { const t = 10 * 60 + 22 + m; return String(Math.floor(t / 60)).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0'); };
     const stOf = id => { const o = s.oferta[id] || ''; return o === 'aguardando' ? ['Aguardando resposta', 'chip c-amber'] : (o === 'aceito' ? ['Preenchida', 'chip c-green'] : ['Livre', 'chip c-blue']); };
     const L = [
-      ['ra', 'Qualquer dia · manhã ou tarde', 'Amil', 'Guia válida até 30/11', ''],
-      ['an', 'Seg a sex · qualquer horário', 'Bradesco Saúde', 'Guia vence em 09/11 (2 dias)', 'color: #C2334D; font-weight: 600'],
-      ['lu', 'Ter e qui · manhã', 'Petrobras', 'Guia válida até 20/11', ''],
-      ['ju', 'Qualquer dia · tarde', 'Unimed', 'Guia válida até 15/11', ''],
-      ['so', 'Sábado · manhã', 'SulAmérica', 'Guia válida até 28/11', ''],
-      ['ma', 'Seg e qua · tarde', 'Particular', 'Sem guia · orçamento ORC-2611-0042', ''],
-      ['ve', 'Qualquer dia · manhã', 'Particular', 'Sem guia', '']
+      ['ra', 'Qualquer dia, manhã ou tarde', 'Amil', 'Guia válida até 30/11', ''],
+      ['an', 'Segunda a sexta, qualquer horário', 'Bradesco Saúde', 'Guia vence em 09/11, em 2 dias', 'color: #C2334D; font-weight: 600'],
+      ['lu', 'Terça e quinta, manhã', 'Petrobras', 'Guia válida até 20/11', ''],
+      ['ju', 'Qualquer dia, tarde', 'Unimed', 'Guia válida até 15/11', ''],
+      ['so', 'Sábado, manhã', 'SulAmérica', 'Guia válida até 28/11', ''],
+      ['ma', 'Segunda e quarta, tarde', 'Particular', 'Sem guia, orçamento ORC-2611-0042', ''],
+      ['ve', 'Qualquer dia, manhã', 'Particular', 'Sem guia', '']
     ];
     const fl = { urgente: ['Urgente'], gestante: ['Gestante'], onco: ['Oncológico'] };
     const mp = s.manual ? P[s.manual] : { nome: '', nasc: '' };
     return {
       nAguardando: String(Object.keys(s.oferta).filter(k => s.oferta[k] === 'aguardando').length),
-      vagas: V.map(v => { const [st, stCls] = stOf(v.id); return { sala: v.sala.replace('Sala ', 'S'), hora: v.hora, dur: v.dur, tipo: v.tipo, orig: v.orig, k: v.k, st, stCls,
+      abas: [['vagas', 'Vagas de hoje', '3'], ['lista', 'Aguardando vaga', '23']].map(([k, t, n]) => ({ t, n, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      abaVagas: s.aba === 'vagas', abaLista: s.aba === 'lista',
+      vagas: V.map(v => { const [st, stCls] = stOf(v.id); return { sala: v.sala, hora: v.hora, dur: v.dur, tipo: v.tipo, orig: v.orig, st, stCls,
         cls: 'vg' + (v.id === s.vaga ? ' sel' : ''), atual: v.id === s.vaga ? 'true' : 'false', abrir: () => this.setState({ vaga: v.id, manual: '', manualFeito: false }) }; }),
       vaga: { sala: vaga.sala, hora: vaga.hora },
       prazos: [10, 20, 30].map(m => ({ t: m + ' min', cls: s.prazo === m ? 'on' : '', p: s.prazo === m ? 'true' : 'false', ir: () => this.setState({ prazo: m }) })),
-      prazoTxt: 'responder em ' + s.prazo + ' min', limite: hhmm(s.prazo),
+      prazoTxt: 'resposta em ' + s.prazo + ' min', limite: hhmm(s.prazo),
       ofertaAguardando: ofv === 'aguardando', ofertaAceita: ofv === 'aceito', ofertaExpirou: ofv === 'expirou', ofertado,
       aceitou: () => setOf('aceito'), semResposta: () => setOf('expirou'),
       sugestoes,
       manualAberto: s.manual !== '' && !s.manualFeito, manual: mp,
       fecharManual: () => this.setState({ manual: '' }), confirmarManual: () => this.setState({ manualFeito: true }), manualFeito: s.manualFeito,
-      filtros: [['todos', 'Todos · 23'], ['urgente', 'Urgente'], ['gestante', 'Gestante'], ['onco', 'Oncológico']].map(([k, t]) => ({ t, cls: s.filtro === k ? 'on' : '', p: s.filtro === k ? 'true' : 'false', ir: () => this.setState({ filtro: k }) })),
+      filtros: [['todos', 'Todos'], ['urgente', 'Urgente'], ['gestante', 'Gestante'], ['onco', 'Oncológico']].map(([k, t]) => ({ t, cls: s.filtro === k ? 'on' : '', p: s.filtro === k ? 'true' : 'false', ir: () => this.setState({ filtro: k }) })),
       lista: L.filter(([pid]) => s.filtro === 'todos' || fl[s.filtro].indexOf(P[pid].prio) >= 0).map(([pid, pref, conv, guia, guiaSt]) => { const p = P[pid];
         return { nome: p.nome, nasc: p.nasc, desde: p.desde, exame: p.exame, pref, prio: p.prio, prioCls: p.prioCls, conv, guia, guiaSt }; })
     };

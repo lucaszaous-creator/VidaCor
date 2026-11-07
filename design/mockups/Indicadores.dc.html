@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Indicadores — VidaCor Imagem</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
@@ -12,166 +12,220 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0;background:#F2F3F6}
-.hm{display:grid;grid-template-columns:44px repeat(12,minmax(0,1fr));gap:4px;align-items:center}
-.hm .c{height:30px;border-radius:7px}
-.hbar{height:12px;border-radius:999px;background:#E9ECF1;overflow:hidden}
-.hbar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#0A1A4A,#3E9BDB)}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:0}
+.kpi{padding:14px 18px;border-left:1px solid #E8EAEF;min-width:0}
+.kpi:first-child{border-left:0}
+.kpi .k{font-size:13px;color:#5B6474;font-weight:500}
+.kpi .v{font-size:28px;font-weight:650;letter-spacing:-.02em;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;font-weight:500;color:#5B6474;margin-left:4px;letter-spacing:0}
+.kpi .d{font-size:13px;color:#5B6474;margin-top:2px}
+.up{color:#1F7A4D;font-weight:600}.warn{color:#9A5B00;font-weight:600}
+.ph{display:flex;align-items:baseline;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.ph h2{font-size:16px;font-weight:650}
+.hrow{display:grid;grid-template-columns:minmax(110px,170px) minmax(0,1fr) 56px;gap:12px;align-items:center;padding:6px 0}
+.hrow .tr{height:12px;border-radius:3px;background:#F1F3F6;overflow:hidden}
+.hrow .tr i{display:block;height:100%;border-radius:3px;background:#13285F}
+.hm{display:grid;grid-template-columns:40px repeat(12,minmax(0,1fr));gap:3px;align-items:center}
+.hm .c{height:28px;border-radius:5px}
+.vb{display:flex;align-items:flex-end;gap:14px;height:220px;padding-top:8px}
+.vb .bc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%}
+.vb .bv{width:100%;max-width:44px;border-radius:6px 6px 0 0;background:#C9D3E6}
+.vb .bv.on{background:#13285F}
+.vb .bn{font-size:13px;font-weight:600;color:#334155}
+.vb .bl{font-size:13px;color:#5B6474}
+.lg{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#5B6474}
+.scrim{position:fixed;inset:0;background:rgba(15,23,42,.28);z-index:40}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:400px;max-width:100vw;background:#fff;z-index:41;display:flex;flex-direction:column;box-shadow:0 8px 24px rgba(15,23,42,.12)}
+.ft{display:flex;align-items:center;gap:8px;padding:12px 18px;border-top:1px solid #E8EAEF;flex-wrap:wrap}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="indicadores" userName="Carla Mendes" userRole="Gerência" userInitials="CM" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="indicadores" userName="Carla Mendes" userRole="Gerência" userInitials="CM" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <div class="crumb"><span>Gestão</span><span aria-hidden="true">›</span><b>Indicadores</b></div>
-      <div class="grow"></div>
-      <button class="btn">Exportar Excel</button>
-      <button class="btn">Exportar PDF</button>
-      <button class="btn btn-p">Agendar relatório por e-mail</button>
-    </div>
-
-    <div class="page-h">
-      <div class="grow">
-        <h1>Indicadores</h1>
-        <p>Produção, prazos, faltas, ocupação, glosas e satisfação · atualizado às 08:40</p>
+    <header class="row wrap" style="gap: 12px">
+      <div style="flex: 1 1 0; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Indicadores</h1>
+        <div class="t13 mute" style="margin-top: 2px">{{resumoFiltro}}</div>
       </div>
-      <div class="seg" role="tablist" aria-label="Período"><button role="tab" aria-selected="false">Semana</button><button class="on" role="tab" aria-selected="true">Mês</button><button role="tab" aria-selected="false">Trimestre</button><button role="tab" aria-selected="false">Ano</button></div>
-    </div>
+      <div class="seg" role="radiogroup" aria-label="Período"><sc-for list="{{periodos}}" as="p" hint-placeholder-count="4"><button class="{{p.cls}}" role="radio" aria-checked="{{p.on}}" onClick="{{p.ir}}" style="height: 38px">{{p.t}}</button></sc-for></div>
+      <button class="btn btn-sm" onClick="{{abrirFiltros}}"><span>Filtros</span></button>
+      <a class="btn btn-sm" href="Relatorios.dc.html">Exportar</a>
+    </header>
 
-    <section class="card" aria-label="Filtros" style="padding: 16px 18px">
-      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 12px; align-items: end">
-        <label class="field">Período<select class="in"><option>01/11 a 06/11/2026</option><option>Últimos 30 dias</option></select></label>
-        <label class="field">Comparar com<select class="in"><option>Mesmo período de outubro</option><option>Novembro de 2025</option></select></label>
-        <label class="field">Unidade<select class="in"><option>Unidade Centro</option><option>Todas</option></select></label>
-        <label class="field">Médico<select class="in"><option>Todos os médicos</option><option>Dr. Paulo Medeiros</option></select></label>
-        <label class="field">Convênio<select class="in"><option>Todos</option><option>Particular</option></select></label>
-        <label class="field">Exame<select class="in"><option>Todos os exames</option><option>Ecocardiograma</option></select></label>
-      </div>
-      <div class="row wrap" style="gap: 8px; margin-top: 12px"><span class="t13 mute">Filtros salvos:</span><button class="chip" style="border: 1px solid #D9DDE5; background: #fff; cursor: pointer; height: 30px">Reunião de diretoria</button><button class="chip" style="border: 1px solid #D9DDE5; background: #fff; cursor: pointer; height: 30px">Cardiologia · mês</button><button class="chip" style="border: 1px solid #D9DDE5; background: #fff; cursor: pointer; height: 30px">Particular x convênio</button></div>
+    <section class="card kpis" aria-label="Indicadores principais">
+      <div class="kpi"><div class="k">Receita sobre a meta</div><div class="v">72<small>%</small></div><div class="d">R$ 448 de 620 mil, faltam 17 dias úteis</div></div>
+      <div class="kpi"><div class="k">Tempo médio de laudo</div><div class="v">5,2<small>horas</small></div><div class="d"><span class="up">96% no prazo</span> de 24 h</div></div>
+      <div class="kpi"><div class="k">Faltas</div><div class="v">4,8<small>%</small></div><div class="d"><span class="up">2,1 p.p. a menos</span> que em outubro</div></div>
+      <div class="kpi"><div class="k">Ticket médio</div><div class="v">R$ 214</div><div class="d"><span class="warn">Glosa de 3,1%</span> nos convênios</div></div>
     </section>
 
-    <section class="grid g4" aria-label="Indicadores principais">
-      <div class="card"><div class="lbl">Receita x meta</div><div class="big" style="margin-top: 8px">72<small>% da meta</small></div><div class="bar" style="margin-top: 14px"><i style="width: 72%"></i></div><div class="t13 mute" style="margin-top: 8px">R$ 448 mil de R$ 620 mil · faltam 17 dias úteis</div></div>
-      <div class="card"><div class="lbl">Tempo médio de laudo</div><div class="big" style="margin-top: 8px">5,2<small>horas</small></div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-green">96% no prazo</span><span class="t13 mute">meta 24 h</span></div></div>
-      <div class="card"><div class="lbl">Faltas (no-show)</div><div class="big" style="margin-top: 8px">4,8<small>%</small></div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-green">−2,1 p.p.</span><span class="t13 mute">desde a confirmação automática</span></div></div>
-      <div class="card"><div class="lbl">Ticket médio</div><div class="big" style="margin-top: 8px">R$ 214</div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-amber">Glosa 3,1%</span><span class="t13 mute">convênios</span></div></div>
-    </section>
+    <nav class="tabs" aria-label="Assuntos">
+      <sc-for list="{{abas}}" as="a" hint-placeholder-count="4"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for>
+    </nav>
 
-    <div class="grid g2">
-      <section class="card" aria-labelledby="rv-h">
-        <div class="card-h"><div><h2 id="rv-h">Receita mensal</h2><div class="sub">Realizado x meta · 2026</div></div>
-          <div class="row t14" style="margin-left: auto; gap: 16px"><span class="row" style="gap: 6px"><i style="width: 10px; height: 10px; border-radius: 50%; background: #0C72B0"></i>Realizado</span><span class="row" style="gap: 6px"><i style="width: 16px; border-top: 2px dashed #5B6474"></i>Meta</span></div></div>
-        <figure role="img" aria-label="Receita mensal de maio a novembro, subindo de 470 mil para uma projeção de 640 mil, acima da meta desde agosto" style="margin: 0">
-          <svg viewBox="0 0 640 220" width="100%" height="220" aria-hidden="true" preserveAspectRatio="none">
-            <defs><linearGradient id="gr" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#3E9BDB" stop-opacity=".32"></stop><stop offset="1" stop-color="#3E9BDB" stop-opacity="0"></stop></linearGradient></defs>
-            <g stroke="#E8EAEF"><path d="M0 40H640M0 100H640M0 160H640"></path></g>
-            <path d="M0 150 C60 146 80 132 106 128 S180 120 213 112 S290 96 320 92 S400 82 426 78 S500 66 533 60 S600 50 640 44 V210 H0Z" fill="url(#gr)"></path>
-            <path d="M0 150 C60 146 80 132 106 128 S180 120 213 112 S290 96 320 92 S400 82 426 78 S500 66 533 60" fill="none" stroke="#0C72B0" stroke-width="3"></path>
-            <path d="M533 60 S600 50 640 44" fill="none" stroke="#0C72B0" stroke-width="3" stroke-dasharray="6 6"></path>
-            <path d="M0 120 H640" stroke="#5B6474" stroke-width="2" stroke-dasharray="6 6"></path>
-            <circle cx="533" cy="60" r="6" fill="#fff" stroke="#0C72B0" stroke-width="3"></circle>
-          </svg>
-          <figcaption class="row t13 mute" style="justify-content: space-between"><span>Mai</span><span>Jun</span><span>Jul</span><span>Ago</span><span>Set</span><span>Out</span><span>Nov (proj.)</span></figcaption>
-        </figure>
-      </section>
-
-      <section class="card" aria-labelledby="pe-h">
-        <div class="card-h"><div><h2 id="pe-h">Produção por exame</h2><div class="sub">Quantidade no mês</div></div></div>
-        <div class="col" style="gap: 12px">
-          <div><div class="row t14"><span>USG (todas)</span><span class="num b" style="margin-left: auto">612</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 100%"></i></div></div>
-          <div><div class="row t14"><span>Ecocardiograma</span><span class="num b" style="margin-left: auto">284</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 46%"></i></div></div>
-          <div><div class="row t14"><span>Raio X</span><span class="num b" style="margin-left: auto">356</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 58%"></i></div></div>
-          <div><div class="row t14"><span>Tomografia</span><span class="num b" style="margin-left: auto">198</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 32%"></i></div></div>
-          <div><div class="row t14"><span>Doppler de carótidas</span><span class="num b" style="margin-left: auto">141</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 23%"></i></div></div>
-          <div><div class="row t14"><span>Teste ergométrico</span><span class="num b" style="margin-left: auto">118</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 19%"></i></div></div>
-          <div><div class="row t14"><span>MAPA / Holter</span><span class="num b" style="margin-left: auto">86</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 14%"></i></div></div>
-        </div>
-      </section>
-    </div>
-
-    <div class="grid g2">
-      <section class="card" aria-labelledby="hm-h">
-        <div class="card-h"><div><h2 id="hm-h">Ocupação por dia e hora</h2><div class="sub">Todas as salas · quanto mais escuro, mais cheio</div></div></div>
-        <div class="scroll-x">
-          <div class="hm" style="min-width: 520px" role="img" aria-label="Mapa de calor: picos entre 8h e 11h de segunda a sexta; sábado cheio só pela manhã">
-            <span></span>
-            <sc-for list="{{hours}}" as="h" hint-placeholder-count="12"><span class="t12 mute" style="text-align: center">{{h}}</span></sc-for>
-            <sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
-              <span class="t13 mute">{{r.day}}</span>
-              <sc-for list="{{r.cells}}" as="c" hint-placeholder-count="12"><span class="c" style="{{c.style}}"></span></sc-for>
-            </sc-for>
+    <sc-if value="{{tFin}}" hint-placeholder-val="{{ true }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 16px">
+        <section class="card pane" aria-labelledby="rv-h">
+          <div class="ph"><h2 id="rv-h">Receita mensal de 2026</h2><div class="grow"></div><span class="lg"><i style="width: 14px; height: 3px; background: #0C72B0"></i>Realizado</span><span class="lg"><i style="width: 14px; border-top: 2px dashed #5B6474"></i>Meta</span></div>
+          <div class="scroll">
+            <figure role="img" aria-label="Receita mensal de maio a novembro, subindo de 470 mil para uma projeção de 640 mil, acima da meta desde agosto" style="margin: 0">
+              <svg viewBox="0 0 640 240" width="100%" height="280" aria-hidden="true" preserveAspectRatio="none">
+                <g stroke="#E8EAEF"><path d="M0 40H640M0 100H640M0 160H640M0 220H640"></path></g>
+                <g fill="#5B6474" font-size="11" font-family="Inter, sans-serif"><text x="4" y="36">R$ 650 mil</text><text x="4" y="156">R$ 450 mil</text></g>
+                <path d="M0 120 H640" stroke="#5B6474" stroke-width="2" stroke-dasharray="6 6" fill="none"></path>
+                <polyline points="0,170 106,150 213,132 320,108 426,92 533,68" fill="none" stroke="#0C72B0" stroke-width="3" stroke-linejoin="round"></polyline>
+                <polyline points="533,68 640,48" fill="none" stroke="#0C72B0" stroke-width="3" stroke-dasharray="6 6"></polyline>
+                <g fill="#fff" stroke="#0C72B0" stroke-width="2.5"><circle cx="106" cy="150" r="4"></circle><circle cx="213" cy="132" r="4"></circle><circle cx="320" cy="108" r="4"></circle><circle cx="426" cy="92" r="4"></circle><circle cx="533" cy="68" r="5"></circle></g>
+              </svg>
+              <figcaption class="row t13 mute" style="justify-content: space-between; margin-top: 6px"><span>Mai</span><span>Jun</span><span>Jul</span><span>Ago</span><span>Set</span><span>Out</span><span>Nov (projeção)</span></figcaption>
+            </figure>
+            <p class="t13 mute" style="margin: 14px 0 0">Outubro fechou em R$ 612 mil, 4% acima da meta. Dados atualizados às 08:40.</p>
           </div>
-        </div>
-        <div class="row t12 mute" style="margin-top: 12px; gap: 8px"><span>Vazio</span><i style="width: 18px; height: 12px; border-radius: 4px; background: rgba(12,114,176,.08)"></i><i style="width: 18px; height: 12px; border-radius: 4px; background: rgba(12,114,176,.35)"></i><i style="width: 18px; height: 12px; border-radius: 4px; background: rgba(12,114,176,.65)"></i><i style="width: 18px; height: 12px; border-radius: 4px; background: #0A1A4A"></i><span>Lotado</span></div>
-      </section>
+        </section>
+        <section class="card pane" aria-labelledby="gc-h">
+          <div class="ph"><h2 id="gc-h">Glosa por convênio</h2><span class="t13 mute">% do faturado</span></div>
+          <div class="scroll" role="img" aria-label="Glosa: Amil 5,4%, SulAmérica 3,6%, Bradesco Saúde 2,9%, Unimed 2,4%, Petrobras 1,2%">
+            <sc-for list="{{glosas}}" as="b" hint-placeholder-count="5"><div class="hrow"><span class="t14">{{b.l}}</span><span class="tr"><i style="{{b.st}}"></i></span><span class="t14 num b" style="text-align: right">{{b.v}}</span></div></sc-for>
+            <a class="btn btn-sm" href="Auditoria-Faturamento.dc.html" style="margin-top: 14px">Ver glosas no faturamento</a>
+          </div>
+        </section>
+      </div>
+    </sc-if>
 
-      <section class="card" aria-labelledby="pm-h">
-        <div class="card-h"><div><h2 id="pm-h">Por médico</h2><div class="sub">Exames, prazo de laudo e NPS</div></div></div>
-        <div class="scroll-x"><table class="tb">
-          <thead><tr><th>Médico</th><th class="r">Exames</th><th class="r">Laudo médio</th><th class="r">NPS</th></tr></thead>
-          <tbody>
-            <tr><td><div class="row nw" style="gap: 10px"><span class="av av-sm" style="background: #E8F2FB; color: #0C72B0">PM</span>Dr. Paulo Medeiros</div></td><td class="r num">402</td><td class="r num">3,1 h</td><td class="r"><span class="chip c-green">84</span></td></tr>
-            <tr><td><div class="row nw" style="gap: 10px"><span class="av av-sm" style="background: #EFEBFC; color: #5B45B5">RA</span>Dra. Renata Alves</div></td><td class="r num">268</td><td class="r num">2,4 h</td><td class="r"><span class="chip c-green">88</span></td></tr>
-            <tr><td><div class="row nw" style="gap: 10px"><span class="av av-sm" style="background: #E5F5EC; color: #1F7A4D">MF</span>Dr. Marcos Freire</div></td><td class="r num">241</td><td class="r num">6,8 h</td><td class="r"><span class="chip c-green">76</span></td></tr>
-            <tr><td><div class="row nw" style="gap: 10px"><span class="av av-sm" style="background: #FFF3DF; color: #9A5B00">LT</span>Dr. Luís Tavares</div></td><td class="r num">554</td><td class="r num">11,2 h</td><td class="r"><span class="chip c-amber">64</span></td></tr>
-          </tbody>
-        </table></div>
-      </section>
-    </div>
+    <sc-if value="{{tProd}}" hint-placeholder-val="{{ false }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px">
+        <section class="card pane" aria-labelledby="pe-h">
+          <div class="ph"><h2 id="pe-h">Produção por exame</h2><span class="t13 mute">quantidade no mês</span></div>
+          <div class="scroll" role="img" aria-label="Produção por exame no mês">
+            <sc-for list="{{producao}}" as="b" hint-placeholder-count="7"><div class="hrow"><span class="t14">{{b.l}}</span><span class="tr"><i style="{{b.st}}"></i></span><span class="t14 num b" style="text-align: right">{{b.v}}</span></div></sc-for>
+          </div>
+        </section>
+        <section class="card pane" style="padding: 0" aria-labelledby="pm-h">
+          <div class="ph" style="padding: 18px 18px 0; margin-bottom: 4px"><h2 id="pm-h">Por médico</h2></div>
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Médico</th><th class="r">Exames</th><th class="r">Laudo médio</th><th class="r">NPS</th></tr></thead>
+              <tbody>
+                <tr><td class="b">Dr. Paulo Medeiros</td><td class="r num">402</td><td class="r num">3,1 h</td><td class="r num">84</td></tr>
+                <tr><td class="b">Dra. Renata Alves</td><td class="r num">268</td><td class="r num">2,4 h</td><td class="r num">88</td></tr>
+                <tr><td class="b">Dr. Marcos Freire</td><td class="r num">241</td><td class="r num">6,8 h</td><td class="r num">76</td></tr>
+                <tr><td class="b">Dr. Luís Tavares</td><td class="r num">554</td><td class="r num warn">11,2 h</td><td class="r num warn">64</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="ft"><span class="t13 mute">Em destaque: laudo médio acima de 8 h ou NPS abaixo de 70.</span></div>
+        </section>
+      </div>
+    </sc-if>
 
-    <div class="grid g3">
-      <section class="card" aria-labelledby="or-h">
-        <div class="card-h"><h2 id="or-h">Origem dos pacientes</h2></div>
-        <div class="col" style="gap: 10px">
-          <div class="row t14"><i style="width: 10px; height: 10px; border-radius: 50%; background: #0A1A4A"></i>Indicação médica<span class="num b" style="margin-left: auto">46%</span></div>
-          <div class="row t14"><i style="width: 10px; height: 10px; border-radius: 50%; background: #0C72B0"></i>Convênio (rede credenciada)<span class="num b" style="margin-left: auto">28%</span></div>
-          <div class="row t14"><i style="width: 10px; height: 10px; border-radius: 50%; background: #3E9BDB"></i>Google e site<span class="num b" style="margin-left: auto">14%</span></div>
-          <div class="row t14"><i style="width: 10px; height: 10px; border-radius: 50%; background: #8B7BE0"></i>Instagram<span class="num b" style="margin-left: auto">8%</span></div>
-          <div class="row t14"><i style="width: 10px; height: 10px; border-radius: 50%; background: #C9CFD8"></i>Outros<span class="num b" style="margin-left: auto">4%</span></div>
+    <sc-if value="{{tAgenda}}" hint-placeholder-val="{{ false }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px">
+        <section class="card pane" aria-labelledby="hm-h">
+          <div class="ph"><h2 id="hm-h">Ocupação por dia e hora</h2><span class="t13 mute">todas as salas</span></div>
+          <div class="scroll">
+            <div class="hm" role="img" aria-label="Mapa de ocupação: picos entre 8h e 11h de segunda a sexta; sábado cheio só pela manhã">
+              <span></span>
+              <sc-for list="{{hours}}" as="h" hint-placeholder-count="12"><span class="t12 mute" style="text-align: center">{{h}}</span></sc-for>
+              <sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+                <span class="t13 mute">{{r.day}}</span>
+                <sc-for list="{{r.cells}}" as="c" hint-placeholder-count="12"><span class="c" style="{{c.style}}"></span></sc-for>
+              </sc-for>
+            </div>
+            <div class="row t12 mute" style="margin-top: 12px; gap: 6px"><span>Vazio</span><i style="width: 18px; height: 12px; border-radius: 3px; background: rgba(12,114,176,.08)"></i><i style="width: 18px; height: 12px; border-radius: 3px; background: rgba(12,114,176,.35)"></i><i style="width: 18px; height: 12px; border-radius: 3px; background: rgba(12,114,176,.65)"></i><i style="width: 18px; height: 12px; border-radius: 3px; background: #0A1A4A"></i><span>Lotado</span></div>
+          </div>
+        </section>
+        <section class="card pane" aria-labelledby="or-h">
+          <div class="ph"><h2 id="or-h">Origem dos pacientes</h2></div>
+          <div class="scroll" role="img" aria-label="Origem: indicação médica 46%, convênio 28%, Google e site 14%, Instagram 8%, outros 4%">
+            <sc-for list="{{origem}}" as="b" hint-placeholder-count="5"><div class="hrow"><span class="t14">{{b.l}}</span><span class="tr"><i style="{{b.st}}"></i></span><span class="t14 num b" style="text-align: right">{{b.v}}</span></div></sc-for>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{tSat}}" hint-placeholder-val="{{ false }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px">
+        <section class="card pane" aria-labelledby="nt-h">
+          <div class="ph"><h2 id="nt-h">NPS nos últimos 6 meses</h2></div>
+          <div class="scroll">
+            <div class="vb" role="img" aria-label="NPS: junho 69, julho 71, agosto 70, setembro 73, outubro 74, novembro 78">
+              <sc-for list="{{nps}}" as="b" hint-placeholder-count="6"><div class="bc"><span class="bn">{{b.v}}</span><div class="{{b.cls}}" style="{{b.st}}"></div><span class="bl">{{b.l}}</span></div></sc-for>
+            </div>
+          </div>
+        </section>
+        <section class="card pane" style="padding: 0" aria-labelledby="cm-h">
+          <div class="ph" style="padding: 18px 18px 0; margin-bottom: 4px"><h2 id="cm-h">O que mais aparece nos comentários</h2></div>
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Tema</th><th class="r">Menções</th><th>Tom</th></tr></thead>
+              <tbody>
+                <tr><td>Atendimento da recepção</td><td class="r num">142</td><td><span class="chip c-green">Positivo</span></td></tr>
+                <tr><td>Rapidez do laudo</td><td class="r num">96</td><td><span class="chip c-green">Positivo</span></td></tr>
+                <tr><td>Espera para entrar na sala</td><td class="r num">58</td><td><span class="chip c-amber">Negativo</span></td></tr>
+                <tr><td>Estacionamento</td><td class="r num">31</td><td><span class="chip c-amber">Negativo</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="ft"><a class="btn btn-sm" href="Comunicacao.dc.html">Ver respostas</a></div>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{filtrosAbertos}}" hint-placeholder-val="{{ false }}">
+      <div class="scrim" onClick="{{fecharFiltros}}"></div>
+      <aside class="drawer" role="dialog" aria-label="Filtros dos indicadores">
+        <div class="row" style="padding: 16px 18px; border-bottom: 1px solid #E8EAEF">
+          <h2 style="flex: 1; font-size: 18px; font-weight: 650">Filtros</h2>
+          <button class="btn btn-sm btn-g" onClick="{{fecharFiltros}}" aria-label="Fechar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
         </div>
-      </section>
-      <section class="card" aria-labelledby="gc-h">
-        <div class="card-h"><h2 id="gc-h">Glosa por convênio</h2></div>
-        <div class="col" style="gap: 12px">
-          <div><div class="row t14"><span>Amil</span><span class="num b" style="margin-left: auto">5,4%</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 54%; background: #C2334D"></i></div></div>
-          <div><div class="row t14"><span>SulAmérica</span><span class="num b" style="margin-left: auto">3,6%</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 36%; background: #9A5B00"></i></div></div>
-          <div><div class="row t14"><span>Bradesco Saúde</span><span class="num b" style="margin-left: auto">2,9%</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 29%"></i></div></div>
-          <div><div class="row t14"><span>Unimed</span><span class="num b" style="margin-left: auto">2,4%</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 24%"></i></div></div>
-          <div><div class="row t14"><span>Petrobras</span><span class="num b" style="margin-left: auto">1,2%</span></div><div class="hbar" style="margin-top: 6px"><i style="width: 12%"></i></div></div>
+        <div class="scroll" style="flex: 1; padding: 16px 18px; display: flex; flex-direction: column; gap: 14px">
+          <div class="field">Filtros salvos<div class="row wrap" style="gap: 6px"><sc-for list="{{salvos}}" as="f" hint-placeholder-count="3"><button class="btn btn-sm" onClick="{{f.ir}}">{{f.t}}</button></sc-for></div></div>
+          <label class="field">Comparar com<select class="in"><option>Mesmo período de outubro</option><option>Novembro de 2025</option></select></label>
+          <label class="field">Unidade<select class="in" value="{{unidade}}" onChange="{{onUnidade}}"><option>Unidade Centro</option><option>Todas as unidades</option></select></label>
+          <label class="field">Médico<select class="in" value="{{medico}}" onChange="{{onMedico}}"><option>Todos os médicos</option><option>Dr. Paulo Medeiros</option><option>Dra. Renata Alves</option></select></label>
+          <label class="field">Convênio<select class="in"><option>Todos</option><option>Particular</option><option>Unimed</option></select></label>
+          <label class="field">Exame<select class="in"><option>Todos os exames</option><option>Ecocardiograma</option><option>USG obstétrica</option></select></label>
         </div>
-      </section>
-      <section class="card" aria-labelledby="nt-h">
-        <div class="card-h"><h2 id="nt-h">NPS nos últimos 6 meses</h2></div>
-        <div class="bars" style="height: 180px; padding-top: 20px">
-          <div class="bc"><span class="bn">69</span><div class="bv" style="height: 69%"></div><span class="bl">Jun</span></div>
-          <div class="bc"><span class="bn">71</span><div class="bv" style="height: 71%"></div><span class="bl">Jul</span></div>
-          <div class="bc"><span class="bn">70</span><div class="bv" style="height: 70%"></div><span class="bl">Ago</span></div>
-          <div class="bc"><span class="bn">73</span><div class="bv" style="height: 73%"></div><span class="bl">Set</span></div>
-          <div class="bc"><span class="bn">74</span><div class="bv" style="height: 74%"></div><span class="bl">Out</span></div>
-          <div class="bc"><span class="bn">78</span><div class="bv on" style="height: 78%"></div><span class="bl" style="color: #0F172A; font-weight: 600">Nov</span></div>
-        </div>
-      </section>
-    </div>
-    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · VidaCor Imagem</p>
+        <div class="ft"><button class="btn btn-sm" onClick="{{limpar}}">Limpar</button><div class="grow"></div><button class="btn btn-sm btn-p" onClick="{{fecharFiltros}}">Aplicar</button></div>
+      </aside>
+    </sc-if>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1950}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { aba: 'fin', per: 'mes', filtros: false, unidade: 'Unidade Centro', medico: 'Todos os médicos' }; }
   renderVals() {
-    const hours = ['7h','8h','9h','10h','11h','12h','13h','14h','15h','16h','17h','18h'];
+    const s = this.state;
+    const hours = ['7h', '8h', '9h', '10h', '11h', '12h', '13h', '14h', '15h', '16h', '17h', '18h'];
     const base = [
-      ['Seg',[.5,.9,1,.95,.8,.4,.35,.7,.75,.65,.5,.25]],
-      ['Ter',[.45,.85,.95,.9,.75,.35,.3,.65,.7,.6,.45,.2]],
-      ['Qua',[.5,.9,.95,1,.85,.4,.3,.6,.7,.65,.5,.3]],
-      ['Qui',[.55,1,1,1,.9,.45,.4,.75,.8,.7,.55,.3]],
-      ['Sex',[.5,.95,1,.9,.8,.4,.35,.6,.65,.55,.4,.2]],
-      ['Sáb',[.6,.9,.85,.7,.5,.1,0,0,0,0,0,0]]
+      ['Seg', [.5, .9, 1, .95, .8, .4, .35, .7, .75, .65, .5, .25]],
+      ['Ter', [.45, .85, .95, .9, .75, .35, .3, .65, .7, .6, .45, .2]],
+      ['Qua', [.5, .9, .95, 1, .85, .4, .3, .6, .7, .65, .5, .3]],
+      ['Qui', [.55, 1, 1, 1, .9, .45, .4, .75, .8, .7, .55, .3]],
+      ['Sex', [.5, .95, 1, .9, .8, .4, .35, .6, .65, .55, .4, .2]],
+      ['Sáb', [.6, .9, .85, .7, .5, .1, 0, 0, 0, 0, 0, 0]]
     ];
-    const rows = base.map(([day, v]) => ({
-      day,
-      cells: v.map(x => ({ style: x >= .97 ? 'background:#0A1A4A' : 'background:rgba(12,114,176,' + (0.06 + x * 0.7).toFixed(2) + ')' }))
-    }));
-    return { hours, rows };
+    const rows = base.map(([day, v]) => ({ day, cells: v.map(x => ({ style: x >= .97 ? 'background: #0A1A4A' : 'background: rgba(12,114,176,' + (0.06 + x * 0.7).toFixed(2) + ')' })) }));
+    const barras = (lista, max, cor) => lista.map(([l, n, v]) => ({ l, v, st: 'width: ' + Math.round(n / max * 100) + '%' + (cor ? '; background: ' + cor : '') }));
+    const PER = { semana: '01/11 a 06/11', mes: 'Novembro até 06/11', tri: 'Setembro a novembro', ano: 'Janeiro a novembro' };
+    const preset = (u, m) => () => this.setState({ unidade: u, medico: m, filtros: false });
+    return {
+      resumoFiltro: PER[s.per] + ', comparado a outubro. ' + s.unidade + ', ' + (s.medico === 'Todos os médicos' ? 'todos os médicos' : s.medico) + '.',
+      periodos: [['semana', 'Semana'], ['mes', 'Mês'], ['tri', 'Trimestre'], ['ano', 'Ano']].map(([k, t]) => ({ t, cls: s.per === k ? 'on' : '', on: s.per === k ? 'true' : 'false', ir: () => this.setState({ per: k }) })),
+      abas: [['fin', 'Receita e glosa'], ['prod', 'Produção'], ['agenda', 'Agenda e ocupação'], ['sat', 'Satisfação']].map(([k, t]) => ({ t, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      tFin: s.aba === 'fin', tProd: s.aba === 'prod', tAgenda: s.aba === 'agenda', tSat: s.aba === 'sat',
+      glosas: barras([['Amil', 5.4, '5,4%'], ['SulAmérica', 3.6, '3,6%'], ['Bradesco Saúde', 2.9, '2,9%'], ['Unimed', 2.4, '2,4%'], ['Petrobras', 1.2, '1,2%']], 6, ''),
+      producao: barras([['USG (todas)', 612, '612'], ['Raio X', 356, '356'], ['Ecocardiograma', 284, '284'], ['Tomografia', 198, '198'], ['Doppler de carótidas', 141, '141'], ['Teste ergométrico', 118, '118'], ['MAPA e Holter', 86, '86']], 612, ''),
+      origem: barras([['Indicação médica', 46, '46%'], ['Convênio', 28, '28%'], ['Google e site', 14, '14%'], ['Instagram', 8, '8%'], ['Outros', 4, '4%']], 46, ''),
+      nps: [['Jun', 69], ['Jul', 71], ['Ago', 70], ['Set', 73], ['Out', 74], ['Nov', 78]].map(([l, v], i) => ({ l, v: String(v), cls: i === 5 ? 'bv on' : 'bv', st: 'height: ' + Math.round((v - 40) / 45 * 100) + '%' })),
+      hours, rows,
+      filtrosAbertos: s.filtros, abrirFiltros: () => this.setState({ filtros: true }), fecharFiltros: () => this.setState({ filtros: false }),
+      unidade: s.unidade, onUnidade: e => this.setState({ unidade: e.target.value }),
+      medico: s.medico, onMedico: e => this.setState({ medico: e.target.value }),
+      limpar: () => this.setState({ unidade: 'Unidade Centro', medico: 'Todos os médicos' }),
+      salvos: [{ t: 'Reunião de diretoria', ir: preset('Todas as unidades', 'Todos os médicos') }, { t: 'Cardiologia no mês', ir: preset('Unidade Centro', 'Dr. Paulo Medeiros') }, { t: 'Particular e convênio', ir: preset('Todas as unidades', 'Todos os médicos') }]
+    };
   }
 }
 </script>

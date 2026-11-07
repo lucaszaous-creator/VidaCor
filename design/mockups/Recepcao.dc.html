@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Recepção — VidaCor Imagem</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
@@ -12,95 +12,217 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0;background:#F2F3F6}
-.kc{background:#fff;border-radius:14px;padding:12px 14px;border:1px solid #E8EAEF;display:flex;flex-direction:column;gap:3px;text-align:left;cursor:pointer;width:100%;font:inherit;color:inherit;min-width:0}
-.kc:hover{border-color:#C9D2DE}
+.kc{background:#fff;border-radius:12px;padding:10px 12px;border:1px solid #E3E7ED;display:flex;flex-direction:column;gap:2px;text-align:left;cursor:pointer;width:100%;font:inherit;color:inherit;min-width:0;flex:none}
+.kc:hover{border-color:#B8C2D3}
 .kc.sel{border-color:#0A1A4A;box-shadow:0 0 0 1px #0A1A4A}
-.kc b{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kc .nm{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .kc .x{font-size:13px;color:#5B6474;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kc .m{font-size:12px;color:#5B6474;display:flex;align-items:center;gap:6px;margin-top:3px;white-space:nowrap;overflow:hidden}
+.kc .m{font-size:12px;color:#5B6474;display:flex;align-items:center;gap:6px;margin-top:2px;white-space:nowrap;overflow:hidden}
+.kc .m span{overflow:hidden;text-overflow:ellipsis}
 .dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex:none}
-.colh{display:flex;align-items:baseline;gap:8px;padding:0 2px 4px}
+.est{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;flex:1 1 auto;min-height:0}
+.ecol{display:flex;flex-direction:column;min-height:0;background:#F6F7F9;border-radius:14px;padding:10px 8px 8px}
+.ecol .scroll{display:flex;flex-direction:column;gap:8px;padding:2px}
+.colh{display:flex;align-items:baseline;gap:8px;padding:0 4px 8px}
 .colh b{font-size:14px;font-weight:600}
 .colh span{font-size:13px;color:#5B6474}
-.stp{display:flex;align-items:center;gap:10px;flex:1 1 140px;min-width:0}
-.ck{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:13px;font-weight:700}
-.ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.todo{background:#fff;border:1.5px solid #CBD2DC;color:#8A93A3}.ck.cur{background:#0A1A4A;color:#fff}
+.sen{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+.drw{position:absolute;top:0;right:0;bottom:0;width:380px;max-width:100%;background:#fff;border-radius:22px;box-shadow:0 18px 48px rgba(15,23,42,.16),0 2px 6px rgba(15,23,42,.06);display:flex;flex-direction:column;z-index:20;overflow:hidden}
+.xb{width:36px;height:36px;border:0;border-radius:10px;background:transparent;color:#5B6474;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.xb:hover{background:#F1F3F6;color:#0F172A}
+.stp{display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;align-items:center;padding:7px 0}
+.ck{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:12px;font-weight:700}
+.ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.todo{border:1.5px solid #CBD2DC;color:#8A93A3}.ck.cur{background:#0A1A4A;color:#fff}.ck.pend{background:#FFF3DF;color:#9A5B00}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="recepcao" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="recepcao" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <h1 style="font-size: 24px; font-weight: 650">Recepção</h1>
-      <div class="grow"></div>
-      <label class="search" style="max-width: 300px; flex: 1 1 240px; min-height: 40px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar paciente</span><input type="search" placeholder="Buscar paciente ou senha"></label>
-      <a class="btn btn-sm" href="Agenda.dc.html">Agenda do dia</a>
+    <header class="row wrap" style="gap: 14px">
+      <div style="flex: 1 1 auto; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Recepção</h1>
+        <div class="t13 mute" style="margin-top: 2px">Guichê 2, Ana Souza. A esteira atualiza sozinha.</div>
+      </div>
+      <label class="search" style="flex: 0 1 340px; min-height: 44px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <span class="sr">Buscar paciente ou senha</span>
+        <input type="search" value="{{q}}" onChange="{{onQ}}" placeholder="Buscar paciente ou senha">
+      </label>
+      <a class="btn" href="Agenda.dc.html">Agenda do dia</a>
+    </header>
+
+    <section class="card row wrap" aria-label="Senhas" style="padding: 12px 18px; gap: 24px">
+      <div><div class="t13 mute">Senha atual</div><div class="sen" style="margin-top: 4px">{{senha}}</div></div>
+      <dl class="row wrap t14" style="gap: 6px 24px; margin: 0; flex: 1 1 320px">
+        <div><dt class="sr">Normais</dt><dd style="margin: 0"><b class="t15">{{nNorm}}</b> <span class="mute">normais</span></dd></div>
+        <div><dt class="sr">Preferencial</dt><dd style="margin: 0"><b class="t15">1</b> <span class="mute">preferencial</span></dd></div>
+        <div><dt class="sr">Retirada de resultado</dt><dd style="margin: 0"><b class="t15">2</b> <span class="mute">retirada de resultado</span></dd></div>
+        <div><dt class="sr">Horários livres</dt><dd style="margin: 0"><b class="t15" style="color: #0C72B0">11</b> <span class="mute">horários livres hoje</span></dd></div>
+      </dl>
+      <div class="row" style="gap: 10px"><button class="btn" onClick="{{rechamar}}">Rechamar</button><button class="btn btn-p" onClick="{{proxima}}">Chamar próxima senha</button></div>
+    </section>
+
+    <div class="fill" style="position: relative; display: flex; flex-direction: column">
+      <section class="card pane" aria-labelledby="est-h" style="flex: 1 1 auto; padding: 14px">
+        <div class="row" style="gap: 12px; padding: 0 4px 12px">
+          <h2 id="est-h" style="font-size: 17px; font-weight: 600">Esteira do paciente</h2>
+          <span class="t13 mute">{{aviso}}</span>
+          <div class="grow"></div>
+          <div class="seg" role="group" aria-label="Filtro da esteira">
+            <sc-for list="{{filtros}}" as="f" hint-placeholder-count="2"><button class="{{f.cls}}" aria-pressed="{{f.on}}" onClick="{{f.ir}}" style="height: 36px">{{f.t}}</button></sc-for>
+          </div>
+        </div>
+        <div class="est">
+          <sc-for list="{{colunas}}" as="c" hint-placeholder-count="5">
+            <div role="group" aria-label="{{c.aria}}" class="ecol">
+              <div class="colh"><b>{{c.t}}</b><span>{{c.n}}</span></div>
+              <div class="scroll">
+                <sc-for list="{{c.cards}}" as="k" hint-placeholder-count="3">
+                  <button class="{{k.cls}}" aria-pressed="{{k.sel}}" onClick="{{k.abrir}}"><span class="nm">{{k.nome}}</span><span class="x">{{k.exame}}</span><span class="m"><i class="dot" style="{{k.dot}}"></i><span>{{k.meta}}</span></span></button>
+                </sc-for>
+                <sc-if value="{{c.vazio}}" hint-placeholder-val="{{ false }}"><div class="t13 mute" style="padding: 8px 4px">Ninguém aqui agora</div></sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <sc-if value="{{temDrw}}" hint-placeholder-val="{{ false }}">
+        <aside class="drw" aria-label="Check-in do paciente">
+          <div class="row" style="padding: 16px 12px 12px 20px; border-bottom: 1px solid #E8EAEF; align-items: flex-start">
+            <div style="flex: 1; min-width: 0">
+              <div class="t13 mute">{{d.onde}}</div>
+              <h2 style="font-size: 19px; font-weight: 650; margin-top: 2px">{{d.nome}}</h2>
+              <div class="t14 num" style="color: #334155">{{d.nasc}}</div>
+            </div>
+            <button class="xb" aria-label="Fechar" onClick="{{fechar}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+          </div>
+          <div class="scroll" style="padding: 14px 20px; display: flex; flex-direction: column; gap: 14px">
+            <dl class="kv" style="margin: 0; grid-template-columns: 92px minmax(0, 1fr)">
+              <sc-for list="{{d.kv}}" as="k" hint-placeholder-count="4"><dt>{{k.k}}</dt><dd>{{k.v}}</dd></sc-for>
+            </dl>
+            <sc-if value="{{d.temPassos}}" hint-placeholder-val="{{ true }}">
+              <div style="border-top: 1px solid #E8EAEF; padding-top: 10px">
+                <h3 class="t14 b" style="margin-bottom: 4px">Check-in</h3>
+                <ol style="list-style: none; margin: 0; padding: 0">
+                  <sc-for list="{{d.passos}}" as="p" hint-placeholder-count="6">
+                    <li class="stp">
+                      <span class="{{p.cls}}">
+                        <sc-if value="{{p.ok}}" hint-placeholder-val="{{ true }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></sc-if>
+                        <sc-if value="{{p.semOk}}" hint-placeholder-val="{{ false }}">{{p.n}}</sc-if>
+                      </span>
+                      <div><div class="{{p.tCls}}">{{p.t}}</div><div class="t12 mute">{{p.s}}</div></div>
+                    </li>
+                  </sc-for>
+                </ol>
+              </div>
+            </sc-if>
+            <sc-if value="{{d.temMsg}}" hint-placeholder-val="{{ false }}">
+              <div class="banner ok" role="status"><div class="t14" style="line-height: 1.5">{{d.msg}}</div></div>
+            </sc-if>
+          </div>
+          <div class="col" style="gap: 8px; padding: 14px 20px 18px; border-top: 1px solid #E8EAEF">
+            <sc-if value="{{d.temAcao}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p" onClick="{{d.agir}}">{{d.acao}}</button></sc-if>
+            <sc-if value="{{d.temLink}}" hint-placeholder-val="{{ false }}"><a class="btn btn-p" href="{{d.link}}">{{d.acao}}</a></sc-if>
+            <a class="btn btn-sm" href="Paciente.dc.html">Abrir ficha</a>
+          </div>
+        </aside>
+      </sc-if>
     </div>
-
-    <section class="card row wrap" aria-label="Senhas" style="padding: 16px 22px; gap: 28px">
-      <div><div class="lbl">Senha atual · guichê 2</div><div style="font-size: 30px; font-weight: 700; letter-spacing: -.02em; margin-top: 2px">N034</div></div>
-      <div class="row wrap t14" style="gap: 22px; flex: 1 1 320px">
-        <span><b class="t15">3</b> <span class="mute">normais</span></span>
-        <span><b class="t15">1</b> <span class="mute">preferencial</span></span>
-        <span><b class="t15">2</b> <span class="mute">retirada de resultado</span></span>
-        <span><b class="t15" style="color: #0C72B0">11</b> <span class="mute">horários livres hoje</span></span>
-      </div>
-      <div class="row" style="gap: 10px"><button class="btn">Rechamar</button><button class="btn btn-p">Chamar próxima senha</button></div>
-    </section>
-
-    <section class="card" aria-labelledby="est-h" style="padding: 20px 22px">
-      <div class="row" style="margin-bottom: 14px"><h2 id="est-h" style="font-size: 18px; font-weight: 600">Esteira do paciente</h2><span class="t14 mute" style="margin-left: 12px">atualiza sozinha</span><div class="grow"></div><div class="seg"><button class="on btn-sm" style="height: 36px">Todos</button><button style="height: 36px">Só pendências</button></div></div>
-      <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px">
-          <div role="group" aria-label="A chegar, 9 pacientes" class="col" style="gap: 8px; min-width: 0">
-            <div class="colh"><b>A chegar</b><span>9</span></div>
-            <button class="kc"><b>Cláudia B. Nunes</b><span class="x">Eco + Doppler</span><span class="m">09:00 · confirmada</span></button><button class="kc"><b>Patrícia G. Lopes</b><span class="x">Obstétrica c/ Doppler</span><span class="m">09:00 · confirmada</span></button><button class="kc"><b>Marcelo D. Faria</b><span class="x">USG abdome</span><span class="m"><i class="dot" style="background:#D97706"></i>09:00 · sem resposta</span></button><button class="kc"><b>Laura N. Costa</b><span class="x">Raio X coluna</span><span class="m">09:00 · confirmada</span></button><button class="kc"><b>Jorge L. Batista</b><span class="x">Holter 24 h</span><span class="m">09:00 · confirmado</span></button>
-            <button class="btn btn-g btn-sm" style="justify-content: flex-start">Mais 4</button>
-          </div>
-          <div role="group" aria-label="Check-in, 3 pacientes" class="col" style="gap: 8px; min-width: 0">
-            <div class="colh"><b>Check-in</b><span>3</span></div>
-            <button class="kc sel" aria-pressed="true"><b>Antônio C. Ribeiro</b><span class="x">Eco + Doppler de carótidas</span><span class="m"><i class="dot" style="background:#0A1A4A"></i>P012 · etapa 5 de 6</span></button><button class="kc"><b>Juliana S. Rocha</b><span class="x">Morfológica</span><span class="m"><i class="dot" style="background:#D97706"></i>Falta pedido médico</span></button><button class="kc"><b>Rafael M. Lima</b><span class="x">Raio X de tórax</span><span class="m"><i class="dot" style="background:#D97706"></i>Falta pagamento</span></button>
-            
-          </div>
-          <div role="group" aria-label="Aguardando a sala, 2 pacientes" class="col" style="gap: 8px; min-width: 0">
-            <div class="colh"><b>Aguardando a sala</b><span>2</span></div>
-            <button class="kc"><b>Lúcia F. Prado</b><span class="x">TC de crânio</span><span class="m">Sala 6 · 4 min</span></button><button class="kc"><b>Tiago S. Braga</b><span class="x">Raio X de tórax</span><span class="m">Sala 5 · 12 min</span></button>
-            
-          </div>
-          <div role="group" aria-label="Em exame, 5 pacientes" class="col" style="gap: 8px; min-width: 0">
-            <div class="colh"><b>Em exame</b><span>5</span></div>
-            <button class="kc"><b>Sônia M. Castro</b><span class="x">Ecocardiograma</span><span class="m"><i class="dot" style="background:#5B45B5"></i>Sala 1 · desde 08:41</span></button><button class="kc"><b>Gustavo H. Pires</b><span class="x">Teste ergométrico</span><span class="m"><i class="dot" style="background:#5B45B5"></i>Sala 4 · desde 08:35</span></button><button class="kc"><b>Vera L. Antunes</b><span class="x">TC de abdome</span><span class="m"><i class="dot" style="background:#5B45B5"></i>Sala 6 · desde 08:30</span></button><button class="kc"><b>Ivone R. Teixeira</b><span class="x">Doppler de carótidas</span><span class="m"><i class="dot" style="background:#5B45B5"></i>Sala 3 · desde 08:33</span></button><button class="kc"><b>Neusa A. Freitas</b><span class="x">Instalação de MAPA</span><span class="m"><i class="dot" style="background:#5B45B5"></i>Sala 7 · desde 08:38</span></button>
-            
-          </div>
-          <div role="group" aria-label="Saindo, 13 pacientes" class="col" style="gap: 8px; min-width: 0">
-            <div class="colh"><b>Saindo</b><span>13</span></div>
-            <button class="kc"><b>Denise P. Gomes</b><span class="x">Pós-contraste</span><span class="m"><i class="dot" style="background:#0F6E6A"></i>observação · 12 de 30 min</span></button><button class="kc"><b>Maria H. Duarte</b><span class="x">Eco · laudo liberado</span><span class="m">saiu 07:52</span></button><button class="kc"><b>Caio V. Moraes</b><span class="x">Raio X · laudo até 14:00</span><span class="m">saiu 08:40</span></button>
-            <button class="btn btn-g btn-sm" style="justify-content: flex-start">Mais 10</button>
-          </div>
-      </div>
-    </section>
-
-    <section class="card" aria-labelledby="ck-h" style="padding: 22px">
-      <div class="row wrap" style="gap: 24px; align-items: center">
-        <div style="flex: 0 1 300px; min-width: 240px">
-          <div class="lbl">Check-in · P012 preferencial</div>
-          <h2 id="ck-h" style="font-size: 20px; font-weight: 650; margin-top: 6px">Antônio Carlos Ribeiro</h2>
-          <div class="t14 mute" style="margin-top: 2px">15/06/1954 · 72 anos · Unimed</div>
-          <div class="t14" style="margin-top: 8px">Eco + Doppler · <b>08:30</b> · Sala 1 · Dr. Paulo</div>
-        </div>
-        <ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 14px 18px; flex: 999 1 560px"><li class="stp"><span class="ck ok">✓</span><div><div class="t14 " style="">Identidade</div><div class="t12 mute">nome + nascimento</div></div></li><li class="stp"><span class="ck ok">✓</span><div><div class="t14 " style="">Elegibilidade</div><div class="t12 mute">Unimed · 08:21</div></div></li><li class="stp"><span class="ck ok">✓</span><div><div class="t14 " style="">Guia</div><div class="t12 mute">nº 4471230</div></div></li><li class="stp"><span class="ck ok">✓</span><div><div class="t14 " style="">Pedido médico</div><div class="t12 mute">foto anexada</div></div></li><li class="stp"><span class="ck cur">5</span><div><div class="t14 b" style="">Etiqueta</div><div class="t12 mute">imprimir</div></div></li><li class="stp"><span class="ck todo">6</span><div><div class="t14 " style="color:#5B6474">Sala</div><div class="t12 mute">enviar</div></div></li></ol>
-        <div class="col" style="gap: 8px; flex: 0 0 220px">
-          <button class="btn btn-p">Imprimir etiqueta</button>
-          <a class="btn btn-g btn-sm" href="Paciente.dc.html">Abrir ficha</a>
-        </div>
-      </div>
-      <div class="t13 mute" style="margin-top: 16px; padding-top: 14px; border-top: 1px solid #F1F3F6">Veículo QRT4B21 no estacionamento desde 08:12 · validado pelo exame</div>
-    </section>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1150}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = { q: '', filtro: 'todos', sel: '', senha: 34, etq: false, enviado: false, rech: false, ped: false, chk: {} };
+  }
+  norm(t) { return (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+  renderVals() {
+    const s = this.state;
+    const AM = '#D97706', VI = '#5B45B5', TE = '#0F6E6A', NA = '#0A1A4A';
+    // [id, nome, nascimento, exame, meta, cor do ponto, coluna, pendência, convênio, horário/sala]
+    const P = [
+      ['cn', 'Cláudia Bastos Nunes', '22/08/1965', 'Eco com Doppler', '09:00, confirmada', '', 0, false, 'Unimed', '09:00, Sala 1'],
+      ['pl', 'Patrícia Gomes Lopes', '03/05/1991', 'Obstétrica com Doppler', '09:00, confirmada', '', 0, false, 'Particular', '09:00, Sala 2'],
+      ['mf', 'Marcelo Dias Faria', '17/02/1979', 'USG de abdome', '09:00, sem resposta', AM, 0, true, 'SulAmérica', '09:00, Sala 3'],
+      ['lc', 'Laura Nunes Costa', '30/10/1983', 'Raio X de coluna', '09:00, confirmada', '', 0, false, 'Unimed', '09:00, Sala 5'],
+      ['jb', 'Jorge Luiz Batista', '01/08/1959', 'Holter 24 h', '09:00, confirmado', '', 0, false, 'Unimed', '09:00, Sala 7'],
+      ['hm', 'Hélio Tavares Mendes', '08/05/1956', 'Ecocardiograma', '10:00, confirmado', '', 0, false, 'Particular', '10:00, Sala 1'],
+      ['rt', 'Rosa Maria Teles', '11/12/1949', 'Ecocardiograma', '10:30, confirmada', '', 0, false, 'Amil', '10:30, Sala 1'],
+      ['rb', 'Rita Costa Barbosa', '09/09/1966', 'USG de tireoide', '10:30, sem resposta', AM, 0, true, 'Particular', '10:30, Sala 3'],
+      ['os', 'Otávio Ramos Sales', '03/03/1967', 'TC de tórax', '11:30, confirmado', '', 0, false, 'Unimed', '11:30, Sala 6'],
+      ['ac', 'Antônio Carlos Ribeiro', '15/06/1954', 'Eco e Doppler de carótidas', 'P012, etapa 5 de 6', NA, 1, false, 'Petrobras', '08:30, Sala 1, Dr. Paulo'],
+      ['js', 'Juliana Sampaio Rocha', '12/04/1993', 'USG morfológica', 'Falta pedido médico', AM, 1, true, 'Bradesco Saúde', '10:40, Sala 2, Dra. Renata'],
+      ['rm', 'Rafael Monteiro Lima', '09/11/1988', 'Raio X de tórax', 'Falta pagamento', AM, 1, true, 'Particular', '08:50, Sala 5'],
+      ['lf', 'Lúcia Fernandes Prado', '02/07/1959', 'TC de crânio', 'Sala 6, 4 min', '', 2, false, 'SulAmérica', '09:00, Sala 6'],
+      ['tb', 'Tiago Souza Braga', '19/05/1990', 'Raio X de tórax', 'Sala 5, 12 min', '', 2, false, 'Amil', '08:30, Sala 5'],
+      ['sc', 'Sônia Maria Castro', '03/02/1962', 'Ecocardiograma', 'Sala 1, desde 08:41', VI, 3, false, 'Particular', '08:30, Sala 1'],
+      ['gp', 'Gustavo Henrique Pires', '14/01/1970', 'Teste ergométrico', 'Sala 4, desde 08:35', VI, 3, false, 'Amil', '08:00, Sala 4'],
+      ['va', 'Vera Lúcia Antunes', '18/09/1957', 'TC de abdome', 'Sala 6, desde 08:30', VI, 3, false, 'Amil', '07:30, Sala 6'],
+      ['it', 'Ivone Rocha Teixeira', '16/08/1951', 'Doppler de carótidas', 'Sala 3, desde 08:33', VI, 3, false, 'Petrobras', '07:30, Sala 3'],
+      ['nf', 'Neusa Almeida Freitas', '22/04/1961', 'Instalação de MAPA', 'Sala 7, desde 08:38', VI, 3, false, 'Petrobras', '08:00, Sala 7'],
+      ['dg', 'Denise Prado Gomes', '25/01/1972', 'Pós-contraste', 'Observação, 12 de 30 min', TE, 4, false, 'Unimed', '07:30, Sala 6'],
+      ['mh', 'Maria Helena Duarte', '12/03/1968', 'Eco, laudo liberado', 'Saiu 07:52', '', 4, false, 'Unimed', '07:30, Sala 1'],
+      ['cm', 'Caio Vieira Moraes', '10/10/1985', 'Raio X, laudo até 14:00', 'Saiu 08:40', '', 4, false, 'Unimed', '07:00, Sala 5'],
+      ['jp', 'João Pedro Alves', '04/09/1971', 'Eco, laudo liberado', 'Saiu 07:40', '', 4, false, 'Particular', '07:00, Sala 1'],
+      ['bc', 'Beatriz Lima Cunha', '19/07/1995', 'Obstétrica, laudo liberado', 'Saiu 07:35', '', 4, false, 'Unimed', '07:00, Sala 2'],
+      ['rl', 'Roberto Faria Lima', '02/02/1958', 'Doppler venoso', 'Saiu 07:38', '', 4, false, 'Unimed', '07:00, Sala 3'],
+      ['mp', 'Mário Jorge Pinto', '15/01/1955', 'Retirada de MAPA', 'Saiu 07:20', '', 4, false, 'Unimed', '07:00, Sala 7']
+    ];
+    const curto = n => { const x = n.split(' '); return x.length > 2 ? x[0] + ' ' + x[1].charAt(0) + '. ' + x[x.length - 1] : n; };
+    const COL = ['A chegar', 'Check-in', 'Aguardando a sala', 'Em exame', 'Saindo'];
+    const colDe = p => (p[0] === 'ac' && s.enviado) ? 2 : (s.chk[p[0]] ? 1 : p[6]);
+    const metaDe = p => p[0] === 'ac' ? (s.enviado ? 'Sala 1, agora' : (s.etq ? 'P012, etapa 6 de 6' : p[4])) : (p[0] === 'js' && s.ped ? 'Etapa 5 de 6' : (s.chk[p[0]] ? 'Etapa 1 de 6' : p[4]));
+    const termos = this.norm(s.q).split(/\s+/).filter(Boolean);
+    const passa = p => (!termos.length || termos.every(t => this.norm(p[1] + ' ' + p[4]).includes(t))) && (s.filtro === 'todos' || p[7]);
+    const colunas = COL.map((t, ci) => {
+      const todos = P.filter(p => colDe(p) === ci);
+      const vis = todos.filter(passa);
+      return { t, n: String(todos.length), aria: t + ', ' + todos.length + ' pacientes', vazio: vis.length === 0,
+        cards: vis.map(p => ({ nome: curto(p[1]), exame: p[3], meta: metaDe(p), dot: p[5] ? 'background: ' + p[5] : 'display: none',
+          cls: 'kc' + (s.sel === p[0] ? ' sel' : ''), sel: s.sel === p[0] ? 'true' : 'false', abrir: () => this.setState({ sel: p[0] }) })) };
+    });
+    const cur = P.find(p => p[0] === s.sel);
+    let d = {};
+    if (cur) {
+      const ci = colDe(cur);
+      const ok = (t, sub) => ({ t, s: sub, ok: true, semOk: false, cls: 'ck ok', tCls: 't14' });
+      const pend = (n, t, sub) => ({ n, t, s: sub, ok: false, semOk: true, cls: 'ck pend', tCls: 't14 b' });
+      const now = (n, t, sub) => ({ n, t, s: sub, ok: false, semOk: true, cls: 'ck cur', tCls: 't14 b' });
+      const todo = (n, t, sub) => ({ n, t, s: sub, ok: false, semOk: true, cls: 'ck todo', tCls: 't14 mute' });
+      let passos = [], acao = '', agir = null, msg = '', link = '';
+      if (cur[0] === 'ac') {
+        passos = [ok('Identidade', 'Nome e nascimento conferidos'), ok('Elegibilidade', 'Petrobras, 08:21'), ok('Guia', 'Nº 4471230, reservada'), ok('Pedido médico', 'Foto anexada'),
+          s.etq ? ok('Etiqueta', 'Pulseira ETQ-7H2M-30 impressa') : now('5', 'Etiqueta', 'Imprimir pulseira'),
+          s.enviado ? ok('Sala', 'Enviado à Sala 1') : (s.etq ? now('6', 'Sala', 'Enviar para a Sala 1') : todo('6', 'Sala', 'Enviar'))];
+        if (!s.etq) { acao = 'Imprimir etiqueta'; agir = () => this.setState({ etq: true }); }
+        else if (!s.enviado) { acao = 'Enviar para a Sala 1'; agir = () => this.setState({ enviado: true }); }
+        msg = s.enviado ? 'Antônio foi para a fila da Sala 1. O Dr. Paulo já vê o paciente como aguardando.' : '';
+      } else if (cur[0] === 'js') {
+        passos = [ok('Identidade', 'Nome e nascimento conferidos'), ok('Elegibilidade', 'Bradesco Saúde, 08:44'), ok('Guia', 'Nº 99120-31'),
+          s.ped ? ok('Pedido médico', 'Foto anexada agora, hash guardado') : pend('4', 'Pedido médico', 'Fotografar o pedido no balcão'), s.ped ? now('5', 'Etiqueta', 'Imprimir pulseira') : todo('5', 'Etiqueta', 'Imprimir'), todo('6', 'Sala', 'Enviar')];
+        if (!s.ped) { acao = 'Fotografar pedido médico'; agir = () => this.setState({ ped: true }); }
+      } else if (cur[0] === 'rm') {
+        passos = [ok('Identidade', 'Nome e nascimento conferidos'), pend('2', 'Pagamento', 'Valor calculado pelo sistema no caixa'), todo('3', 'Etiqueta', 'Imprimir'), todo('4', 'Sala', 'Enviar')];
+        link = 'Caixa.dc.html'; acao = 'Ir para o caixa';
+      } else if (ci === 0) { acao = 'Iniciar check-in'; agir = () => this.setState(p => ({ chk: Object.assign({}, p.chk, { [cur[0]]: true }) })); }
+      else if (s.chk[cur[0]]) { passos = [now('1', 'Identidade', 'Conferir nome e nascimento com o documento'), todo('2', 'Elegibilidade', 'Consultar convênio'), todo('3', 'Guia', 'Conferir'), todo('4', 'Pedido médico', 'Anexar'), todo('5', 'Etiqueta', 'Imprimir'), todo('6', 'Sala', 'Enviar')]; }
+      d = { nome: cur[1], nasc: cur[2], onde: COL[ci], temPassos: passos.length > 0, passos,
+        kv: [{ k: 'Exame', v: cur[3] }, { k: 'Horário', v: cur[9] }, { k: 'Convênio', v: cur[8] }, { k: 'Situação', v: metaDe(cur) }],
+        temAcao: !!acao && !link, temLink: !!link, link, acao, agir: agir || (() => {}), temMsg: !!msg, msg };
+    }
+    const sen = 'N0' + String(s.senha).padStart(2, '0');
+    return {
+      q: s.q, onQ: e => this.setState({ q: e.target.value }),
+      senha: sen, nNorm: String(Math.max(0, 3 - (s.senha - 34))),
+      aviso: s.rech ? 'Senha ' + sen + ' chamada de novo no painel' : '',
+      proxima: () => this.setState(p => ({ senha: p.senha + 1, rech: false })), rechamar: () => this.setState({ rech: true }),
+      filtros: [['todos', 'Todos'], ['pend', 'Só pendências']].map(([k, t]) => ({ t, cls: s.filtro === k ? 'on' : '', on: s.filtro === k ? 'true' : 'false', ir: () => this.setState({ filtro: k }) })),
+      colunas, temDrw: !!cur, d, fechar: () => this.setState({ sel: '' })
+    };
+  }
 }
 </script>
 </body>

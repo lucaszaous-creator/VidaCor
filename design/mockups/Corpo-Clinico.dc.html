@@ -4,211 +4,283 @@
 <meta charset="utf-8">
 <title>Corpo clínico — VidaCor</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style>body{margin:0}</style>
+<style>
+body{margin:0}
+.tg{min-width:64px;height:34px;padding:0 12px;border-radius:10px;border:1px solid #D9DDE5;background:#fff;font:600 13px Inter,sans-serif;color:#5B6474;cursor:pointer}
+.tg.sim{background:#E5F5EC;border-color:#E5F5EC;color:#1F7A4D}
+.tg.pend{background:#FFF3DF;border-color:#E9B44C;color:#9A5B00}
+.esc{text-align:center;padding:10px 4px;border-radius:10px;font-size:13px}
+.esc.on{background:#EFEBFC;color:#5B45B5;font-weight:600}
+.esc.off{background:#F6F7F9;color:#8A93A3}
+.scrim{position:fixed;inset:0;background:rgba(15,23,42,.28);z-index:40}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:440px;max-width:100vw;background:#fff;z-index:41;display:flex;flex-direction:column;box-shadow:0 8px 24px rgba(15,23,42,.12)}
+.ft{display:flex;align-items:center;gap:8px;padding:12px 18px;border-top:1px solid #E8EAEF;flex-wrap:wrap}
+</style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="corpo-clinico" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="corpo-clinico" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="page-h">
-      <div class="grow"><h1>Corpo clínico</h1><p>Quem atende, o que cada um pode fazer e laudar, escala e repasse · médico novo só fica ativo depois da conferência de uma segunda pessoa</p></div>
-      <div class="seg" role="tablist" aria-label="Lista"><button class="{{abaCorpoCls}}" role="tab" aria-selected="{{abaCorpoSel}}" onClick="{{verCorpo}}">Corpo clínico · 9</button><button class="{{abaSolCls}}" role="tab" aria-selected="{{abaSolSel}}" onClick="{{verSol}}">Médicos solicitantes · 214</button></div>
+    <header class="row wrap" style="gap: 16px">
+      <div style="flex: 1 1 auto; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Corpo clínico</h1>
+        <div class="t13 mute" style="margin-top: 2px">{{resumo}}</div>
+      </div>
+      <label class="search" style="flex: 0 1 380px; min-height: 44px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <span class="sr">Buscar médico</span>
+        <input type="search" value="{{q}}" onChange="{{onQ}}" placeholder="Nome, CRM ou especialidade">
+      </label>
       <button class="btn btn-p" onClick="{{novo}}">Cadastrar médico</button>
-    </div>
+    </header>
 
-    <sc-if value="{{alertaVenc}}" hint-placeholder-val="{{ true }}">
-      <div class="banner off"><div class="t14" style="line-height: 1.5"><b>Atenção:</b> o certificado digital do Dr. Marcos Freire vence em 18 dias. Sem certificado ele não assina laudo; já avisamos por e-mail e no chat.</div></div>
-    </sc-if>
+    <nav class="tabs" aria-label="Listas">
+      <sc-for list="{{listas}}" as="a" hint-placeholder-count="2"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}} <span class="mute" style="font-weight: 500">{{a.n}}</span></button></sc-for>
+    </nav>
 
     <sc-if value="{{modoCorpo}}" hint-placeholder-val="{{ true }}">
-    <div style="display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); gap: 16px; align-items: start">
-      <section class="card" style="padding: 8px" aria-label="Médicos">
-        <label class="search" style="margin: 8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar médico</span><input type="search" placeholder="Nome, CRM ou especialidade"></label>
-        <sc-for list="{{medicos}}" as="m" hint-placeholder-count="6">
-          <button class="{{m.cls}}" onClick="{{m.abrir}}" aria-current="{{m.atual}}">
-            <span class="av" style="background: var(--kb); color: var(--k)">{{m.ini}}</span>
-            <span style="flex: 1; min-width: 0">
-              <span class="nm" style="display: block">{{m.nome}}</span>
-              <span class="pv" style="display: block">{{m.crm}} · {{m.esp}}</span>
-              <span class="row wrap" style="gap: 6px; margin-top: 6px"><sc-for list="{{m.tags}}" as="t" hint-placeholder-count="1"><span class="{{t.cls}}" style="height: 22px; font-size: 12px">{{t.t}}</span></sc-for></span>
-            </span>
-          </button>
-        </sc-for>
-      </section>
+      <div class="banner off" style="padding: 10px 14px; align-items: center">
+        <div class="t14" style="flex: 1">Certificado do Dr. Marcos Freire vence em 18 dias (25/11); sem ele, não assina laudo. Ele já foi avisado.</div>
+        <button class="btn btn-sm" onClick="{{verMarcos}}">Ver médico</button>
+      </div>
 
-      <section class="card" aria-label="Dados do médico" style="display: flex; flex-direction: column; gap: 16px">
-        <div class="row wrap" style="gap: 14px">
-          <span class="av {{sel.kCls}}" style="width: 56px; height: 56px; font-size: 17px; background: var(--kb); color: var(--k)">{{sel.ini}}</span>
-          <div style="flex: 1 1 260px; min-width: 0"><div style="font-size: 22px; font-weight: 650">{{sel.nome}}</div><div class="t14 mute">{{sel.crm}} · {{sel.esp}}</div></div>
-          <div class="row wrap" style="gap: 8px"><sc-for list="{{sel.tags}}" as="t" hint-placeholder-count="1"><span class="{{t.cls}}">{{t.t}}</span></sc-for></div>
-        </div>
-
-        <sc-if value="{{sel.pendente}}" hint-placeholder-val="{{ false }}">
-          <div class="banner info" style="flex-direction: column; gap: 10px">
-            <div class="t14" style="line-height: 1.5"><b>Aguardando segunda conferência.</b> Cadastrado por Coordenação (Patrícia Lemos) em 06/11 às 17:20. Confira o CRM no CFM, o RQE e o certificado. Quem cadastrou não pode ativar.</div>
-            <div class="row wrap" style="gap: 8px"><button class="btn btn-sm btn-p" onClick="{{ativar}}">Conferi: ativar médico</button><button class="btn btn-sm">Devolver com pendência</button></div>
-          </div>
-        </sc-if>
-        <sc-if value="{{sel.recemAtivado}}" hint-placeholder-val="{{ false }}">
-          <div class="toast" role="status"><span style="flex: 1">Dr. Felipe Andrade ativado por Ana Souza (2ª conferência) · registrado no lastro</span></div>
-        </sc-if>
-
-        <nav class="row" role="tablist" aria-label="Seções" style="gap: 6px; border-bottom: 1px solid #E8EAEF; padding-bottom: 10px; flex-wrap: wrap">
-          <sc-for list="{{abas}}" as="a" hint-placeholder-count="5"><button class="{{a.cls}}" role="tab" aria-selected="{{a.sel}}" onClick="{{a.ir}}" style="height: 38px; padding: 0 14px; border-radius: 999px; border: 0; font: 600 14px Inter, sans-serif; cursor: pointer">{{a.t}}</button></sc-for>
-        </nav>
-
-        <sc-if value="{{tDados}}" hint-placeholder-val="{{ true }}">
-          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 14px">
-            <div class="col" style="gap: 6px; padding: 14px; border-radius: 16px; background: #F6F7F9"><span class="lbl">CRM</span><b class="t15">{{sel.crm}}</b><span class="chip c-green" style="align-self: flex-start">Regular no CFM · consultado 07/11 09:02</span></div>
-            <div class="col" style="gap: 6px; padding: 14px; border-radius: 16px; background: #F6F7F9"><span class="lbl">Especialidades (RQE)</span><sc-for list="{{sel.rqe}}" as="r" hint-placeholder-count="2"><span class="t14">{{r}}</span></sc-for></div>
-            <div class="col" style="gap: 6px; padding: 14px; border-radius: 16px; background: #F6F7F9"><span class="lbl">Certificado ICP-Brasil</span><b class="t15">{{sel.cert}}</b><span class="{{sel.certCls}}" style="align-self: flex-start">{{sel.certSit}}</span></div>
-            <div class="col" style="gap: 6px; padding: 14px; border-radius: 16px; background: #F6F7F9"><span class="lbl">Contato</span><span class="t14">{{sel.contato}}</span><span class="t13 mute">Ramal e chat da equipe</span></div>
-          </div>
-          <div class="row wrap" style="gap: 8px"><button class="btn btn-sm">Editar dados</button><button class="btn btn-sm">Assinatura e carimbo do laudo</button><button class="btn btn-sm">Afastar temporariamente</button></div>
-        </sc-if>
-
-        <sc-if value="{{tPode}}" hint-placeholder-val="{{ false }}">
-          <p class="t14 mute" style="margin: 0">A fila de laudos e a agenda só oferecem ao médico o que está marcado aqui. Mudança fica pendente até a segunda conferência.</p>
-          <table class="tb">
-            <thead><tr><th>Exame</th><th class="r">Realiza na sala</th><th class="r">Lauda</th><th class="r">Revisa (2ª leitura)</th></tr></thead>
-            <tbody>
-              <sc-for list="{{matriz}}" as="x" hint-placeholder-count="6">
-                <tr><td class="b">{{x.exame}}</td>
-                  <td class="r"><button class="{{x.c0}}" aria-pressed="{{x.p0}}" aria-label="{{x.exame}}: realiza" onClick="{{x.t0}}" style="width: 36px; height: 36px; border-radius: 10px; border: 0; cursor: pointer; font-weight: 700">{{x.i0}}</button></td>
-                  <td class="r"><button class="{{x.c1}}" aria-pressed="{{x.p1}}" aria-label="{{x.exame}}: lauda" onClick="{{x.t1}}" style="width: 36px; height: 36px; border-radius: 10px; border: 0; cursor: pointer; font-weight: 700">{{x.i1}}</button></td>
-                  <td class="r"><button class="{{x.c2}}" aria-pressed="{{x.p2}}" aria-label="{{x.exame}}: revisa" onClick="{{x.t2}}" style="width: 36px; height: 36px; border-radius: 10px; border: 0; cursor: pointer; font-weight: 700">{{x.i2}}</button></td></tr>
-              </sc-for>
-            </tbody>
-          </table>
-          <sc-if value="{{matrizMudou}}" hint-placeholder-val="{{ false }}"><div class="banner off"><div class="t14"><b>{{nMudancas}} mudança(s) pendente(s).</b> Valem depois que outra pessoa da coordenação conferir.</div></div></sc-if>
-        </sc-if>
-
-        <sc-if value="{{tAgenda}}" hint-placeholder-val="{{ false }}">
-          <div style="display: grid; grid-template-columns: 90px repeat(5, minmax(0, 1fr)); gap: 6px">
-            <span></span><sc-for list="{{dias}}" as="d" hint-placeholder-count="5"><span class="lbl" style="text-align: center">{{d}}</span></sc-for>
-            <sc-for list="{{escala}}" as="l" hint-placeholder-count="2">
-              <span class="t13 b" style="align-self: center">{{l.turno}}</span>
-              <sc-for list="{{l.cel}}" as="c" hint-placeholder-count="5"><span style="{{c.st}}" class="t13">{{c.t}}</span></sc-for>
+      <div class="fill" style="display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 16px">
+        <section class="card pane" style="padding: 0" aria-label="Médicos">
+          <div class="scroll">
+            <sc-for list="{{medicos}}" as="m" hint-placeholder-count="5">
+              <button class="{{m.cls}}" onClick="{{m.abrir}}" aria-current="{{m.atual}}">
+                <span style="flex: 1; min-width: 0">
+                  <span class="row" style="gap: 8px"><span class="nm" style="flex: 1; min-width: 0">{{m.nome}}</span><span class="{{m.stCls}}" style="height: 24px; font-size: 12px">{{m.st}}</span></span>
+                  <span class="pv" style="display: block">{{m.crm}}, {{m.espCurta}}</span>
+                </span>
+              </button>
             </sc-for>
+            <sc-if value="{{vazio}}" hint-placeholder-val="{{ false }}">
+              <div class="state"><div class="b">Nenhum médico encontrado</div><div class="t13 mute">Busque pelo CRM ou por parte do nome.</div></div>
+            </sc-if>
           </div>
-          <div class="col" style="gap: 0">
-            <div class="li"><span class="ni k-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"></rect><path d="M4 10h16M9 3v4M15 3v4"></path></svg></span><div style="flex: 1"><div class="t14 b">Congresso · 20 a 22/11</div><div class="s">Agenda bloqueada · 14 pacientes remarcados com aviso no WhatsApp</div></div></div>
-            <div class="li" style="border: 0"><span class="ni k-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><div style="flex: 1"><div class="t14 b">Tempo por exame</div><div class="s">Obstétrica 30 min · morfológica 50 min · Doppler 40 min</div></div></div>
-          </div>
-        </sc-if>
+        </section>
 
-        <sc-if value="{{tRepasse}}" hint-placeholder-val="{{ false }}">
-          <table class="tb">
-            <thead><tr><th>Regra</th><th>Vale para</th><th class="r">Repasse</th><th>Desde</th></tr></thead>
-            <tbody>
-              <tr><td class="b">Exame realizado e laudado</td><td>Particular</td><td class="r num">40% do valor recebido</td><td class="num nw">01/2026</td></tr>
-              <tr><td class="b">Exame realizado e laudado</td><td>Convênios (todos)</td><td class="r num">35% do valor pago pela operadora</td><td class="num nw">01/2026</td></tr>
-              <tr><td class="b">Só laudo (exame de outro técnico)</td><td>Todos</td><td class="r num">R$ 45,00 por laudo</td><td class="num nw">03/2026</td></tr>
-              <tr><td class="b">Glosa</td><td>Convênios</td><td class="r">Desconta no mês em que a glosa é confirmada</td><td class="num nw">01/2026</td></tr>
-            </tbody>
-          </table>
-          <p class="t13 mute" style="margin: 0">Regras com versão e data: mudar não altera meses já fechados. O cálculo é feito pelo servidor e aparece no Financeiro.</p>
-        </sc-if>
-
-        <sc-if value="{{tHist}}" hint-placeholder-val="{{ false }}">
-          <div class="col" style="gap: 0">
-            <div class="li"><span class="ni k-green">✓</span><div style="flex: 1"><div class="t14">Ativada após 2ª conferência</div><div class="s">Ana Souza · 03/01/2026 10:12</div></div></div>
-            <div class="li"><span class="ni k-violet">+</span><div style="flex: 1"><div class="t14">Passou a laudar Raio X</div><div class="s">Coordenação · conferido por Patrícia Lemos · 12/03/2026</div></div></div>
-            <div class="li" style="border: 0"><span class="ni k-blue">↻</span><div style="flex: 1"><div class="t14">Certificado digital renovado até 08/2027</div><div class="s">Sistema · 02/08/2026</div></div></div>
+        <section class="card pane" style="padding: 0" aria-label="Dados do médico">
+          <div class="row wrap" style="gap: 12px; padding: 16px 18px 0">
+            <div style="flex: 1 1 260px; min-width: 0">
+              <h2 style="font-size: 20px; font-weight: 650">{{sel.nome}}</h2>
+              <div class="t14 mute">{{sel.crm}}, {{sel.esp}}</div>
+            </div>
+            <span class="{{sel.stCls}}">{{sel.st}}</span>
           </div>
-        </sc-if>
-      </section>
-    </div>
+          <nav class="tabs" aria-label="Seções do médico" style="padding: 0 10px; margin-top: 10px">
+            <sc-for list="{{abas}}" as="a" hint-placeholder-count="5"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for>
+          </nav>
+
+          <div class="scroll" style="padding: 16px 18px">
+            <sc-if value="{{sel.pendente}}" hint-placeholder-val="{{ false }}">
+              <div class="banner info" style="margin-bottom: 14px; align-items: center; flex-wrap: wrap">
+                <div class="t14" style="flex: 1 1 320px; line-height: 1.5">Aguarda segunda conferência. Cadastrado por Patrícia Lemos em 06/11, 17:20. Confira CRM, RQE e certificado; quem cadastrou não pode ativar.</div>
+                <button class="btn btn-sm btn-p" onClick="{{ativar}}">Conferi: ativar</button>
+                <button class="btn btn-sm">Devolver com pendência</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{sel.recemAtivado}}" hint-placeholder-val="{{ false }}">
+              <div class="banner ok" role="status" style="margin-bottom: 14px"><div class="t14">Dr. Felipe Andrade ativado por Ana Souza (segunda conferência). Já aparece na agenda e na fila de laudos. Registrado no lastro.</div></div>
+            </sc-if>
+
+            <sc-if value="{{tDados}}" hint-placeholder-val="{{ true }}">
+              <dl class="kv" style="margin: 0; grid-template-columns: 160px minmax(0, 1fr); gap: 12px 16px">
+                <dt>CRM</dt><dd><span class="num">{{sel.crm}}</span><span class="mute">, regular no CFM (consultado 07/11 às 09:02)</span></dd>
+                <dt>Especialidades</dt><dd><sc-for list="{{sel.rqe}}" as="r" hint-placeholder-count="2"><div>{{r}}</div></sc-for></dd>
+                <dt>Certificado</dt><dd>{{sel.cert}} <span class="{{sel.certTxt}}">{{sel.certSit}}.</span></dd>
+                <dt>Celular</dt><dd class="num">{{sel.tel}}</dd>
+                <dt>E-mail</dt><dd>{{sel.email}}</dd>
+                <dt>Função</dt><dd>{{sel.funcao}}</dd>
+              </dl>
+            </sc-if>
+
+            <sc-if value="{{tPode}}" hint-placeholder-val="{{ false }}">
+              <table class="tb">
+                <thead><tr><th>Exame</th><th class="r">Realiza na sala</th><th class="r">Lauda</th><th class="r">Segunda leitura</th></tr></thead>
+                <tbody>
+                  <sc-for list="{{matriz}}" as="x" hint-placeholder-count="6">
+                    <tr><td class="b">{{x.exame}}</td>
+                      <td class="r"><button class="{{x.c0}}" aria-pressed="{{x.p0}}" aria-label="{{x.a0}}" onClick="{{x.t0}}">{{x.i0}}</button></td>
+                      <td class="r"><button class="{{x.c1}}" aria-pressed="{{x.p1}}" aria-label="{{x.a1}}" onClick="{{x.t1}}">{{x.i1}}</button></td>
+                      <td class="r"><button class="{{x.c2}}" aria-pressed="{{x.p2}}" aria-label="{{x.a2}}" onClick="{{x.t2}}">{{x.i2}}</button></td></tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </sc-if>
+
+            <sc-if value="{{tAgenda}}" hint-placeholder-val="{{ false }}">
+              <div style="display: grid; grid-template-columns: 80px repeat(5, minmax(0, 1fr)); gap: 6px; align-items: center">
+                <span></span><sc-for list="{{dias}}" as="d" hint-placeholder-count="5"><span class="t13 b mute" style="text-align: center">{{d}}</span></sc-for>
+                <sc-for list="{{escala}}" as="l" hint-placeholder-count="2">
+                  <span class="t13 b">{{l.turno}}</span>
+                  <sc-for list="{{l.cel}}" as="c" hint-placeholder-count="5"><span class="{{c.cls}}">{{c.t}}</span></sc-for>
+                </sc-for>
+              </div>
+              <h3 class="t14 b" style="margin-top: 20px">Bloqueios</h3>
+              <table class="tb" style="margin-top: 4px">
+                <tbody>
+                  <tr><td class="b nw">20 a 22/11</td><td>Congresso. Agenda bloqueada; 14 pacientes remarcados com aviso no WhatsApp.</td></tr>
+                  <tr><td class="b nw">Tempo por exame</td><td>Obstétrica 30 min, morfológica 50 min, Doppler 40 min.</td></tr>
+                </tbody>
+              </table>
+            </sc-if>
+
+            <sc-if value="{{tRepasse}}" hint-placeholder-val="{{ false }}">
+              <table class="tb">
+                <thead><tr><th>Regra</th><th>Vale para</th><th class="r">Repasse</th><th>Desde</th></tr></thead>
+                <tbody>
+                  <tr><td class="b">Realizado e laudado</td><td>Particular</td><td class="r num">40% do valor recebido</td><td class="num nw">01/2026</td></tr>
+                  <tr><td class="b">Realizado e laudado</td><td>Convênios</td><td class="r num">35% do valor pago</td><td class="num nw">01/2026</td></tr>
+                  <tr><td class="b">Só laudo</td><td>Todos</td><td class="r num">R$ 45,00 por laudo</td><td class="num nw">03/2026</td></tr>
+                  <tr><td class="b">Glosa</td><td>Convênios</td><td class="r">Desconta no mês da confirmação</td><td class="num nw">01/2026</td></tr>
+                </tbody>
+              </table>
+              <p class="t13 mute" style="margin: 12px 0 0">O servidor calcula o repasse; mudar a regra cria nova versão e não altera meses fechados.</p>
+            </sc-if>
+
+            <sc-if value="{{tHist}}" hint-placeholder-val="{{ false }}">
+              <table class="tb">
+                <thead><tr><th>Quando</th><th>O que mudou</th><th>Quem</th></tr></thead>
+                <tbody>
+                  <tr><td class="num nw">02/08/2026</td><td>Certificado digital renovado até 08/2027</td><td>Sistema</td></tr>
+                  <tr><td class="num nw">12/03/2026</td><td>Passou a laudar Raio X</td><td>Coordenação, conferido por Patrícia Lemos</td></tr>
+                  <tr><td class="num nw">03/01/2026</td><td>Ativação após segunda conferência</td><td>Ana Souza</td></tr>
+                </tbody>
+              </table>
+              <a class="btn btn-sm" href="Lastro.dc.html" style="margin-top: 12px">Abrir no lastro</a>
+            </sc-if>
+          </div>
+
+          <sc-if value="{{rodapeDados}}" hint-placeholder-val="{{ true }}">
+            <div class="ft"><button class="btn btn-sm">Editar dados</button><button class="btn btn-sm">Assinatura e carimbo</button><div class="grow"></div><button class="btn btn-sm">Afastar temporariamente</button></div>
+          </sc-if>
+          <sc-if value="{{rodapePode}}" hint-placeholder-val="{{ false }}">
+            <div class="ft">
+              <span class="t13" style="flex: 1 1 280px; color: #334155">{{pendTxt}}</span>
+              <sc-if value="{{matrizMudou}}" hint-placeholder-val="{{ false }}"><button class="btn btn-sm" onClick="{{descartar}}">Descartar</button><button class="btn btn-sm btn-p" onClick="{{enviar}}">Enviar para conferência</button></sc-if>
+            </div>
+          </sc-if>
+        </section>
+      </div>
     </sc-if>
 
     <sc-if value="{{modoSol}}" hint-placeholder-val="{{ false }}">
-      <section class="card" aria-label="Médicos solicitantes">
-        <div class="card-h"><div class="grow"><h2>Médicos que pedem exames</h2><div class="sub">Cadastro simples, criado no agendamento a partir do pedido · alimenta o portal do médico solicitante e o envio do laudo</div></div><button class="btn btn-sm">Novo solicitante</button></div>
-        <table class="tb">
-          <thead><tr><th>Médico</th><th>CRM</th><th>Especialidade</th><th class="r">Pedidos no mês</th><th>Recebe o laudo</th></tr></thead>
-          <tbody>
-            <tr><td class="b">Dr. Hugo Lemos</td><td class="num nw">CRM-SC 8.120</td><td>Cardiologia</td><td class="r num">42</td><td><span class="chip c-green">Portal do médico</span></td></tr>
-            <tr><td class="b">Dra. Beatriz Nunes</td><td class="num nw">CRM-SC 15.044</td><td>Ginecologia e obstetrícia</td><td class="r num">37</td><td><span class="chip c-blue">Link seguro por e-mail</span></td></tr>
-            <tr><td class="b">Dr. Rafael Costa</td><td class="num nw">CRM-SC 11.903</td><td>Clínica médica</td><td class="r num">18</td><td><span class="chip">Pelo paciente</span></td></tr>
-            <tr><td class="b">Dra. Lívia Moura</td><td class="num nw">CRM-PR 30.511</td><td>Endocrinologia</td><td class="r num">6</td><td><span class="chip c-amber">CRM a conferir</span></td></tr>
-          </tbody>
-        </table>
+      <section class="card pane fill" style="padding: 0" aria-label="Médicos solicitantes">
+        <div class="row" style="padding: 12px 16px; border-bottom: 1px solid #E8EAEF"><span class="t14 mute" style="flex: 1">Criados no agendamento a partir do pedido médico. Recebem o laudo pelo canal escolhido.</span><button class="btn btn-sm">Novo solicitante</button></div>
+        <div class="scroll">
+          <table class="tb sticky">
+            <thead><tr><th>Médico</th><th>Especialidade</th><th class="r">Pedidos no mês</th><th>Recebe o laudo</th><th>Situação</th></tr></thead>
+            <tbody>
+              <sc-for list="{{solic}}" as="r" hint-placeholder-count="5">
+                <tr><td><div class="b">{{r.nome}}</div><div class="t13 mute num">{{r.crm}}</div></td><td>{{r.esp}}</td><td class="r num">{{r.n}}</td><td>{{r.canal}}</td><td><span class="{{r.cls}}">{{r.st}}</span></td></tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+        <div class="ft"><span class="t13 mute">Mostrando {{nSolic}} de 214</span></div>
       </section>
     </sc-if>
-
     <sc-if value="{{novoAberto}}" hint-placeholder-val="{{ false }}">
-      <section class="card" aria-label="Cadastrar médico" style="outline: 2px solid #0A1A4A">
-        <div class="card-h"><div class="grow"><h2>Cadastrar médico</h2><div class="sub">Fica pendente até outra pessoa conferir e ativar</div></div><button class="btn btn-sm" onClick="{{fecharNovo}}">Cancelar</button></div>
-        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px">
+      <div class="scrim" onClick="{{fecharNovo}}"></div>
+      <aside class="drawer" role="dialog" aria-label="Cadastrar médico">
+        <div class="row" style="padding: 16px 18px; border-bottom: 1px solid #E8EAEF">
+          <h2 style="flex: 1; font-size: 18px; font-weight: 650">Cadastrar médico</h2>
+          <button class="btn btn-sm btn-g" onClick="{{fecharNovo}}" aria-label="Fechar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+        </div>
+        <div class="scroll" style="flex: 1; padding: 16px 18px; display: flex; flex-direction: column; gap: 14px">
           <label class="field">Nome completo<input class="in"></label>
-          <label class="field">CRM e UF<input class="in" placeholder="CRM-SC 00.000"><span class="t12 mute" style="font-weight: 400">Consultamos o CFM ao sair do campo</span></label>
-          <label class="field">RQE e especialidade<input class="in" placeholder="pode ter mais de um"></label>
+          <label class="field">CRM e UF<input class="in num" placeholder="CRM-SC 00.000"><span class="t12 mute" style="font-weight: 400">Consultado no CFM ao sair do campo.</span></label>
+          <label class="field">RQE e especialidade<input class="in" placeholder="Pode ter mais de um"></label>
           <label class="field">Certificado ICP-Brasil<select class="in"><option>A3 em token</option><option>A1 em nuvem</option></select></label>
           <label class="field">Celular<input class="in num"></label>
           <label class="field">E-mail<input class="in"></label>
         </div>
-        <div class="row" style="gap: 8px; margin-top: 14px"><button class="btn btn-p" onClick="{{fecharNovo}}">Salvar para conferência</button><span class="t13 mute">Depois: marque o que pode fazer, a escala e o repasse</span></div>
-      </section>
+        <div class="ft"><span class="t13 mute" style="flex: 1 1 100%">Fica pendente até outra pessoa conferir e ativar. Depois, marque o que pode fazer, a escala e o repasse.</span><button class="btn btn-sm" onClick="{{fecharNovo}}">Cancelar</button><button class="btn btn-sm btn-p" onClick="{{salvarNovo}}">Salvar para conferência</button></div>
+      </aside>
     </sc-if>
-    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
   </main>
 </div>
+
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { lista: 'corpo', sel: 'ra', aba: 'pode', novo: false, ativado: false, mud: {},
+    this.state = { lista: 'corpo', sel: 'ra', aba: 'pode', novo: false, ativado: false, mud: {}, enviado: false, q: '',
       pode: {
         'USG obstétrica e morfológica': [1, 1, 1], 'USG geral (abdome, tireoide, mama)': [1, 1, 0], 'Doppler (carótidas, venoso, obstétrico)': [1, 1, 0],
         'Ecocardiograma': [0, 0, 0], 'Teste ergométrico e MAPA': [0, 0, 0], 'Raio X': [0, 1, 0], 'Tomografia': [0, 0, 0]
       } };
   }
+  norm(t) { return (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
   renderVals() {
     const s = this.state;
     const M = [
-      { id: 'ra', nome: 'Dra. Renata Alves', ini: 'RA', k: 'violet', crm: 'CRM-SC 12.345', esp: 'Radiologia · USG em GO', rqe: ['RQE 4567 · Radiologia e Diagnóstico por Imagem', 'RQE 8910 · Ultrassonografia em Ginecologia e Obstetrícia'], cert: 'A3 · válido até 08/2027', certSit: 'Válido', certCls: 'chip c-green', contato: '(48) 99901-2233 · renata.alves@vidacor', tags: [['Ativa', 'chip c-green']] },
-      { id: 'pm', nome: 'Dr. Paulo Medeiros', ini: 'PM', k: 'blue', crm: 'CRM-SC 9.876', esp: 'Cardiologia · ecocardiografia', rqe: ['RQE 3321 · Cardiologia', 'RQE 3322 · Ecocardiografia'], cert: 'A1 em nuvem · até 03/2027', certSit: 'Válido', certCls: 'chip c-green', contato: '(48) 99877-1020', tags: [['Ativo', 'chip c-green']] },
-      { id: 'mf', nome: 'Dr. Marcos Freire', ini: 'MF', k: 'green', crm: 'CRM-SC 14.210', esp: 'Angiologia · Doppler', rqe: ['RQE 5120 · Angiologia', 'RQE 5121 · Ecografia vascular com Doppler'], cert: 'A3 · vence 25/11/2026', certSit: 'Vence em 18 dias', certCls: 'chip c-amber', contato: '(48) 99655-4410', tags: [['Ativo', 'chip c-green'], ['Certificado vence', 'chip c-amber']] },
-      { id: 'cs', nome: 'Dra. Cecília Souto', ini: 'CS', k: 'rose', crm: 'CRM-SC 10.502', esp: 'Radiologia · TC e Raio X', rqe: ['RQE 4021 · Radiologia e Diagnóstico por Imagem'], cert: 'A3 · até 11/2027', certSit: 'Válido', certCls: 'chip c-green', contato: '(48) 99712-8830', tags: [['Ativa', 'chip c-green'], ['Responsável técnica', 'chip c-navy']] },
-      { id: 'fa', nome: 'Dr. Felipe Andrade', ini: 'FA', k: 'orange', crm: 'CRM-SC 21.007', esp: 'Radiologia', rqe: ['RQE 7788 · Radiologia e Diagnóstico por Imagem'], cert: 'A1 em nuvem · até 10/2027', certSit: 'Válido', certCls: 'chip c-green', contato: '(48) 99140-7712', tags: s.ativado ? [['Ativo', 'chip c-green']] : [['Aguardando 2ª conferência', 'chip c-amber']], pend: !s.ativado }
+      { id: 'ra', nome: 'Dra. Renata Alves', crm: 'CRM-SC 12.345', esp: 'Radiologia, USG em ginecologia e obstetrícia', espCurta: 'Radiologia', rqe: ['RQE 4567, Radiologia e Diagnóstico por Imagem', 'RQE 8910, Ultrassonografia em Ginecologia e Obstetrícia'], cert: 'A3, válido até 08/2027.', certSit: 'Em dia', certTxt: 'mute', tel: '(48) 99901-2233', email: 'renata.alves@vidacor', funcao: 'Médica laudadora', st: ['Ativa', 'chip c-green'] },
+      { id: 'pm', nome: 'Dr. Paulo Medeiros', crm: 'CRM-SC 9.876', esp: 'Cardiologia, ecocardiografia', espCurta: 'Cardiologia', rqe: ['RQE 3321, Cardiologia', 'RQE 3322, Ecocardiografia'], cert: 'A1 em nuvem, até 03/2027.', certSit: 'Em dia', certTxt: 'mute', tel: '(48) 99877-1020', email: 'paulo.medeiros@vidacor', funcao: 'Médico laudador', st: ['Ativo', 'chip c-green'] },
+      { id: 'mf', nome: 'Dr. Marcos Freire', crm: 'CRM-SC 14.210', esp: 'Angiologia, Doppler', espCurta: 'Angiologia', rqe: ['RQE 5120, Angiologia', 'RQE 5121, Ecografia vascular com Doppler'], cert: 'A3, vence 25/11/2026.', certSit: 'Vence em 18 dias', certTxt: 'b', tel: '(48) 99655-4410', email: 'marcos.freire@vidacor', funcao: 'Médico laudador', st: ['Certificado vence', 'chip c-amber'] },
+      { id: 'cs', nome: 'Dra. Cecília Souto', crm: 'CRM-SC 10.502', esp: 'Radiologia, TC e raio X', espCurta: 'Radiologia', rqe: ['RQE 4021, Radiologia e Diagnóstico por Imagem'], cert: 'A3, até 11/2027.', certSit: 'Em dia', certTxt: 'mute', tel: '(48) 99712-8830', email: 'cecilia.souto@vidacor', funcao: 'Responsável técnica', st: ['Ativa', 'chip c-green'] },
+      { id: 'fa', nome: 'Dr. Felipe Andrade', crm: 'CRM-SC 21.007', esp: 'Radiologia', espCurta: 'Radiologia', rqe: ['RQE 7788, Radiologia e Diagnóstico por Imagem'], cert: 'A1 em nuvem, até 10/2027.', certSit: 'Em dia', certTxt: 'mute', tel: '(48) 99140-7712', email: 'felipe.andrade@vidacor', funcao: 'Médico laudador', st: s.ativado ? ['Ativo', 'chip c-green'] : ['Aguarda conferência', 'chip c-amber'], pend: !s.ativado }
     ];
+    const SOL = [
+      { nome: 'Dr. Hugo Lemos', crm: 'CRM-SC 8.120', esp: 'Cardiologia', n: '42', canal: 'Portal do médico', st: 'Ativo', cls: 'chip c-green' },
+      { nome: 'Dra. Beatriz Nunes', crm: 'CRM-SC 15.044', esp: 'Ginecologia e obstetrícia', n: '37', canal: 'Link seguro por e-mail', st: 'Ativo', cls: 'chip c-green' },
+      { nome: 'Dr. Rafael Costa', crm: 'CRM-SC 11.903', esp: 'Clínica médica', n: '18', canal: 'Pelo paciente', st: 'Ativo', cls: 'chip c-green' },
+      { nome: 'Dra. Lívia Moura', crm: 'CRM-PR 30.511', esp: 'Endocrinologia', n: '6', canal: 'Pelo paciente', st: 'CRM a conferir', cls: 'chip c-amber' },
+      { nome: 'Dr. Otávio Rangel', crm: 'CRM-SC 6.774', esp: 'Ortopedia', n: '14', canal: 'Portal do médico', st: 'Ativo', cls: 'chip c-green' },
+      { nome: 'Dra. Sílvia Pacheco', crm: 'CRM-SC 13.388', esp: 'Mastologia', n: '22', canal: 'Link seguro por e-mail', st: 'Ativo', cls: 'chip c-green' },
+      { nome: 'Dr. Ivan Moreira', crm: 'CRM-SC 9.015', esp: 'Urologia', n: '9', canal: 'Pelo paciente', st: 'Ativo', cls: 'chip c-green' }
+    ];
+    const termos = this.norm(s.q).split(/\s+/).filter(Boolean);
+    const bate = txt => termos.every(t => this.norm(txt).includes(t));
+    const vis = M.filter(m => bate([m.nome, m.crm, m.esp].join(' ')));
+    const solVis = SOL.filter(r => bate([r.nome, r.crm, r.esp].join(' ')));
     const cur = M.find(m => m.id === s.sel);
-    const tags = m => m.tags.map(([t, cls]) => ({ t, cls }));
-    const A = [['dados', 'Dados profissionais'], ['pode', 'O que pode fazer'], ['agenda', 'Escala e bloqueios'], ['repasse', 'Repasse'], ['hist', 'Histórico']];
-    const keys = Object.keys(s.pode);
+    const A = [['dados', 'Dados'], ['pode', 'O que pode fazer'], ['agenda', 'Escala e bloqueios'], ['repasse', 'Repasse'], ['hist', 'Histórico']];
+    const COL = ['realiza', 'lauda', 'segunda leitura'];
     const cell = (ex, j) => {
       const v = s.pode[ex][j], chg = s.mud[ex + j];
-      return { c: chg ? 'ni k-amber' : (v ? 'ni k-green' : 'ni k-gray'), i: v ? '✓' : '–', p: v ? 'true' : 'false',
-        t: () => this.setState(st => { const n = Object.assign({}, st.pode); n[ex] = n[ex].slice(); n[ex][j] = n[ex][j] ? 0 : 1; const m = Object.assign({}, st.mud); m[ex + j] = !m[ex + j]; if (!m[ex + j]) delete m[ex + j]; return { pode: n, mud: m }; }) };
+      return { c: 'tg' + (chg ? ' pend' : (v ? ' sim' : '')), i: v ? 'Sim' : 'Não', p: v ? 'true' : 'false',
+        a: ex + ', ' + COL[j] + ': ' + (v ? 'sim' : 'não') + (chg ? ', mudança pendente' : ''),
+        t: () => this.setState(st => { const n = Object.assign({}, st.pode); n[ex] = n[ex].slice(); n[ex][j] = n[ex][j] ? 0 : 1; const m = Object.assign({}, st.mud); m[ex + j] = !m[ex + j]; if (!m[ex + j]) delete m[ex + j]; return { pode: n, mud: m, enviado: false }; }) };
     };
-    const matriz = keys.map(ex => { const a = cell(ex, 0), b = cell(ex, 1), c = cell(ex, 2);
-      return { exame: ex, c0: a.c, i0: a.i, p0: a.p, t0: a.t, c1: b.c, i1: b.i, p1: b.p, t1: b.t, c2: c.c, i2: c.i, p2: c.p, t2: c.t }; });
-    const sala = (t, k) => ({ t, st: 'text-align: center; padding: 10px 4px; border-radius: 10px; background: ' + (k ? '#ECE8FB; color: #5B45B5; font-weight: 600' : '#F6F7F9; color: #8A93A3') });
+    const matriz = Object.keys(s.pode).map(ex => { const a = cell(ex, 0), b = cell(ex, 1), c = cell(ex, 2);
+      return { exame: ex, c0: a.c, i0: a.i, p0: a.p, a0: a.a, t0: a.t, c1: b.c, i1: b.i, p1: b.p, a1: b.a, t1: b.t, c2: c.c, i2: c.i, p2: c.p, a2: c.a, t2: c.t }; });
+    const sala = (t, k) => ({ t, cls: 'esc ' + (k ? 'on' : 'off') });
     const nMud = Object.keys(s.mud).length;
+    const corpo = s.lista === 'corpo';
     return {
-      abaCorpoCls: s.lista === 'corpo' ? 'on' : '', abaSolCls: s.lista === 'sol' ? 'on' : '',
-      abaCorpoSel: s.lista === 'corpo' ? 'true' : 'false', abaSolSel: s.lista === 'sol' ? 'true' : 'false',
-      verCorpo: () => this.setState({ lista: 'corpo' }), verSol: () => this.setState({ lista: 'sol' }),
-      modoCorpo: s.lista === 'corpo', modoSol: s.lista === 'sol',
-      alertaVenc: true,
-      novo: () => this.setState({ novo: true }), fecharNovo: () => this.setState({ novo: false }), novoAberto: s.novo,
-      medicos: M.map(m => ({ nome: m.nome, ini: m.ini, crm: m.crm, esp: m.esp, tags: tags(m), atual: m.id === s.sel ? 'true' : 'false',
-        cls: 'cv k-' + m.k + (m.id === s.sel ? ' sel' : ''), abrir: () => this.setState({ sel: m.id, aba: m.pend ? 'dados' : s.aba }) })),
-      sel: { nome: cur.nome, ini: cur.ini, crm: cur.crm, esp: cur.esp, rqe: cur.rqe, cert: cur.cert, certSit: cur.certSit, certCls: cur.certCls, contato: cur.contato,
-        tags: tags(cur), pendente: !!cur.pend, recemAtivado: cur.id === 'fa' && s.ativado, kCls: 'k-' + cur.k },
+      resumo: '5 médicos, 1 aguardando conferência',
+      q: s.q, onQ: e => this.setState({ q: e.target.value }),
+      listas: [['corpo', 'Corpo clínico', '5'], ['sol', 'Médicos solicitantes', '214']].map(([k, t, n]) => ({ t, n, cls: s.lista === k ? 'on' : '', atual: s.lista === k ? 'page' : 'false', ir: () => this.setState({ lista: k }) })),
+      modoCorpo: corpo, modoSol: !corpo,
+      verMarcos: () => this.setState({ sel: 'mf', aba: 'dados', q: '' }),
+      novo: () => this.setState({ novo: true }), fecharNovo: () => this.setState({ novo: false }), salvarNovo: () => this.setState({ novo: false }), novoAberto: s.novo,
+      medicos: vis.map(m => ({ nome: m.nome, crm: m.crm, espCurta: m.espCurta, st: m.st[0], stCls: m.st[1], atual: m.id === s.sel ? 'true' : 'false',
+        cls: 'cv' + (m.id === s.sel ? ' sel' : ''), abrir: () => this.setState({ sel: m.id, aba: m.pend ? 'dados' : s.aba }) })),
+      vazio: vis.length === 0,
+      sel: { nome: cur.nome, crm: cur.crm, esp: cur.esp, rqe: cur.rqe, cert: cur.cert, certSit: cur.certSit, certTxt: cur.certTxt, tel: cur.tel, email: cur.email, funcao: cur.funcao,
+        st: cur.st[0], stCls: cur.st[1], pendente: !!cur.pend, recemAtivado: cur.id === 'fa' && s.ativado },
       ativar: () => this.setState({ ativado: true }),
-      abas: A.map(([k, t]) => ({ t, sel: s.aba === k ? 'true' : 'false', cls: s.aba === k ? 'chip c-navy' : 'chip', ir: () => this.setState({ aba: k }) })),
+      abas: A.map(([k, t]) => ({ t, atual: s.aba === k ? 'page' : 'false', cls: s.aba === k ? 'on' : '', ir: () => this.setState({ aba: k }) })),
       tDados: s.aba === 'dados', tPode: s.aba === 'pode', tAgenda: s.aba === 'agenda', tRepasse: s.aba === 'repasse', tHist: s.aba === 'hist',
-      matriz, matrizMudou: nMud > 0, nMudancas: String(nMud),
+      rodapeDados: s.aba === 'dados', rodapePode: s.aba === 'pode',
+      matriz, matrizMudou: nMud > 0 && !s.enviado,
+      pendTxt: s.enviado ? 'Enviado para conferência às 10:12. Patrícia Lemos foi avisada; até lá vale o que estava antes.'
+        : (nMud > 0 ? nMud + ' mudança(s) pendente(s). Valem depois que outra pessoa da coordenação conferir.' : 'A agenda e a fila de laudos só oferecem ao médico o que está marcado aqui.'),
+      descartar: () => this.setState(st => { const n = Object.assign({}, st.pode); Object.keys(st.mud).forEach(k => { const ex = k.slice(0, -1), j = +k.slice(-1); n[ex] = n[ex].slice(); n[ex][j] = n[ex][j] ? 0 : 1; }); return { pode: n, mud: {} }; }),
+      enviar: () => this.setState({ enviado: true }),
       dias: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'],
-      escala: [{ turno: 'Manhã', cel: [sala('Sala 2', 1), sala('Sala 2', 1), sala('—', 0), sala('Sala 2', 1), sala('Sala 3', 1)] },
-               { turno: 'Tarde', cel: [sala('Laudos', 1), sala('—', 0), sala('Sala 2', 1), sala('Laudos', 1), sala('—', 0)] }]
+      escala: [{ turno: 'Manhã', cel: [sala('Sala 2', 1), sala('Sala 2', 1), sala('Livre', 0), sala('Sala 2', 1), sala('Sala 3', 1)] },
+               { turno: 'Tarde', cel: [sala('Laudos', 1), sala('Livre', 0), sala('Sala 2', 1), sala('Laudos', 1), sala('Livre', 0)] }],
+      solic: solVis, nSolic: String(solVis.length)
     };
   }
 }

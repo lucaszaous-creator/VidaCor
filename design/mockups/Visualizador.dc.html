@@ -4,145 +4,226 @@
 <meta charset="utf-8">
 <title>Visualizador de imagens — VidaCor Imagem</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style>body{margin:0;background:#F2F3F6}
-.tool{width:44px;height:44px;border-radius:12px;border:0;background:transparent;color:#C9D3E2;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+<style>
+body{margin:0;background:#F2F3F6}
+.vw{background:#0B0F17;color:#DCE3EE;border-radius:22px;padding:10px;display:flex;flex-direction:column;gap:10px;min-height:0;overflow:hidden}
+.tool{width:38px;height:38px;border-radius:10px;border:0;background:transparent;color:#C9D3E2;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
 .tool:hover{background:#1A2333;color:#fff}
 .tool.on{background:#0C72B0;color:#fff}
-.vsep{width:1px;height:28px;background:#263045;margin:0 4px}
-.vp{position:relative;background:#000;border-radius:12px;overflow:hidden;min-height:0}
+.vsep{width:1px;height:24px;background:#263045;margin:0 4px;flex:none}
+.vp{position:relative;background:#000;border-radius:10px;overflow:hidden;min-height:0;min-width:0}
 .vp img{width:100%;height:100%;object-fit:contain;display:block}
 .vp.sel{outline:2px solid #3E9BDB;outline-offset:-2px}
 .ov{position:absolute;font-size:11.5px;line-height:1.5;color:#E3E9F2;text-shadow:0 1px 2px #000;font-variant-numeric:tabular-nums}
-.ser{display:block;border-radius:12px;padding:6px;color:#C9D3E2}
+.ser{display:block;width:100%;border:0;border-radius:10px;padding:6px;background:transparent;color:#C9D3E2;text-align:left;font:inherit;cursor:pointer}
 .ser:hover{background:#1A2333;color:#fff}
 .ser.on{background:#16243A;outline:1px solid #3E9BDB}
-.ser .th{height:78px;background:#000;border-radius:8px;overflow:hidden}
-.ser .th img{width:100%;height:100%;object-fit:contain}
-.kv{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid #1E2738;font-size:13px}
-.kv span:first-child{color:#93A0B5;width:118px;flex:none}
-.kv span:last-child{color:#E6ECF5}
+.ser .th{height:64px;background:#000;border-radius:8px;overflow:hidden}
+.ser .th img{width:100%;height:100%;object-fit:contain;display:block}
+.dk{background:#111827;border-radius:14px;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.dtabs{display:flex;gap:2px;border-bottom:1px solid #1E2738;padding:0 6px;flex:none;flex-wrap:wrap}
+.dtabs button{height:38px;padding:0 7px;border:0;background:transparent;font:500 13px Inter,sans-serif;color:#93A0B5;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.dtabs .on{color:#fff;border-bottom-color:#3E9BDB;font-weight:600}
+.dkv{display:grid;grid-template-columns:100px minmax(0,1fr);gap:8px 10px;font-size:13px;margin:0}
+.dkv dt{color:#93A0B5}.dkv dd{margin:0;color:#E6ECF5}
+.dbtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:0 12px;border-radius:999px;border:1px solid #2A3446;background:#141B27;color:#E6ECF5;font:600 13px Inter,sans-serif;cursor:pointer}
+.dbtn:hover{border-color:#5B6B85;color:#fff}
+.lnk{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #1E2738;color:#E6ECF5}
+.lnk:hover{color:#fff}
+.sel-d{height:36px;border-radius:10px;border:1px solid #2A3446;background:#141B27;color:#E6ECF5;padding:0 10px;font:500 13px Inter,sans-serif}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="visualizador" userName="Dr. Paulo Medeiros" userRole="Cardiologia" userInitials="PM" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="visualizador" userName="Dr. Paulo Medeiros" userRole="Cardiologia" userInitials="PM" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <div class="crumb"><span>Exames</span><span aria-hidden="true">›</span><span>Visualizador</span><span aria-hidden="true">›</span><b>Vera Lúcia Antunes · TC de abdome com contraste</b></div>
-      <div class="grow"></div>
-      <div class="seg" role="tablist" aria-label="Layout"><button role="tab" aria-selected="false">1×1</button><button class="on" role="tab" aria-selected="true">2×2</button><button role="tab" aria-selected="false">1+3</button></div>
+    <header class="row" style="gap: 12px">
+      <div style="flex: 1 1 auto; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Visualizador</h1>
+        <div class="t13 mute" style="margin-top: 2px">TC de abdome com contraste, acesso 2026-118690</div>
+      </div>
+      <div class="seg" role="radiogroup" aria-label="Disposição das imagens">
+        <sc-for list="{{layouts}}" as="l" hint-placeholder-count="3"><button class="{{l.cls}}" role="radio" aria-checked="{{l.on}}" onClick="{{l.ir}}" style="height: 36px; padding: 0 14px">{{l.t}}</button></sc-for>
+      </div>
       <a class="btn btn-p" href="Laudo.dc.html">Laudar este estudo</a>
-    </div>
-    <dc-import name="Barra-Paciente" ini="VA" nome="Vera Lúcia Antunes" nasc="18/09/1957" idade="69 anos" sexo="feminino" convenio="SulAmérica" exame="TC de abdome com contraste" local="Sala 6" alergia="" alertas="Diabética · metformina suspensa" conferida="08:12" hint-size="100%,84px"></dc-import>
+    </header>
 
-    <section aria-label="Visualizador DICOM" style="background: #0B0F17; border-radius: 22px; padding: 12px; color: #DCE3EE; display: flex; flex-direction: column; gap: 12px">
-      <div role="toolbar" aria-label="Ferramentas de imagem" class="row wrap" style="gap: 4px; padding: 4px 6px; background: #111827; border-radius: 14px">
-        <button class="tool on" aria-label="Janela e nível (W/L)" aria-pressed="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"></path></svg></button>
-        <button class="tool" aria-label="Zoom"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5M11 8v6M8 11h6"></path></svg></button>
-        <button class="tool" aria-label="Mover (pan)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 2v20M2 12h20M12 2l-3 3M12 2l3 3M12 22l-3-3M12 22l3-3M2 12l3-3M2 12l3 3M22 12l-3-3M22 12l-3 3"></path></svg></button>
+    <dc-import name="Barra-Paciente" ini="VA" nome="Vera Lúcia Antunes" nasc="18/09/1957" idade="69 anos" sexo="feminino" convenio="SulAmérica" exame="TC de abdome com contraste" local="Sala 6" alergia="" alertas="Diabética com metformina suspensa" conferida="08:12" hint-size="100%,84px"></dc-import>
+
+    <section class="vw fill" aria-label="Visualizador DICOM">
+      <div role="toolbar" aria-label="Ferramentas de imagem" class="row" style="gap: 2px; padding: 4px 6px; background: #111827; border-radius: 12px; flex: none; flex-wrap: wrap">
+        <button class="{{tl.wl.cls}}" aria-label="{{tl.wl.lbl}}" title="{{tl.wl.lbl}}" aria-pressed="{{tl.wl.on}}" onClick="{{tl.wl.ir}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 3v18"></path></svg></button>
+        <button class="{{tl.zoom.cls}}" aria-label="{{tl.zoom.lbl}}" title="{{tl.zoom.lbl}}" aria-pressed="{{tl.zoom.on}}" onClick="{{tl.zoom.ir}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11 4a7 7 0 1 0 0 14a7 7 0 1 0 0-14zM20 20l-3.5-3.5M11 8v6M8 11h6"></path></svg></button>
+        <button class="{{tl.pan.cls}}" aria-label="{{tl.pan.lbl}}" title="{{tl.pan.lbl}}" aria-pressed="{{tl.pan.on}}" onClick="{{tl.pan.ir}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 2v20M2 12h20M9 5l3-3 3 3M9 19l3 3 3-3M5 9l-3 3 3 3M19 9l3 3-3 3"></path></svg></button>
         <span class="vsep" aria-hidden="true"></span>
-        <button class="tool" aria-label="Medir distância"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 17L17 3l4 4L7 21zM7 13l2 2M10 10l2 2M13 7l2 2"></path></svg></button>
-        <button class="tool" aria-label="Medir ângulo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20L18 4M4 20h16M10 20a6 6 0 0 0-2-4.5"></path></svg></button>
-        <button class="tool" aria-label="Região de interesse (ROI) e densidade"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><ellipse cx="12" cy="12" rx="9" ry="6"></ellipse><path d="M12 12h.01"></path></svg></button>
-        <button class="tool" aria-label="Anotação de texto e seta"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20l7-7M4 20v-5M4 20h5M13 4h7v7h-7z"></path></svg></button>
+        <button class="{{tl.dist.cls}}" aria-label="{{tl.dist.lbl}}" title="{{tl.dist.lbl}}" aria-pressed="{{tl.dist.on}}" onClick="{{tl.dist.ir}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 17L17 3l4 4L7 21zM7 13l2 2M10 10l2 2M13 7l2 2"></path></svg></button>
+        <button class="{{tl.ang.cls}}" aria-label="{{tl.ang.lbl}}" title="{{tl.ang.lbl}}" aria-pressed="{{tl.ang.on}}" onClick="{{tl.ang.ir}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20L18 4M4 20h16M10 20a6 6 0 0 0-2-4.5"></path></svg></button>
+        <button class="{{tl.roi.cls}}" aria-label="{{tl.roi.lbl}}" title="{{tl.roi.lbl}}" aria-pressed="{{tl.roi.on}}" onClick="{{tl.roi.ir}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12a9 6 0 1 0 18 0a9 6 0 1 0-18 0M12 12h.01"></path></svg></button>
+        <button class="{{tl.nota.cls}}" aria-label="{{tl.nota.lbl}}" title="{{tl.nota.lbl}}" aria-pressed="{{tl.nota.on}}" onClick="{{tl.nota.ir}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20l7-7M4 20v-5M4 20h5M13 4h7v7h-7z"></path></svg></button>
         <span class="vsep" aria-hidden="true"></span>
-        <button class="tool" aria-label="Reconstrução multiplanar (MPR)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5zM3 8v8l9 5 9-5V8M12 13v8"></path></svg></button>
-        <button class="tool" aria-label="Reconstrução 3D de volume"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11zM12 22V11M20 6.5L12 11 4 6.5"></path></svg></button>
-        <button class="tool" aria-label="Reproduzir cine"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 5l12 7-12 7z"></path></svg></button>
-        <button class="tool" aria-label="Comparar com exame anterior (sincronizar)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4h7v16H4zM13 4h7v16h-7zM8 9l-2 3 2 3M16 9l2 3-2 3"></path></svg></button>
-        <button class="tool" aria-label="Inverter cores"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"></rect><path d="M4 20L20 4" ></path></svg></button>
-        <button class="tool" aria-label="Rodar e espelhar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"></path></svg></button>
-        <button class="tool" aria-label="Marcar imagem-chave"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"></path></svg></button>
+        <button class="{{tl.mpr.cls}}" aria-label="{{tl.mpr.lbl}}" title="{{tl.mpr.lbl}}" aria-pressed="{{tl.mpr.on}}" onClick="{{tl.mpr.ir}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5zM3 8v8l9 5 9-5V8M12 13v8"></path></svg></button>
+        <button class="{{tl.v3d.cls}}" aria-label="{{tl.v3d.lbl}}" title="{{tl.v3d.lbl}}" aria-pressed="{{tl.v3d.on}}" onClick="{{tl.v3d.ir}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11zM12 22V11M20 6.5L12 11 4 6.5"></path></svg></button>
+        <button class="{{tl.cine.cls}}" aria-label="{{tl.cine.lbl}}" title="{{tl.cine.lbl}}" aria-pressed="{{tl.cine.on}}" onClick="{{tl.cine.ir}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 5l12 7-12 7z"></path></svg></button>
+        <button class="{{tl.sinc.cls}}" aria-label="{{tl.sinc.lbl}}" title="{{tl.sinc.lbl}}" aria-pressed="{{tl.sinc.on}}" onClick="{{tl.sinc.ir}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4h7v16H4zM13 4h7v16h-7zM8 9l-2 3 2 3M16 9l2 3-2 3"></path></svg></button>
+        <button class="{{tl.inv.cls}}" aria-label="{{tl.inv.lbl}}" title="{{tl.inv.lbl}}" aria-pressed="{{tl.inv.on}}" onClick="{{tl.inv.ir}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM4 20L20 4"></path></svg></button>
+        <button class="{{tl.rot.cls}}" aria-label="{{tl.rot.lbl}}" title="{{tl.rot.lbl}}" aria-pressed="{{tl.rot.on}}" onClick="{{tl.rot.ir}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"></path></svg></button>
+        <button class="{{tl.chave.cls}}" aria-label="{{tl.chave.lbl}}" title="{{tl.chave.lbl}}" aria-pressed="{{tl.chave.on}}" onClick="{{tl.chave.ir}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"></path></svg></button>
         <div class="grow"></div>
         <label class="row t13" style="gap: 8px; color: #AEB9CA">Janela
-          <select style="height: 36px; border-radius: 10px; border: 1px solid #2A3446; background: #141B27; color: #E6ECF5; padding: 0 10px; font: 500 13px Inter, sans-serif"><option>Partes moles 40/400</option><option>Cérebro 40/80</option><option>Pulmão −600/1500</option><option>Osso 400/1800</option></select>
+          <select class="sel-d" onChange="{{onJanela}}"><option>Partes moles 40/400</option><option>Cérebro 40/80</option><option>Pulmão −600/1500</option><option>Osso 400/1800</option></select>
         </label>
-        <button class="btn btn-sm" style="background: #141B27; border-color: #2A3446; color: #E6ECF5">Exportar</button>
-        <button class="btn btn-sm" style="background: #141B27; border-color: #2A3446; color: #E6ECF5">Compartilhar link seguro</button>
       </div>
 
-      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch">
-        <nav aria-label="Séries do estudo" style="flex: 0 0 150px; display: flex; flex-direction: column; gap: 8px; overflow: hidden">
-          <span class="t12 b" style="color: #93A0B5; letter-spacing: .06em; text-transform: uppercase; padding: 2px 6px">Séries · 5</span>
-          <a class="ser on" href="Visualizador.dc.html"><div class="th"><img src="/_blob/b397e8ff60e8605ce0897e61b093b786" alt=""></div><div class="t12" style="margin-top: 6px">S3 · Axial portal<br><span style="color: #93A0B5">142 imagens</span></div></a>
-          <a class="ser" href="Visualizador.dc.html"><div class="th"><img src="/_blob/f43a481a81537143aec82b37f7a14220" alt=""></div><div class="t12" style="margin-top: 6px">S2 · Tórax axial<br><span style="color: #93A0B5">98 imagens</span></div></a>
-          <a class="ser" href="Visualizador.dc.html"><div class="th"><img src="/_blob/61aa8c1eda64e280ef9de45e3cb63a07" alt=""></div><div class="t12" style="margin-top: 6px">S1 · Crânio<br><span style="color: #93A0B5">36 imagens</span></div></a>
-          <a class="ser" href="Visualizador.dc.html"><div class="th"><img src="/_blob/cba5ba52fe397626d893b1a8488f752d" alt=""></div><div class="t12" style="margin-top: 6px">Anterior · Cintilografia<br><span style="color: #93A0B5">03/2025</span></div></a>
-          <a class="ser" href="Visualizador.dc.html"><div class="th" style="display: flex; align-items: center; justify-content: center; color: #93A0B5; font-size: 12px">Laudo PDF</div><div class="t12" style="margin-top: 6px">Documento<br><span style="color: #93A0B5">versão 1</span></div></a>
+      <div style="flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 112px minmax(0, 1fr) 272px; gap: 10px">
+        <nav aria-label="Séries do estudo" class="scroll" style="display: flex; flex-direction: column; gap: 6px; padding-right: 2px">
+          <sc-for list="{{series}}" as="s" hint-placeholder-count="5">
+            <button class="{{s.cls}}" onClick="{{s.ir}}" aria-pressed="{{s.on}}">
+              <div class="th">
+                <sc-if value="{{s.is3}}" hint-placeholder-val="{{ true }}"><img src="/_blob/b397e8ff60e8605ce0897e61b093b786" alt=""></sc-if><sc-if value="{{s.is2}}" hint-placeholder-val="{{ false }}"><img src="/_blob/f43a481a81537143aec82b37f7a14220" alt=""></sc-if><sc-if value="{{s.is1}}" hint-placeholder-val="{{ false }}"><img src="/_blob/61aa8c1eda64e280ef9de45e3cb63a07" alt=""></sc-if><sc-if value="{{s.iant}}" hint-placeholder-val="{{ false }}"><img src="/_blob/cba5ba52fe397626d893b1a8488f752d" alt=""></sc-if>
+                <sc-if value="{{s.doc}}" hint-placeholder-val="{{ false }}"><div style="height: 100%; display: flex; align-items: center; justify-content: center; color: #93A0B5; font-size: 12px">PDF</div></sc-if>
+              </div>
+              <div class="t12" style="margin-top: 5px; line-height: 1.35">{{s.t}}<br><span style="color: #93A0B5">{{s.n}}</span></div>
+            </button>
+          </sc-for>
         </nav>
 
-        <div style="flex: 999 1 560px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, 420px); gap: 8px; min-width: 0">
-          <div class="vp sel" role="img" aria-label="Viewport 1: RM de abdome axial, série 3, com medida de 38 milímetros">
-            <img src="/_blob/b397e8ff60e8605ce0897e61b093b786" alt="">
-            <span class="ov" style="top: 8px; left: 10px">ANTUNES, VERA LÚCIA<br>F · 58a · ID 2026-118690<br>TC abdome c/ contraste</span>
-            <span class="ov" style="top: 8px; right: 10px; text-align: right">06/11/2026 07:41<br>S3 · Im 64/142<br>Esp. 2,5 mm</span>
-            <span class="ov" style="bottom: 8px; left: 10px">W 400 · L 40<br>Zoom 112%</span>
-            <span class="ov" style="bottom: 8px; right: 10px; text-align: right">VidaCor Imagem<br>Sala 6</span>
-            <svg aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%"><line x1="22" y1="38" x2="36" y2="52" stroke="#FACC15" stroke-width="0.5"></line><circle cx="22" cy="38" r="0.9" fill="#FACC15"></circle><circle cx="36" cy="52" r="0.9" fill="#FACC15"></circle></svg>
-            <span class="ov" style="left: 37%; top: 52%; color: #FACC15; font-weight: 700">38,2 mm</span>
-          </div>
-          <div class="vp" role="img" aria-label="Viewport 2: TC de tórax axial, janela de partes moles">
-            <img src="/_blob/f43a481a81537143aec82b37f7a14220" alt="">
-            <span class="ov" style="top: 8px; left: 10px">S2 · Tórax axial<br>Im 48/98</span>
-            <span class="ov" style="bottom: 8px; left: 10px">W 400 · L 40</span>
-          </div>
-          <div class="vp" role="img" aria-label="Viewport 3: TC de crânio axial, janela de cérebro">
-            <img src="/_blob/61aa8c1eda64e280ef9de45e3cb63a07" alt="">
-            <span class="ov" style="top: 8px; left: 10px">S1 · Crânio axial<br>Im 18/36</span>
-            <span class="ov" style="bottom: 8px; left: 10px">W 80 · L 40</span>
-            <span class="ov" style="top: 8px; right: 10px; color: #7DD3FC">ROI 34 UH ±4</span>
-          </div>
-          <div class="vp" role="img" aria-label="Viewport 4: exame anterior, cintilografia de corpo inteiro de março de 2025, para comparação">
-            <img src="/_blob/cba5ba52fe397626d893b1a8488f752d" alt="">
-            <span class="ov" style="top: 8px; left: 10px">ANTERIOR · 14/03/2025<br>Cintilografia óssea</span>
-            <span class="ov" style="top: 8px; right: 10px; text-align: right; color: #FACC15">Comparação<br>sincronizada</span>
-          </div>
+        <div style="display: grid; grid-template-columns: {{gridCols}}; grid-template-rows: {{gridRows}}; gap: 6px; min-height: 0; min-width: 0">
+          <sc-for list="{{vps}}" as="v" hint-placeholder-count="4">
+            <div class="{{v.cls}}" style="{{v.area}}" role="img" aria-label="{{v.lbl}}" onClick="{{v.ir}}">
+              <sc-if value="{{v.is3}}" hint-placeholder-val="{{ true }}"><img src="/_blob/b397e8ff60e8605ce0897e61b093b786" alt=""></sc-if><sc-if value="{{v.is2}}" hint-placeholder-val="{{ false }}"><img src="/_blob/f43a481a81537143aec82b37f7a14220" alt=""></sc-if><sc-if value="{{v.is1}}" hint-placeholder-val="{{ false }}"><img src="/_blob/61aa8c1eda64e280ef9de45e3cb63a07" alt=""></sc-if><sc-if value="{{v.iant}}" hint-placeholder-val="{{ false }}"><img src="/_blob/cba5ba52fe397626d893b1a8488f752d" alt=""></sc-if>
+              <span class="ov" style="top: 8px; left: 10px">{{v.tl1}}<br>{{v.tl2}}</span>
+              <span class="ov" style="top: 8px; right: 10px; text-align: right; color: {{v.trCor}}">{{v.tr1}}<br>{{v.tr2}}</span>
+              <span class="ov" style="bottom: 8px; left: 10px">{{v.bl}}</span>
+              <sc-if value="{{v.medida}}" hint-placeholder-val="{{ false }}">
+                <svg aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%"><line x1="22" y1="38" x2="36" y2="52" stroke="#FACC15" stroke-width="0.5"></line><circle cx="22" cy="38" r="0.9" fill="#FACC15"></circle><circle cx="36" cy="52" r="0.9" fill="#FACC15"></circle></svg>
+                <span class="ov" style="left: 37%; top: 52%; color: #FACC15; font-weight: 700">38,2 mm</span>
+              </sc-if>
+            </div>
+          </sc-for>
         </div>
 
-        <aside aria-label="Informações do estudo" style="flex: 1 1 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 12px">
-          <div style="background: #111827; border-radius: 14px; padding: 14px">
-            <div class="t14 b" style="color: #fff; margin-bottom: 6px">Dados DICOM</div>
-            <div class="kv"><span>Modalidade</span><span>CT · Tomógrafo 16 canais</span></div>
-            <div class="kv"><span>Accession</span><span>2026-118690</span></div>
-            <div class="kv"><span>Protocolo</span><span>Abdome trifásico</span></div>
-            <div class="kv"><span>Contraste</span><span>Iohexol 300 · 90 mL</span></div>
-            <div class="kv"><span>Dose (DLP)</span><span>612 mGy·cm</span></div>
-            <div class="kv" style="border: 0"><span>Recebido</span><span>07:52 · 142 imagens</span></div>
-          </div>
-          <div style="background: #111827; border-radius: 14px; padding: 14px">
-            <div class="t14 b" style="color: #fff; margin-bottom: 8px">Estudos anteriores</div>
-            <a class="row" href="Visualizador.dc.html" style="color: #E6ECF5; padding: 8px 0; border-bottom: 1px solid #1E2738"><span class="t13 grow">Cintilografia óssea</span><span class="t12" style="color: #93A0B5">03/2025</span></a>
-            <a class="row" href="Visualizador.dc.html" style="color: #E6ECF5; padding: 8px 0; border-bottom: 1px solid #1E2738"><span class="t13 grow">USG abdome total</span><span class="t12" style="color: #93A0B5">11/2024</span></a>
-            <a class="row" href="Visualizador.dc.html" style="color: #E6ECF5; padding: 8px 0"><span class="t13 grow">TC abdome</span><span class="t12" style="color: #93A0B5">06/2023</span></a>
-          </div>
-          <div style="background: #111827; border-radius: 14px; padding: 14px">
-            <div class="row" style="margin-bottom: 8px"><span class="t14 b" style="color: #fff">Imagens-chave</span><span class="chip" style="margin-left: auto; background: #1A2333; color: #C9D3E2">2</span></div>
-            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
-              <div class="dimg" style="height: 70px"><img src="/_blob/b397e8ff60e8605ce0897e61b093b786" alt="Imagem-chave 1"><span class="cap">Im 64</span></div>
-              <div class="dimg" style="height: 70px"><img src="/_blob/b397e8ff60e8605ce0897e61b093b786" alt="Imagem-chave 2"><span class="cap">Im 71</span></div>
+        <aside class="dk" aria-label="Informações do estudo">
+          <nav class="dtabs" aria-label="Informações">
+            <sc-for list="{{abas}}" as="a" hint-placeholder-count="4"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for>
+          </nav>
+          <sc-if value="{{tDicom}}" hint-placeholder-val="{{ true }}">
+            <div class="scroll" style="padding: 14px; flex: 1 1 auto">
+              <dl class="dkv">
+                <dt>Modalidade</dt><dd>TC, tomógrafo 16 canais</dd>
+                <dt>Acesso</dt><dd class="num">2026-118690</dd>
+                <dt>Protocolo</dt><dd>Abdome trifásico</dd>
+                <dt>Contraste</dt><dd>Iohexol 300, 90 mL</dd>
+                <dt>Dose (DLP)</dt><dd class="num">612 mGy·cm</dd>
+                <dt>Recebido</dt><dd class="num">07:52, 142 imagens</dd>
+                <dt>Conciliação</dt><dd>Paciente conferido por nome e nascimento</dd>
+              </dl>
             </div>
-            <p class="t12" style="color: #93A0B5; margin: 10px 0 0">Vão anexadas ao laudo e ao portal do paciente.</p>
-          </div>
-          <div style="background: #111827; border-radius: 14px; padding: 14px">
-            <div class="t14 b" style="color: #fff; margin-bottom: 6px">Acesso registrado</div>
-            <p class="t12" style="color: #AEB9CA; margin: 0; line-height: 1.6">Aberto por Dr. Paulo Medeiros às 08:41, estação Sala de laudo 2. Toda visualização fica na auditoria (LGPD).</p>
+          </sc-if>
+          <sc-if value="{{tAnt}}" hint-placeholder-val="{{ false }}">
+            <div class="scroll" style="padding: 4px 14px; flex: 1 1 auto">
+              <sc-for list="{{anteriores}}" as="p" hint-placeholder-count="3"><button class="lnk" onClick="{{p.ir}}" style="width: 100%; border-left: 0; border-right: 0; border-top: 0; background: transparent; font: inherit; text-align: left; cursor: pointer"><span class="t13 grow">{{p.t}}</span><span class="t12" style="color: #93A0B5">{{p.d}}</span></button></sc-for>
+              <p class="t12" style="color: #93A0B5; margin: 10px 0 0">Ao abrir, o anterior vai para o quadro 4 e a navegação fica sincronizada.</p>
+            </div>
+          </sc-if>
+          <sc-if value="{{tChave}}" hint-placeholder-val="{{ false }}">
+            <div class="scroll" style="padding: 14px; flex: 1 1 auto">
+              <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+                <sc-for list="{{chaves}}" as="k" hint-placeholder-count="2"><div class="dimg" style="height: 80px"><img src="/_blob/b397e8ff60e8605ce0897e61b093b786" alt="{{k.alt}}"><span class="cap">{{k.t}}</span></div></sc-for>
+              </div>
+              <p class="t12" style="color: #93A0B5; margin: 10px 0 0">{{chaveTxt}}</p>
+            </div>
+          </sc-if>
+          <sc-if value="{{tAcesso}}" hint-placeholder-val="{{ false }}">
+            <div class="scroll" style="padding: 14px; flex: 1 1 auto">
+              <p class="t13" style="color: #AEB9CA; margin: 0; line-height: 1.6">Aberto por Dr. Paulo Medeiros às 08:41, estação Sala de laudo 2. Toda visualização fica registrada na auditoria.</p>
+              <sc-if value="{{linkGerado}}" hint-placeholder-val="{{ false }}">
+                <div role="status" class="t13" style="margin-top: 12px; padding: 10px 12px; border-radius: 10px; background: #16243A; color: #E6ECF5; line-height: 1.5">Link seguro criado às 08:47 para o médico solicitante. Vale 7 dias, só leitura, e foi registrado no lastro.</div>
+              </sc-if>
+            </div>
+          </sc-if>
+          <div style="flex: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 10px; border-top: 1px solid #1E2738">
+            <button class="dbtn" onClick="{{exportar}}">Exportar</button>
+            <button class="dbtn" onClick="{{gerarLink}}">Link seguro</button>
           </div>
         </aside>
       </div>
-      <div class="row t13" style="color: #93A0B5; padding: 0 6px 2px; gap: 18px; flex-wrap: wrap"><span>Atalhos: W janela · Z zoom · M medir · ↑↓ trocar imagem · C cine</span><span style="margin-left: auto">Imagens de exemplo públicas (pydicom) · uso ilustrativo</span></div>
     </section>
-    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · visualizador para laudo exige software registrado na Anvisa ou validação regulatória</p>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = { layout: '2x2', tool: 'wl', sel: 0, serie: 0, aba: 'dicom', chaves: 2, link: false, cine: false, sinc: true };
+  }
+  renderVals() {
+    const s = this.state;
+    const IMG = { s3: '/_blob/b397e8ff60e8605ce0897e61b093b786', s2: '/_blob/f43a481a81537143aec82b37f7a14220', s1: '/_blob/61aa8c1eda64e280ef9de45e3cb63a07', ant: '/_blob/cba5ba52fe397626d893b1a8488f752d' };
+    const S = [
+      { k: 's3', t: 'S3 axial portal', n: '142 imagens' },
+      { k: 's2', t: 'S2 tórax axial', n: '98 imagens' },
+      { k: 's1', t: 'S1 crânio', n: '36 imagens' },
+      { k: 'ant', t: 'Anterior, cintilografia', n: '03/2025' },
+      { k: 'doc', t: 'Laudo anterior', n: 'versão 1' }
+    ];
+    const T1 = [
+      ['wl', 'Janela e nível (W)', 'M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 3v18'],
+      ['zoom', 'Zoom (Z)', 'M11 4a7 7 0 1 0 0 14a7 7 0 1 0 0-14zM20 20l-3.5-3.5M11 8v6M8 11h6'],
+      ['pan', 'Mover', 'M12 2v20M2 12h20M9 5l3-3 3 3M9 19l3 3 3-3M5 9l-3 3 3 3M19 9l3 3-3 3']
+    ];
+    const T2 = [
+      ['dist', 'Medir distância (M)', 'M3 17L17 3l4 4L7 21zM7 13l2 2M10 10l2 2M13 7l2 2'],
+      ['ang', 'Medir ângulo', 'M4 20L18 4M4 20h16M10 20a6 6 0 0 0-2-4.5'],
+      ['roi', 'Região de interesse e densidade', 'M3 12a9 6 0 1 0 18 0a9 6 0 1 0-18 0M12 12h.01'],
+      ['nota', 'Anotação de texto', 'M4 20l7-7M4 20v-5M4 20h5M13 4h7v7h-7z']
+    ];
+    const T3 = [
+      ['mpr', 'Reconstrução multiplanar', 'M12 3l9 5-9 5-9-5zM3 8v8l9 5 9-5V8M12 13v8'],
+      ['v3d', 'Reconstrução 3D de volume', 'M12 2l8 4.5v11L12 22l-8-4.5v-11zM12 22V11M20 6.5L12 11 4 6.5'],
+      ['cine', 'Reproduzir cine (C)', 'M7 5l12 7-12 7z'],
+      ['sinc', 'Sincronizar com exame anterior', 'M4 4h7v16H4zM13 4h7v16h-7zM8 9l-2 3 2 3M16 9l2 3-2 3'],
+      ['inv', 'Inverter cores', 'M6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM4 20L20 4'],
+      ['rot', 'Rodar e espelhar', 'M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5'],
+      ['chave', 'Marcar imagem-chave', 'M6 3h12v18l-6-4-6 4z']
+    ];
+    const toggles = { cine: 'cine', sinc: 'sinc' };
+    const mk = ([k, lbl, d]) => {
+      const on = toggles[k] ? !!s[toggles[k]] : (k === 'chave' ? false : s.tool === k);
+      return { k, lbl, on: on ? 'true' : 'false', cls: 'tool' + (on ? ' on' : ''),
+        ir: () => { if (toggles[k]) this.setState({ [toggles[k]]: !s[toggles[k]] }); else if (k === 'chave') this.setState(st => ({ chaves: st.chaves + 1, aba: 'chave' })); else this.setState({ tool: k }); } };
+    };
+    const base = [
+      { k: s.serie === 4 ? 's3' : S[s.serie].k, tl1: 'ANTUNES, VERA LÚCIA', tl2: 'F, 18/09/1957', tr1: '06/11/2026 07:41', tr2: 'Im 64/142, 2,5 mm', bl: 'W 400 L 40, zoom 112%', medida: s.serie === 0, lbl: 'Quadro 1: TC de abdome axial, série 3, com medida de 38 milímetros' },
+      { k: 's2', tl1: 'S2 tórax axial', tl2: 'Imagem 48 de 98', tr1: '', tr2: '', bl: 'W 400 L 40', medida: false, lbl: 'Quadro 2: TC de tórax axial, janela de partes moles' },
+      { k: 's1', tl1: 'S1 crânio axial', tl2: 'Imagem 18 de 36', tr1: 'ROI 34 UH ±4', tr2: '', bl: 'W 80 L 40', medida: false, lbl: 'Quadro 3: TC de crânio axial, janela de cérebro', cor: '#7DD3FC' },
+      { k: 'ant', tl1: 'ANTERIOR, 14/03/2025', tl2: 'Cintilografia óssea', tr1: s.sinc ? 'Comparação' : '', tr2: s.sinc ? 'sincronizada' : '', bl: '', medida: false, lbl: 'Quadro 4: exame anterior, cintilografia de março de 2025', cor: '#FACC15' }
+    ];
+    const L = { '1x1': { n: 1, c: 'minmax(0, 1fr)', r: 'minmax(0, 1fr)' }, '2x2': { n: 4, c: 'repeat(2, minmax(0, 1fr))', r: 'repeat(2, minmax(0, 1fr))' }, '1+3': { n: 4, c: '2fr 1fr', r: 'repeat(3, minmax(0, 1fr))' } };
+    const lay = L[s.layout];
+    const A = [['dicom', 'DICOM'], ['ant', 'Anteriores'], ['chave', 'Chave'], ['acesso', 'Acesso']];
+    return {
+      layouts: [['1x1', '1×1'], ['2x2', '2×2'], ['1+3', '1+3']].map(([k, t]) => ({ t, on: s.layout === k ? 'true' : 'false', cls: s.layout === k ? 'on' : '', ir: () => this.setState({ layout: k }) })),
+      tl: T1.concat(T2, T3).map(mk).reduce((o, t) => { o[t.k] = t; return o; }, {}),
+      onJanela: () => {},
+      series: S.map((x, i) => ({ t: x.t, n: x.n, temImg: x.k !== 'doc', doc: x.k === 'doc', is3: x.k === 's3', is2: x.k === 's2', is1: x.k === 's1', iant: x.k === 'ant', on: i === s.serie ? 'true' : 'false', cls: 'ser' + (i === s.serie ? ' on' : ''), ir: () => this.setState({ serie: i, sel: 0 }) })),
+      gridCols: lay.c, gridRows: lay.r,
+      vps: base.slice(0, lay.n).map((v, i) => ({ is3: v.k === 's3', is2: v.k === 's2', is1: v.k === 's1', iant: v.k === 'ant', tl1: v.tl1, tl2: v.tl2, tr1: v.tr1, tr2: v.tr2, bl: v.bl, medida: v.medida, lbl: v.lbl, trCor: v.cor || '#E3E9F2',
+        area: s.layout === '1+3' && i === 0 ? 'grid-row: 1 / span 3' : '',
+        cls: 'vp' + (i === s.sel ? ' sel' : ''), ir: () => this.setState({ sel: i }) })),
+      abas: A.map(([k, t]) => ({ t, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      tDicom: s.aba === 'dicom', tAnt: s.aba === 'ant', tChave: s.aba === 'chave', tAcesso: s.aba === 'acesso',
+      anteriores: [['Cintilografia óssea', '03/2025'], ['USG abdome total', '11/2024'], ['TC abdome', '06/2023']].map(([t, d]) => ({ t, d, ir: () => this.setState({ layout: '2x2', sinc: true }) })),
+      chaves: Array.from({ length: s.chaves }, (x, i) => ({ t: 'Im ' + (64 + i * 7), alt: 'Imagem-chave ' + (i + 1) })),
+      chaveTxt: s.chaves + ' imagens-chave. Vão anexadas ao laudo e ao portal do paciente depois da assinatura.',
+      linkGerado: !!s.link, gerarLink: () => this.setState({ link: true, aba: 'acesso' }), exportar: () => this.setState({ aba: 'acesso' })
+    };
+  }
 }
 </script>
 </body>

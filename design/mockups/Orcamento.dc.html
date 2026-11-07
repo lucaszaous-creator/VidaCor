@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Orçamento particular</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
@@ -12,167 +12,177 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
-.res{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;padding:8px 12px;border:0;border-radius:12px;background:#fff;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.hd h1{margin:0;font-size:24px;font-weight:650;letter-spacing:-.02em}
+.ph{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid #E8EAEF;flex:none}
+.ph h2{font-size:16px;font-weight:650}
+.pf{flex:none;padding:14px 18px;border-top:1px solid #E8EAEF;display:flex;flex-direction:column;gap:8px}
+.sub-h{font-size:14px;font-weight:650;margin:22px 0 10px}
+.sub-h:first-child{margin-top:0}
+.res{display:flex;align-items:center;gap:12px;width:100%;min-height:44px;padding:6px 12px;border:0;border-radius:10px;background:transparent;text-align:left;font:inherit;color:inherit;cursor:pointer}
 .res:hover{background:#F2F5FA}
-.tot{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:6px 0}
-.icon-x{width:36px;height:36px;border-radius:10px;border:0;background:transparent;color:#5B6474;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
-.icon-x:hover{background:#FDEEF1;color:#C2334D}
+.ln{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:3px 0}
+.ix{width:36px;height:36px;border-radius:10px;border:0;background:transparent;color:#5B6474;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.ix:hover{background:#FDEEF1;color:#C2334D}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="orcamento" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="orcamento" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <div class="crumb"><a href="Recepcao.dc.html">Recepção</a><span aria-hidden="true">›</span><b>Orçamento particular</b></div>
-      <div class="grow"></div>
-      <span class="t13 mute">ORC-2611-0057 · Ana Souza · Guichê 1 · rascunho salvo há 3 s</span>
-    </div>
+    <header class="hd row wrap" style="gap: 12px">
+      <div style="flex: 1 1 auto; min-width: 0">
+        <h1>Orçamentos</h1>
+        <div class="t13 mute num" style="margin-top: 2px">{{subTit}}</div>
+      </div>
+      <a class="btn btn-sm" href="Agendamento-Guia.dc.html">Usar convênio</a>
+      <button class="btn btn-p" onClick="{{novo}}">Novo orçamento</button>
+    </header>
 
-    <div class="page-h">
-      <div class="grow"><h1>Orçamento</h1><p>Os preços vêm da tabela particular vigente e são calculados pelo servidor. Aqui você escolhe os exames; o valor não é digitado.</p></div>
-    </div>
+    <nav class="tabs" aria-label="Seções">
+      <sc-for list="{{abas}}" as="a" hint-placeholder-count="2"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}} <span class="mute" style="font-weight: 500">{{a.n}}</span></button></sc-for>
+    </nav>
 
-    <div class="split">
-      <div class="main col" style="gap: 16px">
-        <section class="card" aria-labelledby="h-pac">
-          <div class="card-h"><span class="ni k-indigo">1</span><div class="grow"><h2 id="h-pac">Para quem</h2></div>
-            <div class="seg" role="group" aria-label="Paciente"><sc-for list="{{pacOpts}}" as="o" hint-placeholder-count="2"><button class="{{o.cls}}" aria-pressed="{{o.p}}" onClick="{{o.ir}}">{{o.t}}</button></sc-for></div>
+    <sc-if value="{{tMontar}}" hint-placeholder-val="{{ true }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px">
+        <section class="card pane" style="padding: 0" aria-label="Montar orçamento">
+          <div class="scroll" style="padding: 18px">
+            <div class="row wrap" style="gap: 10px">
+              <h2 class="sub-h" style="margin: 0; flex: 1">Para quem</h2>
+              <div class="seg" role="group" aria-label="Paciente"><sc-for list="{{pacOpts}}" as="o" hint-placeholder-count="2"><button class="{{o.cls}}" aria-pressed="{{o.p}}" onClick="{{o.ir}}" style="height: 36px">{{o.t}}</button></sc-for></div>
+            </div>
+            <sc-if value="{{pacCad}}" hint-placeholder-val="{{ true }}">
+              <div class="row wrap" style="gap: 14px; margin-top: 12px">
+                <div style="flex: 1 1 240px; min-width: 0"><div class="t15 b">Maria Helena Duarte</div><div class="t13 mute num">12/03/1968, 58 anos. Celular (48) *****-4410</div></div>
+                <a class="btn btn-sm" href="Paciente.dc.html">Abrir cadastro</a>
+              </div>
+            </sc-if>
+            <sc-if value="{{pacSem}}" hint-placeholder-val="{{ false }}">
+              <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 12px">
+                <label class="field">Como chamar<input class="in" value="Rafael"></label>
+                <label class="field">Celular para enviar<input class="in num" value="(48) 99812-0034" inputmode="tel"></label>
+              </div>
+              <div class="t13 mute" style="margin-top: 8px">Ao virar agendamento, pedimos nome completo e nascimento e conferimos se a pessoa já existe.</div>
+            </sc-if>
+
+            <h2 class="sub-h">Exames</h2>
+            <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar exame para adicionar</span><input type="search" placeholder="Adicionar exame pelo nome" value="{{busca}}" onChange="{{buscar}}"></label>
+            <sc-if value="{{temResultados}}" hint-placeholder-val="{{ false }}">
+              <div class="col" style="gap: 2px; margin-top: 6px; padding: 6px; border-radius: 14px; background: #F6F7F9">
+                <sc-for list="{{resultados}}" as="r" hint-placeholder-count="3">
+                  <button class="res" onClick="{{r.add}}"><span class="grow t14 b">{{r.nome}}</span><span class="t14 num">{{r.preco}}</span></button>
+                </sc-for>
+              </div>
+            </sc-if>
+            <table class="tb" style="margin-top: 6px">
+              <thead><tr><th>Exame e preparo</th><th class="r">Preço</th><th class="r"><span class="sr">Remover</span></th></tr></thead>
+              <tbody>
+                <sc-for list="{{itens}}" as="i" hint-placeholder-count="2">
+                  <tr><td><span class="b">{{i.nome}}</span><div class="t13 mute">{{i.prep}}</div></td><td class="r num nw">{{i.preco}}</td>
+                    <td class="r"><button class="ix" aria-label="{{i.rem}}" onClick="{{i.tirar}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></td></tr>
+                </sc-for>
+              </tbody>
+            </table>
+            <sc-if value="{{vazio}}" hint-placeholder-val="{{ false }}">
+              <div class="state"><div class="b">Nenhum exame no orçamento</div><div class="t13 mute">Busque pelo nome do exame que está no pedido médico.</div></div>
+            </sc-if>
+            <sc-if value="{{comboSugerido}}" hint-placeholder-val="{{ true }}">
+              <div class="banner info" style="margin-top: 12px; align-items: center; flex-wrap: wrap"><div class="t14" style="line-height: 1.5; flex: 1 1 300px"><b>Pacote Cardio:</b> ecocardiograma e Doppler de carótidas saem por R$ 540,00 em vez de R$ 600,00.</div><button class="btn btn-sm btn-p" onClick="{{aplicarCombo}}">Aplicar pacote</button></div>
+            </sc-if>
+            <sc-if value="{{comboAplicado}}" hint-placeholder-val="{{ false }}">
+              <div class="row wrap" style="gap: 8px; margin-top: 12px"><span class="t14">Pacote Cardio aplicado, menos R$ 60,00 (regra de combinação v3).</span><button class="btn btn-sm btn-g" onClick="{{tirarCombo}}">Desfazer</button></div>
+            </sc-if>
+
+            <h2 class="sub-h">Desconto</h2>
+            <div class="row wrap" style="gap: 14px; align-items: flex-start">
+              <div class="col" style="gap: 6px; flex: none"><span class="t13 mute b">Percentual</span>
+                <div class="seg" role="group" aria-label="Percentual de desconto"><sc-for list="{{descOpts}}" as="d" hint-placeholder-count="5"><button class="{{d.cls}}" aria-pressed="{{d.p}}" onClick="{{d.ir}}" style="height: 36px; padding: 0 12px">{{d.t}}</button></sc-for></div>
+              </div>
+              <label class="field" style="flex: 1 1 200px">Motivo
+                <select class="in" onChange="{{escolherMotivo}}"><option value="">Escolha o motivo</option><option value="fidel">Paciente frequente</option><option value="func">Funcionário ou familiar</option><option value="social">Condição social avaliada</option><option value="concorr">Cobrir orçamento de outra clínica</option></select>
+              </label>
+            </div>
+            <div class="t13 mute" style="margin-top: 8px">Recepção concede até 10% com motivo. Acima disso, a supervisão autoriza.</div>
+            <sc-if value="{{faltaMotivo}}" hint-placeholder-val="{{ false }}">
+              <div class="banner off" style="margin-top: 12px"><div class="t14">O desconto ainda não entrou no total. Escolha o motivo para ele valer.</div></div>
+            </sc-if>
+            <sc-if value="{{precisaAut}}" hint-placeholder-val="{{ false }}">
+              <div class="banner off" style="margin-top: 12px; align-items: center; flex-wrap: wrap"><div class="t14" style="line-height: 1.5; flex: 1 1 300px"><b>{{descTxt}} passa do seu limite de 10%.</b> Até a supervisão autorizar, o total fica sem desconto.</div><button class="btn btn-sm btn-p" onClick="{{pedirAut}}">Pedir autorização</button></div>
+            </sc-if>
+            <sc-if value="{{aguardandoAut}}" hint-placeholder-val="{{ false }}">
+              <div class="banner info" role="status" style="margin-top: 12px; flex-direction: column; gap: 10px">
+                <div class="t14" style="line-height: 1.5"><b>Aguardando Patrícia Lemos.</b> Ela recebeu o pedido no chat às 10:21 com o motivo. Você pode seguir atendendo; o aviso chega aqui. Se ela estiver por perto, pode autorizar com a própria senha.</div>
+                <div class="row wrap" style="gap: 8px"><label class="sr" for="s-aut">Senha de Patrícia Lemos</label><input id="s-aut" class="in" type="password" placeholder="Senha de Patrícia Lemos" style="flex: 1 1 200px; min-height: 40px"><button class="btn btn-sm btn-p" onClick="{{simularAut}}">Autorizar</button></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{autorizado}}" hint-placeholder-val="{{ false }}">
+              <div class="t14" style="margin-top: 12px; color: #14532D">Autorizado por Patrícia Lemos às 10:24, com reautenticação. Registrado no lastro.</div>
+            </sc-if>
           </div>
-          <sc-if value="{{pacCad}}" hint-placeholder-val="{{ true }}">
-            <div class="row wrap" style="gap: 14px">
-              <span class="av" style="background: #E9EBFB; color: #3F4FB8">MH</span>
-              <div style="flex: 1 1 240px; min-width: 0"><div class="t15 b">Maria Helena Duarte</div><div class="t14 mute">Nascimento 12/03/1968 · celular (48) 9••••-4410 · último exame em 06/11/2026</div></div>
-              <a class="btn btn-sm" href="Paciente.dc.html">Abrir cadastro</a>
-            </div>
-          </sc-if>
-          <sc-if value="{{pacSem}}" hint-placeholder-val="{{ false }}">
-            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px">
-              <label class="field">Como chamar<input class="in" value="Rafael"></label>
-              <label class="field">Celular para enviar<input class="in num" value="(48) 99812-0034" inputmode="tel"></label>
-            </div>
-            <p class="t13 mute" style="margin: 10px 0 0">Sem cadastro: o orçamento fica ligado ao celular. Ao converter em agendamento pedimos nome completo e nascimento e buscamos se a pessoa já existe.</p>
-          </sc-if>
         </section>
 
-        <section class="card" aria-labelledby="h-ex">
-          <div class="card-h"><span class="ni k-violet">2</span><div class="grow"><h2 id="h-ex">Exames</h2><div class="sub">Tabela particular v11 · vigente desde 01/03/2026</div></div></div>
-          <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar exame para adicionar</span><input type="search" placeholder="Adicionar exame: nome ou apelido" value="{{busca}}" onChange="{{buscar}}"></label>
-          <sc-if value="{{temResultados}}" hint-placeholder-val="{{ false }}">
-            <div class="col" style="gap: 2px; margin-top: 8px; padding: 6px; border-radius: 14px; background: #F6F7F9">
-              <sc-for list="{{resultados}}" as="r" hint-placeholder-count="3">
-                <button class="res" onClick="{{r.add}}"><span class="ni k-violet" style="width: 28px; height: 28px; border-radius: 9px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span><span class="grow t14 b">{{r.nome}}</span><span class="t14 num">{{r.preco}}</span></button>
-              </sc-for>
+        <section class="card pane" style="padding: 0" aria-labelledby="h-res">
+          <div class="ph"><h2 id="h-res" style="flex: 1">Resumo</h2><span class="t13 mute">Calculado às 10:21</span></div>
+          <div class="scroll" style="padding: 14px 18px">
+            <div class="ln"><span class="mute">Exames ({{nItens}})</span><span class="num">{{subtotal}}</span></div>
+            <sc-if value="{{comboAplicado}}" hint-placeholder-val="{{ false }}"><div class="ln"><span class="mute">Pacote Cardio</span><span class="num">− R$ 60,00</span></div></sc-if>
+            <sc-if value="{{descValendo}}" hint-placeholder-val="{{ false }}"><div class="ln"><span class="mute">Desconto {{descTxt}}</span><span class="num">− {{descValor}}</span></div></sc-if>
+            <div class="row" style="align-items: baseline; padding: 10px 0 4px; border-top: 1px solid #E8EAEF; margin-top: 6px"><span class="t15 b">Total</span><span class="num" style="margin-left: auto; font-size: 28px; font-weight: 650; letter-spacing: -.02em">{{total}}</span></div>
+            <div class="t13 mute">Válido até 22/11/2026. Depois vale a tabela do dia.</div>
+
+            <h3 class="sub-h">Pagamento previsto</h3>
+            <div class="seg" role="group" aria-label="Forma de pagamento"><sc-for list="{{pagOpts}}" as="o" hint-placeholder-count="3"><button class="{{o.cls}}" aria-pressed="{{o.p}}" onClick="{{o.ir}}" style="height: 36px">{{o.t}}</button></sc-for></div>
+            <sc-if value="{{cartao}}" hint-placeholder-val="{{ true }}">
+              <div class="col" style="gap: 8px; margin-top: 12px"><span class="t13 mute">Parcelas sem juros, mínimo de R$ 100,00 cada</span>
+                <div class="seg" role="group" aria-label="Parcelas"><sc-for list="{{parcOpts}}" as="o" hint-placeholder-count="3"><button class="{{o.cls}}" aria-pressed="{{o.p}}" onClick="{{o.ir}}" style="height: 36px; padding: 0 12px">{{o.t}}</button></sc-for></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{pix}}" hint-placeholder-val="{{ false }}"><div class="t13 mute" style="margin-top: 10px">O código PIX é gerado no caixa, no dia do exame.</div></sc-if>
+          </div>
+          <div class="pf">
+            <sc-if value="{{enviado}}" hint-placeholder-val="{{ false }}"><div class="t13" role="status" style="color: #14532D">Enviado ao WhatsApp às 10:25. A leitura aparece em Recentes.</div></sc-if>
+            <sc-if value="{{bloqueadoMsg}}" hint-placeholder-val="{{ false }}"><div class="t13" style="color: #9A5B00">{{motivoBloqueio}}</div></sc-if>
+            <button class="btn btn-p" onClick="{{enviar}}" disabled="{{bloqueado}}">Enviar pelo WhatsApp</button>
+            <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+              <button class="btn btn-sm" disabled="{{bloqueado}}">Baixar PDF</button>
+              <a class="btn btn-sm" href="Agenda.dc.html">Agendar</a>
             </div>
-          </sc-if>
-          <table class="tb" style="margin-top: 10px">
-            <thead><tr><th>Exame e preparo</th><th class="r">Preço</th><th class="r"><span class="sr">Remover</span></th></tr></thead>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{tRec}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Orçamentos recentes">
+        <div class="ph">
+          <div class="seg" role="group" aria-label="Filtrar por situação"><sc-for list="{{recFiltros}}" as="o" hint-placeholder-count="4"><button class="{{o.cls}}" aria-pressed="{{o.p}}" onClick="{{o.ir}}" style="height: 36px">{{o.t}}</button></sc-for></div>
+          <div class="grow"></div>
+          <span class="t13 mute">Últimos 30 dias: 41 enviados, 26 aceitos</span>
+        </div>
+        <div class="scroll">
+          <table class="tb sticky">
+            <thead><tr><th>Orçamento</th><th>Pessoa</th><th>Exames</th><th class="r">Total</th><th>Situação</th></tr></thead>
             <tbody>
-              <sc-for list="{{itens}}" as="i" hint-placeholder-count="2">
-                <tr><td><span class="b">{{i.nome}}</span><div class="t13 mute">{{i.prep}}</div></td><td class="r num nw">{{i.preco}}</td>
-                  <td class="r"><button class="icon-x" aria-label="{{i.rem}}" onClick="{{i.tirar}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></td></tr>
+              <sc-for list="{{recentes}}" as="r" hint-placeholder-count="4">
+                <tr><td class="num t13 nw">{{r.cod}}</td><td><div class="b">{{r.nome}}</div><div class="t13 mute num">{{r.nasc}}</div></td><td class="t14">{{r.ex}}</td><td class="r num nw">{{r.tot}}</td><td><span class="{{r.cls}}">{{r.sit}}</span><div class="t13 mute" style="margin-top: 4px">{{r.obs}}</div></td></tr>
               </sc-for>
             </tbody>
           </table>
-          <sc-if value="{{vazio}}" hint-placeholder-val="{{ false }}">
-            <div class="state"><div class="b">Nenhum exame no orçamento</div><div class="t13 mute">Busque acima pelo nome do exame que está no pedido médico.</div></div>
-          </sc-if>
-          <sc-if value="{{comboSugerido}}" hint-placeholder-val="{{ true }}">
-            <div class="banner info" style="margin-top: 12px; flex-wrap: wrap"><div class="t14" style="line-height: 1.5; flex: 1 1 300px"><b>Pacote Cardio disponível:</b> ecocardiograma + Doppler de carótidas sai por R$ 540,00 em vez de R$ 600,00. Regra de combinação v3, calculada pelo servidor.</div><button class="btn btn-sm btn-p" onClick="{{aplicarCombo}}">Aplicar pacote</button></div>
-          </sc-if>
-          <sc-if value="{{comboAplicado}}" hint-placeholder-val="{{ false }}">
-            <div class="row wrap" style="gap: 8px; margin-top: 12px"><span class="chip c-green">Pacote Cardio aplicado · − R$ 60,00</span><button class="btn btn-sm btn-g" onClick="{{tirarCombo}}">Desfazer</button></div>
-          </sc-if>
-        </section>
-
-        <section class="card" aria-labelledby="h-desc">
-          <div class="card-h"><span class="ni k-amber">3</span><div class="grow"><h2 id="h-desc">Desconto</h2><div class="sub">Seu perfil (Recepção) concede até 10% com motivo. Acima disso, o supervisor autoriza.</div></div></div>
-          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 14px; align-items: start">
-            <div class="col" style="gap: 8px"><span class="lbl">Percentual</span>
-              <div class="seg" role="group" aria-label="Percentual de desconto"><sc-for list="{{descOpts}}" as="d" hint-placeholder-count="5"><button class="{{d.cls}}" aria-pressed="{{d.p}}" onClick="{{d.ir}}">{{d.t}}</button></sc-for></div>
-            </div>
-            <label class="field">Motivo (obrigatório com desconto)
-              <select class="in" onChange="{{escolherMotivo}}"><option value="">Escolha o motivo</option><option value="fidel">Paciente frequente</option><option value="func">Funcionário ou familiar</option><option value="social">Condição social avaliada</option><option value="concorr">Cobrir orçamento de outra clínica</option></select>
-            </label>
-          </div>
-          <sc-if value="{{faltaMotivo}}" hint-placeholder-val="{{ false }}">
-            <div class="banner off" style="margin-top: 12px"><div class="t14">O desconto ainda não entrou no total: escolha o motivo para ele valer.</div></div>
-          </sc-if>
-          <sc-if value="{{precisaAut}}" hint-placeholder-val="{{ false }}">
-            <div class="banner off" style="margin-top: 12px; flex-wrap: wrap"><div class="t14" style="line-height: 1.5; flex: 1 1 300px"><b>{{descTxt}} passa do seu limite (10%).</b> O orçamento só pode ser enviado com esse desconto depois que um supervisor autorizar. Até lá, o total mostra o valor sem desconto.</div><button class="btn btn-sm btn-p" onClick="{{pedirAut}}">Pedir autorização</button></div>
-          </sc-if>
-          <sc-if value="{{aguardandoAut}}" hint-placeholder-val="{{ false }}">
-            <div class="banner info" role="status" style="margin-top: 12px; flex-wrap: wrap"><div class="t14" style="line-height: 1.5; flex: 1 1 300px"><b>Aguardando autorização.</b> Patrícia Lemos (supervisão) recebeu no chat às 10:21 com o motivo. Você pode continuar atendendo; avisamos aqui quando ela responder.</div><button class="btn btn-sm" onClick="{{simularAut}}">Simular: autorizado</button></div>
-          </sc-if>
-          <sc-if value="{{autorizado}}" hint-placeholder-val="{{ false }}">
-            <div class="row" style="gap: 8px; margin-top: 12px"><span class="chip c-green">Autorizado por Patrícia Lemos · reautenticada · 10:24</span><span class="t13 mute">Registrado no lastro</span></div>
-          </sc-if>
-        </section>
-      </div>
-
-      <div class="aside col" style="gap: 16px">
-        <section class="card" aria-labelledby="h-res">
-          <div class="card-h"><div class="grow"><h2 id="h-res">Resumo</h2><div class="sub">Calculado pelo servidor às 10:21</div></div></div>
-          <div class="tot"><span class="mute">Exames ({{nItens}})</span><span class="num">{{subtotal}}</span></div>
-          <sc-if value="{{comboAplicado}}" hint-placeholder-val="{{ false }}"><div class="tot"><span class="mute">Pacote Cardio</span><span class="num">− R$ 60,00</span></div></sc-if>
-          <sc-if value="{{descValendo}}" hint-placeholder-val="{{ false }}"><div class="tot"><span class="mute">Desconto {{descTxt}}</span><span class="num">− {{descValor}}</span></div></sc-if>
-          <div class="sep"></div>
-          <div class="tot" style="font-size: 18px; font-weight: 650"><span>Total</span><span class="num">{{total}}</span></div>
-          <div class="t13 mute">Válido até <b style="color: #0F172A">22/11/2026</b> (15 dias). Depois disso vale a tabela do dia.</div>
-        </section>
-
-        <section class="card" aria-labelledby="h-pag">
-          <div class="card-h"><div class="grow"><h2 id="h-pag">Pagamento</h2></div></div>
-          <div class="seg" role="group" aria-label="Forma de pagamento"><sc-for list="{{pagOpts}}" as="o" hint-placeholder-count="3"><button class="{{o.cls}}" aria-pressed="{{o.p}}" onClick="{{o.ir}}">{{o.t}}</button></sc-for></div>
-          <sc-if value="{{cartao}}" hint-placeholder-val="{{ true }}">
-            <div class="col" style="gap: 8px; margin-top: 14px"><span class="lbl">Parcelas sem juros</span>
-              <div class="seg" role="group" aria-label="Parcelas"><sc-for list="{{parcOpts}}" as="o" hint-placeholder-count="3"><button class="{{o.cls}}" aria-pressed="{{o.p}}" onClick="{{o.ir}}">{{o.t}}</button></sc-for></div>
-              <span class="t13 mute">Parcela mínima de R$ 100,00 (regra do caixa).</span>
-            </div>
-          </sc-if>
-          <sc-if value="{{pix}}" hint-placeholder-val="{{ false }}"><p class="t13 mute" style="margin: 12px 0 0">O código PIX é gerado no caixa, no dia do exame, com o valor recalculado pelo servidor.</p></sc-if>
-        </section>
-
-        <section class="card col" aria-label="Ações" style="gap: 10px">
-          <button class="btn btn-p" onClick="{{enviar}}" disabled="{{bloqueado}}">Enviar pelo WhatsApp</button>
-          <button class="btn" disabled="{{bloqueado}}">Baixar PDF</button>
-          <a class="btn" href="Agenda.dc.html">Converter em agendamento</a>
-          <span class="t13 mute">Se o paciente decidir usar convênio, use o <a href="Agendamento-Guia.dc.html">agendamento com guia</a>.</span>
-          <sc-if value="{{bloqueadoMsg}}" hint-placeholder-val="{{ false }}"><span class="t13" style="color: #9A5B00">{{motivoBloqueio}}</span></sc-if>
-          <sc-if value="{{enviado}}" hint-placeholder-val="{{ false }}">
-            <div class="toast" role="status"><span style="flex: 1">Orçamento enviado para o WhatsApp do paciente às 10:25 · você verá aqui quando for lido</span></div>
-          </sc-if>
-        </section>
-      </div>
-    </div>
-
-    <section class="card" aria-labelledby="h-rec">
-      <div class="card-h"><div class="grow"><h2 id="h-rec">Orçamentos recentes</h2><div class="sub">Últimos 30 dias · 41 enviados · 26 aceitos</div></div>
-        <div class="seg" role="group" aria-label="Filtrar por situação"><sc-for list="{{recFiltros}}" as="o" hint-placeholder-count="4"><button class="{{o.cls}}" aria-pressed="{{o.p}}" onClick="{{o.ir}}">{{o.t}}</button></sc-for></div>
-      </div>
-      <table class="tb">
-        <thead><tr><th>Orçamento e pessoa</th><th>Exames</th><th class="r">Total</th><th>Situação</th></tr></thead>
-        <tbody>
-          <sc-for list="{{recentes}}" as="r" hint-placeholder-count="4">
-            <tr><td><span class="num t13 mute">{{r.cod}}</span><div class="b">{{r.nome}}</div><div class="t13 mute">{{r.nasc}}</div></td><td class="t14">{{r.ex}}</td><td class="r num nw">{{r.tot}}</td><td><span class="{{r.cls}}">{{r.sit}}</span><div class="t13 mute" style="margin-top: 4px">{{r.obs}}</div></td></tr>
-          </sc-for>
-        </tbody>
-      </table>
-    </section>
-    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+        </div>
+      </section>
+    </sc-if>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { pac: 'cad', itens: ['eco', 'carot'], busca: '', combo: false, desc: 0, motivo: '', aut: '', pag: 'cartao', parc: 3, enviado: false, rec: 'todos' };
+    this.state = { aba: 'montar', pac: 'cad', itens: ['eco', 'carot'], busca: '', combo: false, desc: 0, motivo: '', aut: '', pag: 'cartao', parc: 3, enviado: false, rec: 'todos' };
   }
   renderVals() {
     const s = this.state;
     const C = {
       eco: ['Ecocardiograma transtorácico', 320, 'Sem preparo'], carot: ['Doppler de carótidas e vertebrais', 280, 'Sem preparo'],
-      abd: ['USG de abdome total', 220, 'Jejum de 8 horas'], tireo: ['USG de tireoide', 180, 'Sem preparo'], ergo: ['Teste ergométrico', 240, 'Roupa e tênis confortáveis; refeição leve 2 h antes'],
+      abd: ['USG de abdome total', 220, 'Jejum de 8 horas'], tireo: ['USG de tireoide', 180, 'Sem preparo'], ergo: ['Teste ergométrico', 240, 'Roupa e tênis confortáveis, refeição leve 2 h antes'],
       mapa: ['MAPA 24 horas', 200, 'Volta no dia seguinte para retirar'], mama: ['USG de mamas', 210, 'Sem preparo'], rxt: ['Raio X de tórax PA e perfil', 90, 'Sem preparo']
     };
     const brl = v => 'R$ ' + v.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -191,23 +201,30 @@ class Component extends DCLogic {
     let motivoBloq = '';
     if (!s.itens.length) motivoBloq = 'Adicione ao menos um exame para enviar.';
     else if (s.desc > 0 && !s.motivo) motivoBloq = 'Escolha o motivo do desconto para enviar.';
-    else if (acima && s.aut !== 'ok') motivoBloq = 'Aguardando autorização do desconto para enviar.';
+    else if (acima && s.aut !== 'ok') motivoBloq = 'O desconto precisa de autorização antes do envio.';
     const seg = (lista, cur, f) => lista.map(([k, t]) => ({ t, cls: cur === k ? 'on' : '', p: cur === k ? 'true' : 'false', ir: () => f(k) }));
     const R = [
-      { cod: 'ORC-2611-0049', nome: 'Antônio Carlos Ribeiro', nasc: 'Nasc. 15/06/1954', ex: 'Teste ergométrico + MAPA 24 horas', tot: 'R$ 440,00', sit: 'Aceito', cls: 'chip c-green', obs: 'Agendado para 10/11 às 08:00', f: 'aceito' },
-      { cod: 'ORC-2611-0046', nome: 'Rafael (sem cadastro)', nasc: 'Celular (48) 9••••-0034', ex: 'USG de abdome total', tot: 'R$ 220,00', sit: 'Enviado', cls: 'chip c-blue', obs: 'Lido às 16:40 · válido até 20/11', f: 'enviado' },
-      { cod: 'ORC-2611-0041', nome: 'Vera Lúcia Antunes', nasc: 'Nasc. 18/09/1957', ex: 'USG de tireoide + USG de mamas', tot: 'R$ 351,00', sit: 'Enviado', cls: 'chip c-blue', obs: 'Desconto 10% · paciente frequente', f: 'enviado' },
-      { cod: 'ORC-2610-0198', nome: 'Sônia Maria Castro', nasc: 'Nasc. 03/02/1962', ex: 'Ecocardiograma transtorácico', tot: 'R$ 320,00', sit: 'Vencido', cls: 'chip c-amber', obs: 'Venceu em 01/11 · reenviar recalcula pela tabela atual', f: 'vencido' }
+      { cod: 'ORC-2611-0057', nome: 'Maria Helena Duarte', nasc: '12/03/1968', ex: 'Ecocardiograma e Doppler de carótidas', tot: brl(total), sit: s.enviado ? 'Enviado' : 'Rascunho', cls: s.enviado ? 'chip c-blue' : 'chip', obs: s.enviado ? 'Enviado hoje às 10:25' : 'Em edição agora', f: s.enviado ? 'enviado' : 'rasc' },
+      { cod: 'ORC-2611-0049', nome: 'Antônio Carlos Ribeiro', nasc: '15/06/1954', ex: 'Teste ergométrico e MAPA 24 horas', tot: 'R$ 440,00', sit: 'Aceito', cls: 'chip c-green', obs: 'Agendado para 10/11 às 08:00', f: 'aceito' },
+      { cod: 'ORC-2611-0046', nome: 'Rafael (sem cadastro)', nasc: 'Celular (48) *****-0034', ex: 'USG de abdome total', tot: 'R$ 220,00', sit: 'Enviado', cls: 'chip c-blue', obs: 'Lido às 16:40, válido até 20/11', f: 'enviado' },
+      { cod: 'ORC-2611-0041', nome: 'Vera Lúcia Antunes', nasc: '18/09/1957', ex: 'USG de tireoide e USG de mamas', tot: 'R$ 351,00', sit: 'Enviado', cls: 'chip c-blue', obs: 'Desconto de 10%, paciente frequente', f: 'enviado' },
+      { cod: 'ORC-2611-0033', nome: 'Juliana Sampaio Rocha', nasc: '12/04/1993', ex: 'USG morfológica do 2º trimestre', tot: 'R$ 450,00', sit: 'Aceito', cls: 'chip c-green', obs: 'Pago no caixa em 04/11', f: 'aceito' },
+      { cod: 'ORC-2610-0198', nome: 'Sônia Maria Castro', nasc: '03/02/1962', ex: 'Ecocardiograma transtorácico', tot: 'R$ 320,00', sit: 'Vencido', cls: 'chip c-amber', obs: 'Venceu em 01/11. Reenviar recalcula pela tabela atual', f: 'vencido' },
+      { cod: 'ORC-2610-0187', nome: 'Lúcia Fernandes Prado', nasc: '02/07/1959', ex: 'Raio X de tórax PA e perfil', tot: 'R$ 90,00', sit: 'Recusado', cls: 'chip c-rose', obs: 'Vai fazer pelo convênio', f: 'vencido' }
     ];
     return {
-      pacOpts: seg([['cad', 'Paciente cadastrado'], ['sem', 'Sem cadastro ainda']], s.pac, k => this.setState({ pac: k })),
+      subTit: s.aba === 'montar' ? 'ORC-2611-0057, rascunho salvo há 3 s' : '41 enviados nos últimos 30 dias',
+      novo: () => this.setState({ aba: 'montar', pac: 'sem', itens: [], combo: false, desc: 0, motivo: '', aut: '', enviado: false }),
+      abas: [['montar', 'Montar orçamento', ''], ['rec', 'Recentes', '41']].map(([k, t, n]) => ({ t, n, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      tMontar: s.aba === 'montar', tRec: s.aba === 'rec',
+      pacOpts: seg([['cad', 'Cadastrado'], ['sem', 'Sem cadastro']], s.pac, k => this.setState({ pac: k })),
       pacCad: s.pac === 'cad', pacSem: s.pac === 'sem',
       busca: s.busca, buscar: (e) => this.setState({ busca: e.target.value }), resultados, temResultados: resultados.length > 0,
       itens: s.itens.map(k => ({ nome: C[k][0], prep: C[k][2], preco: brl(C[k][1]), rem: 'Remover ' + C[k][0], tirar: () => this.setState(st => ({ itens: st.itens.filter(x => x !== k), enviado: false })) })),
       vazio: s.itens.length === 0,
       comboSugerido: temCombo && !s.combo, comboAplicado: combo,
       aplicarCombo: () => this.setState({ combo: true }), tirarCombo: () => this.setState({ combo: false }),
-      descOpts: seg([[0, 'Sem desconto'], [5, '5%'], [10, '10%'], [15, '15%'], [20, '20%']], s.desc, k => this.setState({ desc: k, aut: '', enviado: false })),
+      descOpts: seg([[0, 'Nenhum'], [5, '5%'], [10, '10%'], [15, '15%'], [20, '20%']], s.desc, k => this.setState({ desc: k, aut: '', enviado: false })),
       escolherMotivo: (e) => this.setState({ motivo: e.target.value }),
       faltaMotivo: s.desc > 0 && !s.motivo,
       precisaAut: acima && s.motivo !== '' && s.aut === '', aguardandoAut: acima && s.aut === 'pedido', autorizado: acima && s.aut === 'ok',
@@ -219,7 +236,7 @@ class Component extends DCLogic {
       parcOpts: [1, 2, 3].filter(n => n <= maxParc).map(n => ({ t: n + 'x de ' + brl(total / n), cls: parc === n ? 'on' : '', p: parc === n ? 'true' : 'false', ir: () => this.setState({ parc: n }) })),
       bloqueado: motivoBloq !== '', bloqueadoMsg: motivoBloq !== '', motivoBloqueio: motivoBloq,
       enviar: () => { if (!motivoBloq) this.setState({ enviado: true }); }, enviado: s.enviado,
-      recFiltros: seg([['todos', 'Todos'], ['enviado', 'Enviados'], ['aceito', 'Aceitos'], ['vencido', 'Vencidos']], s.rec, k => this.setState({ rec: k })),
+      recFiltros: seg([['todos', 'Todos'], ['enviado', 'Enviados'], ['aceito', 'Aceitos'], ['vencido', 'Vencidos e recusados']], s.rec, k => this.setState({ rec: k })),
       recentes: R.filter(r => s.rec === 'todos' || r.f === s.rec)
     };
   }

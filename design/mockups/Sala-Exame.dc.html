@@ -4,154 +4,231 @@
 <meta charset="utf-8">
 <title>Sala de exame — VidaCor Imagem</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>body{margin:0;background:#F2F3F6}
-.ck{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #E8EAEF;font-size:14px}
-.ck:last-child{border-bottom:0}
-.ok{width:24px;height:24px;border-radius:50%;background:#E5F5EC;color:#1F7A4D;display:inline-flex;align-items:center;justify-content:center;flex:none}
-.wn{width:24px;height:24px;border-radius:50%;background:#FFF3DF;color:#9A5B00;display:inline-flex;align-items:center;justify-content:center;flex:none;font-weight:700;font-size:13px}
-.dev{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #E8EAEF}
-.dev:last-child{border-bottom:0}
-.cbtn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid #2A3446;background:#141B27;color:#E6ECF5;font-size:14px;font-weight:600;cursor:pointer}
-.cbtn.rec{background:#C2334D;border-color:#C2334D;color:#fff}
+.se-ck{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #E8EAEF;font-size:14px}
+.se-ck:last-child{border-bottom:0}
+.se-ok{width:24px;height:24px;border-radius:50%;background:#E5F5EC;color:#1F7A4D;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.se-wn{width:24px;height:24px;border-radius:50%;background:#FFF3DF;color:#9A5B00;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.se-cb{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 12px;white-space:nowrap;border-radius:999px;border:1px solid #2A3446;background:#141B27;color:#E6ECF5;font:600 14px Inter,sans-serif;cursor:pointer}
+.se-cb.rec{background:#C2334D;border-color:#C2334D;color:#fff}
+.se-wl{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #E8EAEF}
+.se-wl:last-child{border-bottom:0}
+.se-ov{position:fixed;inset:0;background:rgba(15,23,42,.32);z-index:50;display:flex;justify-content:flex-end}
+.se-dr{width:440px;max-width:100%;height:100%;background:#fff;display:flex;flex-direction:column;box-shadow:-8px 0 24px rgba(15,23,42,.08)}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="sala" userName="Dr. Paulo Medeiros" userRole="Cardiologia" userInitials="PM" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="sala" userName="Dr. Paulo Medeiros" userRole="Cardiologia" userInitials="PM" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <div class="crumb"><span>Exames</span><span aria-hidden="true">›</span><span>Sala 1 · Ecocardiograma</span><span aria-hidden="true">›</span><b>Em exame</b></div>
+    <header class="row wrap" style="gap: 14px; min-height: 44px">
+      <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Sala 1, ecocardiograma</h1>
+      <span class="chip c-green">Vivid E95 conectado</span>
       <div class="grow"></div>
-      <span class="chip c-green" style="height: 40px; padding: 0 14px"><span class="d"></span>Aparelho conectado · Vivid E95</span>
-      <a class="btn" href="Recepcao.dc.html">Chamar próximo</a>
-    </div>
+      <a class="t14 b" href="Aparelhos.dc.html">Aparelhos: 5 de 6 online</a>
+      <a class="btn btn-sm" href="Recepcao.dc.html">Chamar próximo</a>
+    </header>
 
-    <dc-import name="Barra-Paciente" ini="SC" nome="Sônia Maria Castro" nasc="03/02/1962" idade="64 anos" sexo="feminino" convenio="Unimed" exame="Ecocardiograma transtorácico" local="Sala 1 · em exame 12 min" alergia="iodo" alertas="Hipertensa · losartana" conferida="08:31" hint-size="100%,84px"></dc-import>
+    <dc-import name="Barra-Paciente" ini="SC" nome="Sônia Maria Castro" nasc="03/02/1962" idade="64 anos" sexo="feminino" convenio="Unimed" exame="Ecocardiograma transtorácico" local="Sala 1" alergia="dipirona" alertas="Hipertensa" conferida="08:31" hint-size="100%,84px"></dc-import>
 
-    <div class="split">
-      <div class="main col" style="gap: 16px">
-        <section aria-label="Captura ao vivo" style="background: #0B0F17; border-radius: 22px; padding: 16px; color: #DCE3EE">
-          <div class="row" style="margin-bottom: 12px">
-            <span class="chip" style="background: #C2334D; color: #fff"><span class="d"></span>Ao vivo</span>
-            <span class="t14" style="color: #AEB9CA">Apical 4 câmaras · sonda M5Sc · 52 Hz · prof. 16 cm</span>
-            <span class="t14 num" style="margin-left: auto; color: #AEB9CA">38 imagens · 4 vídeos</span>
+    <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 352px; gap: 16px">
+      <section class="card pane" aria-label="Captura ao vivo" style="background: #0B0F17; color: #DCE3EE; padding: 14px 16px">
+        <div class="row wrap" style="gap: 12px; margin-bottom: 10px">
+          <span class="{{vivoCls}}">{{vivoTxt}}</span>
+          <span class="t14" style="color: #AEB9CA">Apical 4 câmaras, sonda M5Sc</span>
+          <span class="t14 num" style="margin-left: auto; color: #AEB9CA">{{contagem}}</span>
+        </div>
+        <div style="flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 124px; gap: 10px">
+          <div class="dimg" style="height: 100%; min-height: 0">
+            <img src="/_blob/06906023f41361ed5100eedae375c38d" alt="Imagem de ecocardiograma em tempo real, corte apical 4 câmaras (ilustrativa)">
+            <span style="position: absolute; top: 10px; left: 12px; font-size: 12px; line-height: 1.5; color: #D6DEEA">SÔNIA MARIA CASTRO<br>03/02/1962, F</span>
+            <span style="position: absolute; top: 10px; right: 12px; font-size: 12px; line-height: 1.5; color: #D6DEEA; text-align: right">06/11/2026 08:52:14<br>MI 1,2  TIS 0,4</span>
+            <span style="position: absolute; bottom: 10px; left: 12px; font-size: 12px; color: #D6DEEA">FC 72 bpm, ECG ativo</span>
+            <span style="position: absolute; bottom: 10px; right: 12px; font-size: 12px; color: #D6DEEA">{{envioTxt}}</span>
+            <svg aria-hidden="true" viewBox="0 0 400 40" preserveAspectRatio="none" style="position: absolute; bottom: 32px; left: 12px; width: calc(100% - 24px); height: 32px"><path d="M0 22 L40 22 L48 20 L54 24 L60 4 L66 34 L72 22 L120 22 L130 18 L140 22 L180 22 L188 20 L194 24 L200 4 L206 34 L212 22 L260 22 L270 18 L280 22 L320 22 L328 20 L334 24 L340 4 L346 34 L352 22 L400 22" fill="none" stroke="#4ADE80" stroke-width="1.6"></path></svg>
           </div>
-          <div style="display: grid; grid-template-columns: minmax(0, 1fr) 132px; gap: 12px">
-            <div class="dimg" style="height: 430px; position: relative">
-              <img src="/_blob/06906023f41361ed5100eedae375c38d" alt="Imagem de ecocardiograma em tempo real, corte apical 4 câmaras (ilustrativa)">
-              <span style="position: absolute; top: 10px; left: 12px; font-size: 12px; line-height: 1.5; color: #D6DEEA">SÔNIA M. CASTRO · F · 64a<br>VidaCor Imagem · Sala 1</span>
-              <span style="position: absolute; top: 10px; right: 12px; font-size: 12px; line-height: 1.5; color: #D6DEEA; text-align: right">06/11/2026 08:52:14<br>MI 1,2 · TIS 0,4</span>
-              <span style="position: absolute; bottom: 10px; left: 12px; font-size: 12px; color: #D6DEEA">FC 72 bpm · ECG ativo</span>
-              <svg aria-hidden="true" viewBox="0 0 400 40" preserveAspectRatio="none" style="position: absolute; bottom: 34px; left: 12px; right: 12px; width: calc(100% - 24px); height: 34px"><path d="M0 22 L40 22 L48 20 L54 24 L60 4 L66 34 L72 22 L120 22 L130 18 L140 22 L180 22 L188 20 L194 24 L200 4 L206 34 L212 22 L260 22 L270 18 L280 22 L320 22 L328 20 L334 24 L340 4 L346 34 L352 22 L400 22" fill="none" stroke="#4ADE80" stroke-width="1.6"></path></svg>
-            </div>
-            <div class="col" style="gap: 8px">
-              <div class="dimg" style="height: 98px"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt="Paraesternal longo"><span class="cap">PLAX</span></div>
-              <div class="dimg" style="height: 98px"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt="Paraesternal curto"><span class="cap">PSAX</span></div>
-              <div class="dimg" style="height: 98px"><img src="/_blob/5d5abc0e3f9103b34da8cedf87fc15b2" alt="Doppler colorido"><span class="cap">Doppler</span></div>
-              <div class="dimg" style="height: 98px"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt="Apical 2 câmaras"><span class="cap">A2C · cine</span></div>
-            </div>
+          <div class="scroll col" style="gap: 8px" aria-label="Imagens capturadas">
+            <div class="dimg" style="height: 88px; flex: none"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt="Paraesternal longo"><span class="cap">PLAX</span></div>
+            <div class="dimg" style="height: 88px; flex: none"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt="Paraesternal curto"><span class="cap">PSAX</span></div>
+            <div class="dimg" style="height: 88px; flex: none"><img src="/_blob/5d5abc0e3f9103b34da8cedf87fc15b2" alt="Doppler colorido"><span class="cap">Doppler</span></div>
+            <div class="dimg" style="height: 88px; flex: none"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt="Apical 2 câmaras"><span class="cap">A2C cine</span></div>
+            <div class="dimg" style="height: 88px; flex: none"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt="Subcostal"><span class="cap">Subcostal</span></div>
           </div>
-          <div class="row wrap" style="margin-top: 14px; gap: 10px">
-            <button class="cbtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v12H4z"></path><circle cx="12" cy="13" r="4"></circle></svg>Capturar imagem <span style="color: #8E9AAE">Espaço</span></button>
-            <button class="cbtn rec"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="6"></circle></svg>Gravar cine 3 s</button>
-            <button class="cbtn">Marcar como imagem-chave</button>
-            <button class="cbtn">Rotular corte</button>
-            <span class="t13" style="margin-left: auto; color: #AEB9CA">Envio automático ao PACS · última às 08:52:10</span>
-          </div>
-        </section>
+        </div>
+        <div class="row wrap" style="margin-top: 12px; gap: 8px">
+          <button class="se-cb" aria-keyshortcuts="Space" title="Atalho: barra de espaço" onClick="{{capturar}}" disabled="{{pausado}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v12H4z"></path><circle cx="12" cy="13" r="4"></circle></svg>Capturar imagem</button>
+          <button class="se-cb rec" onClick="{{gravar}}" disabled="{{pausado}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="6"></circle></svg>Gravar cine</button>
+          <button class="se-cb">Imagem-chave</button>
+          <button class="se-cb">Rotular corte</button>
+        </div>
+      </section>
 
-        <div class="grid g2">
-          <section class="card" aria-labelledby="sr-h">
-            <div class="card-h"><span class="tile t-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M2 20h20"></path></svg></span><div><h2 id="sr-h">Medidas recebidas do aparelho</h2><div class="sub">DICOM SR · vão direto para o laudo</div></div></div>
+      <aside class="card pane" aria-label="Apoio ao exame" style="padding: 0">
+        <nav class="tabs" aria-label="Apoio ao exame" style="padding: 4px 8px 0; flex-wrap: nowrap">
+          <sc-for list="{{abas}}" as="a" hint-placeholder-count="4"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}" style="padding: 0 8px">{{a.t}}</button></sc-for>
+        </nav>
+        <div class="scroll" style="padding: 6px 18px 16px">
+          <sc-if value="{{tCheck}}" hint-placeholder-val="{{ true }}">
+            <div class="t13 mute" style="padding: 8px 0 2px">{{checkTxt}}</div>
+            <sc-for list="{{checks}}" as="c" hint-placeholder-count="5">
+              <div class="se-ck">
+                <sc-if value="{{c.ok}}" hint-placeholder-val="{{ true }}"><span class="se-ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg><span class="sr">Feito:</span></span></sc-if>
+                <sc-if value="{{c.falta}}" hint-placeholder-val="{{ false }}"><span class="se-wn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><path d="M12 7v6M12 17h.01"></path></svg><span class="sr">Pendente:</span></span></sc-if>
+                <span class="grow">{{c.t}}</span>
+                <sc-if value="{{c.falta}}" hint-placeholder-val="{{ false }}"><button class="btn btn-sm" onClick="{{c.fazer}}">Coletar</button></sc-if>
+              </div>
+            </sc-for>
+          </sc-if>
+
+          <sc-if value="{{tMedidas}}" hint-placeholder-val="{{ false }}">
+            <div class="t13 mute" style="padding: 8px 0 4px">Recebidas do aparelho (DICOM SR). Vão direto para o laudo.</div>
             <table class="tb">
-              <thead><tr><th>Medida</th><th class="r">Valor</th><th class="r">Hora</th></tr></thead>
+              <thead><tr><th>Medida</th><th class="r">Valor</th></tr></thead>
               <tbody>
-                <tr><td>Diâmetro diastólico VE</td><td class="r num b">48 mm</td><td class="r num mute">08:47</td></tr>
-                <tr><td>Diâmetro sistólico VE</td><td class="r num b">30 mm</td><td class="r num mute">08:47</td></tr>
-                <tr><td>Átrio esquerdo</td><td class="r num b">36 mm</td><td class="r num mute">08:48</td></tr>
-                <tr><td>Fração de ejeção (Teichholz)</td><td class="r num b">66%</td><td class="r num mute">08:49</td></tr>
-                <tr><td>Relação E/A</td><td class="r num b">0,7 <span class="chip c-amber" style="height: 22px; font-size: 12px; margin-left: 4px">abaixo</span></td><td class="r num mute">08:51</td></tr>
+                <tr><td>Diâmetro diastólico VE<div class="t12 mute num">08:47</div></td><td class="r num b">48 mm</td></tr>
+                <tr><td>Diâmetro sistólico VE<div class="t12 mute num">08:47</div></td><td class="r num b">30 mm</td></tr>
+                <tr><td>Átrio esquerdo<div class="t12 mute num">08:48</div></td><td class="r num b">36 mm</td></tr>
+                <tr><td>Fração de ejeção (Teichholz)<div class="t12 mute num">08:49</div></td><td class="r num b">66%</td></tr>
+                <tr><td>Relação E/A<div class="t12 num" style="color: #9A5B00">08:51, abaixo da referência</div></td><td class="r num b">0,7</td></tr>
               </tbody>
             </table>
-          </section>
+          </sc-if>
 
-          <section class="card" aria-labelledby="ct-h">
-            <div class="card-h"><span class="tile t-violet"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 2h4M12 2v4M8 6h8l-1 14H9zM9 11h6"></path></svg></span><div><h2 id="ct-h">Contraste e medicamentos</h2><div class="sub">Baixa automática no estoque</div></div></div>
-            <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
-              <label class="field" style="grid-column: span 2">Produto<select class="in"><option>Microbolhas para eco (contraste) — 2 frascos em estoque</option></select></label>
-              <label class="field">Lote<input class="in" value="MB24-118 · val. 03/2027"></label>
-              <label class="field">Volume<input class="in" value="2 mL"></label>
-              <label class="field">Via<select class="in"><option>Endovenosa</option></select></label>
-              <label class="field">Aplicado por<select class="in"><option>Enf. Lívia Costa</option></select></label>
-            </div>
-            <div class="row" style="margin-top: 14px"><span class="t13 mute grow">Não usado neste exame</span><button class="btn btn-sm">Registrar aplicação</button></div>
-          </section>
+          <sc-if value="{{tContraste}}" hint-placeholder-val="{{ false }}">
+            <sc-if value="{{contrasteLivre}}" hint-placeholder-val="{{ true }}">
+              <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-top: 10px">
+                <label class="field" style="grid-column: span 2">Produto<select class="in"><option>Microbolhas para eco, 2 frascos em estoque</option></select></label>
+                <label class="field" style="grid-column: span 2">Lote<select class="in"><option>MB24-118, validade 03/2027</option></select></label>
+                <label class="field">Volume<input class="in" value="2 mL"></label>
+                <label class="field">Via<select class="in"><option>Endovenosa</option></select></label>
+                <label class="field" style="grid-column: span 2">Aplicado por<select class="in"><option>Enf. Lívia Costa</option></select></label>
+              </div>
+              <div class="row" style="margin-top: 14px; gap: 8px"><span class="t13 mute grow">Não usado neste exame</span><button class="btn btn-sm" onClick="{{registrarContraste}}">Registrar aplicação</button></div>
+            </sc-if>
+            <sc-if value="{{contrasteFeito}}" hint-placeholder-val="{{ false }}">
+              <p class="t14" style="margin: 12px 0 0; color: #14532D">Aplicação registrada às 08:55: microbolhas, lote MB24-118, 2 mL, por Enf. Lívia Costa. O estoque baixou 1 frasco e o lote ficou ligado a Sônia Maria Castro.</p>
+            </sc-if>
+          </sc-if>
+
+          <sc-if value="{{tLista}}" hint-placeholder-val="{{ false }}">
+            <div class="t13 mute" style="padding: 8px 0 2px">Enviada ao Vivid E95. Ninguém digita nome na sala.</div>
+            <sc-for list="{{lista}}" as="w" hint-placeholder-count="4">
+              <div class="se-wl"><span class="num b t14" style="width: 46px">{{w.h}}</span><div style="flex: 1; min-width: 0"><div class="t14 b">{{w.n}}</div><div class="t13 mute">{{w.s}}</div></div><span class="{{w.cls}}">{{w.st}}</span></div>
+            </sc-for>
+          </sc-if>
         </div>
-      </div>
-
-      <div class="aside col" style="gap: 16px">
-        <section class="card" aria-labelledby="ic-h">
-          <div class="card-h"><span class="tile t-amber"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 16H3zM12 10v4M12 17h.01"></path></svg></span><div><h2 id="ic-h">Controle do exame</h2><div class="sub">Tudo registrado com hora e usuário</div></div></div>
-          <div class="row wrap" style="gap: 8px">
-            <button class="btn btn-sm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 5v14M16 5v14"></path></svg>Pausar exame</button>
-            <button class="btn btn-sm">Registrar intercorrência</button>
-            <button class="btn btn-sm">Chamar médico à sala</button>
-            <button class="btn btn-sm">Exame não realizado</button>
-          </div>
-          <p class="t13 mute" style="margin: 10px 0 0">Intercorrência (ex.: reação ao contraste) gera alerta no prontuário e avisa o médico responsável.</p>
-        </section>
-        <section class="card" aria-labelledby="wl-h">
-          <div class="card-h"><div><h2 id="wl-h">Lista do aparelho</h2><div class="sub">Worklist enviada ao Vivid E95</div></div><button class="more" aria-label="Opções">•••</button></div>
-          <div class="li"><span class="chip c-blue" style="min-width: 58px; justify-content: center">08:00</span><div style="flex: 1"><div class="t">Sônia Maria Castro</div><div class="s">Em exame agora</div></div><span class="chip c-blue"><span class="d"></span>No aparelho</span></div>
-          <div class="li"><span class="chip" style="min-width: 58px; justify-content: center">08:30</span><div style="flex: 1"><div class="t">Antônio C. Ribeiro</div><div class="s">Eco + Doppler · chegou 08:21</div></div><span class="chip c-green">Enviado</span></div>
-          <div class="li"><span class="chip" style="min-width: 58px; justify-content: center">09:00</span><div style="flex: 1"><div class="t">Cláudia B. Nunes</div><div class="s">Eco + Doppler · ainda não chegou</div></div><span class="chip">Aguardando</span></div>
-          <div class="li"><span class="chip" style="min-width: 58px; justify-content: center">10:00</span><div style="flex: 1"><div class="t">Hélio T. Mendes</div><div class="s">Eco transtorácico</div></div><span class="chip">Aguardando</span></div>
-          <p class="t13 mute" style="margin: 10px 0 0">O nome e o protocolo vão para o aparelho sozinhos: ninguém digita nada na sala.</p>
-        </section>
-
-        <section class="card" aria-labelledby="pe-h">
-          <div class="card-h"><h2 id="pe-h">Antes de começar</h2><span class="chip c-green" style="margin-left: auto">4 de 5</span></div>
-          <div class="ck"><span class="ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span><span class="grow">Identidade: nome + data de nascimento</span></div>
-          <div class="ck"><span class="ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span><span class="grow">Pedido médico anexado</span></div>
-          <div class="ck"><span class="ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span><span class="grow">Alergias conferidas · nenhuma</span></div>
-          <div class="ck"><span class="ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span><span class="grow">Não se aplica: jejum, gestação</span></div>
-          <div class="ck"><span class="wn">!</span><span class="grow">Termo de contraste · só se usar microbolhas</span><button class="btn btn-sm">Coletar</button></div>
-        </section>
-
-        <section class="card" aria-labelledby="dv-h">
-          <div class="card-h"><h2 id="dv-h">Aparelhos conectados</h2><a class="t14 b" href="Aparelhos.dc.html" style="margin-left: auto">Ver integração ao vivo</a></div>
-          <div class="dev"><span class="chip c-green"><span class="d"></span>Online</span><span class="t14 grow">Eco GE Vivid E95 · Sala 1</span></div>
-          <div class="dev"><span class="chip c-green"><span class="d"></span>Online</span><span class="t14 grow">USG Samsung V8 · Salas 2 e 3</span></div>
-          <div class="dev"><span class="chip c-green"><span class="d"></span>Online</span><span class="t14 grow">Ergômetro · Sala 4</span></div>
-          <div class="dev"><span class="chip c-green"><span class="d"></span>Online</span><span class="t14 grow">Raio X DR · Sala 5</span></div>
-          <div class="dev"><span class="chip c-green"><span class="d"></span>Online</span><span class="t14 grow">Tomógrafo 16 canais · Sala 6</span></div>
-          <div class="dev"><span class="chip c-rose"><span class="d"></span>Offline</span><span class="t14 grow">Gravador MAPA #3 · sem sincronizar há 2 h</span></div>
-        </section>
-      </div>
+      </aside>
     </div>
 
-    <section class="card" aria-label="Finalizar exame" style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap">
-      <div class="grow" style="min-width: 260px"><div class="t15 b">Finalizar e mandar para laudo</div><div class="t13 mute">38 imagens, 4 vídeos e 5 medidas vão juntos. A recepção é avisada para liberar a sala.</div></div>
-      <label class="field" style="flex-direction: row; align-items: center; gap: 10px">Prioridade
-        <select class="in" style="min-width: 200px; width: auto"><option>Rotina · prazo 24 h</option><option>Urgente · 2 h</option><option>Paciente internado</option></select>
-      </label>
-      <label class="field" style="flex-direction: row; align-items: center; gap: 10px">Laudar com
-        <select class="in" style="width: 220px"><option>Dr. Paulo Medeiros (eu)</option><option>Telerradiologia externa</option></select>
-      </label>
-      <a class="btn btn-p" href="Laudo.dc.html">Finalizar exame</a>
+    <section class="card row" aria-label="Controle do exame" style="gap: 8px; padding: 12px 16px">
+      <button class="btn btn-sm" onClick="{{pausar}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 5v14M16 5v14"></path></svg>{{pausarTxt}}</button>
+      <button class="btn btn-sm" onClick="{{abrirInter}}">Registrar intercorrência</button>
+      <button class="btn btn-sm" onClick="{{chamar}}">Chamar médico</button>
+      <button class="btn btn-sm" onClick="{{abrirNao}}">Exame não realizado</button>
+      <span class="t13" style="flex: 1 1 0; min-width: 0; color: #0B4A75">{{avisoTxt}}</span>
+      <button class="btn btn-p" onClick="{{abrirFim}}">Finalizar exame</button>
     </section>
-    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · imagens ilustrativas</p>
+
+    <sc-if value="{{gaveta}}" hint-placeholder-val="{{ false }}">
+      <div class="se-ov">
+        <aside class="se-dr" role="dialog" aria-modal="true" aria-labelledby="dr-h">
+          <div class="row" style="gap: 10px; padding: 18px 20px; border-bottom: 1px solid #E8EAEF">
+            <h2 id="dr-h" style="font-size: 18px; font-weight: 650">{{gTitulo}}</h2>
+            <div class="grow"></div>
+            <button class="icon-btn" onClick="{{fechar}}" aria-label="Fechar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+          </div>
+          <div class="scroll col" style="flex: 1 1 auto; gap: 14px; padding: 18px 20px">
+            <div><div class="t15 b">Sônia Maria Castro</div><div class="t14 num" style="color: #334155">03/02/1962, ecocardiograma transtorácico</div></div>
+            <sc-if value="{{gFim}}" hint-placeholder-val="{{ false }}">
+              <div class="col" style="gap: 14px">
+                <dl class="kv" style="margin: 0">
+                  <dt>Imagens</dt><dd class="num">{{contagem}}</dd>
+                  <dt>Medidas</dt><dd>5 do aparelho</dd>
+                  <dt>Checagem</dt><dd>{{checkTxt}}</dd>
+                </dl>
+                <label class="field">Prioridade<select class="in"><option>Rotina, prazo 24 h</option><option>Urgente, prazo 2 h</option><option>Paciente internado</option></select></label>
+                <label class="field">Laudar com<select class="in"><option>Dr. Paulo Medeiros (eu)</option><option>Telerradiologia externa</option></select></label>
+                <p class="t13 mute" style="margin: 0">A recepção é avisada para liberar a sala.</p>
+              </div>
+            </sc-if>
+            <sc-if value="{{gInter}}" hint-placeholder-val="{{ false }}">
+              <div class="col" style="gap: 14px">
+                <label class="field">Tipo<select class="in"><option>Reação a contraste</option><option>Mal-estar ou desmaio</option><option>Falha do aparelho</option><option>Outra</option></select></label>
+                <label class="field">O que aconteceu<textarea class="in" rows="4" placeholder="Descreva o que viu e o que foi feito"></textarea></label>
+                <p class="t13 mute" style="margin: 0">Gera alerta no prontuário e avisa o médico responsável.</p>
+              </div>
+            </sc-if>
+            <sc-if value="{{gNao}}" hint-placeholder-val="{{ false }}">
+              <label class="field">Motivo<select class="in" onChange="{{onMotivo}}"><option value="">Escolha o motivo</option><option value="recusa">Paciente recusou</option><option value="clinico">Condição clínica impede</option><option value="aparelho">Aparelho indisponível</option></select></label>
+            </sc-if>
+          </div>
+          <div class="row" style="gap: 8px; padding: 14px 20px; border-top: 1px solid #E8EAEF; justify-content: flex-end">
+            <button class="btn" onClick="{{fechar}}">Voltar</button>
+            <sc-if value="{{gFim}}" hint-placeholder-val="{{ false }}"><a class="btn btn-p" href="Laudo.dc.html">Finalizar e mandar para laudo</a></sc-if>
+            <sc-if value="{{gInter}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p" onClick="{{salvarInter}}">Registrar intercorrência</button></sc-if>
+            <sc-if value="{{gNao}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p" onClick="{{salvarNao}}" disabled="{{semMotivo}}">Registrar não realizado</button></sc-if>
+          </div>
+        </aside>
+      </div>
+    </sc-if>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = { aba: 'check', img: 38, vid: 4, ultima: '08:52:10', termo: false, contraste: false, pausado: false, aviso: '', gaveta: '', motivo: '' };
+  }
+  renderVals() {
+    const s = this.state;
+    const C = [
+      { t: 'Identidade: nome e data de nascimento', ok: true },
+      { t: 'Pedido médico anexado', ok: true },
+      { t: 'Alergia conferida: dipirona, sem medicamento previsto', ok: true },
+      { t: 'Jejum e gestação: não se aplicam', ok: true },
+      { t: s.termo ? 'Termo de contraste assinado no tablet' : 'Termo de contraste, se usar microbolhas', ok: s.termo }
+    ];
+    const feitos = C.filter(c => c.ok).length;
+    const A = [['check', 'Checagem'], ['medidas', 'Medidas'], ['contraste', 'Contraste'], ['lista', 'Lista']];
+    const titulos = { fim: 'Finalizar exame', inter: 'Registrar intercorrência', nao: 'Exame não realizado' };
+    return {
+      abas: A.map(([k, t]) => ({ t, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      tCheck: s.aba === 'check', tMedidas: s.aba === 'medidas', tContraste: s.aba === 'contraste', tLista: s.aba === 'lista',
+      checkTxt: feitos + ' de 5 itens conferidos',
+      checks: C.map(c => ({ t: c.t, ok: c.ok, falta: !c.ok, fazer: () => this.setState({ termo: true }) })),
+      contrasteLivre: !s.contraste, contrasteFeito: s.contraste,
+      registrarContraste: () => this.setState({ contraste: true }),
+      lista: [
+        { h: '08:00', n: 'Sônia Maria Castro', s: '03/02/1962, em exame agora', st: 'No aparelho', cls: 'chip c-blue' },
+        { h: '08:30', n: 'Antônio Carlos Ribeiro', s: '15/06/1954, chegou 08:21', st: 'Enviado', cls: 'chip c-green' },
+        { h: '09:00', n: 'Cláudia Bastos Nunes', s: '22/08/1965, ainda não chegou', st: 'Aguardando', cls: 'chip' },
+        { h: '10:00', n: 'Hélio Tavares Mendes', s: '30/01/1950, eco transtorácico', st: 'Aguardando', cls: 'chip' }
+      ],
+      vivoTxt: s.pausado ? 'Pausado' : 'Ao vivo', vivoCls: s.pausado ? 'chip c-amber' : 'chip c-rose',
+      contagem: s.img + ' imagens, ' + s.vid + ' vídeos',
+      envioTxt: 'Enviada ao PACS às ' + s.ultima,
+      pausado: s.pausado,
+      capturar: () => this.setState(st => ({ img: st.img + 1, ultima: '08:53:0' + Math.min(9, st.img - 37) })),
+      gravar: () => this.setState(st => ({ vid: st.vid + 1, ultima: '08:53:2' + Math.min(9, st.vid - 3) })),
+      pausarTxt: s.pausado ? 'Retomar exame' : 'Pausar exame',
+      pausar: () => this.setState(st => ({ pausado: !st.pausado, aviso: st.pausado ? 'Exame retomado às 08:54.' : 'Pausado às 08:53. O tempo de sala parou.' })),
+      chamar: () => this.setState({ aviso: 'Dr. Paulo Medeiros chamado à Sala 1 às 08:56.' }),
+      avisoTxt: s.aviso,
+      gaveta: !!s.gaveta, gTitulo: titulos[s.gaveta] || '',
+      gFim: s.gaveta === 'fim', gInter: s.gaveta === 'inter', gNao: s.gaveta === 'nao',
+      abrirFim: () => this.setState({ gaveta: 'fim' }), abrirInter: () => this.setState({ gaveta: 'inter' }), abrirNao: () => this.setState({ gaveta: 'nao', motivo: '' }),
+      fechar: () => this.setState({ gaveta: '' }),
+      onMotivo: e => this.setState({ motivo: e.target.value }), semMotivo: !s.motivo,
+      salvarInter: () => this.setState({ gaveta: '', aviso: 'Intercorrência registrada às 08:57. Médico avisado e alerta no prontuário.' }),
+      salvarNao: () => this.setState({ gaveta: '', aviso: 'Não realizado, registrado às 08:57. Recepção avisada para remarcar.' })
+    };
+  }
 }
 </script>
 </body>

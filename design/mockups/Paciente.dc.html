@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Paciente — VidaCor Imagem</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
@@ -12,167 +12,364 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0;background:#F2F3F6}
-.tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid #E8EAEF;padding:0 8px}
-.tabs a{display:inline-flex;align-items:center;gap:6px;min-height:46px;padding:0 14px;color:#5B6474;font-size:15px;font-weight:500;border-bottom:2px solid transparent;margin-bottom:-1px}
-.tabs a.on{color:#0A1A4A;font-weight:600;border-bottom-color:#0A1A4A}
-.tabs a .ct{font-size:12px;font-weight:600;background:#F1F3F6;color:#334155;border-radius:999px;padding:1px 7px}
-.lb{max-width:170px;white-space:normal}
-.tl{display:flex;gap:14px;position:relative;padding-bottom:16px}
-.tl::before{content:"";position:absolute;left:19px;top:44px;bottom:0;width:2px;background:#E8EAEF}
-.tl:last-child::before{display:none}
-.kv{display:grid;grid-template-columns:120px 1fr;gap:8px 12px;font-size:14px}
-.kv dt{color:#5B6474}.kv dd{margin:0;color:#0F172A;font-weight:500}
+.pc-map{background:#0A1430;color:#E6ECF7;padding:16px 18px}
+.pc-map h2{font-size:16px;font-weight:600;color:#fff}
+.pc-v{height:32px;padding:0 12px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:transparent;color:#D5DEEE;font:600 13px Inter,sans-serif;cursor:pointer}
+.pc-v.on{background:#fff;color:#0A1A4A;border-color:#fff}
+.pc-body{position:relative;height:100%;aspect-ratio:1000/1600;max-width:100%;margin:0 auto}
+.pc-body img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+.pc-org{display:flex;align-items:center;gap:10px;width:100%;padding:7px 12px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:transparent;color:#E6ECF7;font:500 14px Inter,sans-serif;text-align:left;cursor:pointer}
+.pc-org.on{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.4)}
+.pc-dot{width:10px;height:10px;border-radius:50%;flex:none;background:#3E9BDB}
+.pc-dot.w{background:#F2755E}
+.pc-dot.n{background:#6B7A99}
+.pc-det{border-top:1px solid rgba(255,255,255,.14);padding-top:12px;margin-top:4px}
+.pc-det a{color:#9CCBF2;font-weight:600}
+.pc-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #F1F3F6}
+.pc-row:last-child{border-bottom:0}
+.pc-tr{cursor:pointer}
+.pc-tr:hover td{background:#F8FAFC}
+.pc-tr.sel td{background:#EEF4FB}
+.pc-tr.sel td:first-child{box-shadow:inset 3px 0 0 #0A1A4A}
+.pc-h{font-size:16px;font-weight:600;margin:0}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="pacientes" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="pacientes" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <div class="crumb"><span>VidaCor</span><span aria-hidden="true">›</span><a href="Paciente.dc.html">Pacientes</a><span aria-hidden="true">›</span><b>Sônia Maria Castro</b></div>
-      <div class="grow"></div>
+    <header class="row wrap" style="gap: 14px">
+      <a class="icon-btn" href="Pacientes-Lista.dc.html" aria-label="Voltar para a lista de pacientes"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+      <span class="av" style="width: 44px; height: 44px; background: #0A1A4A; color: #fff; font-size: 15px">SC</span>
+      <div style="flex: 1 1 auto; min-width: 0">
+        <div class="row wrap" style="gap: 10px">
+          <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Sônia Maria Castro</h1>
+          <span class="al-chip">Alergia: dipirona</span>
+        </div>
+        <div class="t14 num" style="color: #334155; margin-top: 2px">03/02/1962, 64 anos, feminino, prontuário 0048213</div>
+      </div>
       <a class="btn btn-sm" href="Cadastro-Paciente.dc.html">Editar cadastro</a>
-      <a class="btn btn-sm" href="Cadastro-Paciente.dc.html">Novo paciente</a>
-      <a class="btn btn-sm" href="Caixa.dc.html">Caixa e financeiro</a>
       <a class="btn btn-sm" href="Agenda.dc.html">Agendar exame</a>
       <a class="btn btn-p" href="Atendimento.dc.html">Abrir atendimento</a>
-    </div>
+    </header>
 
-    <section class="card" aria-label="Identificação do paciente" style="padding: 22px 24px">
-      <div class="row wrap" style="gap: 18px; align-items: flex-start">
-        <span class="av av-lg" style="background: linear-gradient(135deg,#0A1A4A,#3E9BDB); color: #fff; width: 72px; height: 72px; font-size: 22px">SC</span>
-        <div style="flex: 1 1 320px">
-          <h1 style="font-size: 28px; font-weight: 650; letter-spacing: -.025em">Sônia Maria Castro</h1>
-          <div class="t15 mute" style="margin-top: 4px">64 anos · feminino · nasc. 03/02/1962 · CPF ***.***.***-17 · prontuário 0048213</div>
-          <div class="row wrap" style="gap: 6px; margin-top: 12px">
-            <span class="chip c-blue">Unimed · carteirinha válida até 12/2027</span>
-            <span class="chip c-rose"><span class="d"></span>Hipertensa · losartana 50 mg</span>
-            <span class="chip c-rose"><span class="d"></span>Alergia: dipirona</span>
-            <span class="chip c-green">Portal ativo · último acesso ontem 21:14</span>
-            <span class="chip">LGPD: 3 de 4 consentimentos</span>
+    <nav class="tabs" aria-label="Seções do paciente">
+      <sc-for list="{{abas}}" as="a" hint-placeholder-count="7"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}} <span class="mute" style="font-weight: 500">{{a.n}}</span></button></sc-for>
+      <a href="Visualizador.dc.html" style="display: inline-flex; align-items: center; gap: 4px">Imagens <span class="mute" style="font-weight: 500">612</span></a>
+    </nav>
+
+    <sc-if value="{{tResumo}}" hint-placeholder-val="{{ true }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px">
+        <section class="card pane pc-map" aria-labelledby="mapa-h">
+          <div class="row wrap" style="gap: 10px">
+            <h2 id="mapa-h">Mapa anatômico</h2>
+            <div class="grow"></div>
+            <div class="row" style="gap: 6px" role="group" aria-label="Vista">
+              <sc-for list="{{vistas}}" as="v" hint-placeholder-count="3"><button class="{{v.cls}}" aria-pressed="{{v.atual}}" onClick="{{v.ir}}">{{v.t}}</button></sc-for>
+            </div>
           </div>
-        </div>
-        <div class="grid" style="grid-template-columns: repeat(3, minmax(110px, 1fr)); gap: 10px; flex: 1 1 380px">
-          <div style="background: #F2F3F6; border-radius: 16px; padding: 12px 14px"><div class="lbl">Exames</div><div class="big" style="font-size: 26px">14</div><div class="t12 mute">desde 2019</div></div>
-          <div style="background: #F2F3F6; border-radius: 16px; padding: 12px 14px"><div class="lbl">Faltas</div><div class="big" style="font-size: 26px">0</div><div class="t12 mute">pontual</div></div>
-          <div style="background: #F2F3F6; border-radius: 16px; padding: 12px 14px"><div class="lbl">NPS</div><div class="big" style="font-size: 26px">10</div><div class="t12 mute">último</div></div>
+          <div style="flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 12px">
+            <div style="min-height: 0; height: 100%">
+              <div class="pc-body">
+                <img src="/_blob/0ff44fe1ec4c215b11a7c763dbfeea82" alt="Modelo anatômico do corpo humano, vista de frente, com pele translúcida, esqueleto e órgãos">
+                <sc-for list="{{pontos}}" as="o" hint-placeholder-count="5"><button class="{{o.hs}}" style="left: {{o.x}}; top: {{o.y}}" aria-label="{{o.aria}}" onClick="{{o.ir}}"></button></sc-for>
+              </div>
+            </div>
+            <div class="scroll col" style="gap: 8px; min-height: 0">
+              <sc-for list="{{pontos}}" as="o" hint-placeholder-count="5">
+                <button class="{{o.cls}}" aria-pressed="{{o.atual}}" onClick="{{o.ir}}"><span class="{{o.dot}}"></span><span style="flex: 1; min-width: 0"><b class="t14" style="display: block">{{o.nome}}</b><span class="t12" style="color: #AFC0DD">{{o.curto}}</span></span></button>
+              </sc-for>
+              <div class="pc-det">
+                <div class="t15 b">{{org.nome}}</div>
+                <div class="t13" style="color: #AFC0DD; margin-top: 2px">{{org.exame}}</div>
+                <div class="t14" style="margin-top: 8px">{{org.achado}}</div>
+                <sc-if value="{{org.coracao}}" hint-placeholder-val="{{ true }}">
+                  <svg viewBox="0 0 260 96" width="100%" height="96" role="img" aria-label="Fração de ejeção nos ecocardiogramas: 2021 62%, 2023 63%, 2025 64%, hoje 66%. Referência 54% ou mais." style="margin-top: 10px">
+                    <line x1="0" y1="70" x2="260" y2="70" stroke="#2A3A62"></line>
+                    <line x1="0" y1="48" x2="260" y2="48" stroke="#2A3A62" stroke-dasharray="4 4"></line>
+                    <text x="258" y="44" text-anchor="end" font-size="10" fill="#AFC0DD" font-family="Inter">referência 54%</text>
+                    <path d="M16 42 L92 38 L168 33 L244 24" fill="none" stroke="#7CC0EE" stroke-width="2.5" stroke-linecap="round"></path>
+                    <circle cx="16" cy="42" r="3.5" fill="#0A1430" stroke="#7CC0EE" stroke-width="2"></circle><circle cx="92" cy="38" r="3.5" fill="#0A1430" stroke="#7CC0EE" stroke-width="2"></circle><circle cx="168" cy="33" r="3.5" fill="#0A1430" stroke="#7CC0EE" stroke-width="2"></circle><circle cx="244" cy="24" r="4.5" fill="#fff"></circle>
+                    <g font-size="11" fill="#D5DEEE" font-family="Inter" text-anchor="middle"><text x="16" y="88">2021</text><text x="92" y="88">2023</text><text x="168" y="88">2025</text><text x="240" y="88">hoje 66%</text></g>
+                  </svg>
+                </sc-if>
+                <sc-if value="{{org.temLaudo}}" hint-placeholder-val="{{ true }}"><a href="Laudo.dc.html" style="display: inline-block; margin-top: 8px" class="t14">Abrir laudo</a></sc-if>
+              </div>
+            </div>
+          </div>
+          <div class="row wrap t12" style="gap: 14px; margin-top: 10px; color: #AFC0DD">
+            <span class="row" style="gap: 6px"><span class="pc-dot"></span>Sem alteração importante</span>
+            <span class="row" style="gap: 6px"><span class="pc-dot w"></span>Achado para acompanhar</span>
+            <span class="grow"></span>
+            <span>Modelo: BodyParts3D, DBCLS (CC BY-SA 2.1 JP)</span>
+          </div>
+        </section>
+
+        <div class="col" style="gap: 16px; min-height: 0">
+          <section class="card pane" aria-labelledby="hist-h" style="flex: 1 1 auto">
+            <div class="row" style="gap: 10px; margin-bottom: 4px">
+              <div style="flex: 1 1 auto; min-width: 0"><h2 id="hist-h" class="pc-h">Histórico de exames</h2><div class="t13 mute">14 exames desde 2019, nenhuma falta</div></div>
+              <button class="btn btn-sm btn-g" onClick="{{irExames}}">Ver todos</button>
+            </div>
+            <div class="scroll">
+              <sc-for list="{{recentes}}" as="e" hint-placeholder-count="4">
+                <div class="pc-row">
+                  <div style="flex: 1; min-width: 0"><a class="b t15" href="{{e.href}}" style="color: #0F172A">{{e.nome}}</a><div class="t13 mute">{{e.data}}, {{e.medico}}</div></div>
+                  <span class="{{e.stCls}}">{{e.st}}</span>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+          <section class="card" aria-labelledby="prox-h" style="flex: none">
+            <h2 id="prox-h" class="pc-h" style="margin-bottom: 4px">Próximos agendamentos</h2>
+            <div class="pc-row"><div class="num b" style="width: 56px">12/11</div><div style="flex: 1; min-width: 0"><div class="t14 b">MAPA 24 h, instalação</div><div class="t13 mute">08:00, Sala 7</div></div><span class="chip c-green">Confirmado</span></div>
+            <div class="pc-row"><div class="num b" style="width: 56px">10/03</div><div style="flex: 1; min-width: 0"><div class="t14 b">Retorno com eco de controle</div><div class="t13 mute">Lembrete automático em fevereiro de 2027</div></div></div>
+          </section>
         </div>
       </div>
-      <nav class="tabs" aria-label="Seções do paciente" style="margin: 18px -8px -8px">
-        <a class="on" href="Paciente.dc.html" aria-current="page">Resumo</a>
-        <a href="Paciente.dc.html">Exames e laudos <span class="ct">14</span></a>
-        <a href="Visualizador.dc.html">Imagens <span class="ct">612</span></a>
-        <a href="Paciente.dc.html">Documentos <span class="ct">9</span></a>
-        <a href="Paciente.dc.html">Financeiro</a>
-        <a href="Paciente.dc.html">Consentimentos</a>
-        <a href="Paciente.dc.html">Auditoria</a>
-      </nav>
-    </section>
+    </sc-if>
 
-    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start">
-      <section class="anat" aria-labelledby="mapa-h" style="flex: 1 1 640px; min-width: 0; padding: 22px">
-        <div class="row wrap" style="gap: 12px">
-          <div><h2 id="mapa-h" style="font-size: 18px; font-weight: 600; color: #FFFFFF">Mapa anatômico</h2><div class="t14" style="color: #AFC0DD; margin-top: 3px">Achados dos exames por órgão · clique para abrir o laudo</div></div>
-          <div class="row wrap" style="gap: 6px; margin-left: auto" role="tablist" aria-label="Vista anatômica"><button class="tool on" role="tab" aria-selected="true">Corpo inteiro</button><button class="tool" role="tab" aria-selected="false">Cardio</button><button class="tool" role="tab" aria-selected="false">Abdome</button></div>
-        </div>
-        <div style="display: flex; justify-content: center; padding: 14px 0 4px">
-          <div style="position: relative; width: 330px">
-            <img class="body" src="/_blob/0ff44fe1ec4c215b11a7c763dbfeea82" alt="Modelo anatômico realista do corpo humano, vista de frente, com pele translúcida, esqueleto e órgãos">
-            <button class="hs" aria-label="Coração: ecocardiograma de 06/11, fração de ejeção 66%" style="left: 53.1%; top: 27.5%"></button>
-            <button class="hs warn" aria-label="Carótidas: Doppler, placa menor que 50% à esquerda" style="left: 50.2%; top: 20.9%"></button>
-            <button class="hs" aria-label="Fígado e abdome: ultrassom de 22/04, normal" style="left: 47.6%; top: 34.5%"></button>
-            <button class="hs" aria-label="Rins: ultrassom de 22/04, normal" style="left: 49.3%; top: 38%"></button>
-            <button class="hs" aria-label="Pelve: sem exames" style="left: 50%; top: 52.1%; opacity: .6"></button>
-
-            <div class="hs-lb" style="left: 84%; top: 27.5%; transform: translateY(-50%)"><b>Coração</b><br><span class="mute">Eco 06/11 · FE 66%</span><br><span style="color: #9A5B00">Disf. diastólica grau I</span></div>
-            <div class="hs-lb" style="right: 84%; top: 19%; transform: translateY(-50%); border: 1.5px solid #F2B8C3"><b style="color: #C2334D">Carótidas</b><br><span class="mute">Doppler 06/11</span><br>Placa &lt; 50% à esq.</div>
-            <div class="hs-lb" style="right: 84%; top: 35.5%; transform: translateY(-50%)"><b>Fígado e rins</b><br><span class="mute">USG 22/04 · normal</span></div>
-            <div class="hs-lb" style="left: 84%; top: 52%; transform: translateY(-50%)"><b>Pelve</b><br><span class="mute">Sem exames</span></div>
+    <sc-if value="{{tExames}}" hint-placeholder-val="{{ false }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px">
+        <section class="card pane" style="padding: 0" aria-label="Exames e laudos">
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Exame</th><th>Data</th><th>Médico</th><th>Situação</th></tr></thead>
+              <tbody>
+                <sc-for list="{{exames}}" as="e" hint-placeholder-count="8">
+                  <tr class="{{e.cls}}" onClick="{{e.ir}}" aria-selected="{{e.atual}}">
+                    <td class="b">{{e.nome}}</td><td class="num nw">{{e.data}}</td><td>{{e.medico}}</td><td><span class="{{e.stCls}}">{{e.st}}</span></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
           </div>
+        </section>
+        <aside class="card pane" aria-label="Exame selecionado">
+          <div class="scroll" style="display: flex; flex-direction: column; gap: 14px">
+            <div><div style="font-size: 18px; font-weight: 650">{{ex.nome}}</div><div class="t14 mute">{{ex.data}}</div></div>
+            <dl class="kv" style="margin: 0">
+              <dt>Médico</dt><dd>{{ex.medico}}</dd>
+              <dt>Local</dt><dd>{{ex.sala}}</dd>
+              <dt>Convênio</dt><dd>{{ex.conv}}</dd>
+              <dt>Imagens</dt><dd>{{ex.imgs}}</dd>
+              <dt>Resultado</dt><dd>{{ex.res}}</dd>
+              <dt>Situação</dt><dd>{{ex.st}}</dd>
+            </dl>
+          </div>
+          <div class="col" style="gap: 8px; padding-top: 14px; border-top: 1px solid #E8EAEF">
+            <a class="btn btn-p" href="Laudo.dc.html">Abrir laudo</a>
+            <a class="btn btn-sm" href="Visualizador.dc.html">Ver imagens</a>
+          </div>
+        </aside>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{tDocs}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Documentos">
+        <div class="scroll">
+          <table class="tb sticky">
+            <thead><tr><th>Documento</th><th>Origem</th><th>Data</th><th>Situação</th></tr></thead>
+            <tbody>
+              <sc-for list="{{docs}}" as="d" hint-placeholder-count="6"><tr><td class="b">{{d.t}}</td><td>{{d.o}}</td><td class="num nw">{{d.d}}</td><td><span class="{{d.stCls}}">{{d.st}}</span></td></tr></sc-for>
+            </tbody>
+          </table>
         </div>
-        <div class="row wrap t13" style="gap: 16px; justify-content: center; margin-top: 10px; color: #D5DEEE">
-          <span class="row" style="gap: 6px"><i style="width: 12px; height: 12px; border-radius: 50%; background: #3E9BDB; box-shadow: 0 0 8px 2px rgba(62,155,219,.7)"></i>Sem alteração importante</span>
-          <span class="row" style="gap: 6px"><i style="width: 12px; height: 12px; border-radius: 50%; background: #F2755E; box-shadow: 0 0 8px 2px rgba(242,117,94,.7)"></i>Achado para acompanhar</span>
-          <span class="row" style="gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"></path></svg>Arraste para girar · role para aproximar</span>
-        </div>
-        <p class="t12" style="margin: 12px 0 0; text-align: center; color: #AFC0DD">Modelo anatômico: BodyParts3D © DBCLS (CC BY-SA 2.1 JP)</p>
+        <footer class="row" style="gap: 10px; padding: 12px 16px; border-top: 1px solid #E8EAEF">
+          <span class="t13 mute grow">Documentos não são apagados. Um documento errado é substituído por nova versão com motivo.</span>
+          <button class="btn btn-sm btn-p">Anexar documento</button>
+        </footer>
       </section>
+    </sc-if>
 
-      <div style="flex: 1 1 400px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
-        <section class="card" aria-labelledby="hist-h">
-          <div class="card-h"><div><h2 id="hist-h">Histórico de exames</h2><div class="sub">Mais recentes primeiro</div></div><a class="t14 b" href="Paciente.dc.html" style="margin-left: auto">Ver todos</a></div>
-          <div class="tl">
-            <a class="dimg" href="Laudo.dc.html" style="width: 40px; height: 40px; flex: none; border-radius: 10px"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt=""></a>
-            <div style="flex: 1; min-width: 0"><div class="row"><b class="t15">Ecocardiograma transtorácico</b><span class="chip c-violet" style="margin-left: auto">Laudando</span></div><div class="t13 mute">Hoje · Dr. Paulo Medeiros · 38 imagens · 4 vídeos</div></div>
-          </div>
-          <div class="tl">
-            <a class="dimg" href="Visualizador.dc.html" style="width: 40px; height: 40px; flex: none; border-radius: 10px"><img src="/_blob/5d5abc0e3f9103b34da8cedf87fc15b2" alt=""></a>
-            <div style="flex: 1; min-width: 0"><div class="row"><b class="t15">Doppler de carótidas</b><span class="chip c-rose" style="margin-left: auto">Achado</span></div><div class="t13 mute">Hoje · Dr. Marcos Freire · placa &lt; 50% à esquerda</div></div>
-          </div>
-          <div class="tl">
-            <a class="dimg" href="Visualizador.dc.html" style="width: 40px; height: 40px; flex: none; border-radius: 10px"><img src="/_blob/b397e8ff60e8605ce0897e61b093b786" alt=""></a>
-            <div style="flex: 1; min-width: 0"><div class="row"><b class="t15">USG de abdome total</b><span class="chip c-green" style="margin-left: auto">Entregue</span></div><div class="t13 mute">22/04/2026 · Dr. Marcos Freire · visto no portal</div></div>
-          </div>
-          <div class="tl">
-            <span class="tile t-gray" style="width: 40px; height: 40px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"></path></svg></span>
-            <div style="flex: 1; min-width: 0"><div class="row"><b class="t15">Teste ergométrico</b><span class="chip c-green" style="margin-left: auto">Entregue</span></div><div class="t13 mute">14/03/2025 · Dr. Paulo · negativo para isquemia</div></div>
-          </div>
+    <sc-if value="{{tCad}}" hint-placeholder-val="{{ false }}">
+      <div class="fill" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-content: start">
+        <section class="card" aria-labelledby="cad1-h">
+          <h2 id="cad1-h" class="pc-h" style="margin-bottom: 12px">Identificação</h2>
+          <dl class="kv" style="margin: 0">
+            <dt>Nome</dt><dd>Sônia Maria Castro</dd>
+            <dt>Nascimento</dt><dd class="num">03/02/1962</dd>
+            <dt>Sexo</dt><dd>Feminino</dd>
+            <dt>CPF</dt><dd class="num">***.***.***-17</dd>
+            <dt>Prontuário</dt><dd class="num">0048213</dd>
+            <dt>Convênio</dt><dd>Unimed, carteirinha válida até 12/2027</dd>
+            <dt>Condições</dt><dd>Hipertensa, em uso de losartana 50 mg</dd>
+            <dt>Alergias</dt><dd>Dipirona</dd>
+          </dl>
         </section>
-
-        <section class="card" aria-labelledby="fe-h">
-          <div class="card-h"><div><h2 id="fe-h">Fração de ejeção</h2><div class="sub">Evolução nos ecocardiogramas</div></div><span class="chip c-green" style="margin-left: auto">Estável</span></div>
-          <svg viewBox="0 0 360 120" width="100%" height="120" role="img" aria-label="Fração de ejeção: 2021 62%, 2023 63%, 2025 64%, 2026 66%">
-            <defs><linearGradient id="feg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#3E9BDB" stop-opacity=".28"></stop><stop offset="1" stop-color="#3E9BDB" stop-opacity="0"></stop></linearGradient></defs>
-            <line x1="0" y1="96" x2="360" y2="96" stroke="#E8EAEF"></line>
-            <line x1="0" y1="66" x2="360" y2="66" stroke="#E8EAEF" stroke-dasharray="4 4"></line>
-            <text x="356" y="61" text-anchor="end" font-size="11" fill="#5B6474" font-family="Inter">referência ≥ 54%</text>
-            <path d="M20 58 L130 52 L240 46 L340 34 L340 96 L20 96 Z" fill="url(#feg)"></path>
-            <path d="M20 58 L130 52 L240 46 L340 34" fill="none" stroke="#0C72B0" stroke-width="2.5" stroke-linecap="round"></path>
-            <circle cx="20" cy="58" r="4" fill="#fff" stroke="#0C72B0" stroke-width="2"></circle><circle cx="130" cy="52" r="4" fill="#fff" stroke="#0C72B0" stroke-width="2"></circle><circle cx="240" cy="46" r="4" fill="#fff" stroke="#0C72B0" stroke-width="2"></circle><circle cx="340" cy="34" r="5" fill="#0A1A4A"></circle>
-            <g font-size="12" fill="#334155" font-family="Inter" text-anchor="middle"><text x="20" y="114">2021 · 62%</text><text x="130" y="114">2023 · 63%</text><text x="240" y="114">2025 · 64%</text><text x="335" y="114">hoje · 66%</text></g>
-          </svg>
-        </section>
-
-        <section class="card" aria-labelledby="prox-h">
-          <div class="card-h"><h2 id="prox-h">Próximos agendamentos</h2></div>
-          <div class="li"><span class="tile t-blue" style="flex-direction: column; width: 48px; height: 48px; line-height: 1"><b class="t15">12</b><span class="t12">nov</span></span><div style="flex: 1"><div class="t">MAPA 24 h · instalação</div><div class="s">08:00 · Sala 7 · confirmado no WhatsApp</div></div><span class="chip c-green">✓</span></div>
-          <div class="li"><span class="tile t-gray" style="flex-direction: column; width: 48px; height: 48px; line-height: 1"><b class="t15">10</b><span class="t12">mar</span></span><div style="flex: 1"><div class="t">Retorno · eco de controle</div><div class="s">Lembrete automático em fev/2027</div></div></div>
+        <section class="card" aria-labelledby="cad2-h">
+          <h2 id="cad2-h" class="pc-h" style="margin-bottom: 12px">Contato e vínculos</h2>
+          <dl class="kv" style="margin: 0">
+            <dt>Celular</dt><dd class="num">(21) 9 0000-0017, WhatsApp</dd>
+            <dt>E-mail</dt><dd>sonia.castro@exemplo.com</dd>
+            <dt>Endereço</dt><dd>[Rua], Centro, [Cidade]</dd>
+            <dt>Médico</dt><dd>Dr. Hugo Lemos, cardiologia</dd>
+            <dt>Veículo</dt><dd>Placa LMN3F55</dd>
+            <dt>Origem</dt><dd>Importado do sistema anterior</dd>
+            <dt>Satisfação</dt><dd>NPS 10 na última visita</dd>
+          </dl>
+          <a class="btn btn-sm" href="Cadastro-Paciente.dc.html" style="margin-top: 16px">Editar cadastro</a>
         </section>
       </div>
-    </div>
+    </sc-if>
 
-    <div class="grid g3">
-      <section class="card" aria-labelledby="doc-h">
-        <div class="card-h"><h2 id="doc-h">Documentos</h2><button class="btn btn-sm" style="margin-left: auto">+ Anexar</button></div>
-        <div class="li"><span class="tile t-blue" style="width: 36px; height: 36px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6v18h12V7zM14 3v4h4"></path></svg></span><div style="flex: 1"><div class="t">Pedido médico · Dr. Hugo Lemos</div><div class="s">Foto no balcão · hoje 07:58</div></div></div>
-        <div class="li"><span class="tile t-violet" style="width: 36px; height: 36px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20h4l10-10-4-4L4 16zM13 7l4 4"></path></svg></span><div style="flex: 1"><div class="t">Termo de uso do portal</div><div class="s">Assinado no tablet · 22/04/2026</div></div></div>
-        <div class="li"><span class="tile t-green" style="width: 36px; height: 36px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path></svg></span><div style="flex: 1"><div class="t">Guia TISS 88410022</div><div class="s">Unimed · autorizada</div></div></div>
+    <sc-if value="{{tFin}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Financeiro">
+        <div class="scroll">
+          <table class="tb sticky">
+            <thead><tr><th>Atendimento</th><th>Forma</th><th class="r">Valor</th><th>Situação</th></tr></thead>
+            <tbody>
+              <sc-for list="{{fin}}" as="f" hint-placeholder-count="4"><tr><td><div class="b">{{f.t}}</div><div class="t13 mute num">{{f.d}}</div></td><td>{{f.forma}}</td><td class="r num">{{f.v}}</td><td><span class="{{f.stCls}}">{{f.st}}</span></td></tr></sc-for>
+            </tbody>
+          </table>
+        </div>
+        <footer class="row" style="gap: 10px; padding: 12px 16px; border-top: 1px solid #E8EAEF">
+          <span class="t13 mute grow">Valores calculados pelo servidor conforme tabela do convênio. Sem saldo em aberto.</span>
+          <a class="btn btn-sm btn-p" href="Caixa.dc.html">Abrir no caixa</a>
+        </footer>
       </section>
-      <section class="card" aria-labelledby="cad-h">
-        <div class="card-h"><h2 id="cad-h">Cadastro</h2><a class="t14 b" href="Paciente.dc.html" style="margin-left: auto">Editar</a></div>
-        <dl class="kv">
-          <dt>Celular</dt><dd>(21) 9 0000-0017 · WhatsApp</dd>
-          <dt>E-mail</dt><dd>sonia.castro@exemplo.com</dd>
-          <dt>Endereço</dt><dd>[Rua], Centro · [Cidade]</dd>
-          <dt>Médico</dt><dd>Dr. Hugo Lemos · cardiologia</dd>
-          <dt>Veículo</dt><dd>Placa LMN3F55 (estacionamento)</dd>
-          <dt>Origem</dt><dd>Importado do sistema anterior</dd>
-        </dl>
+    </sc-if>
+
+    <sc-if value="{{tPortal}}" hint-placeholder-val="{{ false }}">
+      <div class="fill" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-content: start">
+        <section class="card" aria-labelledby="por-h">
+          <div class="row" style="gap: 10px; margin-bottom: 12px"><h2 id="por-h" class="pc-h">Portal Meu VidaCor</h2><span class="{{portal.cls}}">{{portal.st}}</span></div>
+          <dl class="kv" style="margin: 0">
+            <dt>Convite</dt><dd>WhatsApp e e-mail, 22/04 08:12</dd>
+            <dt>Senha</dt><dd>Criada pela paciente em 22/04 08:40</dd>
+            <dt>Dois fatores</dt><dd>Ativo</dd>
+            <dt>Último acesso</dt><dd>Ontem 21:14</dd>
+            <dt>Laudos</dt><dd>Aparecem só depois de assinados</dd>
+          </dl>
+          <sc-if value="{{portal.ativo}}" hint-placeholder-val="{{ true }}">
+            <div class="row wrap" style="gap: 8px; margin-top: 16px"><button class="btn btn-sm" onClick="{{reenviar}}">Reenviar convite</button><button class="btn btn-sm" onClick="{{pedirBloq}}">Bloquear acesso</button></div>
+          </sc-if>
+          <sc-if value="{{portal.confirma}}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top: 16px; padding: 14px; border: 1px solid #E8EAEF; border-radius: 14px">
+              <div class="t14 b">Bloquear o portal de Sônia Maria Castro?</div>
+              <label class="field" style="margin-top: 10px">Motivo
+                <select class="in" onChange="{{onMotivo}}"><option value="">Escolha o motivo</option><option value="pedido">Pedido da paciente</option><option value="suspeita">Suspeita de acesso indevido</option><option value="obito">Óbito informado</option></select>
+              </label>
+              <div class="row" style="gap: 8px; margin-top: 10px"><button class="btn btn-sm" onClick="{{cancelBloq}}">Voltar</button><button class="btn btn-sm btn-p" onClick="{{bloquear}}" disabled="{{semMotivo}}">Bloquear</button></div>
+            </div>
+          </sc-if>
+          <sc-if value="{{portal.bloqueado}}" hint-placeholder-val="{{ false }}">
+            <p class="t14" style="margin: 16px 0 0; color: #7A1E30">Acesso bloqueado às 09:24. As sessões abertas foram encerradas e o motivo ficou no lastro. Para liberar, a coordenação revisa o pedido.</p>
+          </sc-if>
+          <sc-if value="{{reenviado}}" hint-placeholder-val="{{ false }}"><p class="t13" style="margin: 10px 0 0; color: #14532D">Convite reenviado por WhatsApp às 09:22.</p></sc-if>
+        </section>
+        <section class="card" aria-labelledby="lgpd-h">
+          <div class="row" style="gap: 10px; margin-bottom: 4px"><h2 id="lgpd-h" class="pc-h">Consentimentos</h2><span class="t13 mute">{{lgpdTxt}}</span></div>
+          <sc-for list="{{consent}}" as="c" hint-placeholder-count="4">
+            <div class="pc-row"><div style="flex: 1; min-width: 0"><div class="t14 b">{{c.t}}</div><div class="t13 mute">{{c.s}}</div></div>
+              <sc-if value="{{c.ok}}" hint-placeholder-val="{{ true }}"><span class="chip c-green">Concedido</span></sc-if>
+              <sc-if value="{{c.falta}}" hint-placeholder-val="{{ false }}"><button class="btn btn-sm" onClick="{{c.coletar}}">Coletar no tablet</button></sc-if>
+            </div>
+          </sc-for>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{tAud}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Auditoria de acessos">
+        <div class="scroll">
+          <table class="tb sticky">
+            <thead><tr><th>Quando</th><th>Quem</th><th>O que fez</th><th>Onde</th></tr></thead>
+            <tbody>
+              <sc-for list="{{aud}}" as="a" hint-placeholder-count="6"><tr><td class="num nw">{{a.q}}</td><td>{{a.u}}</td><td>{{a.o}}</td><td>{{a.e}}</td></tr></sc-for>
+            </tbody>
+          </table>
+        </div>
+        <footer class="row" style="gap: 10px; padding: 12px 16px; border-top: 1px solid #E8EAEF">
+          <span class="t13 mute grow">Toda leitura de dado clínico fica registrada.</span>
+          <a class="btn btn-sm btn-p" href="Lastro.dc.html">Abrir no lastro</a>
+        </footer>
       </section>
-      <section class="card" aria-labelledby="por-h">
-        <div class="card-h"><span class="tile t-teal"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"></rect><path d="M11 18h2"></path></svg></span><div><h2 id="por-h">Portal Meu VidaCor</h2><div class="sub">Criado sozinho no 1º cadastro</div></div></div>
-        <div class="li"><div style="flex: 1"><div class="t">Convite enviado</div><div class="s">WhatsApp + e-mail · 22/04 08:12</div></div><span class="chip c-green">✓</span></div>
-        <div class="li"><div style="flex: 1"><div class="t">Senha criada pela paciente</div><div class="s">22/04 08:40 · 2 fatores ativo</div></div><span class="chip c-green">✓</span></div>
-        <div class="li"><div style="flex: 1"><div class="t">Laudos visíveis</div><div class="s">Só depois de assinados</div></div><span class="chip">Regra</span></div>
-        <div class="row" style="gap: 8px; margin-top: 12px"><button class="btn btn-sm">Reenviar convite</button><button class="btn btn-sm">Bloquear acesso</button></div>
-      </section>
-    </div>
-    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · modelo anatômico BodyParts3D © DBCLS (CC BY-SA 2.1 JP) · VidaCor Imagem</p>
+    </sc-if>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1600}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = { aba: 'resumo', vista: 'corpo', org: 'coracao', ex: 'e1', portal: 'ativo', motivo: '', reenviado: false, coletado: false };
+  }
+  renderVals() {
+    const s = this.state;
+    const A = [['resumo', 'Resumo', ''], ['exames', 'Exames e laudos', '14'], ['docs', 'Documentos', '9'], ['cad', 'Cadastro', ''], ['fin', 'Financeiro', ''], ['portal', 'Portal e consentimentos', ''], ['aud', 'Auditoria', '']];
+    const O = [
+      { k: 'carotida', nome: 'Carótidas', x: '50.2%', y: '20.9%', w: true, v: ['corpo', 'cardio'], curto: 'Doppler hoje, placa à esquerda', exame: 'Doppler de carótidas, hoje, Dr. Marcos Freire', achado: 'Placa menor que 50% na carótida esquerda. Acompanhar em 12 meses.', laudo: true },
+      { k: 'coracao', nome: 'Coração', x: '53.1%', y: '27.5%', v: ['corpo', 'cardio'], curto: 'Eco hoje, FE 66%', exame: 'Ecocardiograma, hoje, Dr. Paulo Medeiros', achado: 'Fração de ejeção 66%. Disfunção diastólica grau I.', laudo: true, coracao: true },
+      { k: 'figado', nome: 'Fígado', x: '47.6%', y: '34.5%', v: ['corpo', 'abdome'], curto: 'USG 22/04, normal', exame: 'USG de abdome total, 22/04/2026', achado: 'Sem alterações.', laudo: true },
+      { k: 'rins', nome: 'Rins', x: '49.3%', y: '38%', v: ['corpo', 'abdome'], curto: 'USG 22/04, normal', exame: 'USG de abdome total, 22/04/2026', achado: 'Sem alterações.', laudo: true },
+      { k: 'pelve', nome: 'Pelve', x: '50%', y: '52.1%', n: true, v: ['corpo', 'abdome'], curto: 'Sem exames', exame: 'Nenhum exame nesta região', achado: 'Sem registros na clínica.', laudo: false }
+    ];
+    const vis = O.filter(o => o.v.includes(s.vista));
+    const orgSel = vis.find(o => o.k === s.org) || vis[0];
+    const E = [
+      { id: 'e1', nome: 'Ecocardiograma transtorácico', data: '06/11/2026', medico: 'Dr. Paulo Medeiros', sala: 'Sala 1', conv: 'Unimed, guia 88410022', imgs: '38 imagens e 4 vídeos', res: 'FE 66%, disfunção diastólica grau I', st: ['Laudando', 'chip c-violet'], href: 'Laudo.dc.html' },
+      { id: 'e2', nome: 'Doppler de carótidas', data: '06/11/2026', medico: 'Dr. Marcos Freire', sala: 'Sala 3', conv: 'Unimed, guia 88410022', imgs: '22 imagens', res: 'Placa menor que 50% à esquerda', st: ['Laudo assinado', 'chip c-green'], href: 'Visualizador.dc.html' },
+      { id: 'e3', nome: 'USG de abdome total', data: '22/04/2026', medico: 'Dra. Renata Alves', sala: 'Sala 2', conv: 'Particular', imgs: '31 imagens', res: 'Normal', st: ['Entregue', 'chip c-green'], href: 'Visualizador.dc.html' },
+      { id: 'e4', nome: 'Teste ergométrico', data: '14/03/2025', medico: 'Dr. Paulo Medeiros', sala: 'Sala 4', conv: 'Unimed', imgs: 'Relatório em PDF', res: 'Negativo para isquemia', st: ['Entregue', 'chip c-green'], href: 'Laudo.dc.html' },
+      { id: 'e5', nome: 'Ecocardiograma transtorácico', data: '14/03/2025', medico: 'Dr. Paulo Medeiros', sala: 'Sala 1', conv: 'Unimed', imgs: '34 imagens', res: 'FE 64%', st: ['Entregue', 'chip c-green'], href: 'Laudo.dc.html' },
+      { id: 'e6', nome: 'Doppler de carótidas', data: '14/03/2025', medico: 'Dr. Marcos Freire', sala: 'Sala 3', conv: 'Unimed', imgs: '20 imagens', res: 'Placa menor que 50% à esquerda', st: ['Entregue', 'chip c-green'], href: 'Laudo.dc.html' },
+      { id: 'e7', nome: 'Ecocardiograma transtorácico', data: '08/05/2023', medico: 'Dr. Paulo Medeiros', sala: 'Sala 1', conv: 'Unimed', imgs: '30 imagens', res: 'FE 63%', st: ['Entregue', 'chip c-green'], href: 'Laudo.dc.html' },
+      { id: 'e8', nome: 'Raio X de tórax', data: '19/01/2022', medico: 'Dra. Cecília Souto', sala: 'Sala 5', conv: 'Unimed', imgs: '2 imagens', res: 'Normal', st: ['Entregue', 'chip c-green'], href: 'Laudo.dc.html' },
+      { id: 'e9', nome: 'Ecocardiograma transtorácico', data: '11/02/2021', medico: 'Dr. Paulo Medeiros', sala: 'Sala 1', conv: 'Unimed', imgs: '28 imagens', res: 'FE 62%', st: ['Entregue', 'chip c-green'], href: 'Laudo.dc.html' }
+    ];
+    const exSel = E.find(e => e.id === s.ex) || E[0];
+    const mapE = e => ({ nome: e.nome, data: e.data, medico: e.medico, sala: e.sala, conv: e.conv, imgs: e.imgs, res: e.res, st: e.st[0], stCls: e.st[1], href: e.href,
+      cls: 'pc-tr' + (e.id === s.ex ? ' sel' : ''), atual: e.id === s.ex ? 'true' : 'false', ir: () => this.setState({ ex: e.id }) });
+    const C = [
+      { t: 'Tratamento de dados para atendimento', s: 'Assinado no tablet, 22/04/2026', ok: true },
+      { t: 'Portal e mensagens no WhatsApp', s: 'Assinado no tablet, 22/04/2026', ok: true },
+      { t: 'Termo de uso do portal', s: 'Aceito no portal, 22/04/2026', ok: true },
+      { t: 'Uso de imagens anonimizadas em ensino', s: s.coletado ? 'Enviado ao tablet do Guichê 2 às 09:25' : 'Ainda não perguntado', ok: false }
+    ];
+    return {
+      abas: A.map(([k, t, n]) => ({ t, n, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      tResumo: s.aba === 'resumo', tExames: s.aba === 'exames', tDocs: s.aba === 'docs', tCad: s.aba === 'cad', tFin: s.aba === 'fin', tPortal: s.aba === 'portal', tAud: s.aba === 'aud',
+      vistas: [['corpo', 'Corpo inteiro'], ['cardio', 'Cardio'], ['abdome', 'Abdome']].map(([k, t]) => ({ t, cls: s.vista === k ? 'pc-v on' : 'pc-v', atual: s.vista === k ? 'true' : 'false', ir: () => this.setState({ vista: k }) })),
+      pontos: vis.map(o => ({ nome: o.nome, curto: o.curto, x: o.x, y: o.y, aria: o.nome + ': ' + o.curto,
+        hs: 'hs' + (o.w ? ' warn' : ''), dot: 'pc-dot' + (o.w ? ' w' : (o.n ? ' n' : '')),
+        cls: 'pc-org' + (o === orgSel ? ' on' : ''), atual: o === orgSel ? 'true' : 'false', ir: () => this.setState({ org: o.k }) })),
+      org: { nome: orgSel.nome, exame: orgSel.exame, achado: orgSel.achado, coracao: !!orgSel.coracao, temLaudo: !!orgSel.laudo },
+      irExames: () => this.setState({ aba: 'exames' }),
+      recentes: E.slice(0, 6).map(mapE),
+      exames: E.map(mapE), ex: mapE(exSel),
+      docs: [
+        { t: 'Pedido médico, Dr. Hugo Lemos', o: 'Foto no balcão', d: '06/11/2026', st: 'Anexado', stCls: 'chip c-green' },
+        { t: 'Guia TISS 88410022', o: 'Unimed', d: '06/11/2026', st: 'Autorizada', stCls: 'chip c-green' },
+        { t: 'Termo de uso do portal', o: 'Tablet do Guichê 2', d: '22/04/2026', st: 'Assinado', stCls: 'chip c-green' },
+        { t: 'Laudo de USG de abdome total', o: 'VidaCor, Dra. Renata Alves', d: '22/04/2026', st: 'Assinado', stCls: 'chip c-green' },
+        { t: 'Pedido médico, Dr. Hugo Lemos', o: 'Portal', d: '20/04/2026', st: 'Substituído pela versão 2', stCls: 'chip' },
+        { t: 'Relatório do teste ergométrico', o: 'Ergômetro, Sala 4', d: '14/03/2025', st: 'Assinado', stCls: 'chip c-green' }
+      ],
+      fin: [
+        { t: 'Ecocardiograma e Doppler', d: '06/11/2026', forma: 'Unimed, guia 88410022', v: 'Pelo convênio', st: 'Guia autorizada', stCls: 'chip c-green' },
+        { t: 'USG de abdome total', d: '22/04/2026', forma: 'PIX', v: 'R$ 180,00', st: 'Pago', stCls: 'chip c-green' },
+        { t: 'Teste ergométrico e eco', d: '14/03/2025', forma: 'Unimed', v: 'Pelo convênio', st: 'Faturado', stCls: 'chip' }
+      ],
+      portal: { st: s.portal === 'bloqueado' ? 'Bloqueado' : 'Ativo', cls: s.portal === 'bloqueado' ? 'chip c-rose' : 'chip c-green',
+        ativo: s.portal === 'ativo', confirma: s.portal === 'confirma', bloqueado: s.portal === 'bloqueado' },
+      reenviado: s.reenviado && s.portal === 'ativo',
+      reenviar: () => this.setState({ reenviado: true }),
+      pedirBloq: () => this.setState({ portal: 'confirma', motivo: '' }),
+      cancelBloq: () => this.setState({ portal: 'ativo' }),
+      onMotivo: e => this.setState({ motivo: e.target.value }), semMotivo: !s.motivo,
+      bloquear: () => this.setState({ portal: 'bloqueado' }),
+      lgpdTxt: '3 de 4 concedidos',
+      consent: C.map(c => ({ t: c.t, s: c.s, ok: c.ok, falta: !c.ok && !s.coletado, coletar: () => this.setState({ coletado: true }) })),
+      aud: [
+        { q: '06/11 09:12', u: 'Dr. Paulo Medeiros', o: 'Abriu a evolução (vínculo de cuidado)', e: 'Consultório 3' },
+        { q: '06/11 08:52', u: 'Dr. Paulo Medeiros', o: 'Gravou imagens do ecocardiograma', e: 'Sala 1' },
+        { q: '06/11 08:31', u: 'Téc. Carla Mendes', o: 'Conferiu a pulseira na sala', e: 'Sala 1' },
+        { q: '06/11 08:20', u: 'Ana Souza', o: 'Fez o check-in e imprimiu a pulseira', e: 'Guichê 2' },
+        { q: '05/11 21:14', u: 'Paciente', o: 'Entrou no portal e viu o laudo de USG', e: 'Portal' },
+        { q: '22/04 08:12', u: 'Sistema', o: 'Enviou convite do portal', e: 'WhatsApp' }
+      ]
+    };
+  }
 }
 </script>
 </body>

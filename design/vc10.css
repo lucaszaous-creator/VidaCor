@@ -267,3 +267,34 @@ button:disabled{cursor:not-allowed}
 .sec-b:focus-visible{outline:2px solid #0C72B0;outline-offset:2px}
 .sec-n{font-size:11px;letter-spacing:0;background:#E3E7ED;border-radius:999px;padding:1px 7px;color:#334155;text-transform:none}
 .sec-n:empty{display:none}
+/* ===== v9: a tela cabe na janela ===== */
+.app{height:100vh;overflow:hidden;flex-wrap:nowrap}
+.side{height:100vh;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:14px 12px 14px 14px;flex:0 0 268px}
+.side:has(.sb-mini){flex-basis:84px}
+.content{height:100vh;overflow:hidden;min-height:0;padding:14px 20px 16px 4px;gap:14px;flex:1 1 0}
+.fill{flex:1 1 auto;min-height:0}
+.scroll{overflow-y:auto;min-height:0;overscroll-behavior:contain;scrollbar-width:thin}
+.pane{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.pane>.scroll{flex:1 1 auto}
+.tb.sticky thead th{position:sticky;top:0;background:#fff;z-index:1}
+.page-h{padding:0 4px}
+.page-h h1{font-size:26px;letter-spacing:-.02em}
+.page-h p{font-size:14px;margin-top:4px}
+.card{padding:18px}
+.topbar{min-height:44px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabs button,.tabs a{height:40px;padding:0 14px;border:0;background:transparent;font:500 14px Inter,sans-serif;color:var(--mute);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs .on{color:var(--ink);border-bottom-color:var(--navy);font-weight:600}
+.kv{display:grid;grid-template-columns:120px minmax(0,1fr);gap:8px 12px;font-size:14px}
+.kv dt{color:var(--mute)}.kv dd{margin:0}
+.ico{width:18px;height:18px;flex:none}
+@media (max-width:900px){.app{height:auto;overflow:visible;flex-wrap:wrap}.side{height:auto;flex-basis:100%}.content{height:auto;overflow:visible}}
+.sec{font-size:13px;font-weight:600;letter-spacing:0;text-transform:none;color:#5B6474;padding:14px 10px 4px}
+.sec i{display:none}
+.sec-n{display:none}
+.nv{min-height:40px;font-size:14.5px}
+.nv,.nv-i{white-space:nowrap}
+.nv>span:not(.ni):not(.ct):not(.al){overflow:hidden;text-overflow:ellipsis}
+.bar i{background:var(--navy)}
+.bars .bv.on{background:var(--navy)}
+.anat{background:#0B1530}

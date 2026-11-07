@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Agenda — VidaCor Imagem</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
@@ -12,137 +12,242 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0;background:#F2F3F6}
-.ev{margin:2px 3px;border-radius:9px;padding:6px 9px;background:#fff;border:1px solid #E3E7ED;display:flex;flex-direction:column;justify-content:center;gap:1px;min-width:0;overflow:hidden;z-index:1}
-.ev b{font-size:13px;font-weight:600;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center}
-.ev span{font-size:12px;color:#5B6474;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ev.done{background:#F7F8FA;border-color:#EEF0F3}.ev.done b{color:#5B6474;font-weight:500}
-.ev.now{border-color:#B9A9E6;background:#FAF8FE}
-.ev.wait{border-color:#F3C98B;background:#FFFBF4}
-.free{margin:2px 3px;border-radius:9px;border:1.5px dashed #BFD9EE;background:#F7FBFE;color:#0C72B0;font:600 12px Inter,sans-serif;cursor:pointer;z-index:1}
+.gd{display:grid;grid-template-columns:56px repeat(7,minmax(0,1fr));grid-template-rows:52px repeat(24,46px);position:relative;padding-right:8px}
+.gh{grid-column:1 / -1;grid-row:1;position:sticky;top:0;z-index:6;background:#fff;border-bottom:1px solid #E8EAEF;display:grid;grid-template-columns:56px repeat(7,minmax(0,1fr));align-items:center}
+.gh>div{padding:0 8px;min-width:0}
+.ev{margin:2px 3px;border-radius:9px;padding:4px 9px;background:#fff;border:1px solid #DDE2EA;display:flex;flex-direction:column;justify-content:center;gap:1px;min-width:0;overflow:hidden;z-index:2;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.ev:hover{border-color:#9AA6B8}
+.ev .n{font-size:13px;font-weight:600;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center}
+.ev .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.ev .s{font-size:12px;color:#5B6474;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev.done{background:#F7F8FA;border-color:#EEF0F3}.ev.done .n{color:#5B6474;font-weight:500}
+.ev.now{border-color:#B9A9E6;background:#F7F4FE}
+.ev.wait{border-color:#F3C98B;background:#FFFAF1}
+.ev.cx{background:#fff;border-style:dashed;border-color:#D9DDE5}.ev.cx .n{color:#8A93A3;text-decoration:line-through;font-weight:500}
+.ev.sel{box-shadow:0 0 0 2px #0A1A4A;border-color:#0A1A4A}
+.free{margin:2px 3px;border-radius:9px;border:1.5px dashed #BFD9EE;background:#F7FBFE;color:#0C72B0;font:600 12px Inter,sans-serif;cursor:pointer;z-index:2}
+.free:hover{border-style:solid}
+.free.sel{box-shadow:0 0 0 2px #0A1A4A}
+.blk{margin:2px 3px;border-radius:9px;background:#F3F4F7;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;color:#5B6474;padding:6px}
 .dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:6px;flex:none}
-.hr{font-size:12px;color:#5B6474;padding:3px 10px 0 0;text-align:right}
+.hr{font-size:12px;color:#5B6474;padding:2px 10px 0 0;text-align:right}
+.drw{position:absolute;top:0;right:0;bottom:0;width:360px;max-width:100%;background:#fff;border-radius:22px;box-shadow:0 18px 48px rgba(15,23,42,.16),0 2px 6px rgba(15,23,42,.06);display:flex;flex-direction:column;z-index:20;overflow:hidden}
+.xb{width:36px;height:36px;border:0;border-radius:10px;background:transparent;color:#5B6474;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.xb:hover{background:#F1F3F6;color:#0F172A}
+.mt{height:8px;border-radius:999px;background:#EEF0F3;overflow:hidden}
+.mt i{display:block;height:100%;border-radius:999px;background:#13285F}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="agenda" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="agenda" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <div class="row" style="gap: 8px">
-        <button class="icon-btn" aria-label="Dia anterior" style="width: 40px; height: 40px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
-        <button class="btn btn-sm">Hoje</button>
-        <button class="icon-btn" aria-label="Próximo dia" style="width: 40px; height: 40px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
-        <button class="btn btn-g" style="font-size: 22px; font-weight: 650; padding: 0 8px">Sexta, 6 de novembro <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
-      </div>
+    <header class="row wrap" style="gap: 10px">
+      <button class="icon-btn" aria-label="Dia anterior" onClick="{{diaAnt}}" style="width: 40px; height: 40px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
+      <button class="btn btn-sm" onClick="{{diaHoje}}">Hoje</button>
+      <button class="icon-btn" aria-label="Próximo dia" onClick="{{diaProx}}" style="width: 40px; height: 40px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+      <h1 style="margin: 0 0 0 6px; font-size: 24px; font-weight: 650; letter-spacing: -.02em">{{titulo}}</h1>
       <div class="grow"></div>
-      <div class="seg" role="tablist" aria-label="Visualização"><button class="on" role="tab" aria-selected="true">Dia</button><button role="tab" aria-selected="false">Semana</button></div>
-      <button class="btn btn-sm">Todas as salas</button>
-      <button class="btn btn-p"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Agendar</button>
-    </div>
-
-    <div class="row wrap t14 mute" style="gap: 22px; padding: 0 8px">
-      <span><b style="color:#0F172A">42</b> agendados</span>
-      <span><b style="color:#0C72B0">11</b> horários livres</span>
-      <a href="Agenda.dc.html"><b>3</b> na lista de espera</a>
-      <a href="Comunicacao.dc.html"><b>6</b> sem confirmação amanhã</a>
-      <a href="Agenda.dc.html"><b>2</b> pedidos do app</a>
-      <span class="grow"></span>
-      <span class="row" style="gap:0"><i class="dot" style="background:#5B45B5"></i>Em exame</span>
-      <span class="row" style="gap:0"><i class="dot" style="background:#D97706"></i>Aguardando</span>
-      <span class="row" style="gap:0"><i class="dot" style="background:#CBD2DC"></i>Concluído</span>
-    </div>
-
-    <section class="card" aria-label="Agenda do dia por sala" style="padding: 0 10px 10px 0">
-      <div style="display: grid; grid-template-columns: 56px repeat(7, minmax(0, 1fr)); grid-template-rows: 54px repeat(24, 50px); position: relative">
-            <div style="grid-column:1 / -1;grid-row:1;border-bottom:1px solid #E8EAEF"></div>
-            <div style="grid-column:2;grid-row:1;padding:12px 10px"><div class="t14 b nw clamp1">Eco</div><div class="t12 mute nw">Dr. Paulo</div></div>
-            <div style="grid-column:3;grid-row:1;padding:12px 10px"><div class="t14 b nw clamp1">USG obstétrica</div><div class="t12 mute nw">Dra. Renata</div></div>
-            <div style="grid-column:4;grid-row:1;padding:12px 10px"><div class="t14 b nw clamp1">USG e Doppler</div><div class="t12 mute nw">Dr. Marcos</div></div>
-            <div style="grid-column:5;grid-row:1;padding:12px 10px"><div class="t14 b nw clamp1">Ergométrico</div><div class="t12 mute nw">Dr. Paulo</div></div>
-            <div style="grid-column:6;grid-row:1;padding:12px 10px"><div class="t14 b nw clamp1">Raio X</div><div class="t12 mute nw">Téc. Bruno</div></div>
-            <div style="grid-column:7;grid-row:1;padding:12px 10px"><div class="t14 b nw clamp1">Tomografia</div><div class="t12 mute nw">Téc. Carla</div></div>
-            <div style="grid-column:8;grid-row:1;padding:12px 10px"><div class="t14 b nw clamp1">MAPA</div><div class="t12 mute nw">Enf. Lívia</div></div>
-            <div style="grid-column:1 / -1;grid-row:2;border-top:1px solid #E8EAEF"></div><div class="hr" style="grid-column:1;grid-row:2">07:00</div>
-            <div style="grid-column:1 / -1;grid-row:3;border-top:1px solid #F4F5F7"></div><div class="hr" style="grid-column:1;grid-row:3"></div>
-            <div style="grid-column:1 / -1;grid-row:4;border-top:1px solid #E8EAEF"></div><div class="hr" style="grid-column:1;grid-row:4">08:00</div>
-            <div style="grid-column:1 / -1;grid-row:5;border-top:1px solid #F4F5F7"></div><div class="hr" style="grid-column:1;grid-row:5"></div>
-            <div style="grid-column:1 / -1;grid-row:6;border-top:1px solid #E8EAEF"></div><div class="hr" style="grid-column:1;grid-row:6">09:00</div>
-            <div style="grid-column:1 / -1;grid-row:7;border-top:1px solid #F4F5F7"></div><div class="hr" style="grid-column:1;grid-row:7"></div>
-            <div style="grid-column:1 / -1;grid-row:8;border-top:1px solid #E8EAEF"></div><div class="hr" style="grid-column:1;grid-row:8">10:00</div>
-            <div style="grid-column:1 / -1;grid-row:9;border-top:1px solid #F4F5F7"></div><div class="hr" style="grid-column:1;grid-row:9"></div>
-            <div style="grid-column:1 / -1;grid-row:10;border-top:1px solid #E8EAEF"></div><div class="hr" style="grid-column:1;grid-row:10">11:00</div>
-            <div style="grid-column:1 / -1;grid-row:11;border-top:1px solid #F4F5F7"></div><div class="hr" style="grid-column:1;grid-row:11"></div>
-            <div style="grid-column:1 / -1;grid-row:12;border-top:1px solid #E8EAEF"></div><div class="hr" style="grid-column:1;grid-row:12">12:00</div>
-            <div style="grid-column:1 / -1;grid-row:13;border-top:1px solid #F4F5F7"></div><div class="hr" style="grid-column:1;grid-row:13"></div>
-            <div style="grid-column:1 / -1;grid-row:14;border-top:1px solid #E8EAEF"></div><div class="hr" style="grid-column:1;grid-row:14">13:00</div>
-            <div style="grid-column:1 / -1;grid-row:15;border-top:1px solid #F4F5F7"></div><div class="hr" style="grid-column:1;grid-row:15"></div>
-            <div style="grid-column:1 / -1;grid-row:16;border-top:1px solid #E8EAEF"></div><div class="hr" style="grid-column:1;grid-row:16">14:00</div>
-            <div style="grid-column:1 / -1;grid-row:17;border-top:1px solid #F4F5F7"></div><div class="hr" style="grid-column:1;grid-row:17"></div>
-            <div style="grid-column:1 / -1;grid-row:18;border-top:1px solid #E8EAEF"></div><div class="hr" style="grid-column:1;grid-row:18">15:00</div>
-            <div style="grid-column:1 / -1;grid-row:19;border-top:1px solid #F4F5F7"></div><div class="hr" style="grid-column:1;grid-row:19"></div>
-            <div style="grid-column:1 / -1;grid-row:20;border-top:1px solid #E8EAEF"></div><div class="hr" style="grid-column:1;grid-row:20">16:00</div>
-            <div style="grid-column:1 / -1;grid-row:21;border-top:1px solid #F4F5F7"></div><div class="hr" style="grid-column:1;grid-row:21"></div>
-            <div style="grid-column:1 / -1;grid-row:22;border-top:1px solid #E8EAEF"></div><div class="hr" style="grid-column:1;grid-row:22">17:00</div>
-            <div style="grid-column:1 / -1;grid-row:23;border-top:1px solid #F4F5F7"></div><div class="hr" style="grid-column:1;grid-row:23"></div>
-            <div style="grid-column:1 / -1;grid-row:24;border-top:1px solid #E8EAEF"></div><div class="hr" style="grid-column:1;grid-row:24">18:00</div>
-            <div style="grid-column:1 / -1;grid-row:25;border-top:1px solid #F4F5F7"></div><div class="hr" style="grid-column:1;grid-row:25"></div>
-            <div style="grid-column:5;grid-row:2 / span 12;margin:2px 3px;border-radius:9px;background:repeating-linear-gradient(135deg,#F7F8FA 0 8px,#F1F3F6 8px 16px);display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;color:#5B6474;padding:8px">Sala fechada<br>pela manhã</div>
-            <div style="grid-column:6;grid-row:9 / span 3;margin:2px 3px;border-radius:9px;border:1.5px dashed #BFD9EE;background:#F7FBFE;display:flex;flex-direction:column;justify-content:center;padding:6px 9px"><b class="t13" style="color:#0C72B0">Ordem de chegada</b><span class="t12 mute">10:30 às 12:00</span></div>
-            <div style="grid-column:2 / -1;grid-row:12 / span 2;margin:2px 3px;border-radius:9px;background:#F7F8FA;display:flex;align-items:center;justify-content:center;font-size:12px;color:#5B6474">Intervalo · 12:00 às 13:00</div>
-            <div class="ev done" style="grid-column:2;grid-row:2 / span 1"><b>Maria H. Duarte</b><span>Eco</span></div>
-            <div class="ev done" style="grid-column:2;grid-row:3 / span 1"><b>João P. Alves</b><span>Eco</span></div>
-            <div class="ev now" style="grid-column:2;grid-row:4 / span 1"><b><i class="dot" style="background:#5B45B5"></i>Sônia M. Castro</b><span>Em exame</span></div>
-            <div class="ev wait" style="grid-column:2;grid-row:5 / span 1"><b><i class="dot" style="background:#D97706"></i>Antônio C. Ribeiro</b><span>Aguardando 19 min</span></div>
-            <div class="ev " style="grid-column:2;grid-row:6 / span 1"><b>Cláudia B. Nunes</b><span>Eco + Doppler</span></div>
-            <div class="ev " style="grid-column:2;grid-row:8 / span 1"><b>Hélio T. Mendes</b><span>Eco</span></div>
-            <div class="ev " style="grid-column:2;grid-row:9 / span 1"><b>Rosa M. Teles</b><span>Eco</span></div>
-            <div class="ev " style="grid-column:2;grid-row:11 / span 1"><b>Paulo R. Dias</b><span>Eco + Doppler</span></div>
-            <div class="ev done" style="grid-column:3;grid-row:2 / span 1"><b>Beatriz L. Cunha</b><span>Obstétrica</span></div>
-            <div class="ev now" style="grid-column:3;grid-row:3 / span 2"><b><i class="dot" style="background:#5B45B5"></i>Juliana S. Rocha</b><span>Morfológica · em exame</span></div>
-            <div class="ev " style="grid-column:3;grid-row:5 / span 1"><b>Patrícia G. Lopes</b><span>Obstétrica c/ Doppler</span></div>
-            <div class="ev " style="grid-column:3;grid-row:7 / span 1"><b>Fernanda A. Prado</b><span>Translucência nucal</span></div>
-            <div class="ev " style="grid-column:3;grid-row:9 / span 1"><b>Carla N. Souza</b><span>Obstétrica</span></div>
-            <div class="ev " style="grid-column:3;grid-row:16 / span 2"><b>Aline B. Ramos</b><span>Morfológica</span></div>
-            <div class="ev " style="grid-column:3;grid-row:19 / span 1"><b>Mônica S. Reis</b><span>Obstétrica</span></div>
-            <div class="ev done" style="grid-column:4;grid-row:2 / span 1"><b>Roberto F. Lima</b><span>Doppler</span></div>
-            <div class="ev now" style="grid-column:4;grid-row:3 / span 1"><b><i class="dot" style="background:#5B45B5"></i>Ivone R. Teixeira</b><span>Carótidas · em exame</span></div>
-            <div class="ev " style="grid-column:4;grid-row:6 / span 1"><b>Marcelo D. Faria</b><span>USG abdome</span></div>
-            <div class="ev " style="grid-column:4;grid-row:9 / span 1"><b>Rita C. Barbosa</b><span>USG tireoide</span></div>
-            <div class="ev " style="grid-column:4;grid-row:15 / span 1"><b>Sérgio A. Moura</b><span>Doppler venoso</span></div>
-            <div class="ev " style="grid-column:4;grid-row:18 / span 1"><b>Lia M. Torres</b><span>USG mamas</span></div>
-            <div class="ev " style="grid-column:5;grid-row:14 / span 2"><b>Eduardo M. Vaz</b><span>Ergométrico</span></div>
-            <div class="ev " style="grid-column:5;grid-row:16 / span 2"><b>Simone A. Reis</b><span>Ergométrico</span></div>
-            <div class="ev " style="grid-column:5;grid-row:18 / span 2"><b>Gustavo H. Pires</b><span>Ergométrico</span></div>
-            <div class="ev " style="grid-column:5;grid-row:21 / span 2"><b>Ana C. Lima</b><span>Ergométrico</span></div>
-            <div class="ev done" style="grid-column:6;grid-row:2 / span 1"><b>Caio V. Moraes</b><span>Tórax</span></div>
-            <div class="ev wait" style="grid-column:6;grid-row:4 / span 1"><b><i class="dot" style="background:#D97706"></i>Rafael M. Lima</b><span>Aguardando pagamento</span></div>
-            <div class="ev " style="grid-column:6;grid-row:5 / span 1"><b>Tiago S. Braga</b><span>Tórax PA e perfil</span></div>
-            <div class="ev " style="grid-column:6;grid-row:6 / span 1"><b>Laura N. Costa</b><span>Coluna lombar</span></div>
-            <div class="ev now" style="grid-column:7;grid-row:2 / span 2"><b><i class="dot" style="background:#5B45B5"></i>Vera L. Antunes</b><span>TC abdome c/ contraste</span></div>
-            <div class="ev wait" style="grid-column:7;grid-row:6 / span 2"><b><i class="dot" style="background:#D97706"></i>Lúcia F. Prado</b><span>TC crânio · revisar contraste</span></div>
-            <div class="ev " style="grid-column:7;grid-row:10 / span 1"><b>Otávio R. Sales</b><span>TC tórax</span></div>
-            <div class="ev " style="grid-column:7;grid-row:16 / span 2"><b>Júlio P. Matos</b><span>TC abdome</span></div>
-            <div class="ev " style="grid-column:7;grid-row:20 / span 1"><b>Elisa C. Rocha</b><span>TC crânio</span></div>
-            <div class="ev done" style="grid-column:8;grid-row:2 / span 1"><b>Mário J. Pinto</b><span>Retirada MAPA</span></div>
-            <div class="ev " style="grid-column:8;grid-row:4 / span 1"><b>Neusa A. Freitas</b><span>Instalação MAPA</span></div>
-            <div class="ev " style="grid-column:8;grid-row:6 / span 1"><b>Jorge L. Batista</b><span>Instalação Holter</span></div>
-            <div class="ev " style="grid-column:8;grid-row:22 / span 1"><b>Renan F. Alves</b><span>Instalação MAPA</span></div>
-            <button class="free" style="grid-column:3;grid-row:6" aria-label="Encaixar às 09:00">+ 09:00</button>
-            <button class="free" style="grid-column:4;grid-row:4" aria-label="Livre às 08:00">+ 08:00</button>
-            <button class="free" style="grid-column:4;grid-row:7" aria-label="Livre às 09:30">+ 09:30</button>
-            <button class="free" style="grid-column:6;grid-row:7" aria-label="Livre às 09:30">+ 09:30</button>
-            <button class="free" style="grid-column:7;grid-row:8" aria-label="Livre às 10:00">+ 10:00</button>
-            <button class="free" style="grid-column:2;grid-row:7" aria-label="Livre às 09:30">+ 09:30</button>
-            <button class="free" style="grid-column:8;grid-row:8" aria-label="Livre às 10:00">+ 10:00</button>
-            <div aria-hidden="true" style="grid-column:2 / -1;grid-row:5;align-self:start;margin-top:33px;height:2px;background:#C2334D;z-index:3"></div>
-            <div style="grid-column:1;grid-row:5;align-self:start;margin-top:26px;font:700 11px Inter,sans-serif;color:#C2334D;text-align:right;padding-right:8px;z-index:3">08:40</div>
+      <div class="seg" role="group" aria-label="Visualização">
+        <sc-for list="{{visoes}}" as="v" hint-placeholder-count="2"><button class="{{v.cls}}" aria-pressed="{{v.on}}" onClick="{{v.ir}}" style="height: 40px">{{v.t}}</button></sc-for>
       </div>
-    </section>
+      <label class="sr" for="ag-sala">Salas</label>
+      <select id="ag-sala" class="in" style="width: auto; min-height: 40px; border-radius: 999px; font-size: 14px; font-weight: 550"><option>Todas as salas</option><option>Sala 1, ecocardiograma</option><option>Sala 2, USG obstétrica</option><option>Sala 6, tomografia</option></select>
+      <a class="btn btn-p" href="Agendamento-Guia.dc.html">Agendar</a>
+    </header>
+
+    <div class="row wrap t13 mute" style="gap: 16px; padding: 0 4px">
+      <span><b style="color: #0F172A">42</b> agendados</span>
+      <span><b style="color: #0C72B0">7</b> horários livres</span>
+      <a href="Lista-Espera.dc.html"><b>3</b> na lista de espera</a>
+      <a href="Comunicacao.dc.html"><b>6</b> sem confirmação amanhã</a>
+      <a href="Lista-Espera.dc.html"><b>2</b> pedidos do app</a>
+      <span class="grow"></span>
+      <span class="row t13" style="gap: 0"><i class="dot" style="background: #5B45B5"></i>Em exame</span>
+      <span class="row t13" style="gap: 0"><i class="dot" style="background: #D97706"></i>Aguardando</span>
+      <span class="row t13" style="gap: 0"><i class="dot" style="background: #CBD2DC"></i>Concluído</span>
+    </div>
+
+    <div class="fill" style="position: relative; display: flex; flex-direction: column">
+      <sc-if value="{{modoDia}}" hint-placeholder-val="{{ true }}">
+        <section class="card pane" aria-label="Agenda do dia por sala" style="padding: 0; flex: 1 1 auto">
+          <div class="scroll">
+            <div class="gd">
+              <div class="gh">
+                <div></div>
+                <sc-for list="{{salas}}" as="s" hint-placeholder-count="7"><div><div class="t14 b clamp1">{{s.t}}</div><div class="t12 mute clamp1">{{s.q}}</div></div></sc-for>
+              </div>
+              <sc-for list="{{linhas}}" as="l" hint-placeholder-count="24">
+                <div style="{{l.ln}}"></div><div class="hr" style="{{l.pos}}">{{l.h}}</div>
+              </sc-for>
+              <div class="blk" style="grid-column: 5; grid-row: 2 / span 12">Sala fechada pela manhã</div>
+              <div class="blk" style="grid-column: 6; grid-row: 9 / span 3; flex-direction: column; background: #F7FBFE; border: 1.5px dashed #BFD9EE"><b class="t13" style="color: #0C72B0">Ordem de chegada</b><span class="t12 mute">10:30 às 12:00</span></div>
+              <div class="blk" style="grid-column: 2 / -1; grid-row: 12 / span 2">Intervalo, 12:00 às 13:00</div>
+              <sc-for list="{{eventos}}" as="e" hint-placeholder-count="12">
+                <button class="{{e.cls}}" style="{{e.pos}}" onClick="{{e.abrir}}" aria-label="{{e.aria}}"><span class="n"><i class="dot" style="{{e.dot}}"></i><span class="nm">{{e.curto}}</span></span><span class="s">{{e.sub}}</span></button>
+              </sc-for>
+              <sc-for list="{{livres}}" as="f" hint-placeholder-count="7">
+                <button class="{{f.cls}}" style="{{f.pos}}" onClick="{{f.abrir}}" aria-label="{{f.aria}}">Livre {{f.h}}</button>
+              </sc-for>
+              <div aria-hidden="true" style="grid-column: 2 / -1; grid-row: 5; align-self: start; margin-top: 15px; height: 2px; background: #C2334D; z-index: 0"></div>
+              <div style="grid-column: 1; grid-row: 5; align-self: start; margin-top: 8px; font: 700 11px Inter, sans-serif; color: #C2334D; text-align: right; padding-right: 8px; z-index: 3">08:40</div>
+            </div>
+          </div>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{modoSemana}}" hint-placeholder-val="{{ false }}">
+        <section class="card pane" aria-label="Resumo da semana" style="padding: 0; flex: 1 1 auto">
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th style="padding-left: 18px">Dia</th><th class="r">Agendados</th><th class="r">Livres</th><th style="width: 34%">Ocupação</th><th>Observação</th></tr></thead>
+              <tbody>
+                <sc-for list="{{semana}}" as="w" hint-placeholder-count="6">
+                  <tr><td style="padding-left: 18px"><span class="b">{{w.d}}</span></td><td class="r num">{{w.ag}}</td><td class="r num">{{w.lv}}</td><td><div class="row" style="gap: 10px"><div class="mt" style="flex: 1"><i style="{{w.w}}"></i></div><span class="num t13 b" style="width: 36px">{{w.p}}</span></div></td><td class="t13 mute">{{w.obs}}</td></tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{temDrw}}" hint-placeholder-val="{{ false }}">
+        <aside class="drw" aria-label="Detalhe do horário">
+          <div class="row" style="padding: 16px 12px 12px 20px; border-bottom: 1px solid #E8EAEF">
+            <div style="flex: 1; min-width: 0"><div class="t13 mute">{{d.quando}}</div><h2 style="font-size: 18px; font-weight: 650; margin-top: 2px">{{d.titulo}}</h2><div class="t14 num" style="color: #334155">{{d.nasc}}</div></div>
+            <button class="xb" aria-label="Fechar detalhe" onClick="{{fechar}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+          </div>
+          <div class="scroll" style="padding: 16px 20px; display: flex; flex-direction: column; gap: 14px">
+            <sc-if value="{{d.ehPac}}" hint-placeholder-val="{{ true }}">
+              <span class="{{d.stCls}}" style="align-self: flex-start">{{d.st}}</span>
+            </sc-if>
+            <dl class="kv" style="margin: 0; grid-template-columns: 96px minmax(0, 1fr)">
+              <sc-for list="{{d.kv}}" as="k" hint-placeholder-count="5"><dt>{{k.k}}</dt><dd>{{k.v}}</dd></sc-for>
+            </dl>
+            <sc-if value="{{d.cancelando}}" hint-placeholder-val="{{ false }}">
+              <div style="border: 1px solid #E8EAEF; border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px">
+                <label class="field">Motivo do cancelamento<select class="in"><option>Paciente pediu pelo WhatsApp</option><option>Paciente pediu por telefone</option><option>Sala indisponível</option><option>Médico indisponível</option></select></label>
+                <div class="t13 mute">O horário fica livre e é oferecido à lista de espera. O registro continua no lastro.</div>
+                <div class="row wrap" style="gap: 8px"><button class="btn btn-sm" onClick="{{d.voltar}}">Voltar</button><button class="btn btn-sm btn-p" onClick="{{d.confirmar}}">Cancelar agendamento de {{d.titulo}}</button></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{d.cancelado}}" hint-placeholder-val="{{ false }}">
+              <div class="banner ok" role="status"><div class="t14" style="line-height: 1.5">Agendamento cancelado às 08:41 por Ana Souza. O horário foi oferecido à lista de espera e o paciente recebeu a confirmação pelo WhatsApp.</div></div>
+            </sc-if>
+          </div>
+          <div class="col" style="gap: 8px; padding: 14px 20px 18px; border-top: 1px solid #E8EAEF">
+            <sc-if value="{{d.ehPac}}" hint-placeholder-val="{{ true }}">
+              <a class="btn btn-p" href="{{d.href}}">{{d.acao}}</a>
+              <sc-if value="{{d.podeMexer}}" hint-placeholder-val="{{ true }}">
+                <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+                  <a class="btn btn-sm" href="Agendamento-Guia.dc.html">Remarcar</a>
+                  <button class="btn btn-sm" onClick="{{d.cancelar}}">Cancelar</button>
+                </div>
+              </sc-if>
+            </sc-if>
+            <sc-if value="{{d.ehLivre}}" hint-placeholder-val="{{ false }}">
+              <a class="btn btn-p" href="Agendamento-Guia.dc.html">Agendar neste horário</a>
+              <a class="btn btn-sm" href="Lista-Espera.dc.html">Oferecer à lista de espera</a>
+            </sc-if>
+          </div>
+        </aside>
+      </sc-if>
+    </div>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1480}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = { dia: 0, visao: 'dia', sel: '', canc: {}, cancelando: false };
+  }
+  hora(r) { const m = 7 * 60 + (r - 2) * 30; return String(Math.floor(m / 60)).padStart(2, '0') + ':' + (m % 60 ? '30' : '00'); }
+  curto(n) { const p = n.split(' '); return p.length > 2 ? p[0] + ' ' + p[1].charAt(0) + '. ' + p[p.length - 1] : n; }
+  renderVals() {
+    const s = this.state;
+    const SALAS = [['Sala 1, eco', 'Dr. Paulo Medeiros'], ['Sala 2, obstétrica', 'Dra. Renata Alves'], ['Sala 3, USG e Doppler', 'Dr. Marcos Freire'], ['Sala 4, ergométrico', 'Dr. Paulo Medeiros'], ['Sala 5, raio X', 'Téc. Bruno Sales'], ['Sala 6, tomografia', 'Dra. Cecília Souto'], ['Sala 7, MAPA', 'Enf. Lívia Prates']];
+    // [col, row, span, estado, nome, nascimento, exame, convênio]
+    const E = [
+      [2, 2, 1, 'done', 'Maria Helena Duarte', '12/03/1968', 'Ecocardiograma', 'Unimed'],
+      [2, 3, 1, 'done', 'João Pedro Alves', '04/09/1971', 'Ecocardiograma', 'Particular'],
+      [2, 4, 1, 'now', 'Sônia Maria Castro', '03/02/1962', 'Ecocardiograma', 'Particular'],
+      [2, 5, 1, 'wait', 'Antônio Carlos Ribeiro', '15/06/1954', 'Eco e Doppler de carótidas', 'Petrobras'],
+      [2, 6, 1, '', 'Cláudia Bastos Nunes', '22/08/1965', 'Eco com Doppler', 'Unimed'],
+      [2, 8, 1, '', 'Hélio Tavares Mendes', '08/05/1956', 'Ecocardiograma', 'Particular'],
+      [2, 9, 1, '', 'Rosa Maria Teles', '11/12/1949', 'Ecocardiograma', 'Amil'],
+      [2, 11, 1, '', 'Paulo Roberto Dias', '27/01/1960', 'Eco com Doppler', 'Bradesco Saúde'],
+      [3, 2, 1, 'done', 'Beatriz Lima Cunha', '19/07/1995', 'USG obstétrica', 'Unimed'],
+      [3, 3, 2, 'now', 'Juliana Sampaio Rocha', '12/04/1993', 'USG morfológica', 'Bradesco Saúde'],
+      [3, 5, 1, '', 'Patrícia Gomes Lopes', '03/05/1991', 'Obstétrica com Doppler', 'Particular'],
+      [3, 7, 1, '', 'Fernanda Alves Prado', '14/02/1990', 'Translucência nucal', 'SulAmérica'],
+      [3, 9, 1, '', 'Carla Nogueira Souza', '30/06/1997', 'USG obstétrica', 'Unimed'],
+      [3, 16, 2, '', 'Aline Barros Ramos', '05/10/1992', 'USG morfológica', 'Amil'],
+      [3, 19, 1, '', 'Mônica Silva Reis', '21/03/1988', 'USG obstétrica', 'Unimed'],
+      [4, 2, 1, 'done', 'Roberto Faria Lima', '02/02/1958', 'Doppler venoso', 'Unimed'],
+      [4, 3, 1, 'now', 'Ivone Rocha Teixeira', '16/08/1951', 'Doppler de carótidas', 'Petrobras'],
+      [4, 6, 1, '', 'Marcelo Dias Faria', '17/02/1979', 'USG de abdome', 'SulAmérica'],
+      [4, 9, 1, '', 'Rita Costa Barbosa', '09/09/1966', 'USG de tireoide', 'Particular'],
+      [4, 15, 1, '', 'Sérgio Alves Moura', '25/04/1963', 'Doppler venoso', 'Bradesco Saúde'],
+      [4, 18, 1, '', 'Lia Martins Torres', '13/11/1975', 'USG de mamas', 'Unimed'],
+      [5, 14, 2, '', 'Eduardo Melo Vaz', '21/09/1977', 'Teste ergométrico', 'Bradesco Saúde'],
+      [5, 16, 2, '', 'Simone Araújo Reis', '06/06/1969', 'Teste ergométrico', 'Unimed'],
+      [5, 18, 2, '', 'Gustavo Henrique Pires', '14/01/1970', 'Teste ergométrico', 'Amil'],
+      [5, 21, 2, '', 'Ana Clara Lima', '28/02/1981', 'Teste ergométrico', 'Particular'],
+      [6, 2, 1, 'done', 'Caio Vieira Moraes', '10/10/1985', 'Raio X de tórax', 'Unimed'],
+      [6, 4, 1, 'wait', 'Rafael Monteiro Lima', '09/11/1988', 'Raio X de tórax', 'Particular'],
+      [6, 5, 1, '', 'Tiago Souza Braga', '19/05/1990', 'Raio X de tórax PA e perfil', 'Amil'],
+      [6, 6, 1, '', 'Laura Nunes Costa', '30/10/1983', 'Raio X de coluna lombar', 'Unimed'],
+      [7, 2, 2, 'now', 'Vera Lúcia Antunes', '18/09/1957', 'TC de abdome com contraste', 'Amil'],
+      [7, 6, 2, 'wait', 'Lúcia Fernandes Prado', '02/07/1959', 'TC de crânio, revisar contraste', 'SulAmérica'],
+      [7, 10, 1, '', 'Otávio Ramos Sales', '03/03/1967', 'TC de tórax', 'Unimed'],
+      [7, 16, 2, '', 'Júlio Pereira Matos', '12/12/1972', 'TC de abdome', 'Bradesco Saúde'],
+      [7, 20, 1, '', 'Elisa Campos Rocha', '07/07/1980', 'TC de crânio', 'Particular'],
+      [8, 2, 1, 'done', 'Mário Jorge Pinto', '15/01/1955', 'Retirada de MAPA', 'Unimed'],
+      [8, 4, 1, '', 'Neusa Almeida Freitas', '22/04/1961', 'Instalação de MAPA', 'Petrobras'],
+      [8, 6, 1, '', 'Jorge Luiz Batista', '01/08/1959', 'Instalação de Holter', 'Unimed'],
+      [8, 22, 1, '', 'Renan Farias Alves', '18/02/1984', 'Instalação de MAPA', 'Particular']
+    ];
+    const ST = { done: ['Concluído', 'chip', '#CBD2DC'], now: ['Em exame', 'chip c-violet', '#5B45B5'], wait: ['Aguardando', 'chip c-amber', '#D97706'], '': ['Agendado', 'chip c-blue', 'transparent'], cx: ['Cancelado', 'chip', 'transparent'] };
+    const ACAO = { done: ['Abrir ficha', 'Paciente.dc.html'], now: ['Ver atendimento', 'Atendimento.dc.html'], wait: ['Abrir check-in', 'Recepcao.dc.html'], '': ['Abrir ficha', 'Paciente.dc.html'], cx: ['Abrir ficha', 'Paciente.dc.html'] };
+    const F = [[3, 6], [4, 4], [4, 7], [6, 7], [7, 8], [2, 7], [8, 8]];
+    const pos = (c, r, n) => 'grid-column: ' + c + '; grid-row: ' + r + ' / span ' + n;
+    const fim = (r, n) => this.hora(r + n);
+    const est = (e, i) => s.canc['e' + i] ? 'cx' : e[3];
+    const eventos = E.map((e, i) => {
+      const st = est(e, i), id = 'e' + i;
+      const sub = st === 'now' ? 'Em exame' : (st === 'wait' ? 'Aguardando' : (st === 'cx' ? 'Cancelado' : e[6]));
+      return { cls: 'ev ' + st + (s.sel === id ? ' sel' : ''), pos: pos(e[0], e[1], e[2]), curto: this.curto(e[4]), sub,
+        dot: 'background: ' + ST[st][2] + (st === 'now' || st === 'wait' ? '' : '; display: none'),
+        aria: e[4] + ', ' + this.hora(e[1]) + ', ' + ST[st][0], abrir: () => this.setState({ sel: id, cancelando: false }) };
+    });
+    const livres = F.map(([c, r], i) => ({ cls: 'free' + (s.sel === 'f' + i ? ' sel' : ''), pos: pos(c, r, 1), h: this.hora(r), aria: 'Horário livre às ' + this.hora(r) + ', ' + SALAS[c - 2][0], abrir: () => this.setState({ sel: 'f' + i, cancelando: false }) }));
+    let d = {};
+    if (s.sel.charAt(0) === 'e') {
+      const i = +s.sel.slice(1), e = E[i], st = est(e, i), sala = SALAS[e[0] - 2];
+      d = { quando: this.hora(e[1]) + ' às ' + fim(e[1], e[2]), titulo: e[4], nasc: e[5], primeiro: e[4].split(' ')[0], ehPac: true, ehLivre: false,
+        st: ST[st][0], stCls: ST[st][1], acao: ACAO[st][0], href: ACAO[st][1], podeMexer: st === '' && !s.cancelando,
+        kv: [{ k: 'Exame', v: e[6] }, { k: 'Sala', v: sala[0] }, { k: 'Responsável', v: sala[1] }, { k: 'Convênio', v: e[7] }, { k: 'Protocolo', v: 'AG-2611-' + String(4100 + i * 7) }],
+        cancelando: s.cancelando && st === '', cancelado: st === 'cx',
+        cancelar: () => this.setState({ cancelando: true }), voltar: () => this.setState({ cancelando: false }),
+        confirmar: () => this.setState(p => ({ cancelando: false, canc: Object.assign({}, p.canc, { [s.sel]: true }) })) };
+    } else if (s.sel.charAt(0) === 'f') {
+      const f = F[+s.sel.slice(1)], sala = SALAS[f[0] - 2];
+      d = { quando: this.hora(f[1]) + ' às ' + fim(f[1], 1), titulo: 'Horário livre', nasc: sala[0], ehPac: false, ehLivre: true, kv: [{ k: 'Sala', v: sala[0] }, { k: 'Responsável', v: sala[1] }, { k: 'Duração', v: '30 min' }, { k: 'Na espera', v: '3 pacientes compatíveis' }], cancelando: false, cancelado: false };
+    }
+    const T = ['Quinta, 5 de novembro', 'Sexta, 6 de novembro', 'Sábado, 7 de novembro', 'Segunda, 9 de novembro'];
+    const W = [['Segunda, 2/11', 38, 6, 84, ''], ['Terça, 3/11', 41, 3, 93, 'Sala 2 lotada'], ['Quarta, 4/11', 36, 8, 82, 'Dr. Paulo em congresso'], ['Quinta, 5/11', 44, 2, 96, '2 faltas, 1 encaixe'], ['Sexta, 6/11', 42, 7, 86, 'Hoje'], ['Sábado, 7/11', 18, 12, 60, 'Só manhã']];
+    return {
+      titulo: s.visao === 'semana' ? 'Semana de 2 a 7 de novembro' : T[Math.max(0, Math.min(T.length - 1, s.dia + 1))],
+      diaAnt: () => this.setState(p => ({ dia: Math.max(-1, p.dia - 1) })), diaProx: () => this.setState(p => ({ dia: Math.min(2, p.dia + 1) })), diaHoje: () => this.setState({ dia: 0 }),
+      visoes: [['dia', 'Dia'], ['semana', 'Semana']].map(([k, t]) => ({ t, cls: s.visao === k ? 'on' : '', on: s.visao === k ? 'true' : 'false', ir: () => this.setState({ visao: k, sel: '' }) })),
+      modoDia: s.visao === 'dia', modoSemana: s.visao === 'semana',
+      salas: [['Eco', 'Sala 1, Dr. Paulo'], ['Obstétrica', 'Sala 2, Dra. Renata'], ['USG e Doppler', 'Sala 3, Dr. Marcos'], ['Ergométrico', 'Sala 4, Dr. Paulo'], ['Raio X', 'Sala 5, Téc. Bruno'], ['Tomografia', 'Sala 6, Dra. Cecília'], ['MAPA e Holter', 'Sala 7, Enf. Lívia']].map(([t, q]) => ({ t, q })),
+      linhas: Array.from({ length: 24 }, (_, k) => { const r = k + 2; return { ln: 'grid-column: 1 / -1; grid-row: ' + r + '; border-top: 1px solid ' + (k % 2 ? '#F4F5F7' : '#E8EAEF'), pos: 'grid-column: 1; grid-row: ' + r, h: k % 2 ? '' : this.hora(r) }; }),
+      eventos, livres,
+      temDrw: s.sel !== '' && s.visao === 'dia', d, fechar: () => this.setState({ sel: '', cancelando: false }),
+      semana: W.map(([dd, ag, lv, p, obs]) => ({ d: dd, ag: String(ag), lv: String(lv), p: p + '%', w: 'width: ' + p + '%', obs }))
+    };
+  }
 }
 </script>
 </body>

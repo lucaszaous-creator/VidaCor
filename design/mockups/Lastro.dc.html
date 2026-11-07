@@ -4,62 +4,199 @@
 <meta charset="utf-8">
 <title>Explorador de lastro — VidaCor</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>body{margin:0;background:#F2F3F6}
-.ph{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;padding:14px 0;border-bottom:1px solid #F1F3F6}
-.ph:last-child{border-bottom:0}
-.ph-h{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5B6474;padding-top:12px}
-.ph-n{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
-.nd{display:flex;gap:10px;align-items:flex-start;text-align:left;background:#fff;border:1px solid #E8EAEF;border-radius:12px;padding:10px 12px;font:inherit;color:inherit;cursor:pointer;min-width:0}
-.nd:hover{border-color:#C9D2DE}.nd.sel{border-color:#0A1A4A;box-shadow:0 0 0 1px #0A1A4A}
-.nd.todo{background:#FAFBFC;border-style:dashed}
-.nd-b{display:flex;flex-direction:column;gap:2px;min-width:0}
-.nd-b b{font-size:14px;font-weight:600}
-.nd-i{font-size:11.5px;color:#0C72B0;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ck{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:12px;font-weight:700;margin-top:2px}
-.ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.cur{background:#EFEBFC;color:#5B45B5}.ck.todo{background:#fff;border:1.5px solid #CBD2DC}
-.kv{display:flex;flex-direction:column;gap:2px;padding:10px 0;border-bottom:1px solid #F1F3F6;font-size:14px}
-.kv:last-child{border-bottom:0}.kv span{font-size:12px;color:#5B6474;font-weight:600;text-transform:uppercase;letter-spacing:.05em}.kv b{font-weight:500;word-break:break-word}
+.la-num{display:flex;align-items:baseline;gap:6px;font-size:14px;color:#5B6474}
+.la-num b{font-size:20px;font-weight:650;color:#0F172A;font-variant-numeric:tabular-nums}
+.la-ph{position:sticky;top:0;z-index:1;background:#fff;padding:12px 0 6px;font-size:14px;font-weight:650;color:#0F172A;border-bottom:1px solid #F1F3F6}
+.la-nd{display:grid;grid-template-columns:48px 22px minmax(0,1fr);gap:12px;align-items:start;width:100%;padding:10px 12px 10px 4px;border:0;border-radius:12px;background:transparent;font:inherit;color:inherit;text-align:left;cursor:pointer;position:relative}
+.la-nd:hover{background:#F8FAFC}
+.la-nd.sel{background:#EEF4FB;box-shadow:inset 3px 0 0 #0A1A4A}
+.la-nd::before{content:"";position:absolute;left:75px;top:34px;bottom:-10px;width:2px;background:#E8EAEF}
+.la-nd.last::before{display:none}
+.la-ck{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.la-ck.ok{background:#E5F5EC;color:#1F7A4D}
+.la-ck.cur{background:#EFEBFC;color:#5B45B5}
+.la-ck.todo{background:#fff;border:1.5px solid #CBD2DC}
+.la-id{font-size:12px;color:#0C72B0;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.la-seg{display:inline-flex;gap:4px}
+.la-seg button{height:34px;padding:0 12px;border-radius:999px;border:1px solid #D9DDE5;background:#fff;font:600 13px Inter,sans-serif;color:#334155;cursor:pointer}
+.la-seg button.on{background:#0A1A4A;border-color:#0A1A4A;color:#fff}
+.la-ev{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px solid #F1F3F6;font-size:13px}
+.la-ev:last-child{border-bottom:0}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="lastro" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="lastro" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <h1 style="font-size: 24px; font-weight: 650">Lastro</h1>
-      <div class="grow"></div>
-      <label class="search" style="max-width: 520px; flex: 1 1 380px; min-height: 44px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM21 21l-4.3-4.3"></path></svg><span class="sr">Buscar por qualquer código</span><input type="search" value="ACC 2026-118790" placeholder="Qualquer código: ACC, guia, ETQ, StudyUID, NFS-e, PIX, lote, placa"></label>
-      <button class="btn btn-sm">Exportar dossiê (PDF assinado)</button>
-    </div>
+    <header class="row wrap" style="gap: 14px">
+      <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em; flex: 1 1 auto">Lastro</h1>
+      <label class="search" style="flex: 0 1 460px; min-height: 44px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar por qualquer código</span><input type="search" value="{{q}}" onChange="{{onQ}}" placeholder="Qualquer código: ACC, guia, ETQ, StudyUID, NFS-e, PIX, lote, placa"></label>
+      <button class="btn btn-sm" onClick="{{pedirExp}}">Exportar dossiê</button>
+    </header>
 
-    <section class="card row wrap" style="gap: 18px; padding: 18px 22px" aria-label="Resumo">
-      <div style="flex: 1 1 320px"><div class="lbl">Atendimento ATD-2026-118790</div><div style="font-size: 20px; font-weight: 650; margin-top: 4px">Antônio Carlos Ribeiro · 15/06/1954</div><div class="t14 mute" style="margin-top: 2px">Eco + Doppler de carótidas · Unimed · 06/11/2026</div></div>
-      <div class="row wrap t14" style="gap: 20px"><span><b>21</b> <span class="mute">registros ligados</span></span><span><b>5</b> <span class="mute">documentos com hash</span></span><span><b>3</b> <span class="mute">integrações</span></span><span><b style="color:#5B45B5">2</b> <span class="mute">etapas em andamento</span></span></div>
+    <sc-if value="{{expConfirma}}" hint-placeholder-val="{{ false }}">
+      <div class="banner info row wrap" style="align-items: center; gap: 12px">
+        <div class="t14" style="flex: 1 1 320px"><b>Exportar o dossiê de Antônio Carlos Ribeiro, 15/06/1954?</b> O PDF sai assinado e a exportação fica registrada. Confirme sua senha.</div>
+        <label class="sr" for="senha">Senha</label>
+        <input id="senha" class="in" type="password" autocomplete="current-password" placeholder="Senha" value="{{senha}}" onChange="{{onSenha}}" style="width: 180px; min-height: 40px">
+        <button class="btn btn-sm" onClick="{{cancelExp}}">Voltar</button>
+        <button class="btn btn-sm btn-p" onClick="{{exportar}}" disabled="{{semSenha}}">Exportar PDF assinado</button>
+      </div>
+    </sc-if>
+    <sc-if value="{{expFeito}}" hint-placeholder-val="{{ false }}">
+      <div class="banner ok" role="status"><div class="t14">Dossiê exportado às 11:20 com 21 registros e assinatura da clínica. O download vale por 10 minutos e a exportação entrou no lastro.</div></div>
+    </sc-if>
+
+    <section class="row wrap" aria-label="Cadeia aberta" style="gap: 12px 28px; padding: 0 4px">
+      <div style="flex: 1 1 360px; min-width: 0">
+        <div class="t15 b">Antônio Carlos Ribeiro, <span class="num">15/06/1954</span></div>
+        <div class="t13 mute">Atendimento ATD-2026-118790: eco e Doppler de carótidas, Unimed, 06/11/2026</div>
+      </div>
+      <span class="la-num"><b>21</b>registros ligados</span>
+      <span class="la-num"><b>5</b>documentos com hash</span>
+      <span class="la-num"><b style="color: #5B45B5">2</b>em andamento</span>
     </section>
 
-    <div class="split">
-      <section class="card main" aria-label="Cadeia do atendimento" style="padding: 8px 22px"><section class="ph"><div class="ph-h">Agendamento</div><div class="ph-n"><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">AGD-2026-031877</span><b>Agendamento</b><span class="t12 mute">Criado pelo WhatsApp (robô) · confirmado por Ana Souza · 05/11 16:02</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">CONF-88412</span><b>Confirmação</b><span class="t12 mute">WhatsApp · modelo “confirmação D-1” v3 · lida 05/11 18:10</span></span></button></div></section><section class="ph"><div class="ph-h">Autorização</div><div class="ph-n"><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">GUIA 4471230</span><b>Guia da operadora</b><span class="t12 mute">Senha UN-88231-X · válida até 20/11 · 2 procedimentos TUSS</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">ELG-77120</span><b>Elegibilidade</b><span class="t12 mute">Unimed · elegível · 06/11 08:21</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">DOC 3f9a…c21</span><b>Pedido médico</b><span class="t12 mute">Foto · Dr. Hugo Lemos CRM [000000]/RJ · 28/10</span></span></button></div></section><section class="ph"><div class="ph-h">Chegada</div><div class="ph-n"><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">ATD-2026-118790</span><b>Atendimento</b><span class="t12 mute">Check-in 08:21 · Guichê 2 · Ana Souza</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">ETQ-2026-018734</span><b>Pulseira</b><span class="t12 mute">Impressa 08:24 · bipada na Sala 1 às 08:41</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">TERMO v4</span><b>Termo de consentimento</b><span class="t12 mute">Assinado no tablet · 08:23 · hash 9b2e…71f</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">PLACA QRT4B21</span><b>Estacionamento</b><span class="t12 mute">Entrada 08:12 · cortesia validada pelo exame</span></span></button></div></section><section class="ph"><div class="ph-h">Exame</div><div class="ph-n"><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">ACC 2026-118790</span><b>Pedido de exame (accession)</b><span class="t12 mute">Worklist enviada ao GE Vivid E95 (VIVID_S1)</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">MPPS 1.2.840…5521</span><b>Execução no aparelho</b><span class="t12 mute">Início 08:41 · fim 09:02 · Téc. Carla</span></span></button><button class="nd ok sel"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">STUDY 1.2.840…88.1</span><b>Estudo DICOM</b><span class="t12 mute">38 imagens · 4 vídeos · 18 medidas (SR)</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">DESINF T-07</span><b>Transdutor</b><span class="t12 mute">Desinfecção nível alto · ciclo 07:55 · lote DES-221</span></span></button></div></section><section class="ph"><div class="ph-h">Laudo</div><div class="ph-n"><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">LAU-2026-044120 v1</span><b>Laudo</b><span class="t12 mute">Rascunho com medidas do aparelho · Dr. Paulo</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">ASS ICP 5F:2A…</span><b>Assinatura digital</b><span class="t12 mute">Certificado ICP-Brasil · carimbo do tempo 10:42</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">PORTAL</span><b>Publicação</b><span class="t12 mute">Liberado no portal 10:43 · aviso WhatsApp lido 11:02</span></span></button></div></section><section class="ph"><div class="ph-h">Faturamento</div><div class="ph-n"><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">GUIA TISS 900812</span><b>Guia SP/SADT</b><span class="t12 mute">Gerada do atendimento · XML TISS 4.01</span></span></button><button class="nd cur"><span class="ck cur">…</span><span class="nd-b"><span class="num nd-i">LOTE 2026-11-03</span><b>Lote</b><span class="t12 mute">Enviado 07/11 · protocolo ANS 7781203</span></span></button><button class="nd todo"><span class="ck todo"></span><span class="nd-b"><span class="num nd-i">DEMONSTRATIVO</span><b>Retorno da operadora</b><span class="t12 mute">aguardando</span></span></button></div></section><section class="ph"><div class="ph-h">Financeiro</div><div class="ph-n"><button class="nd todo"><span class="ck todo"></span><span class="nd-b"><span class="num nd-i">PAGTO</span><b>Recebimento</b><span class="t12 mute">aguardando o demonstrativo</span></span></button><button class="nd todo"><span class="ck todo"></span><span class="nd-b"><span class="num nd-i">REPASSE</span><b>Repasse ao médico</b><span class="t12 mute">regra 40% · competência 11/2026</span></span></button></div></section></section>
-      <aside class="aside" style="flex: 0 1 400px; min-width: 340px">
-        <section class="card" aria-labelledby="m-h">
-          <div class="lbl">Registro selecionado</div>
-          <h2 id="m-h" style="font-size: 18px; font-weight: 650; margin-top: 6px">Estudo DICOM</h2>
-          <div style="margin-top: 8px"><div class="kv"><span>Identificador</span><b>StudyInstanceUID 1.2.840.113619.2.55.3.604688.88.1</b></div><div class="kv"><span>Criado</span><b>06/11/2026 08:41:12 · pelo aparelho VIVID_S1 (10.0.20.11)</b></div><div class="kv"><span>Recebido pelo VidaCor</span><b>08:41:13 → 09:02:40 · 42 objetos DICOM</b></div><div class="kv"><span>Integridade</span><b>SHA-256 de cada objeto guardado · 0 divergências</b></div><div class="kv"><span>Conciliação</span><b>Paciente e ACC conferidos automaticamente (nome + nascimento + accession)</b></div><div class="kv"><span>Armazenamento</span><b>PACS local · réplica no servidor de contingência · backup externo 07/11 02:10</b></div><div class="kv"><span>Retenção</span><b>20 anos (prontuário) · até 11/2046</b></div><div class="kv"><span>Acessos</span><b>Dr. Paulo (laudo) · Téc. Carla (execução) · paciente (portal, 2 imagens-chave)</b></div><div class="kv"><span>Ligado a</span><b>ACC 2026-118790 · MPPS 1.2.840…5521 · LAU-2026-044120 v1 · ETQ-2026-018734</b></div></div>
-          <div class="row wrap" style="gap: 8px; margin-top: 12px"><a class="btn btn-sm" href="Visualizador.dc.html">Abrir imagens</a><button class="btn btn-sm">Histórico de eventos</button></div>
-        </section>
+    <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 16px">
+      <section class="card pane" aria-label="Cadeia do atendimento" style="padding: 0">
+        <div class="row wrap" style="gap: 10px; padding: 12px 16px; border-bottom: 1px solid #E8EAEF">
+          <label class="sr" for="etapa">Etapa</label>
+          <select id="etapa" class="in" value="{{etapa}}" onChange="{{onEtapa}}" style="width: 200px; min-height: 36px; font-size: 14px">
+            <option value="todas">Todas as etapas</option><option value="agd">Agendamento</option><option value="aut">Autorização</option><option value="che">Chegada</option><option value="exa">Exame</option><option value="lau">Laudo</option><option value="fat">Faturamento</option><option value="fin">Financeiro</option>
+          </select>
+          <div class="grow"></div>
+          <div class="la-seg" role="group" aria-label="Situação"><sc-for list="{{filtros}}" as="f" hint-placeholder-count="3"><button class="{{f.cls}}" aria-pressed="{{f.atual}}" onClick="{{f.ir}}">{{f.t}}</button></sc-for></div>
+        </div>
+        <div class="scroll" style="padding: 0 16px 12px">
+          <sc-for list="{{fases}}" as="g" hint-placeholder-count="3">
+            <h2 class="la-ph">{{g.t}}</h2>
+            <sc-for list="{{g.nos}}" as="n" hint-placeholder-count="3">
+              <button class="{{n.cls}}" onClick="{{n.ir}}" aria-pressed="{{n.atual}}">
+                <span class="t13 mute num" style="padding-top: 3px; text-align: right">{{n.h}}</span>
+                <span class="{{n.ck}}">
+                  <sc-if value="{{n.ok}}" hint-placeholder-val="{{ true }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></sc-if>
+                  <sc-if value="{{n.cur}}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle><path d="M12 8v4l3 2"></path></svg></sc-if>
+                  <span class="sr">{{n.stTxt}}</span>
+                </span>
+                <span style="min-width: 0"><span class="la-id num" style="display: block">{{n.cod}}</span><b class="t14" style="display: block">{{n.t}}</b><span class="t13 mute" style="display: block">{{n.sub}}</span></span>
+              </button>
+            </sc-for>
+          </sc-for>
+          <sc-if value="{{vazio}}" hint-placeholder-val="{{ false }}"><div class="state"><div class="b">Nenhum registro com esse filtro</div><div class="t13 mute">Limpe a busca ou escolha outra etapa.</div></div></sc-if>
+        </div>
+      </section>
+
+      <aside class="card pane" aria-label="Registro selecionado">
+        <div class="row" style="gap: 10px">
+          <div style="flex: 1 1 auto; min-width: 0"><div class="la-id num">{{sel.cod}}</div><h2 style="font-size: 18px; font-weight: 650">{{sel.t}}</h2></div>
+          <span class="{{sel.stCls}}">{{sel.stTxt}}</span>
+        </div>
+        <nav class="tabs" aria-label="Detalhe" style="margin-top: 10px">
+          <button class="{{dCls}}" aria-current="{{dAtual}}" onClick="{{verDados}}">Dados</button>
+          <button class="{{eCls}}" aria-current="{{eAtual}}" onClick="{{verEventos}}">Eventos {{sel.nEv}}</button>
+        </nav>
+        <div class="scroll" style="padding-top: 12px">
+          <sc-if value="{{verD}}" hint-placeholder-val="{{ true }}">
+            <dl class="kv" style="margin: 0; grid-template-columns: 112px minmax(0, 1fr)">
+              <sc-for list="{{sel.kv}}" as="k" hint-placeholder-count="6"><dt>{{k.k}}</dt><dd style="overflow-wrap: anywhere">{{k.v}}</dd></sc-for>
+            </dl>
+          </sc-if>
+          <sc-if value="{{verE}}" hint-placeholder-val="{{ false }}">
+            <p class="t13 mute" style="margin: 0 0 6px">Eventos imutáveis, encadeados por hash. Nada é apagado.</p>
+            <sc-for list="{{sel.ev}}" as="e" hint-placeholder-count="3"><div class="la-ev"><span class="num mute">{{e.h}}</span><div><div>{{e.t}}</div><div class="la-id num">{{e.hash}}</div></div></div></sc-for>
+          </sc-if>
+        </div>
+        <div class="row wrap" style="gap: 8px; padding-top: 12px; border-top: 1px solid #E8EAEF">
+          <sc-if value="{{sel.temImg}}" hint-placeholder-val="{{ true }}"><a class="btn btn-sm" href="Visualizador.dc.html">Abrir imagens</a></sc-if>
+          <a class="btn btn-sm" href="{{sel.href}}">{{sel.hrefTxt}}</a>
+        </div>
       </aside>
     </div>
-    <p class="t12 mute" style="margin: 0 8px">Mockup · dados e identificadores fictícios</p>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1650}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = { q: '', etapa: 'todas', filtro: 'todos', sel: 'study', det: 'd', exp: '', senha: '' };
+  }
+  norm(t) { return (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+  renderVals() {
+    const s = this.state;
+    const n = (id, f, h, cod, t, sub, st, href, hrefTxt, extra) => ({ id, f, h, cod, t, sub, st: st || 'ok', href: href || 'Paciente.dc.html', hrefTxt: hrefTxt || 'Abrir ficha', extra: extra || [] });
+    const N = [
+      n('agd', 'agd', '05/11', 'AGD-2026-031877', 'Agendamento', 'Criado pelo robô do WhatsApp, confirmado por Ana Souza às 16:02', 'ok', 'Agenda.dc.html', 'Abrir na agenda'),
+      n('conf', 'agd', '05/11', 'CONF-88412', 'Confirmação', 'WhatsApp, modelo de confirmação D-1 versão 3, lida às 18:10', 'ok', 'Comunicacao.dc.html', 'Abrir mensagem'),
+      n('guia', 'aut', '04/11', 'GUIA 4471230', 'Guia da operadora', 'Senha UN-88231-X, válida até 20/11, 2 procedimentos TUSS', 'ok', 'Autorizacao.dc.html', 'Abrir autorização'),
+      n('elg', 'aut', '08:21', 'ELG-77120', 'Elegibilidade', 'Unimed respondeu: elegível', 'ok', 'Autorizacao.dc.html', 'Abrir autorização'),
+      n('ped', 'aut', '28/10', 'DOC 3f9a…c21', 'Pedido médico', 'Foto do pedido do Dr. Hugo Lemos, CRM [000000]/RJ'),
+      n('atd', 'che', '08:21', 'ATD-2026-118790', 'Atendimento', 'Check-in no Guichê 2 por Ana Souza', 'ok', 'Recepcao.dc.html', 'Abrir na recepção'),
+      n('etq', 'che', '08:24', 'ETQ-2026-018734', 'Pulseira', 'Impressa às 08:24, bipada na Sala 1 às 08:41', 'ok', 'Etiquetas.dc.html', 'Abrir etiqueta'),
+      n('termo', 'che', '08:23', 'TERMO v4', 'Termo de consentimento', 'Assinado no tablet, hash 9b2e…71f'),
+      n('placa', 'che', '08:12', 'PLACA QRT4B21', 'Estacionamento', 'Entrada às 08:12, cortesia validada pelo exame'),
+      n('acc', 'exa', '08:40', 'ACC 2026-118790', 'Pedido de exame (accession)', 'Worklist enviada ao GE Vivid E95 (VIVID_S1)', 'ok', 'Aparelhos.dc.html', 'Abrir em Aparelhos'),
+      n('mpps', 'exa', '08:41', 'MPPS 1.2.840…5521', 'Execução no aparelho', 'Início 08:41, fim 09:02, Téc. Carla', 'ok', 'Aparelhos.dc.html', 'Abrir em Aparelhos'),
+      n('study', 'exa', '09:02', 'STUDY 1.2.840…88.1', 'Estudo DICOM', '38 imagens, 4 vídeos e 18 medidas (SR)', 'ok', 'Laudo.dc.html', 'Abrir laudo', [
+        ['Identificador', 'StudyInstanceUID 1.2.840.113619.2.55.3.604688.88.1'],
+        ['Criado', '06/11/2026 08:41:12 pelo aparelho VIVID_S1 (10.0.20.11)'],
+        ['Recebido', 'De 08:41:13 a 09:02:40, 42 objetos DICOM'],
+        ['Integridade', 'SHA-256 de cada objeto guardado, nenhuma divergência'],
+        ['Conciliação', 'Automática: nome, nascimento e accession conferidos'],
+        ['Guardado em', 'PACS local, réplica na contingência, backup externo 07/11 02:10'],
+        ['Retenção', '20 anos, até 11/2046'],
+        ['Acessos', 'Dr. Paulo (laudo), Téc. Carla (execução), paciente no portal (2 imagens-chave)']]),
+      n('desinf', 'exa', '07:55', 'DESINF T-07', 'Transdutor', 'Desinfecção de nível alto, lote DES-221'),
+      n('lau', 'lau', '10:30', 'LAU-2026-044120 v1', 'Laudo', 'Rascunho com as medidas do aparelho, Dr. Paulo Medeiros', 'ok', 'Laudo.dc.html', 'Abrir laudo'),
+      n('ass', 'lau', '10:42', 'ASS ICP 5F:2A…', 'Assinatura digital', 'Certificado ICP-Brasil, carimbo do tempo às 10:42', 'ok', 'Laudo.dc.html', 'Abrir laudo'),
+      n('portal', 'lau', '10:43', 'PORTAL', 'Publicação', 'Liberado no portal; aviso no WhatsApp lido às 11:02', 'ok', 'Portal-Web.dc.html', 'Abrir portal'),
+      n('tiss', 'fat', '10:50', 'GUIA TISS 900812', 'Guia SP/SADT', 'Gerada do atendimento, XML TISS 4.01', 'ok', 'Faturamento.dc.html', 'Abrir faturamento'),
+      n('lote', 'fat', '07/11', 'LOTE 2026-11-03', 'Lote', 'Enviado em 07/11, protocolo ANS 7781203', 'cur', 'Faturamento.dc.html', 'Abrir faturamento'),
+      n('demo', 'fat', '', 'DEMONSTRATIVO', 'Retorno da operadora', 'Aguardando', 'todo', 'Faturamento.dc.html', 'Abrir faturamento'),
+      n('pag', 'fin', '', 'PAGTO', 'Recebimento', 'Aguardando o demonstrativo', 'todo', 'Financeiro.dc.html', 'Abrir financeiro'),
+      n('rep', 'fin', '', 'REPASSE', 'Repasse ao médico', 'Regra de 40%, competência 11/2026', 'cur', 'Financeiro.dc.html', 'Abrir financeiro')
+    ];
+    const F = [['agd', 'Agendamento'], ['aut', 'Autorização'], ['che', 'Chegada'], ['exa', 'Exame'], ['lau', 'Laudo'], ['fat', 'Faturamento'], ['fin', 'Financeiro']];
+    const FL = [['todos', 'Todos', () => true], ['cur', 'Em andamento', x => x.st === 'cur'], ['todo', 'Pendentes', x => x.st === 'todo']];
+    const fl = FL.find(f => f[0] === s.filtro);
+    const termos = this.norm(s.q).split(/\s+/).filter(Boolean);
+    const busca = x => !termos.length || termos.every(t => this.norm([x.cod, x.t, x.sub].join(' ')).includes(t));
+    const vis = N.filter(x => (s.etapa === 'todas' || x.f === s.etapa) && fl[2](x) && busca(x));
+    const cur = N.find(x => x.id === s.sel) || N[0];
+    const stTxt = { ok: 'Concluído', cur: 'Em andamento', todo: 'Pendente' };
+    const stCls = { ok: 'chip c-green', cur: 'chip c-violet', todo: 'chip' };
+    const faseNome = k => (F.find(f => f[0] === k) || ['', ''])[1];
+    const kv = cur.extra.length ? cur.extra : [['Identificador', cur.cod], ['Etapa', faseNome(cur.f)], ['Quando', cur.h ? (cur.h.includes('/') ? cur.h + '/2026' : '06/11/2026 ' + cur.h) : 'Ainda não aconteceu'], ['Registro', cur.sub], ['Ligado a', 'ATD-2026-118790']];
+    const ev = cur.st === 'todo' ? [{ h: '06/11', t: 'Previsto na cadeia do atendimento', hash: 'a41c…09e' }] :
+      [{ h: cur.h || '06/11', t: 'Registro criado', hash: '3f9a…c21' }, { h: cur.h || '06/11', t: 'Ligado ao ATD-2026-118790', hash: '7b02…e5d' }, { h: '11:02', t: 'Lido no dossiê por Patrícia Lemos', hash: 'c88e…41a' }];
+    return {
+      q: s.q, onQ: e => this.setState({ q: e.target.value }),
+      etapa: s.etapa,
+      onEtapa: e => this.setState({ etapa: e.target.value }),
+      filtros: FL.map(([k, t]) => ({ t, cls: s.filtro === k ? 'on' : '', atual: s.filtro === k ? 'true' : 'false', ir: () => this.setState({ filtro: k }) })),
+      fases: F.map(([k, t]) => {
+        const nos = vis.filter(x => x.f === k);
+        return { t, nos: nos.map((x, i) => ({ h: x.h, cod: x.cod, t: x.t, sub: x.sub, ok: x.st === 'ok', cur: x.st === 'cur', stTxt: stTxt[x.st], ck: 'la-ck ' + x.st,
+          cls: 'la-nd' + (x.id === cur.id ? ' sel' : '') + (i === nos.length - 1 ? ' last' : ''), atual: x.id === cur.id ? 'true' : 'false', ir: () => this.setState({ sel: x.id }) })) };
+      }).filter(g => g.nos.length),
+      vazio: vis.length === 0,
+      sel: { cod: cur.cod, t: cur.t, stTxt: stTxt[cur.st], stCls: stCls[cur.st], kv: kv.map(([k, v]) => ({ k, v })), ev, nEv: String(ev.length),
+        temImg: cur.id === 'study' || cur.id === 'mpps', href: cur.href, hrefTxt: cur.hrefTxt },
+      verD: s.det === 'd', verE: s.det === 'e',
+      dCls: s.det === 'd' ? 'on' : '', eCls: s.det === 'e' ? 'on' : '', dAtual: s.det === 'd' ? 'page' : 'false', eAtual: s.det === 'e' ? 'page' : 'false',
+      verDados: () => this.setState({ det: 'd' }), verEventos: () => this.setState({ det: 'e' }),
+      expConfirma: s.exp === 'confirma', expFeito: s.exp === 'feito',
+      pedirExp: () => this.setState({ exp: 'confirma', senha: '' }), cancelExp: () => this.setState({ exp: '' }),
+      senha: s.senha, onSenha: e => this.setState({ senha: e.target.value }), semSenha: s.senha.length < 4,
+      exportar: () => this.setState({ exp: 'feito' })
+    };
+  }
 }
 </script>
 </body>

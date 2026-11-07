@@ -4,173 +4,322 @@
 <meta charset="utf-8">
 <title>Financeiro — VidaCor Imagem</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style>body{margin:0;background:#F2F3F6}</style>
+<style>
+body{margin:0}
+.hd h1{margin:0;font-size:24px;font-weight:650;letter-spacing:-.02em}
+.strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:12px 4px}
+.strip>div{padding:0 16px;border-left:1px solid #E8EAEF;min-width:0}
+.strip>div:first-child{border-left:0}
+.strip .v{font-size:20px;font-weight:650;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:2px}
+.ph{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid #E8EAEF;flex:none;flex-wrap:wrap}
+.ph h2{font-size:16px;font-weight:650}
+.pf{flex:none;padding:14px 18px;border-top:1px solid #E8EAEF;display:flex;flex-direction:column;gap:8px}
+.bar i{background:#0C72B0}
+.bars .bv{background:#CFE0EE}
+.bars .bv.on{background:#0C72B0}
+.lg{display:inline-block;width:12px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.ix{width:36px;height:36px;border-radius:10px;border:0;background:transparent;color:#5B6474;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.ix:hover{background:#F1F3F6;color:#0F172A}
+.dbg{position:fixed;inset:0;background:rgba(15,23,42,.32);z-index:40;border:0;padding:0;cursor:default}
+.drw{position:fixed;top:12px;right:12px;bottom:12px;width:480px;max-width:calc(100vw - 24px);background:#fff;border-radius:22px;z-index:41;display:flex;flex-direction:column;box-shadow:0 8px 24px rgba(15,23,42,.12)}
+.drw>header{display:flex;align-items:center;gap:10px;padding:16px 16px 16px 20px;border-bottom:1px solid #E8EAEF}
+.drw>header h2{font-size:18px;font-weight:650}
+.drw>.scroll{flex:1 1 auto;padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.drw>footer{display:flex;gap:8px;flex-wrap:wrap;padding:14px 20px;border-top:1px solid #E8EAEF}
+.tst{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:50;max-width:600px}
+</style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="financeiro" userName="Carla Mendes" userRole="Gerência" userInitials="CM" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="financeiro" userName="Carla Mendes" userRole="Gerência" userInitials="CM" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <div class="crumb"><span>Gestão</span><span aria-hidden="true">›</span><b>Financeiro</b></div>
-      <div class="grow"></div>
-      <a class="btn" href="Caixa.dc.html">Caixa do particular</a>
-      <a class="btn" href="Configuracoes.dc.html">Plano de contas</a>
-      <button class="btn">Conciliar extrato</button>
-      <button class="btn btn-p"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Novo lançamento</button>
-    </div>
-
-    <div class="page-h">
-      <div class="grow">
+    <header class="hd row wrap" style="gap: 12px">
+      <div style="flex: 1 1 auto; min-width: 0">
         <h1>Financeiro</h1>
-        <p>Caixa, contas, conciliação, DRE, notas fiscais e repasse aos médicos</p>
+        <div class="t13 mute" style="margin-top: 2px">{{perTxt}}</div>
       </div>
-      <div class="seg" role="tablist" aria-label="Período"><button role="tab" aria-selected="false">Hoje</button><button class="on" role="tab" aria-selected="true">Mês</button><button role="tab" aria-selected="false">Trimestre</button><button role="tab" aria-selected="false">Ano</button></div>
-    </div>
+      <div class="seg" role="group" aria-label="Período"><sc-for list="{{pers}}" as="p" hint-placeholder-count="4"><button class="{{p.cls}}" aria-pressed="{{p.pr}}" onClick="{{p.ir}}">{{p.t}}</button></sc-for></div>
+      <a class="btn" href="Caixa.dc.html">Caixa</a>
+      <button class="btn btn-p" onClick="{{abrirLanc}}">Novo lançamento</button>
+    </header>
 
-    <section class="grid g4" aria-label="Resumo financeiro">
-      <div class="card"><span class="tile t-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"></path></svg></span><div class="lbl" style="margin-top: 18px">Entradas</div><div class="big" style="margin-top: 6px">R$ 412,7<small>mil</small></div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-green">+9%</span><span class="t13 mute">vs. outubro</span></div></div>
-      <div class="card"><span class="tile t-rose"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"></path></svg></span><div class="lbl" style="margin-top: 18px">Saídas</div><div class="big" style="margin-top: 6px">R$ 287,3<small>mil</small></div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip">+2%</span><span class="t13 mute">vs. outubro</span></div></div>
-      <div class="card"><span class="tile t-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h18v13H3zM3 7l3-4h12l3 4M16 13.5h2"></path></svg></span><div class="lbl" style="margin-top: 18px">Saldo em contas</div><div class="big" style="margin-top: 6px">R$ 538,9<small>mil</small></div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-blue">2 bancos</span><span class="t13 mute">conciliado até ontem</span></div></div>
-      <div class="card"><span class="tile t-violet"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M2 20h20"></path></svg></span><div class="lbl" style="margin-top: 18px">Margem líquida</div><div class="big" style="margin-top: 6px">24,6<small>%</small></div><div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-green">+1,9 p.p.</span><span class="t13 mute">meta 22%</span></div></div>
+    <section class="card strip" aria-label="Resumo financeiro">
+      <div><div class="t13 mute">Entradas</div><div class="v">R$ 412,7 mil</div><div class="t12 mute">9% acima de outubro</div></div>
+      <div><div class="t13 mute">Saídas</div><div class="v">R$ 287,3 mil</div><div class="t12 mute">2% acima de outubro</div></div>
+      <div><div class="t13 mute">Saldo em contas</div><div class="v">R$ 538,9 mil</div><div class="t12 mute">2 bancos, conciliado até ontem</div></div>
+      <div><div class="t13 mute">Margem líquida</div><div class="v">24,6%</div><div class="t12 mute">meta de 22%</div></div>
     </section>
 
-    <div class="split">
-      <section class="card main" aria-labelledby="fc-h">
-        <div class="card-h"><div><h2 id="fc-h">Fluxo de caixa</h2><div class="sub">Últimos 6 meses · realizado</div></div>
-          <div class="row t14" style="margin-left: auto; gap: 16px"><span class="row" style="gap: 6px"><i style="width: 10px; height: 10px; border-radius: 50%; background: #0C72B0"></i>Entradas</span><span class="row" style="gap: 6px"><i style="width: 10px; height: 10px; border-radius: 50%; background: #8B7BE0"></i>Saídas</span></div></div>
-        <figure role="img" aria-label="Gráfico de área: entradas cresceram de 338 mil em junho para 413 mil em novembro; saídas ficaram entre 262 e 287 mil" style="margin: 0">
-          <svg viewBox="0 0 760 240" width="100%" height="240" aria-hidden="true" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="ge" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#3E9BDB" stop-opacity=".35"></stop><stop offset="1" stop-color="#3E9BDB" stop-opacity="0"></stop></linearGradient>
-              <linearGradient id="gs" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#8B7BE0" stop-opacity=".28"></stop><stop offset="1" stop-color="#8B7BE0" stop-opacity="0"></stop></linearGradient>
-            </defs>
-            <g stroke="#E8EAEF" stroke-width="1"><path d="M0 40H760M0 100H760M0 160H760M0 220H760"></path></g>
-            <path d="M0 98 C70 94 110 86 152 84 S250 76 304 70 S400 62 456 58 S560 44 608 40 S700 30 760 26 V220 H0Z" fill="url(#ge)"></path>
-            <path d="M0 98 C70 94 110 86 152 84 S250 76 304 70 S400 62 456 58 S560 44 608 40 S700 30 760 26" fill="none" stroke="#0C72B0" stroke-width="3"></path>
-            <path d="M0 142 C70 140 110 138 152 140 S250 132 304 134 S400 130 456 128 S560 126 608 126 S700 122 760 120 V220 H0Z" fill="url(#gs)"></path>
-            <path d="M0 142 C70 140 110 138 152 140 S250 132 304 134 S400 130 456 128 S560 126 608 126 S700 122 760 120" fill="none" stroke="#8B7BE0" stroke-width="3"></path>
-            <circle cx="608" cy="40" r="6" fill="#fff" stroke="#0C72B0" stroke-width="3"></circle>
-          </svg>
-          <figcaption class="row t13 mute" style="justify-content: space-between; padding: 4px 2px 0"><span>Jun</span><span>Jul</span><span>Ago</span><span>Set</span><span>Out</span><span>Nov</span></figcaption>
-        </figure>
-      </section>
+    <nav class="tabs" aria-label="Seções do financeiro">
+      <sc-for list="{{abas}}" as="a" hint-placeholder-count="7"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}} <span class="mute" style="font-weight: 500">{{a.n}}</span></button></sc-for>
+    </nav>
 
-      <section class="card aside" aria-labelledby="cx-h">
-        <div class="card-h"><div><h2 id="cx-h">Caixas de hoje</h2><div class="sub">Integrado ao caixa do particular · 2 caixas abertos</div></div><a class="t14 b" href="Caixa.dc.html" style="margin-left: auto">Abrir caixa</a></div>
-        <div class="big">R$ 6.842<small>,50</small></div>
-        <div class="col" style="gap: 12px; margin-top: 16px">
-          <div><div class="row t14"><span>PIX</span><span class="num b" style="margin-left: auto">R$ 3.910,00</span></div><div class="bar" style="margin-top: 6px"><i style="width: 57%"></i></div></div>
-          <div><div class="row t14"><span>Cartão de crédito</span><span class="num b" style="margin-left: auto">R$ 1.982,50</span></div><div class="bar" style="margin-top: 6px"><i style="width: 29%"></i></div></div>
-          <div><div class="row t14"><span>Cartão de débito</span><span class="num b" style="margin-left: auto">R$ 640,00</span></div><div class="bar" style="margin-top: 6px"><i style="width: 9%"></i></div></div>
-          <div><div class="row t14"><span>Dinheiro</span><span class="num b" style="margin-left: auto">R$ 310,00</span></div><div class="bar" style="margin-top: 6px"><i style="width: 5%"></i></div></div>
-        </div>
-        <div class="sep" style="margin: 16px 0 6px"></div>
-        <div class="li"><span class="av av-sm" style="background: #0A1A4A; color: #fff">AS</span><div style="flex: 1; min-width: 0"><div class="t">Caixa 1 · Ana Souza</div><div class="s">Aberto 06:52 · troco R$ 200,00</div></div><span class="chip c-green">Aberto</span></div>
-        <div class="li"><span class="av av-sm" style="background: #E5F5EC; color: #1F7A4D">JM</span><div style="flex: 1; min-width: 0"><div class="t">Caixa 2 · Joana Matos</div><div class="s">Aberto 07:00 · 1 sangria R$ 500,00</div></div><span class="chip c-green">Aberto</span></div>
-        <div class="li"><span class="av av-sm" style="background: #F1F3F6; color: #334155">AS</span><div style="flex: 1; min-width: 0"><div class="t">Ontem · fechamento</div><div class="s">Conferido por Carla · diferença R$ 0,00</div></div><span class="chip c-blue">Conferido</span></div>
-      </section>
-    </div>
-
-    <div class="grid g3">
-      <section class="card" aria-labelledby="cp-h">
-        <div class="card-h"><h2 id="cp-h">Contas a pagar</h2><span class="chip c-amber" style="margin-left: auto">4 nesta semana</span></div>
-        <div class="li"><div style="flex: 1"><div class="t">Manutenção tomógrafo</div><div class="s">Fornecedor de equipamentos · vence 09/11</div></div><span class="num b t15">R$ 18.400,00</span></div>
-        <div class="li"><div style="flex: 1"><div class="t">Contraste iodado (lote)</div><div class="s">Distribuidora hospitalar · vence 10/11</div></div><span class="num b t15">R$ 6.920,00</span></div>
-        <div class="li"><div style="flex: 1"><div class="t">Energia elétrica</div><div class="s">Débito automático · 12/11</div></div><span class="num b t15">R$ 9.315,40</span></div>
-        <div class="li"><div style="flex: 1"><div class="t">Licença PACS / backup externo</div><div class="s">Mensal · 15/11</div></div><span class="num b t15">R$ 1.480,00</span></div>
-      </section>
-      <section class="card" aria-labelledby="cr-h">
-        <div class="card-h"><h2 id="cr-h">Contas a receber</h2><span class="chip c-blue" style="margin-left: auto">R$ 312,8 mil</span></div>
-        <div class="li"><div style="flex: 1"><div class="t">Unimed · lote 0148</div><div class="s">Previsto 14/11 · 32 dias</div></div><span class="num b t15">R$ 96.210,00</span></div>
-        <div class="li"><div style="flex: 1"><div class="t">Bradesco Saúde · lote 0146</div><div class="s">Previsto 18/11</div></div><span class="num b t15">R$ 51.880,40</span></div>
-        <div class="li"><div style="flex: 1"><div class="t">Cartão · antecipação</div><div class="s">Adquirente · D+30</div></div><span class="num b t15">R$ 22.430,00</span></div>
-        <div class="li"><div style="flex: 1"><div class="t">Petrobras · lote 0145</div><div class="s">Atrasado 6 dias</div></div><span class="chip c-rose">R$ 18.900,00</span></div>
-      </section>
-      <section class="card" aria-labelledby="cb-h">
-        <div class="card-h"><h2 id="cb-h">Conciliação bancária</h2><button class="more" aria-label="Opções">•••</button></div>
-        <div class="row" style="align-items: flex-end"><div class="big">96<small>%</small></div><span class="t14 mute" style="margin-left: 12px; margin-bottom: 6px">dos lançamentos casados</span></div>
-        <div class="bar" style="margin: 14px 0"><i style="width: 96%"></i></div>
-        <div class="li"><div style="flex: 1"><div class="t">PIX recebido sem identificação</div><div class="s">05/11 · R$ 350,00</div></div><button class="btn btn-sm">Vincular</button></div>
-        <div class="li"><div style="flex: 1"><div class="t">Tarifa bancária</div><div class="s">04/11 · R$ 89,90</div></div><button class="btn btn-sm">Classificar</button></div>
-      </section>
-    </div>
-
-    <div class="grid g2">
-      <section class="card" aria-labelledby="dre-h">
-        <div class="card-h"><div><h2 id="dre-h">DRE resumido · novembro</h2><div class="sub">Regime de competência</div></div><button class="btn btn-sm" style="margin-left: auto">Exportar</button></div>
-        <table class="tb">
-          <tbody>
-            <tr><td>Receita bruta</td><td class="r num b">R$ 448.300,00</td></tr>
-            <tr><td class="mute">(−) Impostos sobre serviço</td><td class="r num nw">R$ 35.640,00</td></tr>
-            <tr><td class="mute">(−) Glosas</td><td class="r num nw">R$ 9.600,00</td></tr>
-            <tr><td class="mute">(−) Repasse médico</td><td class="r num nw">R$ 121.040,00</td></tr>
-            <tr><td class="mute">(−) Custos e despesas operacionais</td><td class="r num nw">R$ 171.700,00</td></tr>
-            <tr><td><b class="b">Resultado líquido</b></td><td class="r"><span class="chip c-green" style="font-size: 14px">R$ 110.320,00 · 24,6%</span></td></tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="card" aria-labelledby="rp-h">
-        <div class="card-h"><div><h2 id="rp-h">Repasse aos médicos</h2><div class="sub">Fechamento em 10/11 · regra por exame e convênio</div></div><button class="btn btn-sm btn-p" style="margin-left: auto">Gerar demonstrativos</button></div>
-        <div class="li"><span class="av" style="background: #E8F2FB; color: #0C72B0">PM</span><div style="flex: 1"><div class="t">Dr. Paulo Medeiros</div><div class="s">Eco e ergométrico · 40% do líquido · 312 exames</div></div><span class="num b t15">R$ 38.420,00</span></div>
-        <div class="li"><span class="av" style="background: #EFEBFC; color: #5B45B5">RA</span><div style="flex: 1"><div class="t">Dra. Renata Alves</div><div class="s">USG obstétrica · 45% · 268 exames</div></div><span class="num b t15">R$ 34.180,00</span></div>
-        <div class="li"><span class="av" style="background: #E5F5EC; color: #1F7A4D">MF</span><div style="flex: 1"><div class="t">Dr. Marcos Freire</div><div class="s">USG geral e Doppler · 40% · 241 exames</div></div><span class="num b t15">R$ 26.610,00</span></div>
-        <div class="li"><span class="av" style="background: #FFF3DF; color: #9A5B00">LT</span><div style="flex: 1"><div class="t">Dr. Luís Tavares</div><div class="s">Raio X e tomografia · R$ por laudo · 410 laudos</div></div><span class="num b t15">R$ 21.830,00</span></div>
-      </section>
-    </div>
-
-    <section class="card" aria-labelledby="nf-h">
-      <div class="card-h"><div><h2 id="nf-h">Notas fiscais de serviço (NFS-e)</h2><div class="sub">Emitidas automaticamente no pagamento particular · 148 em novembro</div></div><button class="btn btn-sm btn-p" style="margin-left: auto">Emitir NFS-e</button></div>
-      <div class="scroll-x">
-        <table class="tb">
-          <thead><tr><th>Número</th><th>Tomador</th><th>Serviço</th><th class="r">Valor</th><th>Situação</th><th class="r"></th></tr></thead>
-          <tbody>
-            <tr><td class="num nw">2026/004812</td><td class="nw">Rafael Monteiro Lima</td><td>Raio X de tórax PA e perfil</td><td class="r num nw">R$ 120,00</td><td><span class="chip c-green">Autorizada</span></td><td class="r"><button class="btn btn-sm">Enviar por WhatsApp</button></td></tr>
-            <tr><td class="num nw">2026/004811</td><td class="nw">Hélio T. Mendes</td><td>Ecocardiograma transtorácico</td><td class="r num nw">R$ 380,00</td><td><span class="chip c-green">Autorizada</span></td><td class="r"><button class="btn btn-sm">Baixar PDF</button></td></tr>
-            <tr><td class="num nw">—</td><td class="nw">Laura N. Costa</td><td>Raio X coluna lombar</td><td class="r num nw">R$ 140,00</td><td><span class="chip c-amber">Prefeitura fora do ar</span><div class="t13 mute" style="margin-top: 4px">Nova tentativa 09:10</div></td><td class="r"><button class="btn btn-sm">Tentar agora</button></td></tr>
-          </tbody>
-        </table>
+    <sc-if value="{{tVisao}}" hint-placeholder-val="{{ true }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px">
+        <section class="card pane" aria-labelledby="h-fc">
+          <div class="row wrap" style="gap: 16px; flex: none">
+            <h2 id="h-fc" style="font-size: 16px; font-weight: 650; flex: 1">Fluxo de caixa, últimos 6 meses</h2>
+            <span class="t13"><i class="lg" style="background: #0C72B0"></i>Entradas</span>
+            <span class="t13"><i class="lg" style="background: #8B7BE0"></i>Saídas</span>
+          </div>
+          <figure role="img" aria-label="Entradas cresceram de 338 mil em junho para 413 mil em novembro; saídas ficaram entre 262 e 287 mil" style="margin: 12px 0 0; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column">
+            <div style="flex: 1 1 auto; min-height: 120px; position: relative">
+              <svg viewBox="0 0 760 240" width="100%" height="100%" aria-hidden="true" preserveAspectRatio="none" style="position: absolute; inset: 0">
+                <g stroke="#E8EAEF" stroke-width="1" vector-effect="non-scaling-stroke"><path d="M0 40H760M0 100H760M0 160H760M0 220H760" vector-effect="non-scaling-stroke"></path></g>
+                <path d="M0 98 C70 94 110 86 152 84 S250 76 304 70 S400 62 456 58 S560 44 608 40 S700 30 760 26" fill="none" stroke="#0C72B0" stroke-width="3" vector-effect="non-scaling-stroke"></path>
+                <path d="M0 142 C70 140 110 138 152 140 S250 132 304 134 S400 130 456 128 S560 126 608 126 S700 122 760 120" fill="none" stroke="#8B7BE0" stroke-width="3" vector-effect="non-scaling-stroke"></path>
+              </svg>
+            </div>
+            <figcaption class="row t13 mute" style="justify-content: space-between; padding: 6px 2px 0"><span>Jun</span><span>Jul</span><span>Ago</span><span>Set</span><span>Out</span><span>Nov</span></figcaption>
+          </figure>
+        </section>
+        <section class="card pane" style="padding: 0" aria-labelledby="h-cx">
+          <div class="ph"><h2 id="h-cx" style="flex: 1">Caixas de hoje</h2><span class="t15 b num">R$ 6.842,50</span></div>
+          <div class="scroll" style="padding: 14px 18px">
+            <div class="col" style="gap: 12px">
+              <div><div class="row t14"><span>PIX</span><span class="num b" style="margin-left: auto">R$ 3.910,00</span></div><div class="bar" style="margin-top: 6px"><i style="width: 57%"></i></div></div>
+              <div><div class="row t14"><span>Cartão de crédito</span><span class="num b" style="margin-left: auto">R$ 1.982,50</span></div><div class="bar" style="margin-top: 6px"><i style="width: 29%"></i></div></div>
+              <div><div class="row t14"><span>Cartão de débito</span><span class="num b" style="margin-left: auto">R$ 640,00</span></div><div class="bar" style="margin-top: 6px"><i style="width: 9%"></i></div></div>
+              <div><div class="row t14"><span>Dinheiro</span><span class="num b" style="margin-left: auto">R$ 310,00</span></div><div class="bar" style="margin-top: 6px"><i style="width: 5%"></i></div></div>
+            </div>
+            <div style="margin-top: 14px">
+              <div class="li"><div style="flex: 1; min-width: 0"><div class="t14 b">Caixa 1, Ana Souza</div><div class="t13 mute">Aberto às 06:52 com R$ 200,00</div></div><span class="chip c-green">Aberto</span></div>
+              <div class="li"><div style="flex: 1; min-width: 0"><div class="t14 b">Caixa 2, Joana Matos</div><div class="t13 mute">1 sangria de R$ 500,00</div></div><span class="chip c-green">Aberto</span></div>
+              <div class="li"><div style="flex: 1; min-width: 0"><div class="t14 b">Fechamento de ontem</div><div class="t13 mute">Conferido por Carla, sem diferença</div></div><span class="chip c-blue">Conferido</span></div>
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
-    <div class="grid g2">
-      <section class="card" aria-labelledby="pv-h">
-        <div class="card-h"><div><h2 id="pv-h">Previsão de caixa</h2><div class="sub">Contas a receber dos convênios − contas a pagar</div></div><div class="seg" style="margin-left: auto"><button class="on" style="height: 36px">30 dias</button><button style="height: 36px">60</button><button style="height: 36px">90</button></div></div>
-        <div class="bars" style="height: 210px; padding-top: 56px">
-          <div class="bc"><span class="bn">R$ 568 mil</span><div class="bv" style="height: 70%"></div><span class="bl">Hoje</span></div>
-          <div class="bc"><span class="bn">R$ 612 mil</span><div class="bv" style="height: 76%"></div><span class="bl">+7 d</span></div>
-          <div class="bc"><span class="bn">R$ 701 mil</span><div class="bv on" style="height: 87%"><div class="tip">14/11 · entra Unimed<br><b>+ R$ 96,2 mil</b></div></div><span class="bl" style="color: #0F172A; font-weight: 600">+14 d</span></div>
-          <div class="bc"><span class="bn">R$ 655 mil</span><div class="bv" style="height: 81%"></div><span class="bl">+21 d</span></div>
-          <div class="bc"><span class="bn">R$ 690 mil</span><div class="bv" style="height: 85%"></div><span class="bl">+30 d</span></div>
+    </sc-if>
+
+    <sc-if value="{{tContas}}" hint-placeholder-val="{{ false }}">
+      <div class="fill" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+        <section class="card pane" style="padding: 0" aria-labelledby="h-cp">
+          <div class="ph"><h2 id="h-cp" style="flex: 1">A pagar</h2><span class="t13 mute">Acima de R$ 10 mil, duas aprovações</span></div>
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Conta</th><th class="r">Valor</th><th class="r"><span class="sr">Ação</span></th></tr></thead>
+              <tbody>
+                <sc-for list="{{pagar}}" as="c" hint-placeholder-count="5">
+                  <tr><td><div class="b">{{c.t}}</div><div class="t13 mute">{{c.s}}</div></td><td class="r num nw">{{c.v}}</td>
+                    <td class="r"><sc-if value="{{c.aberto}}" hint-placeholder-val="{{ true }}"><button class="btn btn-sm" onClick="{{c.agir}}">{{c.acao}}</button></sc-if><sc-if value="{{c.feito}}" hint-placeholder-val="{{ false }}"><span class="{{c.fCls}}">{{c.fTxt}}</span></sc-if></td></tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section class="card pane" style="padding: 0" aria-labelledby="h-cr">
+          <div class="ph"><h2 id="h-cr" style="flex: 1">A receber</h2><span class="t14 b num">R$ 312,8 mil</span></div>
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Origem</th><th class="r">Valor</th><th>Situação</th></tr></thead>
+              <tbody>
+                <tr><td><div class="b">Unimed, lote 0148</div><div class="t13 mute">Previsto para 14/11</div></td><td class="r num nw">R$ 96.210,00</td><td><span class="chip c-blue">No prazo</span></td></tr>
+                <tr><td><div class="b">Bradesco Saúde, lote 0146</div><div class="t13 mute">Previsto para 18/11</div></td><td class="r num nw">R$ 51.880,40</td><td><span class="chip c-blue">No prazo</span></td></tr>
+                <tr><td><div class="b">Cartão, adquirente</div><div class="t13 mute">D+30, sem antecipação</div></td><td class="r num nw">R$ 22.430,00</td><td><span class="chip c-blue">No prazo</span></td></tr>
+                <tr><td><div class="b">Petrobras, lote 0145</div><div class="t13 mute">Venceu em 01/11</div></td><td class="r num nw">R$ 18.900,00</td><td><span class="chip c-rose">Atrasado 6 dias</span></td></tr>
+                <tr><td><div class="b">SulAmérica, lote 0151</div><div class="t13 mute">Previsto para 03/12</div></td><td class="r num nw">R$ 24.880,00</td><td><span class="chip c-blue">No prazo</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{tConc}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Conciliação bancária">
+        <div class="ph">
+          <div style="flex: 1 1 260px; min-width: 0"><div class="row" style="gap: 10px"><span class="t15 b num">{{concPct}} dos lançamentos casados</span></div><div class="bar" style="margin-top: 8px; max-width: 420px"><i style="{{concBar}}"></i></div></div>
+          <button class="btn btn-sm">Importar extrato OFX</button>
         </div>
-      </section>
-      <section class="card" aria-labelledby="cc-h">
-        <div class="card-h"><div><h2 id="cc-h">Por centro de custo</h2><div class="sub">Novembro · receita, custo e margem por área</div></div></div>
-        <div class="scroll-x">
-          <table class="tb">
-            <thead><tr><th>Centro de custo</th><th class="r">Receita</th><th class="r">Custo</th><th>Margem</th></tr></thead>
+        <div class="scroll">
+          <table class="tb sticky">
+            <thead><tr><th>Data</th><th>No extrato</th><th class="r">Valor</th><th>Sugestão do sistema</th><th class="r"><span class="sr">Ação</span></th></tr></thead>
             <tbody>
-              <tr><td class="nw"><b class="b">Cardiologia</b> <span class="t13 mute">eco, ergo, MAPA</span></td><td class="r num nw">R$ 142.300</td><td class="r num nw">R$ 98.400</td><td><span class="chip c-green">30,9%</span></td></tr>
-              <tr><td class="nw"><b class="b">Ultrassonografia</b> <span class="t13 mute">obstétrica e geral</span></td><td class="r num nw">R$ 168.900</td><td class="r num nw">R$ 121.700</td><td><span class="chip c-green">27,9%</span></td></tr>
-              <tr><td class="nw"><b class="b">Raio X</b></td><td class="r num nw">R$ 38.600</td><td class="r num nw">R$ 31.200</td><td><span class="chip c-amber">19,2%</span></td></tr>
-              <tr><td class="nw"><b class="b">Tomografia</b></td><td class="r num nw">R$ 98.500</td><td class="r num nw">R$ 86.040</td><td><span class="chip c-amber">12,6%</span></td></tr>
+              <sc-for list="{{conc}}" as="c" hint-placeholder-count="4">
+                <tr><td class="num nw">{{c.d}}</td><td><div class="b">{{c.t}}</div><div class="t13 mute">{{c.banco}}</div></td><td class="r num nw">{{c.v}}</td><td>{{c.sug}}</td>
+                  <td class="r"><sc-if value="{{c.aberto}}" hint-placeholder-val="{{ true }}"><button class="btn btn-sm" onClick="{{c.agir}}">{{c.acao}}</button></sc-if><sc-if value="{{c.feito}}" hint-placeholder-val="{{ false }}"><span class="chip c-green">Conciliado</span></sc-if></td></tr>
+              </sc-for>
             </tbody>
           </table>
         </div>
       </section>
-    </div>
+    </sc-if>
 
-    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · VidaCor Imagem</p>
+    <sc-if value="{{tDre}}" hint-placeholder-val="{{ false }}">
+      <div class="fill" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+        <section class="card pane" style="padding: 0" aria-labelledby="h-dre">
+          <div class="ph"><h2 id="h-dre" style="flex: 1">DRE de novembro</h2><span class="t13 mute">Competência</span><button class="btn btn-sm">Exportar</button></div>
+          <div class="scroll">
+            <table class="tb">
+              <tbody>
+                <tr><td class="b">Receita bruta</td><td class="r num b nw">R$ 448.300,00</td></tr>
+                <tr><td class="mute">Impostos sobre serviço</td><td class="r num nw">− R$ 35.640,00</td></tr>
+                <tr><td class="mute">Glosas</td><td class="r num nw">− R$ 9.600,00</td></tr>
+                <tr><td class="mute">Repasse médico</td><td class="r num nw">− R$ 121.040,00</td></tr>
+                <tr><td class="mute">Custos e despesas operacionais</td><td class="r num nw">− R$ 171.700,00</td></tr>
+                <tr><td class="b">Resultado líquido</td><td class="r num b nw" style="color: #1F7A4D">R$ 110.320,00 (24,6%)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section class="card pane" style="padding: 0" aria-labelledby="h-cc">
+          <div class="ph"><h2 id="h-cc" style="flex: 1">Por centro de custo</h2></div>
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Centro de custo</th><th class="r">Receita</th><th class="r">Custo</th><th class="r">Margem</th></tr></thead>
+              <tbody>
+                <tr><td><div class="b">Cardiologia</div><div class="t13 mute">Eco, ergométrico e MAPA</div></td><td class="r num nw">R$ 142.300</td><td class="r num nw">R$ 98.400</td><td class="r num">30,9%</td></tr>
+                <tr><td><div class="b">Ultrassonografia</div><div class="t13 mute">Obstétrica e geral</div></td><td class="r num nw">R$ 168.900</td><td class="r num nw">R$ 121.700</td><td class="r num">27,9%</td></tr>
+                <tr><td class="b">Raio X</td><td class="r num nw">R$ 38.600</td><td class="r num nw">R$ 31.200</td><td class="r num" style="color: #9A5B00; font-weight: 600">19,2%</td></tr>
+                <tr><td class="b">Tomografia</td><td class="r num nw">R$ 98.500</td><td class="r num nw">R$ 86.040</td><td class="r num" style="color: #9A5B00; font-weight: 600">12,6%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{tRep}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Repasse aos médicos">
+        <div class="ph"><span class="t14 mute" style="flex: 1">Fechamento em 10/11. Regra por exame e convênio, versão 7.</span></div>
+        <div class="scroll">
+          <table class="tb sticky">
+            <thead><tr><th>Médico</th><th>Regra</th><th class="r">Exames</th><th class="r">Valor</th></tr></thead>
+            <tbody>
+              <tr><td class="b">Dr. Paulo Medeiros</td><td>Eco e ergométrico, 40% do líquido</td><td class="r num">312</td><td class="r num nw">R$ 38.420,00</td></tr>
+              <tr><td class="b">Dra. Renata Alves</td><td>USG obstétrica, 45% do líquido</td><td class="r num">268</td><td class="r num nw">R$ 34.180,00</td></tr>
+              <tr><td class="b">Dr. Marcos Freire</td><td>USG geral e Doppler, 40% do líquido</td><td class="r num">241</td><td class="r num nw">R$ 26.610,00</td></tr>
+              <tr><td class="b">Dra. Cecília Souto</td><td>Raio X e tomografia, valor por laudo</td><td class="r num">410</td><td class="r num nw">R$ 21.830,00</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pf" style="flex-direction: row; align-items: center; flex-wrap: wrap">
+          <span class="t13" style="flex: 1 1 300px; {{repStyle}}">{{repMsg}}</span>
+          <button class="btn btn-p" onClick="{{gerarRep}}" disabled="{{repFeito}}">Gerar demonstrativos</button>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{tNf}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Notas fiscais de serviço">
+        <div class="ph"><span class="t14 mute" style="flex: 1">Emitidas automaticamente no pagamento particular. 148 em novembro.</span><button class="btn btn-sm">Emitir NFS-e avulsa</button></div>
+        <div class="scroll">
+          <table class="tb sticky">
+            <thead><tr><th>Número</th><th>Tomador e serviço</th><th class="r">Valor</th><th>Situação</th><th class="r"><span class="sr">Ação</span></th></tr></thead>
+            <tbody>
+              <sc-for list="{{notas}}" as="n" hint-placeholder-count="4">
+                <tr><td class="num nw">{{n.num}}</td><td><div class="b">{{n.tom}}</div><div class="t13 mute">{{n.serv}}</div></td><td class="r num nw">{{n.v}}</td><td><span class="{{n.cls}}">{{n.st}}</span><div class="t13 mute" style="margin-top: 4px">{{n.obs}}</div></td><td class="r"><button class="btn btn-sm" onClick="{{n.agir}}">{{n.acao}}</button></td></tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{tPrev}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" aria-labelledby="h-pv">
+        <div class="row wrap" style="gap: 10px; flex: none">
+          <div style="flex: 1; min-width: 0"><h2 id="h-pv" style="font-size: 16px; font-weight: 650">Saldo previsto</h2><div class="t13 mute">A receber dos convênios menos contas a pagar</div></div>
+          <div class="seg" role="group" aria-label="Horizonte"><sc-for list="{{horiz}}" as="h" hint-placeholder-count="3"><button class="{{h.cls}}" aria-pressed="{{h.pr}}" onClick="{{h.ir}}" style="height: 36px">{{h.t}}</button></sc-for></div>
+        </div>
+        <div class="bars" style="flex: 1 1 auto; min-height: 0; height: auto; padding-top: 24px" role="img" aria-label="{{prevAria}}">
+          <sc-for list="{{prev}}" as="b" hint-placeholder-count="5"><div class="bc"><span class="bn">{{b.n}}</span><div class="{{b.cls}}" style="{{b.h}}"></div><span class="bl">{{b.l}}</span></div></sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{drw}}" hint-placeholder-val="{{ false }}">
+      <button class="dbg" aria-label="Fechar painel" onClick="{{fecharDrw}}"></button>
+      <aside class="drw" role="dialog" aria-modal="true" aria-labelledby="h-lanc">
+        <header><h2 id="h-lanc" style="flex: 1">Novo lançamento</h2><button class="ix" aria-label="Fechar" onClick="{{fecharDrw}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></header>
+        <div class="scroll">
+          <div class="seg" role="group" aria-label="Tipo"><sc-for list="{{tipos}}" as="t" hint-placeholder-count="2"><button class="{{t.cls}}" aria-pressed="{{t.pr}}" onClick="{{t.ir}}">{{t.t}}</button></sc-for></div>
+          <label class="field">Descrição<input class="in" value="{{lancDesc}}"></label>
+          <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+            <label class="field">Valor<input class="in num" inputmode="decimal" value="R$ 2.340,00"></label>
+            <label class="field">Vencimento<input class="in num" value="20/11/2026"></label>
+          </div>
+          <label class="field">Centro de custo<select class="in"><option>Ultrassonografia</option><option>Cardiologia</option><option>Tomografia</option><option>Raio X</option><option>Administrativo</option></select></label>
+          <label class="field">Conta<select class="in"><option>Banco A, conta movimento</option><option>Banco B, conta convênios</option></select></label>
+          <button class="btn btn-sm" style="align-self: flex-start">Anexar nota ou boleto</button>
+          <div class="t13 mute">Fica no lastro com quem lançou, quando e de qual estação.</div>
+        </div>
+        <footer><button class="btn btn-p" onClick="{{salvarLanc}}">Salvar lançamento</button><button class="btn" onClick="{{fecharDrw}}">Cancelar</button></footer>
+      </aside>
+    </sc-if>
+
+    <sc-if value="{{temToast}}" hint-placeholder-val="{{ false }}">
+      <div class="toast tst" role="status"><span style="flex: 1">{{toast}}</span><button onClick="{{fecharToast}}">Ok</button></div>
+    </sc-if>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2250}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = { aba: 'visao', per: 'mes', pg: {}, cc: {}, nf: {}, rep: false, hz: 30, drw: false, tipo: 'pagar', toast: '' };
+  }
+  renderVals() {
+    const s = this.state;
+    const seg = (lista, cur, f) => lista.map(([k, t]) => ({ t, cls: cur === k ? 'on' : '', pr: cur === k ? 'true' : 'false', ir: () => f(k) }));
+    const P = [
+      { id: 'p1', t: 'Manutenção do tomógrafo', s: 'Fornecedor de equipamentos, vence 09/11', v: 'R$ 18.400,00', alto: true },
+      { id: 'p2', t: 'Contraste iodado, lote', s: 'Distribuidora hospitalar, vence 10/11', v: 'R$ 6.920,00' },
+      { id: 'p3', t: 'Energia elétrica', s: 'Débito automático em 12/11', v: 'R$ 9.315,40', auto: true },
+      { id: 'p4', t: 'Licença do PACS e backup externo', s: 'Mensal, vence 15/11', v: 'R$ 1.480,00' },
+      { id: 'p5', t: 'Aluguel da unidade Centro', s: 'Vence 20/11', v: 'R$ 24.000,00', alto: true }
+    ];
+    const C = [
+      { id: 'c1', d: '05/11', t: 'PIX recebido sem identificação', banco: 'Banco A', v: 'R$ 350,00', sug: 'Caixa 1, recebimento de Eduardo M. Vaz', acao: 'Vincular' },
+      { id: 'c2', d: '04/11', t: 'Tarifa bancária', banco: 'Banco A', v: '− R$ 89,90', sug: 'Despesas bancárias, administrativo', acao: 'Classificar' },
+      { id: 'c3', d: '04/11', t: 'TED Unimed', banco: 'Banco B', v: 'R$ 38.240,40', sug: 'Lote 0148, demonstrativo importado', acao: 'Vincular' },
+      { id: 'c4', d: '03/11', t: 'Débito de cartão de crédito', banco: 'Banco A', v: '− R$ 1.212,30', sug: 'Sem sugestão; escolha a conta', acao: 'Classificar' }
+    ];
+    const N = [
+      { id: 'n1', num: '2026/004815', tom: 'Rafael Monteiro Lima', serv: 'Raio X de tórax PA e perfil', v: 'R$ 120,00', st: 'Autorizada', cls: 'chip c-green', obs: '', acao: 'Enviar por WhatsApp' },
+      { id: 'n2', num: '2026/004812', tom: 'Hélio T. Mendes', serv: 'Ecocardiograma transtorácico', v: 'R$ 380,00', st: 'Autorizada', cls: 'chip c-green', obs: '', acao: 'Baixar PDF' },
+      { id: 'n3', num: 'Sem número', tom: 'Laura N. Costa', serv: 'Raio X de coluna lombar', v: 'R$ 140,00', st: 'Prefeitura fora do ar', cls: 'chip c-amber', obs: 'Nova tentativa automática às 09:10', acao: 'Tentar agora', retry: true },
+      { id: 'n4', num: '2026/004809', tom: 'Paula R. Dias', serv: 'Ecocardiograma, cobrado em duplicidade', v: 'R$ 180,00', st: 'Cancelada', cls: 'chip', obs: 'Estorno autorizado por Carla Mendes', acao: 'Ver motivo' }
+    ];
+    const H = {
+      30: [['Hoje', 'R$ 568 mil', 70], ['+7 d', 'R$ 612 mil', 76], ['+14 d', 'R$ 701 mil', 87], ['+21 d', 'R$ 655 mil', 81], ['+30 d', 'R$ 690 mil', 85]],
+      60: [['Hoje', 'R$ 568 mil', 62], ['+15 d', 'R$ 701 mil', 77], ['+30 d', 'R$ 690 mil', 76], ['+45 d', 'R$ 742 mil', 82], ['+60 d', 'R$ 810 mil', 89]],
+      90: [['Hoje', 'R$ 568 mil', 58], ['+30 d', 'R$ 690 mil', 70], ['+60 d', 'R$ 810 mil', 82], ['+75 d', 'R$ 776 mil', 79], ['+90 d', 'R$ 868 mil', 88]]
+    };
+    const nConc = Object.keys(s.cc).length;
+    const A = [['visao', 'Visão geral', ''], ['contas', 'Contas', ''], ['conc', 'Conciliação', String(4 - nConc)], ['dre', 'DRE e centros de custo', ''], ['rep', 'Repasse médico', ''], ['nf', 'Notas fiscais', ''], ['prev', 'Previsão de caixa', '']];
+    const perT = { hoje: 'Hoje, 07/11/2026', mes: 'Novembro de 2026, até hoje', tri: '4º trimestre de 2026', ano: '2026, até hoje' };
+    return {
+      perTxt: perT[s.per], pers: seg([['hoje', 'Hoje'], ['mes', 'Mês'], ['tri', 'Trimestre'], ['ano', 'Ano']], s.per, k => this.setState({ per: k })),
+      abrirLanc: () => this.setState({ drw: true }),
+      abas: A.map(([k, t, n]) => ({ t, n: n === '0' ? '' : n, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      tVisao: s.aba === 'visao', tContas: s.aba === 'contas', tConc: s.aba === 'conc', tDre: s.aba === 'dre', tRep: s.aba === 'rep', tNf: s.aba === 'nf', tPrev: s.aba === 'prev',
+      pagar: P.map(p => ({ t: p.t, s: p.s, v: p.v, aberto: !s.pg[p.id] && !p.auto, feito: !!s.pg[p.id] || !!p.auto,
+        acao: p.alto ? 'Pedir aprovação' : 'Agendar',
+        fTxt: p.auto ? 'Débito automático' : (p.alto ? 'Com Patrícia Lemos' : 'Agendado'), fCls: p.auto ? 'chip' : (p.alto ? 'chip c-amber' : 'chip c-blue'),
+        agir: () => this.setState(st => ({ pg: Object.assign({}, st.pg, { [p.id]: true }) })) })),
+      concPct: String(96 + nConc) + '%', concBar: 'width: ' + (96 + nConc) + '%',
+      conc: C.map(c => Object.assign({}, c, { aberto: !s.cc[c.id], feito: !!s.cc[c.id], agir: () => this.setState(st => ({ cc: Object.assign({}, st.cc, { [c.id]: true }) })) })),
+      repFeito: s.rep, repMsg: s.rep ? 'Demonstrativos gerados às 11:05 e enviados a Patrícia Lemos para conferência. O pagamento só sai depois dela.' : 'Total de R$ 121.040,00. A conferência é feita por outra pessoa antes do pagamento.',
+      repStyle: s.rep ? 'color: #0B4A75' : 'color: #5B6474', gerarRep: () => this.setState({ rep: true }),
+      notas: N.map(n => (n.retry && s.nf[n.id]) ? Object.assign({}, n, { num: '2026/004816', st: 'Autorizada', cls: 'chip c-green', obs: 'Emitida às 10:58', acao: 'Baixar PDF', agir: () => {} }) : Object.assign({}, n, { agir: () => { if (n.retry) this.setState(st => ({ nf: Object.assign({}, st.nf, { [n.id]: true }) })); } })),
+      horiz: seg([[30, '30 dias'], [60, '60 dias'], [90, '90 dias']], s.hz, k => this.setState({ hz: k })),
+      prev: H[s.hz].map((b, i) => ({ l: b[0], n: b[1], h: 'height: ' + b[2] + '%', cls: i === 2 ? 'bv on' : 'bv' })),
+      prevAria: 'Saldo previsto: ' + H[s.hz].map(b => b[0] + ' ' + b[1]).join(', '),
+      drw: s.drw, fecharDrw: () => this.setState({ drw: false }),
+      tipos: seg([['pagar', 'A pagar'], ['receber', 'A receber']], s.tipo, k => this.setState({ tipo: k })),
+      lancDesc: s.tipo === 'pagar' ? 'Gel para ultrassom, 20 galões' : 'Convênio empresa, check-ups de novembro',
+      salvarLanc: () => this.setState({ drw: false, toast: 'Lançamento salvo às 11:02 em Contas ' + (s.tipo === 'pagar' ? 'a pagar' : 'a receber') + '. Ele entra na previsão de caixa.' }),
+      temToast: s.toast !== '', toast: s.toast, fecharToast: () => this.setState({ toast: '' })
+    };
+  }
 }
 </script>
 </body>

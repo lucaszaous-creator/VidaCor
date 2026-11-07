@@ -4,185 +4,301 @@
 <meta charset="utf-8">
 <title>Laudar — VidaCor Imagem</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style>body{margin:0;background:#F2F3F6}
-.wl{display:block;padding:12px;border-radius:14px;color:#0F172A}
-.wl:hover{background:#F2F3F6;color:#0F172A}
-.wl.on{background:#0A1A4A;color:#fff}
-.wl .s{font-size:13px;color:#5B6474;margin-top:2px}
-.wl.on .s{color:#C9D5EA}
-.fr{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;border-radius:999px;border:1px solid #D9DDE5;background:#fff;font-size:13px;font-weight:550;color:#0A1A4A;cursor:pointer}
+<style>
+body{margin:0;background:#F2F3F6}
+.th{position:relative;display:block;height:64px;border:0;padding:0;border-radius:10px;background:#05070B;overflow:hidden;cursor:pointer}
+.th.on{outline:2px solid #3E9BDB;outline-offset:-2px}
+.th img{width:100%;height:100%;object-fit:contain;display:block}
+.th .cap{position:absolute;left:8px;bottom:5px;font-size:11px;font-weight:600;color:#D6DEEA;text-shadow:0 1px 2px #000}
+.fr{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 12px;border-radius:999px;border:1px solid #D9DDE5;background:#fff;font:550 13px Inter,sans-serif;color:#0A1A4A;cursor:pointer}
+.fr:hover{border-color:#8A93A3}
 .bull path{stroke:#fff;stroke-width:2}
 .bull text{font:600 11px Inter,sans-serif;fill:#0A1A4A;text-anchor:middle;dominant-baseline:middle}
-.ck{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:14px}
+.anat{background:#0B1530}
+.tabs.tc button{padding:0 10px}
+.ck{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #E8EAEF;font-size:14px}
+.ck:last-child{border-bottom:0}
+.ok-i{color:#1F7A4D;flex:none;margin-top:1px}.warn-i{color:#9A5B00;flex:none;margin-top:1px}
+.dw-bg{position:absolute;inset:0;background:rgba(15,23,42,.28);z-index:50;border:0;cursor:pointer}
+.dw{position:absolute;top:0;right:0;bottom:0;width:400px;max-width:100%;background:#fff;box-shadow:-8px 0 24px rgba(15,23,42,.12);display:flex;flex-direction:column;z-index:51}
+.fi{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #E8EAEF;color:#0F172A}
+.fi:hover{background:#F8FAFC;color:#0F172A}
+.fi.on{background:#EEF4FB;box-shadow:inset 3px 0 0 #0A1A4A}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="laudos" userName="Dr. Paulo Medeiros" userRole="Cardiologia" userInitials="PM" hint-size="248px,1400px"></dc-import></div>
-  <main class="content">
-    <div class="topbar">
-      <div class="crumb"><span>Exames</span><span aria-hidden="true">›</span><span>Laudar</span><span aria-hidden="true">›</span><b>Ecocardiograma · Sônia Maria Castro</b></div>
-      <div class="grow"></div>
-      <span class="t14 mute">Rascunho salvo às 08:58</span>
-      <a class="btn" href="Visualizador.dc.html">Abrir no visualizador</a>
-    </div>
-    <dc-import name="Barra-Paciente" ini="SC" nome="Sônia Maria Castro" nasc="03/02/1962" idade="64 anos" sexo="feminino" convenio="Unimed" exame="Ecocardiograma" local="laudo · prazo hoje 18:00" alergia="iodo" alertas="Hipertensa · losartana" conferida="08:31" hint-size="100%,84px"></dc-import>
-
-    <div class="page-h">
-      <div class="grow">
-        <h1>Sônia Maria Castro</h1>
-        <p>64 anos · F · Unimed · protocolo 2026-118734 · Ecocardiograma transtorácico · solicitante Dr. Hugo Lemos</p>
+  <div class="side"><dc-import name="Sidebar" active="laudos" userName="Dr. Paulo Medeiros" userRole="Cardiologia" userInitials="PM" hint-size="248px,900px"></dc-import></div>
+  <main class="content" style="position: relative">
+    <header class="row" style="gap: 12px">
+      <div style="flex: 1 1 auto; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Laudar ecocardiograma</h1>
+        <div class="t13 mute" style="margin-top: 2px">Protocolo 2026-118734, solicitante Dr. Hugo Lemos</div>
       </div>
-      <div class="row" style="gap: 8px"><span class="chip c-violet">Laudando</span><span class="chip c-amber">Prazo hoje 18:00</span><span class="chip c-amber">Hipertensa</span></div>
-    </div>
+      <span class="t13 mute" role="status">{{salvoTxt}}</span>
+      <button class="btn btn-sm" onClick="{{abrirFila}}" aria-expanded="{{filaAria}}">Minha fila <span class="mute" style="font-weight: 500">7</span></button>
+      <a class="btn btn-sm" href="Visualizador.dc.html">Abrir no visualizador</a>
+    </header>
 
-    <section class="card" aria-labelledby="fila-h" style="padding: 14px 16px">
-        <div class="row wrap" style="padding: 2px 4px 10px; gap: 10px"><h2 id="fila-h" style="font-size: 16px; font-weight: 600">Minha fila</h2><span class="chip">7 exames</span>
-          <div class="seg" style="margin-left: auto"><button class="on" style="height: 32px; padding: 0 12px; font-size: 13px">Todos</button><button style="height: 32px; padding: 0 12px; font-size: 13px">Urgentes</button><button style="height: 32px; padding: 0 12px; font-size: 13px">Prazo hoje</button><button style="height: 32px; padding: 0 12px; font-size: 13px">Internados</button></div></div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px">
-        <a class="wl" href="Laudo.dc.html" style="background: #FDEEF1"><div class="row" style="gap: 6px"><b class="t14" style="font-weight: 600">Antônio C. Ribeiro</b><span class="chip c-rose" style="margin-left: auto; height: 22px; font-size: 11px">Urgente</span></div><div class="s">Doppler de carótidas · 1 h 10</div></a>
-        <a class="wl on" href="Laudo.dc.html" aria-current="true"><div class="row" style="gap: 6px"><b class="t14" style="font-weight: 600">Sônia M. Castro</b><span class="chip" style="margin-left: auto; height: 22px; font-size: 11px; background: #13285F; color: #fff">Hoje</span></div><div class="s">Ecocardiograma · aberto</div></a>
-        <a class="wl" href="Laudo.dc.html"><div class="row" style="gap: 6px"><b class="t14" style="font-weight: 600">João P. Alves</b><span class="chip c-amber" style="margin-left: auto; height: 22px; font-size: 11px">Hoje</span></div><div class="s">Eco + Doppler</div></a>
-        <a class="wl" href="Laudo.dc.html"><div class="row" style="gap: 6px"><b class="t14" style="font-weight: 600">Eduardo M. Vaz</b><span class="chip" style="margin-left: auto; height: 22px; font-size: 11px">24 h</span></div><div class="s">Teste ergométrico</div></a>
-        <a class="wl" href="Laudo.dc.html"><div class="row" style="gap: 6px"><b class="t14" style="font-weight: 600">Mário J. Pinto</b><span class="chip c-blue" style="margin-left: auto; height: 22px; font-size: 11px">Internado</span></div><div class="s">MAPA 24 h</div></a>
-        <a class="wl" href="Laudo.dc.html"><div class="row" style="gap: 6px"><b class="t14" style="font-weight: 600">Gustavo H. Pires</b><span class="chip" style="margin-left: auto; height: 22px; font-size: 11px">24 h</span></div><div class="s">Teste ergométrico</div></a>
-        <a class="wl" href="Laudo.dc.html" style="border: 1px solid #E8EAEF"><div class="row" style="gap: 6px"><b class="t14" style="font-weight: 600">Neusa A. Freitas</b><span class="chip" style="margin-left: auto; height: 22px; font-size: 11px">48 h</span></div><div class="s">MAPA 24 h</div></a>
+    <dc-import name="Barra-Paciente" ini="SC" nome="Sônia Maria Castro" nasc="03/02/1962" idade="64 anos" sexo="feminino" convenio="Unimed" exame="Ecocardiograma" local="prazo hoje 18:00" alergia="dipirona" alertas="Hipertensa em uso de losartana" conferida="08:31" hint-size="100%,84px"></dc-import>
+
+    <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(380px, 1fr); gap: 16px">
+      <section class="pane dark" aria-label="Imagens do exame" style="border-radius: 22px; padding: 12px; gap: 8px">
+        <div class="dimg" style="flex: 1 1 auto; min-height: 0">
+          <sc-if value="{{img.eco}}" hint-placeholder-val="{{ true }}"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt="{{img.alt}}"></sc-if>
+          <sc-if value="{{img.dop}}" hint-placeholder-val="{{ false }}"><img src="/_blob/5d5abc0e3f9103b34da8cedf87fc15b2" alt="{{img.alt}}"></sc-if>
+          <span class="cap">{{img.cap}}</span>
         </div>
-    </section>
+        <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; flex: none">
+          <sc-for list="{{thumbs}}" as="t" hint-placeholder-count="5">
+            <button class="{{t.cls}}" onClick="{{t.ir}}" aria-pressed="{{t.on}}" aria-label="{{t.lbl}}"><sc-if value="{{t.eco}}" hint-placeholder-val="{{ true }}"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt=""></sc-if><sc-if value="{{t.dop}}" hint-placeholder-val="{{ false }}"><img src="/_blob/5d5abc0e3f9103b34da8cedf87fc15b2" alt=""></sc-if><span class="cap">{{t.cap}}</span></button>
+          </sc-for>
+        </div>
+      </section>
 
-    <div class="split">
-      <div class="main col" style="gap: 16px">
-        <section aria-label="Imagens do exame" style="background: #0B0F17; border-radius: 22px; padding: 12px">
-          <div class="dimg" style="height: 340px"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt="Ecocardiograma, apical 4 câmaras (ilustrativo)"><span class="cap">A4C · imagem 14 de 38 · cine 3 s</span></div>
-          <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-top: 8px">
-            <div class="dimg" style="height: 56px"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt="PLAX"><span class="cap">PLAX</span></div>
-            <div class="dimg" style="height: 56px"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt="PSAX"><span class="cap">PSAX</span></div>
-            <div class="dimg" style="height: 56px; outline: 2px solid #3E9BDB"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt="A4C, selecionada"><span class="cap">A4C</span></div>
-            <div class="dimg" style="height: 56px"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt="A2C"><span class="cap">A2C</span></div>
-            <div class="dimg" style="height: 56px"><img src="/_blob/5d5abc0e3f9103b34da8cedf87fc15b2" alt="Doppler"><span class="cap">Doppler</span></div>
+      <section class="card pane" aria-label="Laudo" style="padding: 0">
+        <nav class="tabs tc" aria-label="Partes do laudo" style="padding: 0 8px; flex: none">
+          <sc-for list="{{abas}}" as="a" hint-placeholder-count="5"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for>
+        </nav>
+
+        <sc-if value="{{tTexto}}" hint-placeholder-val="{{ true }}">
+          <div class="scroll" style="padding: 16px; display: flex; flex-direction: column; gap: 14px">
+            <div class="row" style="gap: 8px; align-items: flex-end">
+              <label class="field grow" style="min-width: 0">Modelo<select class="in"><option>Eco transtorácico adulto, Dr. Paulo</option><option>Eco transtorácico, clínica</option></select></label>
+              <button class="btn" onClick="{{ditar}}" aria-pressed="{{ditandoAria}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg>{{ditarTxt}} <span class="kbd">F9</span></button>
+            </div>
+            <sc-if value="{{temSugestao}}" hint-placeholder-val="{{ true }}">
+              <div style="border: 1px solid #D9DDE5; border-radius: 14px; padding: 12px 14px; background: #F8FAFC">
+                <div class="t13 b" style="color: #334155">Sugestão de texto a partir das medidas, precisa da sua revisão</div>
+                <p class="t14" style="margin: 6px 0 10px; line-height: 1.5">Padrão de enchimento ventricular compatível com alteração do relaxamento (disfunção diastólica grau I), sem aumento das pressões de enchimento.</p>
+                <div class="row" style="gap: 8px"><button class="btn btn-sm" onClick="{{usarSug}}">Usar no texto</button><button class="btn btn-sm btn-g" onClick="{{descartarSug}}">Descartar</button></div>
+              </div>
+            </sc-if>
+            <label class="field" style="color: #0F172A; font-size: 14px">Análise
+              <textarea class="in" rows="6" value="{{analise}}" onChange="{{onAnalise}}" readonly="{{assinado}}"></textarea>
+            </label>
+            <div class="row wrap" style="gap: 8px" aria-label="Banco de frases">
+              <sc-for list="{{frases}}" as="f" hint-placeholder-count="4"><button class="fr" onClick="{{f.ins}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>{{f.t}}</button></sc-for>
+            </div>
+            <label class="field" style="color: #0F172A; font-size: 14px">Conclusão
+              <textarea class="in" rows="3" value="{{conclusao}}" onChange="{{onConclusao}}" readonly="{{assinado}}"></textarea>
+            </label>
           </div>
-        </section>
+        </sc-if>
 
-        <section class="card" aria-label="Editor do laudo">
-          <div class="row wrap" style="gap: 10px; margin-bottom: 16px">
-            <label class="field grow" style="min-width: 220px">Modelo<select class="in"><option>Eco transtorácico adulto — Dr. Paulo</option></select></label>
-            <button class="btn" style="align-self: flex-end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg>Ditar <span class="kbd">F9</span></button>
-          </div>
-
-          <div class="row" style="margin-bottom: 8px"><h3 style="font-size: 15px; font-weight: 600">Medidas</h3><span class="chip c-blue" style="margin-left: 8px">Do aparelho · conferir</span></div>
-          <div class="scroll-x">
-            <table class="tb">
-              <thead><tr><th>Medida</th><th class="r">Valor</th><th class="r">Referência</th><th>Situação</th></tr></thead>
+        <sc-if value="{{tMedidas}}" hint-placeholder-val="{{ false }}">
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Medida</th><th class="r">Hoje</th><th class="r">14/03/2025</th><th>Situação</th></tr></thead>
               <tbody>
-                <tr><td>Raiz da aorta</td><td class="r num">31 mm</td><td class="r num mute">20–37</td><td><span class="chip">Normal</span></td></tr>
-                <tr><td>Átrio esquerdo</td><td class="r num">36 mm</td><td class="r num mute">27–38</td><td><span class="chip">Normal</span></td></tr>
-                <tr><td>Diâm. diastólico VE</td><td class="r num">48 mm</td><td class="r num mute">38–52</td><td><span class="chip">Normal</span></td></tr>
-                <tr><td>Fração de ejeção</td><td class="r num b">66%</td><td class="r num mute">≥ 54</td><td><span class="chip">Normal</span></td></tr>
-                <tr><td>Relação E/A</td><td class="r num">0,7</td><td class="r num mute">0,8–2,0</td><td><span class="chip c-amber">Abaixo</span></td></tr>
+                <sc-for list="{{medidas}}" as="m" hint-placeholder-count="5">
+                  <tr><td><div>{{m.n}}</div><div class="t13 mute num">Referência {{m.ref}}</div></td><td class="r num b nw">{{m.v}}</td><td class="r num mute nw">{{m.ant}}</td><td><span class="{{m.cls}}">{{m.st}}</span></td></tr>
+                </sc-for>
               </tbody>
             </table>
+            <label class="row" style="gap: 10px; padding: 14px 12px; border-top: 1px solid #E8EAEF; cursor: pointer">
+              <input type="checkbox" checked="{{revisadas}}" onChange="{{tgRevisadas}}" style="width: 20px; height: 20px">
+              <span class="t14">Medidas do aparelho (Vivid E95) conferidas por mim</span>
+            </label>
           </div>
+        </sc-if>
 
-          <div style="margin-top: 16px; border: 1px dashed #B9A9EC; background: #F7F5FE; border-radius: 16px; padding: 14px">
-            <div class="row" style="gap: 8px"><span class="chip c-violet">Rascunho da IA · revisar</span><span class="t13 mute">gerado a partir das medidas, não do diagnóstico</span></div>
-            <p class="t14" style="margin: 10px 0 12px; line-height: 1.55">“Padrão de enchimento ventricular compatível com alteração do relaxamento (disfunção diastólica grau I), sem aumento das pressões de enchimento.”</p>
-            <div class="row" style="gap: 8px"><button class="btn btn-sm">Usar no texto</button><button class="btn btn-sm btn-g">Descartar</button></div>
+        <sc-if value="{{tBull}}" hint-placeholder-val="{{ false }}">
+          <div class="scroll" style="padding: 16px">
+            <div class="t14 b" style="margin-bottom: 4px">Contratilidade do VE, 17 segmentos</div>
+            <div class="row wrap" style="gap: 20px; align-items: center">
+              <svg class="bull" width="200" height="200" viewBox="0 0 220 220" role="img" aria-label="Diagrama de 17 segmentos: todos com contração normal">
+                <g fill="#CFE3F5">
+                  <path d="M58.0 19.9 A104 104 0 0 1 162.0 19.9 L146.0 47.6 A72 72 0 0 0 74.0 47.6 Z"></path>
+                  <path d="M162.0 19.9 A104 104 0 0 1 214.0 110.0 L182.0 110.0 A72 72 0 0 0 146.0 47.6 Z"></path>
+                  <path d="M214.0 110.0 A104 104 0 0 1 162.0 200.1 L146.0 172.4 A72 72 0 0 0 182.0 110.0 Z"></path>
+                  <path d="M162.0 200.1 A104 104 0 0 1 58.0 200.1 L74.0 172.4 A72 72 0 0 0 146.0 172.4 Z"></path>
+                  <path d="M58.0 200.1 A104 104 0 0 1 6.0 110.0 L38.0 110.0 A72 72 0 0 0 74.0 172.4 Z"></path>
+                  <path d="M6.0 110.0 A104 104 0 0 1 58.0 19.9 L74.0 47.6 A72 72 0 0 0 38.0 110.0 Z"></path>
+                  <path d="M74.0 47.6 A72 72 0 0 1 146.0 47.6 L132.0 71.9 A44 44 0 0 0 88.0 71.9 Z"></path>
+                  <path d="M146.0 47.6 A72 72 0 0 1 182.0 110.0 L154.0 110.0 A44 44 0 0 0 132.0 71.9 Z"></path>
+                  <path d="M182.0 110.0 A72 72 0 0 1 146.0 172.4 L132.0 148.1 A44 44 0 0 0 154.0 110.0 Z"></path>
+                  <path d="M146.0 172.4 A72 72 0 0 1 74.0 172.4 L88.0 148.1 A44 44 0 0 0 132.0 148.1 Z"></path>
+                  <path d="M74.0 172.4 A72 72 0 0 1 38.0 110.0 L66.0 110.0 A44 44 0 0 0 88.0 148.1 Z"></path>
+                  <path d="M38.0 110.0 A72 72 0 0 1 74.0 47.6 L88.0 71.9 A44 44 0 0 0 66.0 110.0 Z"></path>
+                  <path d="M78.9 78.9 A44 44 0 0 1 141.1 78.9 L122.7 97.3 A18 18 0 0 0 97.3 97.3 Z"></path>
+                  <path d="M141.1 78.9 A44 44 0 0 1 141.1 141.1 L122.7 122.7 A18 18 0 0 0 122.7 97.3 Z"></path>
+                  <path d="M141.1 141.1 A44 44 0 0 1 78.9 141.1 L97.3 122.7 A18 18 0 0 0 122.7 122.7 Z"></path>
+                  <path d="M78.9 141.1 A44 44 0 0 1 78.9 78.9 L97.3 97.3 A18 18 0 0 0 97.3 122.7 Z"></path>
+                  <circle cx="110" cy="110" r="18" stroke="#fff" stroke-width="2"></circle>
+                </g>
+                <text x="110" y="22">1</text><text x="186" y="66">2</text><text x="186" y="154">3</text><text x="110" y="198">4</text><text x="34" y="154">5</text><text x="34" y="66">6</text>
+                <text x="110" y="52">7</text><text x="160" y="81">8</text><text x="160" y="139">9</text><text x="110" y="168">10</text><text x="60" y="139">11</text><text x="60" y="81">12</text>
+                <text x="110" y="79">13</text><text x="141" y="110">14</text><text x="110" y="141">15</text><text x="79" y="110">16</text><text x="110" y="110">17</text>
+              </svg>
+              <dl class="kv" style="margin: 0; grid-template-columns: 110px auto">
+                <dt><span style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #CFE3F5; margin-right: 8px"></span>Normal</dt><dd class="num">17</dd>
+                <dt><span style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #F6C27A; margin-right: 8px"></span>Hipocinesia</dt><dd class="num">0</dd>
+                <dt><span style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #9A5B00; margin-right: 8px"></span>Acinesia</dt><dd class="num">0</dd>
+                <dt><span style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #0A1A4A; margin-right: 8px"></span>Discinesia</dt><dd class="num">0</dd>
+              </dl>
+            </div>
+            <p class="t13 mute" style="margin: 12px 0 0">Clique em um segmento para mudar a classificação.</p>
           </div>
+        </sc-if>
 
-          <label class="field" style="margin-top: 16px; color: #0F172A; font-size: 15px">Análise
-            <textarea class="in" rows="5">Cavidades cardíacas com dimensões normais. Espessura parietal do ventrículo esquerdo normal. Função sistólica global e segmentar do VE preservada. Padrão de enchimento ventricular compatível com alteração do relaxamento. Valvas com morfologia e função normais. Pericárdio sem derrame.</textarea>
-          </label>
-          <div class="row wrap" style="gap: 8px; margin-top: 10px" aria-label="Banco de frases">
-            <button class="fr">+ Função sistólica preservada</button><button class="fr">+ Disfunção diastólica grau I</button><button class="fr">+ Valvas sem alterações</button><button class="fr">+ Sem derrame pericárdico</button><button class="fr">Mais frases…</button>
+        <sc-if value="{{tAnat}}" hint-placeholder-val="{{ false }}">
+          <div class="scroll" style="padding: 12px">
+            <div class="anat" style="padding: 14px; border-radius: 16px">
+              <div style="position: relative; max-width: 320px; margin: 0 auto">
+                <img class="body" src="/_blob/440bf98f7ba26535c5586a4be32ac7c4" alt="Modelo anatômico do tronco com coração, aorta e carótidas em destaque">
+                <button class="hs" aria-label="Coração: exame atual, fração de ejeção 66%" style="left: 55.1%; top: 50%"></button>
+                <button class="hs warn" aria-label="Carótidas: Doppler de hoje, placa menor que 50% à esquerda" style="left: 51.1%; top: 32.9%"></button>
+                <div class="hs-lb" style="left: 63%; top: 52%"><b style="font-weight: 600">Coração</b><br><span class="mute">Eco hoje, FE 66%</span></div>
+                <div class="hs-lb" style="left: 3%; top: 22%"><b style="font-weight: 600; color: #C2334D">Carótidas</b><br><span class="mute">Placa &lt; 50% à esq.</span></div>
+              </div>
+              <p class="t12" style="margin: 10px 0 0; color: #AFC0DD">Modelo anatômico: BodyParts3D, DBCLS (CC BY-SA 2.1 JP)</p>
+            </div>
           </div>
-          <label class="field" style="margin-top: 16px; color: #0F172A; font-size: 15px">Conclusão
-            <textarea class="in" rows="2">Função sistólica do VE preservada (FE 66%). Disfunção diastólica grau I.</textarea>
-          </label>
-        </section>
-      </div>
+        </sc-if>
 
-      <div class="aside col" style="gap: 16px">
-        <section class="anat" aria-labelledby="m3d-h" style="padding: 18px">
-          <div class="row" style="margin-bottom: 6px; gap: 8px"><div><h2 id="m3d-h" style="font-size: 16px; font-weight: 600; color: #fff">Anatomia do exame</h2><div class="t13" style="color: #AFC0DD; margin-top: 2px">Coração, aorta e carótidas em destaque</div></div></div>
-          <div style="position: relative; max-width: 360px; margin: 0 auto">
-            <img class="body" src="/_blob/440bf98f7ba26535c5586a4be32ac7c4" alt="Modelo anatômico realista do tronco com coração, aorta e carótidas em destaque">
-            <button class="hs" aria-label="Coração: exame atual, fração de ejeção 66%" style="left: 55.1%; top: 50%"></button>
-            <button class="hs warn" aria-label="Carótidas: Doppler de hoje, placa menor que 50% à esquerda" style="left: 51.1%; top: 32.9%"></button>
-            <div class="hs-lb" style="left: 63%; top: 52%"><b style="font-weight: 600">Coração</b><br><span class="mute">Eco hoje · FE 66%</span></div>
-            <div class="hs-lb" style="left: 3%; top: 22%"><b style="font-weight: 600; color: #C2334D">Carótidas</b><br><span class="mute">Placa &lt; 50% à esq.</span></div>
+        <sc-if value="{{tConf}}" hint-placeholder-val="{{ false }}">
+          <div class="scroll" style="padding: 8px 16px">
+            <sc-for list="{{checks}}" as="c" hint-placeholder-count="4">
+              <div class="ck">
+                <sc-if value="{{c.ok}}" hint-placeholder-val="{{ true }}"><svg class="ok-i" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></sc-if>
+                <sc-if value="{{c.warn}}" hint-placeholder-val="{{ false }}"><svg class="warn-i" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 8v5M12 16.5h.01"></path><circle cx="12" cy="12" r="9"></circle></svg></sc-if>
+                <div><div>{{c.t}}</div><div class="t13 mute">{{c.s}}</div></div>
+              </div>
+            </sc-for>
           </div>
-          <div class="row wrap" style="gap: 6px; margin-top: 8px"><button class="tool">Corpo inteiro</button><button class="tool on">Cardio</button><button class="tool">Abdome</button></div>
-          <p class="t12" style="margin: 10px 0 0; color: #AFC0DD">Modelo anatômico: BodyParts3D © DBCLS (CC BY-SA 2.1 JP)</p>
-        </section>
+        </sc-if>
 
-        <section class="card" aria-labelledby="bull-h" style="padding: 18px">
-          <div class="card-h" style="margin-bottom: 8px"><div><h2 id="bull-h" style="font-size: 16px">Contratilidade do VE</h2><div class="sub">17 segmentos · clique para mudar</div></div></div>
-          <div class="row" style="gap: 14px; align-items: center">
-            <svg class="bull" width="170" height="170" viewBox="0 0 220 220" role="img" aria-label="Diagrama de 17 segmentos: todos com contração normal">
-              <g fill="#CFE3F5">
-                <path d="M58.0 19.9 A104 104 0 0 1 162.0 19.9 L146.0 47.6 A72 72 0 0 0 74.0 47.6 Z"></path>
-                <path d="M162.0 19.9 A104 104 0 0 1 214.0 110.0 L182.0 110.0 A72 72 0 0 0 146.0 47.6 Z"></path>
-                <path d="M214.0 110.0 A104 104 0 0 1 162.0 200.1 L146.0 172.4 A72 72 0 0 0 182.0 110.0 Z"></path>
-                <path d="M162.0 200.1 A104 104 0 0 1 58.0 200.1 L74.0 172.4 A72 72 0 0 0 146.0 172.4 Z"></path>
-                <path d="M58.0 200.1 A104 104 0 0 1 6.0 110.0 L38.0 110.0 A72 72 0 0 0 74.0 172.4 Z"></path>
-                <path d="M6.0 110.0 A104 104 0 0 1 58.0 19.9 L74.0 47.6 A72 72 0 0 0 38.0 110.0 Z"></path>
-                <path d="M74.0 47.6 A72 72 0 0 1 146.0 47.6 L132.0 71.9 A44 44 0 0 0 88.0 71.9 Z"></path>
-                <path d="M146.0 47.6 A72 72 0 0 1 182.0 110.0 L154.0 110.0 A44 44 0 0 0 132.0 71.9 Z"></path>
-                <path d="M182.0 110.0 A72 72 0 0 1 146.0 172.4 L132.0 148.1 A44 44 0 0 0 154.0 110.0 Z"></path>
-                <path d="M146.0 172.4 A72 72 0 0 1 74.0 172.4 L88.0 148.1 A44 44 0 0 0 132.0 148.1 Z"></path>
-                <path d="M74.0 172.4 A72 72 0 0 1 38.0 110.0 L66.0 110.0 A44 44 0 0 0 88.0 148.1 Z"></path>
-                <path d="M38.0 110.0 A72 72 0 0 1 74.0 47.6 L88.0 71.9 A44 44 0 0 0 66.0 110.0 Z"></path>
-                <path d="M78.9 78.9 A44 44 0 0 1 141.1 78.9 L122.7 97.3 A18 18 0 0 0 97.3 97.3 Z"></path>
-                <path d="M141.1 78.9 A44 44 0 0 1 141.1 141.1 L122.7 122.7 A18 18 0 0 0 122.7 97.3 Z"></path>
-                <path d="M141.1 141.1 A44 44 0 0 1 78.9 141.1 L97.3 122.7 A18 18 0 0 0 122.7 122.7 Z"></path>
-                <path d="M78.9 141.1 A44 44 0 0 1 78.9 78.9 L97.3 97.3 A18 18 0 0 0 97.3 122.7 Z"></path>
-                <circle cx="110" cy="110" r="18" stroke="#fff" stroke-width="2"></circle>
-              </g>
-              <text x="110" y="22">1</text><text x="186" y="66">2</text><text x="186" y="154">3</text><text x="110" y="198">4</text><text x="34" y="154">5</text><text x="34" y="66">6</text>
-              <text x="110" y="52">7</text><text x="160" y="81">8</text><text x="160" y="139">9</text><text x="110" y="168">10</text><text x="60" y="139">11</text><text x="60" y="81">12</text>
-              <text x="110" y="79">13</text><text x="141" y="110">14</text><text x="110" y="141">15</text><text x="79" y="110">16</text><text x="110" y="110">17</text>
-            </svg>
-            <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 13px">
-              <li class="row" style="gap: 8px"><i style="width: 14px; height: 14px; border-radius: 4px; background: #CFE3F5"></i>Normal · 17</li>
-              <li class="row" style="gap: 8px"><i style="width: 14px; height: 14px; border-radius: 4px; background: #F6C27A"></i>Hipocinesia · 0</li>
-              <li class="row" style="gap: 8px"><i style="width: 14px; height: 14px; border-radius: 4px; background: #9A5B00"></i>Acinesia · 0</li>
-              <li class="row" style="gap: 8px"><i style="width: 14px; height: 14px; border-radius: 4px; background: #0A1A4A"></i>Discinesia · 0</li>
-            </ul>
-          </div>
-        </section>
-
-        <section class="card" aria-labelledby="cmp-h" style="padding: 18px">
-          <div class="card-h" style="margin-bottom: 8px"><h2 id="cmp-h" style="font-size: 16px">Comparar com 14/03/2025</h2></div>
-          <div class="li" style="padding: 8px 0"><span class="t14 grow">Fração de ejeção</span><span class="t14 num mute">64%</span><span class="t14 num b">→ 66%</span></div>
-          <div class="li" style="padding: 8px 0"><span class="t14 grow">Diâm. diastólico VE</span><span class="t14 num mute">47</span><span class="t14 num b">→ 48 mm</span></div>
-          <div class="li" style="padding: 8px 0"><span class="t14 grow">Átrio esquerdo</span><span class="t14 num mute">35</span><span class="t14 num b">→ 36 mm</span></div>
-          <div class="sep" style="margin: 10px 0"></div>
-          <div class="ck"><span class="chip c-green" style="height: 22px">✓</span>Paciente e exame conferidos</div>
-          <div class="ck"><span class="chip c-green" style="height: 22px">✓</span>Medidas revisadas</div>
-          <div class="ck"><span class="chip c-amber" style="height: 22px">!</span>Solicitante sem e-mail: vai só ao portal</div>
-        </section>
-      </div>
+        <footer style="flex: none; padding: 12px 16px 14px; border-top: 1px solid #E8EAEF; display: flex; flex-direction: column; gap: 8px">
+          <sc-if value="{{fBase}}" hint-placeholder-val="{{ true }}">
+            <div class="grid" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+              <button class="btn btn-sm" onClick="{{salvar}}">Salvar rascunho</button>
+              <button class="btn btn-sm" onClick="{{pedirRev}}">Pedir revisão</button>
+              <a class="btn btn-sm" href="Laudo-Impresso.dc.html">Prévia impressa</a>
+            </div>
+            <sc-if value="{{revPedida}}" hint-placeholder-val="{{ false }}"><div class="t13" style="color: #0B4A75">Revisão pedida ao Dr. Marcos Freire às 09:02. O laudo segue com você até ele responder.</div></sc-if>
+            <sc-if value="{{bloqueado}}" hint-placeholder-val="{{ false }}"><div class="t13" style="color: #9A5B00">Para assinar, confira as medidas do aparelho na aba Medidas.</div></sc-if>
+            <button class="btn btn-p" disabled="{{bloqueado}}" onClick="{{pedirAssinar}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"></path><path d="M8.5 12l2.5 2.5 4.5-5"></path></svg>Assinar (ICP-Brasil) e liberar</button>
+          </sc-if>
+          <sc-if value="{{fConfirma}}" hint-placeholder-val="{{ false }}">
+            <div class="t14" style="line-height: 1.5"><b>Assinar o laudo de Sônia Maria Castro, nascida em 03/02/1962?</b> Depois de assinado o texto fica travado; correção vira versão 2 com motivo.</div>
+            <label class="field">Senha do certificado<input class="in" type="password" autocomplete="off" value="{{pin}}" onChange="{{onPin}}"></label>
+            <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+              <button class="btn btn-sm" onClick="{{cancelar}}">Voltar</button>
+              <button class="btn btn-sm btn-p" disabled="{{semPin}}" onClick="{{assinar}}">Assinar agora</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{fAssinado}}" hint-placeholder-val="{{ false }}">
+            <div class="banner ok" role="status" style="padding: 10px 12px"><div class="t14" style="line-height: 1.5"><b>Laudo assinado às 09:04, versão 1.</b> Liberado no portal e enviado ao solicitante. Para corrigir, crie a versão 2 com o motivo.</div></div>
+            <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+              <a class="btn btn-sm" href="Laudo-Impresso.dc.html">Ver laudo assinado</a>
+              <a class="btn btn-sm btn-p" href="Laudo.dc.html">Próximo da fila</a>
+            </div>
+          </sc-if>
+        </footer>
+      </section>
     </div>
 
-    <section class="card" aria-label="Ações do laudo" style="position: sticky; bottom: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; box-shadow: 0 8px 24px rgba(15,23,42,.10)">
-      <span class="t14 mute grow" style="min-width: 260px">Depois de assinado, o laudo fica travado. Correções viram versão 2, com o motivo registrado.</span>
-      <button class="btn">Salvar rascunho</button>
-      <button class="btn">Pedir revisão a um colega</button>
-      <a class="btn" href="Laudo-Impresso.dc.html">Pré-visualizar impressão</a>
-      <button class="btn btn-p"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"></path><path d="M8.5 12l2.5 2.5 4.5-5"></path></svg>Assinar (ICP-Brasil) e liberar</button>
-    </section>
-    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · textos clínicos ilustrativos, definidos pela equipe médica</p>
+    <sc-if value="{{filaAberta}}" hint-placeholder-val="{{ false }}">
+      <button class="dw-bg" onClick="{{fecharFila}}" aria-label="Fechar minha fila"></button>
+      <aside class="dw" aria-label="Minha fila de laudos">
+        <div class="row" style="padding: 16px 16px 8px; gap: 8px">
+          <h2 style="font-size: 18px; font-weight: 650; flex: 1">Minha fila</h2>
+          <button class="icon-btn" onClick="{{fecharFila}}" aria-label="Fechar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+        </div>
+        <nav class="tabs" aria-label="Filtro da fila" style="padding: 0 12px">
+          <sc-for list="{{filtros}}" as="f" hint-placeholder-count="4"><button class="{{f.cls}}" aria-current="{{f.atual}}" onClick="{{f.ir}}">{{f.t}}</button></sc-for>
+        </nav>
+        <div class="scroll" style="flex: 1 1 auto">
+          <sc-for list="{{fila}}" as="q" hint-placeholder-count="5">
+            <a class="{{q.cls}}" href="Laudo.dc.html" aria-current="{{q.atual}}">
+              <span style="flex: 1; min-width: 0"><span class="b t14" style="display: block">{{q.nome}}</span><span class="t13 mute" style="display: block">{{q.exame}}</span></span>
+              <span class="{{q.chip}}">{{q.prazo}}</span>
+            </a>
+          </sc-for>
+        </div>
+      </aside>
+    </sc-if>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1800}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = {
+      aba: 'texto', img: 2, fila: false, filtro: 'todos', sug: true, ditando: false, revisadas: true, fase: 'base', pin: '', salvo: '08:58', rev: false,
+      analise: 'Cavidades cardíacas com dimensões normais. Espessura parietal do ventrículo esquerdo normal. Função sistólica global e segmentar do VE preservada. Padrão de enchimento ventricular compatível com alteração do relaxamento. Valvas com morfologia e função normais. Pericárdio sem derrame.',
+      conclusao: 'Função sistólica do VE preservada (FE 66%). Disfunção diastólica grau I.'
+    };
+  }
+  renderVals() {
+    const s = this.state;
+    const ECO = '/_blob/06906023f41361ed5100eedae375c38d', DOP = '/_blob/5d5abc0e3f9103b34da8cedf87fc15b2';
+    const V = [['PLAX', 'Paraesternal eixo longo', ECO, 'imagem 3 de 38'], ['PSAX', 'Paraesternal eixo curto', ECO, 'imagem 9 de 38'], ['A4C', 'Apical 4 câmaras', ECO, 'imagem 14 de 38, cine 3 s'], ['A2C', 'Apical 2 câmaras', ECO, 'imagem 21 de 38'], ['Doppler', 'Doppler mitral', DOP, 'imagem 30 de 38']];
+    const cur = V[s.img];
+    const A = [['texto', 'Texto'], ['medidas', 'Medidas'], ['bull', 'Contratilidade'], ['anat', 'Anatomia'], ['conf', 'Conferência']];
+    const FR = ['Função sistólica preservada', 'Disfunção diastólica grau I', 'Valvas sem alterações', 'Sem derrame pericárdico'];
+    const add = (t) => this.setState(st => ({ analise: (st.analise.trim() + ' ' + t + '.').trim() }));
+    const Q = [
+      { nome: 'Antônio Carlos Ribeiro', exame: 'Doppler de carótidas', prazo: 'Urgente', chip: 'chip c-rose', urg: true },
+      { nome: 'Sônia Maria Castro', exame: 'Ecocardiograma, aberto agora', prazo: 'Hoje 18:00', chip: 'chip c-amber', hoje: true, atual: true },
+      { nome: 'João Pedro Alves', exame: 'Eco com Doppler', prazo: 'Hoje 19:00', chip: 'chip c-amber', hoje: true },
+      { nome: 'Eduardo Martins Vaz', exame: 'Teste ergométrico', prazo: '24 h', chip: 'chip' },
+      { nome: 'Mário José Pinto', exame: 'MAPA 24 h, internado', prazo: 'Internado', chip: 'chip c-blue', int: true },
+      { nome: 'Gustavo Henrique Pires', exame: 'Teste ergométrico', prazo: '24 h', chip: 'chip' },
+      { nome: 'Neusa Aparecida Freitas', exame: 'MAPA 24 h', prazo: '48 h', chip: 'chip' }
+    ];
+    const FL = [['todos', 'Todos', () => true], ['urg', 'Urgentes', q => q.urg], ['hoje', 'Prazo hoje', q => q.hoje], ['int', 'Internados', q => q.int]];
+    const fl = FL.find(f => f[0] === s.filtro);
+    const M = [
+      ['Raiz da aorta', '31 mm', '31 mm', '20 a 37', 'Normal', 'chip'],
+      ['Átrio esquerdo', '36 mm', '35 mm', '27 a 38', 'Normal', 'chip'],
+      ['Diâmetro diastólico do VE', '48 mm', '47 mm', '38 a 52', 'Normal', 'chip'],
+      ['Fração de ejeção', '66%', '64%', '≥ 54%', 'Normal', 'chip'],
+      ['Relação E/A', '0,7', '0,8', '0,8 a 2,0', 'Abaixo', 'chip c-amber'],
+      ['Septo interventricular', '9 mm', '9 mm', '6 a 10', 'Normal', 'chip'],
+      ['Parede posterior', '9 mm', '8 mm', '6 a 10', 'Normal', 'chip']
+    ];
+    const assinado = s.fase === 'ok';
+    return {
+      salvoTxt: assinado ? 'Assinado às 09:04' : 'Rascunho salvo às ' + s.salvo,
+      abrirFila: () => this.setState({ fila: true }), fecharFila: () => this.setState({ fila: false }),
+      filaAberta: !!s.fila, filaAria: s.fila ? 'true' : 'false',
+      img: { eco: cur[2] === ECO, dop: cur[2] === DOP, alt: 'Ecocardiograma, ' + cur[1] + ' (ilustrativo)', cap: cur[0] + ', ' + cur[3] },
+      thumbs: V.map((v, i) => ({ eco: v[2] === ECO, dop: v[2] === DOP, cap: v[0], lbl: 'Mostrar ' + v[1], on: i === s.img ? 'true' : 'false', cls: 'th' + (i === s.img ? ' on' : ''), ir: () => this.setState({ img: i }) })),
+      abas: A.map(([k, t]) => ({ t, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      tTexto: s.aba === 'texto', tMedidas: s.aba === 'medidas', tBull: s.aba === 'bull', tAnat: s.aba === 'anat', tConf: s.aba === 'conf',
+      ditar: () => this.setState({ ditando: !s.ditando }), ditarTxt: s.ditando ? 'Parar ditado' : 'Ditar', ditandoAria: s.ditando ? 'true' : 'false',
+      temSugestao: !!s.sug && !assinado,
+      usarSug: () => this.setState(st => ({ sug: false, analise: st.analise.replace('Padrão de enchimento ventricular compatível com alteração do relaxamento.', 'Padrão de enchimento ventricular compatível com alteração do relaxamento (disfunção diastólica grau I), sem aumento das pressões de enchimento.') })),
+      descartarSug: () => this.setState({ sug: false }),
+      analise: s.analise, conclusao: s.conclusao, assinado,
+      onAnalise: (e) => this.setState({ analise: e.target.value }), onConclusao: (e) => this.setState({ conclusao: e.target.value }),
+      frases: FR.map(t => ({ t, ins: () => add(t) })),
+      medidas: M.map(([n, v, ant, ref, st, cls]) => ({ n, v, ant, ref, st, cls })),
+      revisadas: !!s.revisadas, tgRevisadas: () => this.setState({ revisadas: !s.revisadas }),
+      checks: [
+        { ok: true, warn: false, t: 'Paciente e exame conferidos', s: 'Nome e nascimento conferidos pela pulseira às 08:31, Sala 1' },
+        { ok: !!s.revisadas, warn: !s.revisadas, t: 'Medidas do aparelho', s: s.revisadas ? 'Conferidas pelo Dr. Paulo Medeiros' : 'Ainda não conferidas: veja a aba Medidas' },
+        { ok: true, warn: false, t: 'Comparação com o exame anterior', s: 'Ecocardiograma de 14/03/2025 carregado' },
+        { ok: false, warn: true, t: 'Solicitante sem e-mail cadastrado', s: 'O laudo vai só ao portal do médico. Peça à recepção para completar o cadastro.' }
+      ],
+      fBase: s.fase === 'base', fConfirma: s.fase === 'conf', fAssinado: assinado,
+      bloqueado: !s.revisadas, revPedida: !!s.rev,
+      salvar: () => this.setState({ salvo: '09:01' }), pedirRev: () => this.setState({ rev: true }),
+      pedirAssinar: () => this.setState({ fase: 'conf', pin: '' }), cancelar: () => this.setState({ fase: 'base' }),
+      pin: s.pin, onPin: (e) => this.setState({ pin: e.target.value }), semPin: !(s.pin && s.pin.length >= 4),
+      assinar: () => this.setState({ fase: 'ok' }),
+      filtros: FL.map(([k, t]) => ({ t, cls: s.filtro === k ? 'on' : '', atual: s.filtro === k ? 'page' : 'false', ir: () => this.setState({ filtro: k }) })),
+      fila: Q.filter(fl[2]).map(q => ({ nome: q.nome, exame: q.exame, prazo: q.prazo, chip: q.chip, cls: 'fi' + (q.atual ? ' on' : ''), atual: q.atual ? 'page' : 'false' }))
+    };
+  }
 }
 </script>
 </body>

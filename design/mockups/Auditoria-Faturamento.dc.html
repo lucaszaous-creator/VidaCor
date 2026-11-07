@@ -4,58 +4,181 @@
 <meta charset="utf-8">
 <title>Auditoria antes do faturamento — VidaCor</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style>body{margin:0;background:#F2F3F6}
-.ck{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:12px;font-weight:700}
-.ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.warn{background:#FFF3DF;color:#9A5B00}.ck.bad{background:#FDEEF1;color:#B4233C}.ck.todo{background:#fff;border:1.5px solid #CBD2DC;color:#8A93A3}.ck.cur{background:#0A1A4A;color:#fff}
-.q{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid #F1F3F6}
-.q:last-child{border-bottom:0}
-.yn{display:inline-flex;gap:6px}.yn button{height:36px;min-width:64px;border-radius:999px;border:1px solid #D9DDE5;background:#fff;font:600 14px Inter,sans-serif;color:#334155;cursor:pointer}
-.yn button.on{background:#0A1A4A;border-color:#0A1A4A;color:#fff}
-.hint{font-size:12.5px;margin-top:4px}
-.sec-t{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5B6474;margin:22px 0 4px}
-.li2{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #F1F3F6}.li2:last-child{border-bottom:0}
-.rowsel{background:#F3F6FB}
+<style>
+body{margin:0}
+.hd h1{margin:0;font-size:24px;font-weight:650;letter-spacing:-.02em}
+.strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:12px 4px}
+.strip>div{padding:0 16px;border-left:1px solid #E8EAEF;min-width:0}
+.strip>div:first-child{border-left:0}
+.strip .v{font-size:20px;font-weight:650;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:2px}
+.ph{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid #E8EAEF;flex:none}
+.ph h2{font-size:16px;font-weight:650}
+.pf{flex:none;padding:14px 18px;border-top:1px solid #E8EAEF;display:flex;flex-direction:column;gap:8px}
+.rowp{cursor:pointer}
+.rowp:hover td{background:#F8FAFC}
+.rowp.sel td{background:#EEF4FB}
+.rowp.sel td:first-child{box-shadow:inset 3px 0 0 #0A1A4A}
+.tst{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:50;max-width:600px}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="faturamento" userName="Carla Mendes" userRole="Faturamento" userInitials="CM" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="faturamento" userName="Carla Mendes" userRole="Faturamento" userInitials="CM" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar"><h1 style="font-size:22px;font-weight:650">Auditoria antes do faturamento</h1><div class="grow"></div><div class="seg"><button class="on">Novembro · 1ª quinzena</button><button>Por operadora</button></div><button class="btn btn-p">Gerar lotes das guias aprovadas</button></div>
-    <section class="grid g4">
-      <div class="card"><div class="lbl">Guias conferidas</div><div class="big" style="margin-top:6px">214</div></div>
-      <div class="card"><div class="lbl">Prontas para enviar</div><div class="big" style="margin-top:6px;color:#1F7A4D">198</div></div>
-      <div class="card"><div class="lbl">Corrigir antes</div><div class="big" style="margin-top:6px;color:#9A5B00">12</div></div>
-      <div class="card"><div class="lbl">Bloqueadas</div><div class="big" style="margin-top:6px;color:#B4233C">4</div><div class="t13 mute" style="margin-top:6px">glosa evitada estimada R$ 3.870</div></div>
-    </section>
-    <div class="col" style="gap:16px">
-      <section class="card" style="padding:20px 8px 8px">
-        <div class="row" style="padding:0 14px 10px"><h2 style="font-size:18px;font-weight:600">O que a auditoria encontrou</h2></div>
-        <div class="scroll-x"><table class="tb"><thead><tr><th>Regra</th><th>Operadora</th><th class="r">Guias</th><th>Efeito</th><th>O que fazer</th></tr></thead><tbody><tr><td><span class="row" style="gap:10px"><span class="ck bad">!</span>Senha vencida antes da data do exame</span></td><td class="nw">Todas</td><td class="r num b">2</td><td><span class="chip c-rose">Bloqueia o envio</span></td><td>Pedir prorrogação</td></tr><tr><td><span class="row" style="gap:10px"><span class="ck bad">!</span>Procedimento executado diferente do autorizado</span></td><td class="nw">Todas</td><td class="r num b">1</td><td><span class="chip c-rose">Bloqueia o envio</span></td><td>Corrigir ou pedir nova senha</td></tr><tr><td><span class="row" style="gap:10px"><span class="ck bad">!</span>Laudo não assinado</span></td><td class="nw">Todas</td><td class="r num b">1</td><td><span class="chip c-rose">Bloqueia o envio</span></td><td>Avisar o médico</td></tr><tr><td><span class="row" style="gap:10px"><span class="ck warn">!</span>CID-10 obrigatório ausente</span></td><td class="nw">SulAmérica</td><td class="r num b">4</td><td><span class="chip c-amber">Corrigir antes</span></td><td>Preencher CID</td></tr><tr><td><span class="row" style="gap:10px"><span class="ck warn">!</span>Assinatura do beneficiário ausente na guia</span></td><td class="nw">Bradesco Saúde</td><td class="r num b">3</td><td><span class="chip c-amber">Corrigir antes</span></td><td>Coletar no próximo contato</td></tr><tr><td><span class="row" style="gap:10px"><span class="ck warn">!</span>Valor diferente da tabela vigente</span></td><td class="nw">Unimed</td><td class="r num b">2</td><td><span class="chip c-amber">Corrigir antes</span></td><td>Aplicar tabela 2026</td></tr><tr><td><span class="row" style="gap:10px"><span class="ck warn">!</span>Prazo de envio vence em 7 dias</span></td><td class="nw">Amil</td><td class="r num b">2</td><td><span class="chip c-amber">Atenção</span></td><td>Enviar no próximo lote</td></tr><tr><td><span class="row" style="gap:10px"><span class="ck ok">✓</span>Carteirinha válida, elegibilidade e senha</span></td><td class="nw">Todas</td><td class="r num b">198</td><td><span class="chip c-green">OK</span></td><td>—</td></tr></tbody></table></div>
-      </section>
-      <div class="grid g2">
-        <section class="card"><div class="t15 b">Regras por operadora</div>
-          <div class="li2"><div style="flex:1"><div class="t14 b">Unimed Costa do Sol</div><div class="t12 mute">24 regras · versão 2026.11 · revisada por Carla</div></div></div>
-          <div class="li2"><div style="flex:1"><div class="t14 b">SulAmérica</div><div class="t12 mute">19 regras · exige CID em SP/SADT</div></div></div>
-          <div class="li2"><div style="flex:1"><div class="t14 b">Bradesco Saúde</div><div class="t12 mute">17 regras · assinatura do beneficiário</div></div></div>
-          <div class="li2"><div style="flex:1"><div class="t14 b">Amil · Petrobras</div><div class="t12 mute">14 · 21 regras</div></div></div>
-          <button class="btn btn-sm" style="margin-top:8px">Editar regras (versão nova)</button>
-        </section>
-        <section class="card" style="background:#F6F8FB;box-shadow:none"><div class="t14 b">De onde vêm as regras</div><p class="t13 mute" style="margin:6px 0 0">Do manual de cada operadora, do padrão TISS e das <b>glosas que já aconteceram</b>: cada glosa recebida sugere uma regra nova para não repetir.</p></section>
+    <header class="hd row wrap" style="gap: 12px">
+      <div style="flex: 1 1 auto; min-width: 0">
+        <h1>Auditoria antes do faturamento</h1>
+        <div class="t13 mute" style="margin-top: 2px">Cada guia guarda a versão da regra que a conferiu</div>
       </div>
-    </div>
-    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios</p>
+      <label class="sr" for="per">Período</label>
+      <select id="per" class="in" style="width: 220px; min-height: 44px"><option>Novembro, 1ª quinzena</option><option>Outubro, 2ª quinzena</option></select>
+      <button class="btn btn-p" onClick="{{gerar}}" disabled="{{gerou}}">{{gerarTxt}}</button>
+    </header>
+
+    <section class="card strip" aria-label="Resumo da auditoria">
+      <div><div class="t13 mute">Guias conferidas</div><div class="v">214</div></div>
+      <div><div class="t13 mute">Prontas para enviar</div><div class="v" style="color: #1F7A4D">{{prontas}}</div></div>
+      <div><div class="t13 mute">Corrigir antes</div><div class="v" style="color: #9A5B00">{{corrigir}}</div></div>
+      <div><div class="t13 mute">Bloqueadas</div><div class="v" style="color: #C2334D">{{bloq}}</div><div class="t12 mute">glosa evitada estimada R$ 3.870,00</div></div>
+    </section>
+
+    <nav class="tabs" aria-label="Seções">
+      <sc-for list="{{abas}}" as="a" hint-placeholder-count="2"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for>
+    </nav>
+
+    <sc-if value="{{tAch}}" hint-placeholder-val="{{ true }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 16px">
+        <section class="card pane" style="padding: 0" aria-label="O que a auditoria encontrou">
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Regra</th><th>Operadora</th><th class="r nw">Guias</th><th>Efeito</th></tr></thead>
+              <tbody>
+                <sc-for list="{{achados}}" as="r" hint-placeholder-count="7">
+                  <tr class="{{r.cls}}" onClick="{{r.abrir}}" aria-selected="{{r.atual}}"><td><div class="b">{{r.t}}</div><div class="t13 mute">{{r.ver}}</div></td><td>{{r.op}}</td><td class="r num b">{{r.n}}</td><td><span class="{{r.efCls}}">{{r.ef}}</span></td></tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <aside class="card pane" style="padding: 0" aria-labelledby="h-gs">
+          <div class="ph"><div style="flex: 1; min-width: 0"><h2 id="h-gs">{{rs.t}}</h2><div class="t13 mute">{{rs.fazer}}</div></div></div>
+          <div class="scroll" style="padding: 0 18px">
+            <sc-for list="{{rs.guias}}" as="g" hint-placeholder-count="3">
+              <div class="li">
+                <div style="flex: 1; min-width: 0"><div class="t14 b">{{g.pac}}</div><div class="t13 mute num nw">{{g.nasc}}</div><div class="t13 mute num nw">Guia {{g.num}}</div><div class="t13" style="margin-top: 2px; color: #334155">{{g.det}}</div></div>
+                <sc-if value="{{g.aberto}}" hint-placeholder-val="{{ true }}"><button class="btn btn-sm" onClick="{{g.agir}}">{{g.acao}}</button></sc-if>
+                <sc-if value="{{g.feito}}" hint-placeholder-val="{{ false }}"><span class="chip c-green">{{g.feitoTxt}}</span></sc-if>
+              </div>
+            </sc-for>
+            <sc-if value="{{rs.ok}}" hint-placeholder-val="{{ false }}"><div class="state"><div class="b">199 guias passaram em todas as regras</div><div class="t13 mute">Entram no próximo lote de cada operadora.</div></div></sc-if>
+          </div>
+          <div class="pf"><a class="btn btn-sm" href="Faturamento.dc.html">Abrir no faturamento</a></div>
+        </aside>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{tReg}}" hint-placeholder-val="{{ false }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 16px">
+        <section class="card pane" style="padding: 0" aria-label="Regras por operadora">
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Operadora</th><th class="r">Regras</th><th>Versão</th><th>Revisão</th></tr></thead>
+              <tbody>
+                <sc-for list="{{ops}}" as="o" hint-placeholder-count="5">
+                  <tr class="{{o.cls}}" onClick="{{o.abrir}}" aria-selected="{{o.atual}}"><td class="b">{{o.nome}}</td><td class="r num">{{o.n}}</td><td class="num">{{o.ver}}</td><td>{{o.rev}}</td></tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+          <div class="pf" style="flex-direction: row"><span class="t13 mute">As regras vêm do manual da operadora, do padrão TISS e das glosas já recebidas: cada glosa sugere uma regra nova.</span></div>
+        </section>
+        <aside class="card pane" style="padding: 0" aria-labelledby="h-op">
+          <div class="ph"><div style="flex: 1; min-width: 0"><h2 id="h-op">{{os.nome}}</h2><div class="t13 mute num">Versão {{os.ver}}, {{os.n}} regras</div></div></div>
+          <div class="scroll" style="padding: 0 18px">
+            <sc-for list="{{os.regras}}" as="r" hint-placeholder-count="4">
+              <div class="li"><div style="flex: 1; min-width: 0"><div class="t14 b">{{r.t}}</div><div class="t13 mute">Origem: {{r.o}}</div></div><span class="{{r.cls}}">{{r.ef}}</span></div>
+            </sc-for>
+          </div>
+          <div class="pf">
+            <sc-if value="{{os.pedido}}" hint-placeholder-val="{{ false }}"><div class="t13" role="status" style="color: #0B4A75">Versão {{os.prox}} enviada às 10:50 para Patrícia Lemos aprovar. Até lá vale a {{os.ver}}.</div></sc-if>
+            <button class="btn btn-p" onClick="{{os.propor}}" disabled="{{os.pedido}}">Propor nova versão</button>
+            <span class="t12 mute">Pede sua senha de novo. Quem propõe não aprova.</span>
+          </div>
+        </aside>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{temToast}}" hint-placeholder-val="{{ false }}">
+      <div class="toast tst" role="status"><span style="flex: 1">{{toast}}</span><button onClick="{{fecharToast}}">Ok</button></div>
+    </sc-if>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1150}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = { aba: 'ach', sel: 'r1', feito: {}, op: 'uni', pedido: {}, gerou: false, toast: '' };
+  }
+  renderVals() {
+    const s = this.state;
+    const R = [
+      { id: 'r1', t: 'Senha vencida antes da data do exame', ver: 'Regra TISS v3', op: 'Todas', ef: 'Bloqueia', efCls: 'chip c-rose', b: true, fazer: 'Peça prorrogação da senha à operadora.', acao: 'Pedir prorrogação', ok: 'Pedida',
+        guias: [['Lúcia Fernandes Prado', '02/07/1959', '2026-1028-0011', 'SulAmérica, senha venceu em 30/10, exame em 31/10'], ['Rafael Monteiro Lima', '09/11/1988', '2026-1102-0040', 'Unimed, senha venceu em 01/11, exame em 02/11']] },
+      { id: 'r2', t: 'Procedimento diferente do autorizado', ver: 'Regra TISS v2', op: 'Todas', ef: 'Bloqueia', efCls: 'chip c-rose', b: true, fazer: 'Corrija o código ou peça nova senha.', acao: 'Pedir nova senha', ok: 'Pedida',
+        guias: [['Sônia Maria Castro', '03/02/1962', '2026-1103-0007', 'Autorizado USG de tireoide, executado USG de tireoide com Doppler']] },
+      { id: 'r3', t: 'Laudo não assinado', ver: 'Regra da clínica v1', op: 'Todas', ef: 'Bloqueia', efCls: 'chip c-rose', b: true, fazer: 'Avise o médico responsável pelo laudo.', acao: 'Avisar médico', ok: 'Avisado',
+        guias: [['Antônio Carlos Ribeiro', '15/06/1954', '2026-1105-0091', 'Laudo em revisão com Dr. Paulo Medeiros']] },
+      { id: 'r4', t: 'CID-10 obrigatório ausente', ver: 'SulAmérica v19', op: 'SulAmérica', ef: 'Corrigir antes', efCls: 'chip c-amber', fazer: 'Preencha o CID a partir do pedido médico.', acao: 'Preencher CID', ok: 'Preenchido',
+        guias: [['Lúcia Fernandes Prado', '02/07/1959', '2026-1101-0021', 'Pedido médico com CID R51'], ['Cláudia Bastos Nunes', '22/08/1965', '2026-1101-0033', 'Pedido sem CID legível'], ['Vera Lúcia Antunes', '18/09/1957', '2026-1104-0050', 'Pedido médico com CID I10'], ['Maria Helena Duarte', '12/03/1968', '2026-1105-0002', 'Pedido médico com CID I65']] },
+      { id: 'r5', t: 'Assinatura do beneficiário ausente', ver: 'Bradesco Saúde v17', op: 'Bradesco Saúde', ef: 'Corrigir antes', efCls: 'chip c-amber', fazer: 'Colete a assinatura no próximo contato ou pelo portal.', acao: 'Pedir assinatura', ok: 'Pedida',
+        guias: [['Juliana Sampaio Rocha', '12/04/1993', '2026-1106-0018', 'Próxima visita em 14/11'], ['Patrícia Gomes Lopes', '03/05/1991', '2026-1102-0077', 'Sem visita marcada'], ['Rafael Monteiro Lima', '09/11/1988', '2026-1103-0090', 'Assinatura pelo portal do paciente']] },
+      { id: 'r6', t: 'Valor diferente da tabela vigente', ver: 'Unimed v24', op: 'Unimed', ef: 'Corrigir antes', efCls: 'chip c-amber', fazer: 'Aplique a tabela 2026 da Unimed (versão 14).', acao: 'Aplicar tabela 2026', ok: 'Aplicada',
+        guias: [['Cláudia Bastos Nunes', '22/08/1965', '2026-1102-0012', 'Cobrado R$ 236,80, tabela atual R$ 248,60'], ['Antônio Carlos Ribeiro', '15/06/1954', '2026-1103-0031', 'Cobrado R$ 186,90, tabela atual R$ 196,20']] },
+      { id: 'r7', t: 'Prazo de envio vence em 7 dias', ver: 'Amil v14', op: 'Amil', ef: 'Atenção', efCls: 'chip c-blue', fazer: 'Inclua no próximo lote da Amil.', acao: 'Incluir no lote', ok: 'No lote',
+        guias: [['Neusa Aparecida Freitas', '05/01/1949', '2026-1104-0033', 'Envio até 14/11'], ['Paulo Roberto Dias', '11/02/1975', '2026-1101-0060', 'Envio até 14/11']] },
+      { id: 'r8', t: 'Carteirinha, elegibilidade e senha', ver: 'Todas as regras', op: 'Todas', ef: 'OK', efCls: 'chip c-green', fazer: 'Nada a fazer.', guias: [], tudoOk: true }
+    ];
+    const resolvidas = r => r.guias.filter((g, i) => s.feito[r.id + i]).length;
+    const nBloq = R.filter(r => r.b).reduce((a, r) => a + r.guias.length - resolvidas(r), 0);
+    const nCorr = R.filter(r => !r.b && !r.tudoOk && r.efCls !== 'chip c-blue').reduce((a, r) => a + r.guias.length - resolvidas(r), 0);
+    const cur = R.find(r => r.id === s.sel) || R[0];
+    const O = [
+      { id: 'uni', nome: 'Unimed Costa do Sol', n: 24, ver: '2026.11', prox: '2026.12', rev: 'Carla Mendes, 02/11',
+        regras: [['Valor igual à tabela do contrato vigente', 'manual do prestador', 'Corrigir antes', 'chip c-amber'], ['Ecocardiograma com estresse exige senha', 'manual do prestador', 'Bloqueia', 'chip c-rose'], ['No máximo 2 USG do mesmo tipo por mês', 'glosa 1714 recebida em 2025', 'Pede revisão', 'chip c-blue'], ['Carteirinha válida na data do exame', 'padrão TISS', 'Bloqueia', 'chip c-rose']] },
+      { id: 'sul', nome: 'SulAmérica', n: 19, ver: '2026.10', prox: '2026.11', rev: 'Marcos Teixeira, 14/10',
+        regras: [['CID-10 obrigatório em SP/SADT', 'manual do prestador', 'Corrigir antes', 'chip c-amber'], ['Todo exame com contraste exige senha', 'manual do prestador', 'Bloqueia', 'chip c-rose'], ['Relatório clínico anexo em tomografia', 'glosa 1801 recebida em 2026', 'Corrigir antes', 'chip c-amber']] },
+      { id: 'bra', nome: 'Bradesco Saúde', n: 17, ver: '2026.09', prox: '2026.10', rev: 'Carla Mendes, 20/09',
+        regras: [['Assinatura do beneficiário na guia', 'manual do prestador', 'Corrigir antes', 'chip c-amber'], ['Morfológica exige senha', 'manual do prestador', 'Bloqueia', 'chip c-rose']] },
+      { id: 'ami', nome: 'Amil', n: 14, ver: '2026.08', prox: '2026.09', rev: 'Marcos Teixeira, 30/08',
+        regras: [['Envio em até 30 dias do atendimento', 'contrato', 'Atenção', 'chip c-blue'], ['Ecocardiograma exige senha', 'glosa 1801 recebida em 2026', 'Bloqueia', 'chip c-rose']] },
+      { id: 'pet', nome: 'Petrobras (AMS)', n: 21, ver: '2026.07', prox: '2026.08', rev: 'Patrícia Lemos, 15/07',
+        regras: [['Ergométrico e MAPA exigem senha', 'manual da AMS', 'Bloqueia', 'chip c-rose'], ['Protocolo do portal anexado ao lote', 'regra da clínica', 'Corrigir antes', 'chip c-amber']] }
+    ];
+    const oc = O.find(o => o.id === s.op) || O[0];
+    return {
+      gerar: () => this.setState({ gerou: true, toast: 'Lotes gerados às 10:52 para 5 operadoras com ' + (199) + ' guias. A validação no schema já começou; acompanhe em Faturamento.' }),
+      gerou: s.gerou, gerarTxt: s.gerou ? 'Lotes gerados' : 'Gerar lotes das aprovadas',
+      prontas: String(199), corrigir: String(nCorr), bloq: String(nBloq),
+      abas: [['ach', 'O que a auditoria encontrou'], ['reg', 'Regras por operadora']].map(([k, t]) => ({ t, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      tAch: s.aba === 'ach', tReg: s.aba === 'reg',
+      achados: R.map(r => ({ t: r.t, ver: r.ver, op: r.op, ef: r.ef, efCls: r.efCls, n: r.tudoOk ? '199' : String(r.guias.length - resolvidas(r)),
+        cls: 'rowp' + (r.id === cur.id ? ' sel' : ''), atual: r.id === cur.id ? 'true' : 'false', abrir: () => this.setState({ sel: r.id }) })),
+      rs: { t: cur.t, fazer: cur.fazer, ok: !!cur.tudoOk,
+        guias: cur.guias.map((g, i) => { const k = cur.id + i; const f = !!s.feito[k];
+          return { pac: g[0], nasc: g[1], num: g[2], det: g[3], acao: cur.acao, aberto: !f, feito: f, feitoTxt: cur.ok, agir: () => this.setState(st => ({ feito: Object.assign({}, st.feito, { [k]: true }) })) }; }) },
+      ops: O.map(o => ({ nome: o.nome, n: String(o.n), ver: o.ver, rev: o.rev, cls: 'rowp' + (o.id === oc.id ? ' sel' : ''), atual: o.id === oc.id ? 'true' : 'false', abrir: () => this.setState({ op: o.id }) })),
+      os: { nome: oc.nome, ver: oc.ver, prox: oc.prox, n: String(oc.n), pedido: !!s.pedido[oc.id],
+        regras: oc.regras.map(r => ({ t: r[0], o: r[1], ef: r[2], cls: r[3] })),
+        propor: () => this.setState(st => ({ pedido: Object.assign({}, st.pedido, { [oc.id]: true }) })) },
+      temToast: s.toast !== '', toast: s.toast, fecharToast: () => this.setState({ toast: '' })
+    };
+  }
 }
 </script>
 </body>

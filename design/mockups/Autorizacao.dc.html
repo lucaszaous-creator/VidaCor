@@ -4,53 +4,173 @@
 <meta charset="utf-8">
 <title>Autorizações — VidaCor</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style>body{margin:0;background:#F2F3F6}
-.ck{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:12px;font-weight:700}
-.ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.warn{background:#FFF3DF;color:#9A5B00}.ck.bad{background:#FDEEF1;color:#B4233C}.ck.todo{background:#fff;border:1.5px solid #CBD2DC;color:#8A93A3}.ck.cur{background:#0A1A4A;color:#fff}
-.q{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid #F1F3F6}
-.q:last-child{border-bottom:0}
-.yn{display:inline-flex;gap:6px}.yn button{height:36px;min-width:64px;border-radius:999px;border:1px solid #D9DDE5;background:#fff;font:600 14px Inter,sans-serif;color:#334155;cursor:pointer}
-.yn button.on{background:#0A1A4A;border-color:#0A1A4A;color:#fff}
-.hint{font-size:12.5px;margin-top:4px}
-.sec-t{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5B6474;margin:22px 0 4px}
-.li2{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #F1F3F6}.li2:last-child{border-bottom:0}
-.rowsel{background:#F3F6FB}
+<style>
+body{margin:0}
+.hd h1{margin:0;font-size:24px;font-weight:650;letter-spacing:-.02em}
+.strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:12px 4px}
+.strip>div{padding:0 16px;border-left:1px solid #E8EAEF;min-width:0}
+.strip>div:first-child{border-left:0}
+.strip .v{font-size:20px;font-weight:650;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:2px}
+.pf{flex:none;padding:14px 18px;border-top:1px solid #E8EAEF;display:flex;flex-direction:column;gap:8px}
+.rowp{cursor:pointer}
+.rowp:hover td{background:#F8FAFC}
+.rowp.sel td{background:#EEF4FB}
+.rowp.sel td:first-child{box-shadow:inset 3px 0 0 #0A1A4A}
+.tl{display:flex;gap:12px;align-items:flex-start;padding:9px 0}
+.tl svg{flex:none;margin-top:1px}
+.sub-h{font-size:14px;font-weight:650;margin:4px 0 0}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="faturamento" userName="Carla Mendes" userRole="Faturamento" userInitials="CM" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="faturamento" userName="Carla Mendes" userRole="Faturamento" userInitials="CM" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar"><h1 style="font-size:22px;font-weight:650">Autorizações</h1><div class="grow"></div><button class="btn btn-p">Nova solicitação</button></div>
-    <div class="row wrap t14 mute" style="gap:24px;padding:0 8px"><span><b style="color:#0F172A">18</b> em andamento</span><span><b style="color:#1F7A4D">41</b> autorizadas na semana</span><span><b style="color:#9A5B00">3</b> pendentes de documento</span><span><b style="color:#B4233C">2</b> negadas</span><span>tempo médio <b style="color:#0F172A">1 h 35</b></span></div>
-    <div class="col" style="gap:16px">
-      <section class="card" style="padding:20px 8px 8px">
-        <div class="row" style="padding:0 14px 10px"><h2 style="font-size:18px;font-weight:600">Fila de autorizações</h2><div class="grow"></div><div class="seg"><button class="on btn-sm" style="height:36px">Todas</button><button style="height:36px">Pendentes</button><button style="height:36px">Negadas</button></div></div>
-        <div class="scroll-x"><table class="tb"><thead><tr><th>Operadora</th><th>Paciente</th><th>Exame</th><th>Situação</th></tr></thead><tbody><tr class="rowsel"><td class="nw"><b>Unimed</b></td><td class="nw">Antônio C. Ribeiro</td><td>Eco + Doppler carótidas</td><td><span class="row" style="gap:8px"><span class="ck ok">✓</span>Autorizada · senha UN-88231-X</span></td></tr><tr class=""><td class="nw"><b>SulAmérica</b></td><td class="nw">Lúcia F. Prado</td><td>TC crânio c/ contraste</td><td><span class="row" style="gap:8px"><span class="ck cur"></span>Em análise · 6 h</span></td></tr><tr class=""><td class="nw"><b>Bradesco Saúde</b></td><td class="nw">Juliana S. Rocha</td><td>USG morfológica</td><td><span class="row" style="gap:8px"><span class="ck warn">!</span>Pendente: pedir relatório</span></td></tr><tr class=""><td class="nw"><b>Amil</b></td><td class="nw">Paulo R. Dias</td><td>Eco transtorácico</td><td><span class="row" style="gap:8px"><span class="ck bad">!</span>Negada · fora da cobertura</span></td></tr><tr class=""><td class="nw"><b>Petrobras</b></td><td class="nw">Marta L. Siqueira</td><td>Doppler venoso MMII</td><td><span class="row" style="gap:8px"><span class="ck todo"></span>Enviada pelo portal (manual)</span></td></tr></tbody></table></div>
-        <div style="margin:14px;padding:14px 16px;border-radius:12px;background:#F6F8FB" class="t13 mute">Operadoras com integração (webservice TISS) recebem e respondem automaticamente. Para as demais, o sistema monta o pedido, a equipe envia pelo portal da operadora e registra a resposta: a solicitação fica rastreada do mesmo jeito.</div>
+    <header class="hd row wrap" style="gap: 12px">
+      <div style="flex: 1 1 auto; min-width: 0">
+        <h1>Autorizações</h1>
+        <div class="t13 mute" style="margin-top: 2px">Pedidos de senha às operadoras, montados a partir do agendamento</div>
+      </div>
+      <label class="search" style="flex: 0 1 360px; min-height: 44px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar solicitação</span><input type="search" placeholder="Paciente, protocolo ou senha" value="{{q}}" onChange="{{onQ}}"></label>
+      <a class="btn btn-p" href="Agendamento-Guia.dc.html">Nova solicitação</a>
+    </header>
+
+    <section class="card strip" aria-label="Resumo da semana">
+      <div><div class="t13 mute">Em andamento</div><div class="v">18</div></div>
+      <div><div class="t13 mute">Autorizadas na semana</div><div class="v" style="color: #1F7A4D">41</div></div>
+      <div><div class="t13 mute">Pendentes de documento</div><div class="v" style="color: #9A5B00">3</div></div>
+      <div><div class="t13 mute">Negadas</div><div class="v" style="color: #C2334D">2</div></div>
+      <div><div class="t13 mute">Tempo médio de resposta</div><div class="v">1 h 35</div></div>
+    </section>
+
+    <nav class="tabs" aria-label="Filtrar por situação">
+      <sc-for list="{{abas}}" as="a" hint-placeholder-count="5"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}} <span class="mute" style="font-weight: 500">{{a.n}}</span></button></sc-for>
+    </nav>
+
+    <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 16px">
+      <section class="card pane" style="padding: 0" aria-label="Fila de autorizações">
+        <div class="scroll">
+          <table class="tb sticky">
+            <thead><tr><th>Paciente</th><th>Operadora e exame</th><th>Situação</th></tr></thead>
+            <tbody>
+              <sc-for list="{{lista}}" as="r" hint-placeholder-count="6">
+                <tr class="{{r.cls}}" onClick="{{r.abrir}}" aria-selected="{{r.atual}}">
+                  <td><div class="b">{{r.nome}}</div><div class="t13 mute num">{{r.nasc}}</div></td>
+                  <td><div>{{r.op}}</div><div class="t13 mute">{{r.ex}}</div></td>
+                  <td><span class="{{r.stCls}}">{{r.st}}</span><div class="t13 mute" style="margin-top: 4px">{{r.det}}</div></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+          <sc-if value="{{vazio}}" hint-placeholder-val="{{ false }}"><div class="state"><div class="b">Nenhuma solicitação aqui</div><div class="t13 mute">Mude o filtro ou confira a busca.</div></div></sc-if>
+        </div>
+        <div class="pf" style="flex-direction: row"><span class="t13 mute">Operadoras sem webservice: o pedido é enviado pelo portal e a resposta é registrada aqui, com o mesmo rastro.</span></div>
       </section>
-      <div class="grid g2">
-        <section class="card">
-          <div class="lbl">Unimed · Antônio Carlos Ribeiro · 15/06/1954</div>
-          <h2 style="font-size:18px;font-weight:650;margin-top:6px">Autorizada</h2>
-          <div style="margin-top:8px"><div class="li2"><span class="ck ok">✓</span><div style="flex:1"><div class="t14 b">Solicitação montada</div><div class="t12 mute">Do agendamento: carteirinha, TUSS 40901114 e 40901300, CID I10, pedido anexado</div></div><span class="t12 mute num">05/11 16:05</span></div><div class="li2"><span class="ck ok">✓</span><div style="flex:1"><div class="t14 b">Enviada à Unimed</div><div class="t12 mute">Webservice TISS · solicitação SP/SADT · protocolo 1180-77231</div></div><span class="t12 mute num">05/11 16:05</span></div><div class="li2"><span class="ck ok">✓</span><div style="flex:1"><div class="t14 b">Em análise</div><div class="t12 mute">Operadora recebeu</div></div><span class="t12 mute num">05/11 16:06</span></div><div class="li2"><span class="ck ok">✓</span><div style="flex:1"><div class="t14 b">Autorizada</div><div class="t12 mute">Senha UN-88231-X · válida até 20/11 · 1 de cada procedimento</div></div><span class="t12 mute num">05/11 17:40</span></div><div class="li2"><span class="ck ok">✓</span><div style="flex:1"><div class="t14 b">Guia preenchida no agendamento</div><div class="t12 mute">Sem digitação: dados vieram da resposta</div></div><span class="t12 mute num">05/11 17:40</span></div></div>
-          <div class="row wrap" style="gap:8px;margin-top:12px"><a class="btn btn-sm" href="Agendamento-Guia.dc.html">Abrir agendamento</a><a class="btn btn-sm" href="Lastro.dc.html">Ver lastro</a></div>
-        </section>
-        <section class="card" style="background:#F6F8FB;box-shadow:none"><div class="t14 b">Negada ou pendente</div><p class="t13 mute" style="margin:6px 0 0">Negativa traz o motivo da operadora e as saídas: recurso, particular com orçamento ou remarcação. Pendência de documento avisa o paciente pelo WhatsApp com o que falta.</p></section>
+
+      <aside class="card pane" style="padding: 0" aria-label="Detalhe da solicitação">
+        <div class="scroll" style="padding: 18px; display: flex; flex-direction: column; gap: 14px">
+          <div>
+            <div style="font-size: 18px; font-weight: 650">{{d.nome}}</div>
+            <div class="t14 num" style="color: #334155">{{d.nasc}}</div>
+          </div>
+          <span class="{{d.stCls}}" style="align-self: flex-start">{{d.st}}</span>
+          <dl class="kv" style="margin: 0">
+            <dt>Operadora</dt><dd>{{d.op}}</dd>
+            <dt>Exame</dt><dd>{{d.ex}}</dd>
+            <dt>TUSS</dt><dd class="num">{{d.tuss}}</dd>
+            <dt>Canal</dt><dd>{{d.canal}}</dd>
+            <dt>Protocolo</dt><dd class="num">{{d.prot}}</dd>
+          </dl>
+          <sc-if value="{{d.temAlerta}}" hint-placeholder-val="{{ false }}"><div class="banner err" style="padding: 10px 12px"><div class="t13" style="line-height: 1.5">{{d.alerta}}</div></div></sc-if>
+          <h3 class="sub-h">Andamento</h3>
+          <div>
+            <sc-for list="{{d.passos}}" as="p" hint-placeholder-count="4">
+              <div class="tl">
+                <sc-if value="{{p.ok}}" hint-placeholder-val="{{ true }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F7A4D" stroke-width="2.2" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></sc-if>
+                <sc-if value="{{p.cur}}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6" fill="#0A1A4A"></circle></svg></sc-if>
+                <sc-if value="{{p.bad}}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C2334D" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6M12 16.5v.5"></path></svg></sc-if>
+                <div style="flex: 1; min-width: 0"><div class="t14 b">{{p.t}}</div><div class="t13 mute">{{p.s}}</div></div>
+                <span class="t12 mute num nw">{{p.h}}</span>
+              </div>
+            </sc-for>
+          </div>
+          <sc-if value="{{d.portal}}" hint-placeholder-val="{{ false }}">
+            <div class="col" style="gap: 10px">
+              <h3 class="sub-h">Resposta do portal</h3>
+              <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+                <label class="field">Senha<input class="in num" value="PB-10377"></label>
+                <label class="field">Válida até<input class="in num" value="06/12/2026"></label>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+        <div class="pf">
+          <sc-if value="{{d.temMsg}}" hint-placeholder-val="{{ false }}"><div class="t13" role="status" style="color: #14532D">{{d.msg}}</div></sc-if>
+          <sc-if value="{{d.temAcao}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p" onClick="{{d.agir}}">{{d.acao}}</button></sc-if>
+          <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+            <a class="btn btn-sm" href="{{d.href2}}">{{d.acao2}}</a>
+            <a class="btn btn-sm" href="Lastro.dc.html">Ver lastro</a>
+          </div>
+        </div>
       </aside>
     </div>
-    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios</p>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1200}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = { f: 'todas', q: '', sel: 'a2', x: {} };
+  }
+  renderVals() {
+    const s = this.state;
+    const ok = (t, sub, h) => ({ ok: true, cur: false, bad: false, t, s: sub, h });
+    const cur = (t, sub, h) => ({ ok: false, cur: true, bad: false, t, s: sub, h });
+    const bad = (t, sub, h) => ({ ok: false, cur: false, bad: true, t, s: sub, h });
+    const R = [
+      { id: 'a1', nome: 'Antônio Carlos Ribeiro', nasc: '15/06/1954', op: 'Unimed', ex: 'Ecocardiograma e Doppler de carótidas', tuss: '40901114, 40901238', canal: 'Webservice TISS', prot: '1180-77231', f: 'aut', st: 'Autorizada', stCls: 'chip c-green', det: 'Senha UN-88231-X',
+        passos: [ok('Solicitação montada', 'Carteirinha, TUSS, CID I10 e pedido anexado, vindos do agendamento', '05/11 16:05'), ok('Enviada à Unimed', 'Solicitação SP/SADT', '05/11 16:05'), ok('Autorizada', 'Senha UN-88231-X, válida até 20/11, 1 de cada procedimento', '05/11 17:40'), ok('Guia preenchida no agendamento', 'Dados vieram da resposta, sem digitação', '05/11 17:40')],
+        acao2: 'Abrir agendamento', href2: 'Agendamento-Guia.dc.html' },
+      { id: 'a2', nome: 'Lúcia Fernandes Prado', nasc: '02/07/1959', op: 'SulAmérica', ex: 'TC de crânio com contraste', tuss: '41001052', canal: 'Webservice TISS', prot: '5541-00982', f: 'ana', st: 'Em análise', stCls: 'chip c-blue', det: 'Há 6 h',
+        alerta: 'Alergia a iodo no cadastro. A triagem de contraste precisa ser feita antes do exame; a autorização não substitui a avaliação médica.',
+        passos: [ok('Solicitação montada', 'Pedido com CID R51 e relatório clínico', '07/11 04:12'), ok('Enviada à SulAmérica', 'Solicitação SP/SADT', '07/11 04:12'), cur('Em análise na operadora', 'Última consulta às 10:05, sem resposta', '07/11 10:05')],
+        acao: 'Consultar operadora agora', msgOk: 'Consultado às 10:31. A SulAmérica segue analisando; nova consulta automática às 11:00.', acao2: 'Abrir triagem', href2: 'Triagem.dc.html' },
+      { id: 'a3', nome: 'Juliana Sampaio Rocha', nasc: '12/04/1993', op: 'Bradesco Saúde', ex: 'USG morfológica do 2º trimestre', tuss: '40901300', canal: 'Webservice TISS', prot: '7720-11450', f: 'pend', st: 'Pendente de documento', stCls: 'chip c-amber', det: 'Operadora pede relatório médico',
+        passos: [ok('Solicitação montada', 'Pedido com idade gestacional de 21 semanas', '06/11 09:20'), ok('Enviada ao Bradesco Saúde', 'Solicitação SP/SADT', '06/11 09:20'), bad('Pendência da operadora', 'Pede relatório médico justificando o exame', '06/11 15:02')],
+        acao: 'Avisar paciente pelo WhatsApp', msgOk: 'Mensagem enviada às 10:31 com a lista do que falta. A resposta da paciente chega no WhatsApp da recepção.', acao2: 'Anexar documento', href2: 'Agendamento-Guia.dc.html' },
+      { id: 'a4', nome: 'Paulo Roberto Dias', nasc: '11/02/1975', op: 'Amil', ex: 'Ecocardiograma transtorácico', tuss: '40901114', canal: 'Portal da operadora', prot: 'AM-55120', f: 'neg', st: 'Negada', stCls: 'chip c-rose', det: 'Fora da cobertura do plano',
+        passos: [ok('Solicitação montada', 'Pedido com CID I49', '05/11 11:00'), ok('Enviada pelo portal', 'Por Carla Mendes, protocolo anexado', '05/11 11:12'), bad('Negada', 'Motivo da operadora: procedimento fora da cobertura do plano S380', '06/11 08:40')],
+        acao: 'Recorrer da negativa', msgOk: 'Recurso aberto às 10:31 com o relatório do Dr. Paulo Medeiros. Prazo de resposta: 5 dias úteis.', acao2: 'Fazer orçamento particular', href2: 'Orcamento.dc.html' },
+      { id: 'a5', nome: 'Marta Lúcia Siqueira', nasc: '23/08/1963', op: 'Petrobras', ex: 'Doppler venoso de membros inferiores', tuss: '40901262', canal: 'Portal da operadora', prot: 'PB-2026-8812', f: 'ana', st: 'Enviada pelo portal', stCls: 'chip', det: 'Aguardando registro da resposta', portal: true,
+        passos: [ok('Solicitação montada', 'Pedido médico e carteirinha AMS', '06/11 14:30'), ok('Enviada pelo portal', 'Por Carla Mendes, print anexado', '06/11 14:41'), cur('Registrar a resposta', 'Copie a senha que aparece no portal da Petrobras', '')],
+        acao: 'Registrar resposta', msgOk: 'Senha PB-10377 registrada às 10:31 por Carla Mendes. A guia do agendamento foi preenchida.', acao2: 'Abrir agendamento', href2: 'Agendamento-Guia.dc.html' },
+      { id: 'a6', nome: 'Vera Lúcia Antunes', nasc: '18/09/1957', op: 'Unimed', ex: 'Ecocardiograma transtorácico', tuss: '40901114', canal: 'Webservice TISS', prot: '1180-77302', f: 'aut', st: 'Autorizada', stCls: 'chip c-green', det: 'Senha UN-88412-K',
+        passos: [ok('Solicitação montada', 'Do agendamento de 07/11', '06/11 18:02'), ok('Enviada à Unimed', 'Solicitação SP/SADT', '06/11 18:02'), ok('Autorizada', 'Senha UN-88412-K, válida até 06/12', '06/11 18:09')],
+        acao2: 'Abrir agendamento', href2: 'Agendamento-Guia.dc.html' }
+    ];
+    const eff = r => (r.id === 'a5' && s.x.a5) ? Object.assign({}, r, { st: 'Autorizada', stCls: 'chip c-green', det: 'Senha PB-10377', f: 'aut' }) : r;
+    const A = [['todas', 'Todas'], ['ana', 'Em análise'], ['pend', 'Pendentes'], ['neg', 'Negadas'], ['aut', 'Autorizadas']];
+    const q = s.q.trim().toLowerCase();
+    const lista = R.map(eff).filter(r => (s.f === 'todas' || r.f === s.f) && (!q || (r.nome + ' ' + r.prot + ' ' + r.det).toLowerCase().indexOf(q) >= 0));
+    const sel = R.find(r => r.id === s.sel) || R[0];
+    const feito = !!s.x[sel.id];
+    const dd = Object.assign({}, sel, { temAlerta: !!sel.alerta, alerta: sel.alerta || '', portal: !!sel.portal && !feito,
+      temAcao: !!sel.acao && !feito, acao: sel.acao || '', temMsg: feito, msg: sel.msgOk || '',
+      agir: () => this.setState(st => ({ x: Object.assign({}, st.x, { [sel.id]: true }) })) });
+    if (sel.id === 'a5' && feito) Object.assign(dd, { st: 'Autorizada', stCls: 'chip c-green', passos: sel.passos.slice(0, 2).concat([ok('Autorizada', 'Senha PB-10377, válida até 06/12, registrada por Carla Mendes', '07/11 10:31')]) });
+    return {
+      q: s.q, onQ: e => this.setState({ q: e.target.value }),
+      abas: A.map(([k, t]) => ({ t, n: k === 'todas' ? '' : String(R.map(eff).filter(r => r.f === k).length), cls: s.f === k ? 'on' : '', atual: s.f === k ? 'page' : 'false', ir: () => this.setState({ f: k }) })),
+      lista: lista.map(r => Object.assign({}, r, { cls: 'rowp' + (r.id === sel.id ? ' sel' : ''), atual: r.id === sel.id ? 'true' : 'false', abrir: () => this.setState({ sel: r.id }) })),
+      vazio: lista.length === 0,
+      d: dd
+    };
+  }
 }
 </script>
 </body>

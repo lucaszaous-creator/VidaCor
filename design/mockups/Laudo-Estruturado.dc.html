@@ -4,57 +4,218 @@
 <meta charset="utf-8">
 <title>Laudo estruturado — VidaCor</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style>body{margin:0;background:#F2F3F6}
-.ck{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:12px;font-weight:700}
-.ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.warn{background:#FFF3DF;color:#9A5B00}.ck.bad{background:#FDEEF1;color:#B4233C}.ck.todo{background:#fff;border:1.5px solid #CBD2DC;color:#8A93A3}.ck.cur{background:#0A1A4A;color:#fff}
-.q{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid #F1F3F6}
-.q:last-child{border-bottom:0}
-.yn{display:inline-flex;gap:6px}.yn button{height:36px;min-width:64px;border-radius:999px;border:1px solid #D9DDE5;background:#fff;font:600 14px Inter,sans-serif;color:#334155;cursor:pointer}
-.yn button.on{background:#0A1A4A;border-color:#0A1A4A;color:#fff}
-.hint{font-size:12.5px;margin-top:4px}
-.sec-t{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5B6474;margin:22px 0 4px}
-.li2{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #F1F3F6}.li2:last-child{border-bottom:0}
-.rowsel{background:#F3F6FB}
+<style>
+body{margin:0;background:#F2F3F6}
+.opt{height:32px;padding:0 10px;border-radius:8px;border:1px solid #D9DDE5;background:#fff;font:500 13px Inter,sans-serif;color:#334155;cursor:pointer}
+.opt.on{background:#0A1A4A;border-color:#0A1A4A;color:#fff;font-weight:600}
+.grp{display:grid;grid-template-columns:120px minmax(0,1fr);gap:8px 12px;align-items:start;padding:10px 0;border-bottom:1px solid #F1F3F6}
+.grp:last-child{border-bottom:0}
+.grp .gl{font-size:14px;color:#5B6474;padding-top:6px}
+.rowp{cursor:pointer}
+.rowp:hover td{background:#F8FAFC}
+.rowp.sel td{background:#EEF4FB}
+.rowp.sel td:first-child{box-shadow:inset 3px 0 0 #0A1A4A}
+.ov{position:absolute;font-size:12px;line-height:1.5;color:#E3E9F2;text-shadow:0 1px 2px #000;font-variant-numeric:tabular-nums}
+.res{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;padding:12px 14px;border-radius:14px;background:#F6F7F9}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="laudos" userName="Dr. Marcos Freire" userRole="USG e Doppler" userInitials="MF" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="laudos" userName="Dr. Marcos Freire" userRole="USG e Doppler" userInitials="MF" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar"><a class="t14 b" href="Laudo.dc.html">← Laudar</a><h1 style="font-size:22px;font-weight:650;margin-left:12px">Laudo estruturado</h1><div class="grow"></div><div class="seg"><button class="on">TI-RADS</button><button>BI-RADS</button><button>O-RADS</button><button>Lung-RADS</button><button>Bosniak</button><button>Obstetrícia</button></div></div>
-    <section class="card row wrap" style="gap: 16px; padding: 18px 22px">
-      <span class="av av-lg" style="background: #FDEEF1; color: #C2334D">RC</span>
-      <div style="flex: 1 1 300px; min-width: 0"><h1 style="font-size: 22px; font-weight: 650">Rita Carvalho Barbosa</h1><div class="t15 mute" style="margin-top: 3px">14/08/1974 · 52 anos · F · USG de tireoide · Dr. Marcos Freire</div></div>
-      
-    </section>
-    <section class="card" style="padding:20px 8px 8px">
-      <div class="row" style="padding:0 14px 10px"><h2 style="font-size:18px;font-weight:600">Nódulos (ACR TI-RADS)</h2><div class="grow"></div><button class="btn btn-sm">+ Nódulo</button><button class="btn btn-sm">Medidas do aparelho</button></div>
-      <div class="scroll-x"><table class="tb"><thead><tr><th>#</th><th>Localização</th><th>Medidas</th><th>Características (pontos)</th><th class="r">Pontos</th><th>Categoria</th><th>Conduta</th></tr></thead><tbody><tr class="rowsel"><td><b>N1</b></td><td>Lobo direito, terço médio</td><td class="num nw">1,8 × 1,2 × 1,1 cm</td><td class="t13">Sólido (2) · Hipoecoico (2) · Mais largo que alto (0) · Lisas (0) · Nenhum (0)</td><td class="r num b">4</td><td><span class="chip c-amber">TR4 · moderadamente suspeito</span></td><td>PAAF (≥ 1,5 cm)</td></tr><tr class=""><td><b>N2</b></td><td>Lobo esquerdo, polo inferior</td><td class="num nw">0,6 × 0,5 × 0,4 cm</td><td class="t13">Espongiforme (0)</td><td class="r num b">0</td><td><span class="chip c-green">TR1 · benigno</span></td><td>Sem seguimento</td></tr></tbody></table></div>
-    </section>
-    <div class="split">
-      <section class="card main" style="padding:22px 28px">
-        <div class="lbl">Texto gerado para o laudo (editável)</div>
-        <p class="t15" style="line-height:1.7;margin:12px 0 0">Tireoide de dimensões normais, contornos regulares e ecotextura homogênea. No terço médio do lobo direito, nódulo sólido, hipoecoico, mais largo que alto, de margens lisas, sem focos ecogênicos, medindo 1,8 × 1,2 × 1,1 cm (<b>ACR TI-RADS 4</b>). No polo inferior do lobo esquerdo, nódulo espongiforme de 0,6 cm (<b>TI-RADS 1</b>).</p>
-        <p class="t15" style="line-height:1.7;margin:12px 0 0"><b>Conclusão:</b> nódulo TI-RADS 4 no lobo direito com indicação de punção aspirativa por agulha fina (≥ 1,5 cm), a critério clínico.</p>
+    <header class="row" style="gap: 12px">
+      <a class="icon-btn" href="Laudo.dc.html" aria-label="Voltar para Laudar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+      <div style="flex: 1 1 auto; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Laudo estruturado</h1>
+        <div class="t13 mute" style="margin-top: 2px">USG de tireoide, protocolo 2026-118802</div>
+      </div>
+      <label class="row t14" style="gap: 8px; color: #5B6474">Classificação
+        <select class="in" style="width: auto; min-height: 40px" onChange="{{onSis}}" aria-label="Sistema de classificação">
+          <sc-for list="{{sistemas}}" as="o" hint-placeholder-count="6"><option value="{{o.k}}" selected="{{o.sel}}">{{o.t}}</option></sc-for>
+        </select>
+      </label>
+    </header>
+
+    <dc-import name="Barra-Paciente" ini="RC" nome="Rita Carvalho Barbosa" nasc="14/08/1974" idade="52 anos" sexo="feminino" convenio="Bradesco Saúde" exame="USG de tireoide" local="Sala 3" alergia="" alertas="" conferida="09:05" hint-size="100%,84px"></dc-import>
+
+    <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(420px, 1.15fr); gap: 16px">
+      <section class="pane dark" aria-label="Imagem do exame" style="border-radius: 22px; padding: 12px; gap: 8px">
+        <div style="position: relative; flex: 1 1 auto; min-height: 0; background: #05070B; border-radius: 12px; overflow: hidden">
+          <sc-if value="{{nod.dir}}" hint-placeholder-val="{{ true }}">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" role="img" aria-label="USG de tireoide, corte transversal, nódulo no lobo direito" style="position: absolute; inset: 0; width: 100%; height: 100%">
+            <path d="M40 150 C 60 95, 150 90, 185 130 L 215 130 C 250 90, 340 95, 360 150 C 340 205, 250 210, 215 175 L 185 175 C 150 210, 60 205, 40 150 Z" fill="#3A4150" stroke="#555E70" stroke-width="1.5"></path>
+            <circle cx="200" cy="152" r="26" fill="#11151D" stroke="#6B7385" stroke-width="2"></circle>
+            <ellipse cx="110" cy="150" rx="42" ry="28" fill="#1B2029" stroke="#8A93A3" stroke-width="1"></ellipse>
+            <line x1="68" y1="150" x2="152" y2="150" stroke="#FACC15" stroke-width="1.5" stroke-dasharray="4 3"></line>
+            <text x="110" y="114" fill="#FACC15" font-size="13" font-weight="700" text-anchor="middle" font-family="Inter, sans-serif">1,8 cm</text>
+          </svg>
+          </sc-if>
+          <sc-if value="{{nod.esq}}" hint-placeholder-val="{{ false }}">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" role="img" aria-label="USG de tireoide, corte transversal, nódulo no lobo esquerdo" style="position: absolute; inset: 0; width: 100%; height: 100%">
+            <path d="M40 150 C 60 95, 150 90, 185 130 L 215 130 C 250 90, 340 95, 360 150 C 340 205, 250 210, 215 175 L 185 175 C 150 210, 60 205, 40 150 Z" fill="#3A4150" stroke="#555E70" stroke-width="1.5"></path>
+            <circle cx="200" cy="152" r="26" fill="#11151D" stroke="#6B7385" stroke-width="2"></circle>
+            <ellipse cx="300" cy="150" rx="16" ry="12" fill="#1B2029" stroke="#8A93A3" stroke-width="1"></ellipse>
+            <line x1="284" y1="150" x2="316" y2="150" stroke="#FACC15" stroke-width="1.5" stroke-dasharray="4 3"></line>
+            <text x="300" y="130" fill="#FACC15" font-size="13" font-weight="700" text-anchor="middle" font-family="Inter, sans-serif">{{nod.medEsq}}</text>
+          </svg>
+          </sc-if>
+          <span class="ov" style="top: 10px; left: 12px">BARBOSA, RITA CARVALHO<br>F, 14/08/1974</span>
+          <span class="ov" style="top: 10px; right: 12px; text-align: right">Logiq E10, L 12 MHz<br>{{nod.corte}}</span>
+          <span class="ov" style="bottom: 10px; left: 12px">{{nod.id}} selecionado</span>
+        </div>
+        <div class="row" style="gap: 8px; flex: none">
+          <span class="t13" style="color: #93A0B5; flex: 1">Medidas e imagens vêm do aparelho (SR DICOM).</span>
+          <a class="btn btn-sm" href="Visualizador.dc.html" style="background: #141B27; border-color: #2A3446; color: #E6ECF5">Abrir no visualizador</a>
+        </div>
       </section>
-      <aside class="aside col" style="gap:16px;flex:1 1 320px;min-width:0">
-        <section class="card"><div class="t15 b">Como a categoria foi calculada</div><p class="t13 mute" style="margin:8px 0 0;line-height:1.6">Soma dos pontos de composição, ecogenicidade, forma, margens e focos (ACR TI-RADS). Categoria e conduta pela tabela da versão vigente, guardada no laudo (lastro).</p></section>
-        <section class="card"><div class="t15 b">Comparação</div><div class="li2"><span class="ck warn">!</span><div><div class="t14">N1 cresceu</div><div class="t12 mute">1,3 cm em 03/2025 → 1,8 cm hoje</div></div></div></section>
-        <section class="card" style="background:#F6F8FB;box-shadow:none"><div class="t14 b">Outros modelos estruturados</div><p class="t13 mute" style="margin:6px 0 0">BI-RADS (mama), O-RADS (ovário), LI-RADS (fígado), Lung-RADS (pulmão), Bosniak (cisto renal), eco (ASE) e obstetrícia (biometria com percentis e curvas).</p></section>
-      </aside>
+
+      <section class="card pane" aria-label="Classificação estruturada" style="padding: 0">
+        <sc-if value="{{tirads}}" hint-placeholder-val="{{ true }}">
+          <nav class="tabs" aria-label="Partes" style="padding: 0 12px; flex: none">
+            <sc-for list="{{abas}}" as="a" hint-placeholder-count="3"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for>
+          </nav>
+
+          <sc-if value="{{tNod}}" hint-placeholder-val="{{ true }}">
+            <div class="scroll" style="padding: 0 0 12px">
+              <table class="tb sticky">
+                <thead><tr><th>Nódulo</th><th>Local e medidas</th><th class="r">Pontos</th><th>Categoria</th></tr></thead>
+                <tbody>
+                  <sc-for list="{{nodulos}}" as="n" hint-placeholder-count="2">
+                    <tr class="{{n.cls}}" onClick="{{n.ir}}" aria-selected="{{n.atual}}">
+                      <td class="b">{{n.id}}</td>
+                      <td><div>{{n.local}}</div><div class="t13 mute num">{{n.med}}</div></td>
+                      <td class="r num b">{{n.pts}}</td>
+                      <td><span class="{{n.catCls}}">{{n.cat}}</span></td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+              <div style="padding: 12px 16px 0">
+                <div class="res" style="margin: 4px 0 4px" role="status">
+                  <span class="t15 b">{{sel.id}}: {{sel.pts}} pontos, {{sel.catLong}}</span>
+                  <span class="t14">Conduta: {{sel.conduta}}</span>
+                  <span class="t12 mute" style="flex-basis: 100%">Calculado pelo servidor com a tabela ACR TI-RADS 2017; a versão fica guardada no laudo.</span>
+                </div>
+                <sc-for list="{{grupos}}" as="g" hint-placeholder-count="5">
+                  <div class="grp" role="radiogroup" aria-label="{{g.t}}">
+                    <span class="gl">{{g.t}}</span>
+                    <div class="row wrap" style="gap: 6px">
+                      <sc-for list="{{g.ops}}" as="o" hint-placeholder-count="3"><button class="{{o.cls}}" role="radio" aria-checked="{{o.on}}" onClick="{{o.ir}}">{{o.t}}</button></sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{tTexto}}" hint-placeholder-val="{{ false }}">
+            <div class="scroll" style="padding: 16px; display: flex; flex-direction: column; gap: 12px">
+              <label class="field" style="color: #0F172A; font-size: 14px">Achados (gerado das categorias, editável)
+                <textarea class="in" rows="7" value="{{achados}}" onChange="{{onAchados}}"></textarea>
+              </label>
+              <label class="field" style="color: #0F172A; font-size: 14px">Conclusão
+                <textarea class="in" rows="3" value="{{conclusao}}" onChange="{{onConclusao}}"></textarea>
+              </label>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{tComp}}" hint-placeholder-val="{{ false }}">
+            <div class="scroll">
+              <table class="tb sticky">
+                <thead><tr><th>Nódulo</th><th class="r">03/2025</th><th class="r">Hoje</th><th>Situação</th></tr></thead>
+                <tbody>
+                  <tr><td class="b">N1</td><td class="r num">1,3 cm, TR4</td><td class="r num b">1,8 cm, TR4</td><td><span class="chip c-amber">Cresceu</span></td></tr>
+                  <tr><td class="b">N2</td><td class="r num">0,6 cm, TR1</td><td class="r num b">0,6 cm, TR1</td><td><span class="chip">Estável</span></td></tr>
+                </tbody>
+              </table>
+              <p class="t13 mute" style="margin: 8px 16px">Comparação com USG de tireoide de 12/03/2025, laudo da Dra. Renata Alves.</p>
+            </div>
+          </sc-if>
+
+          <footer class="row" style="flex: none; gap: 8px; padding: 12px 16px; border-top: 1px solid #E8EAEF">
+            <button class="btn btn-sm" onClick="{{novo}}">Novo nódulo</button>
+            <button class="btn btn-sm" onClick="{{importar}}">Medidas do aparelho</button>
+            <span class="t13 mute grow" role="status" style="min-width: 0">{{aviso}}</span>
+            <button class="btn btn-sm btn-p" onClick="{{gerar}}">Gerar texto do laudo</button>
+          </footer>
+        </sc-if>
+
+        <sc-if value="{{outro}}" hint-placeholder-val="{{ false }}">
+          <div class="state" style="margin: auto">
+            <div class="b">{{sisNome}} não se aplica a este exame</div>
+            <div class="t13 mute" style="max-width: 360px">O exame aberto é USG de tireoide. {{sisNome}} aparece nos exames de {{sisUso}}.</div>
+            <button class="btn btn-sm" onClick="{{voltarTirads}}">Usar TI-RADS</button>
+          </div>
+        </sc-if>
+      </section>
     </div>
-    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios</p>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1250}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = {
+      sis: 'ti', aba: 'nod', sel: 0, aviso: '', achadosEd: null, conclusaoEd: null,
+      nods: [
+        { id: 'N1', local: 'Lobo direito, terço médio', med: '1,8 × 1,2 × 1,1 cm', maior: 1.8, v: { comp: 2, eco: 2, forma: 0, marg: 0, foco: 0 } },
+        { id: 'N2', local: 'Lobo esquerdo, polo inferior', med: '0,6 × 0,5 × 0,4 cm', maior: 0.6, v: { comp: 0, eco: 0, forma: 0, marg: 0, foco: 0 } }
+      ]
+    };
+  }
+  cat(p) { return p <= 1 ? (p === 0 ? 1 : 2) : p === 2 ? 2 : p === 3 ? 3 : p <= 6 ? 4 : 5; }
+  renderVals() {
+    const s = this.state;
+    const G = [
+      ['comp', 'Composição', [['Cístico ou espongiforme', 0], ['Misto', 1], ['Sólido', 2]]],
+      ['eco', 'Ecogenicidade', [['Anecoico', 0], ['Hiper ou isoecoico', 1], ['Hipoecoico', 2], ['Muito hipoecoico', 3]]],
+      ['forma', 'Forma', [['Mais largo que alto', 0], ['Mais alto que largo', 3]]],
+      ['marg', 'Margens', [['Lisas', 0], ['Lobuladas ou irregulares', 2], ['Extensão extratireoidiana', 3]]],
+      ['foco', 'Focos ecogênicos', [['Nenhum', 0], ['Macrocalcificações', 1], ['Periféricos', 2], ['Puntiformes', 3]]]
+    ];
+    const NOME = { 1: 'TR1 benigno', 2: 'TR2 não suspeito', 3: 'TR3 levemente suspeito', 4: 'TR4 moderadamente suspeito', 5: 'TR5 altamente suspeito' };
+    const COR = { 1: 'chip c-green', 2: 'chip c-green', 3: 'chip c-amber', 4: 'chip c-amber', 5: 'chip c-rose' };
+    const LIM = { 3: [2.5, 1.5], 4: [1.5, 1.0], 5: [1.0, 0.5] };
+    const info = n => {
+      const pts = Object.keys(n.v).reduce((a, k) => a + n.v[k], 0);
+      const c = this.cat(pts);
+      const lim = LIM[c];
+      const conduta = !lim ? 'sem seguimento' : n.maior >= lim[0] ? 'PAAF (≥ ' + String(lim[0]).replace('.', ',') + ' cm)' : n.maior >= lim[1] ? 'seguimento ecográfico' : 'sem seguimento';
+      return { pts, c, conduta };
+    };
+    const N = s.nods;
+    const cur = N[s.sel], ci = info(cur);
+    const txtN = (n) => { const i = info(n); return 'No ' + n.local.toLowerCase() + ', nódulo ' + n.med + ' (ACR TI-RADS ' + i.c + ').'; };
+    const achadosAuto = 'Tireoide de dimensões normais, contornos regulares e ecotextura homogênea. ' + N.map(txtN).join(' ');
+    const conclAuto = N.map(n => { const i = info(n); return n.id + ': TI-RADS ' + i.c + ', ' + i.conduta; }).join('; ') + ', a critério clínico.';
+    const SIS = [['ti', 'TI-RADS', 'tireoide'], ['bi', 'BI-RADS', 'mama'], ['o', 'O-RADS', 'ovário'], ['lung', 'Lung-RADS', 'TC de tórax de rastreamento'], ['bos', 'Bosniak', 'cisto renal'], ['obs', 'Obstetrícia', 'USG obstétrica']];
+    const sis = SIS.find(x => x[0] === s.sis);
+    const x = s.sel === 0 ? { cx: 110, rx: 42, ry: 28, corte: 'Transversal, lobo direito' } : { cx: 300, rx: 16, ry: 12, corte: 'Transversal, lobo esquerdo' };
+    const setV = (k, v) => this.setState(st => { const nods = st.nods.map((n, i) => i === st.sel ? Object.assign({}, n, { v: Object.assign({}, n.v, { [k]: v }) }) : n); return { nods, achadosEd: null, conclusaoEd: null }; });
+    return {
+      sistemas: SIS.map(([k, t]) => ({ k, t, sel: s.sis === k })),
+      onSis: (e) => this.setState({ sis: e.target.value }),
+      tirads: s.sis === 'ti', outro: s.sis !== 'ti', sisNome: sis[1], sisUso: sis[2], voltarTirads: () => this.setState({ sis: 'ti' }),
+      nod: { dir: x.cx < 200, esq: x.cx >= 200, medEsq: cur.maior.toFixed(1).replace('.', ',') + ' cm', med: cur.maior.toFixed(1).replace('.', ',') + ' cm', corte: x.corte, id: cur.id },
+      abas: [['nod', 'Nódulos'], ['texto', 'Texto do laudo'], ['comp', 'Comparação']].map(([k, t]) => ({ t, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      tNod: s.aba === 'nod', tTexto: s.aba === 'texto', tComp: s.aba === 'comp',
+      nodulos: N.map((n, i) => { const k = info(n); return { id: n.id, local: n.local, med: n.med, pts: String(k.pts), cat: 'TR' + k.c, catCls: COR[k.c], cls: 'rowp' + (i === s.sel ? ' sel' : ''), atual: i === s.sel ? 'true' : 'false', ir: () => this.setState({ sel: i }) }; }),
+      grupos: G.map(([k, t, ops]) => ({ t, ops: ops.map(([ot, v]) => ({ t: ot, on: cur.v[k] === v ? 'true' : 'false', cls: 'opt' + (cur.v[k] === v ? ' on' : ''), ir: () => setV(k, v) })) })),
+      sel: { id: cur.id, pts: String(ci.pts), catLong: NOME[ci.c], conduta: ci.conduta },
+      achados: s.achadosEd !== null ? s.achadosEd : achadosAuto, conclusao: s.conclusaoEd !== null ? s.conclusaoEd : conclAuto,
+      onAchados: (e) => this.setState({ achadosEd: e.target.value }), onConclusao: (e) => this.setState({ conclusaoEd: e.target.value }),
+      aviso: s.aviso,
+      novo: () => this.setState(st => ({ nods: st.nods.concat([{ id: 'N' + (st.nods.length + 1), local: 'Lobo esquerdo, terço superior', med: '0,8 × 0,6 × 0,5 cm', maior: 0.8, v: { comp: 2, eco: 1, forma: 0, marg: 0, foco: 0 } }]), sel: st.nods.length, aba: 'nod', aviso: 'Nódulo novo criado. Confira a localização.' })),
+      importar: () => this.setState({ aviso: 'Medidas importadas do Logiq E10 às 09:12.' }),
+      gerar: () => this.setState({ aba: 'texto', aviso: 'Texto gerado. Revise antes de voltar ao laudo.' })
+    };
+  }
 }
 </script>
 </body>

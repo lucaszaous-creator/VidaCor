@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Chat da equipe (janela flutuante)</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
@@ -46,16 +46,16 @@
           </button>
         </sc-for>
         <sc-if value="{{vazio}}" hint-placeholder-val="{{ false }}">
-          <div class="state"><span class="ni k-gray" style="width: 44px; height: 44px; border-radius: 14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></span><div class="b">Nada encontrado</div><div class="t13 mute">Tente outro nome ou limpe o filtro.</div></div>
+          <div class="state"><div class="b">Nada encontrado</div><div class="t13 mute">Tente outro nome ou limpe o filtro.</div></div>
         </sc-if>
       </div>
-      <div class="cmp"><button class="btn" style="width: 100%" onClick="{{novaUrgente}}"><span class="ni k-rose" style="width: 26px; height: 26px; border-radius: 8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 8v5M12 16.5h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg></span>Pedir ajuda urgente</button></div>
+      <div class="cmp"><button class="btn" style="width: 100%" onClick="{{novaUrgente}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C2334D" stroke-width="2" aria-hidden="true"><path d="M12 8v5M12 16.5h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg>Pedir ajuda urgente</button></div>
     </sc-if>
 
     <sc-if value="{{emConversa}}" hint-placeholder-val="{{ false }}">
       <sc-if value="{{atual.temPaciente}}" hint-placeholder-val="{{ false }}">
         <a href="Paciente.dc.html" class="row" style="gap: 10px; padding: 8px 14px; background: #F2F5FA; border-bottom: 1px solid #E8EAEF; color: #0F172A">
-          <span class="ni k-violet" style="width: 28px; height: 28px; border-radius: 8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg></span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5B45B5" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg>
           <span style="flex: 1; min-width: 0; line-height: 1.3"><b class="t13">{{atual.paciente}}</b><span class="t12 mute" style="display: block">{{atual.pacienteInfo}}</span></span>
           <span class="t12 mute">Só quem atende</span>
         </a>
@@ -66,7 +66,7 @@
           <sc-for list="{{msgs}}" as="m" hint-placeholder-count="4">
             <div class="{{m.cls}}">
               <sc-if value="{{m.mostrarAutor}}" hint-placeholder-val="{{ true }}"><div class="who">{{m.autor}}</div></sc-if>
-              <sc-if value="{{m.urgente}}" hint-placeholder-val="{{ false }}"><div class="t12 b" style="color: #C2334D; margin-bottom: 2px">URGENTE</div></sc-if>
+              <sc-if value="{{m.urgente}}" hint-placeholder-val="{{ false }}"><div class="t12 b" style="color: #C2334D; margin-bottom: 2px">Urgente</div></sc-if>
               {{m.texto}}
               <sc-if value="{{m.temPaciente}}" hint-placeholder-val="{{ false }}"><div class="pt-chip"><b>{{m.paciente}}</b></div></sc-if>
               <div class="meta">{{m.meta}}</div>
@@ -85,7 +85,7 @@
           <button class="cb" aria-label="Anexar arquivo" style="width: 40px; height: 40px; border: 0; border-radius: 12px; background: transparent; color: #5B6474; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M21 11.5l-8.6 8.6a5 5 0 0 1-7-7l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l8-8"></path></svg></button>
           <button class="send" aria-label="Enviar mensagem" onClick="{{enviar}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"></path></svg></button>
         </div>
-        <div class="t12 mute">Enter envia · mensagens ficam registradas e não podem ser apagadas</div>
+        <div class="t12 mute">Enter envia. Mensagens ficam registradas e não podem ser apagadas.</div>
       </div>
     </sc-if>
   </section>
@@ -99,13 +99,13 @@ class Component extends DCLogic {
     this.state = {
       aberta: null, filtro: 'tudo', busca: '', rascunho: '', urgente: false,
       convs: [
-        { id: 's6', nome: 'Sala 6 · Tomografia', ini: 'S6', k: 'teal', pres: 'on', status: '3 pessoas · Dra. Cecília, Bruno (téc.), Ana', grupo: true, urgente: true, naoLidas: 2,
-          paciente: 'Lúcia Fernandes Prado · 02/07/1959', pacienteInfo: 'TC de crânio com contraste · Sala 6',
+        { id: 's6', nome: 'Sala 6 · Tomografia', ini: 'S6', k: 'teal', pres: 'on', status: '3 pessoas: Dra. Cecília, Bruno (téc.), Ana', grupo: true, urgente: true, naoLidas: 2,
+          paciente: 'Lúcia Fernandes Prado · 02/07/1959', pacienteInfo: 'TC de crânio com contraste, sala 6',
           msgs: [
             { de: 'Bruno (técnico)', k: 'teal', t: 'Paciente chegou para a TC com contraste. Creatinina de ontem 1,6 e TFG 42.', h: '09:02' },
             { de: 'Bruno (técnico)', k: 'teal', t: 'Preciso da avaliação do médico antes de injetar. Exame bloqueado na triagem.', h: '09:03', urg: true, pac: 'Lúcia F. Prado · 02/07/1959' }
           ] },
-        { id: 'ra', nome: 'Dra. Renata Alves', ini: 'RA', k: 'violet', pres: 'busy', status: 'Em exame · Sala 2 · responde em seguida', naoLidas: 1,
+        { id: 'ra', nome: 'Dra. Renata Alves', ini: 'RA', k: 'violet', pres: 'busy', status: 'Em exame na sala 2, responde em seguida', naoLidas: 1,
           msgs: [
             { de: 'Dra. Renata Alves', k: 'violet', t: 'Consegue encaixar uma obstétrica às 10h40? A paciente está com sangramento leve.', h: '08:57' }
           ] },

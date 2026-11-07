@@ -4,167 +4,347 @@
 <meta charset="utf-8">
 <title>Faturamento TISS — VidaCor Imagem</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style>body{margin:0;background:#F2F3F6}</style>
+<style>
+body{margin:0}
+.hd h1{margin:0;font-size:24px;font-weight:650;letter-spacing:-.02em}
+.strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:12px 4px}
+.strip>div{padding:0 16px;border-left:1px solid #E8EAEF;min-width:0}
+.strip>div:first-child{border-left:0}
+.strip .v{font-size:20px;font-weight:650;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:2px}
+.ph{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid #E8EAEF;flex:none;flex-wrap:wrap}
+.ph h2{font-size:16px;font-weight:650}
+.pf{flex:none;padding:14px 18px;border-top:1px solid #E8EAEF;display:flex;flex-direction:column;gap:8px}
+.rowp{cursor:pointer}
+.rowp:hover td{background:#F8FAFC}
+.rowp.sel td{background:#EEF4FB}
+.rowp.sel td:first-child{box-shadow:inset 3px 0 0 #0A1A4A}
+.ck{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #E8EAEF}
+.ck:last-child{border-bottom:0}
+.ck svg{flex:none;margin-top:1px}
+.ix{width:36px;height:36px;border-radius:10px;border:0;background:transparent;color:#5B6474;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.ix:hover{background:#F1F3F6;color:#0F172A}
+.bars .bv.on{background:#0C72B0}
+.bars .bv{background:#CFE0EE}
+.dbg{position:fixed;inset:0;background:rgba(15,23,42,.32);z-index:40;border:0;padding:0;cursor:default}
+.drw{position:fixed;top:12px;right:12px;bottom:12px;width:480px;max-width:calc(100vw - 24px);background:#fff;border-radius:22px;z-index:41;display:flex;flex-direction:column;box-shadow:0 8px 24px rgba(15,23,42,.12)}
+.drw>header{display:flex;align-items:center;gap:10px;padding:16px 16px 16px 20px;border-bottom:1px solid #E8EAEF}
+.drw>header h2{font-size:18px;font-weight:650}
+.drw>.scroll{flex:1 1 auto;padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.drw>footer{display:flex;gap:8px;flex-wrap:wrap;padding:14px 20px;border-top:1px solid #E8EAEF}
+.tst{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:50;max-width:600px}
+</style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="faturamento" userName="Carla Mendes" userRole="Gerência" userInitials="CM" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="faturamento" userName="Carla Mendes" userRole="Gerência" userInitials="CM" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <div class="crumb"><span>Gestão</span><span aria-hidden="true">›</span><b>Faturamento TISS</b></div>
-      <div class="grow"></div>
-      <span class="chip" style="height: 40px; padding: 0 14px; background: #fff">Competência: novembro/2026</span>
-      <a class="btn" href="Configuracoes.dc.html">Tabela TUSS / CBHPM</a>
-      <button class="btn">Conferir guias</button>
-      <button class="btn btn-p"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Gerar lote XML</button>
-    </div>
-
-    <div class="page-h">
-      <div class="grow">
+    <header class="hd row wrap" style="gap: 12px">
+      <div style="flex: 1 1 auto; min-width: 0">
         <h1>Faturamento de convênios</h1>
-        <p>Padrão TISS 4.01 · guia de consulta e SP/SADT · validação no schema oficial da ANS antes do envio</p>
+        <div class="t13 mute" style="margin-top: 2px">TISS 4.01, validação no schema da ANS antes de cada envio</div>
       </div>
-      <div class="seg" role="tablist" aria-label="Seção"><button class="on" role="tab" aria-selected="true">Visão geral</button><button role="tab" aria-selected="false">Guias</button><button role="tab" aria-selected="false">Lotes</button><button role="tab" aria-selected="false">Glosas</button><button role="tab" aria-selected="false">Recebimentos</button></div>
-    </div>
+      <label class="sr" for="comp">Competência</label>
+      <select id="comp" class="in" style="width: 190px; min-height: 44px"><option>Novembro de 2026</option><option>Outubro de 2026</option><option>Setembro de 2026</option></select>
+      <a class="btn" href="Auditoria-Faturamento.dc.html">Conferir guias</a>
+      <button class="btn btn-p" onClick="{{gerarLote}}" disabled="{{jaGerou}}">Gerar lote XML</button>
+    </header>
 
-    <section class="grid g4" aria-label="Resumo do faturamento">
-      <div class="card">
-        <div class="row" style="align-items: flex-start"><span class="tile t-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6"></path></svg></span><button class="more" aria-label="Opções">•••</button></div>
-        <div class="lbl" style="margin-top: 18px">A faturar</div>
-        <div class="big" style="margin-top: 6px">R$ 94,2<small>mil · 612 guias</small></div>
-        <div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-amber">38 com pendência</span></div>
-      </div>
-      <div class="card">
-        <div class="row" style="align-items: flex-start"><span class="tile t-violet"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"></path></svg></span><button class="more" aria-label="Opções">•••</button></div>
-        <div class="lbl" style="margin-top: 18px">Enviado</div>
-        <div class="big" style="margin-top: 6px">R$ 312,8<small>mil · 14 lotes</small></div>
-        <div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-blue">Aguardando retorno</span></div>
-      </div>
-      <div class="card">
-        <div class="row" style="align-items: flex-start"><span class="tile t-rose"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg></span><button class="more" aria-label="Opções">•••</button></div>
-        <div class="lbl" style="margin-top: 18px">Glosado</div>
-        <div class="big" style="margin-top: 6px">R$ 9,6<small>mil · 3,1%</small></div>
-        <div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-green">−0,8 p.p.</span><span class="t13 mute">vs. outubro</span></div>
-      </div>
-      <div class="card">
-        <div class="row" style="align-items: flex-start"><span class="tile t-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><button class="more" aria-label="Opções">•••</button></div>
-        <div class="lbl" style="margin-top: 18px">Recebido no mês</div>
-        <div class="big" style="margin-top: 6px">R$ 241,5<small>mil</small></div>
-        <div class="row" style="margin-top: 12px; gap: 8px"><span class="chip c-green">+12%</span><span class="t13 mute">conciliado no banco</span></div>
-      </div>
+    <section class="card strip" aria-label="Resumo do faturamento">
+      <div><div class="t13 mute">A faturar</div><div class="v">R$ 94,2 mil</div><div class="t12 mute">612 guias, 38 com pendência</div></div>
+      <div><div class="t13 mute">Enviado</div><div class="v">R$ 312,8 mil</div><div class="t12 mute">14 lotes aguardando retorno</div></div>
+      <div><div class="t13 mute">Glosado</div><div class="v">R$ 9,6 mil</div><div class="t12 mute">3,1%, eram 3,9% em outubro</div></div>
+      <div><div class="t13 mute">Recebido no mês</div><div class="v">R$ 241,5 mil</div><div class="t12 mute">conciliado no banco</div></div>
     </section>
 
-    <section class="card" aria-labelledby="gp-h">
-      <div class="card-h wrap">
-        <div><h2 id="gp-h">Guias pendentes</h2><div class="sub">Ordenadas pelo prazo de envio de cada convênio</div></div>
-        <div class="row" style="margin-left: auto; gap: 8px">
-          <label class="search" style="min-height: 40px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar guia</span><input type="search" placeholder="Nº da guia, paciente, senha"></label>
-          <select class="in" aria-label="Filtrar por convênio" style="min-height: 40px; width: 180px"><option>Todos os convênios</option><option>Unimed</option><option>Bradesco Saúde</option></select>
-        </div>
-      </div>
-      <div class="scroll-x">
-        <table class="tb">
-          <thead><tr><th>Prazo</th><th>Guia</th><th>Paciente</th><th>Procedimento (TUSS)</th><th>Convênio</th><th class="r">Valor</th><th>Situação</th><th class="r">Ação</th></tr></thead>
-          <tbody>
-            <tr><td><span class="chip c-rose"><span class="d"></span>Vence hoje</span></td><td class="num nw">2026-1107-0042</td><td class="nw"><b class="b">Vera L. Antunes</b></td><td>41001230 · TC abdome total c/ contraste</td><td class="nw">SulAmérica</td><td class="r num nw">R$ 1.184,00</td><td><span class="chip c-rose">Sem senha de autorização</span></td><td class="r"><button class="btn btn-sm">Solicitar senha</button></td></tr>
-            <tr><td><span class="chip c-rose"><span class="d"></span>1 dia</span></td><td class="num nw">2026-1106-0018</td><td class="nw"><b class="b">Juliana S. Rocha</b></td><td>40901300 · USG morfológica 2º tri</td><td class="nw">Bradesco Saúde</td><td class="r num nw">R$ 412,50</td><td><span class="chip c-amber">Falta pedido médico</span></td><td class="r"><button class="btn btn-sm">Anexar</button></td></tr>
-            <tr><td><span class="chip c-amber"><span class="d"></span>3 dias</span></td><td class="num nw">2026-1105-0091</td><td class="nw"><b class="b">Antônio C. Ribeiro</b></td><td>40901220 · Eco transtorácico + 40901386 Doppler carótidas</td><td class="nw">Unimed</td><td class="r num nw">R$ 698,40</td><td><span class="chip c-amber">Laudo não assinado</span></td><td class="r"><a class="btn btn-sm" href="Fluxo-Laudos.dc.html">Ver laudo</a></td></tr>
-            <tr><td><span class="chip c-green"><span class="d"></span>8 dias</span></td><td class="num nw">2026-1104-0007</td><td class="nw"><b class="b">Gustavo H. Pires</b></td><td>40101045 · Teste ergométrico</td><td class="nw">Petrobras</td><td class="r num nw">R$ 265,00</td><td><span class="chip c-green">Pronta para lote</span></td><td class="r"><button class="btn btn-sm btn-p">Incluir no lote</button></td></tr>
-            <tr><td><span class="chip c-green"><span class="d"></span>12 dias</span></td><td class="num nw">2026-1104-0033</td><td class="nw"><b class="b">Neusa A. Freitas</b></td><td>20102038 · MAPA 24 horas</td><td class="nw">Amil</td><td class="r num nw">R$ 182,00</td><td><span class="chip c-green">Pronta para lote</span></td><td class="r"><button class="btn btn-sm btn-p">Incluir no lote</button></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+    <nav class="tabs" aria-label="Seções do faturamento">
+      <sc-for list="{{abas}}" as="a" hint-placeholder-count="6"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}} <span class="mute" style="font-weight: 500">{{a.n}}</span></button></sc-for>
+    </nav>
 
-    <div class="grid g2">
-      <section class="card" aria-labelledby="lt-h">
-        <div class="card-h"><div><h2 id="lt-h">Lotes</h2><div class="sub">Gerar → validar schema ANS → transmitir → protocolo</div></div><button class="more" aria-label="Opções">•••</button></div>
-        <div class="li"><span class="tile t-gray"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6v18h12V7zM14 3v4h4"></path></svg></span><div style="flex: 1"><div class="t">Lote 0153 · Unimed</div><div class="s">86 guias · R$ 31.420,00 · XML gerado agora</div></div><span class="chip c-amber">Validando no schema</span></div>
-        <div class="li"><span class="tile t-gray"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6v18h12V7zM14 3v4h4"></path></svg></span><div style="flex: 1"><div class="t">Lote 0152 · Bradesco Saúde</div><div class="s">42 guias · R$ 18.906,30 · schema OK</div></div><button class="btn btn-sm btn-p">Transmitir</button></div>
-        <div class="li"><span class="tile t-blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"></path></svg></span><div style="flex: 1"><div class="t">Lote 0151 · SulAmérica</div><div class="s">Protocolo 88120554 · enviado em 03/11</div></div><span class="chip c-blue">Aguardando retorno</span></div>
-        <div class="li"><span class="tile t-green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><div style="flex: 1"><div class="t">Lote 0149 · Amil</div><div class="s">Demonstrativo recebido · 2 glosas</div></div><span class="chip c-green">Conciliado</span></div>
-      </section>
+    <sc-if value="{{tGuias}}" hint-placeholder-val="{{ true }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px">
+        <section class="card pane" style="padding: 0" aria-label="Guias pendentes">
+          <div class="ph">
+            <label class="search" style="flex: 1 1 240px; min-height: 40px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar guia</span><input type="search" placeholder="Nº da guia ou paciente" value="{{q}}" onChange="{{onQ}}"></label>
+            <label class="sr" for="fconv">Convênio</label>
+            <select id="fconv" class="in" style="min-height: 40px; width: 200px" onChange="{{onConv}}"><option value="">Todos os convênios</option><option value="Unimed">Unimed</option><option value="Bradesco Saúde">Bradesco Saúde</option><option value="SulAmérica">SulAmérica</option><option value="Amil">Amil</option><option value="Petrobras">Petrobras</option></select>
+          </div>
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Paciente e guia</th><th>Procedimento</th><th class="r">Valor</th><th>Situação e prazo</th></tr></thead>
+              <tbody>
+                <sc-for list="{{guias}}" as="g" hint-placeholder-count="6">
+                  <tr class="{{g.cls}}" onClick="{{g.abrir}}" aria-selected="{{g.atual}}">
+                    <td><div class="b">{{g.pac}}</div><div class="t13 mute num nw">{{g.num}}</div></td>
+                    <td class="t14">{{g.proc}}<div class="t13 mute">{{g.conv}}</div></td>
+                    <td class="r num nw">{{g.v}}</td>
+                    <td><span class="{{g.stCls}}">{{g.st}}</span><div class="t13 b" style="{{g.pzStyle}}; margin-top: 4px">{{g.prazoTxt}}</div></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+            <sc-if value="{{semGuias}}" hint-placeholder-val="{{ false }}"><div class="state"><div class="b">Nenhuma guia encontrada</div><div class="t13 mute">Confira o número ou limpe o filtro de convênio.</div></div></sc-if>
+          </div>
+        </section>
 
-      <section class="card" aria-labelledby="gl-h">
-        <div class="card-h"><div><h2 id="gl-h">Glosas e recursos</h2><div class="sub">Prazo de recurso conforme contrato</div></div><a class="t14 b" href="Faturamento.dc.html" style="margin-left: auto">Ver todas</a></div>
-        <div class="scroll-x">
-          <table class="tb">
-            <thead><tr><th>Guia</th><th>Motivo</th><th class="r">Valor</th><th>Recurso até</th><th></th></tr></thead>
+        <aside class="card pane" style="padding: 0" aria-label="Detalhe da guia">
+          <div class="scroll" style="padding: 18px; display: flex; flex-direction: column; gap: 14px">
+            <div>
+              <div style="font-size: 18px; font-weight: 650">{{gs.pacNome}}</div>
+              <div class="t14 num" style="color: #334155">{{gs.nasc}}</div>
+            </div>
+            <span class="{{gs.stCls}}" style="align-self: flex-start">{{gs.st}}</span>
+            <dl class="kv" style="margin: 0">
+              <dt>Guia SP/SADT</dt><dd class="num">{{gs.num}}</dd>
+              <dt>Convênio</dt><dd>{{gs.conv}}</dd>
+              <dt>Carteirinha</dt><dd class="num">{{gs.cart}}</dd>
+              <dt>TUSS</dt><dd>{{gs.tuss}}</dd>
+              <dt>Valor</dt><dd class="num">{{gs.v}}, tabela do contrato</dd>
+              <dt>Senha</dt><dd class="num">{{gs.senha}}</dd>
+              <dt>Enviar até</dt><dd>{{gs.ate}}</dd>
+            </dl>
+            <div class="t14" style="line-height: 1.5; color: #334155">{{gs.oque}}</div>
+          </div>
+          <div class="pf">
+            <sc-if value="{{gs.btnAcao}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p" onClick="{{gs.agir}}">{{gs.acao}}</button></sc-if>
+            <sc-if value="{{gs.linkAcao}}" hint-placeholder-val="{{ false }}"><a class="btn btn-p" href="{{gs.href}}">{{gs.acao}}</a></sc-if>
+            <a class="btn btn-sm" href="Lastro.dc.html">Ver lastro da guia</a>
+          </div>
+        </aside>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{tLotes}}" hint-placeholder-val="{{ false }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 16px">
+        <section class="card pane" style="padding: 0" aria-label="Lotes">
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Lote</th><th>Convênio</th><th class="r nw">Guias</th><th class="r">Valor</th><th>Situação</th></tr></thead>
+              <tbody>
+                <sc-for list="{{lotes}}" as="l" hint-placeholder-count="5">
+                  <tr class="{{l.cls}}" onClick="{{l.abrir}}" aria-selected="{{l.atual}}"><td class="num b nw">{{l.n}}</td><td>{{l.conv}}<div class="t13 mute">{{l.obs}}</div></td><td class="r num">{{l.g}}</td><td class="r num nw">{{l.v}}</td><td><span class="{{l.stCls}}">{{l.st}}</span></td></tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <aside class="card pane" style="padding: 0" aria-labelledby="h-conf">
+          <div class="ph"><h2 id="h-conf" style="flex: 1">Lote {{ls.n}}, {{ls.conv}}</h2></div>
+          <div class="scroll" style="padding: 4px 18px">
+            <sc-for list="{{ls.checks}}" as="c" hint-placeholder-count="5">
+              <div class="ck">
+                <sc-if value="{{c.ok}}" hint-placeholder-val="{{ true }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F7A4D" stroke-width="2.2" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></sc-if>
+                <sc-if value="{{c.falha}}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C2334D" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6M12 16.5v.5"></path></svg></sc-if>
+                <div style="flex: 1; min-width: 0"><div class="t14 b">{{c.t}}</div><div class="t13 mute">{{c.s}}</div></div>
+                <sc-if value="{{c.temLink}}" hint-placeholder-val="{{ false }}"><a class="btn btn-sm" href="{{c.href}}">{{c.acao}}</a></sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div class="pf">
+            <div class="t13" style="{{ls.msgStyle}}">{{ls.msg}}</div>
+            <button class="btn btn-p" onClick="{{ls.agir}}" disabled="{{ls.bloq}}">{{ls.acao}}</button>
+          </div>
+        </aside>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{tGlosas}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Glosas e recursos">
+        <div class="ph"><span class="t14 mute" style="flex: 1">Prazo de recurso conforme o contrato de cada operadora.</span></div>
+        <div class="scroll">
+          <table class="tb sticky">
+            <thead><tr><th>Guia</th><th>Motivo da glosa</th><th>Paciente e exame</th><th class="r">Valor</th><th>Recurso até</th><th>Situação</th><th class="r"><span class="sr">Ação</span></th></tr></thead>
             <tbody>
-              <tr><td class="num">0149-017</td><td class="nw"><b class="b">1801</b> · Procedimento sem autorização<br><span class="t13 mute">Amil · USG abdome total</span></td><td class="r num nw">R$ 212,00</td><td><span class="chip c-rose">2 dias</span></td><td class="r"><button class="btn btn-sm">Recorrer</button></td></tr>
-              <tr><td class="num">0149-031</td><td class="nw"><b class="b">1714</b> · Valor acima da tabela<br><span class="t13 mute">Amil · Doppler venoso MMII</span></td><td class="r num nw">R$ 64,80</td><td><span class="chip c-amber">5 dias</span></td><td class="r"><button class="btn btn-sm">Recorrer</button></td></tr>
-              <tr><td class="num">0147-102</td><td class="nw"><b class="b">2002</b> · Carteirinha vencida<br><span class="t13 mute">Unimed · Raio X tórax</span></td><td class="r num nw">R$ 58,00</td><td><span class="chip c-amber">5 dias</span></td><td class="r"><button class="btn btn-sm">Recorrer</button></td></tr>
+              <sc-for list="{{glosas}}" as="g" hint-placeholder-count="4">
+                <tr><td class="num nw">{{g.guia}}</td><td><div class="b">{{g.cod}}</div><div class="t13 mute">{{g.mot}}</div></td><td>{{g.pac}}<div class="t13 mute">{{g.ex}}</div></td><td class="r num nw">{{g.v}}</td><td class="nw b" style="{{g.pzStyle}}">{{g.prazo}}</td><td><span class="{{g.stCls}}">{{g.st}}</span></td><td class="r"><button class="btn btn-sm" onClick="{{g.recorrer}}" disabled="{{g.feito}}">Recorrer</button></td></tr>
+              </sc-for>
             </tbody>
           </table>
         </div>
       </section>
-    </div>
+    </sc-if>
 
-    <section class="card" aria-labelledby="cv-h">
-      <div class="card-h"><div><h2 id="cv-h">Por convênio</h2><div class="sub">Produção de novembro, glosa e prazo médio de pagamento</div></div><div class="seg" style="margin-left: auto"><button class="on" style="height: 36px">Valor</button><button style="height: 36px">Guias</button></div></div>
-      <div class="bars" style="height: 230px; padding-top: 60px">
-        <div class="bc"><span class="bn">R$ 128 mil</span><div class="bv on" style="height: 88%"><div class="tip">Unimed · 1.204 guias<br>Glosa 2,4% · paga em 32 dias</div></div><span class="bl" style="color: #0F172A; font-weight: 600">Unimed</span></div>
-        <div class="bc"><span class="bn">R$ 74 mil</span><div class="bv" style="height: 52%"></div><span class="bl">Bradesco</span></div>
-        <div class="bc"><span class="bn">R$ 58 mil</span><div class="bv" style="height: 41%"></div><span class="bl">SulAmérica</span></div>
-        <div class="bc"><span class="bn">R$ 41 mil</span><div class="bv" style="height: 30%"></div><span class="bl">Amil</span></div>
-        <div class="bc"><span class="bn">R$ 36 mil</span><div class="bv" style="height: 26%"></div><span class="bl">Petrobras</span></div>
-        <div class="bc"><span class="bn">R$ 52 mil</span><div class="bv" style="height: 37%; background: #CFE4F4"></div><span class="bl">Particular</span></div>
-      </div>
-    </section>
-    <div class="grid g2">
-      <section class="card" aria-labelledby="cf-h">
-        <div class="card-h"><span class="tile t-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"></path></svg></span><div><h2 id="cf-h">Conferência antes do lote</h2><div class="sub">Lote 0153 · Unimed · 86 guias</div></div><span class="chip c-amber" style="margin-left: auto">4 bloqueiam</span></div>
-        <div class="li"><span class="step ok">OK</span><div style="flex: 1; min-width: 0"><div class="t">Carteirinha válida na data do exame</div><div class="s">86 de 86 guias</div></div></div>
-        <div class="li"><span class="step ok">OK</span><div style="flex: 1; min-width: 0"><div class="t">Senha de autorização registrada</div><div class="s">Exames que exigem senha: 31 de 31</div></div></div>
-        <div class="li"><span class="step warn">2</span><div style="flex: 1; min-width: 0"><div class="t">Laudo assinado anexado</div><div class="s">2 guias com laudo ainda em revisão</div></div><a class="btn btn-sm" href="Fluxo-Laudos.dc.html">Ver</a></div>
-        <div class="li"><span class="step warn">1</span><div style="flex: 1; min-width: 0"><div class="t">Valor igual à tabela do contrato</div><div class="s">1 guia com valor de 2025</div></div><button class="btn btn-sm">Corrigir</button></div>
-        <div class="li"><span class="step bad">1</span><div style="flex: 1; min-width: 0"><div class="t">Pedido médico digitalizado</div><div class="s">Juliana S. Rocha · USG morfológica</div></div><button class="btn btn-sm">Anexar</button></div>
-        <div class="li"><span class="step ok">OK</span><div style="flex: 1; min-width: 0"><div class="t">XML válido no schema TISS 4.01</div><div class="s">Validação automática da ANS</div></div></div>
-      </section>
-
-      <section class="card" aria-labelledby="dm-h">
-        <div class="card-h"><div><h2 id="dm-h">Demonstrativos de pagamento</h2><div class="sub">Retorno XML do convênio conciliado guia a guia</div></div><button class="btn btn-sm" style="margin-left: auto">Importar XML</button></div>
-        <div class="scroll-x">
-          <table class="tb">
+    <sc-if value="{{tDemo}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Demonstrativos de pagamento">
+        <div class="ph"><span class="t14 mute" style="flex: 1">Retorno XML da operadora conciliado guia a guia.</span><button class="btn btn-sm">Importar XML</button></div>
+        <div class="scroll">
+          <table class="tb sticky">
             <thead><tr><th>Lote</th><th>Convênio</th><th class="r">Apresentado</th><th class="r">Pago</th><th class="r">Glosa</th><th>Situação</th></tr></thead>
             <tbody>
-              <tr><td class="num nw">0149</td><td class="nw">Amil</td><td class="r num nw">R$ 22.410,00</td><td class="r num nw">R$ 22.133,20</td><td class="r num nw">R$ 276,80</td><td><span class="chip c-green">Conciliado</span></td></tr>
-              <tr><td class="num nw">0148</td><td class="nw">Unimed</td><td class="r num nw">R$ 38.902,40</td><td class="r num nw">R$ 38.240,40</td><td class="r num nw">R$ 662,00</td><td><span class="chip c-green">Conciliado</span></td></tr>
-              <tr><td class="num nw">0146</td><td class="nw">Petrobras</td><td class="r num nw">R$ 11.725,00</td><td class="r num nw">—</td><td class="r num nw">—</td><td><span class="chip c-amber">Pagamento previsto 12/11</span></td></tr>
-              <tr><td class="num nw">0145</td><td class="nw">Bradesco Saúde</td><td class="r num nw">R$ 19.380,10</td><td class="r num nw">R$ 18.120,10</td><td class="r num nw">R$ 1.260,00</td><td><span class="chip c-rose">Glosa acima de 5%</span></td></tr>
+              <tr><td class="num">0149</td><td>Amil</td><td class="r num nw">R$ 22.410,00</td><td class="r num nw">R$ 22.133,20</td><td class="r num nw">R$ 276,80</td><td><span class="chip c-green">Conciliado</span></td></tr>
+              <tr><td class="num">0148</td><td>Unimed</td><td class="r num nw">R$ 38.902,40</td><td class="r num nw">R$ 38.240,40</td><td class="r num nw">R$ 662,00</td><td><span class="chip c-green">Conciliado</span></td></tr>
+              <tr><td class="num">0146</td><td>Petrobras</td><td class="r num nw">R$ 11.725,00</td><td class="r mute">aguardando</td><td class="r mute">aguardando</td><td><span class="chip c-amber">Pagamento em 12/11</span></td></tr>
+              <tr><td class="num">0145</td><td>Bradesco Saúde</td><td class="r num nw">R$ 19.380,10</td><td class="r num nw">R$ 18.120,10</td><td class="r num nw">R$ 1.260,00</td><td><span class="chip c-rose">Glosa acima de 5%</span></td></tr>
+              <tr><td class="num">0143</td><td>SulAmérica</td><td class="r num nw">R$ 16.240,00</td><td class="r num nw">R$ 16.002,40</td><td class="r num nw">R$ 237,60</td><td><span class="chip c-green">Conciliado</span></td></tr>
             </tbody>
           </table>
         </div>
       </section>
-    </div>
+    </sc-if>
 
-    <section class="card" aria-labelledby="tb-h">
-      <div class="card-h wrap"><div><h2 id="tb-h">Tabelas e contratos</h2><div class="sub">TUSS, CBHPM com porte e UCO, e regras por convênio</div></div><div class="row" style="margin-left: auto; gap: 8px"><button class="btn btn-sm">Importar tabela</button><button class="btn btn-sm">Reajuste em lote</button></div></div>
-      <div class="scroll-x">
-        <table class="tb">
-          <thead><tr><th>Convênio</th><th>Tabela</th><th>Porte / UCO</th><th>Reajuste</th><th>Autorização exigida</th><th>Prazo de envio</th><th class="r"></th></tr></thead>
-          <tbody>
-            <tr><td class="nw"><b class="b">Unimed</b></td><td class="nw">CBHPM 5ª ed. − 10%</td><td class="nw num">Porte 3A · UCO R$ 18,42</td><td class="nw">IPCA · mar/2026</td><td class="nw">TC, RM, eco fetal</td><td class="nw">30 dias</td><td class="r nw"><button class="btn btn-sm">Editar</button></td></tr>
-            <tr><td class="nw"><b class="b">Bradesco Saúde</b></td><td class="nw">Tabela própria 2026</td><td class="nw num">—</td><td class="nw">Anual · jan/2026</td><td class="nw">TC, morfológica</td><td class="nw">60 dias</td><td class="r nw"><button class="btn btn-sm">Editar</button></td></tr>
-            <tr><td class="nw"><b class="b">SulAmérica</b></td><td class="nw">TUSS + CBHPM 4ª ed.</td><td class="nw num">Porte 2C · UCO R$ 17,90</td><td class="nw">IGP-M · jul/2026</td><td class="nw">Todos com contraste</td><td class="nw">45 dias</td><td class="r nw"><button class="btn btn-sm">Editar</button></td></tr>
-            <tr><td class="nw"><b class="b">Petrobras (AMS)</b></td><td class="nw">Tabela AMS</td><td class="nw num">—</td><td class="nw">Anual</td><td class="nw">Ergométrico, MAPA</td><td class="nw">30 dias</td><td class="r nw"><button class="btn btn-sm">Editar</button></td></tr>
-          </tbody>
-        </table>
+    <sc-if value="{{tConv}}" hint-placeholder-val="{{ false }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px">
+        <section class="card pane" aria-labelledby="h-prod">
+          <div class="row" style="gap: 10px; flex: none"><h2 id="h-prod" style="font-size: 16px; font-weight: 650; flex: 1">Produção de novembro</h2>
+            <div class="seg" role="group" aria-label="Medida"><sc-for list="{{medidas}}" as="m" hint-placeholder-count="2"><button class="{{m.cls}}" aria-pressed="{{m.pr}}" onClick="{{m.ir}}" style="height: 36px">{{m.t}}</button></sc-for></div>
+          </div>
+          <div class="bars" style="flex: 1 1 auto; min-height: 0; height: auto; padding-top: 24px" role="img" aria-label="{{barsAria}}">
+            <sc-for list="{{barras}}" as="b" hint-placeholder-count="6"><div class="bc"><span class="bn">{{b.n}}</span><div class="{{b.cls}}" style="{{b.h}}"></div><span class="bl">{{b.l}}</span></div></sc-for>
+          </div>
+        </section>
+        <section class="card pane" style="padding: 0" aria-label="Indicadores por convênio">
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Convênio</th><th class="r">Guias</th><th class="r">Glosa</th><th class="r">Paga em</th></tr></thead>
+              <tbody>
+                <tr><td class="b">Unimed</td><td class="r num">1.204</td><td class="r num">2,4%</td><td class="r num">32 dias</td></tr>
+                <tr><td class="b">Bradesco Saúde</td><td class="r num">688</td><td class="r num">4,8%</td><td class="r num">45 dias</td></tr>
+                <tr><td class="b">SulAmérica</td><td class="r num">512</td><td class="r num">1,6%</td><td class="r num">30 dias</td></tr>
+                <tr><td class="b">Amil</td><td class="r num">398</td><td class="r num" style="color: #C2334D; font-weight: 600">6,3%</td><td class="r num">60 dias</td></tr>
+                <tr><td class="b">Petrobras</td><td class="r num">301</td><td class="r num">0,9%</td><td class="r num">30 dias</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
-    </section>
+    </sc-if>
 
-    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · VidaCor Imagem</p>
+    <sc-if value="{{tTab}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" style="padding: 0" aria-label="Tabelas e contratos">
+        <div class="ph"><span class="t14 mute" style="flex: 1">Cada mudança de tabela gera versão nova e pede segunda pessoa.</span><a class="btn btn-sm" href="Convenios-Tabelas.dc.html">Importar tabela</a><a class="btn btn-sm" href="Convenios-Tabelas.dc.html">Reajuste em lote</a></div>
+        <div class="scroll">
+          <table class="tb sticky">
+            <thead><tr><th>Convênio</th><th>Tabela</th><th>Porte e UCO</th><th>Reajuste</th><th>Exige autorização</th><th>Envio</th><th class="r"><span class="sr">Ação</span></th></tr></thead>
+            <tbody>
+              <tr><td class="b">Unimed</td><td>CBHPM 5ª ed. menos 10%</td><td class="num">3A, UCO R$ 18,42</td><td>IPCA, mar/2026</td><td>TC, RM, eco fetal</td><td>30 dias</td><td class="r"><a class="btn btn-sm" href="Convenios-Tabelas.dc.html">Abrir</a></td></tr>
+              <tr><td class="b">Bradesco Saúde</td><td>Tabela própria 2026</td><td class="mute">não se aplica</td><td>Anual, jan/2026</td><td>TC, morfológica</td><td>60 dias</td><td class="r"><a class="btn btn-sm" href="Convenios-Tabelas.dc.html">Abrir</a></td></tr>
+              <tr><td class="b">SulAmérica</td><td>TUSS e CBHPM 4ª ed.</td><td class="num">2C, UCO R$ 17,90</td><td>IGP-M, jul/2026</td><td>Todos com contraste</td><td>45 dias</td><td class="r"><a class="btn btn-sm" href="Convenios-Tabelas.dc.html">Abrir</a></td></tr>
+              <tr><td class="b">Amil</td><td>Tabela própria</td><td class="mute">não se aplica</td><td>Abril</td><td>TC, ecocardiograma</td><td>30 dias</td><td class="r"><a class="btn btn-sm" href="Convenios-Tabelas.dc.html">Abrir</a></td></tr>
+              <tr><td class="b">Petrobras (AMS)</td><td>Tabela AMS</td><td class="mute">não se aplica</td><td>Anual</td><td>Ergométrico, MAPA</td><td>30 dias</td><td class="r"><a class="btn btn-sm" href="Convenios-Tabelas.dc.html">Abrir</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{drwRec}}" hint-placeholder-val="{{ false }}">
+      <button class="dbg" aria-label="Fechar painel" onClick="{{fecharDrw}}"></button>
+      <aside class="drw" role="dialog" aria-modal="true" aria-labelledby="h-rec">
+        <header><h2 id="h-rec" style="flex: 1">Recurso da guia {{gr.guia}}</h2><button class="ix" aria-label="Fechar" onClick="{{fecharDrw}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></header>
+        <div class="scroll">
+          <dl class="kv" style="margin: 0">
+            <dt>Paciente</dt><dd>{{gr.pac}}</dd>
+            <dt>Exame</dt><dd>{{gr.ex}}</dd>
+            <dt>Glosa</dt><dd>{{gr.cod}}, {{gr.mot}}</dd>
+            <dt>Valor</dt><dd class="num">{{gr.v}}</dd>
+            <dt>Prazo</dt><dd>{{gr.prazo}}</dd>
+          </dl>
+          <label class="field">Justificativa<textarea class="in" rows="5" style="padding: 10px 14px" value="{{gr.just}}"></textarea></label>
+          <div class="col" style="gap: 0">
+            <div class="t13 mute b">Anexos sugeridos</div>
+            <div class="li"><div style="flex: 1; min-width: 0"><div class="t14 b">{{gr.anexo}}</div><div class="t13 mute">Do lastro do atendimento</div></div><span class="chip c-green">Anexado</span></div>
+            <div class="li"><div style="flex: 1; min-width: 0"><div class="t14 b">Laudo assinado</div><div class="t13 mute">PDF com hash conferido</div></div><span class="chip c-green">Anexado</span></div>
+          </div>
+        </div>
+        <footer><button class="btn btn-p" onClick="{{enviarRec}}">Enviar recurso</button><button class="btn" onClick="{{fecharDrw}}">Cancelar</button></footer>
+      </aside>
+    </sc-if>
+
+    <sc-if value="{{temToast}}" hint-placeholder-val="{{ false }}">
+      <div class="toast tst" role="status"><span style="flex: 1">{{toast}}</span><button onClick="{{fecharToast}}">Ok</button></div>
+    </sc-if>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2300}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(props) {
+    super(props);
+    this.state = { aba: 'guias', q: '', conv: '', sel: 'g1', g: {}, lote: '0153', lt: {}, gerou: false, med: 'v', rec: '', gl: {}, toast: '' };
+  }
+  renderVals() {
+    const s = this.state;
+    const G = [
+      { id: 'g1', prazo: 'Vence hoje', pz: 'r', num: '2026-1107-0042', pac: 'Vera L. Antunes', pacNome: 'Vera Lúcia Antunes', nasc: '18/09/1957', conv: 'SulAmérica', cart: '8890 0012 4471 0035', proc: 'TC de abdome total com contraste', tuss: '41001230', v: 'R$ 1.184,00', senha: 'Não registrada', st: 'Sem senha', stCls: 'chip c-rose', oque: 'A SulAmérica exige senha para tomografia. Sem ela a guia é glosada inteira. Peça a senha agora; a resposta preenche a guia sozinha.', acao: 'Solicitar senha', href: 'Autorizacao.dc.html' },
+      { id: 'g2', prazo: '1 dia', pz: 'r', num: '2026-1106-0018', pac: 'Juliana S. Rocha', pacNome: 'Juliana Sampaio Rocha', nasc: '12/04/1993', conv: 'Bradesco Saúde', cart: '7712 3301 9920 0014', proc: 'USG morfológica do 2º trimestre', tuss: '40901300', v: 'R$ 412,50', senha: 'BS-554120', st: 'Falta pedido médico', stCls: 'chip c-amber', oque: 'O pedido médico não foi digitalizado na recepção. Anexe a imagem do pedido; o restante já confere.', acao: 'Anexar pedido médico', fix: true },
+      { id: 'g3', prazo: '3 dias', pz: 'a', num: '2026-1105-0091', pac: 'Antônio C. Ribeiro', pacNome: 'Antônio Carlos Ribeiro', nasc: '15/06/1954', conv: 'Unimed', cart: '0032 1145 8890 2210', proc: 'Ecocardiograma e Doppler de carótidas', tuss: '40901114 e 40901238', v: 'R$ 698,40', senha: 'UN-88231-X', st: 'Laudo não assinado', stCls: 'chip c-amber', oque: 'O laudo está em revisão com Dr. Paulo Medeiros. A guia entra no lote assim que ele assinar.', acao: 'Ver laudo', href: 'Fluxo-Laudos.dc.html' },
+      { id: 'g4', prazo: '8 dias', pz: '', num: '2026-1104-0007', pac: 'Gustavo H. Pires', pacNome: 'Gustavo Henrique Pires', nasc: '27/10/1966', conv: 'Petrobras', cart: 'AMS 004 551 220', proc: 'Teste ergométrico', tuss: '40101045', v: 'R$ 265,00', senha: 'PB-10293', st: 'Pronta para lote', stCls: 'chip c-green', oque: 'Todas as conferências passaram.', acao: 'Incluir no lote', lote: true },
+      { id: 'g5', prazo: '12 dias', pz: '', num: '2026-1104-0033', pac: 'Neusa A. Freitas', pacNome: 'Neusa Aparecida Freitas', nasc: '05/01/1949', conv: 'Amil', cart: '5520 1188 0045 7710', proc: 'MAPA 24 horas', tuss: '20102038', v: 'R$ 182,00', senha: 'Não exigida', st: 'Pronta para lote', stCls: 'chip c-green', oque: 'Todas as conferências passaram.', acao: 'Incluir no lote', lote: true },
+      { id: 'g6', prazo: '14 dias', pz: '', num: '2026-1103-0120', pac: 'Maria Helena Duarte', pacNome: 'Maria Helena Duarte', nasc: '12/03/1968', conv: 'Unimed', cart: '0032 7781 2290 1104', proc: 'Ecocardiograma transtorácico', tuss: '40901114', v: 'R$ 248,60', senha: 'Não exigida', st: 'Pronta para lote', stCls: 'chip c-green', oque: 'Todas as conferências passaram.', acao: 'Incluir no lote', lote: true }
+    ];
+    const ef = g => {
+      const x = s.g[g.id];
+      if (x === 'anexo') return Object.assign({}, g, { st: 'Pronta para lote', stCls: 'chip c-green', oque: 'Pedido anexado por Carla Mendes às 10:32. Todas as conferências passaram.', acao: 'Incluir no lote', fix: false, lote: true });
+      if (x === 'lote') return Object.assign({}, g, { st: 'No lote 0153', stCls: 'chip c-blue', oque: 'Incluída no lote 0153. Para tirar, abra o lote.', acao: '', fix: false, lote: false });
+      return g;
+    };
+    const GE = G.map(ef);
+    const q = s.q.trim().toLowerCase();
+    const lista = GE.filter(g => (!s.conv || g.conv === s.conv) && (!q || (g.num + ' ' + g.pacNome).toLowerCase().indexOf(q) >= 0));
+    const cur = GE.find(g => g.id === s.sel) || GE[0];
+    const pzStyle = p => p === 'r' ? 'color: #C2334D' : (p === 'a' ? 'color: #9A5B00' : 'color: #334155');
+    const setG = (id, v) => this.setState(st => ({ g: Object.assign({}, st.g, { [id]: v }) }));
+    const L = [
+      { n: '0154', conv: 'Petrobras', obs: 'Gerado agora', g: '1', v: 'R$ 265,00', st: 'Validando no schema', stCls: 'chip c-amber', novo: true },
+      { n: '0153', conv: 'Unimed', obs: 'Gerado hoje às 09:10', g: '86', v: 'R$ 31.420,00', st: '3 bloqueiam', stCls: 'chip c-rose' },
+      { n: '0152', conv: 'Bradesco Saúde', obs: 'Schema conferido', g: '42', v: 'R$ 18.906,30', st: 'Pronto para envio', stCls: 'chip c-green' },
+      { n: '0151', conv: 'SulAmérica', obs: 'Protocolo 88120554, 03/11', g: '57', v: 'R$ 24.880,00', st: 'Aguardando retorno', stCls: 'chip c-blue' },
+      { n: '0149', conv: 'Amil', obs: 'Demonstrativo recebido', g: '61', v: 'R$ 22.410,00', st: 'Conciliado', stCls: 'chip c-teal' }
+    ].filter(l => !l.novo || s.gerou).map(l => (l.n === '0152' && s.lt['0152']) ? Object.assign({}, l, { st: 'Transmitido', stCls: 'chip c-blue', obs: 'Protocolo 88120911, hoje 10:40' }) : l);
+    const ok = (t, sub) => ({ ok: true, falha: false, t, s: sub, temLink: false, href: '', acao: '' });
+    const bad = (t, sub, href, acao) => ({ ok: false, falha: true, t, s: sub, temLink: !!href, href: href || '', acao: acao || '' });
+    const CK = {
+      '0153': [ok('Carteirinha válida na data do exame', '86 de 86 guias'), ok('Senha registrada', '31 de 31 exames que exigem senha'), bad('Laudo assinado', '2 guias com laudo em revisão', 'Fluxo-Laudos.dc.html', 'Ver'), bad('Valor igual ao contrato', '1 guia com valor de 2025', 'Auditoria-Faturamento.dc.html', 'Corrigir'), ok('XML válido no schema TISS 4.01', 'Validação automática da ANS')],
+      '0154': [ok('Carteirinha válida na data do exame', '1 de 1 guia'), ok('Senha registrada', 'PB-10293'), ok('Laudo assinado', '1 de 1'), bad('XML no schema TISS 4.01', 'Validação em andamento, leva cerca de 1 minuto')],
+      '0152': [ok('Carteirinha válida na data do exame', '42 de 42 guias'), ok('Senha registrada', '18 de 18'), ok('Laudo assinado', '42 de 42'), ok('XML válido no schema TISS 4.01', 'Conferido às 09:52')],
+      '0151': [ok('Transmitido pelo webservice', 'Protocolo 88120554 em 03/11 às 16:20'), ok('Recebimento confirmado pela operadora', 'Retorno previsto até 03/12')],
+      '0149': [ok('Demonstrativo importado', '2 glosas, R$ 276,80'), ok('Pagamento conciliado no banco', 'Crédito em 05/11')]
+    };
+    const lcur = L.find(l => l.n === s.lote) || L[0];
+    const transmitido = s.lt['0152'];
+    let ls = { msg: '', msgStyle: 'color: #5B6474', acao: 'Transmitir', bloq: true, agir: () => {} };
+    if (lcur.n === '0153') ls = { msg: '3 guias bloqueiam o envio. Corrija ou retire-as do lote.', msgStyle: 'color: #9A5B00', acao: 'Transmitir', bloq: true, agir: () => {} };
+    if (lcur.n === '0154') ls = { msg: 'Aguardando o resultado do schema.', msgStyle: 'color: #5B6474', acao: 'Transmitir', bloq: true, agir: () => {} };
+    if (lcur.n === '0152') ls = transmitido ? { msg: 'Transmitido às 10:40, protocolo 88120911.', msgStyle: 'color: #14532D', acao: 'Transmitido', bloq: true, agir: () => {} } : { msg: 'Tudo conferido. O envio usa a chave de idempotência do lote.', msgStyle: 'color: #5B6474', acao: 'Transmitir à Bradesco Saúde', bloq: false, agir: () => this.setState(st => ({ lt: Object.assign({}, st.lt, { '0152': true }) })) };
+    if (lcur.n === '0151') ls = { msg: 'Nada a fazer até o retorno da operadora.', msgStyle: 'color: #5B6474', acao: 'Consultar situação', bloq: false, agir: () => this.setState({ toast: 'SulAmérica respondeu às 10:41: lote em análise, sem pendências.' }) };
+    if (lcur.n === '0149') ls = { msg: 'Conciliado. As 2 glosas estão na aba Glosas.', msgStyle: 'color: #5B6474', acao: 'Ver glosas', bloq: false, agir: () => this.setState({ aba: 'glosas' }) };
+    const GL = [
+      { id: 'a', guia: '0149-017', cod: '1801', mot: 'Procedimento sem autorização', pac: 'Paulo R. Dias', ex: 'USG de abdome total', v: 'R$ 212,00', prazo: '2 dias', pz: 'r', just: 'A senha AM-77120 foi emitida em 28/10, antes do exame (30/10). Segue o print da resposta da operadora.', anexo: 'Resposta da Amil com a senha AM-77120' },
+      { id: 'b', guia: '0149-031', cod: '1714', mot: 'Valor acima da tabela', pac: 'Marta L. Siqueira', ex: 'Doppler venoso de membros inferiores', v: 'R$ 64,80', prazo: '5 dias', pz: 'a', just: 'Valor cobrado conforme o aditivo 04, vigente desde 01/09/2026.', anexo: 'Aditivo 04 do contrato Amil' },
+      { id: 'c', guia: '0147-102', cod: '2002', mot: 'Carteirinha vencida', pac: 'Sônia M. Castro', ex: 'Raio X de tórax', v: 'R$ 58,00', prazo: '5 dias', pz: 'a', just: 'Carteirinha renovada pela operadora em 01/10; elegibilidade confirmada no dia do exame.', anexo: 'Consulta de elegibilidade de 14/10' },
+      { id: 'd', guia: '0145-044', cod: '1702', mot: 'Cobrança em duplicidade', pac: 'Hélio T. Mendes', ex: 'Ecocardiograma', v: 'R$ 248,60', prazo: '9 dias', pz: '', just: 'São dois exames em datas diferentes (02/10 e 16/10), com pedidos distintos.', anexo: 'Os dois pedidos médicos' }
+    ];
+    const gr = GL.find(g => g.id === s.rec) || GL[0];
+    const B = {
+      v: [['Unimed', 'R$ 128 mil', 88], ['Bradesco', 'R$ 74 mil', 52], ['SulAmérica', 'R$ 58 mil', 41], ['Amil', 'R$ 41 mil', 30], ['Petrobras', 'R$ 36 mil', 26], ['Particular', 'R$ 52 mil', 37]],
+      g: [['Unimed', '1.204', 90], ['Bradesco', '688', 52], ['SulAmérica', '512', 39], ['Amil', '398', 30], ['Petrobras', '301', 23], ['Particular', '470', 36]]
+    };
+    const A = [['guias', 'Guias pendentes', '38'], ['lotes', 'Lotes', ''], ['glosas', 'Glosas e recursos', '4'], ['demo', 'Demonstrativos', ''], ['conv', 'Por convênio', ''], ['tab', 'Tabelas e contratos', '']];
+    return {
+      gerarLote: () => this.setState({ gerou: true, aba: 'lotes', lote: '0154', toast: 'Lote 0154 da Petrobras gerado às 10:30 com 1 guia. A validação no schema já começou.' }), jaGerou: s.gerou,
+      abas: A.map(([k, t, n]) => ({ t, n, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      tGuias: s.aba === 'guias', tLotes: s.aba === 'lotes', tGlosas: s.aba === 'glosas', tDemo: s.aba === 'demo', tConv: s.aba === 'conv', tTab: s.aba === 'tab',
+      q: s.q, onQ: e => this.setState({ q: e.target.value }), onConv: e => this.setState({ conv: e.target.value }),
+      guias: lista.map(g => Object.assign({}, g, { pzStyle: pzStyle(g.pz), prazoTxt: g.prazo === 'Vence hoje' ? 'Envio vence hoje' : 'Envio em ' + g.prazo, cls: 'rowp' + (g.id === cur.id ? ' sel' : ''), atual: g.id === cur.id ? 'true' : 'false', abrir: () => this.setState({ sel: g.id }) })),
+      semGuias: lista.length === 0,
+      gs: Object.assign({}, cur, { ate: cur.prazo === 'Vence hoje' ? 'Hoje, 07/11' : 'Em ' + cur.prazo,
+        btnAcao: !!(cur.fix || cur.lote), linkAcao: !!cur.href && !cur.fix && !cur.lote && s.g[cur.id] !== 'lote', href: cur.href || '',
+        agir: () => setG(cur.id, cur.fix ? 'anexo' : 'lote') }),
+      lotes: L.map(l => Object.assign({}, l, { cls: 'rowp' + (l.n === lcur.n ? ' sel' : ''), atual: l.n === lcur.n ? 'true' : 'false', abrir: () => this.setState({ lote: l.n }) })),
+      ls: Object.assign({ n: lcur.n, conv: lcur.conv, checks: CK[lcur.n] }, ls),
+      glosas: GL.map(g => Object.assign({}, g, { pzStyle: pzStyle(g.pz), feito: !!s.gl[g.id], st: s.gl[g.id] ? 'Recurso enviado' : 'A recorrer', stCls: s.gl[g.id] ? 'chip c-blue' : 'chip c-amber', recorrer: () => this.setState({ rec: g.id }) })),
+      drwRec: s.rec !== '', gr, fecharDrw: () => this.setState({ rec: '' }),
+      enviarRec: () => this.setState(st => ({ gl: Object.assign({}, st.gl, { [st.rec]: true }), rec: '', toast: 'Recurso da guia ' + gr.guia + ' enviado às 10:45. Protocolo e anexos ficam no lastro da guia.' })),
+      medidas: [['v', 'Valor'], ['g', 'Guias']].map(([k, t]) => ({ t, cls: s.med === k ? 'on' : '', pr: s.med === k ? 'true' : 'false', ir: () => this.setState({ med: k }) })),
+      barras: B[s.med].map((b, i) => ({ l: b[0], n: b[1], h: 'height: ' + b[2] + '%', cls: i === 0 ? 'bv on' : 'bv' })),
+      barsAria: s.med === 'v' ? 'Produção por convênio em reais: Unimed 128 mil, Bradesco 74 mil, SulAmérica 58 mil, Amil 41 mil, Petrobras 36 mil, particular 52 mil' : 'Guias por convênio: Unimed 1.204, Bradesco 688, SulAmérica 512, Amil 398, Petrobras 301, particular 470',
+      temToast: s.toast !== '', toast: s.toast, fecharToast: () => this.setState({ toast: '' })
+    };
+  }
 }
 </script>
 </body>

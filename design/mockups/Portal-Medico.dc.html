@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Portal do médico — VidaCor</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
@@ -12,158 +12,204 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0;background:#F2F3F6}
-.tn{display:inline-flex;align-items:center;height:42px;padding:0 16px;border-radius:999px;color:#334155;font-size:15px;font-weight:550}
-.tn.on{background:#0A1A4A;color:#fff}
+.ptabs{display:flex;gap:2px;align-self:stretch}
+.ptabs button{height:100%;padding:0 14px;border:0;background:transparent;font:500 15px Inter,sans-serif;color:#5B6474;cursor:pointer;border-bottom:2px solid transparent}
+.ptabs button.on{color:#0F172A;font-weight:600;border-bottom-color:#0A1A4A}
 .sw{width:46px;height:28px;border-radius:999px;background:#D9DDE5;position:relative;flex:none;border:0;cursor:pointer}
 .sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .sw.on{background:#0C72B0}.sw.on::after{left:21px}
-.sw.lock{background:#1F7A4D;opacity:.75;cursor:not-allowed}
-.pk{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:8px 12px;border-radius:14px;border:1px solid #E8EAEF;background:#fff;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.pk{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:8px 12px;border-radius:12px;border:1px solid #E8EAEF;background:#fff;text-align:left;font:inherit;color:inherit;cursor:pointer}
 .pk:hover{border-color:#9CC7E8}
-.pk.on{border-color:#0C72B0;background:#F5FAFE;box-shadow:inset 3px 0 0 #0C72B0}
-.ki{aspect-ratio:4/3;border-radius:12px;background:radial-gradient(60% 55% at 50% 55%,#3A4558 0%,#151B26 55%,#05070B 100%);position:relative;overflow:hidden}
-.ki::before{content:"";position:absolute;left:22%;top:28%;width:56%;height:46%;border-radius:50% 50% 45% 45%;border:2px solid rgba(214,222,234,.35)}
+.pk.on{border:2px solid #0C72B0;background:#F5FAFE;padding:7px 11px}
+.ki{aspect-ratio:4/3;border-radius:10px;background:#11161F;position:relative;overflow:hidden}
+.ki::before{content:"";position:absolute;left:22%;top:24%;width:56%;height:46%;border-radius:50% 50% 45% 45%;border:2px solid rgba(214,222,234,.3)}
 .ki span{position:absolute;left:8px;bottom:6px;font-size:11px;font-weight:600;color:#D6DEEA}
+.rowp{cursor:pointer}
+.rowp:hover td{background:#F8FAFC}
+.rowp.sel td{background:#EEF4FB}
+.h2{font-size:17px;font-weight:650;margin:0}
+.flab{font-size:14px;font-weight:600;color:#0F172A;margin:0 0 8px}
 </style>
 </helmet>
-<div style="font-family: Inter, sans-serif; min-height: 100vh; background: #F2F3F6">
-  <header style="display: flex; align-items: center; gap: 20px; padding: 14px 32px; flex-wrap: wrap">
-    <img src="/_blob/69e27b6caf70295083c2b311e1218937" alt="VidaCor Imagem" style="height: 46px; width: auto">
-    <span style="font-size: 16px; font-weight: 650; color: #0A1A4A; padding-left: 16px; border-left: 1px solid #D9DDE5">VidaCor para médicos</span>
-    <nav aria-label="Portal do médico" style="display: flex; gap: 4px; flex-wrap: wrap; margin-left: 12px">
-      <a class="tn on" href="Portal-Medico.dc.html" aria-current="page">Início</a>
-      <a class="tn" href="Portal-Medico.dc.html">Pedir exame</a>
-      <a class="tn" href="Portal-Medico.dc.html">Meus pacientes</a>
-      <a class="tn" href="Portal-Medico.dc.html">Preferências</a>
+<div style="font-family: Inter, sans-serif; height: 100vh; overflow: hidden; background: #F2F3F6; display: flex; flex-direction: column">
+  <header class="row" style="gap: 18px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid #E8EAEF; flex: none">
+    <img src="/_blob/69e27b6caf70295083c2b311e1218937" alt="VidaCor Imagem" style="height: 40px; width: auto">
+    <span class="t15 b" style="color: #0A1A4A">Para médicos</span>
+    <nav class="ptabs" aria-label="Portal do médico" style="margin-left: 8px">
+      <sc-for list="{{abas}}" as="a" hint-placeholder-count="3"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for>
     </nav>
     <div class="grow"></div>
-    <div class="row" style="gap: 10px"><span class="av" style="background: #0A1A4A; color: #fff">HL</span><span class="t14" style="line-height: 1.3"><b style="display: block">Dr. Hugo Lemos</b><span class="mute">Cardiologia · CRM-SC 8.120</span></span></div>
+    <span class="t13 mute">Sessão expira em 30 min sem uso</span>
+    <div class="row" style="gap: 10px"><span class="av" style="background: #0A1A4A; color: #fff">HL</span><span class="t14" style="line-height: 1.3"><b style="display: block">Dr. Hugo Lemos</b><span class="mute">CRM-SC 8.120</span></span></div>
     <button class="btn btn-sm">Sair</button>
   </header>
 
-  <main style="max-width: 1360px; margin: 0 auto; padding: 8px 32px 40px; display: flex; flex-direction: column; gap: 16px">
-    <div class="row wrap" style="gap: 10px; padding: 0 4px">
-      <div class="grow"><h1 style="font-size: 30px; font-weight: 650; letter-spacing: -.025em">Bom dia, Dr. Hugo</h1><p class="t15 mute" style="margin: 6px 0 0">Você vê só os pacientes que encaminhou à VidaCor. Cada laudo aberto fica registrado.</p></div>
-      <span class="chip c-green">2 laudos novos desde ontem</span>
-      <span class="chip c-blue">Sessão segura · 2 etapas · expira em 30 min sem uso</span>
-    </div>
+  <main style="flex: 1 1 auto; min-height: 0; padding: 16px 28px 20px; display: flex; flex-direction: column">
 
-    <div class="split">
-      <section class="card main" aria-labelledby="pd-h" style="display: flex; flex-direction: column; gap: 16px">
-        <div class="card-h" style="margin: 0"><span class="ni k-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"></path><path d="M14 3v5h5M10 13h6M13 10v6"></path></svg></span><div><h2 id="pd-h">Pedir exame</h2><div class="sub">Vira pré-agendamento: a clínica fala com o paciente para marcar o horário</div></div></div>
-
-        <div class="col" style="gap: 8px">
-          <span class="lbl">1 · Paciente</span>
-          <div class="seg" role="tablist" aria-label="Paciente"><button class="{{modoMeusCls}}" role="tab" aria-selected="{{modoMeusSel}}" onClick="{{verMeus}}">Já encaminhei antes</button><button class="{{modoNovoCls}}" role="tab" aria-selected="{{modoNovoSel}}" onClick="{{verNovo}}">Paciente novo para mim</button></div>
-          <sc-if value="{{modoMeus}}" hint-placeholder-val="{{ true }}">
-            <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar entre meus pacientes</span><input type="search" placeholder="Nome ou data de nascimento" value="{{busca}}" onChange="{{onBusca}}"></label>
-            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 8px">
-              <sc-for list="{{achados}}" as="p" hint-placeholder-count="3">
-                <button class="{{p.cls}}" aria-pressed="{{p.sel}}" onClick="{{p.pick}}"><span class="av av-sm" style="background: #E8F2FB; color: #0C72B0">{{p.ini}}</span><span style="min-width: 0"><span class="t14 b" style="display: block">{{p.nome}}</span><span class="t13 mute">Nasc. {{p.nasc}}</span></span></button>
-              </sc-for>
-            </div>
-            <sc-if value="{{semAchado}}" hint-placeholder-val="{{ false }}"><p class="t13 mute" style="margin: 0">Nenhum paciente seu com esse nome ou nascimento. Use "Paciente novo para mim".</p></sc-if>
-          </sc-if>
-          <sc-if value="{{modoNovo}}" hint-placeholder-val="{{ false }}">
-            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 12px">
-              <label class="field">Nome completo<input class="in" placeholder="Como no documento"></label>
-              <label class="field">Data de nascimento<input class="in num" placeholder="dd/mm/aaaa" inputmode="numeric"></label>
-              <label class="field">Celular do paciente<input class="in num" placeholder="(00) 00000-0000" inputmode="tel"></label>
-            </div>
-            <p class="t13 mute" style="margin: 0">A clínica confere se o paciente já tem cadastro. Por segurança, não mostramos aqui dados de quem você não encaminhou.</p>
-          </sc-if>
-        </div>
-
-        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 12px">
-          <label class="field">2 · Exame<select class="in" onChange="{{onExame}}"><option>Ecocardiograma transtorácico</option><option>Doppler de carótidas e vertebrais</option><option>Teste ergométrico</option><option>MAPA 24 horas</option><option>Holter 24 horas</option></select></label>
-          <label class="field">CID-10 (opcional)<input class="in" value="I10 · Hipertensão essencial"></label>
-        </div>
-        <label class="field">3 · Indicação clínica<textarea class="in" rows="2">Hipertenso há 8 anos, dispneia aos médios esforços. Avaliar função ventricular e hipertrofia.</textarea></label>
-
-        <div class="row wrap" style="gap: 16px; align-items: flex-end">
-          <div class="col" style="gap: 6px"><span class="t13 b mute">4 · Urgência</span>
-            <div class="seg" role="radiogroup" aria-label="Urgência"><sc-for list="{{urgs}}" as="u" hint-placeholder-count="3"><button class="{{u.cls}}" role="radio" aria-checked="{{u.sel}}" onClick="{{u.pick}}">{{u.t}}</button></sc-for></div>
+    <sc-if value="{{tPac}}" hint-placeholder-val="{{ true }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 460px); gap: 16px; height: 100%">
+        <section class="card pane" aria-label="Meus pacientes" style="padding: 0">
+          <div class="row" style="padding: 14px 18px 0; gap: 12px">
+            <h1 style="font-size: 20px; font-weight: 650">Meus pacientes</h1>
+            <span class="t13 mute">Exames pedidos por você nos últimos 90 dias</span>
           </div>
-          <div class="col" style="gap: 6px; flex: 1 1 240px"><span class="t13 b mute">5 · Pedido assinado</span>
-            <sc-if value="{{semAnexo}}" hint-placeholder-val="{{ true }}"><button class="btn btn-sm" style="align-self: flex-start" onClick="{{anexar}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 11l-8.5 8.5a5 5 0 0 1-7-7L14 4a3.5 3.5 0 0 1 5 5l-8.5 8.5a2 2 0 0 1-3-3L15 7"></path></svg>Anexar pedido (PDF ou foto)</button></sc-if>
-            <sc-if value="{{temAnexo}}" hint-placeholder-val="{{ false }}"><span class="chip c-green" style="align-self: flex-start">pedido-assinado.pdf · 212 KB · assinatura digital válida</span></sc-if>
+          <nav class="tabs" aria-label="Situação" style="padding: 4px 14px 0">
+            <sc-for list="{{filtros}}" as="x" hint-placeholder-count="4"><button class="{{x.cls}}" aria-current="{{x.sel}}" onClick="{{x.pick}}">{{x.t}}</button></sc-for>
+          </nav>
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Paciente</th><th>Exame</th><th>Situação</th></tr></thead>
+              <tbody>
+                <sc-for list="{{lista}}" as="e" hint-placeholder-count="5">
+                  <tr class="{{e.cls}}" onClick="{{e.abrir}}" aria-selected="{{e.atual}}">
+                    <td><div class="b">{{e.nome}}</div><div class="t13 mute num">{{e.nasc}}</div></td>
+                    <td>{{e.exame}}<div class="t13 mute">{{e.quando}}</div></td>
+                    <td><span class="{{e.chip}}">{{e.sit}}</span></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
           </div>
-        </div>
-        <p class="t13 mute" style="margin: 0">{{urgNota}}</p>
-
-        <div class="row wrap" style="gap: 12px; padding-top: 12px; border-top: 1px solid #E8EAEF">
-          <span class="t14" style="flex: 1 1 260px">{{resumoPedido}}</span>
-          <button class="btn btn-p" disabled="{{bloqEnviar}}" onClick="{{enviar}}">Enviar pedido</button>
-        </div>
-        <sc-if value="{{enviado}}" hint-placeholder-val="{{ false }}">
-          <div class="banner ok" role="status"><div class="t14" style="line-height: 1.5"><b>Pedido PRE-2611-0048 recebido.</b> A recepção vai falar com {{pacSel}} pelo WhatsApp para escolher o horário. Avisamos aqui quando estiver agendado. Se enviar de novo, não duplica.</div></div>
-        </sc-if>
-      </section>
-
-      <section class="card aside" aria-labelledby="pr-h">
-        <div class="card-h"><span class="ni k-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"></path></svg></span><div><h2 id="pr-h">Como receber laudos</h2><div class="sub">Vale para todos os seus pacientes</div></div></div>
-        <sc-for list="{{prefs}}" as="f" hint-placeholder-count="4">
-          <div class="li"><div style="flex: 1; min-width: 0"><div class="t">{{f.t}}</div><div class="s">{{f.s}}</div></div><button class="{{f.cls}}" role="switch" aria-checked="{{f.on}}" aria-label="{{f.t}}" onClick="{{f.tg}}"></button></div>
-        </sc-for>
-        <p class="t13 mute" style="margin: 8px 0 0">Mensagens de aviso nunca trazem o resultado: só dizem que há laudo novo no portal.</p>
-      </section>
-    </div>
-
-    <section class="card" aria-labelledby="mp-h">
-      <div class="card-h wrap"><span class="ni k-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M3 20c.8-3.4 3.2-5 6-5s5.2 1.6 6 5M16 4.5a3.5 3.5 0 0 1 0 7M18 15c1.6.6 2.6 2.2 3 5"></path></svg></span><div><h2 id="mp-h">Meus pacientes</h2><div class="sub">Exames que você pediu nos últimos 90 dias</div></div>
-        <div class="seg" role="tablist" aria-label="Situação" style="margin-left: auto"><sc-for list="{{filtros}}" as="x" hint-placeholder-count="4"><button class="{{x.cls}}" role="tab" aria-selected="{{x.sel}}" onClick="{{x.pick}}" style="height: 36px">{{x.t}}</button></sc-for></div>
-      </div>
-      <table class="tb">
-        <thead><tr><th>Paciente</th><th>Exame</th><th>Situação</th><th class="r">Ação</th></tr></thead>
-        <tbody>
-          <sc-for list="{{lista}}" as="e" hint-placeholder-count="5">
-            <tr><td><b>{{e.nome}}</b><div class="t13 mute">Nasc. {{e.nasc}}</div></td><td>{{e.exame}}<div class="t13 mute">{{e.quando}}</div></td><td><span class="{{e.chip}}"><span class="d"></span>{{e.sit}}</span></td>
-              <td class="r"><sc-if value="{{e.pronto}}" hint-placeholder-val="{{ true }}"><button class="btn btn-sm btn-p" onClick="{{e.abrir}}">Abrir laudo</button></sc-if><sc-if value="{{e.naoPronto}}" hint-placeholder-val="{{ false }}"><span class="t13 mute">{{e.prev}}</span></sc-if></td></tr>
-          </sc-for>
-        </tbody>
-      </table>
-    </section>
-
-    <sc-if value="{{temLaudo}}" hint-placeholder-val="{{ true }}">
-      <div class="split">
-        <section class="card main" aria-labelledby="ld-h" style="display: flex; flex-direction: column; gap: 14px">
-          <div class="row wrap" style="gap: 12px">
-            <div class="grow"><div class="lbl">Laudo assinado</div><h2 id="ld-h" style="font-size: 22px; margin-top: 4px">{{lau.exame}}</h2><div class="t14 mute" style="margin-top: 4px">{{lau.nome}} · nasc. {{lau.nasc}}</div></div>
-            <span class="chip c-green">Assinado por {{lau.medico}} · {{lau.quando}}</span>
-          </div>
-          <div style="padding: 16px; border-radius: 16px; background: #F6F7F9; font-size: 15px; line-height: 1.6"><b>Conclusão:</b> {{lau.concl}}</div>
-          <div class="row wrap" style="gap: 8px"><a class="btn btn-sm" href="Laudo-Impresso.dc.html">Laudo completo (PDF assinado)</a><button class="btn btn-sm">Comparar com exame anterior</button></div>
-          <div class="row wrap" style="gap: 8px"><b class="t15">Imagens-chave</b><span class="chip c-blue">Link seguro · vale 7 dias · só para você</span></div>
-          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 10px">
-            <sc-for list="{{lau.imgs}}" as="k" hint-placeholder-count="4"><div class="ki" role="img" aria-label="{{k}}"><span>{{k}}</span></div></sc-for>
-          </div>
-          <a class="btn btn-sm" href="Visualizador.dc.html" style="align-self: flex-start">Abrir estudo completo no visualizador</a>
         </section>
 
-        <section class="card aside" aria-labelledby="cv-h" style="display: flex; flex-direction: column; gap: 10px; padding: 0; overflow: hidden">
-          <div class="row" style="gap: 10px; padding: 16px 18px; border-bottom: 1px solid #E8EAEF"><span class="av av-sm" style="background: #E8F2FB; color: #0C72B0">{{lau.ini}}</span><div style="min-width: 0"><h2 id="cv-h" class="t15 b">Conversar com {{lau.medico}}</h2><div class="t13 mute">Sobre {{lau.nome}} · segunda opinião</div></div></div>
-          <div class="msgs" style="background: #F6F7F9; min-height: 220px">
-            <sc-for list="{{msgs}}" as="m" hint-placeholder-count="2"><div class="{{m.cls}}"><div>{{m.t}}</div><div class="meta">{{m.h}}</div></div></sc-for>
+        <aside class="card pane" aria-label="Exame selecionado" style="padding: 0">
+          <div style="padding: 16px 20px 0">
+            <div class="b" style="font-size: 18px">{{lau.nome}}</div>
+            <div class="t14 num" style="color: #334155">{{lau.nasc}}</div>
           </div>
-          <div class="cmp" style="border: 0">
-            <label class="in"><span class="sr">Mensagem</span><input placeholder="Escreva sua dúvida sobre o laudo" value="{{rasc}}" onChange="{{onRasc}}" onKeyDown="{{onEnter}}"><button class="send" aria-label="Enviar mensagem" onClick="{{enviarMsg}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></label>
-            <span class="t12 mute">A conversa fica no prontuário do exame. Resposta em até 1 dia útil.</span>
+          <nav class="tabs" aria-label="Detalhe" style="padding: 6px 12px 0">
+            <sc-for list="{{subabas}}" as="a" hint-placeholder-count="2"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for>
+          </nav>
+
+          <sc-if value="{{vLaudo}}" hint-placeholder-val="{{ true }}">
+            <div class="scroll" style="padding: 16px 20px; display: flex; flex-direction: column; gap: 14px">
+              <div><div class="t15 b">{{lau.exame}}</div><div class="t13 mute">{{lau.estado}}</div></div>
+              <sc-if value="{{lau.pronto}}" hint-placeholder-val="{{ true }}">
+                <div style="padding: 14px 16px; border-radius: 14px; background: #F6F7F9; font-size: 15px; line-height: 1.6"><b>Conclusão:</b> {{lau.concl}}</div>
+                <div class="t14 b">Imagens-chave</div>
+                <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+                  <sc-for list="{{lau.imgs}}" as="k" hint-placeholder-count="4"><div class="ki" role="img" aria-label="{{k}}"><span>{{k}}</span></div></sc-for>
+                </div>
+                <div class="t13 mute">Link seguro das imagens vale 7 dias e só abre para você.</div>
+              </sc-if>
+              <sc-if value="{{lau.naoPronto}}" hint-placeholder-val="{{ false }}">
+                <div class="banner info" role="status"><div class="t14">{{lau.prev}}. O laudo aparece aqui assim que for assinado.</div></div>
+              </sc-if>
+            </div>
+            <div class="row wrap" style="gap: 8px; padding: 12px 20px; border-top: 1px solid #E8EAEF">
+              <sc-if value="{{lau.pronto}}" hint-placeholder-val="{{ true }}">
+                <a class="btn btn-sm btn-p" href="Laudo-Impresso.dc.html">Laudo completo (PDF)</a>
+                <a class="btn btn-sm" href="Visualizador.dc.html">Abrir estudo</a>
+                <button class="btn btn-sm">Comparar</button>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{vConversa}}" hint-placeholder-val="{{ false }}">
+            <div class="scroll" style="background: #F6F7F9">
+              <div class="msgs">
+                <sc-for list="{{msgs}}" as="m" hint-placeholder-count="2"><div class="{{m.cls}}"><div>{{m.t}}</div><div class="meta">{{m.h}}</div></div></sc-for>
+              </div>
+            </div>
+            <div class="cmp">
+              <label class="in"><span class="sr">Mensagem para {{lau.medico}}</span><input placeholder="Escreva sua dúvida sobre o laudo" value="{{rasc}}" onChange="{{onRasc}}" onKeyDown="{{onEnter}}"><button class="send" aria-label="Enviar mensagem" onClick="{{enviarMsg}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></label>
+              <span class="t12 mute">Conversa com {{lau.medico}}. Fica no prontuário do exame; resposta em até 1 dia útil.</span>
+            </div>
+          </sc-if>
+        </aside>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{tPedir}}" hint-placeholder-val="{{ false }}">
+      <section class="card pane fill" aria-labelledby="pd-h" style="height: 100%; padding: 0">
+        <div class="row" style="padding: 16px 22px; gap: 12px; border-bottom: 1px solid #E8EAEF">
+          <h1 id="pd-h" style="font-size: 20px; font-weight: 650">Pedir exame</h1>
+          <span class="t13 mute">Vira pré-agendamento: a clínica fala com o paciente para marcar o horário.</span>
+        </div>
+        <div class="scroll" style="padding: 18px 22px">
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px">
+            <div class="col" style="gap: 10px">
+              <div class="flab">Paciente</div>
+              <div class="seg" role="tablist" aria-label="Paciente"><button class="{{modoMeusCls}}" role="tab" aria-selected="{{modoMeusSel}}" onClick="{{verMeus}}">Já encaminhei antes</button><button class="{{modoNovoCls}}" role="tab" aria-selected="{{modoNovoSel}}" onClick="{{verNovo}}">Paciente novo para mim</button></div>
+              <sc-if value="{{modoMeus}}" hint-placeholder-val="{{ true }}">
+                <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar entre meus pacientes</span><input type="search" placeholder="Nome ou data de nascimento" value="{{busca}}" onChange="{{onBusca}}"></label>
+                <div class="col" style="gap: 8px">
+                  <sc-for list="{{achados}}" as="p" hint-placeholder-count="3">
+                    <button class="{{p.cls}}" aria-pressed="{{p.sel}}" onClick="{{p.pick}}"><span class="av av-sm" style="background: #E8F2FB; color: #0C72B0">{{p.ini}}</span><span style="min-width: 0; flex: 1"><span class="t14 b" style="display: block">{{p.nome}}</span><span class="t13 mute num">{{p.nasc}}</span></span></button>
+                  </sc-for>
+                </div>
+                <sc-if value="{{semAchado}}" hint-placeholder-val="{{ false }}"><p class="t13 mute" style="margin: 0">Nenhum paciente seu com esse nome ou nascimento. Use "Paciente novo para mim".</p></sc-if>
+              </sc-if>
+              <sc-if value="{{modoNovo}}" hint-placeholder-val="{{ false }}">
+                <label class="field">Nome completo<input class="in" placeholder="Como no documento"></label>
+                <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+                  <label class="field">Data de nascimento<input class="in num" placeholder="dd/mm/aaaa" inputmode="numeric"></label>
+                  <label class="field">Celular<input class="in num" placeholder="(00) 00000-0000" inputmode="tel"></label>
+                </div>
+                <p class="t13 mute" style="margin: 0">A clínica confere se já existe cadastro. Dados de quem você não encaminhou não aparecem aqui.</p>
+              </sc-if>
+            </div>
+            <div class="col" style="gap: 14px">
+              <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 12px">
+                <label class="field">Exame<select class="in" onChange="{{onExame}}"><option>Ecocardiograma transtorácico</option><option>Doppler de carótidas e vertebrais</option><option>Teste ergométrico</option><option>MAPA 24 horas</option><option>Holter 24 horas</option></select></label>
+                <label class="field">CID-10 (opcional)<input class="in" value="I10, hipertensão essencial"></label>
+              </div>
+              <label class="field">Indicação clínica<textarea class="in" rows="3">Hipertenso há 8 anos, dispneia aos médios esforços. Avaliar função ventricular e hipertrofia.</textarea></label>
+              <div class="field">Urgência
+                <div class="seg" role="radiogroup" aria-label="Urgência"><sc-for list="{{urgs}}" as="u" hint-placeholder-count="3"><button class="{{u.cls}}" role="radio" aria-checked="{{u.sel}}" onClick="{{u.pick}}">{{u.t}}</button></sc-for></div>
+                <span class="t13" style="font-weight: 400; color: #334155">{{urgNota}}</span>
+              </div>
+              <div class="field">Pedido assinado
+                <sc-if value="{{semAnexo}}" hint-placeholder-val="{{ true }}"><button class="btn btn-sm" style="align-self: flex-start" onClick="{{anexar}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 11l-8.5 8.5a5 5 0 0 1-7-7L14 4a3.5 3.5 0 0 1 5 5l-8.5 8.5a2 2 0 0 1-3-3L15 7"></path></svg>Anexar pedido (PDF ou foto)</button></sc-if>
+                <sc-if value="{{temAnexo}}" hint-placeholder-val="{{ false }}"><span class="t14" style="font-weight: 400; color: #1F7A4D">pedido-assinado.pdf, 212 KB, assinatura digital válida</span></sc-if>
+              </div>
+            </div>
+          </div>
+          <sc-if value="{{enviado}}" hint-placeholder-val="{{ false }}">
+            <div class="banner ok" role="status" style="margin-top: 18px"><div class="t14" style="line-height: 1.5"><b>Pedido PRE-2611-0048 recebido.</b> A recepção vai falar com {{pacSel}} pelo WhatsApp para escolher o horário e avisamos aqui quando estiver agendado. Enviar de novo não duplica.</div></div>
+          </sc-if>
+        </div>
+        <div class="row" style="gap: 12px; padding: 14px 22px; border-top: 1px solid #E8EAEF">
+          <span class="t14" style="flex: 1">{{resumoPedido}}</span>
+          <button class="btn btn-p" disabled="{{bloqEnviar}}" onClick="{{enviar}}">Enviar pedido</button>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{tPref}}" hint-placeholder-val="{{ false }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; height: 100%">
+        <section class="card pane" aria-labelledby="pr-h">
+          <h2 id="pr-h" class="h2" style="margin-bottom: 8px">Como receber laudos</h2>
+          <div class="scroll">
+            <sc-for list="{{prefs}}" as="f" hint-placeholder-count="3">
+              <div class="li"><div style="flex: 1; min-width: 0"><div class="t">{{f.t}}</div><div class="s">{{f.s}}</div></div><button class="{{f.cls}}" role="switch" aria-checked="{{f.on}}" aria-label="{{f.t}}" onClick="{{f.tg}}"></button></div>
+            </sc-for>
+          </div>
+          <p class="t13 mute" style="margin: 0; padding-top: 12px; border-top: 1px solid #E8EAEF">Avisos nunca trazem o resultado: só dizem que há laudo novo no portal.</p>
+        </section>
+        <section class="card pane" aria-labelledby="sg-h">
+          <h2 id="sg-h" class="h2" style="margin-bottom: 8px">Acesso</h2>
+          <div class="scroll">
+            <dl class="kv" style="margin: 0">
+              <dt>Verificação</dt><dd>Em 2 etapas, ativa</dd>
+              <dt>Sessão</dt><dd>Expira em 30 minutos sem uso</dd>
+              <dt>Escopo</dt><dd>Só pacientes encaminhados por você. Cada laudo aberto fica registrado.</dd>
+              <dt>Último acesso</dt><dd>Ontem, 18:42, Chrome no Windows</dd>
+            </dl>
           </div>
         </section>
       </div>
     </sc-if>
-
-    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { modo: 'meus', busca: '', pac: '', urg: 'rotina', anexo: false, enviado: false, filtro: 'todos', laudo: 'acr',
+    this.state = { aba: 'pac', sub: 'laudo', modo: 'meus', busca: '', pac: '', urg: 'rotina', anexo: false, enviado: false, filtro: 'todos', laudo: 'acr',
       prefs: { portal: true, email: true, zap: false }, rasc: '',
-      conv: { acr: [['Dr. Hugo, a hipertrofia é concêntrica leve. Sugiro repetir em 12 meses ou antes se piorar a dispneia.', '06/11 17:02', 0]], vla: [] } };
+      conv: { acr: [['Dr. Hugo, a hipertrofia é concêntrica leve. Sugiro repetir em 12 meses ou antes se piorar a dispneia.', '06/11 17:02', 0]] } };
   }
   enviarMsg() {
     const t = (this.state.rasc || '').trim(); if (!t) return;
@@ -172,29 +218,32 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state;
     const P = [
-      { id: 'acr', nome: 'Antônio Carlos Ribeiro', ini: 'AR', nasc: '15/06/1954', exame: 'Ecocardiograma transtorácico', quando: 'Realizado 06/11', sit: 'Laudo pronto', st: 'pronto', chip: 'chip c-green',
-        medico: 'Dr. Paulo Medeiros', mini: 'PM', assin: '06/11 16:40', concl: 'Hipertrofia concêntrica leve do ventrículo esquerdo. Função sistólica preservada (fração de ejeção de 62%). Disfunção diastólica grau I.', imgs: ['Paraesternal longo', 'Apical 4 câmaras', 'Doppler mitral', 'Modo M'] },
-      { id: 'vla', nome: 'Vera Lúcia Antunes', ini: 'VA', nasc: '18/09/1957', exame: 'MAPA 24 horas', quando: 'Realizado 04/11', sit: 'Laudo pronto', st: 'pronto', chip: 'chip c-green',
-        medico: 'Dr. Paulo Medeiros', mini: 'PM', assin: '05/11 11:15', concl: 'Médias pressóricas de vigília e sono acima do normal. Ausência de descenso noturno.', imgs: ['Gráfico 24 h', 'Médias por período'] },
-      { id: 'mhd', nome: 'Maria Helena Duarte', ini: 'MD', nasc: '12/03/1968', exame: 'Doppler de carótidas', quando: 'Realizado hoje 08:40', sit: 'Realizado · em laudo', st: 'realizado', chip: 'chip c-violet', prev: 'Previsão: hoje até 18:00' },
-      { id: 'smc', nome: 'Sônia Maria Castro', ini: 'SC', nasc: '03/02/1962', exame: 'Teste ergométrico', quando: 'Qui, 12/11 · 08:30', sit: 'Agendado', st: 'agendado', chip: 'chip c-blue', prev: 'Preparo enviado' },
-      { id: 'rml', nome: 'Rafael Monteiro Lima', ini: 'RL', nasc: '09/11/1988', exame: 'Holter 24 horas', quando: 'Pedido em 05/11', sit: 'Aguardando horário', st: 'agendado', chip: 'chip c-amber', prev: 'Clínica tentou contato 2x' }
+      { id: 'acr', nome: 'Antônio Carlos Ribeiro', ini: 'AR', nasc: '15/06/1954', exame: 'Ecocardiograma transtorácico', quando: 'Realizado em 06/11', sit: 'Laudo pronto', st: 'pronto', chip: 'chip c-green',
+        medico: 'Dr. Paulo Medeiros', assin: 'Assinado por Dr. Paulo Medeiros em 06/11, 16:40', concl: 'Hipertrofia concêntrica leve do ventrículo esquerdo. Função sistólica preservada (fração de ejeção de 62%). Disfunção diastólica grau I.', imgs: ['Paraesternal longo', 'Apical 4 câmaras', 'Doppler mitral', 'Modo M'] },
+      { id: 'vla', nome: 'Vera Lúcia Antunes', ini: 'VA', nasc: '18/09/1957', exame: 'MAPA 24 horas', quando: 'Realizado em 04/11', sit: 'Laudo pronto', st: 'pronto', chip: 'chip c-green',
+        medico: 'Dr. Paulo Medeiros', assin: 'Assinado por Dr. Paulo Medeiros em 05/11, 11:15', concl: 'Médias pressóricas de vigília e sono acima do normal. Ausência de descenso noturno.', imgs: ['Gráfico 24 horas', 'Médias por período'] },
+      { id: 'mhd', nome: 'Maria Helena Duarte', ini: 'MD', nasc: '12/03/1968', exame: 'Doppler de carótidas', quando: 'Realizado hoje, 08:40', sit: 'Em laudo', st: 'realizado', chip: 'chip c-violet', medico: 'Dr. Marcos Freire', prev: 'Previsão: hoje até 18:00' },
+      { id: 'smc', nome: 'Sônia Maria Castro', ini: 'SC', nasc: '03/02/1962', exame: 'Teste ergométrico', quando: 'Quinta, 12/11, 08:30', sit: 'Agendado', st: 'agendado', chip: 'chip c-blue', medico: 'Dr. Paulo Medeiros', prev: 'Agendado para 12/11; preparo enviado à paciente' },
+      { id: 'rml', nome: 'Rafael Monteiro Lima', ini: 'RL', nasc: '09/11/1988', exame: 'Holter 24 horas', quando: 'Pedido em 05/11', sit: 'Aguardando horário', st: 'agendado', chip: 'chip c-amber', medico: 'Dr. Paulo Medeiros', prev: 'A clínica tentou contato duas vezes' }
     ];
     const q = (s.busca || '').toLowerCase().trim();
-    const achados = P.filter(p => !q || p.nome.toLowerCase().indexOf(q) >= 0 || p.nasc.indexOf(q) >= 0).slice(0, 4);
+    const achados = P.filter(p => !q || p.nome.toLowerCase().indexOf(q) >= 0 || p.nasc.indexOf(q) >= 0).slice(0, 5);
     const sel = P.find(p => p.id === s.pac);
     const U = [['rotina', 'Rotina'], ['prioritario', 'Prioritário'], ['urgente', 'Urgente']];
-    const urgNota = s.urg === 'urgente' ? 'Urgente: a clínica liga para o paciente em até 2 h e reserva a primeira vaga do dia. Se for emergência, encaminhe ao pronto-socorro.'
-      : s.urg === 'prioritario' ? 'Prioritário: oferecemos horário em até 3 dias úteis.' : 'Rotina: o paciente escolhe o horário que preferir.';
-    const pacSel = s.modo === 'novo' ? 'o paciente' : (sel ? sel.nome : '');
+    const urgNota = s.urg === 'urgente' ? 'A clínica liga em até 2 horas e reserva a primeira vaga do dia. Emergência vai ao pronto-socorro.'
+      : s.urg === 'prioritario' ? 'Horário oferecido em até 3 dias úteis.' : 'O paciente escolhe o horário que preferir.';
     const okPac = s.modo === 'novo' || !!sel;
-    const F = [['todos', 'Todos'], ['agendado', 'Agendados'], ['realizado', 'Realizados'], ['pronto', 'Laudo pronto']];
+    const F = [['todos', 'Todos'], ['agendado', 'Agendados'], ['realizado', 'Em laudo'], ['pronto', 'Laudo pronto']];
+    const L = P.find(p => p.id === s.laudo) || P[0];
     const lista = P.filter(p => s.filtro === 'todos' || p.st === s.filtro).map(p => ({ nome: p.nome, nasc: p.nasc, exame: p.exame, quando: p.quando, sit: p.sit, chip: p.chip,
-      pronto: p.st === 'pronto', naoPronto: p.st !== 'pronto', prev: p.prev || '', abrir: () => this.setState({ laudo: p.id }) }));
-    const L = P.find(p => p.id === s.laudo);
-    const PF = [['portal', 'Portal do médico', 'Laudo aparece aqui assim que é assinado'], ['email', 'E-mail com link seguro', 'hugo.lemos@clinicacoracao.med.br · link vale 7 dias'], ['zap', 'Aviso no WhatsApp', 'Só avisa que há laudo novo, sem nome do exame']];
-    const conv = (s.conv[s.laudo] || []);
+      cls: 'rowp' + (L.id === p.id ? ' sel' : ''), atual: L.id === p.id ? 'true' : 'false', abrir: () => this.setState({ laudo: p.id }) }));
+    const PF = [['portal', 'Portal do médico', 'Laudo aparece aqui assim que é assinado'], ['email', 'E-mail com link seguro', 'hugo.lemos@clinicacoracao.med.br, link vale 7 dias'], ['zap', 'Aviso no WhatsApp', 'Só avisa que há laudo novo, sem nome do exame']];
+    const conv = (s.conv[L.id] || []);
     return {
+      abas: [['pac', 'Meus pacientes'], ['pedir', 'Pedir exame'], ['pref', 'Preferências']].map(([k, t]) => ({ t, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      tPac: s.aba === 'pac', tPedir: s.aba === 'pedir', tPref: s.aba === 'pref',
+      subabas: [['laudo', 'Laudo'], ['conv', 'Conversa com o laudador']].map(([k, t]) => ({ t, cls: s.sub === k ? 'on' : '', atual: s.sub === k ? 'page' : 'false', ir: () => this.setState({ sub: k }) })),
+      vLaudo: s.sub === 'laudo', vConversa: s.sub === 'conv',
       modoMeus: s.modo === 'meus', modoNovo: s.modo === 'novo',
       modoMeusCls: s.modo === 'meus' ? 'on' : '', modoNovoCls: s.modo === 'novo' ? 'on' : '',
       modoMeusSel: s.modo === 'meus' ? 'true' : 'false', modoNovoSel: s.modo === 'novo' ? 'true' : 'false',
@@ -207,15 +256,14 @@ class Component extends DCLogic {
       urgNota,
       semAnexo: !s.anexo, temAnexo: s.anexo, anexar: () => this.setState({ anexo: true }),
       bloqEnviar: !okPac || !s.anexo,
-      resumoPedido: !okPac ? 'Escolha o paciente para continuar.' : (!s.anexo ? 'Falta anexar o pedido assinado.' : 'Pronto para enviar · ' + (sel ? sel.nome + ' · nasc. ' + sel.nasc : 'paciente novo')),
-      enviar: () => this.setState({ enviado: true }), enviado: s.enviado, pacSel,
+      resumoPedido: !okPac ? 'Escolha o paciente para continuar.' : (!s.anexo ? 'Falta anexar o pedido assinado.' : 'Pronto para enviar: ' + (sel ? sel.nome + ', ' + sel.nasc : 'paciente novo')),
+      enviar: () => this.setState({ enviado: true }), enviado: s.enviado, pacSel: s.modo === 'novo' ? 'o paciente' : (sel ? sel.nome : ''),
       prefs: PF.map(([k, t, sub]) => ({ t, s: sub, cls: s.prefs[k] ? 'sw on' : 'sw', on: s.prefs[k] ? 'true' : 'false',
         tg: () => this.setState(st => { const n = Object.assign({}, st.prefs); n[k] = !n[k]; return { prefs: n }; }) })),
-      filtros: F.map(([k, t]) => ({ t, cls: s.filtro === k ? 'on' : '', sel: s.filtro === k ? 'true' : 'false', pick: () => this.setState({ filtro: k }) })),
+      filtros: F.map(([k, t]) => ({ t, cls: s.filtro === k ? 'on' : '', sel: s.filtro === k ? 'page' : 'false', pick: () => this.setState({ filtro: k }) })),
       lista,
-      temLaudo: !!L,
-      lau: L ? { exame: L.exame, nome: L.nome, nasc: L.nasc, medico: L.medico, ini: L.mini, quando: L.assin, concl: L.concl, imgs: L.imgs } : { imgs: [] },
-      msgs: conv.length ? conv.map(([t, h, me]) => ({ t, h, cls: me ? 'msg me' : 'msg' })) : [{ t: 'Nenhuma mensagem ainda. Escreva se quiser discutir o laudo.', h: '', cls: 'msg' }],
+      lau: { exame: L.exame, nome: L.nome, nasc: L.nasc, medico: L.medico, estado: L.st === 'pronto' ? L.assin : L.quando, concl: L.concl || '', imgs: L.imgs || [], pronto: L.st === 'pronto', naoPronto: L.st !== 'pronto', prev: L.prev || '' },
+      msgs: conv.length ? conv.map(([t, h, me]) => ({ t, h, cls: me ? 'msg me' : 'msg' })) : [{ t: 'Nenhuma mensagem ainda. Escreva se quiser discutir o exame.', h: '', cls: 'msg' }],
       rasc: s.rasc, onRasc: e => this.setState({ rasc: e.target.value }),
       onEnter: e => { if (e.key === 'Enter') { e.preventDefault(); this.enviarMsg(); } },
       enviarMsg: () => this.enviarMsg()

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Estacionamento</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
@@ -12,130 +12,186 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
-.vg{height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.h2{margin:0;font-size:17px;font-weight:600}
+.pf{display:flex;gap:8px;padding:12px 18px;border-top:1px solid #E8EAEF;flex-wrap:wrap;align-items:center}
+.kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:12px 4px}
+.kpi>div{padding:0 16px;border-left:1px solid #E8EAEF}
+.kpi>div:first-child{border-left:0}
+.kpi .v{font-size:22px;font-weight:650;letter-spacing:-.01em}
+.ftab{display:flex;gap:2px;border-bottom:1px solid #E8EAEF;padding:0 8px}
+.ftab button{height:40px;padding:0 10px;border:0;background:transparent;font:500 13px Inter,sans-serif;color:#5B6474;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.ftab button.on{color:#0F172A;border-bottom-color:#0A1A4A;font-weight:600}
+.vg{height:72px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
 .v-livre{background:#E5F5EC;color:#1F7A4D;border:1px dashed #8CCBA8}
 .v-ocup{background:#E9ECF1;color:#334155}
 .v-pref{background:#E8F2FB;color:#0C72B0;border:1px dashed #9CC7E8}
 .v-prefo{background:#0C72B0;color:#fff}
 .v-mens{background:#ECE8FB;color:#5B45B5}
-.pl{display:inline-flex;align-items:center;height:30px;padding:0 10px;border-radius:6px;border:2px solid #0F172A;background:#fff;font:700 14px Inter,sans-serif;letter-spacing:.06em;color:#0F172A;white-space:nowrap}
-.pl::before{content:"BR";font-size:9px;font-weight:700;color:#fff;background:#0C3C8C;border-radius:3px;padding:1px 3px;margin-right:6px;letter-spacing:0}
-tr.sel td{background:#F5FAFE}
+.pl{display:inline-flex;align-items:center;height:30px;padding:0 10px;border-radius:6px;border:2px solid #0F172A;background:#fff;font:700 14px Inter,sans-serif;letter-spacing:.06em;color:#0F172A;white-space:nowrap;cursor:pointer}
+.rowp{cursor:pointer}
+.rowp:hover td{background:#F8FAFC}
+.rowp.sel td{background:#EEF4FB}
+.rowp.sel td:first-child{box-shadow:inset 3px 0 0 #0A1A4A}
+.ov{position:fixed;inset:0;background:rgba(15,23,42,.32);z-index:50;display:flex;justify-content:flex-end}
+.dw{width:440px;max-width:100%;height:100%;background:#fff;display:flex;flex-direction:column;box-shadow:-8px 0 24px rgba(15,23,42,.12)}
+.toastw{position:fixed;right:24px;bottom:24px;z-index:40;max-width:460px}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="estacionamento" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="estacionamento" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="page-h">
-      <div class="grow"><h1>Estacionamento</h1><p>Pátio da unidade Centro · cortesia e cobrança calculadas pelo servidor</p></div>
+    <header class="row wrap" style="gap: 12px">
+      <div style="flex: 1 1 auto; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Estacionamento</h1>
+        <div class="t13 mute" style="margin-top: 2px">Pátio da unidade Centro. Sem câmeras e cancela por enquanto: a portaria registra aqui.</div>
+      </div>
       <button class="btn btn-p" onClick="{{abrirManual}}">Entrada manual de placa</button>
-    </div>
+    </header>
 
-    <div class="banner info"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="flex: none; margin-top: 2px"><rect x="3" y="7" width="13" height="10" rx="2"></rect><path d="M16 10l5-3v10l-5-3"></path></svg><div class="t14" style="line-height: 1.5"><b>Câmeras e cancela ainda não instaladas.</b> Hoje a portaria registra entrada e saída aqui. Quando instalarmos, a placa é lida sozinha e esta tela continua igual; o que a câmera não ler cai em "Entrada manual".</div></div>
+    <section class="card kpi" aria-label="Ocupação">
+      <div><div class="t13 mute">Vagas livres</div><div class="v num">{{livres}} <span class="t13 mute" style="font-weight: 500">de 40</span></div></div>
+      <div><div class="t13 mute">Ocupadas</div><div class="v num">{{ocupadas}}</div></div>
+      <div><div class="t13 mute">Preferenciais livres</div><div class="v num">2 <span class="t13 mute" style="font-weight: 500">de 4</span></div></div>
+      <div><div class="t13 mute">Mensalistas no pátio</div><div class="v num">5 <span class="t13 mute" style="font-weight: 500">de 8</span></div></div>
+    </section>
 
-    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 16px">
-      <div class="card"><div class="lbl">Vagas livres</div><div class="big">{{livres}}<small>de 40</small></div></div>
-      <div class="card"><div class="lbl">Ocupadas</div><div class="big">{{ocupadas}}</div></div>
-      <div class="card"><div class="lbl">Preferenciais livres</div><div class="big">{{prefLivres}}<small>de 4</small></div><div class="t13 mute">Idoso, gestante, PcD</div></div>
-      <div class="card"><div class="lbl">Mensalistas no pátio</div><div class="big">5<small>de 8 vagas</small></div></div>
-    </div>
+    <nav class="tabs" aria-label="Seções">
+      <sc-for list="{{abas}}" as="a" hint-placeholder-count="4"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}} <span class="mute" style="font-weight: 500">{{a.n}}</span></button></sc-for>
+    </nav>
 
-    <div class="split">
-      <section class="card main" aria-labelledby="pt-h">
-        <div class="card-h wrap"><div class="grow"><h2 id="pt-h">Veículos no pátio</h2><div class="sub">Os mais recentes de {{ocupadas}} · toque na placa para registrar a saída</div></div>
-          <div class="seg" role="tablist" aria-label="Filtro"><sc-for list="{{filtros}}" as="f" hint-placeholder-count="3"><button class="{{f.cls}}" role="tab" aria-selected="{{f.sel}}" onClick="{{f.pick}}" style="height: 36px">{{f.t}}</button></sc-for></div>
-        </div>
-        <table class="tb">
-          <thead><tr><th>Placa</th><th>Entrada</th><th>Vínculo</th><th>Cortesia</th></tr></thead>
-          <tbody>
-            <sc-for list="{{veiculos}}" as="v" hint-placeholder-count="6">
-              <tr class="{{v.trCls}}"><td><button class="pl" onClick="{{v.pick}}" aria-label="{{v.aria}}" style="cursor: pointer">{{v.placa}}</button></td><td class="num">{{v.ent}}<div class="t13 mute">{{v.tempo}}</div></td><td><b>{{v.vin}}</b><div class="t13 mute">{{v.vinSub}}</div></td><td><span class="{{v.chip}}">{{v.cort}}</span></td></tr>
-            </sc-for>
-          </tbody>
-        </table>
-        <sc-if value="{{vazio}}" hint-placeholder-val="{{ false }}"><div class="state"><div class="b">Nenhum veículo neste filtro</div></div></sc-if>
-        <button class="btn btn-sm" style="margin-top: 12px">Ver todos no pátio</button>
-      </section>
-
-      <aside class="aside col" style="gap: 16px">
-        <sc-if value="{{temSel}}" hint-placeholder-val="{{ true }}">
-          <section class="card" aria-labelledby="sd-h" style="outline: 2px solid #0A1A4A">
-            <div class="card-h"><div class="grow"><h2 id="sd-h">Saída · <span class="num">{{sel.placa}}</span></h2><div class="sub">{{sel.vin}} · {{sel.vinSub}}</div></div></div>
-            <div class="li"><div style="flex: 1" class="t14">Tempo no pátio</div><b class="num">{{sel.tempo}}</b></div>
-            <div class="li"><div style="flex: 1" class="t14">Cortesia aplicada</div><b class="num">{{sel.cortH}}</b></div>
-            <div class="li"><div style="flex: 1" class="t14">Tempo cobrado</div><b class="num">{{sel.cobH}}</b></div>
-            <div class="row" style="padding: 14px 0 6px"><span class="t15 b" style="flex: 1">Valor</span><span style="font-size: 28px; font-weight: 650" class="num">{{sel.valor}}</span></div>
-            <p class="t12 mute" style="margin: 0 0 12px">Tabela do estacionamento v2 · R$ 8,00 por hora ou fração após a cortesia · calculado pelo servidor</p>
-            <sc-if value="{{sel.cobra}}" hint-placeholder-val="{{ true }}">
-              <div class="seg" role="radiogroup" aria-label="Forma de pagamento" style="margin-bottom: 12px"><sc-for list="{{formas}}" as="f" hint-placeholder-count="3"><button class="{{f.cls}}" role="radio" aria-checked="{{f.sel}}" onClick="{{f.pick}}">{{f.t}}</button></sc-for></div>
-              <sc-if value="{{noCaixa}}" hint-placeholder-val="{{ false }}"><p class="t13 mute" style="margin: 0 0 12px">Entra na mesma conta do exame no caixa. A cancela libera depois do pagamento.</p></sc-if>
-            </sc-if>
-            <button class="btn btn-p" style="width: 100%" onClick="{{registrarSaida}}">{{sel.acao}}</button>
-          </section>
-        </sc-if>
-        <sc-if value="{{saiu}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status"><span style="flex: 1">{{msgSaida}}</span></div></sc-if>
-
-        <sc-if value="{{manual}}" hint-placeholder-val="{{ false }}">
-          <section class="card" aria-labelledby="mn-h">
-            <div class="card-h"><div class="grow"><h2 id="mn-h">Entrada manual</h2><div class="sub">Quando a câmera não ler ou estiver desligada</div></div><button class="btn btn-sm" onClick="{{fecharManual}}">Fechar</button></div>
-            <div class="col" style="gap: 12px">
-              <label class="field">Placa<input class="in num" value="{{placaNova}}" onChange="{{onPlaca}}" placeholder="ABC1D23" style="text-transform: uppercase; letter-spacing: .08em"></label>
-              <label class="field">Motivo<select class="in"><option>Câmera não leu a placa</option><option>Câmera ainda não instalada</option><option>Placa suja ou danificada</option></select></label>
-              <div class="col" style="gap: 6px"><span class="t13 b mute">Vínculo</span>
-                <div class="seg" role="radiogroup" aria-label="Vínculo"><sc-for list="{{vinculos}}" as="o" hint-placeholder-count="3"><button class="{{o.cls}}" role="radio" aria-checked="{{o.sel}}" onClick="{{o.pick}}" style="height: 36px">{{o.t}}</button></sc-for></div>
-              </div>
-              <sc-if value="{{vinPac}}" hint-placeholder-val="{{ true }}">
-                <label class="field">Paciente com exame hoje<select class="in"><option>Juliana Sampaio Rocha · 12/04/1993 · 10:40</option><option>Lúcia Fernandes Prado · 02/07/1959 · 11:10</option><option>Sônia Maria Castro · 03/02/1962 · 11:30</option></select><span class="t12 mute" style="font-weight: 400">Só aparece quem tem exame hoje. Confira nome e nascimento com a pessoa.</span></label>
-              </sc-if>
-              <button class="btn btn-p" onClick="{{registrarEntrada}}">Registrar entrada</button>
-            </div>
-          </section>
-        </sc-if>
-
-        <section class="card" aria-labelledby="mp-h">
-          <div class="card-h"><h2 id="mp-h">Mapa do pátio</h2></div>
-          <div class="grid" style="grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px" role="img" aria-label="{{mapaAria}}">
-            <sc-for list="{{mapa}}" as="m" hint-placeholder-count="40"><span class="{{m.cls}}">{{m.t}}</span></sc-for>
+    <sc-if value="{{tPat}}" hint-placeholder-val="{{ true }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px">
+        <section class="card pane" style="padding: 0" aria-label="Veículos no pátio">
+          <nav class="ftab" aria-label="Filtro"><sc-for list="{{filtros}}" as="f" hint-placeholder-count="4"><button class="{{f.cls}}" aria-pressed="{{f.sel}}" onClick="{{f.pick}}">{{f.t}}</button></sc-for></nav>
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Placa</th><th class="nw">Entrada</th><th>Vínculo</th><th>Cortesia</th></tr></thead>
+              <tbody>
+                <sc-for list="{{veiculos}}" as="v" hint-placeholder-count="6">
+                  <tr class="{{v.trCls}}" onClick="{{v.pick}}" aria-selected="{{v.atual}}"><td><button class="pl" onClick="{{v.pick}}" aria-label="{{v.aria}}">{{v.placa}}</button></td><td class="num t14">{{v.ent}}<div class="t13 mute">{{v.tempo}}</div></td><td><div class="b t14">{{v.vin}}</div><div class="t13 mute">{{v.vinSub}}</div></td><td><span class="{{v.chip}}">{{v.cort}}</span></td></tr>
+                </sc-for>
+              </tbody>
+            </table>
+            <sc-if value="{{vazio}}" hint-placeholder-val="{{ false }}"><div class="state"><div class="b">Nenhum veículo neste filtro</div></div></sc-if>
           </div>
-          <div class="row wrap t12" style="gap: 10px; margin-top: 10px"><span class="row" style="gap: 4px"><span class="vg v-livre" style="width: 16px; height: 16px"></span>Livre</span><span class="row" style="gap: 4px"><span class="vg v-ocup" style="width: 16px; height: 16px"></span>Ocupada</span><span class="row" style="gap: 4px"><span class="vg v-pref" style="width: 16px; height: 16px"></span>Preferencial</span><span class="row" style="gap: 4px"><span class="vg v-mens" style="width: 16px; height: 16px"></span>Mensalista</span></div>
+          <div class="pf"><span class="t13 mute">Mostrando os mais recentes de {{ocupadas}} no pátio.</span></div>
         </section>
-      </aside>
-    </div>
 
-    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 16px">
-      <section class="card" aria-labelledby="ms-h">
-        <div class="card-h"><div class="grow"><h2 id="ms-h">Mensalistas</h2><div class="sub">Médicos e equipe · cobrança mensal em folha ou boleto</div></div><button class="btn btn-sm">Adicionar</button></div>
-        <sc-for list="{{mensal}}" as="m" hint-placeholder-count="4">
-          <div class="li"><span class="pl">{{m.placa}}</span><div style="flex: 1; min-width: 0"><div class="t">{{m.nome}}</div><div class="s">{{m.plano}}</div></div><span class="{{m.cls}}">{{m.sit}}</span></div>
-        </sc-for>
-      </section>
-      <section class="card" aria-labelledby="hs-h">
-        <div class="card-h"><div class="grow"><h2 id="hs-h">Histórico de hoje</h2><div class="sub">Entradas e saídas · nada é apagado; correção vira nova versão</div></div><a class="btn btn-sm" href="Lastro.dc.html">Lastro</a></div>
-        <sc-for list="{{hist}}" as="h" hint-placeholder-count="4">
-          <div class="li"><span class="t13 num mute" style="width: 44px">{{h.h}}</span><div style="flex: 1; min-width: 0"><div class="t14 b">{{h.t}}</div><div class="s">{{h.s}}</div></div></div>
-        </sc-for>
-      </section>
-    </div>
-    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+        <aside class="card pane" style="padding: 0" aria-label="Saída do veículo">
+          <sc-if value="{{temSel}}" hint-placeholder-val="{{ true }}">
+            <div class="scroll" style="padding: 16px 18px">
+              <div class="t13 mute">Saída</div>
+              <div class="row" style="gap: 10px; margin-top: 4px"><span class="pl" style="cursor: default">{{sel.placa}}</span></div>
+              <div class="t15 b" style="margin-top: 10px">{{sel.vin}}</div>
+              <div class="t13 mute">{{sel.vinSub}}</div>
+              <dl class="kv" style="margin: 14px 0 0">
+                <dt>Tempo no pátio</dt><dd class="num">{{sel.tempo}}</dd>
+                <dt>Cortesia</dt><dd class="num">{{sel.cortH}}</dd>
+                <dt>Tempo cobrado</dt><dd class="num">{{sel.cobH}}</dd>
+              </dl>
+              <div class="row" style="padding: 14px 0 4px; border-top: 1px solid #E8EAEF; margin-top: 14px"><span class="t15 b" style="flex: 1">Valor</span><span class="num" style="font-size: 26px; font-weight: 650">{{sel.valor}}</span></div>
+              <div class="t12 mute">Tabela v2: R$ 8,00 por hora ou fração após a cortesia. Calculado pelo servidor.</div>
+              <sc-if value="{{sel.cobra}}" hint-placeholder-val="{{ true }}">
+                <div class="t13 b" style="margin-top: 14px; color: #5B6474">Forma de pagamento</div>
+                <div class="seg" role="radiogroup" aria-label="Forma de pagamento" style="margin-top: 6px"><sc-for list="{{formas}}" as="f" hint-placeholder-count="3"><button class="{{f.cls}}" role="radio" aria-checked="{{f.sel}}" onClick="{{f.pick}}" style="height: 36px; padding: 0 12px">{{f.t}}</button></sc-for></div>
+                <sc-if value="{{noCaixa}}" hint-placeholder-val="{{ false }}"><div class="t13 mute" style="margin-top: 8px">Entra na mesma conta do exame no caixa.</div></sc-if>
+              </sc-if>
+            </div>
+            <div class="pf"><button class="btn btn-p" style="flex: 1" onClick="{{registrarSaida}}">{{sel.acao}}</button></div>
+          </sc-if>
+          <sc-if value="{{semSel}}" hint-placeholder-val="{{ false }}">
+            <div class="state" style="flex: 1; justify-content: center"><div class="b">Nenhum veículo selecionado</div><div class="t13 mute">Toque na placa para registrar a saída.</div></div>
+          </sc-if>
+        </aside>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{tMapa}}" hint-placeholder-val="{{ false }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px">
+        <section class="card pane" aria-label="Mapa do pátio">
+          <div class="scroll">
+            <div class="grid" style="grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 6px" role="img" aria-label="{{mapaAria}}">
+              <sc-for list="{{mapa}}" as="m" hint-placeholder-count="40"><span class="{{m.cls}}">{{m.t}}</span></sc-for>
+            </div>
+          </div>
+          <div class="row wrap t13" style="gap: 16px; padding-top: 12px; margin-top: 12px; border-top: 1px solid #E8EAEF"><span class="row" style="gap: 6px"><span class="vg v-livre" style="width: 18px; height: 18px"></span>Livre</span><span class="row" style="gap: 6px"><span class="vg v-ocup" style="width: 18px; height: 18px"></span>Ocupada</span><span class="row" style="gap: 6px"><span class="vg v-pref" style="width: 18px; height: 18px"></span>Preferencial livre (P)</span><span class="row" style="gap: 6px"><span class="vg v-prefo" style="width: 18px; height: 18px"></span>Preferencial ocupada</span><span class="row" style="gap: 6px"><span class="vg v-mens" style="width: 18px; height: 18px"></span>Mensalista (M)</span></div>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{tMens}}" hint-placeholder-val="{{ false }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px">
+        <section class="card pane" style="padding: 0" aria-label="Mensalistas">
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Placa</th><th>Nome</th><th>Plano</th><th>Situação</th></tr></thead>
+              <tbody>
+                <sc-for list="{{mensal}}" as="m" hint-placeholder-count="4"><tr><td><span class="pl" style="cursor: default">{{m.placa}}</span></td><td class="b t14">{{m.nome}}</td><td class="t14">{{m.plano}}</td><td><span class="{{m.cls}}">{{m.sit}}</span></td></tr></sc-for>
+              </tbody>
+            </table>
+          </div>
+          <div class="pf"><span class="t13 mute" style="flex: 1">Cobrança mensal em folha ou boleto.</span><button class="btn btn-sm">Adicionar mensalista</button></div>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{tHist}}" hint-placeholder-val="{{ false }}">
+      <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px">
+        <section class="card pane" style="padding: 0" aria-label="Histórico de hoje">
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Hora</th><th>Movimento</th><th>Detalhe</th></tr></thead>
+              <tbody>
+                <sc-for list="{{hist}}" as="h" hint-placeholder-count="4"><tr><td class="num t14 nw">{{h.h}}</td><td class="b t14">{{h.t}}</td><td class="t14">{{h.s}}</td></tr></sc-for>
+              </tbody>
+            </table>
+          </div>
+          <div class="pf"><span class="t13 mute" style="flex: 1">Nada é apagado; correção vira nova versão com motivo.</span><a class="btn btn-sm" href="Lastro.dc.html">Ver no lastro</a></div>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{temToast}}" hint-placeholder-val="{{ false }}">
+      <div class="toastw"><div class="toast" role="status"><span style="flex: 1">{{toast}}</span><button onClick="{{fecharToast}}">Fechar</button></div></div>
+    </sc-if>
+
+    <sc-if value="{{manual}}" hint-placeholder-val="{{ false }}">
+      <div class="ov">
+        <aside class="dw" role="dialog" aria-label="Entrada manual de placa">
+          <div class="row" style="padding: 16px 20px; border-bottom: 1px solid #E8EAEF"><h2 class="h2" style="flex: 1">Entrada manual</h2><button class="btn btn-sm btn-g" onClick="{{fecharManual}}">Fechar</button></div>
+          <div class="scroll" style="flex: 1; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px">
+            <label class="field">Placa<input class="in num" value="{{placaNova}}" onChange="{{onPlaca}}" placeholder="ABC1D23" style="text-transform: uppercase; letter-spacing: .08em"></label>
+            <label class="field">Motivo<select class="in"><option>Câmera ainda não instalada</option><option>Câmera não leu a placa</option><option>Placa suja ou danificada</option></select></label>
+            <div class="field"><span>Vínculo</span>
+              <div class="seg" role="radiogroup" aria-label="Vínculo"><sc-for list="{{vinculos}}" as="o" hint-placeholder-count="3"><button class="{{o.cls}}" role="radio" aria-checked="{{o.sel}}" onClick="{{o.pick}}" style="height: 36px; padding: 0 12px">{{o.t}}</button></sc-for></div>
+            </div>
+            <sc-if value="{{vinPac}}" hint-placeholder-val="{{ true }}">
+              <label class="field">Paciente com exame hoje<select class="in"><option>Juliana Sampaio Rocha, 12/04/1993, 10:40</option><option>Lúcia Fernandes Prado, 02/07/1959, 11:10</option><option>Sônia Maria Castro, 03/02/1962, 11:30</option></select><span class="t12 mute" style="font-weight: 400">Só aparece quem tem exame hoje. Confira nome e nascimento com a pessoa.</span></label>
+            </sc-if>
+          </div>
+          <div class="pf"><button class="btn btn-p" style="flex: 1" onClick="{{registrarEntrada}}">Registrar entrada</button></div>
+        </aside>
+      </div>
+    </sc-if>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { filtro: 'todos', sel: 'RQX4B17', forma: 'caixa', manual: false, placaNova: '', vin: 'pac', saiu: '', extra: [], fora: [],
-      hist: [['10:31', 'Entrada · RTA2C55', 'Manual · câmera não instalada · Portaria (José Lima)'], ['10:18', 'Saída · QHE7F02 · R$ 0,00', 'Cortesia de paciente · 1 h 20 min'], ['09:55', 'Saída · RBM3D90 · R$ 8,00', 'Visitante · PIX'], ['07:02', 'Entrada · Dra. Renata Alves', 'Mensalista']] };
+    this.state = { aba: 'pat', filtro: 'todos', sel: 'RQX4B17', forma: 'caixa', manual: false, placaNova: '', vin: 'pac', toast: '', extra: [], fora: [],
+      hist: [['10:31', 'Entrada RTA2C55', 'Manual, câmera não instalada; portaria (José Lima)'], ['10:18', 'Saída QHE7F02, R$ 0,00', 'Cortesia de paciente, 1 h 20'], ['09:55', 'Saída RBM3D90, R$ 8,00', 'Visitante, PIX'], ['07:05', 'Entrada PWZ6H31', 'Dr. Paulo Medeiros, mensalista'], ['07:02', 'Entrada QDR2K70', 'Dra. Renata Alves, mensalista']] };
   }
   renderVals() {
     const s = this.state;
     const brl = v => 'R$ ' + v.toFixed(2).replace('.', ',');
     const base = [
-      { placa: 'RQX4B17', ent: '08:02', min: 158, tipo: 'pac', vin: 'Maria Helena Duarte', vinSub: 'Nasc. 12/03/1968 · Doppler 08:40', cort: 120 },
-      { placa: 'QIT9A44', ent: '09:10', min: 90, tipo: 'pac', vin: 'Antônio Carlos Ribeiro', vinSub: 'Nasc. 15/06/1954 · Ecocardiograma 09:30', cort: 120 },
-      { placa: 'RTA2C55', ent: '10:31', min: 9, tipo: 'pac', vin: 'Juliana Sampaio Rocha', vinSub: 'Nasc. 12/04/1993 · Gestante · vaga preferencial', cort: 120 },
-      { placa: 'SBC1E08', ent: '08:45', min: 115, tipo: 'vis', vin: 'Visitante', vinSub: 'Acompanhante · sem exame no próprio nome', cort: 0 },
-      { placa: 'PWZ6H31', ent: '07:05', min: 215, tipo: 'mens', vin: 'Dr. Paulo Medeiros', vinSub: 'Mensalista', cort: 0 }
+      { placa: 'RQX4B17', ent: '08:02', min: 158, tipo: 'pac', vin: 'Maria Helena Duarte', vinSub: '12/03/1968, Doppler 08:40', cort: 120 },
+      { placa: 'QIT9A44', ent: '09:10', min: 90, tipo: 'pac', vin: 'Antônio Carlos Ribeiro', vinSub: '15/06/1954, ecocardiograma 09:30', cort: 120 },
+      { placa: 'RTA2C55', ent: '10:31', min: 9, tipo: 'pac', vin: 'Juliana Sampaio Rocha', vinSub: '12/04/1993, gestante, vaga preferencial', cort: 120 },
+      { placa: 'SBC1E08', ent: '08:45', min: 115, tipo: 'vis', vin: 'Visitante', vinSub: 'Acompanhante, sem exame no próprio nome', cort: 0 },
+      { placa: 'PWZ6H31', ent: '07:05', min: 215, tipo: 'mens', vin: 'Dr. Paulo Medeiros', vinSub: 'Mensalista, vaga M1', cort: 0 }
     ].concat(s.extra).filter(v => s.fora.indexOf(v.placa) < 0);
     const calc = v => {
       if (v.tipo === 'mens') return { cob: 0, val: 0 };
@@ -150,47 +206,52 @@ class Component extends DCLogic {
     if (cur) {
       const c = calc(cur); cobra = c.val > 0;
       sel = { placa: cur.placa, vin: cur.vin, vinSub: cur.vinSub, tempo: hm(cur.min), cortH: cur.tipo === 'mens' ? 'Mensalista' : (cur.cort ? hm(Math.min(cur.cort, cur.min)) : 'Não tem'),
-        cobH: hm(c.cob), valor: brl(c.val), cobra, acao: cobra ? 'Registrar saída e cobrar ' + brl(c.val) : 'Registrar saída · sem cobrança' };
+        cobH: hm(c.cob), valor: brl(c.val), cobra, acao: cobra ? 'Registrar saída e cobrar ' + brl(c.val) : 'Registrar saída sem cobrança' };
     }
-    const fx = { caixa: 'junto com o exame no caixa', pix: 'PIX', cartao: 'cartão' };
+    const fx = { caixa: 'junto com o exame no caixa', pix: 'por PIX', cartao: 'no cartão' };
     const mapa = [];
     for (let i = 0; i < 40; i++) {
       let cls = 'vg v-ocup', t = '';
-      if (i < 4) { cls = i < 2 ? 'vg v-prefo' : 'vg v-pref'; t = 'P'; }
-      else if (i < 12) { cls = i < 9 ? 'vg v-mens' : 'vg v-livre'; t = 'M'; }
+      if (i < 4) { cls = i < 2 ? 'vg v-prefo' : 'vg v-pref'; t = 'P' + (i + 1); }
+      else if (i < 12) { cls = i < 9 ? 'vg v-mens' : 'vg v-livre'; t = 'M' + (i - 3); }
       else { cls = i < 12 + (ocup - 7) ? 'vg v-ocup' : 'vg v-livre'; t = String(i + 1); }
       mapa.push({ cls, t });
     }
+    const AB = [['pat', 'Pátio', String(ocup)], ['mapa', 'Mapa', ''], ['mens', 'Mensalistas', ''], ['hist', 'Histórico de hoje', String(s.hist.length)]];
     return {
-      livres: String(40 - ocup), ocupadas: String(ocup), prefLivres: '2',
+      livres: String(40 - ocup), ocupadas: String(ocup),
+      abas: AB.map(([k, t, n]) => ({ t, n, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      tPat: s.aba === 'pat', tMapa: s.aba === 'mapa', tMens: s.aba === 'mens', tHist: s.aba === 'hist',
       filtros: F.map(([k, t]) => ({ t, cls: s.filtro === k ? 'on' : '', sel: s.filtro === k ? 'true' : 'false', pick: () => this.setState({ filtro: k }) })),
       veiculos: lista.map(v => { const c = calc(v); const dentro = v.tipo === 'pac' && v.min <= v.cort;
         return { placa: v.placa, ent: v.ent, tempo: hm(v.min), vin: v.vin, vinSub: v.vinSub, aria: 'Selecionar veículo ' + v.placa,
-          cort: v.tipo === 'mens' ? 'Mensalista' : (v.tipo === 'vis' ? 'Sem cortesia · ' + brl(c.val) : (dentro ? 'Dentro das 2 h grátis' : 'Passou ' + hm(c.cob) + ' · ' + brl(c.val))),
+          cort: v.tipo === 'mens' ? 'Mensalista' : (v.tipo === 'vis' ? 'Sem cortesia, ' + brl(c.val) : (dentro ? 'Dentro das 2 h' : 'Passou ' + hm(c.cob) + ', ' + brl(c.val))),
           chip: v.tipo === 'mens' ? 'chip c-violet' : (v.tipo === 'vis' ? 'chip' : (dentro ? 'chip c-green' : 'chip c-amber')),
-          trCls: v.placa === s.sel ? 'sel' : '', pick: () => this.setState({ sel: v.placa, saiu: '' }) }; }),
+          trCls: 'rowp' + (v.placa === s.sel ? ' sel' : ''), atual: v.placa === s.sel ? 'true' : 'false', pick: () => this.setState({ sel: v.placa }) }; }),
       vazio: lista.length === 0,
-      temSel: !!cur, sel,
-      formas: [['caixa', 'No caixa com o exame'], ['pix', 'PIX'], ['cartao', 'Cartão']].map(([k, t]) => ({ t, cls: s.forma === k ? 'on' : '', sel: s.forma === k ? 'true' : 'false', pick: () => this.setState({ forma: k }) })),
+      temSel: !!cur, semSel: !cur, sel,
+      formas: [['caixa', 'No caixa'], ['pix', 'PIX'], ['cartao', 'Cartão']].map(([k, t]) => ({ t, cls: s.forma === k ? 'on' : '', sel: s.forma === k ? 'true' : 'false', pick: () => this.setState({ forma: k }) })),
       noCaixa: s.forma === 'caixa',
       registrarSaida: () => { if (!cur) return; const c = calc(cur);
-        this.setState(st => ({ fora: st.fora.concat([cur.placa]), sel: '', saiu: 'Saída de ' + cur.placa + ' registrada' + (c.val ? ' · ' + brl(c.val) + ' ' + fx[st.forma] : ' · sem cobrança') + ' · lastro',
-          hist: [['agora', 'Saída · ' + cur.placa + ' · ' + brl(c.val), cur.vin + (c.val ? ' · ' + fx[st.forma] : ' · cortesia')]].concat(st.hist) })); },
-      saiu: !!s.saiu, msgSaida: s.saiu,
+        this.setState(st => ({ fora: st.fora.concat([cur.placa]), sel: '',
+          toast: 'Saída de ' + cur.placa + ' registrada' + (c.val ? ', ' + brl(c.val) + ' ' + fx[st.forma] : ', sem cobrança') + '. Registrado no lastro.',
+          hist: [['agora', 'Saída ' + cur.placa + ', ' + brl(c.val), cur.vin + (c.val ? ', ' + fx[st.forma] : ', cortesia')]].concat(st.hist) })); },
+      temToast: !!s.toast, toast: s.toast, fecharToast: () => this.setState({ toast: '' }),
       manual: s.manual, abrirManual: () => this.setState({ manual: true }), fecharManual: () => this.setState({ manual: false }),
       placaNova: s.placaNova, onPlaca: e => this.setState({ placaNova: e.target.value.toUpperCase() }),
       vinculos: [['pac', 'Paciente do dia'], ['vis', 'Visitante'], ['mens', 'Mensalista']].map(([k, t]) => ({ t, cls: s.vin === k ? 'on' : '', sel: s.vin === k ? 'true' : 'false', pick: () => this.setState({ vin: k }) })),
       vinPac: s.vin === 'pac',
       registrarEntrada: () => { const p = (s.placaNova || 'RKL5G62').trim();
-        const nv = s.vin === 'pac' ? { placa: p, ent: 'agora', min: 0, tipo: 'pac', vin: 'Juliana Sampaio Rocha', vinSub: 'Nasc. 12/04/1993 · USG morfológica 10:40', cort: 120 }
+        const nv = s.vin === 'pac' ? { placa: p, ent: 'agora', min: 0, tipo: 'pac', vin: 'Juliana Sampaio Rocha', vinSub: '12/04/1993, USG morfológica 10:40', cort: 120 }
           : (s.vin === 'vis' ? { placa: p, ent: 'agora', min: 0, tipo: 'vis', vin: 'Visitante', vinSub: 'Entrada manual', cort: 0 } : { placa: p, ent: 'agora', min: 0, tipo: 'mens', vin: 'Mensalista', vinSub: 'Entrada manual', cort: 0 });
-        this.setState(st => ({ extra: st.extra.concat([nv]), manual: false, placaNova: '', hist: [['agora', 'Entrada · ' + p, 'Manual · motivo registrado · Portaria']].concat(st.hist) })); },
+        this.setState(st => ({ extra: st.extra.concat([nv]), manual: false, placaNova: '', aba: 'pat', sel: p, toast: 'Entrada de ' + p + ' registrada com o motivo. A cortesia começa a contar agora.',
+          hist: [['agora', 'Entrada ' + p, 'Manual, motivo registrado; portaria']].concat(st.hist) })); },
       mapa, mapaAria: 'Mapa do pátio: ' + (40 - ocup) + ' vagas livres de 40',
       mensal: [
-        { placa: 'PWZ6H31', nome: 'Dr. Paulo Medeiros', plano: 'Vaga fixa M1 · desconto em folha', sit: 'No pátio', cls: 'chip c-green' },
-        { placa: 'QDR2K70', nome: 'Dra. Renata Alves', plano: 'Vaga rotativa · desconto em folha', sit: 'No pátio', cls: 'chip c-green' },
-        { placa: 'RFE8M13', nome: 'Dr. Marcos Freire', plano: 'Vaga rotativa · boleto', sit: 'Boleto vence 10/11', cls: 'chip c-amber' },
-        { placa: 'SAN0P49', nome: 'Ana Souza · Recepção', plano: 'Vaga rotativa · desconto em folha', sit: 'Fora', cls: 'chip' }
+        { placa: 'PWZ6H31', nome: 'Dr. Paulo Medeiros', plano: 'Vaga fixa M1, desconto em folha', sit: 'No pátio', cls: 'chip c-green' },
+        { placa: 'QDR2K70', nome: 'Dra. Renata Alves', plano: 'Vaga rotativa, desconto em folha', sit: 'No pátio', cls: 'chip c-green' },
+        { placa: 'RFE8M13', nome: 'Dr. Marcos Freire', plano: 'Vaga rotativa, boleto', sit: 'Boleto vence 10/11', cls: 'chip c-amber' },
+        { placa: 'SAN0P49', nome: 'Ana Souza (recepção)', plano: 'Vaga rotativa, desconto em folha', sit: 'Fora', cls: 'chip' }
       ],
       hist: s.hist.map(([h, t, sub]) => ({ h, t, s: sub }))
     };

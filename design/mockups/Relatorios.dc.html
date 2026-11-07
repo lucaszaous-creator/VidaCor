@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Relatórios e exportação</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
@@ -12,163 +12,189 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
-.hb{display:grid;grid-template-columns:minmax(90px,170px) minmax(0,1fr) 84px;gap:10px;align-items:center}
-.hb .tr{height:22px;border-radius:8px;background:#F1F3F6;overflow:hidden}
-.hb .tr i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#0A1A4A,#3E9BDB)}
+.grp{font-size:13px;font-weight:600;color:#5B6474;padding:14px 16px 6px}
+.hb{display:grid;grid-template-columns:minmax(90px,180px) minmax(0,1fr) 72px;gap:12px;align-items:center}
+.hb .tr{height:14px;border-radius:4px;background:#F1F3F6;overflow:hidden}
+.hb .tr i{display:block;height:100%;border-radius:4px;background:#13285F}
+.ft{display:flex;align-items:center;gap:8px;padding:12px 18px;border-top:1px solid #E8EAEF;flex-wrap:wrap}
+.flt .in{min-height:40px;font-size:14px}
 </style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="relatorios" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="relatorios" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="page-h">
-      <div class="grow"><h1>Relatórios</h1><p>Veja, filtre e exporte · toda exportação pede sua senha de novo e fica no lastro</p></div>
-      <span class="chip c-navy">Marcos Teixeira · Faturamento</span>
-    </div>
+    <header class="row wrap" style="gap: 16px">
+      <div style="flex: 1 1 0; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Relatórios</h1>
+        <div class="t13 mute" style="margin-top: 2px">Marcos Teixeira, Faturamento. Toda exportação pede sua senha de novo e fica no lastro.</div>
+      </div>
+      <a class="btn" href="Indicadores.dc.html">Ver indicadores</a>
+    </header>
 
-    <div style="display: grid; grid-template-columns: minmax(230px, 290px) minmax(0, 1fr); gap: 16px; align-items: start">
-      <section class="card" style="padding: 8px" aria-label="Catálogo de relatórios">
-        <sc-for list="{{grupos}}" as="g" hint-placeholder-count="3">
-          <div class="lbl" style="padding: 12px 10px 4px">{{g.t}}</div>
-          <sc-for list="{{g.itens}}" as="r" hint-placeholder-count="2">
-            <button class="{{r.cls}}" aria-current="{{r.atual}}" onClick="{{r.pick}}" style="padding: 10px 12px"><span class="{{r.ni}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"></path></svg></span><span style="flex: 1; min-width: 0"><span class="nm" style="display: block; font-size: 14px">{{r.t}}</span><span class="pv" style="display: block">{{r.s}}</span></span></button>
+    <div class="fill" style="display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 16px">
+      <nav class="card pane" style="padding: 0" aria-label="Catálogo de relatórios">
+        <div class="scroll">
+          <sc-for list="{{grupos}}" as="g" hint-placeholder-count="4">
+            <h2 class="grp">{{g.t}}</h2>
+            <sc-for list="{{g.itens}}" as="r" hint-placeholder-count="2">
+              <button class="{{r.cls}}" aria-current="{{r.atual}}" onClick="{{r.pick}}"><span style="flex: 1; min-width: 0"><span class="nm" style="display: block; font-size: 14px">{{r.t}}</span><span class="pv" style="display: block">{{r.s}}</span></span></button>
+            </sc-for>
           </sc-for>
-        </sc-for>
-      </section>
+        </div>
+      </nav>
 
-      <div class="col" style="gap: 16px; min-width: 0">
-        <section class="card" aria-labelledby="rp-h">
-          <div class="card-h wrap"><div class="grow"><h2 id="rp-h">{{rel.t}}</h2><div class="sub">{{rel.desc}}</div></div><span class="t13 mute">Dados de hoje 10:40</span></div>
-          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: 12px">
+      <section class="card pane" style="padding: 0" aria-labelledby="rp-h">
+        <div class="row wrap" style="gap: 12px; padding: 16px 18px 0; align-items: flex-start">
+          <div style="flex: 1 1 280px; min-width: 0"><h2 id="rp-h" style="font-size: 20px; font-weight: 650">{{rel.t}}</h2><div class="t14 mute">{{rel.desc}}</div></div>
+          <span class="t13 mute">Dados de hoje, 10:40</span>
+        </div>
+        <nav class="tabs" aria-label="Seções do relatório" style="padding: 0 10px; margin-top: 10px">
+          <sc-for list="{{abas}}" as="a" hint-placeholder-count="3"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for>
+        </nav>
+
+        <sc-if value="{{tPrev}}" hint-placeholder-val="{{ true }}">
+          <div class="grid flt" style="grid-template-columns: minmax(0, 1.3fr) repeat(3, minmax(0, 1fr)); gap: 10px; padding: 14px 18px 0">
             <label class="field">Período<select class="in"><option>Outubro de 2026</option><option>Últimos 7 dias</option><option>Este mês</option><option>Personalizado</option></select></label>
             <label class="field">Unidade<select class="in"><option>Todas</option><option>Centro</option><option>Trindade</option></select></label>
-            <label class="field">Convênio<select class="in" onChange="{{onConv}}"><option>Todos</option><option>Unimed</option><option>Bradesco Saúde</option><option>SulAmérica</option><option>Amil</option><option>Particular</option></select></label>
+            <label class="field">Convênio<select class="in" value="{{conv}}" onChange="{{onConv}}"><option>Todos</option><option>Unimed</option><option>Bradesco Saúde</option><option>SulAmérica</option><option>Amil</option><option>Particular</option></select></label>
             <label class="field">Médico<select class="in"><option>Todos</option><option>Dr. Paulo Medeiros</option><option>Dra. Renata Alves</option><option>Dr. Marcos Freire</option><option>Dra. Cecília Souto</option></select></label>
           </div>
-          <sc-if value="{{filtroConv}}" hint-placeholder-val="{{ false }}"><p class="t13 mute" style="margin: 10px 0 0">Filtro aplicado: {{convSel}}</p></sc-if>
-
-          <div class="col" style="gap: 10px; margin-top: 18px" role="img" aria-label="{{grafAria}}">
-            <sc-for list="{{barras}}" as="b" hint-placeholder-count="4">
-              <div class="hb"><span class="t13 b clamp1">{{b.l}}</span><span class="tr"><i style="{{b.st}}"></i></span><span class="t13 num" style="text-align: right">{{b.v}}</span></div>
-            </sc-for>
+          <div class="scroll" style="padding: 16px 18px">
+            <div class="col" style="gap: 10px" role="img" aria-label="{{grafAria}}">
+              <sc-for list="{{barras}}" as="b" hint-placeholder-count="4">
+                <div class="hb"><span class="t13 b clamp1">{{b.l}}</span><span class="tr"><i style="{{b.st}}"></i></span><span class="t13 num" style="text-align: right">{{b.v}}</span></div>
+              </sc-for>
+            </div>
+            <table class="tb" style="margin-top: 14px">
+              <thead><tr><sc-for list="{{rel.cols}}" as="c" hint-placeholder-count="3"><th>{{c}}</th></sc-for></tr></thead>
+              <tbody><sc-for list="{{rel.linhas}}" as="l" hint-placeholder-count="4"><tr><td class="b">{{l.a}}</td><td>{{l.b}}</td><td class="num">{{l.c}}</td></tr></sc-for></tbody>
+            </table>
+            <p class="t13 mute" style="margin: 10px 0 0">Prévia com as primeiras linhas. {{rel.total}}{{filtroTxt}}</p>
           </div>
 
-          <table class="tb" style="margin-top: 16px">
-            <thead><tr><sc-for list="{{rel.cols}}" as="c" hint-placeholder-count="3"><th>{{c}}</th></sc-for></tr></thead>
-            <tbody><sc-for list="{{rel.linhas}}" as="l" hint-placeholder-count="4"><tr><td class="b">{{l.a}}</td><td>{{l.b}}</td><td class="num">{{l.c}}</td></tr></sc-for></tbody>
-          </table>
-          <p class="t13 mute" style="margin: 10px 0 0">Prévia com as primeiras linhas · {{rel.total}}</p>
-        </section>
-
-        <section class="card" aria-labelledby="ex-h">
-          <div class="card-h wrap"><div class="grow"><h2 id="ex-h">Exportar</h2><div class="sub">O arquivo é gerado no servidor com as permissões do seu perfil</div></div>
-            <div class="seg" role="group" aria-label="Formato"><sc-for list="{{formatos}}" as="f" hint-placeholder-count="3"><button class="{{f.cls}}" aria-pressed="{{f.sel}}" onClick="{{f.pick}}">{{f.t}}</button></sc-for></div>
-          </div>
-          <sc-if value="{{rel.saude}}" hint-placeholder-val="{{ true }}">
-            <div class="banner off" style="margin-bottom: 12px"><div class="t14" style="line-height: 1.5"><b>Este relatório tem dado de saúde.</b> Seu perfil (Faturamento) não pode ver: no arquivo, o nome do paciente vira código (PAC-…) e o exame vira o código TUSS. Quem tem vínculo de cuidado recebe completo.</div></div>
-          </sc-if>
           <sc-if value="{{semReaut}}" hint-placeholder-val="{{ true }}">
-            <div class="row wrap" style="gap: 10px"><button class="btn btn-p" onClick="{{pedirExp}}">Exportar {{fmt}}</button><span class="t13 mute">Vai pedir sua senha e o código do autenticador</span></div>
-          </sc-if>
-          <sc-if value="{{reaut}}" hint-placeholder-val="{{ false }}">
-            <div style="padding: 16px; border-radius: 16px; outline: 2px solid #0A1A4A">
-              <div class="t15 b" style="margin-bottom: 10px">Confirme que é você para exportar</div>
-              <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 12px">
-                <label class="field">Senha<input class="in" type="password" value="••••••••••"></label>
-                <label class="field">Código do autenticador<input class="in num" inputmode="numeric" value="482 913"></label>
-              </div>
-              <div class="row wrap" style="gap: 8px; margin-top: 12px"><button class="btn btn-p" onClick="{{confirmar}}">Confirmar e gerar {{fmt}}</button><button class="btn" onClick="{{cancelar}}">Cancelar</button></div>
+            <div class="ft">
+              <sc-if value="{{rel.saude}}" hint-placeholder-val="{{ false }}">
+                <div class="t13" style="flex: 1 1 100%; color: #5A3A00">Tem dado de saúde que o seu perfil não pode ver: no arquivo, o paciente vira código (PAC) e o exame vira código TUSS.</div>
+              </sc-if>
+              <div class="seg" role="group" aria-label="Formato"><sc-for list="{{formatos}}" as="f" hint-placeholder-count="3"><button class="{{f.cls}}" aria-pressed="{{f.sel}}" onClick="{{f.pick}}" style="height: 36px">{{f.t}}</button></sc-for></div>
+              <div class="grow"></div>
+              <span class="t13 mute">Pede senha e código do autenticador</span>
+              <button class="btn btn-sm btn-p" onClick="{{pedirExp}}"><span>Exportar {{fmt}}</span></button>
             </div>
           </sc-if>
-          <sc-if value="{{feito}}" hint-placeholder-val="{{ false }}">
-            <div class="toast" role="status" style="margin-top: 12px"><span style="flex: 1">Arquivo gerado: {{ultimo}} · registrado no lastro {{ultimoCod}} · link de download vale 15 min</span><button>Baixar</button></div>
+          <sc-if value="{{reaut}}" hint-placeholder-val="{{ false }}">
+            <div class="ft" style="align-items: flex-end">
+              <sc-if value="{{rel.saude}}" hint-placeholder-val="{{ false }}">
+                <div class="t13" style="flex: 1 1 100%; color: #5A3A00">No arquivo, o paciente vira código (PAC) e o exame vira código TUSS: o seu perfil não vê dado de saúde.</div>
+              </sc-if>
+              <label class="field" style="flex: 1 1 150px">Senha<input class="in" type="password" autocomplete="current-password" style="min-height: 40px"></label>
+              <label class="field" style="flex: 1 1 150px">Código do autenticador<input class="in num" inputmode="numeric" autocomplete="one-time-code" style="min-height: 40px"></label>
+              <button class="btn btn-sm" onClick="{{cancelar}}">Cancelar</button>
+              <button class="btn btn-sm btn-p" onClick="{{confirmar}}"><span>Confirmar e gerar {{fmt}}</span></button>
+            </div>
           </sc-if>
-        </section>
+          <sc-if value="{{feitoBar}}" hint-placeholder-val="{{ false }}">
+            <div class="ft" role="status" style="background: #E5F5EC">
+              <span class="t13" style="flex: 1; color: #14532D">Arquivo gerado: {{ultimo}}. Registrado no lastro como <span style="white-space: nowrap">{{ultimoCod}}</span>. O link de download vale 15 min.</span>
+              <button class="btn btn-sm">Baixar</button>
+              <button class="btn btn-sm btn-g" onClick="{{fecharFeito}}">Fechar</button>
+            </div>
+          </sc-if>
+        </sc-if>
 
-        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 16px">
-          <section class="card" aria-labelledby="ag-h">
-            <div class="card-h"><span class="ni k-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><div><h2 id="ag-h">Envio recorrente</h2><div class="sub">Por e-mail, com link seguro</div></div></div>
+        <sc-if value="{{tRec}}" hint-placeholder-val="{{ false }}">
+          <div class="scroll" style="padding: 16px 18px">
             <sc-if value="{{podeAgendar}}" hint-placeholder-val="{{ true }}">
-              <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px">
+              <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 560px">
                 <label class="field">Frequência<select class="in"><option>Todo dia 1º</option><option>Toda segunda</option><option>Diário</option></select></label>
                 <label class="field">Para<select class="in"><option>faturamento@vidacor</option><option>coordenacao@vidacor</option></select></label>
               </div>
-              <div class="row wrap" style="gap: 8px; margin-top: 12px"><button class="btn btn-sm btn-p" onClick="{{agendar}}">Agendar envio</button><span class="t13 mute">Só endereços internos da clínica</span></div>
-              <sc-if value="{{agendado}}" hint-placeholder-val="{{ false }}"><div class="banner ok" style="margin-top: 12px"><div class="t14">Agendado: {{rel.t}} todo dia 1º às 07:00. Se o seu perfil mudar, o envio para sozinho.</div></div></sc-if>
+              <div class="row wrap" style="gap: 10px; margin-top: 14px"><button class="btn btn-sm btn-p" onClick="{{agendar}}">Agendar envio</button><span class="t13 mute">Só endereços internos da clínica, com link seguro.</span></div>
+              <sc-if value="{{agendado}}" hint-placeholder-val="{{ false }}"><div class="banner ok" style="margin-top: 14px; max-width: 560px"><div class="t14">Agendado: {{rel.t}} todo dia 1º às 07:00. Se o seu perfil mudar, o envio para sozinho.</div></div></sc-if>
             </sc-if>
             <sc-if value="{{naoAgendar}}" hint-placeholder-val="{{ false }}">
-              <div class="state" style="border: 1px dashed #D9DDE5; border-radius: 16px; padding: 20px 16px">
-                <span class="ni k-gray"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg></span>
+              <div class="state">
                 <div class="t14 b">Envio recorrente indisponível para este relatório</div>
-                <div class="t13 mute">Tem dado de saúde: só a coordenação (Patrícia Lemos) pode agendar. Você pode exportar quando precisar.</div>
+                <div class="t13 mute" style="max-width: 420px">Tem dado de saúde: só a coordenação (Patrícia Lemos) pode agendar. Você pode exportar quando precisar.</div>
               </div>
             </sc-if>
-          </section>
+          </div>
+        </sc-if>
 
-          <section class="card" aria-labelledby="hi-h">
-            <div class="card-h"><span class="ni k-gray"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6L4 8.7M4 4v4.7h4.7M12 8v4l3 2"></path></svg></span><div class="grow"><h2 id="hi-h">Exportações</h2><div class="sub">Quem, quando e o quê</div></div><a class="btn btn-sm" href="Lastro.dc.html">Lastro</a></div>
-            <sc-for list="{{hist}}" as="h" hint-placeholder-count="4">
-              <div class="li"><div style="flex: 1; min-width: 0"><div class="t14 b">{{h.o}}</div><div class="s">{{h.q}} · {{h.w}}</div></div><span class="{{h.cls}}">{{h.tag}}</span></div>
-            </sc-for>
-          </section>
-        </div>
-      </div>
+        <sc-if value="{{tHist}}" hint-placeholder-val="{{ false }}">
+          <div class="scroll">
+            <table class="tb sticky">
+              <thead><tr><th>Arquivo</th><th>Quem</th><th>Quando</th><th>Conteúdo</th></tr></thead>
+              <tbody>
+                <sc-for list="{{hist}}" as="h" hint-placeholder-count="4">
+                  <tr><td class="b">{{h.o}}</td><td>{{h.q}}</td><td class="num nw">{{h.w}}</td><td><span class="{{h.cls}}">{{h.tag}}</span></td></tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+          <div class="ft"><a class="btn btn-sm" href="Lastro.dc.html">Ver no lastro</a></div>
+        </sc-if>
+      </section>
     </div>
-    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { rel: 'medico', fmt: 'XLSX', reaut: false, feito: false, agendado: false, conv: 'Todos', n: 0,
+    this.state = { rel: 'medico', aba: 'prev', fmt: 'XLSX', reaut: false, feito: false, agendado: false, conv: 'Todos', n: 0,
       hist: [
-        ['Glosas por convênio · XLSX', 'Marcos Teixeira', '06/11 17:48', 'Sem dado de saúde', 'chip'],
-        ['Faltas do mês · PDF', 'Patrícia Lemos', '05/11 09:12', 'Completo · coordenação', 'chip c-blue'],
-        ['Financeiro mensal · CSV', 'Patrícia Lemos', '01/11 07:00', 'Envio agendado', 'chip c-violet']
+        ['Glosas por convênio, XLSX', 'Marcos Teixeira', '06/11 17:48', 'Sem dado de saúde', 'chip'],
+        ['Faltas do mês, PDF', 'Patrícia Lemos', '05/11 09:12', 'Completo (coordenação)', 'chip c-blue'],
+        ['Financeiro mensal, CSV', 'Patrícia Lemos', '01/11 07:00', 'Envio agendado', 'chip c-violet']
       ] };
   }
   renderVals() {
     const s = this.state;
     const R = {
-      medico: { g: 'Produção', t: 'Produção por médico', s: 'Exames realizados e laudados', ni: 'ni k-blue', desc: 'Exames realizados e laudados por médico no período', saude: false, cols: ['Médico', 'Principais exames', 'Exames'],
-        d: [['Dr. Paulo Medeiros', 'Eco · ergométrico', 412], ['Dra. Renata Alves', 'USG obstétrica · morfológica', 388], ['Dr. Marcos Freire', 'Doppler · USG geral', 301], ['Dra. Cecília Souto', 'TC · raio X', 276]], total: '4 médicos · 1.377 exames' },
-      conv: { g: 'Produção', t: 'Produção por convênio', s: 'Volume e valor por operadora', ni: 'ni k-teal', desc: 'Exames e valor faturado por convênio (TISS 4.01)', saude: false, cols: ['Convênio', 'Valor faturado', 'Exames'],
-        d: [['Unimed', 'R$ 148.320', 512], ['Particular', 'R$ 96.410', 344], ['Bradesco Saúde', 'R$ 61.900', 221], ['SulAmérica', 'R$ 44.180', 168], ['Amil', 'R$ 31.020', 132]], total: '6 convênios · 1.377 exames' },
-      sala: { g: 'Produção', t: 'Produção por sala', s: 'Uso e ociosidade', ni: 'ni k-indigo', desc: 'Exames e ocupação de cada sala', saude: false, cols: ['Sala', 'Ocupação', 'Exames'],
-        d: [['Sala 1 · Eco', '86%', 298], ['Sala 2 · USG', '91%', 342], ['Sala 3 · Doppler', '74%', 233], ['Sala 5 · TC', '68%', 191]], total: '6 salas' },
-      faltas: { g: 'Agenda', t: 'Faltas', s: 'Quem não veio e por quê', ni: 'ni k-amber', desc: 'Pacientes que faltaram, com exame e contato feito', saude: true, cols: ['Paciente', 'Exame', 'Faltas no período'],
-        d: [['PAC-0193', 'TUSS 40901173', 2], ['PAC-0457', 'TUSS 40902005', 1], ['PAC-0821', 'TUSS 40101010', 1], ['PAC-1102', 'TUSS 40901173', 1]], total: '61 faltas · 4,4% dos agendados' },
-      espera: { g: 'Agenda', t: 'Tempo de espera', s: 'Chegada até a sala', ni: 'ni k-orange', desc: 'Minutos entre o check-in e o início do exame, mediana por dia', saude: false, cols: ['Dia', 'Pico', 'Mediana (min)'],
-        d: [['Segunda', '08:00–09:00', 18], ['Terça', '07:30–08:30', 14], ['Quarta', '14:00–15:00', 11], ['Quinta', '08:00–09:00', 21]], total: 'Meta: até 15 min' },
-      glosas: { g: 'Faturamento', t: 'Glosas', s: 'Valor glosado e motivo', ni: 'ni k-rose', desc: 'Glosas por convênio e motivo principal', saude: false, cols: ['Convênio', 'Motivo principal', 'Glosado (R$)'],
-        d: [['Unimed', 'Guia vencida', 4210], ['Bradesco Saúde', 'TUSS sem autorização', 2980], ['SulAmérica', 'Assinatura ausente', 1140], ['Amil', 'Duplicidade', 620]], total: '1,9% do faturado' },
-      fin: { g: 'Faturamento', t: 'Financeiro', s: 'Entradas e saídas', ni: 'ni k-green', desc: 'Recebido por forma de pagamento', saude: false, cols: ['Forma', 'Participação', 'Recebido (R$ mil)'],
-        d: [['Convênios', '62%', 264], ['PIX', '21%', 89], ['Cartão', '15%', 64], ['Dinheiro', '2%', 9]], total: 'Total recebido R$ 426 mil' },
-      estoque: { g: 'Operação', t: 'Estoque', s: 'Consumo e validade', ni: 'ni k-gray', desc: 'Itens mais consumidos e validade próxima', saude: false, cols: ['Item', 'Validade mais próxima', 'Consumo'],
-        d: [['Gel condutor 5 L', '03/2027', 38], ['Contraste iodado 100 mL', '12/2026', 54], ['Capa de transdutor', '08/2027', 410], ['Lençol descartável', '—', 1210]], total: '3 itens vencem em 60 dias' }
+      medico: { g: 'Produção', t: 'Produção por médico', s: 'Exames realizados e laudados', desc: 'Exames realizados e laudados por médico no período', saude: false, cols: ['Médico', 'Principais exames', 'Exames'],
+        d: [['Dr. Paulo Medeiros', 'Eco e ergométrico', 412], ['Dra. Renata Alves', 'USG obstétrica e morfológica', 388], ['Dr. Marcos Freire', 'Doppler e USG geral', 301], ['Dra. Cecília Souto', 'TC e raio X', 276]], total: '4 médicos, 1.377 exames.' },
+      conv: { g: 'Produção', t: 'Produção por convênio', s: 'Volume e valor por operadora', desc: 'Exames e valor faturado por convênio (TISS 4.01)', saude: false, cols: ['Convênio', 'Valor faturado', 'Exames'],
+        d: [['Unimed', 'R$ 148.320', 512], ['Particular', 'R$ 96.410', 344], ['Bradesco Saúde', 'R$ 61.900', 221], ['SulAmérica', 'R$ 44.180', 168], ['Amil', 'R$ 31.020', 132]], total: '6 convênios, 1.377 exames.' },
+      sala: { g: 'Produção', t: 'Produção por sala', s: 'Uso e ociosidade', desc: 'Exames e ocupação de cada sala', saude: false, cols: ['Sala', 'Ocupação', 'Exames'],
+        d: [['Sala 1, Eco', '86%', 298], ['Sala 2, USG', '91%', 342], ['Sala 3, Doppler', '74%', 233], ['Sala 6, TC', '68%', 191]], total: '6 salas.' },
+      faltas: { g: 'Agenda', t: 'Faltas', s: 'Quem não veio e por quê', desc: 'Pacientes que faltaram, com exame e contato feito', saude: true, cols: ['Paciente', 'Exame', 'Faltas no período'],
+        d: [['PAC-0193', 'TUSS 40901173', 2], ['PAC-0457', 'TUSS 40902005', 1], ['PAC-0821', 'TUSS 40101010', 1], ['PAC-1102', 'TUSS 40901173', 1]], total: '61 faltas, 4,4% dos agendados.' },
+      espera: { g: 'Agenda', t: 'Tempo de espera', s: 'Da chegada até a sala', desc: 'Minutos entre o check-in e o início do exame, mediana por dia', saude: false, cols: ['Dia', 'Pico', 'Mediana (min)'],
+        d: [['Segunda', '08:00 às 09:00', 18], ['Terça', '07:30 às 08:30', 14], ['Quarta', '14:00 às 15:00', 11], ['Quinta', '08:00 às 09:00', 21]], total: 'Meta: até 15 min.' },
+      glosas: { g: 'Faturamento', t: 'Glosas', s: 'Valor glosado e motivo', desc: 'Glosas por convênio e motivo principal', saude: false, cols: ['Convênio', 'Motivo principal', 'Glosado (R$)'],
+        d: [['Unimed', 'Guia vencida', 4210], ['Bradesco Saúde', 'TUSS sem autorização', 2980], ['SulAmérica', 'Assinatura ausente', 1140], ['Amil', 'Duplicidade', 620]], total: '1,9% do faturado.' },
+      fin: { g: 'Faturamento', t: 'Financeiro', s: 'Entradas e saídas', desc: 'Recebido por forma de pagamento', saude: false, cols: ['Forma', 'Participação', 'Recebido (R$ mil)'],
+        d: [['Convênios', '62%', 264], ['PIX', '21%', 89], ['Cartão', '15%', 64], ['Dinheiro', '2%', 9]], total: 'Total recebido: R$ 426 mil.' },
+      estoque: { g: 'Operação', t: 'Estoque', s: 'Consumo e validade', desc: 'Itens mais consumidos e validade próxima', saude: false, cols: ['Item', 'Validade mais próxima', 'Consumo'],
+        d: [['Gel condutor 5 L', '03/2027', 38], ['Contraste iodado 100 mL', '12/2026', 54], ['Capa de transdutor', '08/2027', 410], ['Lençol descartável', 'Sem validade', 1210]], total: '3 itens vencem em 60 dias.' }
     };
     const r = R[s.rel];
     const max = Math.max.apply(null, r.d.map(x => x[2]));
     const groups = [];
     Object.keys(R).forEach(k => { const x = R[k]; let g = groups.find(y => y.t === x.g); if (!g) { g = { t: x.g, itens: [] }; groups.push(g); }
-      g.itens.push({ t: x.t, s: x.s, ni: x.ni, cls: 'cv' + (s.rel === k ? ' sel' : ''), atual: s.rel === k ? 'true' : 'false', pick: () => this.setState({ rel: k, reaut: false, feito: false, agendado: false }) }); });
+      g.itens.push({ t: x.t, s: x.s, cls: 'cv' + (s.rel === k ? ' sel' : ''), atual: s.rel === k ? 'true' : 'false', pick: () => this.setState({ rel: k, reaut: false, feito: false, agendado: false }) }); });
     const fmtN = v => typeof v === 'number' ? v.toLocaleString('pt-BR') : v;
     const cod = 'EXP-2611-' + String(312 + s.n).padStart(4, '0');
     return {
       grupos: groups,
+      abas: [['prev', 'Prévia e exportação'], ['rec', 'Envio recorrente'], ['hist', 'Exportações feitas']].map(([k, t]) => ({ t, cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      tPrev: s.aba === 'prev', tRec: s.aba === 'rec', tHist: s.aba === 'hist',
       rel: { t: r.t, desc: r.desc, saude: r.saude, cols: r.cols, total: r.total, linhas: r.d.map(x => ({ a: x[0], b: x[1], c: fmtN(x[2]) })) },
       barras: r.d.map(x => ({ l: x[0], v: fmtN(x[2]), st: 'width: ' + Math.round(x[2] / max * 100) + '%' })),
       grafAria: 'Gráfico de barras: ' + r.d.map(x => x[0] + ' ' + x[2]).join(', '),
-      onConv: e => this.setState({ conv: e.target.value }), filtroConv: s.conv !== 'Todos', convSel: s.conv,
+      conv: s.conv, onConv: e => this.setState({ conv: e.target.value }), filtroTxt: s.conv !== 'Todos' ? ' Filtro aplicado: ' + s.conv + '.' : '',
       formatos: ['CSV', 'PDF', 'XLSX'].map(f => ({ t: f, cls: s.fmt === f ? 'on' : '', sel: s.fmt === f ? 'true' : 'false', pick: () => this.setState({ fmt: f }) })),
       fmt: s.fmt,
-      semReaut: !s.reaut, reaut: s.reaut,
+      semReaut: !s.reaut && !s.feito, reaut: s.reaut, feitoBar: s.feito && !s.reaut,
       pedirExp: () => this.setState({ reaut: true, feito: false }),
       cancelar: () => this.setState({ reaut: false }),
+      fecharFeito: () => this.setState({ feito: false }),
       confirmar: () => this.setState(st => ({ reaut: false, feito: true, n: st.n + 1,
-        hist: [[r.t + ' · ' + st.fmt, 'Marcos Teixeira', 'agora', r.saude ? 'Dado de saúde removido' : 'Sem dado de saúde', r.saude ? 'chip c-amber' : 'chip']].concat(st.hist) })),
-      feito: s.feito, ultimo: r.t + ' (' + s.fmt + ')', ultimoCod: cod,
+        hist: [[r.t + ', ' + st.fmt, 'Marcos Teixeira', 'Agora', r.saude ? 'Dado de saúde removido' : 'Sem dado de saúde', r.saude ? 'chip c-amber' : 'chip']].concat(st.hist) })),
+      ultimo: r.t + ' (' + s.fmt + ')', ultimoCod: cod,
       podeAgendar: !r.saude, naoAgendar: r.saude,
       agendar: () => this.setState({ agendado: true }), agendado: s.agendado,
       hist: s.hist.map(([o, q, w, tag, cls]) => ({ o, q, w, tag, cls }))

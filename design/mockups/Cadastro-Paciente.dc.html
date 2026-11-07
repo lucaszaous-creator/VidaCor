@@ -4,178 +4,194 @@
 <meta charset="utf-8">
 <title>Cadastro de paciente — VidaCor</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+<link rel="stylesheet" href="/_blob/3428af26abb0af564c467191e42d3475">
 </head>
 <body>
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style>body{margin:0}</style>
+<style>
+body{margin:0}
+.fs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.fs .w2{grid-column:span 2}
+.cb{display:flex;align-items:center;gap:10px;font-size:14px;min-height:36px}
+.cb input{width:18px;height:18px;flex:none}
+.sub-h{font-size:15px;font-weight:600;margin:0 0 10px}
+.ckl{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #F1F3F6;font-size:14px}
+.ckl:last-child{border-bottom:0}
+.ci{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center}
+.ci.ok{background:#E5F5EC;color:#1F7A4D}.ci.todo{border:1.5px solid #CBD2DC}
+.alg{display:inline-flex;align-items:center;gap:4px;height:32px;padding:0 4px 0 12px;border-radius:999px;background:#C2334D;color:#fff;font-size:13px;font-weight:700}
+.alg button{width:26px;height:26px;border:0;border-radius:50%;background:transparent;color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.alg button:hover{background:rgba(255,255,255,.18)}
+.dup{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 16px;border-radius:16px;background:#FFF3DF;color:#5A3A00}
+</style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
-  <div class="side"><dc-import name="Sidebar" active="pacientes" hint-size="248px,1400px"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="pacientes" hint-size="248px,900px"></dc-import></div>
   <main class="content">
-    <div class="topbar">
-      <div class="crumb"><a href="Paciente.dc.html">Pacientes</a><span aria-hidden="true">›</span><b>Novo paciente</b></div>
-      <div class="grow"></div>
-      <span class="t13 mute">Rascunho salvo há 4 s · origem: telefone · Guichê 1</span>
-    </div>
+    <header class="row wrap" style="gap: 14px">
+      <a class="btn btn-sm btn-g" href="Pacientes-Lista.dc.html" style="padding: 0 10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>Pacientes</a>
+      <div style="flex: 1 1 auto; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Novo paciente</h1>
+        <div class="t13 mute" style="margin-top: 2px">Rascunho salvo há 4 s. Origem: telefone, Guichê 1.</div>
+      </div>
+      <button class="btn" onClick="{{lerDoc}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="9" cy="11" r="2.5"></circle><path d="M14 10h4M14 14h4M6 16c.6-1.3 1.7-2 3-2s2.4.7 3 2"></path></svg>Ler documento ou carteirinha</button>
+    </header>
 
-    <div class="page-h">
-      <div class="grow"><h1>Novo paciente</h1><p>Só nome, nascimento, sexo e celular são obrigatórios para agendar. O resto pode ser completado no check-in.</p></div>
-      <button class="btn" onClick="{{lerDoc}}"><span class="ni k-blue" style="width: 28px; height: 28px; border-radius: 9px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="9" cy="11" r="2.5"></circle><path d="M14 10h4M14 14h4M6 16c.6-1.3 1.7-2 3-2s2.4.7 3 2"></path></svg></span>Ler documento ou carteirinha</button>
-    </div>
-
-    <sc-if value="{{docLido}}" hint-placeholder-val="{{ false }}">
-      <div class="banner info" role="status"><div class="t14" style="line-height: 1.5"><b>Documento lido:</b> CNH de Maria Helena Duarte. Preenchemos nome, nascimento, CPF e nome da mãe. <b>Confira cada campo com a paciente</b> antes de salvar.</div></div>
+    <sc-if value="{{dupAberto}}" hint-placeholder-val="{{ true }}">
+      <div class="dup" role="alert">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6"></path></svg>
+        <div style="flex: 1 1 360px; min-width: 0">
+          <div class="t14 b">Pode ser a mesma pessoa: Maria Helena Duarte, 12/03/1968</div>
+          <div class="t13">Nome igual e nascimento com dia e mês trocados. Mãe: Ivone Duarte. Último exame: ecocardiograma em 06/11/2026.</div>
+        </div>
+        <a class="btn btn-sm btn-p" href="Paciente.dc.html">É ela: abrir o cadastro existente</a>
+        <button class="btn btn-sm" onClick="{{naoEMesma}}">Não é a mesma pessoa</button>
+      </div>
+    </sc-if>
+    <sc-if value="{{dupDescartado}}" hint-placeholder-val="{{ false }}">
+      <div class="t13 mute" style="padding: 0 4px">Você confirmou que é outra pessoa (homônimo). Registrado no lastro com o motivo.</div>
     </sc-if>
 
-    <div class="split">
-      <div class="main col" style="gap: 16px">
+    <nav class="tabs" aria-label="Seções do cadastro">
+      <sc-for list="{{abas}}" as="a" hint-placeholder-count="5"><button class="{{a.cls}}" aria-current="{{a.atual}}" onClick="{{a.ir}}">{{a.t}}<span class="sr">{{a.sr}}</span></button></sc-for>
+    </nav>
 
-        <section class="card" aria-labelledby="s-busca">
-          <div class="card-h"><span class="ni k-indigo">1</span><div><h2 id="s-busca">Quem é</h2><div class="sub">Buscamos enquanto você digita para não criar o mesmo paciente duas vezes</div></div></div>
-          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px">
-            <label class="field" style="grid-column: span 2">Nome civil completo *<input class="in" value="Maria Helena Duarte"></label>
-            <label class="field">Data de nascimento *<input class="in num" value="21/03/1968" inputmode="numeric"></label>
-          </div>
-          <sc-if value="{{dupAberto}}" hint-placeholder-val="{{ true }}">
-            <div style="margin-top: 14px; border: 2px solid #E9B44C; background: #FFF8EA; border-radius: 16px; padding: 14px 16px">
-              <div class="row wrap" style="gap: 12px">
-                <span class="ni k-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6"></path></svg></span>
-                <div style="flex: 1 1 280px; min-width: 0">
-                  <div class="t15 b">Pode ser a mesma pessoa: Maria Helena Duarte · 12/03/1968</div>
-                  <div class="t13" style="color: #5A3A00; margin-top: 2px">Nome igual e nascimento parecido (dia e mês podem ter sido trocados) · mãe: Ivone Duarte · último exame: ecocardiograma em 06/11/2026</div>
-                </div>
+    <div class="fill" style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .42fr); gap: 16px">
+      <section class="card pane" aria-label="{{abaNome}}">
+        <div class="scroll" style="padding: 2px">
+          <sc-if value="{{docLido}}" hint-placeholder-val="{{ false }}">
+            <div class="banner info" role="status" style="margin-bottom: 16px"><div class="t14" style="line-height: 1.5"><b>CNH lida.</b> Preenchemos nome, nascimento, CPF e nome da mãe. Confira cada campo com a paciente antes de salvar.</div></div>
+          </sc-if>
+
+          <sc-if value="{{aIdent}}" hint-placeholder-val="{{ true }}">
+            <div class="fs">
+              <label class="field w2">Nome civil completo *<input class="in" value="Maria Helena Duarte"></label>
+              <label class="field">Data de nascimento *<input class="in num" value="21/03/1968" inputmode="numeric"></label>
+              <label class="field">Nome social<input class="in" placeholder="Como prefere"></label>
+              <div class="field w2">Sexo *<div class="seg" role="radiogroup" aria-label="Sexo"><sc-for list="{{sexos}}" as="x" hint-placeholder-count="3"><button class="{{x.cls}}" role="radio" aria-checked="{{x.on}}" onClick="{{x.ir}}" style="height: 40px; padding: 0 12px">{{x.t}}</button></sc-for></div></div>
+              <label class="field">CPF<input class="in num" value="{{cpf}}" onChange="{{onCpf}}" aria-invalid="{{cpfInvalido}}" style="{{cpfStyle}}"><span class="t12" style="{{cpfMsgStyle}}">{{cpfMsg}}</span></label>
+              <label class="field w2">Nome da mãe<input class="in" value="Rosa Maria Duarte"><span class="t12 mute" style="font-weight: 400">Ajuda a separar homônimos</span></label>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{aCont}}" hint-placeholder-val="{{ false }}">
+            <div class="fs">
+              <label class="field">Celular *<input class="in num" value="(48) 99812-4410"></label>
+              <label class="cb" style="align-self: end; min-height: 46px"><input type="checkbox" checked>É WhatsApp</label>
+              <label class="field">E-mail<input class="in" placeholder="opcional"></label>
+              <label class="field">CEP<input class="in num" value="88015-200"><span class="t12" style="color: #1F7A4D; font-weight: 400">Endereço preenchido pelo CEP</span></label>
+              <label class="field w2">Endereço<input class="in" value="Rua Felipe Schmidt, 515, ap. 302, Centro, Florianópolis/SC"></label>
+            </div>
+            <label class="cb" style="margin-top: 16px"><input type="checkbox" checked="{{temResp}}" onChange="{{toggleResp}}">Tem responsável legal ou acompanhante que decide (menor, curatela)</label>
+            <sc-if value="{{temResp}}" hint-placeholder-val="{{ false }}">
+              <div class="fs" style="margin-top: 10px; padding: 14px; border-radius: 14px; background: #F6F7F9">
+                <label class="field">Nome do responsável<input class="in"></label>
+                <label class="field">Parentesco<input class="in" placeholder="mãe, pai, curador"></label>
+                <label class="field">CPF do responsável<input class="in num"></label>
+                <label class="field">Celular do responsável<input class="in num"></label>
               </div>
-              <div class="row wrap" style="gap: 8px; margin-top: 12px">
-                <a class="btn btn-sm btn-p" href="Paciente.dc.html">É ela: abrir o cadastro existente</a>
-                <button class="btn btn-sm" onClick="{{naoEMesma}}">Não é a mesma pessoa</button>
+            </sc-if>
+          </sc-if>
+
+          <sc-if value="{{aConv}}" hint-placeholder-val="{{ false }}">
+            <div class="seg" role="radiogroup" aria-label="Tipo de atendimento" style="margin-bottom: 16px"><button class="{{partCls}}" role="radio" aria-checked="{{partAria}}" onClick="{{setPart}}">Particular</button><button class="{{convCls}}" role="radio" aria-checked="{{convAria}}" onClick="{{setConv}}">Convênio</button></div>
+            <sc-if value="{{convenio}}" hint-placeholder-val="{{ true }}">
+              <div class="fs">
+                <label class="field">Operadora<select class="in"><option>Unimed Grande Florianópolis</option><option>Bradesco Saúde</option><option>SulAmérica</option></select></label>
+                <label class="field">Carteirinha<input class="in num" value="0 865 000123456 7"></label>
+                <label class="field">Validade<input class="in num" value="31/12/2027"></label>
+                <label class="field">Plano<input class="in" value="Unimed Pleno, apartamento"></label>
               </div>
+              <div class="row wrap" style="gap: 12px; margin-top: 16px">
+                <button class="btn btn-sm" onClick="{{elegibilidade}}">Verificar elegibilidade</button>
+                <sc-if value="{{elegivel}}" hint-placeholder-val="{{ false }}"><span class="chip c-green">Elegível hoje</span><span class="t13 mute">Consulta TISS às 09:14, protocolo ELG-77131</span></sc-if>
+              </div>
+              <p class="t13 mute" style="margin: 14px 0 0">Convênio só agenda com guia autorizada. A foto da carteirinha, frente e verso, fica anexada.</p>
+            </sc-if>
+            <sc-if value="{{particular}}" hint-placeholder-val="{{ false }}">
+              <p class="t14 mute" style="margin: 0">Atendimento particular: preço e desconto são calculados no caixa pelo sistema, nunca digitados aqui.</p>
+            </sc-if>
+          </sc-if>
+
+          <sc-if value="{{aSeg}}" hint-placeholder-val="{{ false }}">
+            <h3 class="sub-h">Alergias</h3>
+            <div class="row wrap" style="gap: 8px">
+              <sc-for list="{{alergias}}" as="a" hint-placeholder-count="1"><span class="alg">{{a.nome}}<button aria-label="Remover alergia a {{a.nome}}" onClick="{{a.remover}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-for>
+              <sc-for list="{{sugestoes}}" as="s" hint-placeholder-count="3"><button class="btn btn-sm" onClick="{{s.add}}" aria-label="Adicionar alergia a {{s.nome}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>{{s.nome}}</button></sc-for>
+            </div>
+            <label class="cb" style="margin-top: 8px"><input type="checkbox" checked="{{nega}}" onChange="{{toggleNega}}" disabled="{{temAlergia}}">Nega alergias</label>
+            <div class="t12 mute">Informe ao menos uma alergia ou marque que nega.</div>
+            <h3 class="sub-h" style="margin-top: 20px">Condições para o exame</h3>
+            <div class="fs" style="gap: 4px 14px">
+              <label class="cb"><input type="checkbox">Marca-passo ou implante metálico</label>
+              <label class="cb"><input type="checkbox">Gestante ou pode estar</label>
+              <label class="cb"><input type="checkbox">Diabetes, usa metformina</label>
+              <label class="cb"><input type="checkbox">Doença renal</label>
+            </div>
+            <h3 class="sub-h" style="margin-top: 20px">Acessibilidade e cuidados</h3>
+            <div class="fs" style="gap: 4px 14px">
+              <label class="cb"><input type="checkbox" checked>Cadeira de rodas</label>
+              <label class="cb"><input type="checkbox">Intérprete de Libras</label>
+              <label class="cb"><input type="checkbox">Baixa visão</label>
+              <label class="cb"><input type="checkbox">Precisa de acompanhante</label>
+              <label class="cb"><input type="checkbox">Preferencial (60 anos ou mais)</label>
             </div>
           </sc-if>
-          <sc-if value="{{dupDescartado}}" hint-placeholder-val="{{ false }}">
-            <div class="row" style="gap: 8px; margin-top: 12px"><span class="chip">Homônimo registrado</span><span class="t13 mute">Você confirmou que é outra pessoa. Fica no lastro com o motivo.</span></div>
-          </sc-if>
-          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px; margin-top: 14px">
-            <label class="field">Nome social<input class="in" placeholder="Como prefere ser chamada"></label>
-            <div class="field">Sexo *<div class="seg" role="radiogroup" aria-label="Sexo"><button class="on" role="radio" aria-checked="true">Feminino</button><button role="radio" aria-checked="false">Masculino</button><button role="radio" aria-checked="false">Intersexo</button></div></div>
-            <label class="field">CPF<input class="in num" value="{{cpf}}" onChange="{{onCpf}}" aria-invalid="{{cpfInvalido}}" style="{{cpfStyle}}"><span class="t12" style="{{cpfMsgStyle}}">{{cpfMsg}}</span></label>
-            <label class="field">Nome da mãe<input class="in" value="Rosa Maria Duarte"><span class="t12 mute" style="font-weight: 400">Ajuda a separar homônimos</span></label>
-          </div>
-        </section>
 
-        <section class="card" aria-labelledby="s-contato">
-          <div class="card-h"><span class="ni k-teal">2</span><div><h2 id="s-contato">Contato e endereço</h2><div class="sub">O celular recebe confirmação, preparo e o aviso do laudo</div></div></div>
-          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px">
-            <label class="field">Celular *<input class="in num" value="(48) 99812-4410"></label>
-            <label class="row t14" style="gap: 8px; align-self: end; min-height: 46px"><input type="checkbox" checked style="width: 18px; height: 18px">É WhatsApp</label>
-            <label class="field">E-mail<input class="in" placeholder="opcional"></label>
-            <label class="field">CEP<input class="in num" value="88015-200"><span class="t12" style="color: #1F7A4D">Endereço preenchido pelo CEP</span></label>
-            <label class="field" style="grid-column: span 2">Endereço<input class="in" value="Rua Felipe Schmidt, 515, ap. 302 · Centro · Florianópolis/SC"></label>
-          </div>
-          <label class="row t14" style="gap: 8px; margin-top: 14px"><input type="checkbox" checked="{{temResp}}" onChange="{{toggleResp}}" style="width: 18px; height: 18px">Tem responsável legal ou acompanhante que decide (menor, curatela)</label>
-          <sc-if value="{{temResp}}" hint-placeholder-val="{{ false }}">
-            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px; margin-top: 12px; padding: 14px; border-radius: 14px; background: #F6F7F9">
-              <label class="field">Nome do responsável<input class="in"></label>
-              <label class="field">Parentesco<input class="in" placeholder="mãe, pai, curador…"></label>
-              <label class="field">CPF do responsável<input class="in num"></label>
-              <label class="field">Celular do responsável<input class="in num"></label>
+          <sc-if value="{{aPriv}}" hint-placeholder-val="{{ false }}">
+            <p class="t14" style="margin: 0 0 12px; color: #334155">Uso dos dados para o atendimento e o faturamento: sempre, pela tutela da saúde, sem precisar de consentimento.</p>
+            <div class="col" style="gap: 4px">
+              <label class="cb"><input type="checkbox" checked>Receber lembretes, preparo e aviso do laudo pelo WhatsApp</label>
+              <label class="cb"><input type="checkbox">Responder pesquisa de satisfação</label>
+              <label class="cb"><input type="checkbox">Uso de imagens sem identificação para ensino</label>
+              <label class="cb"><input type="checkbox" checked>Criar conta no portal e enviar o convite pelo WhatsApp</label>
             </div>
+            <p class="t13 mute" style="margin: 14px 0 0">Cada consentimento é separado e a paciente pode retirar qualquer um pelo portal.</p>
           </sc-if>
-        </section>
+        </div>
 
-        <section class="card" aria-labelledby="s-conv">
-          <div class="card-h"><span class="ni k-orange">3</span><div><h2 id="s-conv">Convênio</h2><div class="sub">Convênio só agenda com guia autorizada (docs/21)</div></div>
-            <div class="seg" role="radiogroup" aria-label="Tipo de atendimento" style="margin-left: auto"><button class="{{partCls}}" role="radio" aria-checked="{{partAria}}" onClick="{{setPart}}">Particular</button><button class="{{convCls}}" role="radio" aria-checked="{{convAria}}" onClick="{{setConv}}">Convênio</button></div></div>
-          <sc-if value="{{convenio}}" hint-placeholder-val="{{ true }}">
-            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px">
-              <label class="field">Operadora<select class="in"><option>Unimed Grande Florianópolis</option><option>Bradesco Saúde</option><option>SulAmérica</option></select></label>
-              <label class="field">Carteirinha<input class="in num" value="0 865 000123456 7"></label>
-              <label class="field">Plano<input class="in" value="Unimed Pleno · apartamento"></label>
-              <label class="field">Validade<input class="in num" value="31/12/2027"></label>
+        <div class="row wrap" style="gap: 10px; padding-top: 14px; margin-top: 12px; border-top: 1px solid #E8EAEF">
+          <span class="t13" style="{{motivoSt}}">{{motivoBloq}}</span>
+          <sc-if value="{{temProx}}" hint-placeholder-val="{{ true }}"><button class="btn btn-g" onClick="{{proxima}}" aria-label="{{proxAria}}">Próxima</button></sc-if>
+          <button class="btn" disabled="{{bloqSalvar}}" onClick="{{salvar}}">Só salvar</button>
+          <button class="btn btn-p" disabled="{{bloqSalvar}}" onClick="{{salvar}}">Salvar e agendar</button>
+        </div>
+      </section>
+
+      <aside class="card pane" aria-label="Pronto para agendar">
+        <h2 style="font-size: 17px; font-weight: 600; padding-bottom: 6px">Pronto para agendar?</h2>
+        <div class="scroll">
+          <sc-for list="{{checklist}}" as="c" hint-placeholder-count="7">
+            <div class="ckl">
+              <span class="{{c.cls}}"><sc-if value="{{c.ok}}" hint-placeholder-val="{{ true }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></sc-if></span>
+              <span>{{c.t}}<span class="sr">{{c.sr}}</span></span>
+              <span class="t12 mute">{{c.quando}}</span>
             </div>
-            <div class="row wrap" style="gap: 10px; margin-top: 12px">
-              <button class="btn btn-sm" onClick="{{elegibilidade}}">Verificar elegibilidade</button>
-              <sc-if value="{{elegivel}}" hint-placeholder-val="{{ false }}"><span class="chip c-green">Elegível hoje · consulta TISS às 09:14</span></sc-if>
-              <span class="t13 mute">Foto da carteirinha frente e verso fica anexada</span>
-            </div>
+          </sc-for>
+          <sc-if value="{{salvo}}" hint-placeholder-val="{{ false }}">
+            <div class="toast" role="status" style="margin-top: 12px"><span style="flex: 1">Paciente PAC-2026-004812 criada às 09:13.</span><a href="Agendamento-Guia.dc.html" style="color: #8FC5F0; font-weight: 600">Agendar</a></div>
           </sc-if>
-          <sc-if value="{{particular}}" hint-placeholder-val="{{ false }}">
-            <div class="t14 mute">Atendimento particular: preço e desconto são calculados no caixa pelo sistema, nunca digitados aqui.</div>
-          </sc-if>
-        </section>
-
-        <section class="card" aria-labelledby="s-saude">
-          <div class="card-h"><span class="ni k-rose">4</span><div><h2 id="s-saude">Segurança do paciente</h2><div class="sub">Vai para a barra do paciente e para a triagem antes do exame</div></div></div>
-          <div class="field">Alergias</div>
-          <div class="row wrap" style="gap: 8px; margin-top: 6px">
-            <sc-for list="{{alergias}}" as="a" hint-placeholder-count="1"><span class="al-chip">{{a.nome}}<button aria-label="Remover {{a.nome}}" onClick="{{a.remover}}" style="border: 0; background: transparent; color: #fff; cursor: pointer; font: inherit; padding: 0 0 0 4px">✕</button></span></sc-for>
-            <sc-for list="{{sugestoes}}" as="s" hint-placeholder-count="3"><button class="chip" onClick="{{s.add}}" style="border: 1px dashed #D9DDE5; cursor: pointer">+ {{s.nome}}</button></sc-for>
-            <span class="t13 mute">ou "nega alergias" (precisa marcar uma das duas)</span>
-          </div>
-          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 10px; margin-top: 16px">
-            <label class="row t14" style="gap: 8px"><input type="checkbox" style="width: 18px; height: 18px">Marca-passo ou implante metálico</label>
-            <label class="row t14" style="gap: 8px"><input type="checkbox" style="width: 18px; height: 18px">Gestante ou pode estar</label>
-            <label class="row t14" style="gap: 8px"><input type="checkbox" style="width: 18px; height: 18px">Diabetes (metformina)</label>
-            <label class="row t14" style="gap: 8px"><input type="checkbox" style="width: 18px; height: 18px">Doença renal</label>
-          </div>
-          <div class="field" style="margin-top: 16px">Acessibilidade e cuidados</div>
-          <div class="row wrap" style="gap: 8px; margin-top: 6px"><span class="chip c-blue">Cadeira de rodas</span><span class="chip">Intérprete de Libras</span><span class="chip">Baixa visão</span><span class="chip">Precisa de acompanhante</span><span class="chip">Preferencial (60+)</span></div>
-        </section>
-
-        <section class="card" aria-labelledby="s-lgpd">
-          <div class="card-h"><span class="ni k-green">5</span><div><h2 id="s-lgpd">Privacidade e portal</h2><div class="sub">Cada consentimento é separado e pode ser retirado pela paciente no portal</div></div></div>
-          <div class="col" style="gap: 10px">
-            <div class="row t14" style="gap: 10px"><span class="chip">Sempre</span>Uso dos dados para o atendimento e o faturamento (base legal: tutela da saúde, não precisa de consentimento)</div>
-            <label class="row t14" style="gap: 10px"><input type="checkbox" checked style="width: 18px; height: 18px">Receber lembretes, preparo e aviso do laudo pelo WhatsApp</label>
-            <label class="row t14" style="gap: 10px"><input type="checkbox" style="width: 18px; height: 18px">Responder pesquisa de satisfação</label>
-            <label class="row t14" style="gap: 10px"><input type="checkbox" style="width: 18px; height: 18px">Uso de imagens sem identificação para ensino</label>
-            <label class="row t14" style="gap: 10px"><input type="checkbox" checked style="width: 18px; height: 18px">Criar conta no portal e enviar o convite pelo WhatsApp</label>
-          </div>
-        </section>
-      </div>
-
-      <aside class="aside col" style="gap: 16px">
-        <section class="card">
-          <div class="t15 b">Pronto para agendar?</div>
-          <div class="col" style="gap: 8px; margin-top: 12px">
-            <sc-for list="{{checklist}}" as="c" hint-placeholder-count="6">
-              <div class="row t14" style="gap: 10px"><span class="{{c.cls}}" style="width: 24px; height: 24px; border-radius: 7px; font-size: 12px; font-weight: 700">{{c.ic}}</span><span style="flex: 1">{{c.t}}</span><span class="t12 mute">{{c.quando}}</span></div>
-            </sc-for>
-          </div>
-          <div class="col" style="gap: 8px; margin-top: 16px">
-            <button class="btn btn-p" disabled="{{bloqSalvar}}" onClick="{{salvar}}">Salvar e agendar</button>
-            <button class="btn" disabled="{{bloqSalvar}}" onClick="{{salvar}}">Só salvar</button>
-            <span class="t12 mute">{{motivoBloq}}</span>
-          </div>
-        </section>
-        <sc-if value="{{salvo}}" hint-placeholder-val="{{ false }}">
-          <div class="toast" role="status"><span style="flex: 1">Paciente PAC-2026-004812 criada</span><a href="Agendamento-Guia.dc.html" style="color: #8FC5F0; font-weight: 600">Agendar</a></div>
-        </sc-if>
-        <section class="card">
-          <div class="t15 b">Lastro deste cadastro</div>
-          <div class="col t13" style="gap: 6px; margin-top: 10px; color: #334155">
-            <div>Criado por <b>Ana Souza</b> · Guichê 1 · 09:12</div>
-            <div>Origem: <b>telefone</b> (pode ser balcão, portal, WhatsApp)</div>
-            <div>Documento lido: CNH · hash guardado</div>
-          </div>
-        </section>
-        <section class="card">
-          <div class="t15 b">Corrigir depois</div>
-          <p class="t13" style="margin: 8px 0 0; line-height: 1.55; color: #334155">Mudar nome ou nascimento pede <b>motivo</b>, guarda a versão anterior e <b>invalida as etiquetas</b> já impressas. Juntar dois cadastros duplicados precisa de uma segunda pessoa.</p>
-        </section>
+        </div>
+        <div style="border-top: 1px solid #E8EAEF; padding-top: 12px">
+          <dl class="kv" style="margin: 0; grid-template-columns: 96px minmax(0, 1fr); font-size: 13px">
+            <dt>Criado por</dt><dd>Ana Souza, Guichê 1, 09:12</dd>
+            <dt>Origem</dt><dd>Telefone</dd>
+            <dt>Documento</dt><dd>{{docTxt}}</dd>
+          </dl>
+          <p class="t12 mute" style="margin: 10px 0 0; line-height: 1.5">Mudar nome ou nascimento depois pede motivo, guarda a versão anterior e invalida as etiquetas impressas.</p>
+        </div>
       </aside>
     </div>
-    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2300}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { dup: 'aberto', doc: false, cpf: '123.456.789-00', resp: false, conv: true, eleg: false, alergias: ['Iodo'], salvo: false };
+    this.state = { aba: 'ident', dup: 'aberto', doc: false, cpf: '123.456.789-00', resp: false, conv: true, eleg: false, alergias: ['Iodo'], nega: false, sexo: 'F', salvo: false };
   }
   cpfOk(v) {
     const d = (v || '').replace(/\D/g, '');
@@ -188,12 +204,24 @@ class Component extends DCLogic {
     const cpfVazio = !s.cpf.trim(), ok = cpfVazio || this.cpfOk(s.cpf);
     const sug = ['Contraste iodado', 'Látex', 'Dipirona', 'Gadolínio'].filter(x => !s.alergias.includes(x));
     const dupPend = s.dup === 'aberto';
-    const ck = (b, t, q) => ({ cls: 'ni ' + (b ? 'k-green' : 'k-gray'), ic: b ? '✓' : '·', t, quando: q });
-    const checklist = [ck(true, 'Nome e nascimento', 'agendar'), ck(true, 'Sexo e celular', 'agendar'), ck(!dupPend, 'Possível duplicado resolvido', 'agendar'),
+    const alergOk = s.alergias.length > 0 || s.nega;
+    const ck = (b, t, q) => ({ cls: b ? 'ci ok' : 'ci todo', ok: b, t, quando: q, sr: b ? ', concluído' : ', pendente' });
+    const checklist = [ck(true, 'Nome e nascimento', 'agendar'), ck(true, 'Sexo e celular', 'agendar'), ck(!dupPend, 'Possível duplicado resolvido', 'agendar'), ck(alergOk, 'Alergias informadas', 'agendar'),
       ck(!cpfVazio && ok, 'CPF válido', 'check-in'), ck(s.doc, 'Documento com foto', 'check-in'), ck(!s.conv || s.eleg, 'Convênio elegível', 'check-in')];
+    const A = [['ident', 'Identificação'], ['cont', 'Contato'], ['conv', 'Convênio'], ['seg', 'Segurança'], ['priv', 'Privacidade']];
+    const pend = { ident: dupPend || !ok, cont: false, conv: s.conv && !s.eleg, seg: !alergOk, priv: false };
+    const idx = A.findIndex(a => a[0] === s.aba);
+    const prox = A[idx + 1];
+    const motivo = dupPend ? 'Resolva o possível duplicado antes de salvar.' : (!ok ? 'Corrija o CPF ou deixe em branco.' : (!alergOk ? 'Informe alergias ou marque que nega, na aba Segurança.' : 'O que falta para o check-in pode ser completado depois.'));
+    const bloq = dupPend || !ok || !alergOk;
     return {
-      lerDoc: () => this.setState({ doc: true, cpf: '529.982.247-25' }), docLido: s.doc,
+      lerDoc: () => this.setState({ doc: true, cpf: '529.982.247-25' }), docLido: s.doc, docTxt: s.doc ? 'CNH lida, hash guardado' : 'Ainda não lido',
       dupAberto: dupPend, dupDescartado: s.dup === 'outra', naoEMesma: () => this.setState({ dup: 'outra' }),
+      abas: A.map(([k, t]) => ({ t: t + (pend[k] ? ' *' : ''), sr: pend[k] ? ', com pendência' : '', cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
+      abaNome: A[idx][1],
+      aIdent: s.aba === 'ident', aCont: s.aba === 'cont', aConv: s.aba === 'conv', aSeg: s.aba === 'seg', aPriv: s.aba === 'priv',
+      temProx: !!prox, proxAria: prox ? 'Próxima aba: ' + prox[1] : '', proxima: () => { if (prox) this.setState({ aba: prox[0] }); },
+      sexos: [['F', 'Feminino'], ['M', 'Masculino'], ['I', 'Intersexo']].map(([k, t]) => ({ t, cls: s.sexo === k ? 'on' : '', on: s.sexo === k ? 'true' : 'false', ir: () => this.setState({ sexo: k }) })),
       cpf: s.cpf, onCpf: e => this.setState({ cpf: e.target.value }), cpfInvalido: ok ? 'false' : 'true',
       cpfStyle: ok ? '' : 'border: 2px solid #C2334D',
       cpfMsg: cpfVazio ? 'Opcional para agendar, pedido no check-in' : (ok ? 'CPF válido' : 'CPF inválido: confira os dois últimos dígitos'),
@@ -204,9 +232,10 @@ class Component extends DCLogic {
       setPart: () => this.setState({ conv: false }), setConv: () => this.setState({ conv: true }),
       elegibilidade: () => this.setState({ eleg: true }), elegivel: s.eleg,
       alergias: s.alergias.map(a => ({ nome: a, remover: () => this.setState(st => ({ alergias: st.alergias.filter(x => x !== a) })) })),
-      sugestoes: sug.map(x => ({ nome: x, add: () => this.setState(st => ({ alergias: st.alergias.concat([x]) })) })),
+      sugestoes: sug.map(x => ({ nome: x, add: () => this.setState(st => ({ alergias: st.alergias.concat([x]), nega: false })) })),
+      nega: s.nega, temAlergia: s.alergias.length > 0, toggleNega: () => this.setState(st => ({ nega: !st.nega })),
       checklist,
-      bloqSalvar: dupPend || !ok, motivoBloq: dupPend ? 'Resolva o possível duplicado antes de salvar.' : (!ok ? 'Corrija o CPF ou deixe em branco.' : 'O que falta para o check-in pode ser completado depois.'),
+      bloqSalvar: bloq, motivoBloq: motivo, motivoSt: (bloq ? 'color: #9A5B00' : 'color: #5B6474') + '; flex: 1 1 160px',
       salvar: () => this.setState({ salvo: true }), salvo: s.salvo
     };
   }
