@@ -47,7 +47,7 @@ Agendamento ─┬─ Guia/autorização ── Elegibilidade ── Pedido méd
                                                                   ├─ Medidas (DICOM SR) · dose (RDSR)
                                                                   ├─ Insumos (contraste: lote; transdutor: desinfecção)
                                                                   └─ Laudo v1..vn ─┬─ Assinatura ICP (certificado, carimbo do tempo)
-                                                                                   ├─ Entrega (portal, impresso, CD, retirada)
+                                                                                   ├─ Entrega (portal, impresso, link, retirada)
                                                                                    └─ Faturamento ─┬─ Guia TISS (XML)
                                                                                                    ├─ Lote (protocolo ANS)
                                                                                                    ├─ Demonstrativo / glosa / recurso
@@ -108,7 +108,7 @@ Agendamento ─┬─ Guia/autorização ── Elegibilidade ── Pedido méd
 
 ### 3.8 Entrega do resultado
 - Publicação no portal (quando, avisos enviados, quando o paciente abriu).
-- Impresso e CD: quem imprimiu e gravou, quantas vias, **quem retirou** (paciente, responsável, terceiro com procuração), documento e assinatura de retirada.
+- Impresso e link: quem imprimiu ou gerou o link, quantas vias, **quem retirou** (paciente, responsável, terceiro com procuração), documento e assinatura de retirada.
 - Compartilhamento com médico externo: link, validade, acessos, revogação.
 
 ### 3.9 Faturamento (TISS)
@@ -178,7 +178,7 @@ Agendamento ─┬─ Guia/autorização ── Elegibilidade ── Pedido méd
 | Guia e autorização no agendamento | Autorizações, elegibilidade, faturamento de guias | Seção obrigatória com conferências automáticas, saldo e reserva provisória |
 | Worklist, MPPS, imagens, SR | comDICOM (worklist, SR), PACS | Mais: hash por objeto, conciliação auditada, dose (RDSR) |
 | Laudos e versões | Comparador de laudos, assinatura | Versões imutáveis com motivo, rastreio da IA, carimbo do tempo |
-| Entrega e CD | Impressão sob demanda, CD/DVD, portal | Mais: quem retirou, procuração, acessos ao portal |
+| Entrega | Impressão sob demanda, CD/DVD (não usamos), portal | Mais: quem retirou, procuração, acessos ao portal |
 | Faturamento TISS | Guias, lotes, glosas | Mais: dossiê por atendimento, regra aplicada versionada |
 | Estoque, financeiro, repasse | Estoque, contas, pagamento de médico | Mais: recall por lote, txid/NSU/NFS-e ligados |
 | Desinfecção de transdutor, manutenção, dose | Não encontrado nos materiais públicos | Incluído |

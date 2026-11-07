@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Configurações — VidaCor Imagem</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+<link rel="stylesheet" href="/_blob/7e124b8551ce8ce21b13995f1ed38d0e">
 </head>
 <body>
 <x-dc>
@@ -67,7 +67,7 @@ body{margin:0;background:#F2F3F6}
       <section class="card half" aria-labelledby="pm-h">
         <div class="card-h"><div><h2 id="pm-h">Permissões por perfil</h2><div class="sub">Cada ato é liberado separadamente</div></div><button class="btn btn-sm" style="margin-left: auto">Editar perfis</button></div>
         <div class="scroll-x">
-          <table class="tb" style="min-width: 640px">
+          <table class="tb">
             <thead><tr><th>Ato</th><th>Recepção</th><th>Técnico</th><th>Médico</th><th>Faturam.</th><th>Gerência</th></tr></thead>
             <tbody>
               <tr><td class="nw">Agendar e fazer check-in</td><td><span class="chip c-green">Sim</span></td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td><td><span class="chip">Não</span></td><td><span class="chip c-green">Sim</span></td></tr>
@@ -96,7 +96,7 @@ body{margin:0;background:#F2F3F6}
       <section class="card half" aria-labelledby="hr-h">
         <div class="card-h"><div><h2 id="hr-h">Horários de funcionamento por sala</h2><div class="sub">A agenda só oferece horários dentro destes turnos</div></div><button class="btn btn-sm" style="margin-left: auto">Editar</button></div>
         <div class="scroll-x">
-          <table class="tb" style="min-width: 640px">
+          <table class="tb">
             <thead><tr><th>Sala</th><th>Seg a sex</th><th>Sábado</th><th>Intervalo</th><th>Duração padrão</th></tr></thead>
             <tbody>
               <tr><td class="nw"><b class="b">Sala 1 · Ecocardiograma</b></td><td class="nw num">07:00–19:00</td><td class="nw num">07:00–12:00</td><td class="nw num">12:00–13:00</td><td class="nw">30 min</td></tr>
@@ -123,7 +123,7 @@ body{margin:0;background:#F2F3F6}
       <section class="card half" aria-labelledby="pr-h">
         <div class="card-h"><div><h2 id="pr-h">Tabela de preços do particular</h2><div class="sub">Vigente desde 01/08/2026 · usada no orçamento e no caixa</div></div><button class="btn btn-sm" style="margin-left: auto">Nova tabela</button></div>
         <div class="scroll-x">
-          <table class="tb" style="min-width: 600px">
+          <table class="tb">
             <thead><tr><th>Exame</th><th>Código TUSS</th><th class="r">À vista (PIX)</th><th class="r">Cartão</th><th class="r">Desconto máx.</th></tr></thead>
             <tbody>
               <tr><td class="nw">Ecocardiograma transtorácico</td><td class="num nw">40901106</td><td class="r num nw">R$ 280,00</td><td class="r num nw">R$ 300,00</td><td class="r nw">10%</td></tr>
@@ -142,7 +142,7 @@ body{margin:0;background:#F2F3F6}
       <section class="card half" aria-labelledby="ap-h">
         <div class="card-h"><div><h2 id="ap-h">Aparelhos DICOM</h2><div class="sub">Recebem a worklist e enviam imagens e medidas</div></div><button class="btn btn-sm" style="margin-left: auto">Adicionar</button></div>
         <div class="scroll-x">
-          <table class="tb" style="min-width: 600px">
+          <table class="tb">
             <thead><tr><th>Aparelho</th><th>AE Title · IP:porta</th><th>Recursos</th><th>Status</th></tr></thead>
             <tbody>
               <tr><td class="nw"><b class="b">Ecocardiógrafo · Sala 1</b></td><td class="num t13 nw">ECO_S1 · 10.0.1.21:104</td><td class="nw t13">Worklist + SR</td><td><span class="chip c-green">Online</span></td></tr>
@@ -161,7 +161,7 @@ body{margin:0;background:#F2F3F6}
         <div class="card-h"><div><h2 id="im-h">Impressoras e etiquetas</h2><div class="sub">Onde cada documento sai</div></div></div>
         <div class="li"><span class="tile t-gray" style="width: 38px; height: 38px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M8 14h8v7H8z"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t">Recepção 1 · laser</div><div class="s">Comprovante, recibo, preparo</div></div><span class="chip c-green">Pronta</span></div>
         <div class="li"><span class="tile t-gray" style="width: 38px; height: 38px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16v12H4zM8 10h8M8 14h5"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t">Etiquetadora térmica</div><div class="s">Etiqueta 50 × 25 mm · código de barras</div></div><span class="chip c-green">Pronta</span></div>
-        <div class="li"><span class="tile t-gray" style="width: 38px; height: 38px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="2.5"></circle></svg></span><div style="flex: 1; min-width: 0"><div class="t">Robô de CD/DVD</div><div class="s">Gravação e impressão do disco</div></div><span class="chip c-amber">Tinta 12%</span></div>
+        <div class="li"><span class="tile t-gray" style="width: 38px; height: 38px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="2.5"></circle></svg></span><div style="flex: 1; min-width: 0"><div class="t">Impressoras de etiqueta</div><div class="s">Guichês e salas · ZPL</div></div><span class="chip c-amber">Ribbon 12% · Guichê 2</span></div>
         <div class="li"><span class="tile t-gray" style="width: 38px; height: 38px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M8 14h8v7H8z"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t">Laudos · sala de entrega</div><div class="s">Papel timbrado A4</div></div><span class="chip c-green">Pronta</span></div>
       </section>
 

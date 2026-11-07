@@ -14,7 +14,7 @@ pedido do cliente (Cliente) ou se é proposta nossa (Nova).
 | **Caixa do particular** (`Caixa`) | Abertura com fundo de troco, suprimento, sangria, fechamento com conferência (esperado × contado) e assinaturas, recebimento com itens, desconto com autorização do gerente, pagamento dividido (PIX com QR, cartão parcelado, dinheiro com troco), NFS-e automática, recibo, comprovante por WhatsApp, estorno com motivo, orçamentos abertos, tabela do particular | MW + Cliente |
 | **Agendamento com guia** (`Agendamento-Guia`) | Seção obrigatória da guia para convênio (carteirinha, nº, senha, validade, TUSS e saldo, solicitante, CID, anexos com hash), conferências automáticas, consumo atômico, reserva provisória sem guia | MW (autorizações) + Cliente |
 | **Explorador de lastro** (`Lastro`) | Busca por qualquer código, cadeia completa do atendimento, metadados por registro, dossiê assinado | Nova |
-| **Etiquetas e rastreio** (`Etiquetas`) | Pulseira, exame, seringa, MAPA, envelope e CD; código único; bipe na sala com bloqueio de divergência; reimpressão com motivo que invalida a anterior; lastro de eventos; impressoras por local | MW (etiquetas) + Nova |
+| **Etiquetas e rastreio** (`Etiquetas`) | Pulseira, exame, seringa, MAPA e envelope; código único; bipe na sala com bloqueio de divergência; reimpressão com motivo que invalida a anterior; lastro de eventos; impressoras por local | MW (etiquetas) + Nova |
 | **Paciente 360º** (`Paciente`) | Cadastro, alertas e alergias, **mapa anatômico realista** com exames por região, linha do tempo com imagens, evolução de medidas, documentos, financeiro, consentimentos LGPD, auditoria, acesso ao portal | MW + Cliente + Nova |
 | **TV de chamada** (`Telao`) | Senha e sala atuais, últimas chamadas, nome abreviado (privacidade), mensagens | MW |
 
@@ -26,8 +26,8 @@ pedido do cliente (Cliente) ou se é proposta nossa (Nova).
 | **Sala de exame** (`Sala-Exame`) | Worklist DICOM enviada ao aparelho, status dos aparelhos, captura de imagem e cine, medidas por DICOM SR, checklist pré-exame, contraste (lote, volume) ligado ao estoque, pausa e intercorrência, envio para laudo com prioridade | MW comDICOM + ML |
 | **Aparelhos e integração DICOM** (`Aparelhos`) | Caminho do exame (check-in → worklist → MPPS → imagens e SR → conferência → laudo), sala ao vivo com imagens chegando e medidas, revisão de vínculo paciente × imagem (auditada), conversor para DICOM (PDF do ergométrico e do MAPA, captura HDMI), status de todos os aparelhos, registro de comunicação, configuração do servidor (AE Title, porta, TLS) | MW comDICOM + ML MediPrint + Nova |
 | **Laudar** (`Laudo`) | Lista com prioridade/SLA, modelos, banco de frases, ditado, rascunho de IA para revisar, medidas automáticas com referência, anatomia cardio, mapa de 17 segmentos do VE, comparação com o anterior, revisão por par, assinatura ICP-Brasil | MW Laudos + ML Mediworks |
-| **Visualizador** (`Visualizador`) | Séries, janela/nível, zoom, medidas, ângulo, ROI, anotações, MPR/3D, cine, comparação lado a lado, metadados DICOM, imagens-chave, gravar CD/exportar | ML PACS |
-| **Fluxo de laudos** (`Fluxo-Laudos`) | Quadro por etapa, prazos (SLA), filtros, produtividade por médico, entrega (portal, WhatsApp), impressão sob demanda e CD/DVD, telerradiologia, laudo retificado com versão | ML Mediflow |
+| **Visualizador** (`Visualizador`) | Séries, janela/nível, zoom, medidas, ângulo, ROI, anotações, MPR/3D, cine, comparação lado a lado, metadados DICOM, imagens-chave, compartilhar link seguro/exportar | ML PACS |
+| **Fluxo de laudos** (`Fluxo-Laudos`) | Quadro por etapa, prazos (SLA), filtros, produtividade por médico, entrega (portal, WhatsApp), impressão sob demanda, link seguro das imagens, telerradiologia, laudo retificado com versão | ML Mediflow |
 
 ## Gestão
 
@@ -54,7 +54,7 @@ pedido do cliente (Cliente) ou se é proposta nossa (Nova).
 
 Laudo A4 com timbrado, assinatura ICP-Brasil e QR de validação · Comprovante e
 preparo com QR para check-in · Atestado de comparecimento · Recibo · Etiquetas
-de identificação · Etiqueta de CD/DVD.
+de identificação.
 
 ## Fora do escopo por enquanto
 

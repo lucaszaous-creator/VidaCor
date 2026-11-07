@@ -42,7 +42,11 @@ e `tabbar` (app).
 
 **Layout:** `.app` (menu de 280 px + conteúdo) · `.split > .main / .aside /
 .half` (colunas que quebram) · `.g2/.g3/.g4` (grades com largura mínima) ·
-`.scroll-x > .tb` (tabela com largura mínima e rolagem).
+`.tb` ocupa 100% e quebra o texto nas células; `.nw` só em valores curtos (data, hora, valor).
+
+Folha de estilos dos mockups: `design/vc4.css`. Verificação: `node tools/verificacao/sem-rolagem-lateral.js <pasta-dos-mockups> design/vc4.css 1000`.
+
+**Sem rolagem lateral (regra):** em telas de 1280 px ou mais (menu de 280 px + 1000 px de conteúdo), **nenhuma tela obriga a arrastar para o lado**. Tabelas cabem na largura: menos colunas (junte atributos em uma célula), texto quebrando, detalhe abaixo da tabela em vez de coluna lateral. Proibido `min-width` fixo em tabela e quadro. Exceções: telão (tamanho fixo de TV) e o visualizador de imagens. Conferido por teste automático que mede a largura de cada tela.
 
 O **menu lateral** é um componente único (`design/mockups/Sidebar.dc.html`)
 importado por todas as telas, com o item ativo por parâmetro.

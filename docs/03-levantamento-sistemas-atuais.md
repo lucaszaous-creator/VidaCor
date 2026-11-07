@@ -36,7 +36,7 @@ NPS), MultiChat (WhatsApp Business), Telemedicina, Web Agendamento, API Clínica
   modalidades, comparação com exames anteriores, ditado por voz, priorização de
   laudos, IA (versão 11).
 - **MediClinic RIS / Mediflow**: agenda de exames, controle de exame e laudo pelo
-  navegador, impressão sob demanda (laudo, imagens, CD/DVD com a marca),
+  navegador, impressão sob demanda (laudo, imagens, CD/DVD com a marca — **não será replicado**: a VidaCor não usa mais CD),
   agendamento online, MediAutonotify (SMS, e-mail, WhatsApp), **elegibilidade** no
   convênio.
 - **MediWeb Portal**: entrega de exames e laudos a médicos e pacientes.

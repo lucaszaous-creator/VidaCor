@@ -1,5 +1,5 @@
 P='/tmp/claude-0/-home-user/4fd689ae-5e0d-5bbd-bb63-c60bbbb26a18/scratchpad/vidacor-canvas/project/'
-CSS='/_blob/853c2170559ca366b1acd78dfcd0297c'
+CSS='/_blob/7e124b8551ce8ce21b13995f1ed38d0e'
 def page(title,style,body,h):
     return f'''<!doctype html>
 <html lang="pt-BR">
@@ -79,7 +79,7 @@ b1=f'''<div class="app" style="font-family: Inter, sans-serif">
         </div>
 
         <h3 class="lbl" style="margin: 24px 0 10px">Procedimentos autorizados</h3>
-        <div class="scroll-x"><table class="tb" style="min-width: 600px"><thead><tr><th>Código TUSS</th><th>Procedimento</th><th class="r">Autorizado</th><th class="r">Neste agendamento</th><th class="r">Saldo</th></tr></thead><tbody>
+        <div class="scroll-x"><table class="tb"><thead><tr><th>Código TUSS</th><th>Procedimento</th><th class="r">Autorizado</th><th class="r">Neste agendamento</th><th class="r">Saldo</th></tr></thead><tbody>
           <tr><td class="num nw">40901114</td><td>Ecocardiograma transtorácico</td><td class="r num">1</td><td class="r num">1</td><td class="r num">0</td></tr>
           <tr><td class="num nw">40901300</td><td>Doppler colorido de carótidas</td><td class="r num">1</td><td class="r num">1</td><td class="r num">0</td></tr>
         </tbody></table></div>

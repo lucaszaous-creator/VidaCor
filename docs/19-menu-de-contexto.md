@@ -59,7 +59,7 @@ Os itens mudam com o **estado** do objeto (laudo pendente × assinado; horário 
 | **Paciente na esteira** | Abrir ficha · check-in ▸ (etapas feitas e pendentes) · chamar na TV · mover para ▸ · preferencial · WhatsApp ▸ · receber no caixa · remarcar · etiqueta · desistência · cancelar (com motivo/permissão) |
 | **Agendamento** | Abrir · confirmar presença · reenviar confirmação · remarcar ▸ (sugestões) · trocar médico ▸ · outra sala ▸ · recortar para mover · preparo ▸ · orçamento · marcar atraso · falta · cancelar |
 | **Horário livre** | Agendar aqui · encaixar da lista de espera ▸ (só quem cabe) · colar agendamento · reservar para urgência · bloquear ▸ (motivo) · disponível no agendamento online (liga/desliga) |
-| **Laudo na fila** | Abrir no laudo · abrir imagens · comparar com anterior · atribuir a ▸ (fila de cada médico) · prioridade ▸ · segunda leitura · "conversar antes de liberar" · enviar ao solicitante (após assinatura) · imprimir · gravar CD |
+| **Laudo na fila** | Abrir no laudo · abrir imagens · comparar com anterior · atribuir a ▸ (fila de cada médico) · prioridade ▸ · segunda leitura · "conversar antes de liberar" · enviar ao solicitante (após assinatura) · imprimir · compartilhar link seguro |
 | **Laudo assinado** | Abrir · retificar (nova versão) · ver acessos — sem desfazer assinatura |
 | **Imagem no visualizador** | Janela ▸ (predefinições por número) · medir ▸ · anotar · imagem-chave · sincronizar séries · comparar · girar/inverter · copiar para o laudo · exportar anonimizada · informações DICOM |
 | **Recebimento no caixa** | Ver recibo · reenviar comprovante · ver NFS-e · copiar código PIX · ver na conciliação · observação · estornar (2º fator + aprovação) |

@@ -1,6 +1,6 @@
 import random
 P='/tmp/claude-0/-home-user/4fd689ae-5e0d-5bbd-bb63-c60bbbb26a18/scratchpad/vidacor-canvas/project/'
-CSS='/_blob/853c2170559ca366b1acd78dfcd0297c'
+CSS='/_blob/7e124b8551ce8ce21b13995f1ed38d0e'
 LOGO='/_blob/69e27b6caf70295083c2b311e1218937'
 def barcode(w,h,seed):
     r=random.Random(seed); x=0; d=[]
@@ -51,12 +51,11 @@ rows=[
 ("ETQ-2026-018729","Seringa","Vera L. Antunes","20/02/1968","Contraste iodado · lote IOP-2611","Sala 6 · Téc. Carla · 07:58","Bipada no tomógrafo · 08:02","ok","Usada",0),
 ("ETQ-2026-018722","Pulseira","Rafael Monteiro Lima","09/11/1988","Raio X de tórax · ACC 2026-118722","Guichê 2 · Ana · 08:10","Reimpressa · motivo: rasgou","warn","Invalidada",0),
 ("ETQ-2026-018723","Pulseira","Rafael Monteiro Lima","09/11/1988","Raio X de tórax · ACC 2026-118722","Guichê 2 · Ana · 08:12","Aguardando bipe na Sala 5","info","Impressa",0),
-("ETQ-2026-018705","CD/DVD","Maria Helena Duarte","12/03/1968","Eco · ACC 2026-118701","Recepção · gravador · 08:05","Entregue ao paciente · 08:30","ok","Entregue",0),
 ("ETQ-2026-018699","MAPA","Neusa A. Freitas","18/09/1957","MAPA 24 h · aparelho nº 07","Sala 7 · Enf. Lívia · 07:55","Devolução prevista 07/11 08:00","info","Em uso",0),
 ]
 chip={"ok":"c-green","bad":"c-rose","warn":"c-amber","info":"c-blue"}
 trs=''.join(f'''<tr class="{"sel" if s else ""}"><td class="nw"><b class="num">{i}</b></td><td>{t}</td><td class="nw"><b>{n}</b><div class="t12 mute">{d}</div></td><td>{e}</td><td class="t13 mute">{o}</td><td class="t13">{ev}</td><td><span class="chip {chip[k]}">{st}</span></td></tr>''' for i,t,n,d,e,o,ev,k,st,s in rows)
-tl=[("ok","Impressa","Guichê 2 · impressora Zebra G2 · Ana Souza","08:24"),("ok","Colocada no paciente","Recepção conferiu nome + nascimento","08:25"),("ok","Bipada na Sala 1","Téc. Carla · paciente e exame conferem","08:41"),("ok","Vinculada ao exame","Imagens recebidas com o ACC 2026-118790","08:47"),("todo","Envelope / CD","Ao liberar o laudo",""),("todo","Retirada pelo paciente","Assinatura no tablet","")]
+tl=[("ok","Impressa","Guichê 2 · impressora Zebra G2 · Ana Souza","08:24"),("ok","Colocada no paciente","Recepção conferiu nome + nascimento","08:25"),("ok","Bipada na Sala 1","Téc. Carla · paciente e exame conferem","08:41"),("ok","Vinculada ao exame","Imagens recebidas com o ACC 2026-118790","08:47"),("todo","Envelope (se impresso)","Ao liberar o laudo",""),("todo","Retirada pelo paciente","Assinatura no tablet","")]
 tlh=''.join(f'<li class="tli"><span class="ck {k}">{"✓" if k=="ok" else ""}</span><div style="flex:1;min-width:0"><div class="t14 {"b" if k=="ok" else "mute"}">{a}</div><div class="t12 mute">{b}</div></div><span class="t12 mute num">{c}</span></li>' for k,a,b,c in tl)
 style1='''body{margin:0;background:#F2F3F6}
 .tb tr.sel td{background:#F3F6FB}
@@ -95,13 +94,13 @@ p1=head('Etiquetas e rastreio — VidaCor').replace('STYLE',style1)+f'''<div cla
       </div>
     </section>
 
-    <div class="split">
-      <section class="card main" aria-labelledby="ras-h" style="padding: 20px 8px 8px">
-        <div class="row" style="padding: 0 14px 10px"><h2 id="ras-h" style="font-size: 18px; font-weight: 600">Etiquetas de hoje</h2><div class="grow"></div><div class="seg"><button class="on btn-sm" style="height: 36px">Todas</button><button style="height: 36px">Pulseiras</button><button style="height: 36px">Exame</button><button style="height: 36px">Seringa</button><button style="height: 36px">CD/DVD</button></div></div>
+    <div class="col" style="gap: 16px">
+      <section class="card" aria-labelledby="ras-h" style="padding: 20px 8px 8px">
+        <div class="row" style="padding: 0 14px 10px"><h2 id="ras-h" style="font-size: 18px; font-weight: 600">Etiquetas de hoje</h2><div class="grow"></div><div class="seg"><button class="on btn-sm" style="height: 36px">Todas</button><button style="height: 36px">Pulseiras</button><button style="height: 36px">Exame</button><button style="height: 36px">Seringa</button><button style="height: 36px">Envelope</button></div></div>
         <div class="scroll-x"><table class="tb"><thead><tr><th>Código</th><th>Tipo</th><th>Paciente</th><th>Para</th><th>Impressa</th><th>Último evento</th><th>Situação</th></tr></thead><tbody>{trs}</tbody></table></div>
       </section>
 
-      <aside class="aside col" style="gap: 16px; flex: 0 1 380px; min-width: 340px">
+      <div class="grid g2">
         <section class="card" aria-labelledby="tl-h">
           <div class="lbl">Lastro da etiqueta</div>
           <h2 id="tl-h" style="font-size: 18px; font-weight: 650; margin-top: 6px" class="num">ETQ-2026-018734</h2>
@@ -118,9 +117,9 @@ p1=head('Etiquetas e rastreio — VidaCor').replace('STYLE',style1)+f'''<div cla
           <div class="li"><span class="chip c-green"><span class="d"></span>Online</span><div style="flex:1"><div class="t t14">Guichê 1 · Zebra ZD421</div><div class="s">pulseiras e exame · ribbon 64%</div></div></div>
           <div class="li"><span class="chip c-green"><span class="d"></span>Online</span><div style="flex:1"><div class="t t14">Guichê 2 · Zebra ZD421</div><div class="s">pulseiras e exame · ribbon 81%</div></div></div>
           <div class="li"><span class="chip c-green"><span class="d"></span>Online</span><div style="flex:1"><div class="t t14">Sala 6 · Brother QL</div><div class="s">seringas</div></div></div>
-          <div class="li"><span class="chip c-rose"><span class="d"></span>Offline</span><div style="flex:1"><div class="t t14">Recepção · gravador Rimage</div><div class="s">CD/DVD · 2 na fila</div></div></div>
+          <div class="li"><span class="chip c-rose"><span class="d"></span>Offline</span><div style="flex:1"><div class="t t14">Recepção · impressora A4</div><div class="s">laudos e envelopes · 2 na fila</div></div></div>
         </section>
-      </aside>
+      </div>
     </div>
     <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · códigos ilustrativos</p>
   </main>
@@ -185,7 +184,6 @@ p2=head('Modelos de etiqueta — VidaCor').replace('STYLE',style2)+f'''<div styl
   </div>
   <div style="display:flex;gap:40px;flex-wrap:wrap;align-items:flex-start">
     <div class="item">{cap("5 · Envelope de exame (110 × 60 mm)","Com QR para o resultado no portal (o QR só abre após login do paciente).")}{envelope}</div>
-    <div class="item">{cap("6 · CD/DVD (118 mm)","Impresso pelo gravador; confere com o envelope na entrega.")}{cd}</div>
   </div>
   <p class="t12 mute">Mockup · dados fictícios · códigos e QR ilustrativos · impressoras térmicas (ZPL) e gravador de mídia</p>
 </div>

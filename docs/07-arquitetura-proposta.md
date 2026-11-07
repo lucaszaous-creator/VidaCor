@@ -38,7 +38,7 @@
 
 | Já existe | Precisa adaptar | Novo |
 |---|---|---|
-| Agenda multiprofissional, recepção, cadastro, prontuário que não apaga, TISS e glosas, financeiro e caixa, estoque, CRM/WhatsApp, permissões, assinatura ICP-Brasil, auditoria | Agenda por **sala/equipamento**, regras de convênio para exames de imagem, documentos com a marca VidaCor | Worklist e aparelhos, sala de exame, laudo com DICOM SR, PACS/visualizador, fluxo de laudos e CD, portal e app do paciente, Meus Exames Bebê, estacionamento, TV de chamada |
+| Agenda multiprofissional, recepção, cadastro, prontuário que não apaga, TISS e glosas, financeiro e caixa, estoque, CRM/WhatsApp, permissões, assinatura ICP-Brasil, auditoria | Agenda por **sala/equipamento**, regras de convênio para exames de imagem, documentos com a marca VidaCor | Worklist e aparelhos, sala de exame, laudo com DICOM SR, PACS/visualizador, fluxo de laudos e entrega por link, portal e app do paciente, Meus Exames Bebê, estacionamento, TV de chamada |
 
 ## Riscos técnicos
 

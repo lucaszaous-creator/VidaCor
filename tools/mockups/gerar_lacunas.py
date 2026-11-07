@@ -1,5 +1,5 @@
 P='/tmp/claude-0/-home-user/4fd689ae-5e0d-5bbd-bb63-c60bbbb26a18/scratchpad/vidacor-canvas/project/'
-CSS='/_blob/853c2170559ca366b1acd78dfcd0297c'
+CSS='/_blob/7e124b8551ce8ce21b13995f1ed38d0e'
 BASE='''body{margin:0;background:#F2F3F6}
 .ck{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:12px;font-weight:700}
 .ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.warn{background:#FFF3DF;color:#9A5B00}.ck.bad{background:#FDEEF1;color:#B4233C}.ck.todo{background:#fff;border:1.5px solid #CBD2DC;color:#8A93A3}.ck.cur{background:#0A1A4A;color:#fff}
@@ -73,7 +73,7 @@ b=f'''    <div class="topbar"><a class="t14 b" href="Sala-Exame.dc.html">← Sal
         <div class="sec-t" style="color:#8A93A3">Ressonância (não se aplica a este exame)</div>
         <p class="t13 mute" style="margin:6px 0 0">Marcapasso, implantes, clipes, claustrofobia e outros itens aparecem automaticamente quando o exame for de ressonância.</p>
       </section>
-      <aside class="aside col" style="gap:16px;flex:0 1 380px;min-width:340px">
+      <aside class="aside col" style="gap:16px;flex:1 1 320px;min-width:0">
         <section class="card" style="border:1px solid #F3C98B;box-shadow:none;background:#FFFBF4">
           <div class="lbl" style="color:#9A5B00">Resultado da triagem</div>
           <div style="font-size:20px;font-weight:650;margin-top:6px">Precisa de aprovação médica</div>
@@ -100,12 +100,12 @@ b=f'''    <div class="topbar"><a class="t14 b" href="Sala-Exame.dc.html">← Sal
 open(P+'Triagem.dc.html','w').write(page('Triagem de segurança — VidaCor','sala',b,1450))
 # ---------- 2 Laudo estruturado TI-RADS ----------
 nods=[("N1","Lobo direito, terço médio","1,8 × 1,2 × 1,1 cm","Sólido (2)","Hipoecoico (2)","Mais largo que alto (0)","Lisas (0)","Nenhum (0)","4","TR4 · moderadamente suspeito","PAAF (≥ 1,5 cm)"),("N2","Lobo esquerdo, polo inferior","0,6 × 0,5 × 0,4 cm","Espongiforme (0)","—","—","—","—","0","TR1 · benigno","Sem seguimento")]
-rows=''.join(f'<tr class="{"rowsel" if i==0 else ""}"><td><b>{a}</b></td><td>{b}</td><td class="num nw">{c}</td><td>{d}</td><td>{e}</td><td>{f}</td><td>{g}</td><td>{h_}</td><td class="r num b">{pt}</td><td><span class="chip {"c-amber" if "TR4" in tr else "c-green"}">{tr}</span></td><td>{rec}</td></tr>' for i,(a,b,c,d,e,f,g,h_,pt,tr,rec) in enumerate(nods))
+rows=''.join(f'<tr class="{"rowsel" if i==0 else ""}"><td><b>{a}</b></td><td>{b}</td><td class="num nw">{c}</td><td class="t13">{" · ".join(x for x in (d,e,f,g,h_) if x!="—")}</td><td class="r num b">{pt}</td><td><span class="chip {"c-amber" if "TR4" in tr else "c-green"}">{tr}</span></td><td>{rec}</td></tr>' for i,(a,b,c,d,e,f,g,h_,pt,tr,rec) in enumerate(nods))
 b=f'''    <div class="topbar"><a class="t14 b" href="Laudo.dc.html">← Laudar</a><h1 style="font-size:22px;font-weight:650;margin-left:12px">Laudo estruturado</h1><div class="grow"></div><div class="seg"><button class="on">TI-RADS</button><button>BI-RADS</button><button>O-RADS</button><button>Lung-RADS</button><button>Bosniak</button><button>Obstetrícia</button></div></div>
 {ptop("Rita Carvalho Barbosa","14/08/1974 · 52 anos · F · USG de tireoide · Dr. Marcos Freire")}
     <section class="card" style="padding:20px 8px 8px">
       <div class="row" style="padding:0 14px 10px"><h2 style="font-size:18px;font-weight:600">Nódulos (ACR TI-RADS)</h2><div class="grow"></div><button class="btn btn-sm">+ Nódulo</button><button class="btn btn-sm">Medidas do aparelho</button></div>
-      <div class="scroll-x"><table class="tb" style="min-width:1100px"><thead><tr><th>#</th><th>Localização</th><th>Medidas</th><th>Composição</th><th>Ecogenicidade</th><th>Forma</th><th>Margens</th><th>Focos ecogênicos</th><th class="r">Pontos</th><th>Categoria</th><th>Conduta</th></tr></thead><tbody>{rows}</tbody></table></div>
+      <div class="scroll-x"><table class="tb"><thead><tr><th>#</th><th>Localização</th><th>Medidas</th><th>Características (pontos)</th><th class="r">Pontos</th><th>Categoria</th><th>Conduta</th></tr></thead><tbody>{rows}</tbody></table></div>
     </section>
     <div class="split">
       <section class="card main" style="padding:22px 28px">
@@ -113,7 +113,7 @@ b=f'''    <div class="topbar"><a class="t14 b" href="Laudo.dc.html">← Laudar</
         <p class="t15" style="line-height:1.7;margin:12px 0 0">Tireoide de dimensões normais, contornos regulares e ecotextura homogênea. No terço médio do lobo direito, nódulo sólido, hipoecoico, mais largo que alto, de margens lisas, sem focos ecogênicos, medindo 1,8 × 1,2 × 1,1 cm (<b>ACR TI-RADS 4</b>). No polo inferior do lobo esquerdo, nódulo espongiforme de 0,6 cm (<b>TI-RADS 1</b>).</p>
         <p class="t15" style="line-height:1.7;margin:12px 0 0"><b>Conclusão:</b> nódulo TI-RADS 4 no lobo direito com indicação de punção aspirativa por agulha fina (≥ 1,5 cm), a critério clínico.</p>
       </section>
-      <aside class="aside col" style="gap:16px;flex:0 1 360px;min-width:320px">
+      <aside class="aside col" style="gap:16px;flex:1 1 320px;min-width:0">
         <section class="card"><div class="t15 b">Como a categoria foi calculada</div><p class="t13 mute" style="margin:8px 0 0;line-height:1.6">Soma dos pontos de composição, ecogenicidade, forma, margens e focos (ACR TI-RADS). Categoria e conduta pela tabela da versão vigente, guardada no laudo (lastro).</p></section>
         <section class="card"><div class="t15 b">Comparação</div><div class="li2"><span class="ck warn">!</span><div><div class="t14">N1 cresceu</div><div class="t12 mute">1,3 cm em 03/2025 → 1,8 cm hoje</div></div></div></section>
         <section class="card" style="background:#F6F8FB;box-shadow:none"><div class="t14 b">Outros modelos estruturados</div><p class="t13 mute" style="margin:6px 0 0">BI-RADS (mama), O-RADS (ovário), LI-RADS (fígado), Lung-RADS (pulmão), Bosniak (cisto renal), eco (ASE) e obstetrícia (biometria com percentis e curvas).</p></section>
@@ -121,9 +121,9 @@ b=f'''    <div class="topbar"><a class="t14 b" href="Laudo.dc.html">← Laudar</
     </div>'''
 open(P+'Laudo-Estruturado.dc.html','w').write(page('Laudo estruturado — VidaCor','laudos',b,1250,("Dr. Marcos Freire","USG e Doppler","MF")))
 # ---------- 3 Exame externo ----------
-st=[("ok","Ler mídia","CD · leitor da recepção"),("ok","Conferir paciente",""),("cur","Escolher estudos",""),("todo","Importar","")]
+st=[("ok","Receber o exame","link do portal da outra clínica"),("ok","Conferir paciente",""),("cur","Escolher estudos",""),("todo","Importar","")]
 sh=''.join(f'<li class="row" style="gap:10px;flex:1 1 180px"><span class="ck {k}">{"✓" if k=="ok" else i+1}</span><div><div class="t14 b">{a}</div><div class="t12 mute">{b_}</div></div></li>' for i,(k,a,b_) in enumerate(st))
-stud=[(1,"10/03/2025","TC de crânio sem contraste","Hospital São Lucas","1 série · 32 imagens","Laudo em PDF"),(1,"10/03/2025","TC de seios da face","Hospital São Lucas","2 séries · 88 imagens","—"),(0,"02/01/2024","Raio X de tórax","Clínica Imagem Sul","2 imagens","—")]
+stud=[(1,"10/03/2025","TC de crânio sem contraste","Hospital São Lucas","1 série · 32 imagens","Laudo em PDF"),(1,"10/03/2025","TC de seios da face","Hospital São Lucas","2 séries · 88 imagens","—"),(0,"02/01/2024","Raio X de tórax (fotos enviadas pela paciente)","WhatsApp","2 fotos + laudo PDF","Só como anexo")]
 sr=''.join(f'<label class="li2" style="align-items:center"><input type="checkbox" {"checked" if c else ""} style="width:20px;height:20px;accent-color:#0A1A4A"><div style="flex:1"><div class="t15 b">{e}</div><div class="t13 mute">{d} · {i_} · {n}</div></div><span class="t13 mute">{l}</span></label>' for c,d,e,i_,n,l in stud)
 b=f'''    <div class="topbar"><h1 style="font-size:22px;font-weight:650">Importar exame externo</h1><div class="grow"></div><span class="t13 mute">Recepção · Ana Souza</span></div>
     <ol class="card row wrap" style="list-style:none;margin:0;gap:12px;padding:16px 22px">{sh}</ol>
@@ -131,18 +131,18 @@ b=f'''    <div class="topbar"><h1 style="font-size:22px;font-weight:650">Importa
       <section class="card main" style="padding:22px 28px">
         <h2 style="font-size:18px;font-weight:600">Conferência do paciente</h2>
         <div class="grid g2" style="margin-top:14px">
-          <div style="background:#F6F8FB;border-radius:14px;padding:16px"><div class="lbl">No CD</div><div class="t15 b" style="margin-top:6px">PRADO^LUCIA^F</div><div class="t14 mute">Nasc. 02/07/1959 · ID externo HSL-552190</div></div>
+          <div style="background:#F6F8FB;border-radius:14px;padding:16px"><div class="lbl">No exame recebido</div><div class="t15 b" style="margin-top:6px">PRADO^LUCIA^F</div><div class="t14 mute">Nasc. 02/07/1959 · ID externo HSL-552190</div></div>
           <div style="background:#F6F8FB;border-radius:14px;padding:16px"><div class="lbl">Cadastro VidaCor</div><div class="t15 b" style="margin-top:6px">Lúcia Fernandes Prado</div><div class="t14 mute">Nasc. 02/07/1959 · prontuário 2026-004417</div></div>
         </div>
-        <div class="li2" style="margin-top:8px"><span class="ck ok">✓</span><div><div class="t14">Nascimento confere · nome compatível (abreviado no CD)</div><div class="t12 mute">Confirmado por Ana Souza com o documento da paciente</div></div></div>
-        <h2 style="font-size:18px;font-weight:600;margin-top:22px">Estudos encontrados no CD</h2>
+        <div class="li2" style="margin-top:8px"><span class="ck ok">✓</span><div><div class="t14">Nascimento confere · nome compatível (abreviado na origem)</div><div class="t12 mute">Confirmado por Ana Souza com o documento da paciente</div></div></div>
+        <div class="sec-t">De onde pode vir</div><div class="row wrap t14" style="gap:10px;margin-top:6px"><span class="chip c-blue">Link ou QR do portal de outra clínica</span><span class="chip">Arquivos enviados pelo paciente (portal ou WhatsApp)</span><span class="chip">Rede parceira (DICOMweb)</span></div><h2 style="font-size:18px;font-weight:600;margin-top:22px">Estudos encontrados</h2>
         <div style="margin-top:6px">{sr}</div>
       </section>
-      <aside class="aside col" style="gap:16px;flex:0 1 360px;min-width:320px">
+      <aside class="aside col" style="gap:16px;flex:1 1 320px;min-width:0">
         <section class="card"><div class="t15 b">Como entra no VidaCor</div><ul class="t13" style="margin:10px 0 0;padding-left:18px;line-height:1.7"><li>Marcado como <b>exame externo</b>, com a instituição de origem</li><li>Somente leitura: não vira laudo da VidaCor</li><li>Disponível como <b>exame anterior</b> para comparação</li><li>Hash de cada imagem e do PDF; lastro de quem importou</li><li>Identificação corrigida nas imagens (perfil IHE PIR), com o original guardado</li></ul></section>
         <section class="card"><div class="t15 b">Vai ser comparado com</div><div class="li2"><span class="ck cur">→</span><div><div class="t14">TC de crânio com contraste · hoje · Sala 6</div><div class="t12 mute">O médico verá a TC externa lado a lado</div></div></div></section>
         <button class="btn btn-p">Importar 2 estudos</button>
-        <p class="t12 mute" style="margin:0">O CD é devolvido à paciente; nada fica gravado fora do PACS.</p>
+        <p class="t12 mute" style="margin:0">O link expira na origem; a cópia fica no PACS da VidaCor, com a origem registrada.</p>
       </aside>
     </div>'''
 open(P+'Exame-Externo.dc.html','w').write(page('Importar exame externo — VidaCor','pacientes',b,1150))
@@ -153,13 +153,13 @@ tl=[("ok","Solicitação montada","Do agendamento: carteirinha, TUSS 40901114 e 
 tlh=''.join(f'<div class="li2"><span class="ck {k}">✓</span><div style="flex:1"><div class="t14 b">{a}</div><div class="t12 mute">{b_}</div></div><span class="t12 mute num">{c}</span></div>' for k,a,b_,c in tl)
 b=f'''    <div class="topbar"><h1 style="font-size:22px;font-weight:650">Autorizações</h1><div class="grow"></div><button class="btn btn-p">Nova solicitação</button></div>
     <div class="row wrap t14 mute" style="gap:24px;padding:0 8px"><span><b style="color:#0F172A">18</b> em andamento</span><span><b style="color:#1F7A4D">41</b> autorizadas na semana</span><span><b style="color:#9A5B00">3</b> pendentes de documento</span><span><b style="color:#B4233C">2</b> negadas</span><span>tempo médio <b style="color:#0F172A">1 h 35</b></span></div>
-    <div class="split">
-      <section class="card main" style="padding:20px 8px 8px">
+    <div class="col" style="gap:16px">
+      <section class="card" style="padding:20px 8px 8px">
         <div class="row" style="padding:0 14px 10px"><h2 style="font-size:18px;font-weight:600">Fila de autorizações</h2><div class="grow"></div><div class="seg"><button class="on btn-sm" style="height:36px">Todas</button><button style="height:36px">Pendentes</button><button style="height:36px">Negadas</button></div></div>
         <div class="scroll-x"><table class="tb"><thead><tr><th>Operadora</th><th>Paciente</th><th>Exame</th><th>Situação</th></tr></thead><tbody>{fr}</tbody></table></div>
         <div style="margin:14px;padding:14px 16px;border-radius:12px;background:#F6F8FB" class="t13 mute">Operadoras com integração (webservice TISS) recebem e respondem automaticamente. Para as demais, o sistema monta o pedido, a equipe envia pelo portal da operadora e registra a resposta: a solicitação fica rastreada do mesmo jeito.</div>
       </section>
-      <aside class="aside col" style="gap:16px;flex:0 1 400px;min-width:340px">
+      <div class="grid g2">
         <section class="card">
           <div class="lbl">Unimed · Antônio Carlos Ribeiro · 15/06/1954</div>
           <h2 style="font-size:18px;font-weight:650;margin-top:6px">Autorizada</h2>
@@ -180,12 +180,12 @@ b=f'''    <div class="topbar"><h1 style="font-size:22px;font-weight:650">Auditor
       <div class="card"><div class="lbl">Corrigir antes</div><div class="big" style="margin-top:6px;color:#9A5B00">12</div></div>
       <div class="card"><div class="lbl">Bloqueadas</div><div class="big" style="margin-top:6px;color:#B4233C">4</div><div class="t13 mute" style="margin-top:6px">glosa evitada estimada R$ 3.870</div></div>
     </section>
-    <div class="split">
-      <section class="card main" style="padding:20px 8px 8px">
+    <div class="col" style="gap:16px">
+      <section class="card" style="padding:20px 8px 8px">
         <div class="row" style="padding:0 14px 10px"><h2 style="font-size:18px;font-weight:600">O que a auditoria encontrou</h2></div>
         <div class="scroll-x"><table class="tb"><thead><tr><th>Regra</th><th>Operadora</th><th class="r">Guias</th><th>Efeito</th><th>O que fazer</th></tr></thead><tbody>{rr}</tbody></table></div>
       </section>
-      <aside class="aside col" style="gap:16px;flex:0 1 380px;min-width:320px">
+      <div class="grid g2">
         <section class="card"><div class="t15 b">Regras por operadora</div>
           <div class="li2"><div style="flex:1"><div class="t14 b">Unimed Costa do Sol</div><div class="t12 mute">24 regras · versão 2026.11 · revisada por Carla</div></div></div>
           <div class="li2"><div style="flex:1"><div class="t14 b">SulAmérica</div><div class="t12 mute">19 regras · exige CID em SP/SADT</div></div></div>
@@ -194,7 +194,7 @@ b=f'''    <div class="topbar"><h1 style="font-size:22px;font-weight:650">Auditor
           <button class="btn btn-sm" style="margin-top:8px">Editar regras (versão nova)</button>
         </section>
         <section class="card" style="background:#F6F8FB;box-shadow:none"><div class="t14 b">De onde vêm as regras</div><p class="t13 mute" style="margin:6px 0 0">Do manual de cada operadora, do padrão TISS e das <b>glosas que já aconteceram</b>: cada glosa recebida sugere uma regra nova para não repetir.</p></section>
-      </aside>
+      </div>
     </div>'''
 open(P+'Auditoria-Faturamento.dc.html','w').write(page('Auditoria antes do faturamento — VidaCor','faturamento',b,1150,("Carla Mendes","Faturamento","CM")))
 print('ok')

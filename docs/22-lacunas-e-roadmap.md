@@ -7,6 +7,7 @@
 ## Decisões
 | Item | Decisão |
 |---|---|
+| CD/DVD (gravação, etiqueta, leitura) | **Retirado** (07/11/2026): não se usa mais. Entrega por portal, link seguro e impresso; exame externo chega por link ou arquivo |
 | Comunicação obrigatória de achado crítico ao solicitante | **Descartado** pelo dono do produto (07/11/2026). Pode voltar à pauta se a clínica pedir |
 | Todos os demais itens abaixo | **Aprovados** para o roteiro |
 
@@ -16,7 +17,7 @@
 |---|---|---|---|
 | E1 | **Triagem de segurança** | Questionário por exame com bloqueio: reação prévia a contraste, função renal (TFG calculada), metformina, gestação, amamentação, jejum, acesso venoso; itens de ressonância quando houver. Resultado: liberado, liberado com ressalvas ou **precisa de aprovação médica** (exame bloqueado na sala até o médico registrar a conduta). Protocolo de reação e checklist do carrinho de emergência | `Triagem.dc.html` |
 | E2 | **Laudo estruturado e classificações** | TI-RADS, BI-RADS, O-RADS, LI-RADS, Lung-RADS, Bosniak, eco (ASE) e obstetrícia (biometria com percentis). Categoria e conduta calculadas pela versão vigente da tabela (guardada no lastro); texto gerado e editável; comparação com o anterior | `Laudo-Estruturado.dc.html` |
-| E3 | **Exame externo** | Importar CD/pendrive/link de outra instituição: conferência de identidade, escolha dos estudos, marcação como externo (somente leitura), correção de identificação (IHE PIR) com original guardado, uso como exame anterior | `Exame-Externo.dc.html` |
+| E3 | **Exame externo** | Importar exame de outra instituição (link ou QR do portal dela, arquivos enviados pelo paciente, DICOMweb): conferência de identidade, escolha dos estudos, marcação como externo (somente leitura), correção de identificação (IHE PIR) com original guardado, uso como exame anterior | `Exame-Externo.dc.html` |
 | E4 | **Pedido de autorização pelo sistema** | Montar a solicitação a partir do agendamento (carteirinha, TUSS, CID, pedido anexado) e enviar por **webservice TISS** às operadoras que aceitam; para as demais, montar o pedido, enviar pelo portal e registrar a resposta. Fila com situação (em análise, autorizada, pendente de documento, negada com motivo), prazo e lastro; resposta preenche a guia sem digitação | `Autorizacao.dc.html` |
 | E5 | **Auditoria antes do faturamento** | Regras por operadora, versionadas: senha vencida, procedimento diferente do autorizado, laudo não assinado, CID ausente, assinatura do beneficiário, valor fora da tabela, prazo de envio, carteirinha, elegibilidade. Guia com erro bloqueante não entra no lote; glosa recebida sugere regra nova | `Auditoria-Faturamento.dc.html` |
 | E6 | **Modo contingência** | Procedimento oficial quando o sistema ou a rede caem: agenda do dia e fichas exportadas em PDF toda manhã, formulários em papel numerados, retomada com lançamento posterior e conciliação (lastro marca "registrado em contingência") | Documento a fazer |
