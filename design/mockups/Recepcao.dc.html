@@ -73,6 +73,102 @@ body{margin:0;background:#F2F3F6}
       </div>
     </section>
 
+    <section class="card" aria-labelledby="esteira-h" style="padding:20px 22px">
+      <div class="card-h" style="flex-wrap:wrap">
+        <div><h2 id="esteira-h">Esteira do paciente</h2><div class="sub">Onde cada paciente está agora · atualiza sozinha (check-in, chamada, início e fim do exame no aparelho)</div></div>
+        <div class="seg" style="margin-left:auto" role="tablist" aria-label="Filtrar esteira"><button class="on btn-sm" style="height:36px" role="tab" aria-selected="true">Todas as salas</button><button style="height:36px" role="tab" aria-selected="false">Dr. Paulo</button><button style="height:36px" role="tab" aria-selected="false">Dra. Renata</button><button style="height:36px" role="tab" aria-selected="false">Só atrasos</button></div>
+      </div>
+      <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:6px">
+        <div style="flex:1 0 236px;min-width:236px;background:#F6F8FB;border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:10px" role="group" aria-label="Agendados · a chegar, 9 pacientes">
+          <div class="row" style="gap:8px;padding:2px 4px"><b class="t14" style="flex:1">Agendados · a chegar</b><span class="chip" style="background:#EEF1F5;color:#334155;height:24px">9</span></div>
+          <article style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(15,23,42,.06);display:flex;flex-direction:column;gap:6px">
+            <div class="row" style="gap:8px"><span class="av av-sm" style="background:#E8F2FB;color:#0C72B0">CN</span><b class="t14 nw clamp1" style="flex:1;min-width:0">Cláudia B. Nunes</b></div>
+            <div class="t13 mute clamp1">Eco + Doppler · Dr. Paulo</div>
+            <div class="row" style="gap:6px;flex-wrap:wrap"><span class="chip " style="height:24px;font-size:12px">em 20 min</span><span class="t12 mute">09:00</span></div>
+          </article><article style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(15,23,42,.06);display:flex;flex-direction:column;gap:6px">
+            <div class="row" style="gap:8px"><span class="av av-sm" style="background:#EFEBFC;color:#5B45B5">PL</span><b class="t14 nw clamp1" style="flex:1;min-width:0">Patrícia G. Lopes</b></div>
+            <div class="t13 mute clamp1">Obstétrica c/ Doppler</div>
+            <div class="row" style="gap:6px;flex-wrap:wrap"><span class="chip c-green" style="height:24px;font-size:12px">confirmada</span><span class="t12 mute">09:00</span></div>
+          </article><article style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(15,23,42,.06);display:flex;flex-direction:column;gap:6px">
+            <div class="row" style="gap:8px"><span class="av av-sm" style="background:#E5F5EC;color:#1F7A4D">MF</span><b class="t14 nw clamp1" style="flex:1;min-width:0">Marcelo D. Faria</b></div>
+            <div class="t13 mute clamp1">USG abdome · jejum</div>
+            <div class="row" style="gap:6px;flex-wrap:wrap"><span class="chip c-amber" style="height:24px;font-size:12px">sem confirmação</span><span class="t12 mute">09:00</span></div>
+          </article>
+          <button class="btn btn-g btn-sm" style="justify-content:flex-start">+ ver todos</button>
+        </div>
+        <div style="flex:1 0 236px;min-width:236px;background:#F6F8FB;border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:10px" role="group" aria-label="Chegou · no check-in, 3 pacientes">
+          <div class="row" style="gap:8px;padding:2px 4px"><b class="t14" style="flex:1">Chegou · no check-in</b><span class="chip" style="background:#FFF3DF;color:#9A5B00;height:24px">3</span></div>
+          <article style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(15,23,42,.06);display:flex;flex-direction:column;gap:6px">
+            <div class="row" style="gap:8px"><span class="av av-sm" style="background:#EFEBFC;color:#5B45B5">JR</span><b class="t14 nw clamp1" style="flex:1;min-width:0">Juliana S. Rocha</b></div>
+            <div class="t13 mute clamp1">Morfológica · Dra. Renata</div>
+            <div class="row" style="gap:6px;flex-wrap:wrap"><span class="chip c-amber" style="height:24px;font-size:12px">10 min</span><span class="t12 mute">balcão 2</span></div><span class="step warn" style="height:24px;font-size:12px">! Falta pedido</span>
+          </article><article style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(15,23,42,.06);display:flex;flex-direction:column;gap:6px">
+            <div class="row" style="gap:8px"><span class="av av-sm" style="background:#E5F5EC;color:#1F7A4D">RL</span><b class="t14 nw clamp1" style="flex:1;min-width:0">Rafael M. Lima</b></div>
+            <div class="t13 mute clamp1">Raio X tórax · particular</div>
+            <div class="row" style="gap:6px;flex-wrap:wrap"><span class="chip c-amber" style="height:24px;font-size:12px">6 min</span><span class="t12 mute">caixa</span></div><span class="step warn" style="height:24px;font-size:12px">! Pagamento</span>
+          </article>
+          <button class="btn btn-g btn-sm" style="justify-content:flex-start">+ ver todos</button>
+        </div>
+        <div style="flex:1 0 236px;min-width:236px;background:#F6F8FB;border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:10px" role="group" aria-label="Aguardando a sala, 2 pacientes">
+          <div class="row" style="gap:8px;padding:2px 4px"><b class="t14" style="flex:1">Aguardando a sala</b><span class="chip" style="background:#E8F2FB;color:#0C72B0;height:24px">2</span></div>
+          <article style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(15,23,42,.06);display:flex;flex-direction:column;gap:6px">
+            <div class="row" style="gap:8px"><span class="av av-sm" style="background:#E8F2FB;color:#0C72B0">AR</span><b class="t14 nw clamp1" style="flex:1;min-width:0">Antônio C. Ribeiro</b></div>
+            <div class="t13 mute clamp1">Eco + Doppler · Dr. Paulo</div>
+            <div class="row" style="gap:6px;flex-wrap:wrap"><span class="chip c-rose" style="height:24px;font-size:12px">19 min</span><span class="t12 mute">Sala 1 · P012</span></div><span class="t12" style="color:#C2334D;font-weight:600">Acima de 15 min · preferencial</span>
+          </article><article style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(15,23,42,.06);display:flex;flex-direction:column;gap:6px">
+            <div class="row" style="gap:8px"><span class="av av-sm" style="background:#FDEEF1;color:#C2334D">LP</span><b class="t14 nw clamp1" style="flex:1;min-width:0">Lúcia F. Prado</b></div>
+            <div class="t13 mute clamp1">TC crânio c/ contraste</div>
+            <div class="row" style="gap:6px;flex-wrap:wrap"><span class="chip " style="height:24px;font-size:12px">4 min</span><span class="t12 mute">Sala 6</span></div><span class="step warn" style="height:24px;font-size:12px">! Revisar contraste</span>
+          </article>
+          
+        </div>
+        <div style="flex:1 0 236px;min-width:236px;background:#F6F8FB;border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:10px" role="group" aria-label="Em exame, 5 pacientes">
+          <div class="row" style="gap:8px;padding:2px 4px"><b class="t14" style="flex:1">Em exame</b><span class="chip" style="background:#EFEBFC;color:#5B45B5;height:24px">5</span></div>
+          <article style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(15,23,42,.06);display:flex;flex-direction:column;gap:6px">
+            <div class="row" style="gap:8px"><span class="av av-sm" style="background:#E8F2FB;color:#0C72B0">SC</span><b class="t14 nw clamp1" style="flex:1;min-width:0">Sônia M. Castro</b></div>
+            <div class="t13 mute clamp1">Eco · 24 imagens recebidas</div>
+            <div class="row" style="gap:6px;flex-wrap:wrap"><span class="chip c-violet" style="height:24px;font-size:12px">desde 08:41</span><span class="t12 mute">Sala 1 · Dr. Paulo</span></div>
+          </article><article style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(15,23,42,.06);display:flex;flex-direction:column;gap:6px">
+            <div class="row" style="gap:8px"><span class="av av-sm" style="background:#E5F5EC;color:#1F7A4D">GP</span><b class="t14 nw clamp1" style="flex:1;min-width:0">Gustavo H. Pires</b></div>
+            <div class="t13 mute clamp1">Ergométrico</div>
+            <div class="row" style="gap:6px;flex-wrap:wrap"><span class="chip c-violet" style="height:24px;font-size:12px">desde 08:35</span><span class="t12 mute">Sala 4 · Dr. Paulo</span></div>
+          </article><article style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(15,23,42,.06);display:flex;flex-direction:column;gap:6px">
+            <div class="row" style="gap:8px"><span class="av av-sm" style="background:#FDEEF1;color:#C2334D">VA</span><b class="t14 nw clamp1" style="flex:1;min-width:0">Vera L. Antunes</b></div>
+            <div class="t13 mute clamp1">TC abdome · série 3/4</div>
+            <div class="row" style="gap:6px;flex-wrap:wrap"><span class="chip c-violet" style="height:24px;font-size:12px">desde 08:30</span><span class="t12 mute">Sala 6</span></div>
+          </article>
+          <button class="btn btn-g btn-sm" style="justify-content:flex-start">+ ver todos</button>
+        </div>
+        <div style="flex:1 0 236px;min-width:236px;background:#F6F8FB;border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:10px" role="group" aria-label="Pós-exame · orientação, 2 pacientes">
+          <div class="row" style="gap:8px;padding:2px 4px"><b class="t14" style="flex:1">Pós-exame · orientação</b><span class="chip" style="background:#E2F4F3;color:#0F6E6A;height:24px">2</span></div>
+          <article style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(15,23,42,.06);display:flex;flex-direction:column;gap:6px">
+            <div class="row" style="gap:8px"><span class="av av-sm" style="background:#E2F4F3;color:#0F6E6A">NF</span><b class="t14 nw clamp1" style="flex:1;min-width:0">Neusa A. Freitas</b></div>
+            <div class="t13 mute clamp1">MAPA instalado · devolve amanhã</div>
+            <div class="row" style="gap:6px;flex-wrap:wrap"><span class="chip c-teal" style="height:24px;font-size:12px">orientada</span><span class="t12 mute">Sala 7</span></div>
+          </article><article style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(15,23,42,.06);display:flex;flex-direction:column;gap:6px">
+            <div class="row" style="gap:8px"><span class="av av-sm" style="background:#FFF3DF;color:#9A5B00">DG</span><b class="t14 nw clamp1" style="flex:1;min-width:0">Denise P. Gomes</b></div>
+            <div class="t13 mute clamp1">Observação pós-contraste</div>
+            <div class="row" style="gap:6px;flex-wrap:wrap"><span class="chip c-amber" style="height:24px;font-size:12px">12 de 30 min</span><span class="t12 mute">Repouso</span></div>
+          </article>
+          
+        </div>
+        <div style="flex:1 0 236px;min-width:236px;background:#F6F8FB;border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:10px" role="group" aria-label="Liberados hoje, 11 pacientes">
+          <div class="row" style="gap:8px;padding:2px 4px"><b class="t14" style="flex:1">Liberados hoje</b><span class="chip" style="background:#E5F5EC;color:#1F7A4D;height:24px">11</span></div>
+          <article style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(15,23,42,.06);display:flex;flex-direction:column;gap:6px">
+            <div class="row" style="gap:8px"><span class="av av-sm" style="background:#E8F2FB;color:#0C72B0">MD</span><b class="t14 nw clamp1" style="flex:1;min-width:0">Maria H. Duarte</b></div>
+            <div class="t13 mute clamp1">Eco · laudo liberado</div>
+            <div class="row" style="gap:6px;flex-wrap:wrap"><span class="chip c-green" style="height:24px;font-size:12px">laudo no portal</span><span class="t12 mute">saiu 07:52</span></div>
+          </article><article style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(15,23,42,.06);display:flex;flex-direction:column;gap:6px">
+            <div class="row" style="gap:8px"><span class="av av-sm" style="background:#E5F5EC;color:#1F7A4D">CM</span><b class="t14 nw clamp1" style="flex:1;min-width:0">Caio V. Moraes</b></div>
+            <div class="t13 mute clamp1">Raio X · aguardando laudo</div>
+            <div class="row" style="gap:6px;flex-wrap:wrap"><span class="chip c-blue" style="height:24px;font-size:12px">laudo até 14:00</span><span class="t12 mute">saiu 08:40</span></div>
+          </article>
+          <button class="btn btn-g btn-sm" style="justify-content:flex-start">+ ver todos</button>
+        </div>
+      </div>
+      <p class="t13 mute" style="margin:12px 0 0">Os tempos ficam em <b style="color:#C2334D">vermelho</b> acima da meta da etapa (aguardando sala: 15 min; check-in: 10 min). A mesma esteira aparece na agenda de cada médico, filtrada pelos pacientes dele.</p>
+    </section>
+
     <section class="card" aria-labelledby="linha-h" style="padding: 20px 0 8px">
       <div class="card-h" style="padding: 0 22px"><div><h2 id="linha-h">Linha do dia</h2><div class="sub">Todas as salas · os quadros tracejados são horários livres, toque para encaixar</div></div>
         <div class="row wrap t13" style="gap: 12px; margin-left: auto; color: #334155">
@@ -307,7 +403,7 @@ body{margin:0;background:#F2F3F6}
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2100}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2650}}'>
 class Component extends DCLogic {
   renderVals() { return {}; }
 }

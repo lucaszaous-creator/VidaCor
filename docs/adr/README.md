@@ -19,5 +19,6 @@
 | [0014](0014-garantias-no-servidor-e-no-banco.md) | As seis garantias: servidor decide, banco protege, repetição não duplica | Proposto |
 | [0015](0015-protecao-do-usuario.md) | Proteção do usuário: a cerca e a rede de segurança | Proposto |
 | [0016](0016-seguranca-por-classe-de-ataque.md) | Segurança por classe de ataque (Cloudflare security-audit) | Proposto |
+| [0017](0017-permissoes-e-rls.md) | Permissões em três camadas (perfil, contexto e RLS) | Proposto |
 
 Visão geral em [11 · Arquitetura e infraestrutura](../11-arquitetura-e-infraestrutura.md).

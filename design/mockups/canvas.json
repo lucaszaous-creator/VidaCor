@@ -39,7 +39,7 @@
    "x": 3040,
    "y": 0,
    "w": 1440,
-   "h": 2100,
+   "h": 2650,
    "title": "3 · Recepção, senhas e check-in",
    "expand": "fill",
    "is_interactive": true
@@ -54,8 +54,8 @@
    "is_interactive": true
   },
   "Sala-Exame.dc.html": {
-   "x": 1520,
-   "y": 2720,
+   "x": 3040,
+   "y": 3070,
    "w": 1440,
    "h": 1700,
    "title": "5 · Sala de exame (worklist, captura, medidas)",
@@ -63,8 +63,8 @@
    "is_interactive": true
   },
   "Laudo.dc.html": {
-   "x": 4560,
-   "y": 2720,
+   "x": 6080,
+   "y": 3070,
    "w": 1440,
    "h": 1800,
    "title": "6 · Laudar (workstation do médico)",
@@ -72,8 +72,8 @@
    "is_interactive": true
   },
   "Visualizador.dc.html": {
-   "x": 6080,
-   "y": 2720,
+   "x": 7600,
+   "y": 3070,
    "w": 1440,
    "h": 1500,
    "title": "7 · Visualizador de imagens (PACS)",
@@ -81,8 +81,8 @@
    "is_interactive": true
   },
   "Fluxo-Laudos.dc.html": {
-   "x": 7600,
-   "y": 2720,
+   "x": 9120,
+   "y": 3070,
    "w": 1440,
    "h": 1600,
    "title": "8 · Fluxo de laudos, entrega e impressão",
@@ -91,7 +91,7 @@
   },
   "Faturamento.dc.html": {
    "x": 0,
-   "y": 5490,
+   "y": 5840,
    "w": 1440,
    "h": 2300,
    "title": "9 · Faturamento TISS (guias, lotes, glosas)",
@@ -100,7 +100,7 @@
   },
   "Financeiro.dc.html": {
    "x": 1520,
-   "y": 5490,
+   "y": 5840,
    "w": 1440,
    "h": 2250,
    "title": "10 · Financeiro (caixa, contas, DRE, repasse, NF)",
@@ -109,7 +109,7 @@
   },
   "Estoque.dc.html": {
    "x": 3040,
-   "y": 5490,
+   "y": 5840,
    "w": 1440,
    "h": 2150,
    "title": "11 · Estoque",
@@ -118,7 +118,7 @@
   },
   "Comunicacao.dc.html": {
    "x": 4560,
-   "y": 5490,
+   "y": 5840,
    "w": 1440,
    "h": 1900,
    "title": "12 · WhatsApp, automações, NPS e telemedicina",
@@ -127,7 +127,7 @@
   },
   "Indicadores.dc.html": {
    "x": 6080,
-   "y": 5490,
+   "y": 5840,
    "w": 1440,
    "h": 1950,
    "title": "13 · Indicadores",
@@ -136,7 +136,7 @@
   },
   "Configuracoes.dc.html": {
    "x": 7600,
-   "y": 5490,
+   "y": 5840,
    "w": 1440,
    "h": 2200,
    "title": "14 · Configurações, segurança e aparelhos",
@@ -145,7 +145,7 @@
   },
   "Portal-Web.dc.html": {
    "x": 0,
-   "y": 8210,
+   "y": 8560,
    "w": 1440,
    "h": 1950,
    "title": "15 · Portal do paciente (web)",
@@ -154,35 +154,35 @@
   },
   "App-Paciente.dc.html": {
    "x": 1520,
-   "y": 8210,
+   "y": 8560,
    "w": 390,
    "h": 844,
    "title": "16 · App do paciente"
   },
   "App-Bebe.dc.html": {
    "x": 1990,
-   "y": 8210,
+   "y": 8560,
    "w": 390,
    "h": 844,
    "title": "17 · Meus Exames Bebê"
   },
   "App-Medico.dc.html": {
    "x": 2460,
-   "y": 8210,
+   "y": 8560,
    "w": 390,
    "h": 844,
    "title": "18 · App do médico"
   },
   "Telao.dc.html": {
    "x": 2930,
-   "y": 8210,
+   "y": 8560,
    "w": 1280,
    "h": 720,
    "title": "19 · Painel de chamada (TV da sala de espera)"
   },
   "Laudo-Impresso.dc.html": {
    "x": 0,
-   "y": 10580,
+   "y": 10930,
    "w": 794,
    "h": 1123,
    "title": "20 · Laudo impresso (A4)",
@@ -190,7 +190,7 @@
   },
   "Preparo-Exame.dc.html": {
    "x": 874,
-   "y": 10580,
+   "y": 10930,
    "w": 794,
    "h": 1123,
    "title": "21 · Comprovante + preparo (A4)",
@@ -198,7 +198,7 @@
   },
   "Documentos.dc.html": {
    "x": 1748,
-   "y": 10580,
+   "y": 10930,
    "w": 794,
    "h": 1123,
    "title": "22 · Atestado, recibo e etiquetas (A4)",
@@ -214,8 +214,8 @@
    "is_interactive": true
   },
   "Atendimento.dc.html": {
-   "x": 0,
-   "y": 2720,
+   "x": 1520,
+   "y": 3070,
    "w": 1440,
    "h": 1700,
    "title": "8b · Atendimento médico (evolução, prescrição, documentos)",
@@ -223,13 +223,22 @@
    "is_interactive": true
   },
   "Aparelhos.dc.html": {
-   "y": 2720,
+   "y": 3070,
    "w": 1440,
    "h": 2350,
    "title": "Aparelhos e integração DICOM (imagem chega ao vivo)",
    "expand": "fill",
    "is_interactive": true,
-   "x": 3040
+   "x": 4560
+  },
+  "Agenda-Medico.dc.html": {
+   "y": 3070,
+   "w": 1440,
+   "h": 1650,
+   "title": "Minha agenda (médico) + onde estão meus pacientes",
+   "expand": "fill",
+   "is_interactive": true,
+   "x": 0
   }
  },
  "order": [
@@ -239,6 +248,7 @@
   "Recepcao.dc.html",
   "Caixa.dc.html",
   "Paciente.dc.html",
+  "Agenda-Medico.dc.html",
   "Atendimento.dc.html",
   "Sala-Exame.dc.html",
   "Aparelhos.dc.html",
@@ -270,35 +280,35 @@
   },
   "t2": {
    "x": 0,
-   "y": 2420,
+   "y": 2770,
    "text": "Atendimento, exames, laudos e imagens",
    "kind": "title1",
-   "maxW": 9040
+   "maxW": 10560
   },
   "t3": {
    "x": 0,
-   "y": 5190,
+   "y": 5540,
    "text": "Gestão",
    "kind": "title1",
    "maxW": 9040
   },
   "t4": {
    "x": 0,
-   "y": 7910,
+   "y": 8260,
    "text": "Paciente e médico",
    "kind": "title1",
    "maxW": 4210
   },
   "t5": {
    "x": 0,
-   "y": 10280,
+   "y": 10630,
    "text": "Documentos impressos",
    "kind": "title1",
    "maxW": 2542
   },
   "n1": {
    "x": 4330,
-   "y": 8210,
+   "y": 8560,
    "w": 400,
    "fill": "blue",
    "size": "m",
@@ -306,7 +316,7 @@
   },
   "n2": {
    "x": 4770,
-   "y": 8210,
+   "y": 8560,
    "w": 400,
    "fill": "green",
    "size": "m",
@@ -314,7 +324,7 @@
   },
   "n3": {
    "x": 5210,
-   "y": 8210,
+   "y": 8560,
    "w": 400,
    "fill": "purple",
    "size": "m",
@@ -322,7 +332,7 @@
   },
   "n4": {
    "x": 4330,
-   "y": 8810,
+   "y": 9160,
    "w": 400,
    "fill": "orange",
    "size": "m",
@@ -330,7 +340,7 @@
   },
   "n5": {
    "x": 4770,
-   "y": 8810,
+   "y": 9160,
    "w": 400,
    "fill": "teal",
    "size": "m",

@@ -82,6 +82,12 @@ Baseado na skill **Cloudflare security-audit** (instalada em `.claude/skills/sec
 - **Cripto, cadeia de suprimentos, infra, IA e memória:** sem cripto caseira; Actions por SHA e sem `pull_request_target`; contêiner sem root; consoles só na VLAN de administração; IA sem autoridade de escrita e com entrada tratada como não confiável; `unsafe` só em crate de FFI revisado.
 - **Auditoria:** `/security-audit` antes da produção, de versões maiores e após incidentes; achado só com fronteira cruzada e resultado concreto; nunca testar contra produção ou dados reais.
 
+## Perfis, permissões e RLS (obrigatório) — [docs/18](docs/18-perfis-permissoes-e-rls.md)
+- Três camadas: **perfil** (atos) → **contexto** (unidade, sala, vínculo de cuidado, laudo atribuído, caixa próprio) no núcleo → **RLS forçado** no PostgreSQL com `SET LOCAL app.*` por transação.
+- Médico vê dado clínico completo só com **vínculo de cuidado**; fora disso, **acesso de emergência** com justificativa, auditado e revisado.
+- **TI sem dado clínico**; separação de funções (quem pede estorno não aprova; perfil clínico novo exige segunda pessoa).
+- Toda política RLS tem teste de autorizado e não autorizado; proibido `USING (true)`, `BYPASSRLS` nos papéis da aplicação e `SET` de sessão para contexto.
+
 ## Playbooks
 Os roteiros de auditoria e correção ficam em [docs/playbooks/](docs/playbooks/) e
 também como comandos do Claude Code em `.claude/commands/`:

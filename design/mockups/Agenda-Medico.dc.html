@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Minha agenda (médico) — VidaCor Imagem</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F2F3F6}</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="minha-agenda" userName="Dr. Paulo Medeiros" userRole="Cardiologia · Eco e ergométrico" userInitials="PM" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><span>Clínica</span><span aria-hidden="true">›</span><b>Minha agenda</b></div>
+      <div class="grow"></div>
+      <button class="btn btn-sm">Bloquear horário</button>
+      <button class="btn btn-sm">Pedir troca de agenda</button>
+    </div>
+
+    <div class="page-h">
+      <div class="grow">
+        <h1>Bom dia, Dr. Paulo</h1>
+        <p>Sexta, 6 de novembro · Sala 1 (eco) até 12:00 · Sala 4 (ergométrico) das 13:00 às 17:00</p>
+      </div>
+      <div class="seg" role="tablist" aria-label="Período"><button class="on" role="tab" aria-selected="true">Hoje</button><button role="tab" aria-selected="false">Semana</button><button role="tab" aria-selected="false">Mês</button></div>
+    </div>
+
+    <section class="grid g4" aria-label="Resumo do meu dia">
+      <div class="card"><div class="lbl">Pacientes hoje</div><div class="big" style="margin-top: 6px">14</div><div class="t13 mute" style="margin-top: 6px">9 eco · 5 ergométricos</div></div>
+      <div class="card"><div class="lbl">Já atendidos</div><div class="big" style="margin-top: 6px">3</div><div class="bar" style="margin-top: 10px"><i style="width: 21%"></i></div></div>
+      <div class="card"><div class="lbl">Esperando por mim</div><div class="big" style="margin-top: 6px; color: #C2334D">1</div><div class="t13 mute" style="margin-top: 6px">Antônio C. Ribeiro · 19 min</div></div>
+      <div class="card"><div class="lbl">Laudos para assinar</div><div class="big" style="margin-top: 6px">7</div><div class="row" style="margin-top: 8px; gap: 6px"><span class="chip c-rose">2 vencem hoje</span><a class="t13 b" href="Laudo.dc.html">Laudar</a></div></div>
+    </section>
+
+    <section class="card" aria-labelledby="onde-h">
+      <div class="card-h"><div><h2 id="onde-h">Onde estão meus pacientes</h2><div class="sub">A mesma esteira da recepção, só com os meus pacientes de hoje</div></div><a class="t14 b" href="Recepcao.dc.html" style="margin-left: auto">Ver esteira completa</a></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: 10px">
+        <div style="background: #F6F8FB; border-radius: 16px; padding: 14px"><div class="row"><b class="t14" style="flex: 1">A chegar</b><span class="chip">8</span></div><div class="t13 mute" style="margin-top: 8px">Cláudia B. Nunes 09:00 · Hélio T. Mendes 10:00 · +6</div></div>
+        <div style="background: #FFF8EC; border-radius: 16px; padding: 14px"><div class="row"><b class="t14" style="flex: 1">No check-in</b><span class="chip c-amber">0</span></div><div class="t13 mute" style="margin-top: 8px">—</div></div>
+        <div style="background: #FDEEF1; border-radius: 16px; padding: 14px"><div class="row"><b class="t14" style="flex: 1">Esperando a sala</b><span class="chip c-rose">1</span></div><div class="t13" style="margin-top: 8px"><b>Antônio C. Ribeiro</b> · 19 min · preferencial</div></div>
+        <div style="background: #EFEBFC; border-radius: 16px; padding: 14px"><div class="row"><b class="t14" style="flex: 1">Em exame</b><span class="chip c-violet">2</span></div><div class="t13" style="margin-top: 8px">Sônia M. Castro (S1) · Gustavo H. Pires (S4)</div></div>
+        <div style="background: #E5F5EC; border-radius: 16px; padding: 14px"><div class="row"><b class="t14" style="flex: 1">Liberados</b><span class="chip c-green">3</span></div><div class="t13 mute" style="margin-top: 8px">2 com laudo pendente</div></div>
+      </div>
+    </section>
+
+    <div class="split">
+      <section class="card main" aria-labelledby="ag-h">
+        <div class="card-h"><div><h2 id="ag-h">Minha agenda de hoje</h2><div class="sub">Status ao vivo · chamar o paciente aparece na TV da sala de espera</div></div></div>
+        <div class="li">
+          <div class="num b t15" style="width: 56px">07:30</div>
+          <span class="av" style="background: #E5F5EC; color: #1F7A4D">MD</span>
+          <div style="flex: 1; min-width: 0"><div class="t nw">Maria Helena Duarte <span class="t13 mute" style="font-weight: 400">· 58 a · F · 12/03/1968</span></div><div class="s">Ecocardiograma transtorácico · Unimed</div></div>
+          <span class="chip c-green">✓ Laudo assinado</span>
+        </div>
+        <div class="li">
+          <div class="num b t15" style="width: 56px">08:00</div>
+          <span class="av" style="background: #E8F2FB; color: #0C72B0">EV</span>
+          <div style="flex: 1; min-width: 0"><div class="t nw">Eduardo M. Vaz <span class="t13 mute" style="font-weight: 400">· 49 a · M · 21/09/1977</span></div><div class="s">Teste ergométrico · Bradesco Saúde</div></div>
+          <span class="chip c-blue">Liberado · laudo pendente</span>
+          <a class="btn btn-sm" href="Laudo.dc.html">Laudar</a>
+        </div>
+        <div class="li" style="background: #F6F2FC; margin: 0 -12px; padding: 12px; border-radius: 14px">
+          <div class="num b t15" style="width: 56px">08:30</div>
+          <span class="av" style="background: #E8F2FB; color: #0C72B0">SC</span>
+          <div style="flex: 1; min-width: 0"><div class="t nw">Sônia Maria Castro <span class="t13 mute" style="font-weight: 400">· 64 a · F · 03/02/1962</span></div><div class="s">Ecocardiograma · em exame na Sala 1 desde 08:41 · 24 imagens recebidas</div></div>
+          <span class="chip c-violet">● Em exame</span>
+          <a class="btn btn-b btn-sm" href="Laudo.dc.html">Abrir laudo</a>
+        </div>
+        <div class="li">
+          <div class="num b t15" style="width: 56px">08:30</div>
+          <span class="av" style="background: #E8F2FB; color: #0C72B0">AR</span>
+          <div style="flex: 1; min-width: 0"><div class="t nw">Antônio Carlos Ribeiro <span class="t13 mute" style="font-weight: 400">· 72 a · M · 15/06/1954</span></div><div class="s">Eco + Doppler de carótidas · check-in completo · <b style="color: #C2334D">aguardando há 19 min</b></div></div>
+          <span class="chip c-navy">P012</span>
+          <button class="btn btn-p btn-sm">Chamar para a Sala 1</button>
+        </div>
+        <div class="li">
+          <div class="num b t15" style="width: 56px">09:00</div>
+          <span class="av" style="background: #FFF3DF; color: #9A5B00">CN</span>
+          <div style="flex: 1; min-width: 0"><div class="t nw">Cláudia B. Nunes <span class="t13 mute" style="font-weight: 400">· 61 a · F</span></div><div class="s">Eco + Doppler · confirmou pelo WhatsApp</div></div>
+          <span class="chip">A chegar</span>
+        </div>
+        <div class="li">
+          <div class="num b t15" style="width: 56px">09:30</div>
+          <span class="slot-free" style="flex: 1">Horário livre · a recepção pode encaixar</span>
+        </div>
+        <div class="li">
+          <div class="num b t15" style="width: 56px">10:00</div>
+          <span class="av" style="background: #E8F2FB; color: #0C72B0">HM</span>
+          <div style="flex: 1; min-width: 0"><div class="t nw">Hélio T. Mendes <span class="t13 mute" style="font-weight: 400">· 70 a · M</span></div><div class="s">Eco transtorácico · particular · exame anterior em 03/2025</div></div>
+          <span class="chip">A chegar</span>
+        </div>
+        <div class="li">
+          <div class="num b t15" style="width: 56px">13:00</div>
+          <span class="tile t-gray" style="width: 40px; height: 40px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h4l2-5 4 10 2-5h6"></path></svg></span>
+          <div style="flex: 1"><div class="t">Tarde · Teste ergométrico (Sala 4)</div><div class="s">5 pacientes · primeiro às 13:00</div></div>
+        </div>
+      </section>
+
+      <aside class="aside col" style="gap: 16px">
+        <section class="card" aria-labelledby="av-h">
+          <div class="card-h"><h2 id="av-h" style="font-size: 17px">Avisos para mim</h2></div>
+          <div class="li"><span class="tile t-teal" style="width: 36px; height: 36px">✓</span><div><div class="t t14">Imagens de Sônia M. Castro chegaram</div><div class="s">24 imagens + medidas do aparelho · 08:47</div></div></div>
+          <div class="li"><span class="tile t-rose" style="width: 36px; height: 36px">!</span><div><div class="t t14">Laudo de Eduardo M. Vaz vence às 14:00</div><div class="s">Prazo do convênio</div></div></div>
+          <div class="li"><span class="tile t-amber" style="width: 36px; height: 36px">!</span><div><div class="t t14">Antônio C. Ribeiro: hipertenso, usa losartana</div><div class="s">Antes do exame</div></div></div>
+        </section>
+        <section class="card" aria-labelledby="sem-h">
+          <div class="card-h"><h2 id="sem-h" style="font-size: 17px">Minha semana</h2></div>
+          <div class="col" style="gap: 10px">
+            <div><div class="row t14"><span>Seg</span><span class="num b" style="margin-left: auto">12 pacientes</span></div><div class="bar" style="margin-top: 5px"><i style="width: 70%"></i></div></div>
+            <div><div class="row t14"><span>Ter</span><span class="num b" style="margin-left: auto">15 pacientes</span></div><div class="bar" style="margin-top: 5px"><i style="width: 88%"></i></div></div>
+            <div><div class="row t14"><span>Qua</span><span class="mute" style="margin-left: auto">Congresso · bloqueado</span></div><div class="bar" style="margin-top: 5px"><i style="width: 0%"></i></div></div>
+            <div><div class="row t14"><span>Qui</span><span class="num b" style="margin-left: auto">13 pacientes</span></div><div class="bar" style="margin-top: 5px"><i style="width: 76%"></i></div></div>
+            <div><div class="row t14"><b>Sex · hoje</b><span class="num b" style="margin-left: auto">14 pacientes</span></div><div class="bar" style="margin-top: 5px"><i style="width: 82%"></i></div></div>
+          </div>
+        </section>
+        <section class="card" aria-labelledby="pr-h" style="background: #F6F8FB; box-shadow: none">
+          <h2 id="pr-h" style="font-size: 15px; font-weight: 600">O que o médico vê</h2>
+          <p class="t13 mute" style="margin: 8px 0 0; line-height: 1.5">Dados clínicos completos só dos pacientes com vínculo de atendimento com você (agendados, em exame ou com laudo atribuído). Outro paciente exige acesso de emergência com justificativa, que fica na auditoria.</p>
+        </section>
+      </aside>
+    </div>
+    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1650}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

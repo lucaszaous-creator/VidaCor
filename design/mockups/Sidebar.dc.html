@@ -62,7 +62,7 @@
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"active":{"editor":"enum","options":["inicio","agenda","recepcao","pacientes","atendimento","caixa","aparelhos","sala","laudos","fluxo","visualizador","faturamento","financeiro","estoque","comunicacao","telemedicina","estacionamento","indicadores","configuracoes"],"default":"inicio"},"userName":{"editor":"text","default":"Ana Souza"},"userRole":{"editor":"text","default":"Recepção"},"userInitials":{"editor":"text","default":"AS"},"$preview":{"width":280,"height":1400}}'>
+<script type="text/x-dc" data-dc-script data-props='{"active":{"editor":"enum","options":["inicio","agenda","minha-agenda","recepcao","pacientes","atendimento","caixa","aparelhos","sala","laudos","fluxo","visualizador","faturamento","financeiro","estoque","comunicacao","telemedicina","estacionamento","indicadores","configuracoes"],"default":"inicio"},"userName":{"editor":"text","default":"Ana Souza"},"userRole":{"editor":"text","default":"Recepção"},"userInitials":{"editor":"text","default":"AS"},"$preview":{"width":280,"height":1400}}'>
 class Component extends DCLogic {
   renderVals() {
     const active = this.props.active ?? 'inicio';
@@ -82,6 +82,7 @@ class Component extends DCLogic {
       telemedicina:'M3 6h12v12H3zM15 10l6-3v10l-6-3',
       atendimento:'M6 3v6a4 4 0 0 0 8 0V3M10 13v3a5 5 0 0 0 10 0v-2M20 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
       aparelhos:'M4 5h16v10H4zM8 19h8M12 15v4M7 9h2M7 12h5M15 9l2 2-2 2',
+      'minha-agenda':'M4 5h16v16H4zM4 10h16M9 3v4M15 3v4M8 14h3v3H8z',
       caixa:'M3 8h18v12H3zM7 8V5h10v3M12 12v4M10 14h4',
       estacionamento:'M5 17h14l-1.5-6.5A2 2 0 0 0 15.6 9H8.4a2 2 0 0 0-1.9 1.5zM7 17v2M17 17v2M8 13h.01M16 13h.01',
       indicadores:'M4 20V10M10 20V4M16 20v-7M2 20h20',
@@ -95,6 +96,7 @@ class Component extends DCLogic {
       { title: 'Clínica', items: [
         it('inicio','Início','Main.dc.html'),
         it('agenda','Agenda','Agenda.dc.html',{hasCount:true,count:'42'}),
+        it('minha-agenda','Minha agenda (médico)','Agenda-Medico.dc.html',{hasCount:true,count:'14'}),
         it('recepcao','Recepção e senhas','Recepcao.dc.html',{hasCount:true,count:'6'}),
         it('pacientes','Pacientes','Paciente.dc.html')
       ]},

@@ -17,9 +17,10 @@ do canvas; as cópias locais estão em `design/assets/` (veja
 | — | `Sidebar.dc.html` | Menu lateral compartilhado |
 | 1 | `Main.dc.html` | Início (painel do dia) |
 | 2 | `Agenda.dc.html` | Agenda por sala e agendamento |
-| 3 | `Recepcao.dc.html` | Recepção, senhas e check-in |
+| 3 | `Recepcao.dc.html` | Recepção, senhas, **esteira do paciente** e check-in |
 | 4 | `Caixa.dc.html` | Caixa do particular |
 | 5 | `Paciente.dc.html` | Paciente 360º + anatomia |
+| 5b | `Agenda-Medico.dc.html` | Minha agenda (médico) + onde estão meus pacientes |
 | 6 | `Atendimento.dc.html` | Atendimento médico |
 | 7 | `Sala-Exame.dc.html` | Sala de exame |
 | 7b | `Aparelhos.dc.html` | Aparelhos e integração DICOM (imagem chega ao vivo) |
