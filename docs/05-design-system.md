@@ -67,3 +67,7 @@ Contraste AA · alvo de toque ≥ 44 px · controles reais (`button`, `a`, `labe
 `aria-label` em botão só com ícone · teclado (Ctrl+K busca, F2 check-in, F9
 ditado) · pensado para 1366×768 e zoom de 150% · portal e app com tamanho de
 letra ajustável.
+
+## Menu de contexto
+
+Todo objeto tem menu de clique direito (também por teclado e pelo botão ⋯). Regras completas e catálogo por objeto em [19 · Menu de contexto](19-menu-de-contexto.md).

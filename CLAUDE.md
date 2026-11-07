@@ -67,6 +67,7 @@ Nenhum código, tela ou lançamento ultrapassa estes caminhos:
 - **Ao testar:** usabilidade com a equipe nas tarefas críticas; caos em homologação.
 - **Ao lançar:** revisão de prontidão completa, piloto com comparação automática, liberação gradual por chave, sem lançamento em véspera de feriado ou fechamento.
 - **Na tela (R1–R14):** prevenir em vez de avisar; confirmação só em ato irreversível e com o nome do paciente; alertas em três níveis; corrigir com versão, nunca apagar; nada se perde; o atendimento nunca para; mensagem diz o que aconteceu, o que foi feito e o que fazer; a tela nunca mente; ética com o paciente (resultado delicado só após conversa, IA sempre revisada).
+- **Menu de contexto (clique direito)** em todo objeto, seguindo o [docs/19](docs/19-menu-de-contexto.md): também por teclado (Menu/Shift+F10) e botão ⋯; ação que o perfil nunca terá não aparece, indisponível aparece apagada com motivo; destrutivas no fim com motivo; nada clínico em lote; ações vêm do servidor.
 - Mudança em fluxo clínico precisa da aprovação do **responsável clínico de segurança**.
 
 ## Segurança por classe de ataque (obrigatória) — [docs/17](docs/17-seguranca-por-classe-de-ataque.md)

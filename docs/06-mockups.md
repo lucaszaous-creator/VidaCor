@@ -41,6 +41,7 @@ do canvas; as cópias locais estão em `design/assets/` (veja
 | 22 | `Laudo-Impresso.dc.html` | Laudo A4 |
 | 23 | `Preparo-Exame.dc.html` | Comprovante + preparo A4 |
 | 24 | `Documentos.dc.html` | Atestado, recibo e etiquetas A4 |
+| 25 | `Menus-Contexto.dc.html` | Clique direito: 8 situações com menus e submenus + regras |
 
 ## Rodadas
 

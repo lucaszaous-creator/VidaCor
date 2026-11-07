@@ -239,6 +239,14 @@
    "expand": "fill",
    "is_interactive": true,
    "x": 0
+  },
+  "Menus-Contexto.dc.html": {
+   "x": 0,
+   "y": 12123,
+   "w": 1440,
+   "h": 6700,
+   "title": "Clique direito: menus de contexto (8 situações + regras)",
+   "expand": "fill"
   }
  },
  "order": [
@@ -268,7 +276,8 @@
   "Telao.dc.html",
   "Laudo-Impresso.dc.html",
   "Preparo-Exame.dc.html",
-  "Documentos.dc.html"
+  "Documentos.dc.html",
+  "Menus-Contexto.dc.html"
  ],
  "notes": {
   "t1": {
@@ -345,6 +354,13 @@
    "fill": "teal",
    "size": "m",
    "text": "DX (nosso time)\n• Base: suíte Clinica (.NET 8 + PostgreSQL), com agenda, TISS, financeiro e prontuário prontos.\n• Imagens: Orthanc (PACS) + OHIF (visualizador) + DCMTK (worklist).\n• Um servidor local, backup externo, deploy automático.\n\nImagens ilustrativas: arquivos de exemplo públicos da biblioteca pydicom + modelo 3D renderizado aqui."
+  },
+  "t6": {
+   "x": 0,
+   "y": 11863,
+   "text": "Interações",
+   "kind": "title1",
+   "maxW": 1440
   }
  },
  "designSystems": []
