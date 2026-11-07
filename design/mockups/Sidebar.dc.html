@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Menu lateral — VidaCor</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/079f870cfe8a03ec36101026af3bba84">
+<link rel="stylesheet" href="/_blob/b7e42ddd1a1313743941687fc5dcf532">
 </head>
 <body>
 <x-dc>
@@ -29,12 +29,17 @@
     <input type="search" placeholder="Paciente, CPF, protocolo, placa">
     <span class="kbd">Ctrl K</span>
   </label>
+  <button class="nv" style="margin-top: 8px; background: #FFFFFF" aria-expanded="{{chatOpen}}" aria-label="Chat da equipe · 4 não lidas, 1 urgente" onClick="{{toggleChat}}">
+    <span class="ni k-pink"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"></path><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"></path></svg></span>
+    Chat da equipe
+    <span class="al" aria-hidden="true">4</span>
+  </button>
 
   <sc-for list="{{sections}}" as="sec" hint-placeholder-count="4">
-    <div class="sec">{{sec.title}}</div>
+    <div class="sec"><i class="{{sec.k}}"></i>{{sec.title}}</div>
     <sc-for list="{{sec.items}}" as="it" hint-placeholder-count="4">
       <a class="{{it.cls}}" href="{{it.href}}">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{it.d}}"></path></svg>
+        <span class="{{it.ni}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{it.d}}"></path></svg></span>
         {{it.label}}
         <sc-if value="{{it.hasCount}}" hint-placeholder-val="{{ false }}"><span class="ct">{{it.count}}</span></sc-if>
         <sc-if value="{{it.hasAlert}}" hint-placeholder-val="{{ false }}"><span class="al" aria-label="{{it.alertLabel}}">{{it.alert}}</span></sc-if>
@@ -79,11 +84,16 @@
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
     <span class="tip">Buscar · Ctrl K</span>
   </button>
+  <button class="nv-i" aria-expanded="{{chatOpen}}" aria-label="Chat da equipe · 4 não lidas, 1 urgente" onClick="{{toggleChat}}">
+    <span class="ni k-pink"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"></path><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"></path></svg></span>
+    <span class="al">4</span>
+    <span class="tip">Chat da equipe · 4 não lidas</span>
+  </button>
   <sc-for list="{{sections}}" as="sec" hint-placeholder-count="3">
     <div class="sb-sep" role="separator" aria-label="{{sec.title}}"></div>
     <sc-for list="{{sec.items}}" as="it" hint-placeholder-count="4">
       <a class="{{it.miniCls}}" href="{{it.href}}" aria-label="{{it.aria}}">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{it.d}}"></path></svg>
+        <span class="{{it.ni}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{it.d}}"></path></svg></span>
         <sc-if value="{{it.hasAlert}}" hint-placeholder-val="{{ false }}"><span class="al">{{it.alert}}</span></sc-if>
         <span class="tip">{{it.tip}}</span>
       </a>
@@ -95,6 +105,7 @@
     <span class="tip">{{userName}} · {{userRole}}</span>
   </a>
 </sc-if>
+<dc-import name="Chat-Popout" aberto="{{chatOpen}}" fechar="{{closeChat}}" hint-size="0px,0px"></dc-import>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"active":{"editor":"enum","options":["lastro","inicio","agenda","minha-agenda","etiquetas","recepcao","pacientes","atendimento","caixa","aparelhos","sala","laudos","fluxo","visualizador","faturamento","financeiro","estoque","comunicacao","telemedicina","estacionamento","indicadores","configuracoes"],"default":"inicio"},"userName":{"editor":"text","default":"Ana Souza"},"userRole":{"editor":"text","default":"Recepção"},"userInitials":{"editor":"text","default":"AS"},"$preview":{"width":280,"height":1400}}'>
@@ -103,7 +114,7 @@ class Component extends DCLogic {
     super(props);
     let mini = false;
     try { mini = window.localStorage.getItem('vc-menu') === 'mini'; } catch (e) {}
-    this.state = { mini };
+    this.state = { mini, chat: false };
   }
   toggleMenu() {
     const mini = !this.state.mini;
@@ -111,6 +122,10 @@ class Component extends DCLogic {
     this.setState({ mini });
   }
   renderVals() {
+    const K = { inicio:'navy', agenda:'blue', 'minha-agenda':'blue', recepcao:'teal', etiquetas:'amber', pacientes:'violet',
+      atendimento:'green', sala:'teal', aparelhos:'indigo', laudos:'violet', fluxo:'pink', visualizador:'navy',
+      caixa:'green', faturamento:'orange', financeiro:'green', estoque:'amber', comunicacao:'teal', lastro:'indigo',
+      indicadores:'pink', configuracoes:'gray', telemedicina:'blue', estacionamento:'gray' };
     const active = this.props.active ?? 'inicio';
     const I = {
       inicio:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',
@@ -137,11 +152,11 @@ class Component extends DCLogic {
       configuracoes:'M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1M15 4v4M9 10v4M17 16v4'
     };
     const it = (key, label, href, extra) => Object.assign({
-      key, label, href, d: I[key], cls: key === active ? 'nv on' : 'nv', miniCls: key === active ? 'nv-i on' : 'nv-i',
+      key, label, href, d: I[key], cls: key === active ? 'nv on' : 'nv', miniCls: key === active ? 'nv-i on' : 'nv-i', ni: 'ni k-' + (K[key] || 'gray'),
       hasCount: false, count: '', hasAlert: false, alert: '', alertLabel: ''
     }, extra || {});
     const sections = [
-      { title: 'Clínica', items: [
+      { title: 'Clínica', k: 'k-blue', items: [
         it('inicio','Início','Main.dc.html'),
         it('agenda','Agenda','Agenda.dc.html',{hasCount:true,count:'42'}),
         it('minha-agenda','Minha agenda (médico)','Agenda-Medico.dc.html',{hasCount:true,count:'14'}),
@@ -149,7 +164,7 @@ class Component extends DCLogic {
         it('etiquetas','Etiquetas e rastreio','Etiquetas.dc.html',{hasAlert:true,alert:'1',alertLabel:'1 divergência de etiqueta'}),
         it('pacientes','Pacientes','Paciente.dc.html')
       ]},
-      { title: 'Exames', items: [
+      { title: 'Exames', k: 'k-violet', items: [
         it('atendimento','Atendimento médico','Atendimento.dc.html',{hasCount:true,count:'8'}),
         it('sala','Sala de exame','Sala-Exame.dc.html',{hasCount:true,count:'5'}),
         it('aparelhos','Aparelhos (DICOM)','Aparelhos.dc.html',{hasAlert:true,alert:'1',alertLabel:'1 aparelho offline'}),
@@ -157,7 +172,7 @@ class Component extends DCLogic {
         it('fluxo','Fluxo de laudos','Fluxo-Laudos.dc.html'),
         it('visualizador','Visualizador de imagens','Visualizador.dc.html')
       ]},
-      { title: 'Gestão', items: [
+      { title: 'Gestão', k: 'k-orange', items: [
         it('caixa','Caixa (particular)','Caixa.dc.html'),
         it('faturamento','Faturamento TISS','Faturamento.dc.html',{hasAlert:true,alert:'3',alertLabel:'3 glosas com prazo'}),
         it('financeiro','Financeiro','Financeiro.dc.html'),
@@ -178,6 +193,9 @@ class Component extends DCLogic {
       mini, open: !mini,
       rootCls: mini ? 'sb sb-mini' : 'sb',
       toggle: () => this.toggleMenu(),
+      chatOpen: !!this.state.chat,
+      toggleChat: () => this.setState(st => ({ chat: !st.chat })),
+      closeChat: () => this.setState({ chat: false }),
       userName: this.props.userName ?? 'Ana Souza',
       userRole: this.props.userRole ?? 'Recepção',
       userInitials: this.props.userInitials ?? 'AS'

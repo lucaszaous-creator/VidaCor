@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Atendimento médico — VidaCor Imagem</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/079f870cfe8a03ec36101026af3bba84">
+<link rel="stylesheet" href="/_blob/b7e42ddd1a1313743941687fc5dcf532">
 </head>
 <body>
 <x-dc>
@@ -33,19 +33,9 @@ body{margin:0;background:#F2F3F6}
       <a class="btn btn-sm" href="Atendimento.dc.html">Próximo: Antônio C. Ribeiro</a>
     </div>
 
-    <section class="card" aria-label="Paciente em atendimento" style="padding: 20px 24px">
-      <div class="row wrap" style="gap: 16px">
-        <span class="av av-lg" style="background: #E8F2FB; color: #0C72B0">SC</span>
-        <div style="flex: 1 1 280px; min-width: 0">
-          <h1 style="font-size: 24px; font-weight: 650">Sônia Maria Castro</h1>
-          <div class="t15 mute" style="margin-top: 4px">03/02/1962 · 64 anos · feminino · Unimed</div>
-        </div>
-        <div class="row wrap" style="gap: 8px">
-          <span class="chip c-rose">Alergia: iodo</span>
-          <span class="chip c-amber">Hipertensa · losartana 50 mg</span>
-        </div>
-      </div>
-      <div class="row wrap t14 mute" style="gap: 22px; margin-top: 16px; padding-top: 14px; border-top: 1px solid #F1F3F6">
+    <dc-import name="Barra-Paciente" ini="SC" nome="Sônia Maria Castro" nasc="03/02/1962" idade="64 anos" sexo="feminino" convenio="Unimed" exame="Consulta cardiológica" local="Consultório 3" alergia="iodo" alertas="Hipertensa · losartana 50 mg" conferida="08:31" hint-size="100%,84px"></dc-import>
+    <section class="card" aria-label="Sinais vitais de hoje" style="padding: 14px 24px">
+      <div class="row wrap t14 mute" style="gap: 22px">
         <span>PA <b style="color: #0F172A">138/86</b></span>
         <span>FC <b style="color: #0F172A">72</b></span>
         <span>SpO₂ <b style="color: #0F172A">97%</b></span>

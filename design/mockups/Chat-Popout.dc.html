@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Chat da equipe (janela flutuante)</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/b7e42ddd1a1313743941687fc5dcf532">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div style="font-family: Inter, sans-serif; color: #0F172A">
+<sc-if value="{{aberto}}" hint-placeholder-val="{{ true }}">
+  <section class="cp" role="dialog" aria-label="Chat da equipe" onKeyDown="{{onKey}}">
+    <div class="cp-h">
+      <sc-if value="{{emConversa}}" hint-placeholder-val="{{ false }}">
+        <button class="cb" aria-label="Voltar para as conversas" onClick="{{voltar}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
+        <span class="avw"><span class="av av-sm" style="{{atual.avStyle}}">{{atual.ini}}</span><span class="{{atual.presCls}}"></span></span>
+        <div style="flex: 1; min-width: 0; line-height: 1.25"><div class="b t15" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{atual.nome}}</div><div class="t12" style="color: #C9D3EA">{{atual.status}}</div></div>
+      </sc-if>
+      <sc-if value="{{naLista}}" hint-placeholder-val="{{ true }}">
+        <div style="flex: 1; line-height: 1.25"><div class="b" style="font-size: 16px">Chat da equipe</div><div class="t12" style="color: #C9D3EA">{{resumo}}</div></div>
+      </sc-if>
+      <a class="cb" href="Chat-Interno.dc.html" aria-label="Abrir em janela inteira" title="Abrir em janela inteira"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-8 8M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></a>
+      <button class="cb" aria-label="Fechar o chat (Esc)" title="Fechar (Esc)" onClick="{{fechar}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+    </div>
+
+    <sc-if value="{{naLista}}" hint-placeholder-val="{{ true }}">
+      <div style="padding: 10px 12px; background: #fff; border-bottom: 1px solid #E8EAEF; display: flex; flex-direction: column; gap: 8px">
+        <label class="search" style="min-height: 40px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar conversa</span><input type="search" placeholder="Buscar pessoa, sala ou grupo" value="{{busca}}" onChange="{{onBusca}}"></label>
+        <div class="qr" role="radiogroup" aria-label="Filtro">
+          <sc-for list="{{filtros}}" as="f" hint-placeholder-count="3"><button class="{{f.cls}}" role="radio" aria-checked="{{f.sel}}" onClick="{{f.pick}}">{{f.label}}</button></sc-for>
+        </div>
+      </div>
+      <div class="cp-b" style="background: #fff">
+        <sc-for list="{{lista}}" as="c" hint-placeholder-count="5">
+          <button class="{{c.cls}}" onClick="{{c.abrir}}" aria-label="{{c.aria}}">
+            <span class="avw"><span class="av" style="{{c.avStyle}}">{{c.ini}}</span><span class="{{c.presCls}}"></span></span>
+            <span style="flex: 1; min-width: 0">
+              <span class="row" style="gap: 6px"><span class="nm">{{c.nome}}</span><sc-if value="{{c.urgente}}" hint-placeholder-val="{{ false }}"><span class="chip c-rose" style="height: 20px; font-size: 11px; padding: 0 7px">Urgente</span></sc-if><span class="t12 mute" style="margin-left: auto">{{c.hora}}</span></span>
+              <span class="row" style="gap: 8px; margin-top: 2px"><span class="pv" style="flex: 1">{{c.preview}}</span><sc-if value="{{c.temNaoLidas}}" hint-placeholder-val="{{ false }}"><span class="un">{{c.naoLidas}}</span></sc-if></span>
+            </span>
+          </button>
+        </sc-for>
+        <sc-if value="{{vazio}}" hint-placeholder-val="{{ false }}">
+          <div class="state"><span class="ni k-gray" style="width: 44px; height: 44px; border-radius: 14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></span><div class="b">Nada encontrado</div><div class="t13 mute">Tente outro nome ou limpe o filtro.</div></div>
+        </sc-if>
+      </div>
+      <div class="cmp"><button class="btn" style="width: 100%" onClick="{{novaUrgente}}"><span class="ni k-rose" style="width: 26px; height: 26px; border-radius: 8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 8v5M12 16.5h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg></span>Pedir ajuda urgente</button></div>
+    </sc-if>
+
+    <sc-if value="{{emConversa}}" hint-placeholder-val="{{ false }}">
+      <sc-if value="{{atual.temPaciente}}" hint-placeholder-val="{{ false }}">
+        <a href="Paciente.dc.html" class="row" style="gap: 10px; padding: 8px 14px; background: #F2F5FA; border-bottom: 1px solid #E8EAEF; color: #0F172A">
+          <span class="ni k-violet" style="width: 28px; height: 28px; border-radius: 8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg></span>
+          <span style="flex: 1; min-width: 0; line-height: 1.3"><b class="t13">{{atual.paciente}}</b><span class="t12 mute" style="display: block">{{atual.pacienteInfo}}</span></span>
+          <span class="t12 mute">Só quem atende</span>
+        </a>
+      </sc-if>
+      <div class="cp-b">
+        <div class="msgs" aria-live="polite">
+          <span class="day">Hoje</span>
+          <sc-for list="{{msgs}}" as="m" hint-placeholder-count="4">
+            <div class="{{m.cls}}">
+              <sc-if value="{{m.mostrarAutor}}" hint-placeholder-val="{{ true }}"><div class="who">{{m.autor}}</div></sc-if>
+              <sc-if value="{{m.urgente}}" hint-placeholder-val="{{ false }}"><div class="t12 b" style="color: #C2334D; margin-bottom: 2px">URGENTE</div></sc-if>
+              {{m.texto}}
+              <sc-if value="{{m.temPaciente}}" hint-placeholder-val="{{ false }}"><div class="pt-chip"><b>{{m.paciente}}</b></div></sc-if>
+              <div class="meta">{{m.meta}}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div class="cmp">
+        <div class="qr" aria-label="Respostas rápidas">
+          <sc-for list="{{rapidas}}" as="r" hint-placeholder-count="3"><button onClick="{{r.usar}}">{{r.label}}</button></sc-for>
+          <button class="{{urgCls}}" aria-pressed="{{urgente}}" onClick="{{toggleUrg}}" style="margin-left: auto">Urgente</button>
+        </div>
+        <div class="in">
+          <span class="sr" id="cp-msg-l">Mensagem</span>
+          <input aria-labelledby="cp-msg-l" placeholder="{{placeholder}}" value="{{rascunho}}" onChange="{{onTexto}}" onKeyDown="{{onEnter}}">
+          <button class="cb" aria-label="Anexar arquivo" style="width: 40px; height: 40px; border: 0; border-radius: 12px; background: transparent; color: #5B6474; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M21 11.5l-8.6 8.6a5 5 0 0 1-7-7l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l8-8"></path></svg></button>
+          <button class="send" aria-label="Enviar mensagem" onClick="{{enviar}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"></path></svg></button>
+        </div>
+        <div class="t12 mute">Enter envia · mensagens ficam registradas e não podem ser apagadas</div>
+      </div>
+    </sc-if>
+  </section>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"aberto":{"editor":"boolean","default":true},"fechar":{"editor":null},"$preview":{"width":440,"height":680}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      aberta: null, filtro: 'tudo', busca: '', rascunho: '', urgente: false,
+      convs: [
+        { id: 's6', nome: 'Sala 6 · Tomografia', ini: 'S6', k: 'teal', pres: 'on', status: '3 pessoas · Dra. Cecília, Bruno (téc.), Ana', grupo: true, urgente: true, naoLidas: 2,
+          paciente: 'Lúcia Fernandes Prado · 02/07/1959', pacienteInfo: 'TC de crânio com contraste · Sala 6',
+          msgs: [
+            { de: 'Bruno (técnico)', k: 'teal', t: 'Paciente chegou para a TC com contraste. Creatinina de ontem 1,6 e TFG 42.', h: '09:02' },
+            { de: 'Bruno (técnico)', k: 'teal', t: 'Preciso da avaliação do médico antes de injetar. Exame bloqueado na triagem.', h: '09:03', urg: true, pac: 'Lúcia F. Prado · 02/07/1959' }
+          ] },
+        { id: 'ra', nome: 'Dra. Renata Alves', ini: 'RA', k: 'violet', pres: 'busy', status: 'Em exame · Sala 2 · responde em seguida', naoLidas: 1,
+          msgs: [
+            { de: 'Dra. Renata Alves', k: 'violet', t: 'Consegue encaixar uma obstétrica às 10h40? A paciente está com sangramento leve.', h: '08:57' }
+          ] },
+        { id: 'rec', nome: 'Recepção', ini: 'RE', k: 'blue', pres: 'on', status: '5 pessoas', grupo: true, naoLidas: 1,
+          msgs: [
+            { de: 'Carla (guichê 2)', k: 'blue', t: 'A impressora de etiquetas do guichê 2 parou. Estou imprimindo pelo guichê 1.', h: '08:22' },
+            { de: 'Você', me: true, t: 'Ok, já avisei a TI.', h: '08:24', lida: true },
+            { de: 'Carla (guichê 2)', k: 'blue', t: 'Voltou a funcionar, obrigada!', h: '08:41' }
+          ] },
+        { id: 'fat', nome: 'Faturamento', ini: 'FA', k: 'orange', pres: 'on', status: '2 pessoas', grupo: true, naoLidas: 0,
+          msgs: [
+            { de: 'Marcos (faturamento)', k: 'orange', t: 'A guia da Unimed do Sr. Antônio foi autorizada, já está no agendamento.', h: '08:10', pac: 'Antônio C. Ribeiro · 15/06/1954' },
+            { de: 'Você', me: true, t: 'Perfeito, obrigada.', h: '08:12', lida: true }
+          ] },
+        { id: 'pm', nome: 'Dr. Paulo Medeiros', ini: 'PM', k: 'blue', pres: 'off', status: 'Ausente desde 08:40', naoLidas: 0,
+          msgs: [
+            { de: 'Dr. Paulo Medeiros', k: 'blue', t: 'Pode liberar o laudo da Sra. Maria Helena no portal, já conversei com ela.', h: '07:58' },
+            { de: 'Você', me: true, t: 'Liberado.', h: '08:01', lida: true }
+          ] }
+      ]
+    };
+  }
+  conv(id) { return this.state.convs.find(c => c.id === id); }
+  abrir(id) { this.setState(s => ({ aberta: id, rascunho: '', urgente: false, convs: s.convs.map(c => c.id === id ? Object.assign({}, c, { naoLidas: 0 }) : c) })); }
+  enviar(texto) {
+    const t = (texto ?? this.state.rascunho).trim();
+    if (!t || !this.state.aberta) return;
+    const h = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    const id = this.state.aberta, urg = this.state.urgente, n = Date.now();
+    this.setState(s => ({ rascunho: '', urgente: false, convs: s.convs.map(c => c.id === id ? Object.assign({}, c, { urgente: c.urgente || urg, msgs: c.msgs.concat([{ de: 'Você', me: true, t, h, urg, n }]) }) : c) }));
+    setTimeout(() => this.setState(s => ({ convs: s.convs.map(c => c.id === id ? Object.assign({}, c, { msgs: c.msgs.map(m => m.n === n ? Object.assign({}, m, { lida: true }) : m) }) : c) })), 1400);
+  }
+  renderVals() {
+    const st = this.state;
+    const aberto = this.props.aberto ?? true;
+    const fechar = this.props.fechar || (() => {});
+    const pres = p => 'pres ' + p;
+    const all = st.convs.map(c => {
+      const last = c.msgs[c.msgs.length - 1];
+      return {
+        id: c.id, nome: c.nome, ini: c.ini, urgente: !!c.urgente && c.naoLidas > 0,
+        avStyle: 'background: var(--kb); color: var(--k)', presCls: pres(c.pres),
+        cls: 'cv k-' + c.k + (c.urgente && c.naoLidas ? ' urg' : ''),
+        hora: last.h, preview: (last.me ? 'Você: ' : (c.grupo ? last.de.split(' ')[0] + ': ' : '')) + last.t,
+        naoLidas: String(c.naoLidas), temNaoLidas: c.naoLidas > 0,
+        aria: c.nome + (c.naoLidas ? ', ' + c.naoLidas + ' não lidas' : '') + (c.urgente && c.naoLidas ? ', urgente' : ''),
+        abrir: () => this.abrir(c.id)
+      };
+    });
+    const q = st.busca.toLowerCase();
+    const lista = all.filter(c => (!q || c.nome.toLowerCase().includes(q)) &&
+      (st.filtro === 'tudo' || (st.filtro === 'nl' && c.temNaoLidas) || (st.filtro === 'urg' && c.urgente) || (st.filtro === 'grp' && this.conv(c.id).grupo)));
+    const F = [['tudo', 'Tudo'], ['nl', 'Não lidas'], ['urg', 'Urgentes'], ['grp', 'Grupos']];
+    const tot = st.convs.reduce((a, c) => a + c.naoLidas, 0);
+    const c = st.aberta ? this.conv(st.aberta) : null;
+    const msgs = c ? c.msgs.map((m, i) => ({
+      cls: 'msg' + (m.me ? ' me' : '') + (m.urg && !m.me ? ' urg' : '') + (m.k ? ' k-' + m.k : ''),
+      mostrarAutor: !m.me && !!c.grupo, autor: m.de, texto: m.t, urgente: !!m.urg,
+      temPaciente: !!m.pac, paciente: m.pac || '',
+      meta: m.h + (m.me ? (m.lida ? ' · lida' : ' · enviada') : '')
+    })) : [];
+    const rapidas = (c && c.id === 's6' ? ['Estou indo', 'Pode suspender o contraste', 'Ligue no ramal 214'] : ['Ok', 'Já vejo', 'Pode encaixar']).map(r => ({ label: r, usar: () => this.enviar(r) }));
+    return {
+      aberto, fechar,
+      naLista: !c, emConversa: !!c,
+      resumo: tot ? tot + ' não lidas · 1 urgente' : 'Tudo lido',
+      busca: st.busca, onBusca: e => this.setState({ busca: e.target.value }),
+      filtros: F.map(([k, l]) => ({ label: l, sel: st.filtro === k, cls: st.filtro === k ? 'on' : '', pick: () => this.setState({ filtro: k }) })),
+      lista, vazio: lista.length === 0,
+      novaUrgente: () => { this.abrir('s6'); this.setState({ urgente: true }); },
+      atual: c ? { nome: c.nome, ini: c.ini, avStyle: 'background: #fff; color: #0A1A4A', presCls: pres(c.pres), status: c.status,
+        temPaciente: !!c.paciente, paciente: c.paciente || '', pacienteInfo: c.pacienteInfo || '' } : { nome: '', ini: '', avStyle: '', presCls: '', status: '', temPaciente: false, paciente: '', pacienteInfo: '' },
+      msgs, rapidas,
+      voltar: () => this.setState({ aberta: null }),
+      rascunho: st.rascunho, onTexto: e => this.setState({ rascunho: e.target.value }),
+      onEnter: e => { if (e.key === 'Enter') { e.preventDefault(); this.enviar(); } },
+      onKey: e => { if (e.key === 'Escape') { e.stopPropagation(); fechar(); } },
+      enviar: () => this.enviar(),
+      urgente: st.urgente, urgCls: st.urgente ? 'on' : '', toggleUrg: () => this.setState(s => ({ urgente: !s.urgente })),
+      placeholder: st.urgente ? 'Mensagem urgente (avisa com som e no topo)' : 'Escreva uma mensagem'
+    };
+  }
+}
+</script>
+</body>
+</html>

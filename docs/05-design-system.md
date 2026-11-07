@@ -44,7 +44,7 @@ e `tabbar` (app).
 .half` (colunas que quebram) · `.g2/.g3/.g4` (grades com largura mínima) ·
 `.tb` ocupa 100% e quebra o texto nas células; `.nw` só em valores curtos (data, hora, valor).
 
-Folha de estilos dos mockups: `design/vc5.css`. Verificação: `node tools/verificacao/sem-rolagem-lateral.js <pasta-dos-mockups> design/vc5.css 1000`.
+Folha de estilos dos mockups: `design/vc7.css`. Verificação: `node tools/verificacao/sem-rolagem-lateral.js <pasta-dos-mockups> design/vc7.css 1000`.
 
 **Sem rolagem lateral (regra):** em telas de 1280 px ou mais (menu de 280 px + 1000 px de conteúdo), **nenhuma tela obriga a arrastar para o lado**. Tabelas cabem na largura: menos colunas (junte atributos em uma célula), texto quebrando, detalhe abaixo da tabela em vez de coluna lateral. Proibido `min-width` fixo em tabela e quadro. Exceções: telão (tamanho fixo de TV) e o visualizador de imagens. Conferido por teste automático que mede a largura de cada tela.
 
@@ -52,6 +52,21 @@ O **menu lateral** é um componente único (`design/mockups/Sidebar.dc.html`)
 importado por todas as telas, com o item ativo por parâmetro.
 
 **Menu lateral recolhível:** botão no topo do menu alterna entre completo (280 px) e só ícones (88 px). Recolhido, cada ícone tem dica com o nome e o contador, alertas continuam visíveis como selo, e os grupos viram separadores. A escolha fica salva por usuário e vale em todas as telas. Botão com `aria-expanded` e rótulo; foco visível; sem animação quando o sistema pede movimento reduzido.
+
+**Cores do menu:** cada módulo tem um ícone em quadrado colorido (`.ni` + `k-<cor>`), sempre a mesma cor em todo o sistema (agenda azul, recepção verde-água, laudos violeta, faturamento laranja…). O item ativo fica com a cor cheia e o ícone branco. Cor nunca é a única pista: o nome sempre aparece (ou na dica, com o menu recolhido).
+
+**Chat da equipe:** abre do menu como janela flutuante (`Chat-Popout`) por cima de qualquer tela, sem perder o que se estava fazendo; Esc fecha; botão leva à página inteira (`Chat-Interno`). Regras:
+- assunto de paciente é **ligado ao paciente** (nome + nascimento) e só quem tem vínculo de cuidado vê (docs/18);
+- mensagem urgente toca som, fica no topo e pede confirmação de leitura;
+- nada é apagado: edição mostra "editada" e guarda a anterior (docs/21);
+- sem resultado de exame ou diagnóstico em grupo geral; arquivos ficam no servidor da clínica;
+- substitui WhatsApp pessoal para assuntos internos.
+
+**Barra do paciente em foco** (`Barra-Paciente`): fixa no topo de toda tela clínica (sala, atendimento, laudo, visualizador): nome, **nascimento em destaque**, idade, sexo, convênio, alergia em vermelho cheio, alertas, exame e local, pulseira conferida. "Trocar paciente" lista só os pacientes do dia daquela sala e salva o rascunho antes de trocar.
+
+**Estados de tela** (`Estados`): todo bloco de dados tem desenhados vazio, carregando (esqueleto), sem conexão, erro, sem permissão, salvamento automático e conflito, feito com desfazer, ato irreversível, campo com erro, busca sem resultado, avisos em três níveis e central de avisos.
+
+**Protótipo de fluxo** (`Fluxo-Completo`): agendar convênio com guia → check-in com dois identificadores → sala com bipe da pulseira (com simulação de pulseira errada) → laudo com assinatura → portal, com o lastro sendo montado ao lado. Usado no teste de usabilidade com a equipe (docs/16).
 
 ## Regras de UX (aprendidas com o cliente)
 

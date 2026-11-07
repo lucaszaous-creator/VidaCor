@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Estados das telas</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/b7e42ddd1a1313743941687fc5dcf532">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div style="font-family: Inter, sans-serif; color: #0F172A; background: #F2F3F6; padding: 40px 40px 56px; display: flex; flex-direction: column; gap: 24px">
+  <header style="max-width: 980px">
+    <div class="lbl">Padrão de interface</div>
+    <h1 style="margin: 6px 0 0; font-size: 32px; font-weight: 650; letter-spacing: -.01em">Estados das telas: além do caminho feliz</h1>
+    <p class="t15 mute" style="margin: 8px 0 0; line-height: 1.55">Toda tela e todo bloco de dados tem estes estados desenhados. A regra das mensagens: <b style="color: #0F172A">o que aconteceu, o que o sistema já fez e o que a pessoa deve fazer</b>. Nada some, nada mente, o atendimento não para.</p>
+  </header>
+
+  <div class="grid g3" style="gap: 16px">
+    <section class="card" aria-labelledby="e1">
+      <div class="row" style="gap: 10px"><span class="ni k-gray">1</span><h2 id="e1" class="t15 b" style="margin: 0">Vazio</h2><span class="t12 mute" style="margin-left: auto">Recepção · esteira</span></div>
+      <div class="state" style="border: 1px dashed #D9DDE5; border-radius: 16px; margin-top: 14px">
+        <span class="ni k-teal" style="width: 52px; height: 52px; border-radius: 16px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span>
+        <div class="b">Ninguém aguardando agora</div>
+        <div class="t13 mute">Próximo agendado: 10:40 · Juliana S. Rocha (USG morfológica)</div>
+        <a class="btn btn-sm" href="Agenda.dc.html">Ver agenda</a>
+      </div>
+      <p class="t13 mute" style="margin: 12px 0 0">Diz por que está vazio e oferece o próximo passo. Nunca uma tabela em branco.</p>
+    </section>
+
+    <section class="card" aria-labelledby="e2">
+      <div class="row" style="gap: 10px"><span class="ni k-blue">2</span><h2 id="e2" class="t15 b" style="margin: 0">Carregando</h2><span class="t12 mute" style="margin-left: auto">Agenda</span></div>
+      <div class="col" style="gap: 10px; margin-top: 14px" role="status" aria-label="Carregando a agenda">
+        <div class="row" style="gap: 10px"><div class="sk" style="width: 40px; height: 40px; border-radius: 50%"></div><div class="col" style="gap: 6px; flex: 1"><div class="sk" style="height: 12px; width: 60%"></div><div class="sk" style="height: 10px; width: 40%"></div></div></div>
+        <div class="row" style="gap: 10px"><div class="sk" style="width: 40px; height: 40px; border-radius: 50%"></div><div class="col" style="gap: 6px; flex: 1"><div class="sk" style="height: 12px; width: 70%"></div><div class="sk" style="height: 10px; width: 35%"></div></div></div>
+        <div class="row" style="gap: 10px"><div class="sk" style="width: 40px; height: 40px; border-radius: 50%"></div><div class="col" style="gap: 6px; flex: 1"><div class="sk" style="height: 12px; width: 55%"></div><div class="sk" style="height: 10px; width: 45%"></div></div></div>
+      </div>
+      <p class="t13 mute" style="margin: 12px 0 0">Esqueleto com o formato do conteúdo; a parte já carregada aparece na hora. Passou de 5 s: "Está demorando mais que o normal" e o que fazer.</p>
+    </section>
+
+    <section class="card" aria-labelledby="e3">
+      <div class="row" style="gap: 10px"><span class="ni k-amber">3</span><h2 id="e3" class="t15 b" style="margin: 0">Sem conexão</h2><span class="t12 mute" style="margin-left: auto">Toda a aplicação</span></div>
+      <div class="banner off" role="status" style="margin-top: 14px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.6a10 10 0 0 1 14 0M8.5 16.4a5 5 0 0 1 7 0M12 20h.01M3 3l18 18"></path></svg>
+        <div class="t14" style="line-height: 1.5"><b>Sem conexão com o servidor desde 10:12.</b> Você pode continuar: check-in, senhas e etiquetas funcionam neste computador. <b>3 ações</b> aguardam envio e sobem sozinhas quando voltar.</div>
+      </div>
+      <div class="li" style="border: 0"><span class="chip c-amber">Aguardando</span><div class="t14" style="flex: 1">Check-in · Patrícia G. Lopes · 10:14</div></div>
+      <p class="t13 mute" style="margin: 4px 0 0">O que não funciona sem servidor (laudo, imagens, cobrança) aparece apagado com o motivo. Contingência longa: docs/22, E6.</p>
+    </section>
+
+    <section class="card" aria-labelledby="e4">
+      <div class="row" style="gap: 10px"><span class="ni k-rose">4</span><h2 id="e4" class="t15 b" style="margin: 0">Erro</h2><span class="t12 mute" style="margin-left: auto">Caixa · nota fiscal</span></div>
+      <div class="banner err" role="alert" style="margin-top: 14px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="flex: none; margin-top: 2px"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6M12 16.5h.01"></path></svg>
+        <div class="t14" style="line-height: 1.5"><b>A prefeitura não respondeu ao emitir a NFS-e.</b> O pagamento de R$ 380,00 está registrado e a nota entrou na fila: tentamos de novo a cada 5 min. Nada a fazer agora; se não sair em 1 h, o financeiro é avisado.</div>
+      </div>
+      <div class="row" style="gap: 8px; margin-top: 12px"><button class="btn btn-sm">Tentar agora</button><button class="btn btn-sm">Ver detalhes</button><span class="t12 mute" style="margin-left: auto">Código ERR-NFS-504 · 10:21</span></div>
+    </section>
+
+    <section class="card" aria-labelledby="e5">
+      <div class="row" style="gap: 10px"><span class="ni k-violet">5</span><h2 id="e5" class="t15 b" style="margin: 0">Sem permissão</h2><span class="t12 mute" style="margin-left: auto">Laudo de outro médico</span></div>
+      <div class="state" style="border: 1px dashed #D9DDE5; border-radius: 16px; margin-top: 14px; padding: 24px 16px">
+        <span class="ni k-violet" style="width: 52px; height: 52px; border-radius: 16px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg></span>
+        <div class="b">Você não atende este paciente hoje</div>
+        <div class="t13 mute" style="max-width: 320px">Dado clínico só com vínculo de cuidado. Em emergência, peça acesso com justificativa: fica registrado e é revisado.</div>
+        <div class="row" style="gap: 8px"><button class="btn btn-sm">Pedir acesso de emergência</button><button class="btn btn-sm">Pedir ao responsável</button></div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="e6">
+      <div class="row" style="gap: 10px"><span class="ni k-green">6</span><h2 id="e6" class="t15 b" style="margin: 0">Salvamento automático</h2><span class="t12 mute" style="margin-left: auto">Laudo · evolução</span></div>
+      <div class="row" style="gap: 8px; margin-top: 14px"><span class="chip c-green"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Salvo há 3 s</span><span class="chip">Salvando…</span><span class="chip c-amber">Não salvo · tentando de novo</span></div>
+      <div class="banner info" style="margin-top: 12px"><div class="t14" style="line-height: 1.5"><b>A Dra. Renata também editou este laudo há 1 min.</b> As duas versões estão guardadas; nada foi sobrescrito.</div></div>
+      <div class="row" style="gap: 8px; margin-top: 10px"><button class="btn btn-sm">Ver diferenças</button><button class="btn btn-sm">Ficar com a minha</button></div>
+    </section>
+
+    <section class="card" aria-labelledby="e7">
+      <div class="row" style="gap: 10px"><span class="ni k-navy">7</span><h2 id="e7" class="t15 b" style="margin: 0">Feito, com desfazer</h2><span class="t12 mute" style="margin-left: auto">Ações reversíveis</span></div>
+      <div class="col" style="gap: 8px; margin-top: 14px">
+        <div class="toast" role="status"><span style="flex: 1">Juliana S. Rocha foi para a Sala 2</span><button>Desfazer</button></div>
+        <div class="toast" role="status"><span style="flex: 1">3 etiquetas enviadas para o Guichê 1</span><button>Ver fila</button></div>
+      </div>
+      <p class="t13 mute" style="margin: 12px 0 0">Ação reversível não pede confirmação: faz e oferece desfazer por 10 s. Confirmação fica só para o irreversível (item 8).</p>
+    </section>
+
+    <section class="card" aria-labelledby="e8">
+      <div class="row" style="gap: 10px"><span class="ni k-rose">8</span><h2 id="e8" class="t15 b" style="margin: 0">Ato irreversível</h2><span class="t12 mute" style="margin-left: auto">Assinar laudo</span></div>
+      <div role="dialog" aria-label="Assinar laudo" style="margin-top: 14px; border-radius: 18px; box-shadow: 0 16px 40px rgba(15,23,42,.14); padding: 18px; background: #fff">
+        <div class="t15 b">Assinar o laudo de Sônia Maria Castro?</div>
+        <div class="t13 mute" style="margin-top: 4px">Nasc. 03/02/1962 · Ecocardiograma · 06/11/2026</div>
+        <div class="t14" style="margin-top: 10px; line-height: 1.5">Depois de assinado, só é possível corrigir com nova versão e motivo.</div>
+        <label class="t13 b" style="display: block; margin-top: 12px" for="pin">PIN do certificado</label>
+        <input id="pin" type="password" style="margin-top: 6px; width: 100%; height: 44px; border: 1px solid #D9DDE5; border-radius: 12px; padding: 0 12px; font: inherit; box-sizing: border-box">
+        <div class="row" style="gap: 8px; margin-top: 12px; justify-content: flex-end"><button class="btn btn-sm">Voltar</button><button class="btn btn-sm btn-p">Assinar laudo</button></div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="e9">
+      <div class="row" style="gap: 10px"><span class="ni k-orange">9</span><h2 id="e9" class="t15 b" style="margin: 0">Campo com erro</h2><span class="t12 mute" style="margin-left: auto">Cadastro</span></div>
+      <label class="t13 b" style="display: block; margin-top: 14px" for="cpf">CPF</label>
+      <input id="cpf" value="123.456.789-00" aria-invalid="true" aria-describedby="cpf-e" style="margin-top: 6px; width: 100%; height: 44px; border: 2px solid #C2334D; border-radius: 12px; padding: 0 12px; font: inherit; box-sizing: border-box">
+      <div id="cpf-e" class="t13" style="color: #C2334D; margin-top: 6px">CPF inválido: confira os dois últimos dígitos.</div>
+      <label class="t13 b" style="display: block; margin-top: 12px" for="cel">Celular (WhatsApp)</label>
+      <input id="cel" value="(48) 99812-4410" style="margin-top: 6px; width: 100%; height: 44px; border: 1px solid #1F7A4D; border-radius: 12px; padding: 0 12px; font: inherit; box-sizing: border-box">
+      <p class="t13 mute" style="margin: 10px 0 0">Formato aplicado ao digitar, erro mostrado ao sair do campo, nunca só no final.</p>
+    </section>
+
+    <section class="card" aria-labelledby="e10">
+      <div class="row" style="gap: 10px"><span class="ni k-indigo">10</span><h2 id="e10" class="t15 b" style="margin: 0">Busca sem resultado</h2><span class="t12 mute" style="margin-left: auto">Ctrl K</span></div>
+      <label class="search" style="margin-top: 14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar</span><input value="Marai Helena"></label>
+      <div class="t14" style="margin-top: 12px">Nenhum paciente com <b>"Marai Helena"</b>.</div>
+      <div class="li" style="border: 0; padding: 8px 0"><span class="av av-sm" style="background: #E9ECF1; color: #334155">MH</span><div style="flex: 1"><div class="t14">Você quis dizer <b>Maria Helena Duarte</b>?</div><div class="s">12/03/1968</div></div></div>
+      <button class="btn btn-sm">Cadastrar novo paciente</button>
+    </section>
+
+    <section class="card" aria-labelledby="e11">
+      <div class="row" style="gap: 10px"><span class="ni k-pink">11</span><h2 id="e11" class="t15 b" style="margin: 0">Avisos em três níveis</h2></div>
+      <div class="col" style="gap: 8px; margin-top: 14px">
+        <div class="banner info"><div class="t14"><b>Informação:</b> o Dr. Paulo volta às 13h.</div></div>
+        <div class="banner off"><div class="t14"><b>Atenção:</b> guia vence amanhã. Agende até 18h ou peça nova senha.</div></div>
+        <div class="banner err"><div class="t14"><b>Bloqueio:</b> pulseira de outro paciente. Exame parado até conferir.</div></div>
+      </div>
+      <p class="t13 mute" style="margin: 10px 0 0">Bloqueio só quando há risco ao paciente; o resto informa sem interromper.</p>
+    </section>
+
+    <section class="card" aria-labelledby="e12">
+      <div class="row" style="gap: 10px"><span class="ni k-teal">12</span><h2 id="e12" class="t15 b" style="margin: 0">Central de avisos</h2><span class="t12 mute" style="margin-left: auto">Sino</span></div>
+      <div class="col" style="gap: 0; margin-top: 8px">
+        <div class="li"><span class="ni k-rose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 8v5M12 16.5h.01"></path><circle cx="12" cy="12" r="9"></circle></svg></span><div style="flex: 1; min-width: 0"><div class="t14 b">Triagem aguarda médico · Sala 6</div><div class="s">Lúcia F. Prado · há 2 min</div></div></div>
+        <div class="li"><span class="ni k-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t14">3 laudos vencem em 2 h</div><div class="s">Fluxo de laudos · há 10 min</div></div></div>
+        <div class="li" style="border: 0"><span class="ni k-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t14">Guia Unimed autorizada</div><div class="s">Antônio C. Ribeiro · há 40 min</div></div></div>
+      </div>
+    </section>
+  </div>
+  <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

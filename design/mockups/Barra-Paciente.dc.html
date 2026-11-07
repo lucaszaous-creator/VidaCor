@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Barra do paciente em foco</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/b7e42ddd1a1313743941687fc5dcf532">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div style="font-family: Inter, sans-serif; color: #0F172A; position: relative">
+  <section class="pbar" aria-label="Paciente em foco: {{nome}}, nascido em {{nasc}}">
+    <div class="id" style="flex: 1 1 320px">
+      <span class="av" style="width: 48px; height: 48px; font-size: 15px; background: #E3F0FA; color: #0C72B0">{{ini}}</span>
+      <div style="min-width: 0; line-height: 1.3">
+        <div class="nm">{{nome}}</div>
+        <div class="dn"><b>{{nasc}}</b> · {{idade}} · {{sexo}} · {{convenio}}</div>
+      </div>
+    </div>
+    <div class="row wrap" style="gap: 8px; flex: 1 1 360px">
+      <sc-if value="{{temAlergia}}" hint-placeholder-val="{{ true }}"><span class="al-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 8v5M12 16.5h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg>Alergia: {{alergia}}</span></sc-if>
+      <sc-for list="{{alertas}}" as="a" hint-placeholder-count="1"><span class="chip c-amber">{{a}}</span></sc-for>
+      <span class="chip c-blue">{{exame}} · {{local}}</span>
+      <sc-if value="{{conferida}}" hint-placeholder-val="{{ true }}"><span class="chip c-green"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Pulseira conferida {{conferidaHora}}</span></sc-if>
+      <sc-if value="{{naoConferida}}" hint-placeholder-val="{{ false }}"><span class="chip c-rose">Pulseira não bipada</span></sc-if>
+    </div>
+    <div class="row" style="gap: 8px">
+      <button class="btn btn-sm" aria-expanded="{{menuAria}}" aria-haspopup="listbox" onClick="{{toggle}}">Trocar paciente
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+      <a class="icon-btn" href="Paciente.dc.html" aria-label="Abrir ficha completa de {{nome}}" title="Ficha completa"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 4h6v6M20 4l-8 8M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></a>
+    </div>
+  </section>
+  <sc-if value="{{menuAberto}}" hint-placeholder-val="{{ false }}">
+    <div role="listbox" aria-label="Pacientes de hoje nesta sala" style="position: absolute; right: 16px; top: calc(100% + 8px); width: 380px; max-width: calc(100% - 32px); background: #fff; border-radius: 16px; box-shadow: 0 16px 40px rgba(15,23,42,.18); padding: 8px; z-index: 40">
+      <div class="lbl" style="padding: 8px 10px">Pacientes de hoje nesta sala</div>
+      <sc-for list="{{outros}}" as="p" hint-placeholder-count="3">
+        <button role="option" aria-selected="{{p.sel}}" onClick="{{p.pick}}" style="display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px; border: 0; border-radius: 12px; background: {{p.bg}}; text-align: left; font: inherit; cursor: pointer">
+          <span class="av av-sm" style="background: #E9ECF1; color: #334155">{{p.ini}}</span>
+          <span style="flex: 1; min-width: 0; line-height: 1.3"><b class="t14">{{p.nome}}</b><span class="t13 mute" style="display: block">{{p.nasc}} · {{p.exame}}</span></span>
+          <span class="t12 mute">{{p.hora}}</span>
+        </button>
+      </sc-for>
+      <div class="t12 mute" style="padding: 8px 10px 4px">Ao trocar, a tela inteira passa para o outro paciente e o rascunho atual fica salvo.</div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"ini":{"editor":"text","default":"SC"},"nome":{"editor":"text","default":"Sônia Maria Castro"},"nasc":{"editor":"text","default":"03/02/1962"},"idade":{"editor":"text","default":"64 anos"},"sexo":{"editor":"text","default":"feminino"},"convenio":{"editor":"text","default":"Unimed"},"exame":{"editor":"text","default":"Ecocardiograma"},"local":{"editor":"text","default":"Sala 1"},"alergia":{"editor":"text","default":"iodo"},"alertas":{"editor":"text","default":"Hipertensa · losartana"},"conferida":{"editor":"text","default":"08:31"},"$preview":{"width":1100,"height":120}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { aberto: false, troca: null }; }
+  renderVals() {
+    const p = this.props, t = this.state.troca;
+    const base = { ini: p.ini ?? 'SC', nome: p.nome ?? 'Sônia Maria Castro', nasc: p.nasc ?? '03/02/1962', idade: p.idade ?? '64 anos', sexo: p.sexo ?? 'feminino',
+      convenio: p.convenio ?? 'Unimed', exame: p.exame ?? 'Ecocardiograma', local: p.local ?? 'Sala 1', alergia: p.alergia ?? 'iodo',
+      alertas: p.alertas ?? 'Hipertensa · losartana', conferida: p.conferida ?? '08:31' };
+    const outros = [
+      { ini: 'AR', nome: 'Antônio Carlos Ribeiro', nasc: '15/06/1954', idade: '72 anos', sexo: 'masculino', convenio: 'Unimed', exame: 'Eco + Doppler de carótidas', alergia: '', alertas: 'Marca-passo', conferida: '', hora: '09:00' },
+      { ini: 'JR', nome: 'Juliana Sampaio Rocha', nasc: '12/04/1993', idade: '33 anos', sexo: 'feminino', convenio: 'Bradesco Saúde', exame: 'USG morfológica', alergia: '', alertas: 'Gestante · 22 semanas', conferida: '', hora: '09:30' },
+      { ini: base.ini, nome: base.nome, nasc: base.nasc, idade: base.idade, sexo: base.sexo, convenio: base.convenio, exame: base.exame, alergia: base.alergia, alertas: base.alertas, conferida: base.conferida, hora: 'agora' }
+    ];
+    const cur = t ? Object.assign({}, base, t) : base;
+    const conf = !!cur.conferida;
+    return {
+      ini: cur.ini, nome: cur.nome, nasc: cur.nasc, idade: cur.idade, sexo: cur.sexo, convenio: cur.convenio, exame: cur.exame, local: base.local,
+      alergia: cur.alergia, temAlergia: !!cur.alergia,
+      alertas: cur.alertas ? String(cur.alertas).split(',').map(s => s.trim()).filter(Boolean) : [],
+      conferida: conf, naoConferida: !conf, conferidaHora: cur.conferida,
+      menuAberto: !!this.state.aberto, menuAria: this.state.aberto ? 'true' : 'false',
+      toggle: () => this.setState(s => ({ aberto: !s.aberto })),
+      outros: outros.map(o => ({ ini: o.ini, nome: o.nome, nasc: o.nasc, exame: o.exame, hora: o.hora,
+        sel: o.nome === cur.nome ? 'true' : 'false', bg: o.nome === cur.nome ? '#EEF4FB' : 'transparent',
+        pick: () => this.setState({ aberto: false, troca: o.nome === base.nome ? null : o }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>
