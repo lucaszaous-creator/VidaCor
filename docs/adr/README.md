@@ -18,5 +18,6 @@
 | [0013](0013-distribuicao-instaladores.md) | Distribuição por instaladores e atualização pelo servidor local | Proposto |
 | [0014](0014-garantias-no-servidor-e-no-banco.md) | As seis garantias: servidor decide, banco protege, repetição não duplica | Proposto |
 | [0015](0015-protecao-do-usuario.md) | Proteção do usuário: a cerca e a rede de segurança | Proposto |
+| [0016](0016-seguranca-por-classe-de-ataque.md) | Segurança por classe de ataque (Cloudflare security-audit) | Proposto |
 
 Visão geral em [11 · Arquitetura e infraestrutura](../11-arquitetura-e-infraestrutura.md).

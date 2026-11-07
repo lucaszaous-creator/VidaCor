@@ -21,6 +21,7 @@ para DICOM) e incluir o **estacionamento com leitura de placa**.
 | Regras de arquitetura e engenharia | 📝 Proposta — [docs/14](docs/14-regras-de-arquitetura-e-engenharia.md) |
 | Padrão de qualidade (seis garantias + playbooks) | 📝 Proposta — [CLAUDE.md](CLAUDE.md) · [docs/15](docs/15-padrao-de-qualidade.md) · [playbooks](docs/playbooks/) |
 | Proteção do usuário (processo + interface) | ✅ Regra — [docs/16](docs/16-protecao-do-usuario.md) · [modelos](docs/modelos/) |
+| Segurança por classe de ataque (Cloudflare) | ✅ Regra — [docs/17](docs/17-seguranca-por-classe-de-ataque.md) · `/security-audit` |
 | Desenvolvimento | ⏳ Próximo passo — [docs/09](docs/09-proximos-passos.md) |
 
 **Mockup ao vivo:** https://claude.ai/artifact/NT2bm1UnVPJe9NGGs3HTii
@@ -38,6 +39,8 @@ ressonância, mamografia e medicina nuclear.
 README.md                    este arquivo
 CLAUDE.md / AGENTS.md        regras obrigatórias (as seis garantias) para pessoas e IA
 .claude/commands/            playbooks como comandos (/auditoria, /idempotencia…)
+.claude/skills/security-audit/  skill de auditoria da Cloudflare (MIT)
+THIRD_PARTY_NOTICES.md       licenças de terceiros
 docs/
   01-historico-da-conversa.md   tudo o que foi discutido e decidido até agora
   02-estacionamento-leitura-de-placa.md
@@ -55,6 +58,7 @@ docs/
   14-regras-de-arquitetura-e-engenharia.md  princípios, padrões, testes, segurança, fluxo
   15-padrao-de-qualidade.md     as seis garantias com exemplos do VidaCor e checklist de PR
   16-protecao-do-usuario.md     a cerca (processo) e a rede de segurança (interface)
+  17-seguranca-por-classe-de-ataque.md  regras SEC-* baseadas na skill Cloudflare security-audit
   modelos/                      design, riscos clínicos, rastreabilidade, prontidão, pós-incidente
   playbooks/                    auditoria, testes, refatoração, segurança, idempotência, corrida
   bugs.md                       bugs encontrados por testes

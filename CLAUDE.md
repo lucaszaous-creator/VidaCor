@@ -69,11 +69,25 @@ Nenhum código, tela ou lançamento ultrapassa estes caminhos:
 - **Na tela (R1–R14):** prevenir em vez de avisar; confirmação só em ato irreversível e com o nome do paciente; alertas em três níveis; corrigir com versão, nunca apagar; nada se perde; o atendimento nunca para; mensagem diz o que aconteceu, o que foi feito e o que fazer; a tela nunca mente; ética com o paciente (resultado delicado só após conversa, IA sempre revisada).
 - Mudança em fluxo clínico precisa da aprovação do **responsável clínico de segurança**.
 
+## Segurança por classe de ataque (obrigatória) — [docs/17](docs/17-seguranca-por-classe-de-ataque.md)
+Baseado na skill **Cloudflare security-audit** (instalada em `.claude/skills/security-audit/`, MIT). Regras de construção `SEC-*` por domínio, entre elas:
+- **Injeção:** SQL só parametrizado; XML sem entidades externas; Typst com dado escapado; caminhos de arquivo gerados pelo servidor.
+- **Acesso:** negar por padrão; autorização **por objeto** (ter o ID não dá direito); teste de acesso indevido em toda rota com ID.
+- **Autenticação:** OIDC com PKCE/state/nonce; JWT validado; sessão renovada e invalidada; cookies HttpOnly/Secure/SameSite + CSRF; 2FA sem atalho; **reautenticação** para assinar, estornar, autorizar desconto, exportar e mudar permissão; `no-store` em resposta com dado de saúde.
+- **Telas:** sem `dangerouslySetInnerHTML`; CSP estrita e `frame-ancestors 'none'`; token e dado de saúde fora do armazenamento do navegador; WebSocket autorizado por evento.
+- **Tauri:** capacidades mínimas; conteúdo remoto sem acesso à ponte; servidor decide permissão; atualizador assinado.
+- **Mensageria/DICOM:** permissão por assunto no NATS; enum desconhecido rejeitado; ack depois de gravar; só aparelhos cadastrados.
+- **Disponibilidade:** limites de tamanho, página, profundidade e tempo; regex linear; descompressão limitada; limite de tentativas antes do login.
+- **Dados:** filtro de dono em cada consulta; cópias derivadas, logs e backups com as mesmas permissões; sem oráculo de enumeração; links assinados curtos; revogação vale para cache e fila.
+- **Cripto, cadeia de suprimentos, infra, IA e memória:** sem cripto caseira; Actions por SHA e sem `pull_request_target`; contêiner sem root; consoles só na VLAN de administração; IA sem autoridade de escrita e com entrada tratada como não confiável; `unsafe` só em crate de FFI revisado.
+- **Auditoria:** `/security-audit` antes da produção, de versões maiores e após incidentes; achado só com fronteira cruzada e resultado concreto; nunca testar contra produção ou dados reais.
+
 ## Playbooks
 Os roteiros de auditoria e correção ficam em [docs/playbooks/](docs/playbooks/) e
 também como comandos do Claude Code em `.claude/commands/`:
 `/auditoria`, `/testes-integracao`, `/refatoracao-segura`, `/seguranca`,
 `/idempotencia`, `/condicao-de-corrida`.
+Auditoria completa de segurança: `/security-audit` (skill da Cloudflare, ver docs/17).
 
 ## Regras clínicas que não podem ser quebradas
 - Registro clínico (laudo, evolução, documento assinado) **nunca** é apagado nem alterado: correção gera nova versão com motivo.

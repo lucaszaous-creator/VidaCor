@@ -10,6 +10,7 @@ Roteiros padronizados para auditar e corrigir o VidaCor. Cada um também existe 
 | 4 | [Idempotência de webhooks e pagamentos](idempotencia.md) | `/idempotencia` | G3 |
 | 5 | [Condições de corrida](condicao-de-corrida.md) | `/condicao-de-corrida` | G2 |
 | 6 | [Refatoração segura em camadas](refatoracao-segura.md) | `/refatoracao-segura` | G5 |
+| — | Auditoria completa de segurança (Cloudflare) | `/security-audit` | G1 + docs/17 |
 
 Fluxo recomendado: **auditoria** (só leitura) → AUDITORIA.md aponta o primeiro playbook de correção → plano → OK do dono → correção em passos → `just test`.
 
