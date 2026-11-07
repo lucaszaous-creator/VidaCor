@@ -92,3 +92,27 @@ letra ajustável.
 ## Menu de contexto
 
 Todo objeto tem menu de clique direito (também por teclado e pelo botão ⋯). Regras completas e catálogo por objeto em [19 · Menu de contexto](19-menu-de-contexto.md).
+
+
+## Regras de acabamento (obrigatórias, 07/11/2026)
+
+### A tela cabe na janela
+- Toda tela de sistema é desenhada para **1440×900** e precisa funcionar em **1280×800** **sem rolar a página**.
+- O que é longo rola **dentro do próprio painel** (lista, tabela, conversa, linha do tempo), com cabeçalho fixo.
+- Conteúdo secundário vai para **abas**, **painel de detalhe** ou **gaveta**; nunca empilhado para baixo.
+- Estrutura padrão: cabeçalho de uma linha (título, busca, ação principal) → abas (se houver) → área de trabalho
+  com 1 a 3 painéis (`.fill`, `.card.pane`, `.scroll`). Modelo: `design/mockups/Pacientes-Lista.dc.html`.
+- O menu lateral rola por dentro; só o grupo da tela atual vem aberto.
+- Exceções com tamanho próprio: apps (390×844), tablet (1180×820), telão (1280×720) e impressos A4.
+- Verificação: `tools/verificacao/verifica.sh` renderiza com o motor do canvas nas duas resoluções e falha se a
+  página rolar, se um painel cortar conteúdo ou se houver rolagem lateral.
+
+### Proibido "cara de IA"
+- Emoji e caracteres usados como ícone (✓ ✕ ▶ ● ▼ ★ ⚡ ✨ ‹ › → ← ⋯ •). Ícone é SVG de traço do conjunto do sistema.
+- Ícones de raio, brilho, estrela mágica, sol ou varinha; enfeites de "IA".
+- Gradientes decorativos (só o esqueleto de carregamento).
+- Pílula para tudo: chip só para situação/status, no máximo um por linha de lista.
+- Correntes de "·": no máximo um separador por linha; usar colunas, rótulos ou vírgula.
+- Rótulos em MAIÚSCULAS espaçadas fora de cabeçalho de tabela; quadradinhos coloridos numerados como enfeite de título.
+- Cards de "Regras", "Dicas", "Como funciona" e parágrafos explicando o óbvio; tom de marketing; rodapés de "mockup".
+- Borda colorida à esquerda em card, sombras pesadas, subtítulo em toda caixa.
