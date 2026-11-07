@@ -21,6 +21,8 @@
 | **G5** | **Camadas separadas** | Tela sem regra; domínio sem I/O; adaptadores na borda. 400 linhas = revisão, 600 = justificar ou dividir. Refatoração sem mudar comportamento, com testes de caracterização | [/refatoracao-segura](playbooks/refatoracao-segura.md) |
 | **G6** | **Plano antes, alteração depois** | Auditoria só lê. Correção começa por plano e espera o OK do dono. Migration revisada por pessoa; nada apagado sozinho; nenhuma proteção desligada para "fazer funcionar". O que não deu para verificar é escrito como "não verificado" | [/auditoria](playbooks/auditoria.md) |
 
+Além delas, valem os procedimentos e requisitos de interface de **proteção do usuário** do [docs/16](16-protecao-do-usuario.md) (a cerca e a rede de segurança).
+
 As Partes A e B abaixo detalham **como** cumprir essas garantias e o resto da engenharia.
 
 ---

@@ -60,6 +60,15 @@ produção. Quando houver, o comando único de verificação será `just test`.
 - Nunca desligar uma proteção existente para "fazer funcionar".
 - Se não for possível verificar algo, escrever **"não verificado"** e o motivo, sem chutar.
 
+## Proteção do usuário (obrigatória) — [docs/16](docs/16-protecao-do-usuario.md)
+Nenhum código, tela ou lançamento ultrapassa estes caminhos:
+- **Antes de construir:** documento de design, risco clínico no registro (risco alto sem controle não é construído), requisito com ID e teste.
+- **Ao construir:** G1–G6; perfis IHE SWF/PIR com os aparelhos; **dois identificadores** (nome + nascimento) em todo ato clínico.
+- **Ao testar:** usabilidade com a equipe nas tarefas críticas; caos em homologação.
+- **Ao lançar:** revisão de prontidão completa, piloto com comparação automática, liberação gradual por chave, sem lançamento em véspera de feriado ou fechamento.
+- **Na tela (R1–R14):** prevenir em vez de avisar; confirmação só em ato irreversível e com o nome do paciente; alertas em três níveis; corrigir com versão, nunca apagar; nada se perde; o atendimento nunca para; mensagem diz o que aconteceu, o que foi feito e o que fazer; a tela nunca mente; ética com o paciente (resultado delicado só após conversa, IA sempre revisada).
+- Mudança em fluxo clínico precisa da aprovação do **responsável clínico de segurança**.
+
 ## Playbooks
 Os roteiros de auditoria e correção ficam em [docs/playbooks/](docs/playbooks/) e
 também como comandos do Claude Code em `.claude/commands/`:

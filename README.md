@@ -20,6 +20,7 @@ para DICOM) e incluir o **estacionamento com leitura de placa**.
 | Instalação e distribuição | 📝 Proposta — [docs/13](docs/13-instalacao-e-distribuicao.md) |
 | Regras de arquitetura e engenharia | 📝 Proposta — [docs/14](docs/14-regras-de-arquitetura-e-engenharia.md) |
 | Padrão de qualidade (seis garantias + playbooks) | 📝 Proposta — [CLAUDE.md](CLAUDE.md) · [docs/15](docs/15-padrao-de-qualidade.md) · [playbooks](docs/playbooks/) |
+| Proteção do usuário (processo + interface) | ✅ Regra — [docs/16](docs/16-protecao-do-usuario.md) · [modelos](docs/modelos/) |
 | Desenvolvimento | ⏳ Próximo passo — [docs/09](docs/09-proximos-passos.md) |
 
 **Mockup ao vivo:** https://claude.ai/artifact/NT2bm1UnVPJe9NGGs3HTii
@@ -53,6 +54,8 @@ docs/
   13-instalacao-e-distribuicao.md     instaladores do servidor e das estações
   14-regras-de-arquitetura-e-engenharia.md  princípios, padrões, testes, segurança, fluxo
   15-padrao-de-qualidade.md     as seis garantias com exemplos do VidaCor e checklist de PR
+  16-protecao-do-usuario.md     a cerca (processo) e a rede de segurança (interface)
+  modelos/                      design, riscos clínicos, rastreabilidade, prontidão, pós-incidente
   playbooks/                    auditoria, testes, refatoração, segurança, idempotência, corrida
   bugs.md                       bugs encontrados por testes
   adr/                          decisões de arquitetura (ADR-0001 a 0013)
