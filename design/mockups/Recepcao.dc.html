@@ -12,19 +12,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0;background:#F2F3F6}
-.kc{background:#fff;border-radius:14px;padding:14px;border:1px solid #E8EAEF;display:flex;flex-direction:column;gap:4px;text-align:left;cursor:pointer;width:100%;font:inherit;color:inherit}
+.kc{background:#fff;border-radius:14px;padding:12px 14px;border:1px solid #E8EAEF;display:flex;flex-direction:column;gap:3px;text-align:left;cursor:pointer;width:100%;font:inherit;color:inherit;min-width:0}
 .kc:hover{border-color:#C9D2DE}
 .kc.sel{border-color:#0A1A4A;box-shadow:0 0 0 1px #0A1A4A}
-.kc b{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kc b{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .kc .x{font-size:13px;color:#5B6474;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kc .m{font-size:12px;color:#5B6474;display:flex;align-items:center;gap:6px;margin-top:4px}
-.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
-.colh{display:flex;align-items:baseline;gap:8px;padding:0 2px 10px}
+.kc .m{font-size:12px;color:#5B6474;display:flex;align-items:center;gap:6px;margin-top:3px;white-space:nowrap;overflow:hidden}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex:none}
+.colh{display:flex;align-items:baseline;gap:8px;padding:0 2px 4px}
 .colh b{font-size:14px;font-weight:600}
 .colh span{font-size:13px;color:#5B6474}
-.st{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #F1F3F6;font-size:15px}
-.st:last-child{border-bottom:0}
-.ck{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:13px;font-weight:700}
+.stp{display:flex;align-items:center;gap:10px;flex:1 1 140px;min-width:0}
+.ck{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:13px;font-weight:700}
 .ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.todo{background:#fff;border:1.5px solid #CBD2DC;color:#8A93A3}.ck.cur{background:#0A1A4A;color:#fff}
 </style>
 </helmet>
@@ -33,92 +32,73 @@ body{margin:0;background:#F2F3F6}
   <main class="content">
     <div class="topbar">
       <h1 style="font-size: 24px; font-weight: 650">Recepção</h1>
-      <span class="t14 mute" style="margin-left: 8px">Guichê 2 · senha atual <b style="color: #0F172A">N034</b> · aguardando: 3 normais, 1 preferencial, 2 resultados</span>
       <div class="grow"></div>
-      <button class="btn btn-sm">Rechamar</button>
-      <button class="btn btn-p">Chamar próxima senha</button>
+      <label class="search" style="max-width: 300px; flex: 1 1 240px; min-height: 40px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar paciente</span><input type="search" placeholder="Buscar paciente ou senha"></label>
+      <a class="btn btn-sm" href="Agenda.dc.html">Agenda do dia</a>
     </div>
 
-    <div class="row" style="padding: 0 8px">
-      <div class="seg" role="tablist" aria-label="Visão da recepção"><button class="on" role="tab" aria-selected="true">Esteira</button><a href="Agenda.dc.html" role="tab" aria-selected="false">Agenda do dia</a><button role="tab" aria-selected="false">Horários livres <span class="chip c-blue" style="height: 20px; font-size: 12px">11</span></button></div>
-      <div class="grow"></div>
-      <label class="search" style="max-width: 320px; flex: 1 1 260px; min-height: 40px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar paciente</span><input type="search" placeholder="Buscar paciente ou senha"></label>
-    </div>
+    <section class="card row wrap" aria-label="Senhas" style="padding: 16px 22px; gap: 28px">
+      <div><div class="lbl">Senha atual · guichê 2</div><div style="font-size: 30px; font-weight: 700; letter-spacing: -.02em; margin-top: 2px">N034</div></div>
+      <div class="row wrap t14" style="gap: 22px; flex: 1 1 320px">
+        <span><b class="t15">3</b> <span class="mute">normais</span></span>
+        <span><b class="t15">1</b> <span class="mute">preferencial</span></span>
+        <span><b class="t15">2</b> <span class="mute">retirada de resultado</span></span>
+        <span><b class="t15" style="color: #0C72B0">11</b> <span class="mute">horários livres hoje</span></span>
+      </div>
+      <div class="row" style="gap: 10px"><button class="btn">Rechamar</button><button class="btn btn-p">Chamar próxima senha</button></div>
+    </section>
 
-    <div class="split">
-      <section class="main" aria-label="Esteira do paciente">
-        <div style="display: grid; grid-template-columns: repeat(4, minmax(190px, 1fr)); gap: 14px; overflow-x: auto">
-          <div role="group" aria-label="A chegar, 9 pacientes">
+    <section class="card" aria-labelledby="est-h" style="padding: 20px 22px">
+      <div class="row" style="margin-bottom: 14px"><h2 id="est-h" style="font-size: 18px; font-weight: 600">Esteira do paciente</h2><span class="t14 mute" style="margin-left: 12px">atualiza sozinha</span><div class="grow"></div><div class="seg"><button class="on btn-sm" style="height: 36px">Todos</button><button style="height: 36px">Só pendências</button></div></div>
+      <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px">
+          <div role="group" aria-label="A chegar, 9 pacientes" class="col" style="gap: 8px; min-width: 0">
             <div class="colh"><b>A chegar</b><span>9</span></div>
-            <div class="col" style="gap: 8px">
-              <button class="kc"><b>Cláudia B. Nunes</b><span class="x">Eco + Doppler</span><span class="m">09:00 · confirmada</span></button>
-              <button class="kc"><b>Patrícia G. Lopes</b><span class="x">Obstétrica c/ Doppler</span><span class="m">09:00 · confirmada</span></button>
-              <button class="kc"><b>Marcelo D. Faria</b><span class="x">USG abdome</span><span class="m">09:00 · sem resposta</span></button>
-              <button class="btn btn-g btn-sm" style="justify-content: flex-start">Mais 6</button>
-            </div>
+            <button class="kc"><b>Cláudia B. Nunes</b><span class="x">Eco + Doppler</span><span class="m">09:00 · confirmada</span></button><button class="kc"><b>Patrícia G. Lopes</b><span class="x">Obstétrica c/ Doppler</span><span class="m">09:00 · confirmada</span></button><button class="kc"><b>Marcelo D. Faria</b><span class="x">USG abdome</span><span class="m"><i class="dot" style="background:#D97706"></i>09:00 · sem resposta</span></button><button class="kc"><b>Laura N. Costa</b><span class="x">Raio X coluna</span><span class="m">09:00 · confirmada</span></button><button class="kc"><b>Jorge L. Batista</b><span class="x">Holter 24 h</span><span class="m">09:00 · confirmado</span></button>
+            <button class="btn btn-g btn-sm" style="justify-content: flex-start">Mais 4</button>
           </div>
-          <div role="group" aria-label="Check-in, 3 pacientes">
+          <div role="group" aria-label="Check-in, 3 pacientes" class="col" style="gap: 8px; min-width: 0">
             <div class="colh"><b>Check-in</b><span>3</span></div>
-            <div class="col" style="gap: 8px">
-              <button class="kc sel" aria-pressed="true"><b>Antônio C. Ribeiro</b><span class="x">Eco + Doppler de carótidas</span><span class="m"><i class="dot" style="background: #0A1A4A"></i>P012 · 4 de 6 etapas</span></button>
-              <button class="kc"><b>Juliana S. Rocha</b><span class="x">Morfológica</span><span class="m"><i class="dot" style="background: #D97706"></i>Falta pedido médico</span></button>
-              <button class="kc"><b>Rafael M. Lima</b><span class="x">Raio X de tórax</span><span class="m"><i class="dot" style="background: #D97706"></i>Falta pagamento</span></button>
-            </div>
+            <button class="kc sel" aria-pressed="true"><b>Antônio C. Ribeiro</b><span class="x">Eco + Doppler de carótidas</span><span class="m"><i class="dot" style="background:#0A1A4A"></i>P012 · etapa 5 de 6</span></button><button class="kc"><b>Juliana S. Rocha</b><span class="x">Morfológica</span><span class="m"><i class="dot" style="background:#D97706"></i>Falta pedido médico</span></button><button class="kc"><b>Rafael M. Lima</b><span class="x">Raio X de tórax</span><span class="m"><i class="dot" style="background:#D97706"></i>Falta pagamento</span></button>
+            
           </div>
-          <div role="group" aria-label="Aguardando a sala, 2 pacientes">
+          <div role="group" aria-label="Aguardando a sala, 2 pacientes" class="col" style="gap: 8px; min-width: 0">
             <div class="colh"><b>Aguardando a sala</b><span>2</span></div>
-            <div class="col" style="gap: 8px">
-              <button class="kc"><b>Lúcia F. Prado</b><span class="x">TC de crânio</span><span class="m">Sala 6 · 4 min</span></button>
-              <button class="kc"><b>Tiago S. Braga</b><span class="x">Raio X de tórax</span><span class="m">Sala 5 · 12 min</span></button>
-            </div>
+            <button class="kc"><b>Lúcia F. Prado</b><span class="x">TC de crânio</span><span class="m">Sala 6 · 4 min</span></button><button class="kc"><b>Tiago S. Braga</b><span class="x">Raio X de tórax</span><span class="m">Sala 5 · 12 min</span></button>
+            
           </div>
-          <div role="group" aria-label="Em exame, 5 pacientes">
+          <div role="group" aria-label="Em exame, 5 pacientes" class="col" style="gap: 8px; min-width: 0">
             <div class="colh"><b>Em exame</b><span>5</span></div>
-            <div class="col" style="gap: 8px">
-              <button class="kc"><b>Sônia M. Castro</b><span class="x">Ecocardiograma</span><span class="m">Sala 1 · desde 08:41</span></button>
-              <button class="kc"><b>Gustavo H. Pires</b><span class="x">Teste ergométrico</span><span class="m">Sala 4 · desde 08:35</span></button>
-              <button class="kc"><b>Vera L. Antunes</b><span class="x">TC de abdome</span><span class="m">Sala 6 · desde 08:30</span></button>
-              <button class="btn btn-g btn-sm" style="justify-content: flex-start">Mais 2</button>
-            </div>
+            <button class="kc"><b>Sônia M. Castro</b><span class="x">Ecocardiograma</span><span class="m"><i class="dot" style="background:#5B45B5"></i>Sala 1 · desde 08:41</span></button><button class="kc"><b>Gustavo H. Pires</b><span class="x">Teste ergométrico</span><span class="m"><i class="dot" style="background:#5B45B5"></i>Sala 4 · desde 08:35</span></button><button class="kc"><b>Vera L. Antunes</b><span class="x">TC de abdome</span><span class="m"><i class="dot" style="background:#5B45B5"></i>Sala 6 · desde 08:30</span></button><button class="kc"><b>Ivone R. Teixeira</b><span class="x">Doppler de carótidas</span><span class="m"><i class="dot" style="background:#5B45B5"></i>Sala 3 · desde 08:33</span></button><button class="kc"><b>Neusa A. Freitas</b><span class="x">Instalação de MAPA</span><span class="m"><i class="dot" style="background:#5B45B5"></i>Sala 7 · desde 08:38</span></button>
+            
           </div>
+          <div role="group" aria-label="Saindo, 13 pacientes" class="col" style="gap: 8px; min-width: 0">
+            <div class="colh"><b>Saindo</b><span>13</span></div>
+            <button class="kc"><b>Denise P. Gomes</b><span class="x">Pós-contraste</span><span class="m"><i class="dot" style="background:#0F6E6A"></i>observação · 12 de 30 min</span></button><button class="kc"><b>Maria H. Duarte</b><span class="x">Eco · laudo liberado</span><span class="m">saiu 07:52</span></button><button class="kc"><b>Caio V. Moraes</b><span class="x">Raio X · laudo até 14:00</span><span class="m">saiu 08:40</span></button>
+            <button class="btn btn-g btn-sm" style="justify-content: flex-start">Mais 10</button>
+          </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="ck-h" style="padding: 22px">
+      <div class="row wrap" style="gap: 24px; align-items: center">
+        <div style="flex: 0 1 300px; min-width: 240px">
+          <div class="lbl">Check-in · P012 preferencial</div>
+          <h2 id="ck-h" style="font-size: 20px; font-weight: 650; margin-top: 6px">Antônio Carlos Ribeiro</h2>
+          <div class="t14 mute" style="margin-top: 2px">15/06/1954 · 72 anos · Unimed</div>
+          <div class="t14" style="margin-top: 8px">Eco + Doppler · <b>08:30</b> · Sala 1 · Dr. Paulo</div>
         </div>
-        <div class="row t14 mute" style="gap: 18px; margin-top: 18px; padding: 0 4px">
-          <span>Pós-exame <b style="color: #0F172A">2</b></span>
-          <span>Liberados hoje <b style="color: #0F172A">11</b></span>
-          <span>Atraso acima da meta <b style="color: #C2334D">1</b></span>
+        <ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 14px 18px; flex: 999 1 560px"><li class="stp"><span class="ck ok">✓</span><div><div class="t14 " style="">Identidade</div><div class="t12 mute">nome + nascimento</div></div></li><li class="stp"><span class="ck ok">✓</span><div><div class="t14 " style="">Elegibilidade</div><div class="t12 mute">Unimed · 08:21</div></div></li><li class="stp"><span class="ck ok">✓</span><div><div class="t14 " style="">Guia</div><div class="t12 mute">nº 4471230</div></div></li><li class="stp"><span class="ck ok">✓</span><div><div class="t14 " style="">Pedido médico</div><div class="t12 mute">foto anexada</div></div></li><li class="stp"><span class="ck cur">5</span><div><div class="t14 b" style="">Etiqueta</div><div class="t12 mute">imprimir</div></div></li><li class="stp"><span class="ck todo">6</span><div><div class="t14 " style="color:#5B6474">Sala</div><div class="t12 mute">enviar</div></div></li></ol>
+        <div class="col" style="gap: 8px; flex: 0 0 220px">
+          <button class="btn btn-p">Imprimir etiqueta</button>
+          <a class="btn btn-g btn-sm" href="Paciente.dc.html">Abrir ficha</a>
         </div>
-      </section>
-
-      <aside class="aside" style="flex: 0 1 380px; min-width: 340px" aria-labelledby="ck-h">
-        <section class="card">
-          <div class="row" style="align-items: flex-start">
-            <div style="min-width: 0">
-              <div class="lbl">Check-in · P012 preferencial</div>
-              <h2 id="ck-h" style="font-size: 20px; font-weight: 650; margin-top: 6px">Antônio Carlos Ribeiro</h2>
-              <div class="t14 mute" style="margin-top: 2px">15/06/1954 · 72 anos · Unimed</div>
-            </div>
-            <a class="t14 b" href="Paciente.dc.html" style="margin-left: auto">Ficha</a>
-          </div>
-          <div class="t14" style="margin-top: 14px; padding: 12px 14px; background: #F6F8FB; border-radius: 12px">Eco + Doppler de carótidas · <b>08:30</b> · Sala 1 · Dr. Paulo</div>
-
-          <div style="margin-top: 14px">
-            <div class="st"><span class="ck ok">✓</span><span style="flex: 1">Identidade conferida</span><span class="t13 mute">nome + nascimento</span></div>
-            <div class="st"><span class="ck ok">✓</span><span style="flex: 1">Convênio elegível</span><span class="t13 mute">08:21</span></div>
-            <div class="st"><span class="ck ok">✓</span><span style="flex: 1">Guia autorizada</span><span class="t13 mute">nº 4471230</span></div>
-            <div class="st"><span class="ck ok">✓</span><span style="flex: 1">Pedido médico</span><span class="t13 mute">foto anexada</span></div>
-            <div class="st"><span class="ck cur">5</span><b style="flex: 1">Etiqueta e pulseira</b></div>
-            <div class="st"><span class="ck todo">6</span><span style="flex: 1; color: #5B6474">Enviar para a sala</span></div>
-          </div>
-
-          <button class="btn btn-p" style="width: 100%; margin-top: 16px">Imprimir etiqueta</button>
-          <div class="t13 mute" style="margin-top: 12px; text-align: center">Veículo QRT4B21 no estacionamento · entrada 08:12</div>
-        </section>
-      </aside>
-    </div>
+      </div>
+      <div class="t13 mute" style="margin-top: 16px; padding-top: 14px; border-top: 1px solid #F1F3F6">Veículo QRT4B21 no estacionamento desde 08:12 · validado pelo exame</div>
+    </section>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1150}}'>
 class Component extends DCLogic {
   renderVals() { return {}; }
 }
