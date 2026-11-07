@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Autorizações — VidaCor</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F2F3F6}
+.ck{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:12px;font-weight:700}
+.ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.warn{background:#FFF3DF;color:#9A5B00}.ck.bad{background:#FDEEF1;color:#B4233C}.ck.todo{background:#fff;border:1.5px solid #CBD2DC;color:#8A93A3}.ck.cur{background:#0A1A4A;color:#fff}
+.q{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid #F1F3F6}
+.q:last-child{border-bottom:0}
+.yn{display:inline-flex;gap:6px}.yn button{height:36px;min-width:64px;border-radius:999px;border:1px solid #D9DDE5;background:#fff;font:600 14px Inter,sans-serif;color:#334155;cursor:pointer}
+.yn button.on{background:#0A1A4A;border-color:#0A1A4A;color:#fff}
+.hint{font-size:12.5px;margin-top:4px}
+.sec-t{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5B6474;margin:22px 0 4px}
+.li2{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #F1F3F6}.li2:last-child{border-bottom:0}
+.rowsel{background:#F3F6FB}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="faturamento" userName="Carla Mendes" userRole="Faturamento" userInitials="CM" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar"><h1 style="font-size:22px;font-weight:650">Autorizações</h1><div class="grow"></div><button class="btn btn-p">Nova solicitação</button></div>
+    <div class="row wrap t14 mute" style="gap:24px;padding:0 8px"><span><b style="color:#0F172A">18</b> em andamento</span><span><b style="color:#1F7A4D">41</b> autorizadas na semana</span><span><b style="color:#9A5B00">3</b> pendentes de documento</span><span><b style="color:#B4233C">2</b> negadas</span><span>tempo médio <b style="color:#0F172A">1 h 35</b></span></div>
+    <div class="split">
+      <section class="card main" style="padding:20px 8px 8px">
+        <div class="row" style="padding:0 14px 10px"><h2 style="font-size:18px;font-weight:600">Fila de autorizações</h2><div class="grow"></div><div class="seg"><button class="on btn-sm" style="height:36px">Todas</button><button style="height:36px">Pendentes</button><button style="height:36px">Negadas</button></div></div>
+        <div class="scroll-x"><table class="tb"><thead><tr><th>Operadora</th><th>Paciente</th><th>Exame</th><th>Situação</th></tr></thead><tbody><tr class="rowsel"><td class="nw"><b>Unimed</b></td><td class="nw">Antônio C. Ribeiro</td><td>Eco + Doppler carótidas</td><td><span class="row" style="gap:8px"><span class="ck ok">✓</span>Autorizada · senha UN-88231-X</span></td></tr><tr class=""><td class="nw"><b>SulAmérica</b></td><td class="nw">Lúcia F. Prado</td><td>TC crânio c/ contraste</td><td><span class="row" style="gap:8px"><span class="ck cur"></span>Em análise · 6 h</span></td></tr><tr class=""><td class="nw"><b>Bradesco Saúde</b></td><td class="nw">Juliana S. Rocha</td><td>USG morfológica</td><td><span class="row" style="gap:8px"><span class="ck warn">!</span>Pendente: pedir relatório</span></td></tr><tr class=""><td class="nw"><b>Amil</b></td><td class="nw">Paulo R. Dias</td><td>Eco transtorácico</td><td><span class="row" style="gap:8px"><span class="ck bad">!</span>Negada · fora da cobertura</span></td></tr><tr class=""><td class="nw"><b>Petrobras</b></td><td class="nw">Marta L. Siqueira</td><td>Doppler venoso MMII</td><td><span class="row" style="gap:8px"><span class="ck todo"></span>Enviada pelo portal (manual)</span></td></tr></tbody></table></div>
+        <div style="margin:14px;padding:14px 16px;border-radius:12px;background:#F6F8FB" class="t13 mute">Operadoras com integração (webservice TISS) recebem e respondem automaticamente. Para as demais, o sistema monta o pedido, a equipe envia pelo portal da operadora e registra a resposta: a solicitação fica rastreada do mesmo jeito.</div>
+      </section>
+      <aside class="aside col" style="gap:16px;flex:0 1 400px;min-width:340px">
+        <section class="card">
+          <div class="lbl">Unimed · Antônio Carlos Ribeiro · 15/06/1954</div>
+          <h2 style="font-size:18px;font-weight:650;margin-top:6px">Autorizada</h2>
+          <div style="margin-top:8px"><div class="li2"><span class="ck ok">✓</span><div style="flex:1"><div class="t14 b">Solicitação montada</div><div class="t12 mute">Do agendamento: carteirinha, TUSS 40901114 e 40901300, CID I10, pedido anexado</div></div><span class="t12 mute num">05/11 16:05</span></div><div class="li2"><span class="ck ok">✓</span><div style="flex:1"><div class="t14 b">Enviada à Unimed</div><div class="t12 mute">Webservice TISS · solicitação SP/SADT · protocolo 1180-77231</div></div><span class="t12 mute num">05/11 16:05</span></div><div class="li2"><span class="ck ok">✓</span><div style="flex:1"><div class="t14 b">Em análise</div><div class="t12 mute">Operadora recebeu</div></div><span class="t12 mute num">05/11 16:06</span></div><div class="li2"><span class="ck ok">✓</span><div style="flex:1"><div class="t14 b">Autorizada</div><div class="t12 mute">Senha UN-88231-X · válida até 20/11 · 1 de cada procedimento</div></div><span class="t12 mute num">05/11 17:40</span></div><div class="li2"><span class="ck ok">✓</span><div style="flex:1"><div class="t14 b">Guia preenchida no agendamento</div><div class="t12 mute">Sem digitação: dados vieram da resposta</div></div><span class="t12 mute num">05/11 17:40</span></div></div>
+          <div class="row wrap" style="gap:8px;margin-top:12px"><a class="btn btn-sm" href="Agendamento-Guia.dc.html">Abrir agendamento</a><a class="btn btn-sm" href="Lastro.dc.html">Ver lastro</a></div>
+        </section>
+        <section class="card" style="background:#F6F8FB;box-shadow:none"><div class="t14 b">Negada ou pendente</div><p class="t13 mute" style="margin:6px 0 0">Negativa traz o motivo da operadora e as saídas: recurso, particular com orçamento ou remarcação. Pendência de documento avisa o paciente pelo WhatsApp com o que falta.</p></section>
+      </aside>
+    </div>
+    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1200}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

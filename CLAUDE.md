@@ -95,6 +95,7 @@ Baseado na skill **Cloudflare security-audit** (instalada em `.claude/skills/sec
 - **Convênio só com guia autorizada:** o agendamento de convênio exige a seção da guia (carteirinha, nº da guia, senha, validade, TUSS autorizados e saldo, solicitante, anexos) com conferências automáticas; a guia é consumida de forma atômica e não pode ser usada por dois atendimentos; sem guia, só reserva provisória com prazo.
 - Rastrear também: worklist/MPPS/estudo com hash, dose de radiação (RDSR), lote de contraste por paciente, desinfecção de transdutores, manutenção e controle de qualidade dos aparelhos, mensagens enviadas, leituras de dado clínico, configurações versionadas.
 - Qualquer código leva à cadeia completa (explorador de lastro e dossiê assinado).
+- Roteiro aprovado em [docs/22](docs/22-lacunas-e-roadmap.md): triagem de segurança bloqueante, laudo estruturado com versão da classificação, exame externo nunca vira laudo da VidaCor, autorização pedida pelo sistema e auditoria antes do faturamento com regras versionadas por operadora.
 
 ## Playbooks
 Os roteiros de auditoria e correção ficam em [docs/playbooks/](docs/playbooks/) e

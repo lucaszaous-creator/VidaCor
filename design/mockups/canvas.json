@@ -290,6 +290,51 @@
    "title": "Explorador de lastro (cadeia completa do atendimento)",
    "expand": "fill",
    "is_interactive": true
+  },
+  "Triagem.dc.html": {
+   "x": 0,
+   "y": 19243,
+   "w": 1440,
+   "h": 1450,
+   "title": "Triagem de segurança antes do exame",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Laudo-Estruturado.dc.html": {
+   "x": 1520,
+   "y": 19243,
+   "w": 1440,
+   "h": 1250,
+   "title": "Laudo estruturado (TI-RADS, BI-RADS…)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Exame-Externo.dc.html": {
+   "x": 3040,
+   "y": 19243,
+   "w": 1440,
+   "h": 1150,
+   "title": "Importar exame externo (CD)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Autorizacao.dc.html": {
+   "x": 4560,
+   "y": 19243,
+   "w": 1440,
+   "h": 1200,
+   "title": "Autorizações: pedido direto pelo sistema",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Auditoria-Faturamento.dc.html": {
+   "x": 6080,
+   "y": 19243,
+   "w": 1440,
+   "h": 1150,
+   "title": "Auditoria antes do faturamento",
+   "expand": "fill",
+   "is_interactive": true
   }
  },
  "order": [
@@ -325,7 +370,12 @@
   "Documentos.dc.html",
   "Menus-Contexto.dc.html",
   "Recepcao-Interativa.dc.html",
-  "Lastro.dc.html"
+  "Lastro.dc.html",
+  "Triagem.dc.html",
+  "Laudo-Estruturado.dc.html",
+  "Exame-Externo.dc.html",
+  "Autorizacao.dc.html",
+  "Auditoria-Faturamento.dc.html"
  ],
  "notes": {
   "t1": {
@@ -409,6 +459,13 @@
    "text": "Interações",
    "kind": "title1",
    "maxW": 2960
+  },
+  "t7": {
+   "x": 0,
+   "y": 18983,
+   "text": "Novos módulos (lacunas)",
+   "kind": "title1",
+   "maxW": 7520
   }
  },
  "designSystems": []

@@ -48,6 +48,16 @@ do canvas; as cópias locais estão em `design/assets/` (veja
 | 25 | `Menus-Contexto.dc.html` | Clique direito: 8 situações com menus e submenus + regras |
 | 26 | `Recepcao-Interativa.dc.html` | **Protótipo interativo**: esteira com clique direito, teclado, submenus, seleção múltipla, perfis e confirmação |
 
+## Novos módulos (lacunas, docs/22)
+
+| Arquivo | Tela |
+|---|---|
+| `Triagem.dc.html` | Triagem de segurança antes do exame |
+| `Laudo-Estruturado.dc.html` | Laudo estruturado (TI-RADS e demais classificações) |
+| `Exame-Externo.dc.html` | Importar exame externo |
+| `Autorizacao.dc.html` | Autorizações pedidas pelo sistema |
+| `Auditoria-Faturamento.dc.html` | Auditoria antes do faturamento |
+
 ## Rodadas
 
 | Rodada | Resultado | O que mudou |

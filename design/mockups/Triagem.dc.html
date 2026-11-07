@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Triagem de segurança — VidaCor</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F2F3F6}
+.ck{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:12px;font-weight:700}
+.ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.warn{background:#FFF3DF;color:#9A5B00}.ck.bad{background:#FDEEF1;color:#B4233C}.ck.todo{background:#fff;border:1.5px solid #CBD2DC;color:#8A93A3}.ck.cur{background:#0A1A4A;color:#fff}
+.q{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid #F1F3F6}
+.q:last-child{border-bottom:0}
+.yn{display:inline-flex;gap:6px}.yn button{height:36px;min-width:64px;border-radius:999px;border:1px solid #D9DDE5;background:#fff;font:600 14px Inter,sans-serif;color:#334155;cursor:pointer}
+.yn button.on{background:#0A1A4A;border-color:#0A1A4A;color:#fff}
+.hint{font-size:12.5px;margin-top:4px}
+.sec-t{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5B6474;margin:22px 0 4px}
+.li2{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #F1F3F6}.li2:last-child{border-bottom:0}
+.rowsel{background:#F3F6FB}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="sala" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar"><a class="t14 b" href="Sala-Exame.dc.html">← Sala de exame</a><h1 style="font-size:22px;font-weight:650;margin-left:12px">Triagem de segurança</h1><div class="grow"></div><span class="t13 mute">Feita por Enf. Lívia · 08:52 · antes de entrar na sala</span></div>
+    <section class="card row wrap" style="gap: 16px; padding: 18px 22px">
+      <span class="av av-lg" style="background: #FDEEF1; color: #C2334D">LF</span>
+      <div style="flex: 1 1 300px; min-width: 0"><h1 style="font-size: 22px; font-weight: 650">Lúcia Fernandes Prado</h1><div class="t15 mute" style="margin-top: 3px">02/07/1959 · 67 anos · F · TC de crânio com contraste · Sala 6</div></div>
+      <span class="chip c-rose">Alergia registrada: iodo</span>
+    </section>
+    <div class="split">
+      <section class="card main" style="padding: 8px 28px 20px">
+        <div class="sec-t">Contraste iodado</div>
+        <div class="q"><div><div class="t15">Já teve reação a contraste iodado?</div><div class="hint ">Registrado em 2023: urticária leve após TC. Exige protocolo de pré-medicação e médico presente.</div></div><span class="yn"><button class="on">Sim</button><button class="">Não</button></span></div>
+        <div class="q"><div><div class="t15">Asma ou outra alergia importante?</div></div><span class="yn"><button class="">Sim</button><button class="on">Não</button></span></div>
+        <div class="q"><div><div class="t15">Usa metformina?</div><div class="hint ">Orientar suspender por 48 h após o exame se a função renal estiver reduzida.</div></div><span class="yn"><button class="on">Sim</button><button class="">Não</button></span></div>
+        <div class="q"><div><div class="t15">Função renal</div><div class="hint mute">Creatinina 1,4 mg/dL em 28/10 · anexada pela recepção</div></div><div style="text-align:right"><div class="big" style="font-size:26px">TFG 40</div><div class="t12 mute">mL/min/1,73 m² · CKD-EPI</div></div></div>
+        <div class="sec-t">Gestação e amamentação</div>
+        <div class="q"><div><div class="t15">Existe possibilidade de gravidez?</div><div class="hint ">Não se aplica (67 anos) · pergunta registrada assim mesmo</div></div><span class="yn"><button class="">Sim</button><button class="on">Não</button></span></div>
+        <div class="q"><div><div class="t15">Está amamentando?</div></div><span class="yn"><button class="">Sim</button><button class="on">Não</button></span></div>
+        <div class="sec-t">Outros</div>
+        <div class="q"><div><div class="t15">Jejum de 4 horas cumprido?</div><div class="hint ">Última refeição às 04:30</div></div><span class="yn"><button class="on">Sim</button><button class="">Não</button></span></div>
+        <div class="q"><div><div class="t15">Acesso venoso difícil ou extravasamento prévio?</div></div><span class="yn"><button class="">Sim</button><button class="on">Não</button></span></div>
+        <div class="sec-t" style="color:#8A93A3">Ressonância (não se aplica a este exame)</div>
+        <p class="t13 mute" style="margin:6px 0 0">Marcapasso, implantes, clipes, claustrofobia e outros itens aparecem automaticamente quando o exame for de ressonância.</p>
+      </section>
+      <aside class="aside col" style="gap:16px;flex:0 1 380px;min-width:340px">
+        <section class="card" style="border:1px solid #F3C98B;box-shadow:none;background:#FFFBF4">
+          <div class="lbl" style="color:#9A5B00">Resultado da triagem</div>
+          <div style="font-size:20px;font-weight:650;margin-top:6px">Precisa de aprovação médica</div>
+          <ul class="t14" style="margin:12px 0 0;padding-left:18px;line-height:1.6">
+            <li>Reação prévia a contraste iodado</li>
+            <li>TFG 40: abaixo de 45</li>
+            <li>Usa metformina</li>
+          </ul>
+          <button class="btn btn-p" style="width:100%;margin-top:14px">Pedir aprovação ao radiologista</button>
+          <button class="btn btn-sm" style="width:100%;margin-top:8px">Sugerir exame sem contraste</button>
+          <p class="t12 mute" style="margin:10px 0 0">O exame fica bloqueado na sala até um médico aprovar e registrar a conduta (pré-medicação, hidratação, contraste de baixa osmolaridade).</p>
+        </section>
+        <section class="card">
+          <div class="t15 b">Termo de consentimento do contraste</div>
+          <div class="li2"><span class="ck todo"></span><div><div class="t14">Assinar no tablet</div><div class="t12 mute">Versão 4 do termo · liberado após a aprovação médica</div></div></div>
+        </section>
+        <section class="card" style="background:#F6F8FB;box-shadow:none">
+          <div class="t14 b">Se houver reação</div>
+          <p class="t13 mute" style="margin:6px 0 10px">Protocolo de reação a contraste e checklist do carrinho de emergência da Sala 6 (conferido hoje às 07:30 por Enf. Lívia).</p>
+          <button class="btn btn-sm">Registrar reação</button>
+        </section>
+      </aside>
+    </div>
+    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1450}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
