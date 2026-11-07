@@ -158,7 +158,7 @@ page=f'''<!doctype html>
 <meta charset="utf-8">
 <title>Menus de contexto — VidaCor Imagem</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/7e124b8551ce8ce21b13995f1ed38d0e">
+<link rel="stylesheet" href="/_blob/079f870cfe8a03ec36101026af3bba84">
 </head>
 <body>
 <x-dc>
