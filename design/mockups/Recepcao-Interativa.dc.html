@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Recepção interativa (clique direito) — VidaCor</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F2F3F6}
+.kc{background:#fff;border-radius:14px;padding:12px 14px;border:1px solid #E8EAEF;display:flex;flex-direction:column;gap:3px;text-align:left;cursor:default;width:100%;font:inherit;color:inherit;min-width:0;position:relative;user-select:none}
+.kc:hover{border-color:#C9D2DE}
+.kc:focus-visible{outline:3px solid #9CC7E8;outline-offset:2px}
+.kc.sel{border-color:#0A1A4A;box-shadow:0 0 0 1px #0A1A4A}
+.kc.multi{background:#EEF3FA;border-color:#0C72B0}
+.kc b{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:26px}
+.kc .x{font-size:13px;color:#5B6474;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kc .m{font-size:12px;color:#5B6474;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kc .m.warn{color:#9A5B00;font-weight:600}
+.kc .pf{position:absolute;top:10px;right:36px;font-size:11px;font-weight:700;color:#fff;background:#0A1A4A;border-radius:6px;padding:1px 6px}
+.more{position:absolute;top:6px;right:6px;width:28px;height:28px;border-radius:8px;border:0;background:transparent;color:#5B6474;cursor:pointer;font-size:16px;line-height:1}
+.more:hover{background:#F1F3F6;color:#0F172A}
+.colh{display:flex;align-items:baseline;gap:8px;padding:0 2px 4px}
+.colh b{font-size:14px;font-weight:600}.colh span{font-size:13px;color:#5B6474}
+.ovl{position:absolute;inset:0;z-index:40}
+.cm{position:absolute;z-index:50;background:#fff;border-radius:12px;box-shadow:0 12px 32px rgba(15,23,42,.18),0 2px 6px rgba(15,23,42,.08);border:1px solid #E3E7ED;padding:6px;width:300px;font-size:14px}
+.cm-t{font-size:12px;font-weight:600;color:#5B6474;padding:8px 10px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cm-s{display:flex;align-items:center;gap:8px;margin:2px 4px 6px;padding:0 10px;height:34px;border-radius:8px;background:#F6F8FB;color:#5B6474}
+.cm-s input{border:0;outline:0;background:transparent;font:400 13px Inter,sans-serif;color:#0F172A;flex:1;min-width:0}
+.cm-h{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#5B6474;padding:8px 10px 4px}
+.cm-i{display:flex;align-items:center;gap:10px;width:100%;min-height:36px;padding:6px 10px;border-radius:8px;border:0;background:transparent;color:#0F172A;font:400 14px Inter,sans-serif;text-align:left;cursor:pointer}
+.cm-i:hover,.cm-i.act{background:#EEF3FA}
+.cm-i svg{flex:none}
+.cm-l{flex:1;display:flex;flex-direction:column;min-width:0}
+.cm-why{font-size:11.5px;color:#5B6474;margin-top:1px}
+.cm-k{font-size:12px;color:#5B6474;white-space:nowrap}
+.cm-i.off{color:#8A93A3;cursor:not-allowed}.cm-i.off:hover{background:transparent}
+.cm-i.danger{color:#B4233C}
+.cm-i.done{color:#1F7A4D}
+.cm-sep{height:1px;background:#EEF0F3;margin:5px 4px}
+.cm-f{font-size:11.5px;color:#5B6474;padding:8px 10px 4px;border-top:1px solid #F1F3F6;margin-top:4px}
+.toast{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);background:#0F172A;color:#fff;border-radius:12px;padding:12px 18px;font-size:14px;z-index:60;box-shadow:0 8px 24px rgba(15,23,42,.25);max-width:80%}
+.dlgb{position:absolute;inset:0;background:rgba(15,23,42,.35);z-index:70;display:flex;align-items:center;justify-content:center}
+.dlg{background:#fff;border-radius:18px;padding:24px;width:460px;max-width:92%;box-shadow:0 20px 60px rgba(15,23,42,.3)}
+.opt{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #E3E7ED;border-radius:10px;cursor:pointer;font-size:14px;width:100%;background:#fff;text-align:left;font-family:inherit}
+.opt.on{border-color:#0A1A4A;box-shadow:0 0 0 1px #0A1A4A}
+.stp{display:flex;align-items:center;gap:10px;flex:1 1 140px;min-width:0}
+.ck{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:13px;font-weight:700}
+.ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.todo{background:#fff;border:1.5px solid #CBD2DC;color:#8A93A3}.ck.cur{background:#0A1A4A;color:#fff}
+</style>
+</helmet>
+<div data-root="1" style="position: relative; font-family: Inter, sans-serif; min-height: 1000px; padding: 24px 28px 40px; display: flex; flex-direction: column; gap: 16px">
+  <div class="row wrap" style="gap: 14px">
+    <div class="grow"><div class="lbl">Protótipo interativo</div><h1 style="font-size: 26px; font-weight: 650; margin-top: 4px">Recepção · clique direito</h1>
+    <p class="t14 mute" style="margin: 4px 0 0">Clique com o botão direito num paciente (ou use o botão ⋯, ou Shift+F10 com o cartão focado). Ctrl+clique seleciona vários.</p></div>
+    <div class="col" style="gap: 6px; align-items: flex-end">
+      <span class="t12 mute">Ver como</span>
+      <div class="seg" role="radiogroup" aria-label="Perfil do usuário">
+        <button class="{{perfilRecCls}}" role="radio" aria-checked="{{perfilRecSel}}" onClick="{{setRec}}">Recepção</button>
+        <button class="{{perfilSupCls}}" role="radio" aria-checked="{{perfilSupSel}}" onClick="{{setSup}}">Supervisor</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="card" style="padding: 20px 22px" aria-label="Esteira do paciente">
+    <div class="row" style="margin-bottom: 14px"><h2 style="font-size: 18px; font-weight: 600">Esteira do paciente</h2><span class="t14 mute" style="margin-left: 12px">{{selInfo}}</span></div>
+    <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px">
+      <sc-for list="{{cols}}" as="col" hint-placeholder-count="5">
+        <div role="group" aria-label="{{col.label}}" class="col" style="gap: 8px; min-width: 0">
+          <div class="colh"><b>{{col.label}}</b><span>{{col.count}}</span></div>
+          <sc-for list="{{col.items}}" as="p" hint-placeholder-count="3">
+            <div class="{{p.cls}}" tabindex="0" role="button" aria-label="{{p.aria}}" onClick="{{p.onClick}}" onContextMenu="{{p.onCtx}}" onKeyDown="{{p.onKey}}">
+              <b>{{p.nome}}</b>
+              <sc-if value="{{p.pref}}" hint-placeholder-val="{{ false }}"><span class="pf">P</span></sc-if>
+              <span class="x">{{p.exame}}</span>
+              <span class="{{p.metaCls}}">{{p.meta}}</span>
+              <button class="more" aria-label="{{p.moreAria}}" onClick="{{p.onMore}}">⋯</button>
+            </div>
+          </sc-for>
+          <sc-if value="{{col.empty}}" hint-placeholder-val="{{ false }}"><div class="t13 mute" style="padding: 10px 4px">Ninguém aqui</div></sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section class="card" style="padding: 22px" aria-label="Check-in do paciente selecionado">
+    <div class="row wrap" style="gap: 24px; align-items: center">
+      <div style="flex: 0 1 300px; min-width: 240px">
+        <div class="lbl">{{det.lbl}}</div>
+        <h2 style="font-size: 20px; font-weight: 650; margin-top: 6px">{{det.nome}}</h2>
+        <div class="t14 mute" style="margin-top: 2px">{{det.nasc}}</div>
+        <div class="t14" style="margin-top: 8px">{{det.exame}}</div>
+      </div>
+      <ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 14px 18px; flex: 999 1 560px">
+        <sc-for list="{{det.steps}}" as="s" hint-placeholder-count="6">
+          <li class="stp"><span class="{{s.cls}}">{{s.sym}}</span><div class="t14">{{s.label}}</div></li>
+        </sc-for>
+      </ol>
+    </div>
+  </section>
+
+  <section class="card" style="padding: 18px 22px; box-shadow: none; background: #F6F8FB" aria-label="Histórico de ações">
+    <div class="lbl" style="margin-bottom: 8px">Auditoria desta sessão (cada ação fica registrada)</div>
+    <sc-for list="{{log}}" as="l" hint-placeholder-count="2"><div class="t13" style="padding: 3px 0">{{l}}</div></sc-for>
+    <sc-if value="{{logEmpty}}" hint-placeholder-val="{{ true }}"><div class="t13 mute">Nenhuma ação ainda.</div></sc-if>
+  </section>
+
+  <sc-if value="{{menuOpen}}" hint-placeholder-val="{{ false }}">
+    <div class="ovl" onClick="{{closeMenu}}" onContextMenu="{{closeMenuCtx}}"></div>
+    <div class="cm" role="menu" aria-label="{{menu.title}}" style="top: {{menu.y}}px; left: {{menu.x}}px" onKeyDown="{{menuKey}}">
+      <div class="cm-t">{{menu.title}}</div>
+      <label class="cm-s"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM21 21l-4.3-4.3"></path></svg><span class="sr">Filtrar ações</span><input value="{{menu.filter}}" onChange="{{setFilter}}" placeholder="Digite para filtrar…" autoFocus="{{ true }}"></label>
+      <sc-for list="{{menu.items}}" as="it" hint-placeholder-count="8">
+        <sc-if value="{{it.isSep}}" hint-placeholder-val="{{ false }}"><div class="cm-sep" role="separator"></div></sc-if>
+        <sc-if value="{{it.isHead}}" hint-placeholder-val="{{ false }}"><div class="cm-h">{{it.label}}</div></sc-if>
+        <sc-if value="{{it.isItem}}" hint-placeholder-val="{{ true }}">
+          <button class="{{it.cls}}" role="menuitem" aria-disabled="{{it.dis}}" onClick="{{it.run}}" onMouseEnter="{{it.hover}}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{it.d}}"></path></svg>
+            <span class="cm-l">{{it.label}}<sc-if value="{{it.hasWhy}}" hint-placeholder-val="{{ false }}"><span class="cm-why">{{it.why}}</span></sc-if></span>
+            <span class="cm-k">{{it.right}}</span>
+          </button>
+        </sc-if>
+      </sc-for>
+      <sc-if value="{{menu.noResults}}" hint-placeholder-val="{{ false }}"><div class="t13 mute" style="padding: 8px 10px">Nenhuma ação com esse nome</div></sc-if>
+      <div class="cm-f">Toda ação fica na auditoria</div>
+    </div>
+    <sc-if value="{{subOpen}}" hint-placeholder-val="{{ false }}">
+      <div class="cm" role="menu" aria-label="{{sub.title}}" style="top: {{sub.y}}px; left: {{sub.x}}px; width: 280px">
+        <div class="cm-h">{{sub.title}}</div>
+        <sc-for list="{{sub.items}}" as="it" hint-placeholder-count="5">
+          <sc-if value="{{it.isSep}}" hint-placeholder-val="{{ false }}"><div class="cm-sep" role="separator"></div></sc-if>
+          <sc-if value="{{it.isItem}}" hint-placeholder-val="{{ true }}">
+            <button class="{{it.cls}}" role="menuitem" aria-disabled="{{it.dis}}" onClick="{{it.run}}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{it.d}}"></path></svg>
+              <span class="cm-l">{{it.label}}<sc-if value="{{it.hasWhy}}" hint-placeholder-val="{{ false }}"><span class="cm-why">{{it.why}}</span></sc-if></span>
+              <span class="cm-k">{{it.right}}</span>
+            </button>
+          </sc-if>
+        </sc-for>
+      </div>
+    </sc-if>
+  </sc-if>
+
+  <sc-if value="{{dlgOpen}}" hint-placeholder-val="{{ false }}">
+    <div class="dlgb">
+      <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="dlg-h">
+        <h3 id="dlg-h" style="font-size: 18px; font-weight: 650">{{dlg.title}}</h3>
+        <p class="t14 mute" style="margin: 6px 0 14px">{{dlg.who}}</p>
+        <div class="lbl" style="margin-bottom: 8px">Motivo</div>
+        <div class="col" style="gap: 8px">
+          <sc-for list="{{dlg.motivos}}" as="mo" hint-placeholder-count="3"><button class="{{mo.cls}}" onClick="{{mo.pick}}"><span class="{{mo.dot}}"></span>{{mo.label}}</button></sc-for>
+        </div>
+        <label class="field" style="margin-top: 14px">{{dlg.confirmLabel}}<input class="in" value="{{dlg.typed}}" onChange="{{dlg.onType}}" autoFocus="{{ true }}"></label>
+        <div class="row" style="justify-content: flex-end; gap: 10px; margin-top: 18px">
+          <button class="btn" onClick="{{dlg.cancel}}">Voltar</button>
+          <button class="{{dlg.okCls}}" onClick="{{dlg.ok}}" aria-disabled="{{dlg.okDis}}">{{dlg.okLabel}}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{toastOn}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status">{{toast}}</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      perfil: 'recepcao',
+      sel: 'ar', multi: [],
+      menu: null, sub: null, active: -1, filter: '',
+      dlg: null, toast: '', log: [],
+      pts: [
+        { id: 'cn', nome: 'Cláudia B. Nunes', nasc: '22/08/1965', exame: 'Eco + Doppler', hora: '09:00', stage: 'chegar', conf: true, steps: [0,0,0,0,0,0] },
+        { id: 'pl', nome: 'Patrícia G. Lopes', nasc: '03/05/1991', exame: 'Obstétrica c/ Doppler', hora: '09:00', stage: 'chegar', conf: true, steps: [0,0,0,0,0,0] },
+        { id: 'mf', nome: 'Marcelo D. Faria', nasc: '17/01/1980', exame: 'USG abdome', hora: '09:00', stage: 'chegar', conf: false, steps: [0,0,0,0,0,0] },
+        { id: 'ar', nome: 'Antônio Carlos Ribeiro', nasc: '15/06/1954', exame: 'Eco + Doppler de carótidas', hora: '08:30', stage: 'checkin', senha: 'P012', pref: true, steps: [1,1,1,1,0,0] },
+        { id: 'jr', nome: 'Juliana Sampaio Rocha', nasc: '12/04/1993', exame: 'Morfológica', hora: '08:45', stage: 'checkin', senha: 'N034', steps: [1,1,1,0,0,0], pend: 'Falta pedido médico' },
+        { id: 'rl', nome: 'Rafael Monteiro Lima', nasc: '09/11/1988', exame: 'Raio X de tórax', hora: '08:50', stage: 'checkin', senha: 'N035', steps: [1,1,0,1,0,0], pend: 'Falta pagamento', particular: true },
+        { id: 'lp', nome: 'Lúcia Fernandes Prado', nasc: '02/07/1959', exame: 'TC de crânio', hora: '09:00', stage: 'sala', sala: 'Sala 6', steps: [1,1,1,1,1,1] },
+        { id: 'sc', nome: 'Sônia Maria Castro', nasc: '03/02/1962', exame: 'Ecocardiograma', hora: '08:30', stage: 'exame', sala: 'Sala 1', steps: [1,1,1,1,1,1] },
+        { id: 'gp', nome: 'Gustavo H. Pires', nasc: '30/03/1971', exame: 'Teste ergométrico', hora: '08:30', stage: 'exame', sala: 'Sala 4', steps: [1,1,1,1,1,1] },
+        { id: 'dg', nome: 'Denise P. Gomes', nasc: '11/10/1966', exame: 'Pós-contraste', hora: '08:00', stage: 'saindo', status: 'observação 12 de 30 min', steps: [1,1,1,1,1,1] }
+      ]
+    };
+  }
+  // ---------- helpers ----------
+  P(id) { return this.state.pts.find(p => p.id === id); }
+  upd(id, fn) { this.setState(s => ({ pts: s.pts.map(p => p.id === id ? Object.assign({}, p, fn(p)) : p) })); }
+  say(msg, logMsg) {
+    const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    this.setState(s => ({ toast: msg, log: [hora + ' · ' + (logMsg || msg) + ' · por ' + (s.perfil === 'supervisor' ? 'Supervisor' : 'Recepção')].concat(s.log).slice(0, 6) }));
+    clearTimeout(this._t); this._t = setTimeout(() => this.setState({ toast: '' }), 2600);
+  }
+  close() { this.setState({ menu: null, sub: null, active: -1, filter: '' }); }
+  rootOf(el) { return el.closest('[data-root]'); }
+  openAt(id, clientX, clientY, el) {
+    const root = this.rootOf(el); const r = root.getBoundingClientRect();
+    const scale = r.width / root.offsetWidth || 1;
+    let x = (clientX - r.left) / scale, y = (clientY - r.top) / scale;
+    const W = root.offsetWidth, H = root.offsetHeight;
+    if (x + 310 > W) x = W - 310; if (y + 520 > H) y = Math.max(10, H - 520);
+    const multi = this.state.multi.length > 1 && this.state.multi.includes(id);
+    this.setState({ menu: { id, x, y, multi, rootW: W }, sub: null, active: -1, filter: '', sel: multi ? this.state.sel : id });
+  }
+  // ---------- actions ----------
+  stepLabels() { return ['Identidade', 'Elegibilidade', 'Guia', 'Pedido médico', 'Etiqueta', 'Enviar para a sala']; }
+  toggleStep(id, i) {
+    const p = this.P(id); const steps = p.steps.slice(); steps[i] = steps[i] ? 0 : 1;
+    const all = steps.every(Boolean);
+    const pend = (i === 3 && steps[3]) ? undefined : p.pend;
+    this.upd(id, () => ({ steps, pend: (i === 3 && steps[3]) || (i === 2 && steps[2] && p.particular) ? undefined : p.pend, stage: all ? 'sala' : p.stage, sala: all ? (p.sala || 'Sala 1') : p.sala }));
+    this.close();
+    this.say((steps[i] ? 'Etapa concluída: ' : 'Etapa reaberta: ') + this.stepLabels()[i] + ' · ' + p.nome + (all ? ' · enviado para a sala' : ''));
+  }
+  moveTo(id, stage, label) { const p = this.P(id); this.upd(id, () => ({ stage })); this.close(); this.say(p.nome + ' movido para “' + label + '”'); }
+  confirmDlg(kind, id) {
+    const p = this.P(id);
+    const cfg = kind === 'cancelar'
+      ? { title: 'Cancelar atendimento', motivos: ['Paciente pediu para cancelar', 'Exame contraindicado no momento', 'Erro de agendamento'], okLabel: 'Cancelar atendimento' }
+      : { title: 'Registrar desistência', motivos: ['Desistiu por tempo de espera', 'Passou mal / foi embora', 'Sem documento ou pedido'], okLabel: 'Registrar desistência' };
+    this.close();
+    this.setState({ dlg: Object.assign({ kind, id, motivo: -1, typed: '' }, cfg) });
+  }
+  // ---------- menus ----------
+  item(o) { return Object.assign({ isItem: true, isSep: false, isHead: false, st: '', why: '', kbd: '', sub: null }, o); }
+  sep() { return { isSep: true, isItem: false, isHead: false }; }
+  head(label) { return { isHead: true, isItem: false, isSep: false, label }; }
+  I(k) { return ({
+    open: 'M14 3h7v7M21 3l-9 9M5 5h5M5 5v14h14v-5', id: 'M3 5h18v14H3zM7 15c.8-1.5 2-2 3-2s2.2.5 3 2M10 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
+    tv: 'M3 5h18v12H3zM8 21h8', move: 'M5 12h14M13 6l6 6-6 6', star: 'M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z',
+    chat: 'M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z', cash: 'M3 7h18v12H3zM12 10v6M9.5 12.5h5', cal: 'M4 5h16v16H4zM4 10h16M9 3v4M15 3v4',
+    x: 'M6 6l12 12M18 6L6 18', print: 'M6 9V3h12v6M6 18H4v-7h16v7h-2M6 14h12v7H6z', flag: 'M5 21V4h12l-2 4 2 4H5', check: 'M5 12l5 5 9-10', dot: 'M12 12h.01', info: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 11v6M12 7h.01'
+  })[k] || ''; }
+  mainItems(p) {
+    const sup = this.state.perfil === 'supervisor';
+    const id = p.id;
+    const its = [
+      this.item({ key: 'open', label: 'Abrir ficha do paciente', d: this.I('open'), kbd: 'Enter', run: () => { this.close(); this.say('Abrindo a ficha de ' + p.nome); } }),
+      this.item({ key: 'checkin', label: 'Check-in', d: this.I('id'), sub: 'checkin', st: p.stage === 'chegar' || p.stage === 'checkin' ? '' : 'off', why: p.stage === 'chegar' || p.stage === 'checkin' ? '' : 'Check-in já concluído' }),
+      this.item({ key: 'tv', label: 'Chamar na TV', d: this.I('tv'), kbd: 'C', st: p.stage === 'sala' || p.stage === 'checkin' ? '' : 'off', why: p.stage === 'sala' || p.stage === 'checkin' ? '' : 'Só para quem está no check-in ou aguardando a sala', run: () => { this.close(); this.say('Chamando ' + (p.senha || p.nome.split(' ')[0]) + ' · ' + p.nome.split(' ')[0] + ' ' + p.nome.split(' ').slice(-1)[0][0] + '. na TV'); } }),
+      this.item({ key: 'move', label: 'Mover para', d: this.I('move'), sub: 'mover' }),
+      this.sep(),
+      this.item({ key: 'pref', label: p.pref ? 'Tirar preferência' : 'Marcar como preferencial', d: this.I('star'), kbd: 'P', run: () => { this.upd(id, x => ({ pref: !x.pref })); this.close(); this.say((p.pref ? 'Preferência retirada: ' : 'Marcado como preferencial: ') + p.nome); } }),
+      this.item({ key: 'whats', label: 'Enviar pelo WhatsApp', d: this.I('chat'), sub: 'whats' }),
+      this.item({ key: 'caixa', label: 'Receber no caixa', d: this.I('cash'), kbd: 'F4', st: p.particular && p.pend === 'Falta pagamento' ? '' : 'off', why: p.particular && p.pend === 'Falta pagamento' ? '' : 'Nada a receber (convênio ou já pago)', run: () => { this.upd(id, x => ({ pend: undefined, steps: x.steps.map((v, i) => i === 2 ? 1 : v) })); this.close(); this.say('Pagamento de R$ 180,00 recebido (PIX) · ' + p.nome); } }),
+      this.item({ key: 'etq', label: 'Imprimir etiqueta', d: this.I('print'), kbd: 'Ctrl+P', run: () => { this.close(); this.say('Etiqueta enviada para a impressora do guichê 2 · ' + p.nome); } }),
+      this.sep(),
+      this.item({ key: 'desist', label: 'Registrar desistência…', d: this.I('flag'), st: p.stage === 'exame' || p.stage === 'saindo' ? 'off' : 'danger', why: p.stage === 'exame' || p.stage === 'saindo' ? 'Paciente já em exame ou saindo' : '', run: () => this.confirmDlg('desistencia', id) }),
+      this.item({ key: 'cancel', label: 'Cancelar atendimento…', d: this.I('x'), st: sup ? 'danger' : 'off', why: sup ? '' : 'Só supervisor da recepção', run: () => this.confirmDlg('cancelar', id) })
+    ];
+    return its;
+  }
+  loteItems() {
+    const ids = this.state.multi; const ps = ids.map(i => this.P(i));
+    const allChegar = ps.every(p => p.stage === 'chegar');
+    return [
+      this.item({ key: 'prep', label: 'Enviar preparo pelo WhatsApp', d: this.I('chat'), run: () => { this.close(); this.say('Preparo enviado para ' + ps.length + ' pacientes'); } }),
+      this.item({ key: 'etqs', label: 'Imprimir etiquetas', d: this.I('print'), run: () => { this.close(); this.say(ps.length + ' etiquetas enviadas para a impressora'); } }),
+      this.item({ key: 'conf', label: 'Confirmar presença', d: this.I('check'), st: allChegar ? '' : 'off', why: allChegar ? '' : 'Só para quem ainda vai chegar', run: () => { ps.forEach(p => this.upd(p.id, () => ({ conf: true }))); this.close(); this.say('Presença confirmada para ' + ps.length + ' pacientes'); } }),
+      this.sep(),
+      this.item({ key: 'nolote', label: 'Ações clínicas não são feitas em lote', d: this.I('info'), st: 'off', why: 'Assinar, liberar e cancelar: um paciente por vez' }),
+      this.sep(),
+      this.item({ key: 'limpa', label: 'Limpar seleção', d: this.I('x'), kbd: 'Esc', run: () => { this.setState({ multi: [] }); this.close(); } })
+    ];
+  }
+  subItems(kind, p) {
+    if (kind === 'checkin') return this.stepLabels().map((l, i) => this.item({ key: 's' + i, label: l, d: this.I(p.steps[i] ? 'check' : 'dot'), st: p.steps[i] ? 'done' : '', right: p.steps[i] ? 'feito' : 'marcar', run: () => this.toggleStep(p.id, i) }));
+    if (kind === 'mover') return [['chegar', 'A chegar'], ['checkin', 'Check-in'], ['sala', 'Aguardando a sala'], ['exame', 'Em exame'], ['saindo', 'Saindo']].map(([s, l]) => this.item({ key: s, label: l, d: this.I(p.stage === s ? 'check' : 'move'), st: p.stage === s ? 'off' : '', why: p.stage === s ? 'Está aqui agora' : (s === 'exame' ? 'Normalmente feito pelo aparelho (MPPS)' : ''), run: () => this.moveTo(p.id, s, l) }));
+    if (kind === 'whats') return [['Preparo do exame', 'preparo'], ['Aviso de atraso do médico', 'atraso'], ['Como chegar e estacionamento', 'local'], ['Link do pré-check-in', 'pre']].map(([l, k]) => this.item({ key: k, label: l, d: this.I('chat'), run: () => { this.close(); this.say('WhatsApp enviado (modelo aprovado: “' + l + '”) · ' + p.nome); } }));
+    return [];
+  }
+  decorate(list, activeIdx, isMain) {
+    let n = -1;
+    return list.map(it => {
+      if (!it.isItem) return it;
+      n++;
+      const idx = n;
+      const off = it.st === 'off';
+      return Object.assign({}, it, {
+        cls: 'cm-i ' + it.st + (isMain && idx === activeIdx ? ' act' : ''),
+        dis: off ? 'true' : 'false',
+        hasWhy: !!it.why,
+        right: it.sub ? '›' : (it.right || it.kbd || ''),
+        run: off ? (e => e && e.stopPropagation()) : (it.sub ? (e => { e && e.stopPropagation(); this.openSub(it.sub, idx); }) : it.run),
+        hover: () => { if (isMain) { this.setState({ active: idx }); if (it.sub && !off) this.openSub(it.sub, idx); else if (this.state.sub) this.setState({ sub: null }); } }
+      });
+    });
+  }
+  openSub(kind, idx) {
+    const m = this.state.menu; if (!m) return;
+    const right = m.x + 300 + 290 < m.rootW;
+    this.setState({ sub: { kind, x: right ? m.x + 296 : m.x - 284, y: m.y + 86 + idx * 37 }, active: idx });
+  }
+  visibleMain() {
+    const m = this.state.menu; if (!m) return [];
+    const p = this.P(m.id);
+    let list = m.multi ? this.loteItems() : this.mainItems(p);
+    const f = this.state.filter.trim().toLowerCase();
+    if (f) list = list.filter(it => it.isItem && it.label.toLowerCase().includes(f));
+    return list;
+  }
+  // ---------- render ----------
+  renderVals() {
+    const s = this.state;
+    const stages = [['chegar', 'A chegar'], ['checkin', 'Check-in'], ['sala', 'Aguardando a sala'], ['exame', 'Em exame'], ['saindo', 'Saindo']];
+    const meta = p => p.stage === 'chegar' ? (p.hora + ' · ' + (p.conf ? 'confirmada' : 'sem confirmação'))
+      : p.stage === 'checkin' ? (p.pend || ((p.senha || '') + ' · etapa ' + (p.steps.filter(Boolean).length + 1 > 6 ? 6 : p.steps.filter(Boolean).length + 1) + ' de 6'))
+      : p.stage === 'sala' ? (p.sala + ' · aguardando') : p.stage === 'exame' ? (p.sala + ' · em exame') : (p.status || 'liberado');
+    const cols = stages.map(([st, label]) => {
+      const items = s.pts.filter(p => p.stage === st).map(p => ({
+        nome: p.nome, exame: p.exame, meta: meta(p), pref: !!p.pref,
+        metaCls: 'm' + ((p.stage === 'checkin' && p.pend) || (p.stage === 'chegar' && !p.conf) ? ' warn' : ''),
+        cls: 'kc' + (s.multi.includes(p.id) ? ' multi' : (s.sel === p.id ? ' sel' : '')),
+        aria: p.nome + ', ' + p.exame + ', ' + meta(p) + '. Menu: Shift+F10',
+        moreAria: 'Ações de ' + p.nome,
+        onClick: e => {
+          if (e.ctrlKey || e.metaKey || e.shiftKey) { const has = s.multi.includes(p.id); this.setState({ multi: has ? s.multi.filter(x => x !== p.id) : s.multi.concat(p.id) }); }
+          else this.setState({ sel: p.id, multi: [] });
+        },
+        onCtx: e => { e.preventDefault(); this.openAt(p.id, e.clientX, e.clientY, e.currentTarget); },
+        onMore: e => { e.stopPropagation(); const r = e.currentTarget.getBoundingClientRect(); this.openAt(p.id, r.left, r.bottom, e.currentTarget); },
+        onKey: e => {
+          if (e.key === 'ContextMenu' || (e.shiftKey && e.key === 'F10')) { e.preventDefault(); const r = e.currentTarget.getBoundingClientRect(); this.openAt(p.id, r.left + 24, r.top + 24, e.currentTarget); }
+          else if (e.key === 'Enter') this.setState({ sel: p.id, multi: [] });
+        }
+      }));
+      return { label, count: String(items.length), items, empty: items.length === 0 };
+    });
+    // menu
+    let menu = null, sub = null;
+    if (s.menu) {
+      const p = this.P(s.menu.id);
+      const vis = this.visibleMain();
+      menu = {
+        x: Math.round(s.menu.x), y: Math.round(s.menu.y), filter: s.filter,
+        title: s.menu.multi ? (s.multi.length + ' pacientes selecionados') : (p.nome + ' · ' + p.nasc),
+        items: this.decorate(vis, s.active, true), noResults: vis.length === 0
+      };
+      if (s.sub && !s.menu.multi) sub = { x: Math.round(s.sub.x), y: Math.round(s.sub.y), title: ({ checkin: 'Etapas do check-in', mover: 'Mover para', whats: 'Mensagens aprovadas' })[s.sub.kind], items: this.decorate(this.subItems(s.sub.kind, p), -1, false) };
+    }
+    // dialog
+    let dlg = null;
+    if (s.dlg) {
+      const p = this.P(s.dlg.id); const first = p.nome.split(' ')[0];
+      const ok = s.dlg.motivo >= 0 && s.dlg.typed.trim().toLowerCase() === first.toLowerCase();
+      dlg = {
+        title: s.dlg.title, who: p.nome + ' · ' + p.nasc + ' · ' + p.exame,
+        motivos: s.dlg.motivos.map((m, i) => ({ label: m, cls: 'opt' + (s.dlg.motivo === i ? ' on' : ''), dot: s.dlg.motivo === i ? 'ck cur' : 'ck todo', pick: () => this.setState({ dlg: Object.assign({}, s.dlg, { motivo: i }) }) })),
+        confirmLabel: 'Para confirmar, digite o primeiro nome do paciente (' + first + ')',
+        typed: s.dlg.typed, onType: e => this.setState({ dlg: Object.assign({}, s.dlg, { typed: e.target.value }) }),
+        okLabel: s.dlg.okLabel, okCls: ok ? 'btn btn-p' : 'btn', okDis: ok ? 'false' : 'true',
+        cancel: () => this.setState({ dlg: null }),
+        ok: () => {
+          if (!ok) return;
+          const motivo = s.dlg.motivos[s.dlg.motivo];
+          this.upd(p.id, () => ({ stage: 'saindo', status: (s.dlg.kind === 'cancelar' ? 'cancelado · ' : 'desistiu · ') + motivo.toLowerCase(), pend: undefined }));
+          this.setState({ dlg: null });
+          this.say((s.dlg.kind === 'cancelar' ? 'Atendimento cancelado: ' : 'Desistência registrada: ') + p.nome, (s.dlg.kind === 'cancelar' ? 'Cancelamento' : 'Desistência') + ' de ' + p.nome + ' · motivo: ' + motivo);
+        }
+      };
+    }
+    const selP = this.P(s.sel) || s.pts[0];
+    const done = selP.steps.filter(Boolean).length;
+    const det = {
+      lbl: 'Check-in' + (selP.senha ? ' · ' + selP.senha : '') + (selP.pref ? ' preferencial' : ''),
+      nome: selP.nome, nasc: selP.nasc, exame: selP.exame + ' · ' + selP.hora,
+      steps: this.stepLabels().map((l, i) => ({ label: l, sym: selP.steps[i] ? '✓' : String(i + 1), cls: 'ck ' + (selP.steps[i] ? 'ok' : (i === done ? 'cur' : 'todo')) }))
+    };
+    return {
+      cols, det, menu, sub, dlg,
+      menuOpen: !!s.menu, subOpen: !!sub, dlgOpen: !!s.dlg,
+      toast: s.toast, toastOn: !!s.toast,
+      log: s.log, logEmpty: s.log.length === 0,
+      selInfo: s.multi.length > 1 ? (s.multi.length + ' selecionados · clique direito num deles para ações em lote') : 'Ctrl+clique para selecionar vários',
+      perfilRecCls: s.perfil === 'recepcao' ? 'on' : '', perfilSupCls: s.perfil === 'supervisor' ? 'on' : '',
+      perfilRecSel: s.perfil === 'recepcao' ? 'true' : 'false', perfilSupSel: s.perfil === 'supervisor' ? 'true' : 'false',
+      setRec: () => this.setState({ perfil: 'recepcao' }), setSup: () => this.setState({ perfil: 'supervisor' }),
+      closeMenu: () => this.close(),
+      closeMenuCtx: e => { e.preventDefault(); this.close(); },
+      setFilter: e => this.setState({ filter: e.target.value, active: 0, sub: null }),
+      menuKey: e => {
+        const vis = this.visibleMain().filter(it => it.isItem);
+        if (e.key === 'Escape') { e.preventDefault(); if (this.state.sub) this.setState({ sub: null }); else this.close(); }
+        else if (e.key === 'ArrowDown') { e.preventDefault(); this.setState({ active: Math.min(vis.length - 1, this.state.active + 1), sub: null }); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); this.setState({ active: Math.max(0, this.state.active - 1), sub: null }); }
+        else if (e.key === 'ArrowRight') { const it = vis[this.state.active]; if (it && it.sub && it.st !== 'off') { e.preventDefault(); this.openSub(it.sub, this.state.active); } }
+        else if (e.key === 'ArrowLeft') { if (this.state.sub) { e.preventDefault(); this.setState({ sub: null }); } }
+        else if (e.key === 'Enter') { const it = vis[this.state.active]; if (it && it.st !== 'off') { e.preventDefault(); if (it.sub) this.openSub(it.sub, this.state.active); else it.run(); } }
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -247,6 +247,15 @@
    "h": 6700,
    "title": "Clique direito: menus de contexto (8 situações + regras)",
    "expand": "fill"
+  },
+  "Recepcao-Interativa.dc.html": {
+   "x": 1520,
+   "y": 12123,
+   "w": 1440,
+   "h": 1000,
+   "title": "Protótipo interativo: recepção com clique direito",
+   "expand": "fill",
+   "is_interactive": true
   }
  },
  "order": [
@@ -277,7 +286,8 @@
   "Laudo-Impresso.dc.html",
   "Preparo-Exame.dc.html",
   "Documentos.dc.html",
-  "Menus-Contexto.dc.html"
+  "Menus-Contexto.dc.html",
+  "Recepcao-Interativa.dc.html"
  ],
  "notes": {
   "t1": {
@@ -360,7 +370,7 @@
    "y": 11863,
    "text": "Interações",
    "kind": "title1",
-   "maxW": 1440
+   "maxW": 2960
   }
  },
  "designSystems": []
