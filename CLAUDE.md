@@ -1,0 +1,73 @@
+# CLAUDE.md — regras do projeto VidaCor
+
+Este arquivo vale para **qualquer pessoa ou assistente de IA** que trabalhe neste
+repositório. As regras abaixo são obrigatórias; o detalhamento, com exemplos e
+testes exigidos, está em [docs/15-padrao-de-qualidade.md](docs/15-padrao-de-qualidade.md).
+As regras gerais de arquitetura estão em [docs/14](docs/14-regras-de-arquitetura-e-engenharia.md)
+e as decisões em [docs/adr/](docs/adr/).
+
+## O projeto
+Sistema da clínica de diagnóstico por imagem **VidaCor Imagem**: agenda, recepção,
+caixa, atendimento médico, exames, aparelhos DICOM, laudos, imagens, faturamento
+TISS, financeiro, estoque, WhatsApp, portal do paciente e estacionamento.
+Servidor **local**. Núcleo em **Rust** (axum, sqlx), banco **PostgreSQL**, telas em
+**TypeScript/React** (web e Tauri). Visão geral: [README](README.md) e [docs/11](docs/11-arquitetura-e-infraestrutura.md).
+
+**Estado atual:** documentação, mockups e arquitetura. Ainda não há código de
+produção. Quando houver, o comando único de verificação será `just test`.
+
+## As seis garantias (inegociáveis)
+
+### G1 · O servidor decide; o cliente só pede
+- Tudo que roda no navegador ou no Desktop pode ser lido e alterado pelo usuário.
+- **Preço, desconto, cortesia, valor de guia, permissão, perfil e limite** são calculados e validados **no núcleo Rust**. O servidor recalcula tudo e ignora valores vindos do cliente.
+- Esconder botão é conforto de UX, não segurança: toda rota verifica a permissão do ato.
+- **Nenhum segredo em código de tela** nem em variável que vai para o navegador (`VITE_*`, configuração do Tauri). Só valores públicos por design (por exemplo, URL do servidor).
+- O banco **nunca** é exposto diretamente (nada de PostgREST/API automática). No portal, que roda na nuvem, RLS por paciente é obrigatório como segunda barreira.
+
+### G2 · Concorrência se resolve no banco
+- Todo trecho que **lê, decide e grava** sobre recurso limitado (horário de sala, senha da fila, caixa aberto, lote de estoque, número de guia/lote TISS, link de convite, cortesia) precisa de proteção **no PostgreSQL**, nesta ordem de preferência:
+  1. **constraint única** (índice único);
+  2. **operação atômica** (`UPDATE … WHERE … AND condição` conferindo as linhas afetadas);
+  3. **transação com `SELECT … FOR UPDATE`** quando a regra for mais complexa.
+- **Proibido** lock em memória, lock em Redis com expiração ou decisão baseada em cache para garantir exclusividade. Infraestrutura nova para isso só com ADR explicando por que o banco não basta.
+- Cada proteção tem teste com **2 requisições simultâneas** provando que só uma tem efeito.
+
+### G3 · Repetir não duplica (idempotência)
+- **Webhooks recebidos** (PIX, WhatsApp, NFS-e, provedor de assinatura): verificar a assinatura com o **corpo bruto**, antes de qualquer processamento; gravar o **ID do evento em tabela com chave única antes** de agir; se já existir, responder 200 e parar; **não depender da ordem** de chegada (buscar o estado atual no provedor); responder 2xx rápido e processar pelo outbox.
+- **Chamadas que fazemos** a provedores (cobrança PIX, estorno, emissão de NFS-e, envio de lote TISS, assinatura, envio de WhatsApp): **chave de idempotência UUID** gerada uma vez por operação de negócio e reaproveitada nas retentativas.
+- **Rotas de escrita do núcleo** que criam cobrança, recebimento, guia, agendamento ou laudo aceitam o header **`Idempotency-Key`** e devolvem a mesma resposta se a chave se repetir.
+- **Nunca** usar dado pessoal (CPF, e-mail, telefone, nome) como chave de idempotência.
+
+### G4 · Teste de integração de verdade
+- Fluxos críticos são testados **chamando a rota HTTP real**, com **PostgreSQL real de teste** (Testcontainers) e **Orthanc/NATS reais** quando o fluxo usar. Mock **só de serviço externo** (PSP do PIX, Meta, prefeitura, provedor de assinatura, Memed).
+- Cada fluxo cobre: **caminho feliz**, **erros esperados**, **repetição** (clique duplo, webhook duplicado, 2 requisições simultâneas), **limites** (zero, negativo, esgotado, expirado) e **acesso indevido** (usuário ou paciente A tentando ler/alterar dado de B).
+- As frases de comportamento ("quando…, então…") são escritas em português e **aprovadas pelo dono do produto antes** dos testes.
+- **Proibido** apagar, pular (`#[ignore]`, `skip`) ou afrouxar teste para passar, e proibido mockar o banco ou a regra testada. Teste que falha por bug real **continua falhando** e o bug vai para [docs/bugs.md](docs/bugs.md).
+- **Nunca** apontar teste para banco de produção nem usar dado real de paciente fora de produção.
+
+### G5 · Camadas separadas
+- Tela (React/Tauri) **não** contém regra de negócio nem acessa banco ou provedor.
+- Domínio (crates `dominio-*`) **não** conhece HTTP, SQL, Orthanc nem provedores: fala por *traits*.
+- Adaptadores (banco, Orthanc, PIX, WhatsApp, NFS-e, assinatura) ficam na borda.
+- Arquivo acima de **400 linhas** pede revisão de responsabilidade; acima de **600**, o PR precisa justificar ou dividir.
+- Refatoração **não muda comportamento**: testes de caracterização antes, um passo por vez, mesmos nomes públicos, rotas e colunas; bug encontrado vai para a lista, não é corrigido junto.
+
+### G6 · Plano antes, alteração depois
+- Auditorias são **somente leitura**: não alteram arquivos, não rodam migration, não instalam nada.
+- Correções começam por **plano escrito** e esperam o **OK** do dono antes de mexer em código.
+- **Toda migration nova** é revisada por uma pessoa antes de rodar. Nunca apagar dados para "fazer funcionar"; dados duplicados que impeçam uma constraint são reportados com proposta de limpeza.
+- Nunca desligar uma proteção existente para "fazer funcionar".
+- Se não for possível verificar algo, escrever **"não verificado"** e o motivo, sem chutar.
+
+## Playbooks
+Os roteiros de auditoria e correção ficam em [docs/playbooks/](docs/playbooks/) e
+também como comandos do Claude Code em `.claude/commands/`:
+`/auditoria`, `/testes-integracao`, `/refatoracao-segura`, `/seguranca`,
+`/idempotencia`, `/condicao-de-corrida`.
+
+## Regras clínicas que não podem ser quebradas
+- Registro clínico (laudo, evolução, documento assinado) **nunca** é apagado nem alterado: correção gera nova versão com motivo.
+- Laudo só vai ao portal **depois de assinado**.
+- Dado de saúde **nunca** em log, métrica, URL ou cache do navegador.
+- Imagem DICOM sem paciente conciliado **nunca** vai para laudo.

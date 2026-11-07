@@ -3,7 +3,9 @@
 > **Status:** proposta (v0.1, nov/2026). Consolida as regras que valem para
 > todo o código do VidaCor. Complementa a [11](11-arquitetura-e-infraestrutura.md)
 > (arquitetura), a [12](12-observabilidade-e-metricas.md) (métricas) e a
-> [13](13-instalacao-e-distribuicao.md) (instalação). Regras marcadas com
+> [13](13-instalacao-e-distribuicao.md) (instalação). As seis garantias obrigatórias (servidor decide, banco protege, idempotência,
+> testes reais, camadas, plano antes) estão em [15](15-padrao-de-qualidade.md) e no
+> [CLAUDE.md](../CLAUDE.md). Regras marcadas com
 > **[CI]** são verificadas automaticamente: o merge não acontece se falharem.
 
 ---
