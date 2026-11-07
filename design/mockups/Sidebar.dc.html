@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Menu lateral — VidaCor</title>
 <script src="./support.js"></script>
-<link rel="stylesheet" href="/_blob/b7e42ddd1a1313743941687fc5dcf532">
+<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
 </head>
 <body>
 <x-dc>
@@ -36,7 +36,8 @@
   </button>
 
   <sc-for list="{{sections}}" as="sec" hint-placeholder-count="4">
-    <div class="sec"><i class="{{sec.k}}"></i>{{sec.title}}</div>
+    <button class="sec sec-b" aria-expanded="{{sec.aria}}" onClick="{{sec.flip}}"><i class="{{sec.k}}"></i>{{sec.title}}<span class="sec-n">{{sec.resumo}}</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" style="margin-left: auto"><path d="{{sec.chev}}"></path></svg></button>
+    <sc-if value="{{sec.aberta}}" hint-placeholder-val="{{ true }}">
     <sc-for list="{{sec.items}}" as="it" hint-placeholder-count="4">
       <a class="{{it.cls}}" href="{{it.href}}">
         <span class="{{it.ni}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{it.d}}"></path></svg></span>
@@ -45,6 +46,7 @@
         <sc-if value="{{it.hasAlert}}" hint-placeholder-val="{{ false }}"><span class="al" aria-label="{{it.alertLabel}}">{{it.alert}}</span></sc-if>
       </a>
     </sc-for>
+    </sc-if>
   </sc-for>
 
   <div class="sec">Nas salas agora</div>
@@ -66,7 +68,7 @@
   <div class="row" style="margin-top: 10px; padding: 8px 8px">
     <span class="av" style="background: #0A1A4A; color: #fff">{{userInitials}}</span>
     <span style="flex: 1; line-height: 1.3"><b class="t15" style="display: block; font-weight: 600">{{userName}}</b><span class="t13 mute">{{userRole}}</span></span>
-    <a class="icon-btn" href="Configuracoes.dc.html" aria-label="Configurações da conta" style="width: 40px; height: 40px; border: 0; background: transparent">
+    <a class="icon-btn" href="Preferencias.dc.html" aria-label="Minhas preferências" style="width: 40px; height: 40px; border: 0; background: transparent">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"></path></svg>
     </a>
   </div>
@@ -108,13 +110,21 @@
 <dc-import name="Chat-Popout" aberto="{{chatOpen}}" fechar="{{closeChat}}" hint-size="0px,0px"></dc-import>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"active":{"editor":"enum","options":["cadastro","corpo-clinico","chat","lastro","inicio","agenda","minha-agenda","etiquetas","recepcao","pacientes","atendimento","caixa","aparelhos","sala","laudos","fluxo","visualizador","faturamento","financeiro","estoque","comunicacao","telemedicina","estacionamento","indicadores","configuracoes"],"default":"inicio"},"userName":{"editor":"text","default":"Ana Souza"},"userRole":{"editor":"text","default":"Recepção"},"userInitials":{"editor":"text","default":"AS"},"$preview":{"width":280,"height":1400}}'>
+<script type="text/x-dc" data-dc-script data-props='{"active":{"editor":"enum","options":["espera","pacotes","orcamento","relatorios","exames-cad","convenios","modelos-laudo","usuarios","qualidade","revisao","dose","ouvidoria","contingencia","preferencias","cadastro","corpo-clinico","chat","lastro","inicio","agenda","minha-agenda","etiquetas","recepcao","pacientes","atendimento","caixa","aparelhos","sala","laudos","fluxo","visualizador","faturamento","financeiro","estoque","comunicacao","telemedicina","estacionamento","indicadores","configuracoes"],"default":"inicio"},"userName":{"editor":"text","default":"Ana Souza"},"userRole":{"editor":"text","default":"Recepção"},"userInitials":{"editor":"text","default":"AS"},"$preview":{"width":280,"height":1400}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
     let mini = false;
     try { mini = window.localStorage.getItem('vc-menu') === 'mini'; } catch (e) {}
-    this.state = { mini, chat: false };
+    let fechadas = {};
+    try { fechadas = JSON.parse(window.localStorage.getItem('vc-menu-secoes') || '{}') || {}; } catch (e) {}
+    this.state = { mini, chat: false, fechadas };
+  }
+  flipSec(id) {
+    const f = Object.assign({}, this.state.fechadas || {});
+    f[id] = !f[id];
+    try { window.localStorage.setItem('vc-menu-secoes', JSON.stringify(f)); } catch (e) {}
+    this.setState({ fechadas: f });
   }
   toggleMenu() {
     const mini = !this.state.mini;
@@ -125,7 +135,7 @@ class Component extends DCLogic {
     const K = { inicio:'navy', agenda:'blue', 'minha-agenda':'blue', recepcao:'teal', etiquetas:'amber', pacientes:'violet',
       atendimento:'green', sala:'teal', aparelhos:'indigo', laudos:'violet', fluxo:'pink', visualizador:'navy',
       caixa:'green', faturamento:'orange', financeiro:'green', estoque:'amber', comunicacao:'teal', lastro:'indigo',
-      indicadores:'pink', configuracoes:'gray', cadastro:'violet', 'corpo-clinico':'rose', telemedicina:'blue', estacionamento:'gray' };
+      indicadores:'pink', configuracoes:'gray', cadastro:'violet', 'corpo-clinico':'rose', espera:'amber', pacotes:'teal', orcamento:'green', relatorios:'indigo', 'exames-cad':'teal', convenios:'orange', 'modelos-laudo':'violet', usuarios:'navy', qualidade:'green', revisao:'violet', dose:'amber', ouvidoria:'pink', contingencia:'rose', telemedicina:'blue', estacionamento:'gray' };
     const active = this.props.active ?? 'inicio';
     const I = {
       inicio:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',
@@ -151,6 +161,19 @@ class Component extends DCLogic {
       indicadores:'M4 20V10M10 20V4M16 20v-7M2 20h20',
       cadastro:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6',
       'corpo-clinico':'M12 21s-7-4.4-7-10V5l7-3 7 3v6c0 5.6-7 10-7 10zM12 8v6M9 11h6',
+      espera:'M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z',
+      pacotes:'M20 7H4v13h16zM4 7l2-4h12l2 4M12 7v13M8 11h8',
+      orcamento:'M7 3h10v18l-2.5-1.5L12 21l-2.5-1.5L7 21zM10 8h4M10 12h4',
+      relatorios:'M4 4h16v16H4zM8 16v-4M12 16V8M16 16v-6',
+      'exames-cad':'M9 3h6v4H9zM6 5h3M15 5h3v16H6V5h3M9 12h6M9 16h4',
+      convenios:'M3 8h18v12H3zM3 12h18M7 16h3',
+      'modelos-laudo':'M14 3H6v18h12V7zM14 3v4h4M9 12h6M9 16h6M9 8h2',
+      usuarios:'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21v-1a6 6 0 0 1 12 0v1M17 11l2 2 4-4',
+      qualidade:'M12 2l3 6 6 .9-4.5 4.3 1 6.3L12 16.6 6.5 19.5l1-6.3L3 8.9 9 8z',
+      revisao:'M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
+      dose:'M12 12h.01M12 3a9 9 0 0 1 7.8 4.5L12 12zM4.2 16.5A9 9 0 0 1 4.2 7.5L12 12zM19.8 16.5A9 9 0 0 1 12 21v-9z',
+      ouvidoria:'M3 11v3a2 2 0 0 0 2 2h2l5 4V5L7 9H5a2 2 0 0 0-2 2zM16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12',
+      contingencia:'M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z',
       configuracoes:'M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1M15 4v4M9 10v4M17 16v4'
     };
     const it = (key, label, href, extra) => Object.assign({
@@ -158,35 +181,63 @@ class Component extends DCLogic {
       hasCount: false, count: '', hasAlert: false, alert: '', alertLabel: ''
     }, extra || {});
     const sections = [
-      { title: 'Clínica', k: 'k-blue', items: [
+      { id: 'clinica', title: 'Clínica', k: 'k-blue', items: [
         it('inicio','Início','Main.dc.html'),
         it('agenda','Agenda','Agenda.dc.html',{hasCount:true,count:'42'}),
         it('minha-agenda','Minha agenda (médico)','Agenda-Medico.dc.html',{hasCount:true,count:'14'}),
+        it('espera','Lista de espera','Lista-Espera.dc.html',{hasCount:true,count:'9'}),
         it('recepcao','Recepção e senhas','Recepcao.dc.html',{hasCount:true,count:'6'}),
+        it('pacientes','Pacientes','Pacientes-Lista.dc.html'),
         it('etiquetas','Etiquetas e rastreio','Etiquetas.dc.html',{hasAlert:true,alert:'1',alertLabel:'1 divergência de etiqueta'}),
-        it('pacientes','Pacientes','Paciente.dc.html'),
-        it('cadastro','Novo paciente','Cadastro-Paciente.dc.html')
+        it('pacotes','Check-up e pacotes','Checkup-Pacotes.dc.html'),
+        it('estacionamento','Estacionamento','Estacionamento.dc.html')
       ]},
-      { title: 'Exames', k: 'k-violet', items: [
+      { id: 'exames', title: 'Exames', k: 'k-violet', items: [
         it('atendimento','Atendimento médico','Atendimento.dc.html',{hasCount:true,count:'8'}),
         it('sala','Sala de exame','Sala-Exame.dc.html',{hasCount:true,count:'5'}),
         it('aparelhos','Aparelhos (DICOM)','Aparelhos.dc.html',{hasAlert:true,alert:'1',alertLabel:'1 aparelho offline'}),
         it('laudos','Laudar','Laudo.dc.html',{hasAlert:true,alert:'11',alertLabel:'11 laudos pendentes'}),
         it('fluxo','Fluxo de laudos','Fluxo-Laudos.dc.html'),
-        it('visualizador','Visualizador de imagens','Visualizador.dc.html')
+        it('visualizador','Visualizador de imagens','Visualizador.dc.html'),
+        it('telemedicina','Telemedicina','Telemedicina.dc.html')
       ]},
-      { title: 'Gestão', k: 'k-orange', items: [
+      { id: 'gestao', title: 'Gestão', k: 'k-orange', items: [
         it('caixa','Caixa (particular)','Caixa.dc.html'),
+        it('orcamento','Orçamentos','Orcamento.dc.html'),
         it('faturamento','Faturamento TISS','Faturamento.dc.html',{hasAlert:true,alert:'3',alertLabel:'3 glosas com prazo'}),
         it('financeiro','Financeiro','Financeiro.dc.html'),
         it('estoque','Estoque','Estoque.dc.html',{hasCount:true,count:'2'}),
         it('comunicacao','WhatsApp e NPS','Comunicacao.dc.html',{hasCount:true,count:'5'}),
-        it('corpo-clinico','Corpo clínico','Corpo-Clinico.dc.html',{hasAlert:true,alert:'1',alertLabel:'1 médico aguardando conferência'}),
-        it('lastro','Lastro (rastreio)','Lastro.dc.html'),
         it('indicadores','Indicadores','Indicadores.dc.html'),
+        it('relatorios','Relatórios','Relatorios.dc.html')
+      ]},
+      { id: 'cadastros', title: 'Cadastros', k: 'k-teal', items: [
+        it('exames-cad','Exames e procedimentos','Exames-Procedimentos.dc.html'),
+        it('convenios','Convênios e tabelas','Convenios-Tabelas.dc.html'),
+        it('modelos-laudo','Modelos de laudo','Modelos-Laudo.dc.html'),
+        it('corpo-clinico','Corpo clínico','Corpo-Clinico.dc.html',{hasAlert:true,alert:'1',alertLabel:'1 médico aguardando conferência'}),
+        it('usuarios','Usuários e perfis','Usuarios-Perfis.dc.html'),
         it('configuracoes','Configurações','Configuracoes.dc.html')
+      ]},
+      { id: 'qualidade', title: 'Qualidade e apoio', k: 'k-green', items: [
+        it('qualidade','Qualidade (POPs, eventos)','Qualidade.dc.html',{hasCount:true,count:'4'}),
+        it('revisao','Revisão por pares','Revisao-Pares.dc.html'),
+        it('dose','Dose de radiação','Gestao-Dose.dc.html',{hasAlert:true,alert:'1',alertLabel:'1 dose acima da referência'}),
+        it('ouvidoria','Ouvidoria','Ouvidoria.dc.html',{hasCount:true,count:'3'}),
+        it('lastro','Lastro (rastreio)','Lastro.dc.html'),
+        it('contingencia','Contingência','Contingencia.dc.html')
       ]}
     ];
+    const fech = this.state.fechadas || {};
+    const activeSec = (sections.find(sec => sec.items.some(x => x.key === active)) || {}).id;
+    sections.forEach(sec => {
+      const aberta = !fech[sec.id] || sec.id === activeSec;
+      sec.aberta = aberta;
+      sec.aria = aberta ? 'true' : 'false';
+      sec.chev = aberta ? 'M6 9l6 6 6-6' : 'M9 6l6 6-6 6';
+      sec.flip = () => this.flipSec(sec.id);
+      sec.resumo = aberta ? '' : String(sec.items.length);
+    });
     sections.forEach(sec => sec.items.forEach(x => {
       x.tip = x.hasAlert ? x.label + ' · ' + x.alertLabel : (x.hasCount ? x.label + ' · ' + x.count : x.label);
       x.aria = x.tip;

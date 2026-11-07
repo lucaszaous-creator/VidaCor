@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Exames e procedimentos</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.tab{height:38px;padding:0 14px;border-radius:999px;border:0;font:600 14px Inter,sans-serif;cursor:pointer}
+.box{display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:16px;background:#F6F7F9;min-width:0}
+.wa{background:#E7DED3;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.wa-b{align-self:flex-start;max-width:92%;background:#fff;border-radius:4px 14px 14px 14px;padding:10px 12px;font-size:14px;line-height:1.5;color:#111;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.wa-m{font-size:11px;color:#667085;text-align:right;margin-top:4px}
+.grp{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5B6474;padding:14px 16px 6px}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="exames-cad" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><a href="Configuracoes.dc.html">Cadastros</a><span aria-hidden="true">›</span><b>Exames e procedimentos</b></div>
+      <div class="grow"></div>
+      <span class="t13 mute">68 exames ativos · 6 modalidades</span>
+    </div>
+
+    <div class="page-h">
+      <div class="grow"><h1>Exames e procedimentos</h1><p>O que a clínica faz, como prepara o paciente, quem realiza e lauda. Toda mudança gera nova versão com data de vigência.</p></div>
+      <button class="btn btn-p" onClick="{{novo}}">Cadastrar exame</button>
+    </div>
+
+    <sc-if value="{{novoAberto}}" hint-placeholder-val="{{ false }}">
+      <div class="banner info" role="status"><div class="t14" style="line-height: 1.5; flex: 1"><b>Novo exame em rascunho.</b> Ele só aparece na agenda depois de ter preço, preparo, quem realiza e modelo de laudo, e de ser publicado pela coordenação.</div><button class="btn btn-sm" onClick="{{fecharNovo}}">Entendi</button></div>
+    </sc-if>
+
+    <div style="display: grid; grid-template-columns: minmax(250px, 310px) minmax(0, 1fr); gap: 16px; align-items: start">
+      <section class="card" style="padding: 8px 0" aria-label="Catálogo de exames">
+        <label class="search" style="margin: 8px 12px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar exame</span><input type="search" placeholder="Nome, TUSS ou apelido" value="{{busca}}" onChange="{{buscar}}"></label>
+        <sc-for list="{{grupos}}" as="g" hint-placeholder-count="6">
+          <div class="grp"><span>{{g.nome}}</span> <span class="faint">· {{g.n}}</span></div>
+          <sc-for list="{{g.itens}}" as="e" hint-placeholder-count="2">
+            <button class="{{e.cls}}" onClick="{{e.abrir}}" aria-current="{{e.atual}}">
+              <span class="ni {{e.k}}" style="width: 28px; height: 28px; border-radius: 9px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12h3l2-5 4 10 2-5h5"></path></svg></span>
+              <span style="flex: 1; min-width: 0"><span class="nm" style="display: block; font-size: 14px">{{e.nome}}</span><span class="pv" style="display: block">{{e.tuss}} · {{e.dur}}</span></span>
+            </button>
+          </sc-for>
+        </sc-for>
+        <sc-if value="{{semResultado}}" hint-placeholder-val="{{ false }}">
+          <div class="state"><div class="b">Nenhum exame com esse nome</div><div class="t13 mute">Busque pelo código TUSS ou por parte do nome.</div></div>
+        </sc-if>
+      </section>
+
+      <div class="col" style="gap: 16px; min-width: 0">
+      <section class="card" aria-label="Detalhe do exame" style="display: flex; flex-direction: column; gap: 16px">
+        <div class="row wrap" style="gap: 14px; align-items: flex-start">
+          <span class="ni {{ex.k}}" style="width: 52px; height: 52px; border-radius: 16px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12h3l2-5 4 10 2-5h5"></path></svg></span>
+          <div style="flex: 1 1 280px; min-width: 0">
+            <div style="font-size: 22px; font-weight: 650">{{ex.nome}}</div>
+            <div class="t14 mute">{{ex.grupo}} · TUSS {{ex.tuss}} · versão {{ex.ver}} vigente desde {{ex.desde}}</div>
+          </div>
+          <div class="row wrap" style="gap: 8px"><span class="chip c-green">Ativo na agenda</span><sc-if value="{{rascunho}}" hint-placeholder-val="{{ false }}"><span class="chip c-amber">Rascunho v{{ex.prox}}</span></sc-if></div>
+        </div>
+
+        <nav class="row wrap" role="tablist" aria-label="Seções do exame" style="gap: 6px; border-bottom: 1px solid #E8EAEF; padding-bottom: 10px">
+          <sc-for list="{{abas}}" as="a" hint-placeholder-count="6"><button class="tab {{a.cls}}" role="tab" aria-selected="{{a.sel}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for>
+        </nav>
+
+        <sc-if value="{{tGeral}}" hint-placeholder-val="{{ true }}">
+          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px">
+            <div class="box"><span class="lbl">Código TUSS</span><b class="t15 num">{{ex.tuss}}</b><span class="t13 mute">Tabela TUSS 22 · conferido em 01/10/2026</span></div>
+            <div class="box"><span class="lbl">Nome para o paciente</span><b class="t15">{{ex.paciente}}</b><span class="t13 mute">Usado no WhatsApp, portal e etiqueta</span></div>
+            <div class="box"><span class="lbl">Duração na agenda</span><b class="t15">{{ex.dur}}</b><span class="t13 mute">Média real dos últimos 90 dias: {{ex.real}}</span></div>
+            <div class="box"><span class="lbl">Limpeza e desinfecção</span><b class="t15">{{ex.limpeza}}</b><span class="t13 mute">Bloqueado na agenda após cada exame</span></div>
+          </div>
+          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 12px">
+            <div class="col" style="gap: 8px"><span class="lbl">Salas que podem</span>
+              <div class="row wrap" style="gap: 8px"><sc-for list="{{salas}}" as="s" hint-placeholder-count="6"><button class="{{s.cls}}" aria-pressed="{{s.p}}" onClick="{{s.tg}}" style="border: 0; cursor: pointer; height: 36px">{{s.t}}</button></sc-for></div>
+            </div>
+            <div class="col" style="gap: 8px"><span class="lbl">Aparelhos que podem</span>
+              <div class="row wrap" style="gap: 8px"><sc-for list="{{ex.aparelhos}}" as="ap" hint-placeholder-count="2"><a class="chip c-blue" href="Aparelhos.dc.html">{{ap}}</a></sc-for></div>
+              <span class="t13 mute">A agenda só oferece horário em sala com aparelho apto e manutenção em dia.</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{tPreparo}}" hint-placeholder-val="{{ false }}">
+          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; align-items: start">
+            <div class="col" style="gap: 14px">
+              <div class="col" style="gap: 8px"><span class="lbl">Jejum</span>
+                <div class="seg" role="group" aria-label="Jejum"><sc-for list="{{jejum}}" as="j" hint-placeholder-count="4"><button class="{{j.cls}}" aria-pressed="{{j.p}}" onClick="{{j.ir}}">{{j.t}}</button></sc-for></div>
+              </div>
+              <div class="col" style="gap: 8px"><span class="lbl">Bexiga</span>
+                <div class="seg" role="group" aria-label="Bexiga"><sc-for list="{{bexiga}}" as="j" hint-placeholder-count="3"><button class="{{j.cls}}" aria-pressed="{{j.p}}" onClick="{{j.ir}}">{{j.t}}</button></sc-for></div>
+              </div>
+              <label class="field">Texto do preparo enviado ao paciente<textarea class="in" rows="6">{{ex.preparo}}</textarea></label>
+              <span class="t13 mute">Enviado na confirmação do agendamento e lembrado 24 h antes. Termos clínicos são trocados por linguagem simples.</span>
+            </div>
+            <div class="col" style="gap: 8px">
+              <span class="lbl">Como chega no WhatsApp</span>
+              <div class="wa" aria-label="Prévia da mensagem">
+                <div class="wa-b"><b>VidaCor Imagem</b><br>Olá, Juliana! Seu exame <b>{{ex.paciente}}</b> está marcado para 12/11 às 09:20.<br><br><b>Como se preparar:</b><br>{{prevJejum}}<br>{{prevBexiga}}<br>{{ex.preparoCurto}}<br><br>Responda 1 para confirmar ou 2 para remarcar.<div class="wa-m">09:02</div></div>
+              </div>
+              <span class="t12 mute">Prévia com paciente fictícia. Modelo de mensagem aprovado pela Meta: confirmacao_preparo_v3.</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{tQuem}}" hint-placeholder-val="{{ false }}">
+          <table class="tb">
+            <thead><tr><th>Médico</th><th>Realiza na sala</th><th>Lauda</th><th>2ª leitura</th></tr></thead>
+            <tbody>
+              <sc-for list="{{ex.quem}}" as="q" hint-placeholder-count="3">
+                <tr><td><span class="b">{{q.nome}}</span><div class="t13 mute">{{q.crm}}</div></td><td><span class="{{q.rCls}}">{{q.r}}</span></td><td><span class="{{q.lCls}}">{{q.l}}</span></td><td><span class="{{q.sCls}}">{{q.s}}</span></td></tr>
+              </sc-for>
+            </tbody>
+          </table>
+          <div class="row wrap" style="gap: 10px"><a class="btn btn-sm" href="Corpo-Clinico.dc.html">Mudar no Corpo clínico</a><span class="t13 mute">Quem realiza e lauda é definido por médico, com segunda conferência. Aqui só se consulta.</span></div>
+        </sc-if>
+
+        <sc-if value="{{tPreco}}" hint-placeholder-val="{{ false }}">
+          <p class="t14 mute" style="margin: 0">Valores vêm das tabelas de preço; o servidor calcula o valor de cada atendimento na hora. Para mudar, edite a tabela com data de vigência.</p>
+          <table class="tb">
+            <thead><tr><th>Tabela</th><th class="r">Valor</th><th>Vigência</th><th>Origem</th></tr></thead>
+            <tbody>
+              <sc-for list="{{ex.precos}}" as="p" hint-placeholder-count="5">
+                <tr><td class="b">{{p.tab}}</td><td class="r num nw">{{p.v}}</td><td class="t13">{{p.vig}}</td><td><span class="{{p.cls}}">{{p.orig}}</span></td></tr>
+              </sc-for>
+            </tbody>
+          </table>
+          <div class="banner info"><div class="t14" style="line-height: 1.5"><b>Mudança agendada:</b> Particular passa de {{ex.partAtual}} para {{ex.partNovo}} em 01/01/2027 (tabela Particular v12, aprovada por Patrícia Lemos). Orçamentos já enviados mantêm o valor até vencerem.</div></div>
+          <div class="row wrap" style="gap: 8px"><a class="btn btn-sm" href="Convenios-Tabelas.dc.html">Abrir tabelas dos convênios</a><a class="btn btn-sm" href="Orcamento.dc.html">Ver em um orçamento</a></div>
+        </sc-if>
+
+        <sc-if value="{{tTriagem}}" hint-placeholder-val="{{ false }}">
+          <p class="t14 mute" style="margin: 0">Perguntas que a recepção e a sala precisam responder antes de iniciar. Item bloqueante impede o exame até ser resolvido.</p>
+          <div class="col" style="gap: 0">
+            <sc-for list="{{ex.triagem}}" as="t" hint-placeholder-count="4">
+              <div class="li"><span class="ni {{t.k}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t14 b">{{t.t}}</div><div class="s">{{t.s}}</div></div><span class="{{t.cls}}">{{t.nivel}}</span></div>
+            </sc-for>
+          </div>
+          <a class="btn btn-sm" href="Triagem.dc.html" style="align-self: flex-start">Ver formulário de triagem</a>
+        </sc-if>
+
+        <sc-if value="{{tModelo}}" hint-placeholder-val="{{ false }}">
+          <div class="li" style="border: 0"><span class="ni k-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6M8 13h8M8 17h5"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t14 b">{{ex.modelo}}</div><div class="s">Modelo da clínica · aprovado pela responsável técnica, Dra. Cecília Souto · {{ex.modeloCampos}}</div></div><a class="btn btn-sm" href="Modelos-Laudo.dc.html">Abrir modelo</a></div>
+          <p class="t13 mute" style="margin: 0">Médicos podem ter modelo pessoal derivado deste; o laudo guarda qual versão do modelo foi usada.</p>
+        </sc-if>
+
+        <sc-if value="{{rascunho}}" hint-placeholder-val="{{ false }}">
+          <div class="banner off" style="flex-wrap: wrap"><div class="t14" style="line-height: 1.5; flex: 1 1 320px"><b>Você mudou o preparo.</b> A mudança fica em rascunho (v{{ex.prox}}). Agendamentos já confirmados recebem o texto antigo; os novos, o texto publicado.</div><div class="row" style="gap: 8px"><button class="btn btn-sm" onClick="{{descartar}}">Descartar rascunho</button><button class="btn btn-sm btn-p" onClick="{{publicar}}">Publicar v{{ex.prox}}</button></div></div>
+        </sc-if>
+        <sc-if value="{{publicado}}" hint-placeholder-val="{{ false }}">
+          <div class="toast" role="status"><span style="flex: 1">Versão publicada por Patrícia Lemos com motivo "ajuste de jejum" · vale para agendamentos a partir de agora · registrado no lastro</span></div>
+        </sc-if>
+      </section>
+
+      <section class="card" aria-labelledby="h-versoes">
+        <div class="card-h"><div class="grow"><h2 id="h-versoes">Histórico de versões</h2><div class="sub">Nada é apagado: cada versão mostra quem mudou, o quê e por quê</div></div><a class="btn btn-sm" href="Lastro.dc.html">Ver no lastro</a></div>
+        <div class="col" style="gap: 0">
+          <sc-for list="{{versoes}}" as="v" hint-placeholder-count="4">
+            <div class="li"><span class="ni {{v.k}}" style="font-weight: 700; font-size: 12px">{{v.n}}</span><div style="flex: 1; min-width: 0"><div class="t14 b">{{v.t}}</div><div class="s">{{v.s}}</div></div><span class="t13 mute nw">{{v.d}}</span></div>
+          </sc-for>
+        </div>
+      </section>
+      </div>
+    </div>
+    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sel: 'morf2', aba: 'geral', busca: '', jejum: 'nao', bexiga: 'nao', mudou: false, publicado: false, novo: false,
+      salas: { 'Sala 1': 0, 'Sala 2': 1, 'Sala 3': 1, 'Sala 4': 0, 'Sala 5': 0, 'Sala 6': 0 } };
+  }
+  renderVals() {
+    const s = this.state;
+    const G = [
+      ['Ecocardiograma', 'k-rose', [['eco', 'Ecocardiograma transtorácico', '40901114', '40 min'], ['ecoest', 'Ecocardiograma com estresse', '40901122', '60 min']]],
+      ['Doppler', 'k-teal', [['carot', 'Doppler de carótidas e vertebrais', '40901238', '40 min'], ['venoso', 'Doppler venoso de membros inferiores', '40901254', '40 min']]],
+      ['Ultrassonografia', 'k-violet', [['morf2', 'USG morfológica do 2º trimestre', '40901300', '50 min'], ['obst', 'USG obstétrica', '40901203', '30 min'], ['abd', 'USG de abdome total', '40901165', '30 min'], ['tireo', 'USG de tireoide', '40901173', '20 min']]],
+      ['Ergométrico e MAPA', 'k-orange', [['ergo', 'Teste ergométrico', '40101045', '40 min'], ['mapa', 'MAPA 24 horas', '40101061', '20 min']]],
+      ['Raio X', 'k-blue', [['rxt', 'Raio X de tórax PA e perfil', '40805026', '10 min']]],
+      ['Tomografia', 'k-indigo', [['tcc', 'TC de crânio sem contraste', '41001010', '20 min'], ['tcabd', 'TC de abdome com contraste', '41001230', '30 min']]]
+    ];
+    const q = (s.busca || '').toLowerCase();
+    const grupos = G.map(([nome, k, its]) => {
+      const itens = its.filter(i => !q || i[1].toLowerCase().indexOf(q) >= 0 || i[2].indexOf(q) >= 0).map(([id, n, tuss, dur]) => ({
+        nome: n, tuss, dur, k, atual: id === s.sel ? 'true' : 'false', cls: 'cv' + (id === s.sel ? ' sel' : ''),
+        abrir: () => this.setState({ sel: id, mudou: false, publicado: false }) }));
+      return { nome, n: String(itens.length), itens };
+    }).filter(g => g.itens.length);
+    let base = null, grupo = '', kk = '';
+    G.forEach(([nome, k, its]) => its.forEach(i => { if (i[0] === s.sel) { base = i; grupo = nome; kk = k; } }));
+    const morf = s.sel === 'morf2';
+    const ok = (t) => ({ t, cls: 'chip c-green' }), no = (t) => ({ t, cls: 'chip' });
+    const quem = (n, crm, r, l, v) => ({ nome: n, crm, r: r ? 'Sim' : 'Não', rCls: r ? 'chip c-green' : 'chip', l: l ? 'Sim' : 'Não', lCls: l ? 'chip c-green' : 'chip', s: v ? 'Sim' : 'Não', sCls: v ? 'chip c-green' : 'chip' });
+    const ex = {
+      nome: base[1], tuss: base[2], dur: base[3], grupo, k: kk, ver: morf ? '7' : '3', prox: morf ? '8' : '4', desde: morf ? '01/10/2026' : '15/03/2026',
+      paciente: morf ? 'Ultrassom morfológico (2º trimestre)' : base[1], real: morf ? '47 min' : base[3],
+      limpeza: morf ? '10 min · transdutor convexo' : (grupo === 'Tomografia' ? '15 min · mesa e bobina' : '10 min'),
+      aparelhos: morf ? ['Voluson E10 · Sala 2', 'Voluson E8 · Sala 3'] : (grupo === 'Tomografia' ? ['Somatom go.Up · Sala 5'] : (grupo === 'Ecocardiograma' ? ['Vivid E95 · Sala 1'] : ['Logiq E10 · Sala 4'])),
+      preparo: morf ? 'Não precisa de jejum nem de bexiga cheia. Venha com roupa confortável e traga os ultrassons anteriores da gestação. Pode vir com um acompanhante.' : 'Siga as orientações abaixo e traga o pedido médico e exames anteriores.',
+      preparoCurto: morf ? 'Traga os ultrassons anteriores da gestação. Pode vir com acompanhante.' : 'Traga o pedido médico e exames anteriores.',
+      quem: morf ? [quem('Dra. Renata Alves', 'CRM-SC 12.345 · USG em GO', 1, 1, 1), quem('Dr. Felipe Andrade', 'CRM-SC 21.007 · aguardando ativação', 0, 0, 0), quem('Dra. Cecília Souto', 'CRM-SC 10.502 · Radiologia', 0, 1, 0)]
+                 : [quem('Dr. Paulo Medeiros', 'CRM-SC 9.876', 1, 1, 0), quem('Dra. Cecília Souto', 'CRM-SC 10.502', 0, 1, 1)],
+      precos: morf ? [
+        { tab: 'Particular', v: 'R$ 380,00', vig: 'desde 01/03/2026 · tabela v11', orig: 'Tabela particular', cls: 'chip c-navy' },
+        { tab: 'Unimed', v: 'R$ 214,60', vig: 'desde 01/05/2026', orig: 'CBHPM 5ª ed. + 10%', cls: 'chip c-blue' },
+        { tab: 'Bradesco Saúde', v: 'R$ 236,00', vig: 'desde 01/02/2026', orig: 'Tabela própria', cls: 'chip c-blue' },
+        { tab: 'SulAmérica', v: 'R$ 229,40', vig: 'desde 01/07/2026', orig: 'CBHPM 5ª ed.', cls: 'chip c-blue' },
+        { tab: 'Petrobras', v: 'R$ 251,00', vig: 'desde 01/01/2026', orig: 'Tabela própria', cls: 'chip c-blue' }]
+        : [{ tab: 'Particular', v: 'R$ 260,00', vig: 'desde 01/03/2026 · tabela v11', orig: 'Tabela particular', cls: 'chip c-navy' }, { tab: 'Unimed', v: 'R$ 148,20', vig: 'desde 01/05/2026', orig: 'CBHPM 5ª ed. + 10%', cls: 'chip c-blue' }],
+      partAtual: morf ? 'R$ 380,00' : 'R$ 260,00', partNovo: morf ? 'R$ 395,00' : 'R$ 270,00',
+      triagem: morf ? [
+        { t: 'Gestação: idade gestacional pela DUM ou 1º ultrassom', s: 'Ideal entre 20 e 24 semanas. Fora disso o sistema avisa na hora de agendar.', nivel: 'Obrigatório', cls: 'chip c-amber', k: 'k-pink' },
+        { t: 'Gestação múltipla', s: 'Dobra a duração na agenda automaticamente', nivel: 'Ajusta agenda', cls: 'chip c-blue', k: 'k-blue' },
+        { t: 'Contraste', s: 'Não se aplica a este exame', nivel: 'Não se aplica', cls: 'chip', k: 'k-gray' }]
+        : [{ t: 'Contraste iodado: alergia, função renal e metformina', s: 'Alergia a iodo sem protocolo bloqueia o exame até o médico liberar', nivel: 'Bloqueante', cls: 'chip c-rose', k: 'k-rose' },
+           { t: 'Possibilidade de gestação', s: 'Mulher de 10 a 55 anos responde antes de exame com radiação', nivel: 'Bloqueante', cls: 'chip c-rose', k: 'k-pink' },
+           { t: 'Marca-passo e implantes', s: 'Registrado para a equipe da sala', nivel: 'Informativo', cls: 'chip c-blue', k: 'k-blue' }],
+      modelo: morf ? 'Morfológica 2º trimestre · clínica · versão 4' : base[1] + ' · clínica · versão 2',
+      modeloCampos: morf ? '18 campos variáveis (biometria, placenta, líquido amniótico)' : '9 campos variáveis'
+    };
+    const A = [['geral', 'Geral'], ['preparo', 'Preparo'], ['quem', 'Quem realiza e lauda'], ['preco', 'Preço'], ['triagem', 'Triagem exigida'], ['modelo', 'Modelo de laudo']];
+    const opt = (lista, cur, key) => lista.map(([k, t]) => ({ t, cls: cur === k ? 'on' : '', p: cur === k ? 'true' : 'false', ir: () => this.setState({ [key]: k, mudou: true, publicado: false }) }));
+    const J = { nao: 'Não precisa de jejum.', '4h': 'Jejum de 4 horas (água liberada).', '6h': 'Jejum de 6 horas (água liberada).', '8h': 'Jejum de 8 horas (água liberada).' };
+    const B = { nao: 'Não precisa de bexiga cheia.', cheia: 'Beba 4 copos de água 1 hora antes e não urine.', vazia: 'Esvazie a bexiga antes de entrar na sala.' };
+    return {
+      novo: () => this.setState({ novo: true }), fecharNovo: () => this.setState({ novo: false }), novoAberto: s.novo,
+      busca: s.busca, buscar: (e) => this.setState({ busca: e.target.value }), grupos, semResultado: grupos.length === 0,
+      ex,
+      abas: A.map(([k, t]) => ({ t, sel: s.aba === k ? 'true' : 'false', cls: s.aba === k ? 'chip c-navy' : 'chip', ir: () => this.setState({ aba: k }) })),
+      tGeral: s.aba === 'geral', tPreparo: s.aba === 'preparo', tQuem: s.aba === 'quem', tPreco: s.aba === 'preco', tTriagem: s.aba === 'triagem', tModelo: s.aba === 'modelo',
+      salas: Object.keys(s.salas).map(n => ({ t: n, cls: s.salas[n] ? 'chip c-green' : 'chip', p: s.salas[n] ? 'true' : 'false',
+        tg: () => this.setState(st => { const m = Object.assign({}, st.salas); m[n] = m[n] ? 0 : 1; return { salas: m, mudou: true, publicado: false }; }) })),
+      jejum: opt([['nao', 'Sem jejum'], ['4h', '4 h'], ['6h', '6 h'], ['8h', '8 h']], s.jejum, 'jejum'),
+      bexiga: opt([['nao', 'Indiferente'], ['cheia', 'Cheia'], ['vazia', 'Vazia']], s.bexiga, 'bexiga'),
+      prevJejum: J[s.jejum], prevBexiga: B[s.bexiga],
+      rascunho: s.mudou, publicado: s.publicado,
+      descartar: () => this.setState({ mudou: false, jejum: 'nao', bexiga: 'nao' }),
+      publicar: () => this.setState({ mudou: false, publicado: true }),
+      versoes: [
+        { n: 'v7', k: 'k-green', t: 'Duração passou de 45 para 50 min', s: 'Patrícia Lemos · motivo: média real acima de 45 min em 3 meses', d: '01/10/2026' },
+        { n: 'v6', k: 'k-blue', t: 'Sala 3 habilitada (Voluson E8 instalado)', s: 'Patrícia Lemos · conferido por Dra. Cecília Souto', d: '18/07/2026' },
+        { n: 'v5', k: 'k-violet', t: 'Texto do preparo reescrito em linguagem simples', s: 'Carla Mendes · aprovado por Dra. Renata Alves', d: '02/04/2026' },
+        { n: 'v4', k: 'k-gray', t: 'Triagem de gestação múltipla incluída', s: 'Dra. Renata Alves · motivo: agenda subestimava gemelares', d: '10/01/2026' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

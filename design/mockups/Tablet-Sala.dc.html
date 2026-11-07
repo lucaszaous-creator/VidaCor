@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Tablet da sala</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F2F3F6}
+.tc{background:#fff;border-radius:20px;box-shadow:0 1px 2px rgba(15,23,42,.05);padding:16px;min-width:0}
+.big-btn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:64px;border-radius:18px;border:1px solid #D9DDE5;background:#fff;color:#0F172A;font:650 18px Inter,sans-serif;cursor:pointer;width:100%}
+.big-btn:disabled{opacity:.4}
+.bb-go{background:#1F7A4D;border-color:#1F7A4D;color:#fff}
+.bb-pa{background:#FFF3DF;border-color:#E9C27A;color:#5A3A00}
+.bb-fi{background:#0A1A4A;border-color:#0A1A4A;color:#fff}
+.bb-sos{background:#C2334D;border-color:#C2334D;color:#fff}
+.ck{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:6px 12px;border-radius:14px;border:1px solid #E8EAEF;background:#fff;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.ck .bx{width:30px;height:30px;border-radius:9px;border:2px solid #A0A8B6;display:inline-flex;align-items:center;justify-content:center;flex:none;font-weight:800;font-size:16px}
+.ck.on{background:#F1FAF5;border-color:#B7E0C8}.ck.on .bx{background:#1F7A4D;border-color:#1F7A4D;color:#fff}
+.scan{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border-radius:16px;padding:14px;text-align:center}
+.s-wait{background:#F6F7F9;border:2px dashed #C3C9D4;color:#334155}
+.s-ok{background:#E5F5EC;border:2px solid #1F7A4D;color:#14532D}
+.s-bad{background:#FDEEF1;border:2px solid #C2334D;color:#7A1E30}
+.ph{width:88px;height:88px;border-radius:22px;background:linear-gradient(160deg,#E8F2FB,#C9DDF1);display:flex;align-items:center;justify-content:center;color:#0C72B0;font-size:30px;font-weight:700;flex:none}
+</style>
+</helmet>
+<div style="width: 1180px; max-width: 100%; height: 820px; background: #F2F3F6; font-family: Inter, sans-serif; color: #0F172A; display: flex; flex-direction: column; overflow: hidden; position: relative">
+  <header style="display: flex; align-items: center; gap: 14px; height: 64px; padding: 0 20px; background: #0A1A4A; color: #fff; flex: none">
+    <span style="font-size: 20px; font-weight: 700">Sala 2</span>
+    <span style="color: #B9CCE8; font-size: 15px">Ultrassom · Voluson E10 · Bruna Reis (técnica)</span>
+    <div class="grow"></div>
+    <span class="chip" style="background: rgba(110,231,168,.16); color: #8EF0BE; height: 30px"><span class="d"></span>Aparelho conectado</span>
+    <span class="num" style="font-size: 22px; font-weight: 700">10:42</span>
+  </header>
+
+  <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, .95fr); gap: 14px; padding: 14px 16px">
+    <div style="display: flex; flex-direction: column; gap: 14px; min-height: 0">
+      <section class="tc" aria-label="Paciente atual">
+        <div class="row" style="gap: 14px; align-items: flex-start">
+          <div class="ph" role="img" aria-label="Foto da paciente não cadastrada">JR</div>
+          <div style="min-width: 0">
+            <div class="lbl">Paciente agora</div>
+            <div style="font-size: 26px; font-weight: 700; line-height: 1.15; margin-top: 4px">Juliana Sampaio Rocha</div>
+            <div style="font-size: 20px; font-weight: 600; color: #334155; margin-top: 4px">Nasc. 12/04/1993 <span class="t15 mute" style="font-weight: 500">· 33 anos</span></div>
+          </div>
+        </div>
+        <div class="col" style="gap: 6px; margin-top: 12px">
+          <div class="t15"><b>USG obstétrica morfológica · 2º trimestre</b></div>
+          <div class="t14 mute">Dra. Renata Alves · Unimed · guia autorizada</div>
+          <div class="row wrap" style="gap: 6px"><span class="chip c-violet">Gestante · 22 semanas</span><span class="chip">Sem alergias</span></div>
+        </div>
+      </section>
+
+      <section class="tc" aria-label="Pulseira" style="flex: 1; display: flex; flex-direction: column; gap: 10px">
+        <div class="row"><b class="t15 grow">Pulseira</b><span class="t13 mute">Bipe com o leitor do tablet</span></div>
+        <div class="{{scanCls}}" role="status" style="flex: 1">
+          <b style="font-size: 18px">{{scanT}}</b>
+          <span class="t14" style="line-height: 1.45">{{scanS}}</span>
+        </div>
+        <div class="row" style="gap: 8px">
+          <button class="big-btn" style="min-height: 52px; font-size: 15px" onClick="{{bipeOk}}">Simular bipe certo</button>
+          <button class="big-btn" style="min-height: 52px; font-size: 15px" onClick="{{bipeErro}}">Simular bipe errado</button>
+        </div>
+      </section>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px; min-height: 0">
+      <section class="tc" aria-labelledby="ck-h">
+        <div class="row" style="margin-bottom: 10px"><b id="ck-h" class="t15 grow">Triagem e preparo</b><span class="{{ckChip}}">{{ckN}} de 5</span></div>
+        <div class="col" style="gap: 8px">
+          <sc-for list="{{checks}}" as="c" hint-placeholder-count="5">
+            <button class="{{c.cls}}" role="checkbox" aria-checked="{{c.on}}" onClick="{{c.tg}}"><span class="bx" aria-hidden="true">{{c.i}}</span><span style="min-width: 0"><span class="t15 b" style="display: block">{{c.t}}</span><span class="t13 mute">{{c.s}}</span></span></button>
+          </sc-for>
+        </div>
+      </section>
+
+      <section class="tc" aria-labelledby="ds-h" style="flex: 1">
+        <div class="row" style="margin-bottom: 8px"><b id="ds-h" class="t15 grow">Desinfecção do transdutor</b><span class="{{desChip}}">{{desSit}}</span></div>
+        <div class="t14 mute" style="line-height: 1.45">{{desTxt}}</div>
+        <button class="big-btn" style="min-height: 52px; font-size: 15px; margin-top: 10px" onClick="{{desinf}}">Registrar desinfecção agora</button>
+      </section>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px; min-height: 0">
+      <section class="tc" aria-labelledby="ex-h">
+        <div class="row" style="margin-bottom: 10px"><b id="ex-h" class="t15 grow">Exame</b><span class="{{stChip}}">{{stTxt}}</span></div>
+        <div class="row" style="gap: 12px; padding: 12px; border-radius: 14px; background: #F6F7F9; margin-bottom: 10px">
+          <div class="grow"><div class="lbl">Imagens recebidas</div><div class="num" style="font-size: 34px; font-weight: 700">{{imgs}}</div></div>
+          <div class="t13 mute" style="max-width: 130px; line-height: 1.4">{{imgsSub}}</div>
+        </div>
+        <div class="col" style="gap: 8px">
+          <sc-if value="{{podeIniciar}}" hint-placeholder-val="{{ true }}"><button class="big-btn bb-go" disabled="{{bloqIniciar}}" onClick="{{iniciar}}">Iniciar exame</button></sc-if>
+          <sc-if value="{{rodando}}" hint-placeholder-val="{{ false }}"><button class="big-btn bb-pa" onClick="{{pausar}}">Pausar</button></sc-if>
+          <sc-if value="{{pausado}}" hint-placeholder-val="{{ false }}"><button class="big-btn bb-go" onClick="{{iniciar}}">Retomar</button></sc-if>
+          <sc-if value="{{podeFinalizar}}" hint-placeholder-val="{{ false }}"><button class="big-btn bb-fi" onClick="{{pedirFim}}">Finalizar</button></sc-if>
+        </div>
+        <sc-if value="{{bloqIniciar}}" hint-placeholder-val="{{ false }}"><p class="t13" style="margin: 8px 0 0; color: #7A1E30">{{motivoBloq}}</p></sc-if>
+        <sc-if value="{{confFim}}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top: 10px; padding: 12px; border-radius: 14px; outline: 2px solid #0A1A4A">
+            <div class="t14" style="line-height: 1.45">Finalizar o exame de <b>Juliana Sampaio Rocha</b> (12/04/1993)? As {{imgs}} imagens seguem para o laudo da Dra. Renata.</div>
+            <div class="row" style="gap: 8px; margin-top: 10px"><button class="big-btn bb-fi" style="min-height: 52px; font-size: 15px" onClick="{{finalizar}}">Sim, finalizar</button><button class="big-btn" style="min-height: 52px; font-size: 15px" onClick="{{naoFim}}">Voltar</button></div>
+          </div>
+        </sc-if>
+      </section>
+
+      <section class="tc" aria-labelledby="px-h">
+        <b id="px-h" class="t15">Próximo</b>
+        <div class="t15" style="margin: 6px 0 2px"><b>Sônia Maria Castro</b> · 03/02/1962</div>
+        <div class="t13 mute">USG de mamas · 11:00 · na recepção desde 10:31</div>
+        <button class="big-btn" style="min-height: 52px; font-size: 15px; margin-top: 10px" disabled="{{bloqChamar}}" onClick="{{chamar}}">{{chamarTxt}}</button>
+      </section>
+
+      <button class="big-btn bb-sos" onClick="{{abrirSos}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 8v5M12 16.5h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg>Pedir ajuda urgente</button>
+    </div>
+  </div>
+
+  <sc-if value="{{sos}}" hint-placeholder-val="{{ false }}">
+    <section aria-labelledby="sos-h" role="dialog" style="position: absolute; right: 16px; bottom: 16px; width: 380px; max-width: calc(100% - 32px); background: #fff; border-radius: 20px; box-shadow: 0 24px 64px rgba(15,23,42,.28); overflow: hidden">
+      <div class="row" style="gap: 10px; padding: 12px 14px; background: #C2334D; color: #fff"><b id="sos-h" class="grow t15">Ajuda urgente · Sala 2</b><button class="big-btn" style="width: 48px; min-height: 48px; background: transparent; border-color: rgba(255,255,255,.4); color: #fff" aria-label="Fechar" onClick="{{fecharSos}}">×</button></div>
+      <div style="padding: 14px; display: flex; flex-direction: column; gap: 10px">
+        <sc-if value="{{sosNaoEnviado}}" hint-placeholder-val="{{ true }}">
+          <span class="t13 mute">Vai para enfermagem, médica da sala e coordenação, com toque sonoro.</span>
+          <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+            <sc-for list="{{sosOpts}}" as="o" hint-placeholder-count="4"><button class="big-btn" style="min-height: 56px; font-size: 15px" onClick="{{o.pick}}">{{o.t}}</button></sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{sosEnviado}}" hint-placeholder-val="{{ false }}">
+          <div class="msg me" style="max-width: 100%">{{sosMsg}}<div class="meta">10:42 · enviado</div></div>
+          <div class="msg">Enfermeira Cláudia: a caminho, 1 min.<div class="meta">10:42</div></div>
+        </sc-if>
+      </div>
+    </section>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { bipe: 'wait', ck: { id: true, gest: true, bex: false, prep: true, alerg: true }, st: 'pronto', confFim: false, chamado: false, des: false, sos: false, sosMsg: '' };
+  }
+  renderVals() {
+    const s = this.state;
+    const C = [['id', 'Nome e nascimento confirmados', 'Paciente disse em voz alta'], ['gest', 'Gestação confirmada', '22 semanas pela DUM · cartão da gestante'],
+      ['bex', 'Bexiga', 'Não precisa cheia no 2º trimestre: confirme que esvaziou'], ['prep', 'Preparo', 'Sem jejum para este exame'], ['alerg', 'Alergias perguntadas', 'Nega alergias · inclusive ao látex da capa']];
+    const nCk = C.filter(([k]) => s.ck[k]).length;
+    const allCk = nCk === 5;
+    const bipeOk = s.bipe === 'ok';
+    const SC = {
+      wait: ['scan s-wait', 'Aguardando bipe da pulseira', 'O exame só começa depois de conferir a pulseira com nome e nascimento.'],
+      ok: ['scan s-ok', 'Pulseira conferida · 10:41', 'Juliana Sampaio Rocha · 12/04/1993 · ETQ-P-2611-0412. Bate com o exame da sala.'],
+      bad: ['scan s-bad', 'Bloqueado: pulseira de outra paciente', 'Bipada: Vera Lúcia Antunes · 18/09/1957 (agendada na Sala 4). O exame foi bloqueado e a coordenação foi avisada. Confira quem está na sala e chame a recepção.']
+    }[s.bipe];
+    const motivo = s.bipe === 'bad' ? 'Pulseira errada: exame bloqueado até bipar a pulseira certa.' : (!bipeOk ? 'Falta bipar a pulseira.' : 'Falta completar a triagem (' + nCk + ' de 5).');
+    const ST = { pronto: ['chip', 'Não iniciado'], rodando: ['chip c-green', 'Em andamento · 06:12'], pausado: ['chip c-amber', 'Pausado'], fim: ['chip c-navy', 'Finalizado'] }[s.st];
+    const imgs = { pronto: 0, rodando: 14, pausado: 14, fim: 38 }[s.st];
+    const SO = ['Paciente passou mal', 'Queda ou desmaio', 'Preciso de médico', 'Outro (falar)'];
+    return {
+      scanCls: SC[0], scanT: SC[1], scanS: SC[2],
+      bipeOk: () => this.setState({ bipe: 'ok' }), bipeErro: () => this.setState({ bipe: 'bad', st: s.st === 'rodando' ? 'pausado' : s.st }),
+      checks: C.map(([k, t, sub]) => ({ t, s: sub, cls: 'ck' + (s.ck[k] ? ' on' : ''), on: s.ck[k] ? 'true' : 'false', i: s.ck[k] ? '✓' : '',
+        tg: () => this.setState(st => { const n = Object.assign({}, st.ck); n[k] = !n[k]; return { ck: n }; }) })),
+      ckN: String(nCk), ckChip: allCk ? 'chip c-green' : 'chip c-amber',
+      desChip: s.des ? 'chip c-green' : 'chip c-amber', desSit: s.des ? 'Registrada' : 'Pendente',
+      desTxt: s.des ? 'Agora, 10:42 · alto nível · peróxido de hidrogênio lote PX-2610-33 (val. 03/2027) · Bruna Reis. Vai para o lastro do transdutor.' : 'Última: 10:05, após a paciente anterior. Registre antes de iniciar este exame.',
+      desinf: () => this.setState({ des: true }),
+      stChip: ST[0], stTxt: ST[1], imgs: String(imgs),
+      imgsSub: s.st === 'fim' ? 'Estudo completo enviado ao PACS' : (s.st === 'pronto' ? 'Chegam sozinhas do aparelho' : 'Chegando do aparelho agora'),
+      podeIniciar: s.st === 'pronto', rodando: s.st === 'rodando', pausado: s.st === 'pausado', podeFinalizar: s.st === 'rodando' || s.st === 'pausado',
+      bloqIniciar: s.st === 'pronto' && !(bipeOk && allCk && s.des),
+      motivoBloq: !s.des && bipeOk && allCk ? 'Falta registrar a desinfecção do transdutor.' : motivo,
+      iniciar: () => { if (bipeOk && allCk && s.des) this.setState({ st: 'rodando' }); },
+      pausar: () => this.setState({ st: 'pausado' }),
+      pedirFim: () => this.setState({ confFim: true }), naoFim: () => this.setState({ confFim: false }),
+      finalizar: () => this.setState({ st: 'fim', confFim: false }),
+      confFim: s.confFim,
+      bloqChamar: s.st !== 'fim' || s.chamado,
+      chamarTxt: s.chamado ? 'No telão: Sônia M. Castro · Sala 2' : (s.st === 'fim' ? 'Chamar próximo no telão' : 'Chamar próximo (finalize antes)'),
+      chamar: () => this.setState({ chamado: true }),
+      sos: s.sos, abrirSos: () => this.setState({ sos: true }), fecharSos: () => this.setState({ sos: false }),
+      sosNaoEnviado: !s.sosMsg, sosEnviado: !!s.sosMsg, sosMsg: s.sosMsg,
+      sosOpts: SO.map(t => ({ t, pick: () => this.setState({ sosMsg: 'URGENTE · Sala 2 · ' + t }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

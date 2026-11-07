@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Pacientes — VidaCor</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.pr{box-sizing:border-box;display:flex;align-items:flex-start;gap:12px;width:100%;padding:14px 12px;border:0;border-bottom:1px solid #E8EAEF;background:#fff;text-align:left;font:inherit;color:inherit;cursor:pointer;border-radius:0}
+.pr:hover{background:#F8FAFC}
+.pr.sel{background:#EEF4FB;box-shadow:inset 3px 0 0 #0A1A4A}
+.pcard{display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:16px;border:1px solid #E8EAEF;background:#fff;text-align:left;font:inherit;color:inherit;cursor:pointer;min-width:0}
+.pcard:hover{border-color:#B8C0CC}
+.pcard.sel{border:2px solid #0A1A4A;padding:15px;background:#F7F9FD}
+.fchip{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border-radius:999px;border:1px solid #D9DDE5;background:#fff;color:#334155;font:550 14px Inter,sans-serif;cursor:pointer}
+.fchip.on{background:#0A1A4A;border-color:#0A1A4A;color:#fff}
+.fchip .n{font-size:12px;font-weight:700;opacity:.75}
+.pg{min-width:36px;height:36px;border-radius:10px;border:1px solid #D9DDE5;background:#fff;font:600 14px Inter,sans-serif;color:#334155;cursor:pointer}
+.pg.on{background:#0A1A4A;border-color:#0A1A4A;color:#fff}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="pacientes" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><b>Pacientes</b></div>
+      <div class="grow"></div>
+      <span class="t13 mute">Unidade Centro · Guichê 1 · Ana Souza</span>
+    </div>
+
+    <div class="page-h">
+      <div class="grow"><h1>Pacientes</h1><p>Busque antes de cadastrar: nome, nascimento, CPF, protocolo ou telefone.</p></div>
+      <a class="btn btn-p" href="Cadastro-Paciente.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Novo paciente</a>
+    </div>
+
+    <section class="card" aria-label="Busca e filtros" style="padding: 18px">
+      <label class="search" style="border-color: #D9DDE5; min-height: 52px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <span class="sr">Buscar paciente</span>
+        <input type="search" value="{{q}}" onChange="{{onQ}}" placeholder="Nome, nascimento (12/03/1968), CPF, protocolo ou telefone">
+        <sc-if value="{{temQ}}" hint-placeholder-val="{{ false }}"><button class="btn-g" onClick="{{limpar}}" style="border: 0; background: transparent; color: #0C72B0; font: 600 14px Inter, sans-serif; cursor: pointer; height: 36px">Limpar</button></sc-if>
+      </label>
+      <div class="row wrap" style="gap: 8px; margin-top: 12px">
+        <sc-for list="{{filtros}}" as="f" hint-placeholder-count="5"><button class="{{f.cls}}" aria-pressed="{{f.on}}" onClick="{{f.tg}}">{{f.t}}<span class="n">{{f.n}}</span></button></sc-for>
+        <div class="grow"></div>
+        <div class="seg" role="radiogroup" aria-label="Visualização"><button class="{{vTabCls}}" role="radio" aria-checked="{{vTabAria}}" onClick="{{verTabela}}">Lista</button><button class="{{vCardCls}}" role="radio" aria-checked="{{vCardAria}}" onClick="{{verCards}}">Cartões</button></div>
+      </div>
+    </section>
+
+    <div class="split">
+      <div class="main col" style="gap: 16px">
+        <section class="card" aria-labelledby="res-h" style="padding: 8px 8px 14px">
+          <div class="row wrap" style="gap: 8px; padding: 12px 12px 6px">
+            <h2 id="res-h" class="t15 b">{{tituloRes}}</h2>
+            <span class="t13 mute">{{subRes}}</span>
+          </div>
+
+          <sc-if value="{{vazio}}" hint-placeholder-val="{{ false }}">
+            <div class="state" style="margin: 8px; border: 1px dashed #D9DDE5; border-radius: 16px">
+              <span class="ni k-gray" style="width: 52px; height: 52px; border-radius: 16px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5M8 11h6"></path></svg></span>
+              <div class="b">Nenhum paciente encontrado para “{{q}}”</div>
+              <div class="t13 mute" style="max-width: 440px; line-height: 1.5">Confira a grafia ou busque pela data de nascimento. Se for a primeira vez dele na clínica, cadastre: o cadastro também procura parecidos antes de salvar.</div>
+              <div class="row wrap" style="gap: 8px; justify-content: center"><button class="btn btn-sm" onClick="{{limpar}}">Limpar busca e filtros</button><a class="btn btn-sm btn-p" href="Cadastro-Paciente.dc.html">Cadastrar novo paciente</a></div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{modoTabela}}" hint-placeholder-val="{{ true }}">
+            <div role="list">
+              <sc-for list="{{lista}}" as="p" hint-placeholder-count="6">
+                <button class="{{p.prCls}}" role="listitem" aria-current="{{p.atual}}" onClick="{{p.abrir}}">
+                  <span class="av {{p.k}}" style="background: var(--kb); color: var(--k)">{{p.ini}}</span>
+                  <span class="grid" style="flex: 1; min-width: 0; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: 4px 16px">
+                    <span style="min-width: 0"><span class="t15 b" style="display: block">{{p.nome}}</span><span class="t13 mute num">{{p.nasc}} · {{p.idade}}</span></span>
+                    <span class="t13" style="min-width: 0; color: #334155"><span style="display: block">{{p.conv}}</span><span class="mute">Último: {{p.ultimo}}</span></span>
+                    <span class="t13" style="min-width: 0; color: #334155"><span style="display: block">Próximo: {{p.proximo}}</span><span class="row wrap" style="gap: 6px; margin-top: 4px"><sc-for list="{{p.pend}}" as="x" hint-placeholder-count="1"><span class="{{x.cls}}" style="height: 22px; font-size: 12px">{{x.t}}</span></sc-for></span></span>
+                  </span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{modoCards}}" hint-placeholder-val="{{ false }}">
+            <div class="grid" role="list" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 12px; padding: 8px">
+              <sc-for list="{{lista}}" as="p" hint-placeholder-count="4">
+                <button class="{{p.cardCls}}" role="listitem" aria-current="{{p.atual}}" onClick="{{p.abrir}}">
+                  <span class="row" style="gap: 10px"><span class="av {{p.k}}" style="background: var(--kb); color: var(--k)">{{p.ini}}</span><span style="min-width: 0"><span class="t15 b" style="display: block">{{p.nome}}</span><span class="t13 mute num">{{p.nasc}} · {{p.idade}}</span></span></span>
+                  <span class="t13" style="color: #334155">{{p.conv}}</span>
+                  <span class="t13 mute">Próximo: {{p.proximo}}</span>
+                  <span class="row wrap" style="gap: 6px"><sc-for list="{{p.pend}}" as="x" hint-placeholder-count="1"><span class="{{x.cls}}" style="height: 22px; font-size: 12px">{{x.t}}</span></sc-for></span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{temRes}}" hint-placeholder-val="{{ true }}">
+            <nav class="row wrap" aria-label="Páginas" style="gap: 6px; padding: 14px 12px 0">
+              <span class="t13 mute">{{faixa}}</span>
+              <div class="grow"></div>
+              <button class="pg" onClick="{{pAnt}}" disabled="{{semAnt}}" aria-label="Página anterior">‹</button>
+              <sc-for list="{{paginas}}" as="g" hint-placeholder-count="3"><button class="{{g.cls}}" aria-current="{{g.atual}}" onClick="{{g.ir}}">{{g.n}}</button></sc-for>
+              <button class="pg" onClick="{{pProx}}" disabled="{{semProx}}" aria-label="Próxima página">›</button>
+            </nav>
+          </sc-if>
+        </section>
+
+        <section class="card" aria-labelledby="dup-h">
+          <div class="card-h"><span class="ni k-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><circle cx="16" cy="9" r="3"></circle><path d="M3 20c.8-3 3.2-5 6-5s5.2 2 6 5M15 15c2.6 0 4.6 1.6 5.4 4"></path></svg></span><div><h2 id="dup-h">Possíveis duplicados</h2><div class="sub">O sistema compara nome, nascimento, mãe, CPF e telefone. Nada é juntado sozinho.</div></div></div>
+          <div class="col" style="gap: 12px">
+            <sc-for list="{{dups}}" as="d" hint-placeholder-count="2">
+              <div style="border: 1px solid #E8EAEF; border-radius: 16px; padding: 14px 16px">
+                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 10px">
+                  <div><div class="t14 b">{{d.a}}</div><div class="t13 mute">{{d.aSub}}</div></div>
+                  <div><div class="t14 b">{{d.b}}</div><div class="t13 mute">{{d.bSub}}</div></div>
+                </div>
+                <div class="t13" style="margin-top: 8px; color: #5A3A00">{{d.motivo}}</div>
+                <sc-if value="{{d.aberto}}" hint-placeholder-val="{{ true }}">
+                  <div class="row wrap" style="gap: 8px; margin-top: 10px">
+                    <button class="btn btn-sm btn-p" onClick="{{d.juntar}}">Juntar cadastros (pede segunda pessoa)</button>
+                    <button class="btn btn-sm" onClick="{{d.separar}}">Não são a mesma pessoa</button>
+                  </div>
+                </sc-if>
+                <sc-if value="{{d.pedido}}" hint-placeholder-val="{{ false }}">
+                  <div class="banner info" role="status" style="margin-top: 10px"><div class="t13" style="line-height: 1.5"><b>Pedido de junção enviado</b> às 09:21. Fica pendente até outra pessoa da recepção ou da coordenação conferir os documentos. Até lá os dois cadastros continuam separados e nada se perde: exames, laudos e guias vão para o cadastro que ficar, com o motivo no lastro.</div></div>
+                </sc-if>
+                <sc-if value="{{d.separado}}" hint-placeholder-val="{{ false }}">
+                  <div class="row" style="gap: 8px; margin-top: 10px"><span class="chip">Homônimos confirmados</span><span class="t13 mute">Não aparece mais aqui. Registrado no lastro.</span></div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+      </div>
+
+      <aside class="aside col" style="gap: 16px">
+        <sc-if value="{{temSel}}" hint-placeholder-val="{{ true }}">
+          <section class="card" aria-labelledby="rs-h">
+            <div class="row" style="gap: 12px">
+              <span class="av av-lg {{sel.k}}" style="background: var(--kb); color: var(--k)">{{sel.ini}}</span>
+              <div style="min-width: 0"><h2 id="rs-h" style="font-size: 19px; font-weight: 650">{{sel.nome}}</h2><div class="t14 num" style="color: #334155">{{sel.nasc}} · {{sel.idade}}</div><div class="t12 mute">{{sel.prot}}</div></div>
+            </div>
+            <sc-if value="{{sel.temAlergia}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 12px"><span class="al-chip">Alergia: {{sel.alergia}}</span></div></sc-if>
+            <div class="col" style="gap: 0; margin-top: 12px">
+              <div class="li"><span class="lbl" style="width: 92px">Convênio</span><span class="t14" style="flex: 1">{{sel.conv}}</span></div>
+              <div class="li"><span class="lbl" style="width: 92px">CPF</span><span class="t14 num" style="flex: 1">{{sel.cpf}}</span></div>
+              <div class="li"><span class="lbl" style="width: 92px">Celular</span><span class="t14 num" style="flex: 1">{{sel.tel}}</span></div>
+              <div class="li"><span class="lbl" style="width: 92px">Último</span><span class="t14" style="flex: 1">{{sel.ultimo}}</span></div>
+              <div class="li"><span class="lbl" style="width: 92px">Próximo</span><span class="t14" style="flex: 1">{{sel.proximo}}</span></div>
+            </div>
+            <div class="row wrap" style="gap: 6px; margin-top: 10px"><sc-for list="{{sel.pend}}" as="x" hint-placeholder-count="1"><span class="{{x.cls}}">{{x.t}}</span></sc-for></div>
+            <div class="col" style="gap: 8px; margin-top: 16px">
+              <a class="btn btn-p" href="Paciente.dc.html">Abrir ficha do paciente</a>
+              <a class="btn" href="Agendamento-Guia.dc.html">Agendar exame</a>
+              <a class="btn" href="Cadastro-Paciente.dc.html">Completar ou corrigir cadastro</a>
+            </div>
+            <p class="t12 mute" style="margin: 12px 0 0; line-height: 1.5">CPF aparece mascarado. Abrir a ficha registra a leitura no lastro (quem, onde, quando).</p>
+          </section>
+        </sc-if>
+        <sc-if value="{{semSel}}" hint-placeholder-val="{{ false }}">
+          <section class="card"><div class="state"><div class="b">Escolha um paciente</div><div class="t13 mute">O resumo aparece aqui.</div></div></section>
+        </sc-if>
+        <section class="card">
+          <div class="t15 b">Dicas de busca</div>
+          <ul class="t13" style="margin: 8px 0 0; padding-left: 18px; line-height: 1.7; color: #334155">
+            <li>Nome + nascimento: “maria 1968”</li>
+            <li>Só números: CPF, telefone ou protocolo</li>
+            <li>Acentos e maiúsculas não importam</li>
+            <li>Ctrl K busca em qualquer tela</li>
+          </ul>
+        </section>
+      </aside>
+    </div>
+    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { q: '', f: {}, view: 'tabela', sel: 'mh', pag: 1, dup: { d1: 'aberto', d2: 'aberto' } };
+  }
+  idade(n) {
+    const [d, m, a] = n.split('/').map(Number);
+    let i = 2026 - a; if (m > 11 || (m === 11 && d > 7)) i--; return i + ' anos';
+  }
+  norm(t) { return (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+  renderVals() {
+    const s = this.state;
+    const P = [
+      { id: 'mh', nome: 'Maria Helena Duarte', nasc: '12/03/1968', k: 'k-violet', prot: 'PAC-2019-000318', cpf: '•••.456.789-••', tel: '(48) 99812-4410', conv: 'Unimed · Pleno', ultimo: 'Ecocardiograma · 06/11/2026', proximo: 'Doppler de carótidas · 12/11 09:20', hoje: false, pend: [['Laudo em revisão', 'chip c-amber']], dup: true },
+      { id: 'ac', nome: 'Antônio Carlos Ribeiro', nasc: '15/06/1954', k: 'k-blue', prot: 'PAC-2021-001204', cpf: '•••.112.903-••', tel: '(48) 99640-1187', conv: 'Petrobras · AMS', ultimo: 'Teste ergométrico · 30/10/2026', proximo: 'Hoje 10:40 · MAPA', hoje: true, pend: [['Na clínica hoje', 'chip c-teal'], ['Guia a autorizar', 'chip c-amber']] },
+      { id: 'js', nome: 'Juliana Sampaio Rocha', nasc: '12/04/1993', k: 'k-pink', prot: 'PAC-2026-002877', cpf: '•••.873.221-••', tel: '(48) 99155-3020', conv: 'Bradesco Saúde · Nacional', ultimo: 'USG obstétrica · 10/10/2026', proximo: 'Hoje 10:40 · USG morfológica', hoje: true, pend: [['Na clínica hoje', 'chip c-teal'], ['Gestante', 'chip c-violet']] },
+      { id: 'lf', nome: 'Lúcia Fernandes Prado', nasc: '02/07/1959', k: 'k-rose', prot: 'PAC-2020-000955', cpf: '•••.340.118-••', tel: '(48) 98810-7745', conv: 'SulAmérica · Especial', ultimo: 'Raio X de tórax · 22/09/2026', proximo: 'Tomografia sem contraste · 19/11', hoje: false, alergia: 'iodo', pend: [['Exame pendente', 'chip c-amber']] },
+      { id: 'sm', nome: 'Sônia Maria Castro', nasc: '03/02/1962', k: 'k-teal', prot: 'PAC-2022-001731', cpf: '', tel: '(48) 99302-6681', conv: 'Particular', ultimo: 'USG de tireoide · 14/08/2026', proximo: 'Sem agendamento', hoje: false, pend: [['Cadastro incompleto', 'chip c-rose']], inc: true },
+      { id: 'va', nome: 'Vera Lúcia Antunes', nasc: '18/09/1957', k: 'k-orange', prot: 'PAC-2018-000071', cpf: '•••.009.554-••', tel: '(48) 99987-2210', conv: 'Amil · S750', ultimo: 'Doppler venoso · 02/11/2026', proximo: 'Hoje 14:10 · Ecocardiograma', hoje: true, pend: [['Na clínica hoje', 'chip c-teal']] },
+      { id: 'rm', nome: 'Rafael Monteiro Lima', nasc: '09/11/1988', k: 'k-indigo', prot: 'PAC-2026-004102', cpf: '•••.661.420-••', tel: '(48) 99021-5566', conv: 'Unimed · Básico', ultimo: 'Raio X de joelho · 05/11/2026', proximo: 'Sem agendamento', hoje: false, pend: [['Exame pendente', 'chip c-amber']] },
+      { id: 'mh2', nome: 'Maria Helena Duarte', nasc: '21/03/1968', k: 'k-gray', prot: 'PAC-2026-004790', cpf: '', tel: '(48) 99812-4410', conv: 'Particular', ultimo: 'Nenhum', proximo: 'Sem agendamento', hoje: false, pend: [['Possível duplicado', 'chip c-amber'], ['Cadastro incompleto', 'chip c-rose']], inc: true, dup: true }
+    ];
+    const F = [
+      ['hoje', 'Hoje na clínica', p => p.hoje], ['pend', 'Com exame pendente', p => p.pend.some(x => /pendente|autorizar|revis/i.test(x[0]))],
+      ['conv', 'Convênio', p => p.conv !== 'Particular'], ['inc', 'Cadastro incompleto', p => !!p.inc], ['dup', 'Possíveis duplicados', p => !!p.dup]
+    ];
+    const qn = this.norm(s.q).trim();
+    const termos = qn.split(/\s+/).filter(Boolean);
+    const busca = p => {
+      if (!termos.length) return true;
+      const alvo = this.norm([p.nome, p.nasc, p.nasc.slice(-4), p.prot, p.tel, p.cpf].join(' '));
+      const dig = alvo.replace(/\D/g, '');
+      return termos.every(t => alvo.includes(t) || (/^\d+$/.test(t) && t.length >= 4 && dig.includes(t)));
+    };
+    const ativos = F.filter(f => s.f[f[0]]);
+    const res = P.filter(p => busca(p) && ativos.every(f => f[2](p)));
+    const map = p => ({
+      nome: p.nome, nasc: p.nasc, idade: this.idade(p.nasc), ini: p.nome.split(' ').map(x => x[0]).filter((x, i, a) => i === 0 || i === a.length - 1).join(''),
+      k: p.k, conv: p.conv, ultimo: p.ultimo, proximo: p.proximo, prot: p.prot, cpf: p.cpf || 'Não informado', tel: p.tel,
+      temAlergia: !!p.alergia, alergia: p.alergia || '',
+      pend: p.pend.map(([t, cls]) => ({ t, cls })),
+      prCls: 'pr ' + p.k + (s.sel === p.id ? ' sel' : ''), cardCls: 'pcard ' + p.k + (s.sel === p.id ? ' sel' : ''),
+      atual: s.sel === p.id ? 'true' : 'false', abrir: () => this.setState({ sel: p.id })
+    });
+    const cur = P.find(p => p.id === s.sel);
+    const nPag = termos.length || ativos.length ? 1 : 1561;
+    const D = [
+      { id: 'd1', a: 'Maria Helena Duarte · 12/03/1968', aSub: 'PAC-2019-000318 · Unimed · 14 exames', b: 'Maria Helena Duarte · 21/03/1968', bSub: 'PAC-2026-004790 · Particular · criado ontem por telefone', motivo: 'Mesmo nome e celular; nascimento com dia trocado (12 e 21). Mãe: Rosa Maria Duarte nos dois.' },
+      { id: 'd2', a: 'José Augusto Pereira · 04/05/1949', aSub: 'PAC-2017-000044 · Unimed · 31 exames', b: 'José Augusto Pereira · 04/05/1949', bSub: 'PAC-2024-003311 · SulAmérica · 2 exames', motivo: 'Nome e nascimento iguais; telefones e mães diferentes. Pode ser homônimo: confira o documento.' }
+    ];
+    const setDup = (id, v) => this.setState(st => ({ dup: Object.assign({}, st.dup, { [id]: v }) }));
+    const pags = s.pag <= 2 ? [1, 2, 3] : [s.pag - 1, s.pag, s.pag + 1];
+    return {
+      q: s.q, onQ: e => this.setState({ q: e.target.value }), temQ: s.q !== '',
+      limpar: () => this.setState({ q: '', f: {} }),
+      filtros: F.map(([k, t, fn]) => ({ t, n: String(P.filter(fn).length), cls: s.f[k] ? 'fchip on' : 'fchip', on: s.f[k] ? 'true' : 'false',
+        tg: () => this.setState(st => ({ f: Object.assign({}, st.f, { [k]: !st.f[k] }), pag: 1 })) })),
+      vTabCls: s.view === 'tabela' ? 'on' : '', vCardCls: s.view === 'cards' ? 'on' : '',
+      vTabAria: s.view === 'tabela' ? 'true' : 'false', vCardAria: s.view === 'cards' ? 'true' : 'false',
+      verTabela: () => this.setState({ view: 'tabela' }), verCards: () => this.setState({ view: 'cards' }),
+      tituloRes: termos.length || ativos.length ? res.length + ' encontrado(s)' : 'Vistos recentemente',
+      subRes: termos.length || ativos.length ? 'em 12.486 pacientes da clínica' : 'Digite para buscar em 12.486 pacientes',
+      vazio: res.length === 0, temRes: res.length > 0,
+      modoTabela: res.length > 0 && s.view === 'tabela', modoCards: res.length > 0 && s.view === 'cards',
+      lista: res.map(map),
+      faixa: nPag === 1 ? 'Mostrando ' + res.length + ' de ' + res.length : 'Página ' + s.pag + ' de 1.561 · 8 por página',
+      paginas: (nPag === 1 ? [1] : pags).map(n => ({ n: String(n), cls: n === s.pag ? 'pg on' : 'pg', atual: n === s.pag ? 'page' : 'false', ir: () => this.setState({ pag: n }) })),
+      semAnt: s.pag <= 1, semProx: s.pag >= nPag,
+      pAnt: () => this.setState(st => ({ pag: Math.max(1, st.pag - 1) })), pProx: () => this.setState(st => ({ pag: Math.min(nPag, st.pag + 1) })),
+      temSel: !!cur, semSel: !cur,
+      sel: cur ? map(cur) : { pend: [] },
+      dups: D.map(d => Object.assign({}, d, { aberto: s.dup[d.id] === 'aberto', pedido: s.dup[d.id] === 'pedido', separado: s.dup[d.id] === 'separado',
+        juntar: () => setDup(d.id, 'pedido'), separar: () => setDup(d.id, 'separado') }))
+    };
+  }
+}
+</script>
+</body>
+</html>

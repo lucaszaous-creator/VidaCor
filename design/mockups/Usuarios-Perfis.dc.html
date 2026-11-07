@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Usuários e perfis — VidaCor</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.ur{box-sizing:border-box;display:grid;grid-template-columns:minmax(0,2.2fr) minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr);gap:4px 12px;align-items:center;width:100%;padding:12px;border:0;border-bottom:1px solid #E8EAEF;background:#fff;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.ur:hover{background:#F8FAFC}
+.ur.sel{background:#EEF4FB;box-shadow:inset 3px 0 0 #0A1A4A}
+.ur.off{color:#8A93A3}
+.mx{display:grid;grid-template-columns:minmax(120px,1.5fr) repeat(9,minmax(0,1fr));gap:4px;align-items:center}
+.mx .h{font-size:11px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:#5B6474;text-align:center;line-height:1.25;padding:4px 0;overflow-wrap:anywhere}
+.mx .a{font-size:14px;font-weight:600;color:#0F172A;padding:6px 0}
+.cel{width:100%;max-width:44px;height:36px;margin:0 auto;display:flex;align-items:center;justify-content:center;border-radius:10px;border:0;font:700 14px Inter,sans-serif;cursor:pointer}
+.cel.sim{background:#E1F3E8;color:#1F7A4D}.cel.nao{background:#F1F3F6;color:#8A93A3}
+.cel.pend{background:#FDF0D9;color:#9A5B00;box-shadow:inset 0 0 0 2px #E9B44C}
+.cel.trava{background:#F1F3F6;color:#B8C0CC;cursor:not-allowed}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="usuarios" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><a href="Configuracoes.dc.html">Configurações</a><span aria-hidden="true">›</span><b>Usuários e perfis</b></div>
+      <div class="grow"></div>
+      <span class="t13 mute">Você: Patrícia Lemos · Coordenação</span>
+    </div>
+    <div class="page-h">
+      <div class="grow"><h1>Usuários e perfis</h1><p>O perfil diz quais atos a pessoa pode fazer; o contexto diz onde. O servidor confere tudo a cada ação.</p></div>
+      <button class="btn btn-p">Convidar usuário</button>
+    </div>
+
+    <div class="split">
+      <section class="main card" aria-labelledby="us-h" style="padding: 8px 8px 12px">
+        <div class="row wrap" style="gap: 10px; padding: 12px 12px 8px">
+          <h2 id="us-h" class="t15 b">Usuários · {{nAtivos}} ativos</h2>
+          <div class="grow"></div>
+          <div class="seg" role="radiogroup" aria-label="Situação"><sc-for list="{{filtrosUs}}" as="f" hint-placeholder-count="3"><button class="{{f.cls}}" role="radio" aria-checked="{{f.on}}" onClick="{{f.ir}}" style="height: 36px">{{f.t}}</button></sc-for></div>
+        </div>
+        <div class="ur" aria-hidden="true" style="cursor: default; padding-top: 4px; padding-bottom: 8px"><span class="lbl">Usuário e perfil</span><span class="lbl">Unidade · último acesso</span><span class="lbl">2FA</span><span class="lbl">Situação</span></div>
+        <div role="list">
+          <sc-for list="{{usuarios}}" as="u" hint-placeholder-count="8">
+            <button class="{{u.cls}}" role="listitem" aria-current="{{u.atual}}" onClick="{{u.abrir}}">
+              <span class="row" style="gap: 10px; min-width: 0"><span class="av av-sm {{u.k}}" style="background: var(--kb); color: var(--k)">{{u.ini}}</span><span style="min-width: 0"><span class="t14 b" style="display: block">{{u.nome}}</span><span class="t13 mute">{{u.perfis}}</span></span></span>
+              <span class="t13" style="color: #334155">{{u.unidade}}<span class="mute" style="display: block">{{u.acesso}}</span></span>
+              <span><span class="{{u.faCls}}" style="height: 24px; font-size: 12px">{{u.fa}}</span></span>
+              <span><span class="{{u.sitCls}}" style="height: 24px; font-size: 12px">{{u.sit}}</span></span>
+            </button>
+          </sc-for>
+        </div>
+        <p class="t12 mute" style="margin: 10px 12px 0">Usuário não é apagado: é desativado, e tudo o que fez continua no lastro com o nome dele.</p>
+      </section>
+
+      <aside class="aside col" style="gap: 16px">
+        <section class="card" aria-labelledby="ud-h">
+          <div class="row" style="gap: 12px"><span class="av {{sel.k}}" style="background: var(--kb); color: var(--k); width: 52px; height: 52px">{{sel.ini}}</span><div style="min-width: 0"><h2 id="ud-h" style="font-size: 18px; font-weight: 650">{{sel.nome}}</h2><div class="t13 mute">{{sel.login}}</div></div></div>
+          <div class="lbl" style="margin-top: 16px">Perfis</div>
+          <div class="row wrap" style="gap: 6px; margin-top: 8px"><sc-for list="{{sel.perfisL}}" as="p" hint-placeholder-count="2"><span class="chip c-blue">{{p}}</span></sc-for>
+            <sc-if value="{{podeAdd}}" hint-placeholder-val="{{ true }}"><button class="chip" onClick="{{addFin}}" style="border: 1px dashed #D9DDE5; cursor: pointer">+ Financeiro</button></sc-if>
+          </div>
+          <sc-if value="{{conflito}}" hint-placeholder-val="{{ false }}">
+            <div class="banner err" role="alert" style="margin-top: 10px"><div class="t13" style="line-height: 1.5"><b>Bloqueado: separação de funções.</b> Com Caixa + Financeiro, {{sel.primeiro}} poderia <b>pedir</b> e <b>aprovar</b> o mesmo estorno. Nada foi alterado. Se precisar dos dois, crie um perfil sem “aprovar estorno” ou peça a outra pessoa.</div></div>
+          </sc-if>
+          <div class="lbl" style="margin-top: 16px">Contexto</div>
+          <div class="col" style="gap: 8px; margin-top: 8px">
+            <div class="row wrap" style="gap: 6px"><span class="t13 mute" style="width: 64px">Unidade</span><sc-for list="{{unidades}}" as="x" hint-placeholder-count="2"><button class="{{x.cls}}" aria-pressed="{{x.on}}" onClick="{{x.tg}}" style="cursor: pointer; border: 0">{{x.t}}</button></sc-for></div>
+            <div class="row wrap" style="gap: 6px"><span class="t13 mute" style="width: 64px">Salas</span><sc-for list="{{salas}}" as="x" hint-placeholder-count="6"><button class="{{x.cls}}" aria-pressed="{{x.on}}" onClick="{{x.tg}}" style="cursor: pointer; border: 0">{{x.t}}</button></sc-for></div>
+            <div class="t12 mute">{{sel.contextoNota}}</div>
+          </div>
+          <div class="sep" style="margin: 16px 0 12px"></div>
+          <sc-if value="{{podeDesativar}}" hint-placeholder-val="{{ true }}">
+            <div class="row wrap" style="gap: 8px"><button class="btn btn-sm">Redefinir 2FA</button><button class="btn btn-sm" onClick="{{pedirDesativar}}" style="color: #C2334D">Desativar usuário</button></div>
+          </sc-if>
+          <sc-if value="{{confDesativar}}" hint-placeholder-val="{{ false }}">
+            <div style="border: 2px solid #F3B9C4; background: #FFF7F8; border-radius: 14px; padding: 12px 14px">
+              <div class="t14 b">Desativar {{sel.nome}}?</div>
+              <p class="t13" style="margin: 6px 0 10px; line-height: 1.5; color: #334155">Sai de todas as estações agora e não entra mais. O histórico fica no lastro. Dá para reativar depois.</p>
+              <label class="field">Motivo<select class="in" value="{{motivo}}" onChange="{{onMotivo}}"><option value="">Escolha</option><option>Saiu da clínica</option><option>Afastamento</option><option>Suspeita de acesso indevido</option></select></label>
+              <div class="row wrap" style="gap: 8px; margin-top: 10px"><button class="btn btn-sm btn-p" disabled="{{semMotivo}}" onClick="{{desativar}}">Desativar</button><button class="btn btn-sm" onClick="{{cancelarDesativar}}">Cancelar</button></div>
+            </div>
+          </sc-if>
+          <sc-if value="{{inativo}}" hint-placeholder-val="{{ false }}">
+            <div class="row wrap" style="gap: 8px"><span class="chip">Desativado · {{sel.motivoOff}}</span><button class="btn btn-sm">Reativar (pede segunda pessoa)</button></div>
+          </sc-if>
+        </section>
+      </aside>
+    </div>
+
+    <section class="card" aria-labelledby="mx-h">
+      <div class="card-h"><span class="ni k-indigo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4h16v16H4zM4 10h16M4 15h16M10 4v16"></path></svg></span><div><h2 id="mx-h">Perfis e atos</h2><div class="sub">Clique para mudar. A mudança fica pendente até outra pessoa da coordenação conferir.</div></div></div>
+      <div class="mx" role="group" aria-label="Atos por perfil">
+        <span class="h" style="text-align: left">Ato</span><sc-for list="{{perfisCab}}" as="p" hint-placeholder-count="9"><span class="h" title="{{p.nome}}">{{p.curto}}</span></sc-for>
+        <sc-for list="{{matriz}}" as="r" hint-placeholder-count="10">
+          <span class="a">{{r.ato}}</span>
+          <sc-for list="{{r.cels}}" as="c" hint-placeholder-count="9"><button class="{{c.cls}}" aria-pressed="{{c.on}}" aria-label="{{c.rot}}" title="{{c.rot}}" disabled="{{c.trava}}" onClick="{{c.tg}}">{{c.i}}</button></sc-for>
+        </sc-for>
+      </div>
+      <div class="row wrap t12 mute" style="gap: 14px; margin-top: 12px">
+        <span class="row" style="gap: 6px"><span class="cel sim" style="width: 22px; height: 22px; font-size: 11px">✓</span>Pode</span>
+        <span class="row" style="gap: 6px"><span class="cel nao" style="width: 22px; height: 22px; font-size: 11px">–</span>Não pode</span>
+        <span class="row" style="gap: 6px"><span class="cel pend" style="width: 22px; height: 22px; font-size: 11px">!</span>Mudança pendente</span>
+        <span class="row" style="gap: 6px"><span class="cel trava" style="width: 22px; height: 22px; font-size: 11px">×</span>Travado pela regra (ex.: TI nunca vê dado clínico)</span>
+      </div>
+
+      <sc-if value="{{temErro}}" hint-placeholder-val="{{ false }}">
+        <div class="banner err" role="alert" style="margin-top: 14px"><div class="t14" style="line-height: 1.5"><b>Não aplicado: {{erroSep}}</b></div></div>
+      </sc-if>
+      <sc-if value="{{temPend}}" hint-placeholder-val="{{ false }}">
+        <div class="banner off" style="margin-top: 14px; flex-wrap: wrap"><div class="t14" style="flex: 1 1 320px; line-height: 1.5"><b>{{nPend}} mudança(s) pendente(s):</b> {{listaPend}}. Ainda não valem.</div><button class="btn btn-sm btn-p" onClick="{{abrirReauth}}">Enviar para conferência</button><button class="btn btn-sm" onClick="{{descartar}}">Descartar</button></div>
+      </sc-if>
+      <sc-if value="{{reauth}}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top: 12px; border: 1px solid #D9DDE5; border-radius: 16px; padding: 14px 16px; max-width: 480px">
+          <div class="t15 b">Confirme que é você</div>
+          <p class="t13 mute" style="margin: 4px 0 10px">Mudar permissão pede a sua senha de novo, mesmo com a sessão aberta.</p>
+          <label class="field">Senha de Patrícia Lemos<input class="in" type="password" value="{{senha}}" onChange="{{onSenha}}"></label>
+          <div class="row wrap" style="gap: 8px; margin-top: 10px"><button class="btn btn-sm btn-p" disabled="{{semSenha}}" onClick="{{enviar}}">Confirmar e enviar</button><button class="btn btn-sm" onClick="{{fecharReauth}}">Cancelar</button></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{enviado}}" hint-placeholder-val="{{ false }}">
+        <div class="toast" role="status" style="margin-top: 12px"><span style="flex: 1">Enviado às 10:12 para conferência. Carla Mendes e Dra. Cecília Souto foram avisadas. Você não pode aprovar a própria mudança.</span></div>
+      </sc-if>
+    </section>
+
+    <div class="grid g2">
+      <section class="card" aria-labelledby="em-h">
+        <div class="card-h"><span class="ni k-rose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l8 4v5c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V7z"></path><path d="M12 8v5M12 16h.01"></path></svg></span><div><h2 id="em-h">Acesso de emergência</h2><div class="sub">Médico sem vínculo de cuidado abriu dado clínico com justificativa</div></div><span class="chip c-rose" style="margin-left: auto">{{nRevisar}} a revisar</span></div>
+        <div class="col" style="gap: 0">
+          <sc-for list="{{emerg}}" as="e" hint-placeholder-count="3">
+            <div class="li" style="align-items: flex-start; flex-wrap: wrap">
+              <div style="flex: 1 1 260px; min-width: 0">
+                <div class="t14 b">{{e.quem}} <span class="mute" style="font-weight: 400">· {{e.quando}}</span></div>
+                <div class="t13" style="color: #334155">Paciente: {{e.pac}}</div>
+                <div class="t13 mute" style="margin-top: 2px">“{{e.just}}”</div>
+              </div>
+              <sc-if value="{{e.aberto}}" hint-placeholder-val="{{ true }}"><button class="btn btn-sm" onClick="{{e.revisar}}">Revisar</button></sc-if>
+              <sc-if value="{{e.ok}}" hint-placeholder-val="{{ false }}"><span class="chip c-green">{{e.res}}</span></sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <p class="t12 mute" style="margin: 10px 0 0">Todo uso é auditado, avisa o responsável clínico e precisa ser revisado em até 72 h.</p>
+      </section>
+
+      <section class="card" aria-labelledby="sf-h">
+        <div class="card-h"><span class="ni k-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 7h12l-3-3M16 17H4l3 3"></path></svg></span><div><h2 id="sf-h">Separação de funções</h2><div class="sub">Combinações que o sistema não deixa existir na mesma pessoa</div></div></div>
+        <div class="col" style="gap: 0">
+          <div class="li"><span class="chip c-rose">Bloqueado</span><span class="t14" style="flex: 1">Pedir estorno + aprovar estorno</span></div>
+          <div class="li"><span class="chip c-rose">Bloqueado</span><span class="t14" style="flex: 1">Cadastrar perfil clínico + ativar o mesmo perfil</span></div>
+          <div class="li"><span class="chip c-rose">Bloqueado</span><span class="t14" style="flex: 1">Mudar permissão + conferir a própria mudança</span></div>
+          <div class="li"><span class="chip c-amber">Avisa</span><span class="t14" style="flex: 1">Receber pagamento + fechar o próprio caixa sem conferência</span></div>
+          <div class="li"><span class="chip">Regra fixa</span><span class="t14" style="flex: 1">TI administra o sistema, mas nunca vê dado clínico</span></div>
+        </div>
+      </section>
+    </div>
+    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const P = ['rec', 'cx', 'tec', 'med', 'fat', 'fin', 'coo', 'ti', 'aud'];
+    const base = {
+      agenda:   [1, 1, 1, 1, 1, 0, 1, 0, 1],
+      checkin:  [1, 1, 0, 0, 0, 0, 1, 0, 0],
+      receber:  [0, 1, 0, 0, 0, 1, 0, 0, 0],
+      pedEst:   [0, 1, 0, 0, 0, 0, 1, 0, 0],
+      aprEst:   [0, 0, 0, 0, 0, 1, 0, 0, 0],
+      laudar:   [0, 0, 0, 1, 0, 0, 0, 0, 0],
+      assinar:  [0, 0, 0, 1, 0, 0, 0, 0, 0],
+      clinico:  [0, 0, 1, 1, 0, 0, 0, 0, 1],
+      exportar: [0, 0, 0, 0, 1, 1, 1, 0, 1],
+      usuarios: [0, 0, 0, 0, 0, 0, 1, 1, 0]
+    };
+    this.P = P;
+    this.state = { base, mud: {}, erro: '', reauth: false, senha: '', enviado: false, sel: 'cm', filtro: 'ativos', addFin: false, conf: false, motivo: '', off: {},
+      ctx: { cm: { u: ['Centro'], s: [] }, as: { u: ['Centro'], s: [] }, pm: { u: ['Centro'], s: ['4', '5'] }, ra: { u: ['Centro', 'Trindade'], s: ['1', '2'] }, cs: { u: ['Centro'], s: ['3', '6'] }, mt: { u: ['Centro', 'Trindade'], s: [] }, pl: { u: ['Centro', 'Trindade'], s: [] }, bt: { u: ['Centro', 'Trindade'], s: [] }, lp: { u: ['Centro'], s: ['3', '6'] }, rmo: { u: ['Centro'], s: [] } },
+      em: { e1: '', e2: '', e3: 'ok' } };
+  }
+  renderVals() {
+    const s = this.state;
+    const P = this.P;
+    const NOMES = ['Recepção', 'Caixa', 'Técnico', 'Médico', 'Faturamento', 'Financeiro', 'Coordenação', 'TI (sem dado clínico)', 'Auditor'];
+    const CURTO = ['Recep.', 'Caixa', 'Técn.', 'Médico', 'Fatur.', 'Financ.', 'Coord.', 'TI', 'Audit.'];
+    const ATOS = [['agenda', 'Ver agenda'], ['checkin', 'Fazer check-in'], ['receber', 'Receber pagamento'], ['pedEst', 'Pedir estorno'], ['aprEst', 'Aprovar estorno'],
+      ['laudar', 'Laudar'], ['assinar', 'Assinar laudo'], ['clinico', 'Ver dado clínico'], ['exportar', 'Exportar'], ['usuarios', 'Gerenciar usuários']];
+    const val = (a, j) => { const k = a + ':' + j; return k in s.mud ? s.mud[k] : s.base[a][j]; };
+    const trava = (a, j) => (P[j] === 'ti' && (a === 'clinico' || a === 'laudar' || a === 'assinar')) || (P[j] === 'aud' && a !== 'agenda' && a !== 'clinico' && a !== 'exportar') || ((a === 'laudar' || a === 'assinar') && P[j] !== 'med');
+    const toggle = (a, j) => {
+      const novo = val(a, j) ? 0 : 1;
+      if (novo && a === 'aprEst' && val('pedEst', j)) { this.setState({ erro: NOMES[j] + ' já pode pedir estorno; o mesmo perfil não pode também aprovar. Nada foi alterado.' }); return; }
+      if (novo && a === 'pedEst' && val('aprEst', j)) { this.setState({ erro: NOMES[j] + ' já pode aprovar estorno; o mesmo perfil não pode também pedir. Nada foi alterado.' }); return; }
+      this.setState(st => { const m = Object.assign({}, st.mud); const k = a + ':' + j; if (k in m) delete m[k]; else m[k] = novo; return { mud: m, erro: '', enviado: false }; });
+    };
+    const matriz = ATOS.map(([a, ato]) => ({ ato, cels: P.map((p, j) => {
+      const t = trava(a, j), v = val(a, j), pend = (a + ':' + j) in s.mud;
+      return { cls: 'cel ' + (t ? 'trava' : (pend ? 'pend' : (v ? 'sim' : 'nao'))), i: t ? '×' : (pend ? '!' : (v ? '✓' : '–')), on: v ? 'true' : 'false', trava: t,
+        rot: NOMES[j] + ': ' + ato + (t ? ' (travado pela regra)' : (v ? ' (pode)' : ' (não pode)')) + (pend ? ', mudança pendente' : ''), tg: () => { if (!t) toggle(a, j); } };
+    }) }));
+    const pendKeys = Object.keys(s.mud);
+    const atoNome = Object.fromEntries(ATOS);
+    const listaPend = pendKeys.map(k => { const [a, j] = k.split(':'); return (s.mud[k] ? 'dar ' : 'tirar ') + '“' + atoNome[a] + '” ' + (s.mud[k] ? 'a ' : 'de ') + NOMES[+j]; }).join('; ');
+
+    const U = [
+      { id: 'cm', nome: 'Carla Mendes', login: 'carla.mendes', k: 'k-teal', perfis: ['Recepção', 'Caixa'], fa: true, acesso: 'hoje 07:51 · Guichê 2' },
+      { id: 'as', nome: 'Ana Souza', login: 'ana.souza', k: 'k-violet', perfis: ['Recepção'], fa: true, acesso: 'hoje 07:58 · Guichê 1' },
+      { id: 'pm', nome: 'Dr. Paulo Medeiros', login: 'paulo.medeiros', k: 'k-blue', perfis: ['Médico'], fa: true, acesso: 'hoje 08:10 · Sala 4' },
+      { id: 'ra', nome: 'Dra. Renata Alves', login: 'renata.alves', k: 'k-pink', perfis: ['Médico'], fa: true, acesso: 'hoje 07:40 · Sala 2' },
+      { id: 'cs', nome: 'Dra. Cecília Souto', login: 'cecilia.souto', k: 'k-rose', perfis: ['Médico', 'Coordenação'], fa: true, acesso: 'ontem 18:22 · Laudos' },
+      { id: 'lp', nome: 'Luana Pires', login: 'luana.pires', k: 'k-green', perfis: ['Técnico'], fa: false, acesso: 'hoje 07:30 · Sala 3' },
+      { id: 'mt', nome: 'Marcos Teixeira', login: 'marcos.teixeira', k: 'k-orange', perfis: ['Faturamento'], fa: true, acesso: 'ontem 17:05 · Faturamento' },
+      { id: 'pl', nome: 'Patrícia Lemos', login: 'patricia.lemos', k: 'k-navy', perfis: ['Coordenação'], fa: true, acesso: 'agora · Coordenação' },
+      { id: 'bt', nome: 'Bruno Tavares', login: 'bruno.tavares', k: 'k-gray', perfis: ['TI (sem dado clínico)'], fa: true, acesso: '05/11 16:40 · TI' },
+      { id: 'rmo', nome: 'Rita Moraes', login: 'rita.moraes', k: 'k-gray', perfis: ['Recepção'], fa: true, acesso: '30/09 18:00 · Guichê 2', off: 'Saiu da clínica' }
+    ];
+    const isOff = u => !!(u.off || s.off[u.id]);
+    const vis = U.filter(u => s.filtro === 'todos' || (s.filtro === 'ativos' ? !isOff(u) : isOff(u)));
+    const cur = U.find(u => u.id === s.sel);
+    const perfisCur = cur.perfis;
+    const ctx = s.ctx[cur.id];
+    const tgCtx = (campo, v) => this.setState(st => { const c = Object.assign({}, st.ctx); const o = Object.assign({}, c[cur.id]); o[campo] = o[campo].includes(v) ? o[campo].filter(x => x !== v) : o[campo].concat([v]); c[cur.id] = o; return { ctx: c }; });
+    const off = isOff(cur);
+    const EM = [
+      { id: 'e1', quem: 'Dr. Marcos Freire', quando: '06/11 22:14 · de casa (VPN)', pac: 'Lúcia Fernandes Prado · 02/07/1959', just: 'Paciente no pronto-socorro do hospital parceiro; plantonista pediu o laudo da TC anterior.' },
+      { id: 'e2', quem: 'Dra. Renata Alves', quando: '05/11 11:02 · Sala 2', pac: 'Vera Lúcia Antunes · 18/09/1957', just: 'Comparar com USG anterior; vínculo de cuidado não tinha sido criado pela recepção.' },
+      { id: 'e3', quem: 'Dr. Paulo Medeiros', quando: '02/11 19:47 · Laudos', pac: 'Antônio Carlos Ribeiro · 15/06/1954', just: 'Dor torácica, telefonema do cardiologista assistente.' }
+    ];
+    return {
+      nAtivos: String(U.filter(u => !isOff(u)).length),
+      filtrosUs: [['ativos', 'Ativos'], ['inativos', 'Desativados'], ['todos', 'Todos']].map(([k, t]) => ({ t, cls: s.filtro === k ? 'on' : '', on: s.filtro === k ? 'true' : 'false', ir: () => this.setState({ filtro: k }) })),
+      usuarios: vis.map(u => ({ nome: u.nome, ini: u.nome.replace(/^(Dr|Dra)\. /, '').split(' ').map(x => x[0]).filter((x, i, a) => i === 0 || i === a.length - 1).join(''),
+        k: u.k, perfis: u.perfis.join(' + '), unidade: s.ctx[u.id].u.join(', '), acesso: u.acesso,
+        fa: u.fa ? '2FA ativo' : '2FA pendente', faCls: u.fa ? 'chip c-green' : 'chip c-amber',
+        sit: isOff(u) ? 'Desativado' : 'Ativo', sitCls: isOff(u) ? 'chip' : 'chip c-teal',
+        cls: 'ur' + (u.id === s.sel ? ' sel' : '') + (isOff(u) ? ' off' : ''), atual: u.id === s.sel ? 'true' : 'false',
+        abrir: () => this.setState({ sel: u.id, addFin: false, conf: false, motivo: '' }) })),
+      sel: { nome: cur.nome, login: cur.login + ' · ' + (cur.fa ? '2FA ativo' : '2FA pendente: entra só depois de ativar'), k: cur.k, ini: cur.nome.replace(/^(Dr|Dra)\. /, '').split(' ').map(x => x[0]).filter((x, i, a) => i === 0 || i === a.length - 1).join(''),
+        perfisL: perfisCur, primeiro: cur.nome.split(' ')[0], motivoOff: cur.off || s.off[cur.id] || '',
+        contextoNota: ctx.s.length ? 'Só vê a agenda e a fila destas salas.' : 'Sem sala fixa: vale para a unidade inteira, conforme o perfil.' },
+      podeAdd: cur.perfis.includes('Caixa') && !off, addFin: () => this.setState({ addFin: true }), conflito: s.addFin && cur.perfis.includes('Caixa'),
+      unidades: ['Centro', 'Trindade'].map(t => ({ t, cls: ctx.u.includes(t) ? 'chip c-violet' : 'chip', on: ctx.u.includes(t) ? 'true' : 'false', tg: () => tgCtx('u', t) })),
+      salas: ['1', '2', '3', '4', '5', '6'].map(n => ({ t: 'Sala ' + n, cls: ctx.s.includes(n) ? 'chip c-violet' : 'chip', on: ctx.s.includes(n) ? 'true' : 'false', tg: () => tgCtx('s', n) })),
+      podeDesativar: !off && !s.conf, confDesativar: !off && s.conf, inativo: off,
+      pedirDesativar: () => this.setState({ conf: true }), cancelarDesativar: () => this.setState({ conf: false, motivo: '' }),
+      motivo: s.motivo, onMotivo: e => this.setState({ motivo: e.target.value }), semMotivo: !s.motivo,
+      desativar: () => this.setState(st => ({ off: Object.assign({}, st.off, { [cur.id]: st.motivo }), conf: false, motivo: '' })),
+      perfisCab: NOMES.map((nome, j) => ({ nome, curto: CURTO[j] })),
+      matriz,
+      erroSep: s.erro, temErro: s.erro !== '',
+      temPend: pendKeys.length > 0 && !s.enviado, nPend: String(pendKeys.length), listaPend,
+      descartar: () => this.setState({ mud: {}, reauth: false, senha: '' }),
+      abrirReauth: () => this.setState({ reauth: true }), fecharReauth: () => this.setState({ reauth: false, senha: '' }),
+      reauth: s.reauth && !s.enviado, senha: s.senha, onSenha: e => this.setState({ senha: e.target.value }), semSenha: !s.senha,
+      enviar: () => this.setState({ enviado: true, reauth: false, senha: '' }), enviado: s.enviado,
+      nRevisar: String(EM.filter(e => s.em[e.id] !== 'ok').length),
+      emerg: EM.map(e => ({ quem: e.quem, quando: e.quando, pac: e.pac, just: e.just, aberto: s.em[e.id] !== 'ok', ok: s.em[e.id] === 'ok',
+        res: e.id === 'e3' ? 'Revisado · justificado (Dra. Cecília)' : 'Revisado agora · justificado', revisar: () => this.setState(st => ({ em: Object.assign({}, st.em, { [e.id]: 'ok' }) })) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -44,7 +44,7 @@ e `tabbar` (app).
 .half` (colunas que quebram) · `.g2/.g3/.g4` (grades com largura mínima) ·
 `.tb` ocupa 100% e quebra o texto nas células; `.nw` só em valores curtos (data, hora, valor).
 
-Folha de estilos dos mockups: `design/vc7.css`. Verificação: `node tools/verificacao/sem-rolagem-lateral.js <pasta-dos-mockups> design/vc7.css 1000`.
+Folha de estilos dos mockups: `design/vc8.css`. Verificação: `node tools/verificacao/sem-rolagem-lateral.js <pasta-dos-mockups> design/vc8.css 1000`.
 
 **Sem rolagem lateral (regra):** em telas de 1280 px ou mais (menu de 280 px + 1000 px de conteúdo), **nenhuma tela obriga a arrastar para o lado**. Tabelas cabem na largura: menos colunas (junte atributos em uma célula), texto quebrando, detalhe abaixo da tabela em vez de coluna lateral. Proibido `min-width` fixo em tabela e quadro. Exceções: telão (tamanho fixo de TV) e o visualizador de imagens. Conferido por teste automático que mede a largura de cada tela.
 

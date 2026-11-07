@@ -1,7 +1,7 @@
 const {chromium}=require('playwright');const fs=require('fs');
 const dir=process.argv[2];const css=fs.readFileSync(process.argv[3],'utf8');
 (async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:+process.argv[4],height:900}});
-await p.route('**/_blob/b7e42ddd1a1313743941687fc5dcf532',r=>r.fulfill({body:css,contentType:'text/css'}));
+await p.route('**/_blob/fb2dedb8954c196c1d9a9203c0ff5693',r=>r.fulfill({body:css,contentType:'text/css'}));
 await p.route('**/_blob/**',r=>r.fulfill({body:'',status:200}));
 await p.route('**/support.js',r=>r.fulfill({body:'',contentType:'text/javascript'}));
 for(const f of fs.readdirSync(dir).filter(f=>f.endsWith('.dc.html'))){

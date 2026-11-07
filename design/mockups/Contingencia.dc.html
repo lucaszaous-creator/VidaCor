@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Contingência — VidaCor</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="contingencia" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="page-h">
+      <div class="grow"><h1>Contingência</h1><p>Quando o sistema ou a rede caem, o atendimento continua no papel · tudo volta para o sistema depois, com marcação no lastro</p></div>
+      <div class="seg" role="tablist" aria-label="Situação (demonstração)">
+        <sc-for list="{{modos}}" as="m" hint-placeholder-count="3"><button class="{{m.cls}}" role="tab" aria-selected="{{m.sel}}" onClick="{{m.ir}}">{{m.t}}</button></sc-for>
+      </div>
+    </div>
+
+    <section class="card" aria-label="Estado atual" style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center">
+      <span class="{{estado.ni}}" style="width: 52px; height: 52px; border-radius: 16px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"></path><path d="M9 12l2 2 4-4"></path></svg></span>
+      <div style="flex: 1 1 320px; min-width: 0">
+        <div class="row wrap" style="gap: 10px"><span style="font-size: 22px; font-weight: 650">{{estado.titulo}}</span><span class="{{estado.chip}}">{{estado.tag}}</span></div>
+        <div class="t14 mute" style="margin-top: 4px; line-height: 1.5">{{estado.sub}}</div>
+      </div>
+      <sc-if value="{{isNormal}}" hint-placeholder-val="{{ true }}">
+        <button class="btn btn-p" onClick="{{abrirDeclarar}}">Declarar contingência</button>
+      </sc-if>
+      <sc-if value="{{isConting}}" hint-placeholder-val="{{ false }}">
+        <button class="btn btn-p" onClick="{{irRetomada}}">Sistema voltou: iniciar retomada</button>
+      </sc-if>
+    </section>
+
+    <sc-if value="{{declarando}}" hint-placeholder-val="{{ false }}">
+      <section class="card" aria-label="Declarar contingência" style="outline: 2px solid #0A1A4A">
+        <div class="card-h"><div class="grow"><h2>Declarar contingência</h2><div class="sub">Avisa todas as estações, o chat da equipe e a coordenação · registrado no lastro com quem declarou</div></div><button class="btn btn-sm" onClick="{{fecharDeclarar}}">Cancelar</button></div>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 14px">
+          <label class="field">Motivo<select class="in"><option>Servidor local fora do ar</option><option>Rede interna fora</option><option>Internet fora (portal, WhatsApp, TISS)</option><option>Falta de energia</option><option>Simulado</option></select></label>
+          <label class="field">Responsável pela contingência<select class="in"><option>Patrícia Lemos (Coordenação)</option><option>Ana Souza (Recepção)</option><option>Dra. Cecília Souto (Resp. técnica)</option></select></label>
+          <label class="field" style="grid-column: 1 / -1">O que foi observado<textarea class="in" rows="2" placeholder="Ex.: telas da recepção não carregam desde 10:40; TI avisada"></textarea></label>
+        </div>
+        <div class="row wrap" style="gap: 8px; margin-top: 14px"><button class="btn btn-p" onClick="{{confirmarDeclarar}}">Declarar agora</button><span class="t13 mute">Se o servidor estiver fora, este aviso é gravado neste computador e enviado assim que voltar.</span></div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{isConting}}" hint-placeholder-val="{{ false }}">
+      <div class="banner off"><div class="t14" style="line-height: 1.5"><b>Em contingência desde 10:42.</b> O servidor local não responde. O sistema passou este computador para modo offline e liberou o kit de papel. Atenda pelas fichas numeradas; nada precisa ser refeito depois, só lançado.</div></div>
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr))">
+        <section class="card" aria-label="Funciona offline">
+          <div class="card-h"><span class="ni k-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span><div class="grow"><h2>Funciona neste computador</h2><div class="sub">Cópia local de hoje, só leitura (exceto ficha rápida)</div></div></div>
+          <sc-for list="{{funciona}}" as="f" hint-placeholder-count="5"><div class="li"><span class="ni k-green">✓</span><div style="flex: 1"><div class="t14 b">{{f.t}}</div><div class="s">{{f.s}}</div></div></div></sc-for>
+        </section>
+        <section class="card" aria-label="Não funciona">
+          <div class="card-h"><span class="ni k-rose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></span><div class="grow"><h2>Não funciona agora</h2><div class="sub">E o que fazer no lugar</div></div></div>
+          <sc-for list="{{naoFunciona}}" as="f" hint-placeholder-count="5"><div class="li"><span class="ni k-rose">–</span><div style="flex: 1"><div class="t14 b">{{f.t}}</div><div class="s">{{f.s}}</div></div></div></sc-for>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isRetomada}}" hint-placeholder-val="{{ false }}">
+      <div class="banner info"><div class="t14" style="line-height: 1.5"><b>Sistema de volta às 13:05 (contingência de 2h23).</b> As fichas em papel precisam ser lançadas. Cada lançamento fica marcado como "registrado em contingência" no lastro, com o número da ficha e quem digitou.</div></div>
+      <section class="card" aria-label="Lançamento posterior">
+        <div class="card-h"><div class="grow"><h2>Lançamento posterior</h2><div class="sub">{{resumoLanc}}</div></div>
+          <div class="seg" role="tablist" aria-label="Filtro"><sc-for list="{{filtros}}" as="f" hint-placeholder-count="4"><button class="{{f.cls}}" role="tab" aria-selected="{{f.sel}}" onClick="{{f.ir}}">{{f.t}}</button></sc-for></div>
+        </div>
+        <table class="tb">
+          <thead><tr><th>Papel nº</th><th>Paciente</th><th>Exame e quem atendeu</th><th>Situação</th><th class="r">Ação</th></tr></thead>
+          <tbody>
+            <sc-for list="{{fichas}}" as="x" hint-placeholder-count="6">
+              <tr>
+                <td class="num nw b">{{x.n}}</td>
+                <td><div class="b">{{x.nome}}</div><div class="t13 mute num">Nasc. {{x.nasc}}</div></td>
+                <td><div>{{x.exame}}</div><div class="t13 mute">{{x.quem}} · {{x.hora}}</div></td>
+                <td><span class="{{x.cls}}">{{x.sit}}</span><div class="t12 mute" style="margin-top: 4px">{{x.obs}}</div></td>
+                <td class="r"><button class="btn btn-sm" onClick="{{x.acao}}">{{x.btn}}</button></td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+        <p class="t13 mute" style="margin: 12px 0 0">Divergente = o papel não bate com o sistema (nome, nascimento, exame ou guia). Resolve quem atendeu, com motivo; o papel é digitalizado e anexado ao atendimento.</p>
+      </section>
+      <section class="card" aria-label="Checklist de retomada">
+        <div class="card-h"><div class="grow"><h2>Checklist de retomada</h2><div class="sub">{{progresso}} itens concluídos · a contingência só é encerrada com tudo marcado</div></div></div>
+        <sc-for list="{{checklist}}" as="c" hint-placeholder-count="6">
+          <label class="li" style="cursor: pointer"><input type="checkbox" checked="{{c.on}}" onChange="{{c.tg}}" style="width: 20px; height: 20px"><div style="flex: 1"><div class="t14 b">{{c.t}}</div><div class="s">{{c.s}}</div></div></label>
+        </sc-for>
+        <div class="row wrap" style="gap: 8px; margin-top: 12px"><button class="btn btn-p" disabled="{{naoPodeEncerrar}}" onClick="{{encerrar}}">Encerrar contingência</button><span class="t13 mute">Pede a senha de quem declarou ou da coordenação.</span></div>
+      </section>
+    </sc-if>
+
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr))">
+      <section class="card" aria-label="Kit de papel do dia">
+        <div class="card-h"><span class="ni k-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"></path><path d="M14 3v5h5M10 13h6M10 17h6"></path></svg></span><div class="grow"><h2>Kit gerado hoje às 06:00</h2><div class="sub">Impresso e conferido por Carla Mendes às 06:48</div></div></div>
+        <sc-for list="{{kit}}" as="k" hint-placeholder-count="4"><div class="li"><div style="flex: 1; min-width: 0"><div class="t14 b">{{k.t}}</div><div class="s">{{k.s}}</div></div><span class="chip c-teal" style="white-space: normal; height: auto; min-height: 26px; padding: 4px 10px">{{k.onde}}</span></div></sc-for>
+        <p class="t13 mute" style="margin: 10px 0 0">Também salvo em PDF neste computador e no pendrive cifrado do cofre da recepção.</p>
+      </section>
+      <section class="card" aria-label="Histórico">
+        <div class="card-h"><span class="ni k-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><div class="grow"><h2>Histórico e simulados</h2><div class="sub">Simulado trimestral obrigatório · próximo em 15/01/2027</div></div></div>
+        <sc-for list="{{historico}}" as="h" hint-placeholder-count="4"><div class="li"><div style="flex: 1; min-width: 0"><div class="t14 b">{{h.t}}</div><div class="s">{{h.s}}</div></div><span class="{{h.cls}}">{{h.tag}}</span></div></sc-for>
+      </section>
+    </div>
+    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { modo: 'normal', declarar: false, filtro: 'todos', lanc: {}, chk: [true, true, false, false, false, false], encerrada: false };
+  }
+  renderVals() {
+    const s = this.state;
+    const M = [['normal', 'Operando normal'], ['conting', 'Em contingência'], ['retomada', 'Retomada']];
+    const est = {
+      normal: { ni: 'ni k-green', titulo: 'Operando normal', tag: 'Servidor e rede ok', chip: 'chip c-green', sub: s.encerrada ? 'Contingência de hoje encerrada às 13:41 por Patrícia Lemos · 14 fichas lançadas · registrado no lastro' : 'Última verificação 09:58 · servidor local, banco, rede e internet respondendo · kit de papel do dia pronto' },
+      conting: { ni: 'ni k-amber', titulo: 'Em contingência desde 10:42', tag: 'Servidor local fora', chip: 'chip c-amber', sub: 'Declarada por Ana Souza · responsável: Patrícia Lemos · TI avisada às 10:44 · 9 pacientes atendidos no papel até agora' },
+      retomada: { ni: 'ni k-blue', titulo: 'Retomada em andamento', tag: 'Lançando o papel', chip: 'chip c-blue', sub: 'Servidor de volta às 13:05 · contingência continua aberta até o checklist ficar completo' }
+    }[s.modo];
+    const F = [
+      { id: 'C-0412', nome: 'Maria Helena Duarte', nasc: '12/03/1968', exame: 'Ecocardiograma', quem: 'Dr. Paulo Medeiros', hora: '10:50', base: 'lancado' },
+      { id: 'C-0413', nome: 'Antônio Carlos Ribeiro', nasc: '15/06/1954', exame: 'Doppler de carótidas', quem: 'Dr. Marcos Freire', hora: '11:05', base: 'lancado' },
+      { id: 'C-0414', nome: 'Juliana Sampaio Rocha', nasc: '12/04/1993', exame: 'USG obstétrica', quem: 'Dra. Renata Alves', hora: '11:20', base: 'diverg', obs: 'Papel: nasc. 12/04/1992 · sistema: 12/04/1993' },
+      { id: 'C-0415', nome: 'Sônia Maria Castro', nasc: '03/02/1962', exame: 'USG de tireoide', quem: 'Dra. Renata Alves', hora: '11:45', base: 'pend' },
+      { id: 'C-0416', nome: 'Vera Lúcia Antunes', nasc: '18/09/1957', exame: 'Raio X de tórax', quem: 'Dra. Cecília Souto', hora: '12:10', base: 'diverg', obs: 'Guia Unimed sem senha anotada no papel' },
+      { id: 'C-0417', nome: 'Rafael Monteiro Lima', nasc: '09/11/1988', exame: 'Teste ergométrico', quem: 'Dr. Paulo Medeiros', hora: '12:30', base: 'pend' }
+    ];
+    const sitOf = f => s.lanc[f.id] || f.base;
+    const SIT = { lancado: ['Lançado', 'chip c-green', 'Ver no lastro'], diverg: ['Divergente', 'chip c-rose', 'Resolver'], pend: ['Pendente', 'chip c-amber', 'Lançar'] };
+    const all = F.map(f => sitOf(f));
+    const cnt = k => all.filter(x => x === k).length;
+    const fichas = F.filter(f => s.filtro === 'todos' || sitOf(f) === s.filtro).map(f => {
+      const k = sitOf(f), d = SIT[k];
+      return { n: f.id, nome: f.nome, nasc: f.nasc, exame: f.exame, quem: f.quem, hora: f.hora, sit: d[0], cls: d[1], btn: d[2],
+        obs: k === 'lancado' ? 'Registrado em contingência' : (k === 'diverg' ? f.obs : 'Aguardando digitação'),
+        acao: () => this.setState(st => { if (sitOf(f) === 'lancado') return null; const l = Object.assign({}, st.lanc); l[f.id] = 'lancado'; return { lanc: l }; }) };
+    });
+    const FL = [['todos', 'Todas'], ['pend', 'Pendentes'], ['diverg', 'Divergentes'], ['lancado', 'Lançadas']];
+    const C = [['Servidor, banco e rede conferidos pela TI', 'Marcos (TI) · 13:05'], ['Agenda do sistema conferida com a agenda em papel', 'Encaixes feitos no papel entram como novos agendamentos'],
+      ['Todas as fichas em papel lançadas', 'Nenhuma pendente ou divergente'], ['Imagens dos aparelhos conciliadas', 'Estudos feitos offline ligados ao paciente certo (nome + nascimento)'],
+      ['Caixa conferido', 'Recibos manuais lançados no Caixa com o número do recibo'], ['Papéis digitalizados e guardados', 'Arquivo de contingência · pasta do dia']];
+    const done = s.chk.filter(Boolean).length;
+    return {
+      modos: M.map(([k, t]) => ({ t, cls: s.modo === k ? 'on' : '', sel: s.modo === k ? 'true' : 'false', ir: () => this.setState({ modo: k, declarar: false }) })),
+      estado: est, isNormal: s.modo === 'normal', isConting: s.modo === 'conting', isRetomada: s.modo === 'retomada',
+      declarando: s.declarar && s.modo === 'normal',
+      abrirDeclarar: () => this.setState({ declarar: true }), fecharDeclarar: () => this.setState({ declarar: false }),
+      confirmarDeclarar: () => this.setState({ declarar: false, modo: 'conting', encerrada: false }),
+      irRetomada: () => this.setState({ modo: 'retomada' }),
+      funciona: [
+        { t: 'Agenda do dia (cópia das 06:00 e atualizações até 10:42)', s: 'Consulta por nome e nascimento' },
+        { t: 'Ficha rápida offline', s: 'Gravada cifrada neste computador; sobe sozinha quando voltar' },
+        { t: 'Impressão de etiquetas em branco numeradas', s: 'Impressora local da recepção' },
+        { t: 'Aparelhos gravando imagens', s: 'Ficam no próprio aparelho até o servidor voltar' },
+        { t: 'Telefone e celular da recepção', s: 'Ramais não dependem do servidor' }
+      ],
+      naoFunciona: [
+        { t: 'Cadastro e check-in no sistema', s: 'Use a ficha em papel numerada' },
+        { t: 'Caixa, PIX e cartão integrados', s: 'Maquininha avulsa e recibo manual numerado' },
+        { t: 'Autorização de guias e TISS', s: 'Anote nº da guia e senha; confira no portal da operadora pelo celular' },
+        { t: 'Laudos e assinatura digital', s: 'Laudo fica para depois; urgências: médico liga para o solicitante' },
+        { t: 'WhatsApp e portal do paciente', s: 'Avisos de atraso por telefone' }
+      ],
+      resumoLanc: cnt('lancado') + ' lançadas · ' + cnt('diverg') + ' divergentes · ' + cnt('pend') + ' pendentes (mostrando 6 de 14)',
+      filtros: FL.map(([k, t]) => ({ t, cls: s.filtro === k ? 'on' : '', sel: s.filtro === k ? 'true' : 'false', ir: () => this.setState({ filtro: k }) })),
+      fichas,
+      checklist: C.map(([t, sub], i) => ({ t, s: sub, on: s.chk[i], tg: () => this.setState(st => { const c = st.chk.slice(); c[i] = !c[i]; return { chk: c }; }) })),
+      progresso: done + ' de ' + C.length, naoPodeEncerrar: done < C.length,
+      encerrar: () => this.setState({ modo: 'normal', encerrada: true }),
+      kit: [
+        { t: 'Agenda do dia em PDF por sala', s: 'Salas 1 a 6 · 87 pacientes · nome, nascimento, exame, preparo', onde: 'Pasta azul · balcão da recepção' },
+        { t: 'Fichas de atendimento pré-preenchidas', s: 'Uma por paciente agendado, com código de barras', onde: 'Pasta azul · balcão da recepção' },
+        { t: 'Etiquetas em branco numeradas', s: 'C-0400 a C-0499 · reservadas no sistema', onde: 'Gaveta 2 da recepção' },
+        { t: 'Formulários em papel numerados', s: 'Ficha de encaixe, recibo manual, termo de consentimento, triagem de contraste', onde: 'Armário da coordenação' }
+      ],
+      historico: [
+        { t: 'Hoje · servidor local fora · 2h23', s: 'Declarada por Ana Souza · 14 fichas', tag: s.modo === 'normal' && s.encerrada ? 'Encerrada' : 'Aberta', cls: s.modo === 'normal' && s.encerrada ? 'chip c-green' : 'chip c-amber' },
+        { t: '16/10 · simulado trimestral', s: 'Recepção e salas 1–3 · retomada em 38 min · 2 melhorias anotadas', tag: 'Simulado', cls: 'chip c-violet' },
+        { t: '22/08 · internet fora · 47 min', s: 'Só portal, WhatsApp e TISS afetados · atendimento seguiu', tag: 'Encerrada', cls: 'chip c-green' },
+        { t: '11/07 · simulado trimestral', s: 'Turno da tarde · retomada em 52 min', tag: 'Simulado', cls: 'chip c-violet' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

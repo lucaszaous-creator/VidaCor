@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Check-up e pacotes</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.pc{display:flex;flex-direction:column;gap:10px;width:100%;padding:18px;border-radius:18px;border:1px solid #E8EAEF;background:#fff;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.pc:hover{border-color:#9CC7E8}
+.pc.on{border-color:#0A1A4A;box-shadow:inset 0 0 0 1px #0A1A4A}
+.rt{display:grid;grid-template-columns:64px 36px minmax(0,1fr);gap:12px;align-items:start;padding:12px 0}
+.dot{width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+.d-ok{background:#E5F5EC;color:#1F7A4D}.d-now{background:#0A1A4A;color:#fff;box-shadow:0 0 0 5px #E8F2FB}.d-todo{background:#F1F3F6;color:#5B6474}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="pacotes" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="page-h">
+      <div class="grow"><h1>Check-up e pacotes</h1><p>Vários exames num só dia, na ordem certa · preço do pacote calculado pelo servidor</p></div>
+      <div class="seg" role="tablist" aria-label="Seção"><sc-for list="{{abas}}" as="a" hint-placeholder-count="3"><button class="{{a.cls}}" role="tab" aria-selected="{{a.sel}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for></div>
+    </div>
+
+    <sc-if value="{{tPac}}" hint-placeholder-val="{{ true }}">
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 16px">
+        <sc-for list="{{pacotes}}" as="p" hint-placeholder-count="3">
+          <button class="{{p.cls}}" aria-pressed="{{p.sel}}" onClick="{{p.pick}}">
+            <span class="row" style="gap: 10px"><span class="{{p.ni}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h16v12H4zM9 7V5h6v2M4 12h16"></path></svg></span><span class="t15 b">{{p.nome}}</span></span>
+            <span class="t13 mute">{{p.exs}}</span>
+            <span class="row" style="gap: 8px; align-items: baseline"><span style="font-size: 24px; font-weight: 650" class="num">{{p.preco}}</span><span class="t13 mute" style="text-decoration: line-through">{{p.avulso}}</span></span>
+            <span class="t12 mute">{{p.dur}}</span>
+          </button>
+        </sc-for>
+      </div>
+
+      <section class="card" aria-labelledby="dp-h">
+        <div class="card-h wrap"><div class="grow"><h2 id="dp-h">{{pk.nome}}</h2><div class="sub">{{pk.para}}</div></div><button class="btn btn-sm">Nova versão do pacote</button><button class="btn btn-sm btn-p" onClick="{{irRoteiro}}">Montar roteiro para um paciente</button></div>
+        <table class="tb">
+          <thead><tr><th>Exame</th><th>Preparo</th><th class="r">Duração</th><th class="r">Avulso</th></tr></thead>
+          <tbody>
+            <sc-for list="{{pk.itens}}" as="i" hint-placeholder-count="3"><tr><td class="b">{{i.ex}}</td><td>{{i.prep}}</td><td class="r num nw">{{i.min}} min</td><td class="r num nw">{{i.val}}</td></tr></sc-for>
+          </tbody>
+        </table>
+        <div class="row wrap" style="gap: 12px; margin-top: 14px; padding: 14px 16px; border-radius: 16px; background: #F6F7F9">
+          <div class="grow"><div class="lbl">Preço do pacote</div><div style="font-size: 28px; font-weight: 650" class="num">{{pk.preco}}</div></div>
+          <div class="t13 mute" style="flex: 1 1 300px; line-height: 1.5">{{pk.regra}}. A recepção não digita valor: o caixa recebe o preço pronto do servidor. Mudar a regra pede aprovação da coordenação e vira nova versão.</div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{tRot}}" hint-placeholder-val="{{ false }}">
+      <div class="split">
+        <section class="card main" aria-labelledby="rt-h">
+          <div class="card-h wrap">
+            <span class="av" style="background: #E8F2FB; color: #0C72B0">{{rot.ini}}</span>
+            <div class="grow"><h2 id="rt-h">{{rot.pac}}</h2><div class="sub">Nasc. {{rot.nasc}} · {{pk.nome}} · hoje, 7 de novembro</div></div>
+            <span class="chip c-green"><span class="d"></span>Ao vivo</span>
+          </div>
+          <div class="seg" role="radiogroup" aria-label="Pacote do roteiro" style="margin-bottom: 8px"><sc-for list="{{pacMini}}" as="p" hint-placeholder-count="3"><button class="{{p.cls}}" role="radio" aria-checked="{{p.sel}}" onClick="{{p.pick}}" style="height: 36px">{{p.t}}</button></sc-for></div>
+          <div class="banner info" style="margin-bottom: 6px"><div class="t14" style="line-height: 1.5">Ordem montada pelo sistema: <b>{{rot.regra}}</b>. Horários e salas vêm da agenda real; a recepção pode trocar, e o sistema avisa se a troca quebrar um preparo.</div></div>
+          <sc-for list="{{etapas}}" as="e" hint-placeholder-count="3">
+            <div class="rt" style="{{e.bd}}">
+              <span class="t15 b num" style="padding-top: 8px">{{e.h}}</span>
+              <span class="{{e.dot}}">{{e.n}}</span>
+              <div style="min-width: 0">
+                <div class="row wrap" style="gap: 8px"><span class="t15 b">{{e.ex}}</span><span class="{{e.chip}}">{{e.sit}}</span></div>
+                <div class="t13 mute" style="margin-top: 3px">{{e.sala}} · {{e.min}} min · {{e.prof}}</div>
+                <div class="t13" style="margin-top: 4px; color: #334155">{{e.porque}}</div>
+              </div>
+            </div>
+          </sc-for>
+          <div class="row wrap" style="gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #E8EAEF">
+            <span class="t14" style="flex: 1 1 240px">Tempo total previsto: <b>{{rot.total}}</b> · chegada {{rot.cheg}} · saída prevista {{rot.saida}}</span>
+            <button class="btn btn-sm" onClick="{{avancar}}">Simular próxima etapa</button>
+            <button class="btn btn-sm">Imprimir roteiro do paciente</button>
+          </div>
+        </section>
+        <aside class="aside col" style="gap: 16px">
+          <section class="card" aria-labelledby="ag-h">
+            <div class="card-h"><h2 id="ag-h">Agora</h2></div>
+            <div class="lbl">Etapa atual</div>
+            <div style="font-size: 20px; font-weight: 650; margin: 4px 0">{{rot.agora}}</div>
+            <div class="t14 mute">{{rot.agoraSub}}</div>
+            <div class="bar" style="margin: 14px 0 6px" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{rot.pct}}" aria-label="Progresso do check-up"><i style="{{rot.barSt}}"></i></div>
+            <div class="t13 mute">{{rot.feito}} de {{rot.n}} etapas concluídas</div>
+          </section>
+          <section class="card" aria-labelledby="av-h">
+            <div class="card-h"><h2 id="av-h">Avisos ao paciente</h2></div>
+            <div class="li"><span class="ni k-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span><div style="flex: 1"><div class="t14 b">Roteiro enviado no WhatsApp</div><div class="s">Ontem 18:00 · com o preparo de cada exame</div></div></div>
+            <div class="li"><span class="ni k-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16v10H8l-4 4z"></path></svg></span><div style="flex: 1"><div class="t14 b">Próxima sala aparece no telão</div><div class="s">Chamada pelo nome curto, sem o exame</div></div></div>
+          </section>
+        </aside>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{tEmp}}" hint-placeholder-val="{{ false }}">
+      <div style="display: grid; grid-template-columns: minmax(240px, 320px) minmax(0, 1fr); gap: 16px; align-items: start">
+        <section class="card" style="padding: 8px" aria-label="Empresas com contrato">
+          <sc-for list="{{empresas}}" as="c" hint-placeholder-count="3">
+            <button class="{{c.cls}}" aria-current="{{c.atual}}" onClick="{{c.pick}}"><span class="ni k-indigo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 21V6l8-3v18M12 9h8v12M7 9h2M7 13h2M15 13h2M15 17h2"></path></svg></span><span style="flex: 1; min-width: 0"><span class="nm" style="display: block">{{c.nome}}</span><span class="pv" style="display: block">{{c.func}} funcionários · {{c.cnpj}}</span></span></button>
+          </sc-for>
+          <button class="btn btn-sm" style="margin: 10px">Novo contrato</button>
+        </section>
+        <div class="col" style="gap: 16px; min-width: 0">
+          <section class="card" aria-labelledby="ef-h">
+            <div class="card-h wrap"><div class="grow"><h2 id="ef-h">{{emp.nome}}</h2><div class="sub">Contrato {{emp.ct}} · {{emp.func}} funcionários ativos · lista enviada pelo RH da empresa</div></div><span class="chip c-green">Contrato vigente</span></div>
+            <table class="tb">
+              <thead><tr><th>Função</th><th>Exames</th><th class="r">Por pessoa</th></tr></thead>
+              <tbody><sc-for list="{{emp.funcoes}}" as="f" hint-placeholder-count="3"><tr><td class="b">{{f.f}}<div class="t13 mute" style="font-weight: 400">{{f.n}} pessoas</div></td><td>{{f.ex}}</td><td class="r num nw">{{f.v}}</td></tr></sc-for></tbody>
+            </table>
+          </section>
+          <section class="card" aria-labelledby="fm-h">
+            <div class="card-h wrap"><div class="grow"><h2 id="fm-h">Faturamento de novembro</h2><div class="sub">Fecha dia 30 · NFS-e emitida para o CNPJ da empresa · boleto em 15 dias</div></div><a class="btn btn-sm" href="Financeiro.dc.html">Ver no Financeiro</a></div>
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 12px">
+              <div class="col" style="gap: 4px; padding: 14px; border-radius: 16px; background: #F6F7F9"><span class="lbl">Atendidos</span><b style="font-size: 24px" class="num">{{emp.atend}}</b></div>
+              <div class="col" style="gap: 4px; padding: 14px; border-radius: 16px; background: #F6F7F9"><span class="lbl">Faltaram</span><b style="font-size: 24px" class="num">{{emp.falt}}</b><span class="t12 mute">Avisamos o RH; falta não é cobrada</span></div>
+              <div class="col" style="gap: 4px; padding: 14px; border-radius: 16px; background: #F6F7F9"><span class="lbl">Parcial do mês</span><b style="font-size: 24px" class="num">{{emp.parcial}}</b><span class="t12 mute">Calculado pelo servidor</span></div>
+            </div>
+            <p class="t13 mute" style="margin: 12px 0 0">A empresa recebe só a lista de quem fez e o resultado de aptidão. Laudo e dado de saúde ficam com o funcionário e o médico do trabalho.</p>
+          </section>
+        </div>
+      </div>
+    </sc-if>
+
+    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { aba: 'pac', pk: 'cardio', passo: 1, emp: 'cls' }; }
+  renderVals() {
+    const s = this.state;
+    const brl = v => 'R$ ' + v.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    const PK = {
+      cardio: { nome: 'Check-up cardiológico', ni: 'ni k-rose', para: 'Para quem tem fator de risco ou mais de 40 anos · pedido médico único cobre os três exames', preco: 690, regra: 'Regra de preço v3, vigente desde 01/10/2026 (desconto de pacote aprovado por Patrícia Lemos)',
+        pac: 'Antônio Carlos Ribeiro', nasc: '15/06/1954', ini: 'AR', ordem: 'Doppler e eco antes do esforço; ergométrico por último porque o esforço altera a frequência e a pressão', cheg: '07:40',
+        itens: [
+          { ex: 'Doppler de carótidas e vertebrais', prep: 'Sem preparo', min: 40, val: 320, h: '07:50', sala: 'Sala 3', prof: 'Dr. Marcos Freire', porque: 'Primeiro: sem preparo e libera a sala 3 cedo.' },
+          { ex: 'Ecocardiograma transtorácico', prep: 'Sem preparo', min: 40, val: 380, h: '08:40', sala: 'Sala 1 · Vivid E95', prof: 'Dr. Paulo Medeiros', porque: 'Antes do esforço, com o coração em repouso.' },
+          { ex: 'Teste ergométrico', prep: 'Tênis e roupa leve; refeição leve até 2 h antes', min: 45, val: 190, h: '09:35', sala: 'Sala 4', prof: 'Dr. Paulo Medeiros', porque: 'Por último: o esforço muda frequência e pressão.' }
+        ] },
+      mulher: { nome: 'Check-up da mulher', ni: 'ni k-pink', para: 'Rastreio anual · USG de mamas, transvaginal, tireoide e abdome', preco: 760, regra: 'Regra de preço v2, vigente desde 01/08/2026',
+        pac: 'Sônia Maria Castro', nasc: '03/02/1962', ini: 'SC', ordem: 'jejum primeiro (abdome total), depois exames sem preparo; transvaginal com bexiga vazia', cheg: '07:20',
+        itens: [
+          { ex: 'USG de abdome total', prep: 'Jejum de 8 h', min: 30, val: 280, h: '07:30', sala: 'Sala 2', prof: 'Dra. Renata Alves', porque: 'Primeiro: exige jejum de 8 h; depois a paciente pode tomar o café da clínica.' },
+          { ex: 'USG transvaginal', prep: 'Bexiga vazia', min: 25, val: 240, h: '08:05', sala: 'Sala 2', prof: 'Dra. Renata Alves', porque: 'Na mesma sala, logo após esvaziar a bexiga.' },
+          { ex: 'USG de mamas e axilas', prep: 'Sem desodorante', min: 25, val: 230, h: '08:35', sala: 'Sala 5', prof: 'Dra. Renata Alves', porque: 'Sem preparo de jejum.' },
+          { ex: 'USG de tireoide', prep: 'Sem preparo', min: 20, val: 190, h: '09:05', sala: 'Sala 5', prof: 'Dra. Renata Alves', porque: 'Mesma sala do anterior: sem deslocamento.' }
+        ] },
+      ocup: { nome: 'Ocupacional para empresas', ni: 'ni k-indigo', para: 'Admissional, periódico e demissional · exames definidos pela função no contrato', preco: 210, regra: 'Preço do contrato com cada empresa; aqui, tabela padrão v1',
+        pac: 'Rafael Monteiro Lima', nasc: '09/11/1988', ini: 'RL', ordem: 'raio X primeiro (rápido), ECG em repouso antes do ergométrico, ergométrico por último', cheg: '13:20',
+        itens: [
+          { ex: 'Raio X de tórax PA', prep: 'Sem preparo', min: 10, val: 90, h: '13:30', sala: 'Sala 6', prof: 'Técnico de radiologia', porque: 'Primeiro: rápido e sem preparo.' },
+          { ex: 'Eletrocardiograma de repouso', prep: 'Sem preparo', min: 15, val: 60, h: '13:45', sala: 'Sala 4', prof: 'Enfermagem', porque: 'Em repouso, antes de qualquer esforço.' },
+          { ex: 'Teste ergométrico', prep: 'Tênis e roupa leve', min: 45, val: 190, h: '14:05', sala: 'Sala 4', prof: 'Dr. Paulo Medeiros', porque: 'Por último: esforço físico.' }
+        ] }
+    };
+    const pk = PK[s.pk];
+    const soma = pk.itens.reduce((a, i) => a + i.val, 0);
+    const min = pk.itens.reduce((a, i) => a + i.min, 0);
+    const [hh, mm] = pk.cheg.split(':').map(Number);
+    const last = pk.itens[pk.itens.length - 1];
+    const [lh, lm] = last.h.split(':').map(Number);
+    const fim = lh * 60 + lm + last.min;
+    const tot = fim - (hh * 60 + mm);
+    const hm = m => Math.floor(m / 60) + ' h ' + String(m % 60).padStart(2, '0') + ' min';
+    const n = pk.itens.length; const p = Math.min(s.passo, n);
+    const etapas = pk.itens.map((i, k) => {
+      const st = k < p ? 'ok' : (k === p ? 'now' : 'todo');
+      return { h: i.h, n: st === 'ok' ? '✓' : String(k + 1), ex: i.ex, sala: i.sala, min: String(i.min), prof: i.prof, porque: i.porque,
+        dot: 'dot d-' + st, sit: st === 'ok' ? 'Concluído' : (st === 'now' ? 'Em andamento' : 'Aguardando'), chip: st === 'ok' ? 'chip c-green' : (st === 'now' ? 'chip c-blue' : 'chip'),
+        bd: k < n - 1 ? 'border-bottom: 1px solid #E8EAEF' : '' };
+    });
+    const cur = pk.itens[p];
+    const pct = Math.round(p / n * 100);
+    const E = {
+      cls: { nome: 'Construtora Litoral Sul', cnpj: 'CNPJ 00.000.111/0001-00', ct: 'EMP-2026-014', func: 84, atend: 23, falt: 2, parcial: 4830,
+        funcoes: [{ f: 'Motorista', n: 12, ex: 'Teste ergométrico · Raio X de tórax · ECG', v: 340 }, { f: 'Operador de máquinas', n: 31, ex: 'Raio X de tórax · ECG', v: 150 }, { f: 'Administrativo', n: 41, ex: 'ECG', v: 60 }] },
+      tsa: { nome: 'Transportes Serra Azul', cnpj: 'CNPJ 00.000.222/0001-00', ct: 'EMP-2026-021', func: 46, atend: 9, falt: 0, parcial: 3060,
+        funcoes: [{ f: 'Motorista de carreta', n: 38, ex: 'Teste ergométrico · Raio X de tórax · ECG', v: 340 }, { f: 'Escritório', n: 8, ex: 'ECG', v: 60 }] },
+      mvi: { nome: 'Metalúrgica Vale do Rio', cnpj: 'CNPJ 00.000.333/0001-00', ct: 'EMP-2025-007', func: 120, atend: 31, falt: 4, parcial: 4650,
+        funcoes: [{ f: 'Soldador', n: 44, ex: 'Raio X de tórax · ECG', v: 150 }, { f: 'Manutenção', n: 30, ex: 'ECG · USG de abdome', v: 210 }, { f: 'Administrativo', n: 46, ex: 'ECG', v: 60 }] }
+    };
+    const emp = E[s.emp];
+    const A = [['pac', 'Pacotes'], ['rot', 'Roteiro do dia'], ['emp', 'Empresas']];
+    return {
+      abas: A.map(([k, t]) => ({ t, cls: s.aba === k ? 'on' : '', sel: s.aba === k ? 'true' : 'false', ir: () => this.setState({ aba: k }) })),
+      tPac: s.aba === 'pac', tRot: s.aba === 'rot', tEmp: s.aba === 'emp',
+      pacotes: Object.keys(PK).map(k => { const x = PK[k]; const av = x.itens.reduce((a, i) => a + i.val, 0);
+        return { nome: x.nome, ni: x.ni, exs: x.itens.map(i => i.ex).join(' · '), preco: brl(x.preco), avulso: brl(av), dur: x.itens.length + ' exames · cerca de ' + x.itens.reduce((a, i) => a + i.min, 0) + ' min nas salas',
+          cls: 'pc' + (s.pk === k ? ' on' : ''), sel: s.pk === k ? 'true' : 'false', pick: () => this.setState({ pk: k, passo: 1 }) }; }),
+      pk: { nome: pk.nome, para: pk.para, preco: brl(pk.preco) + ' (avulso ' + brl(soma) + ')', regra: pk.regra,
+        itens: pk.itens.map(i => ({ ex: i.ex, prep: i.prep, min: String(i.min), val: brl(i.val) })) },
+      irRoteiro: () => this.setState({ aba: 'rot', passo: 1 }),
+      pacMini: Object.keys(PK).map(k => ({ t: PK[k].nome, cls: s.pk === k ? 'on' : '', sel: s.pk === k ? 'true' : 'false', pick: () => this.setState({ pk: k, passo: 1 }) })),
+      rot: { pac: pk.pac, nasc: pk.nasc, ini: pk.ini, regra: pk.ordem, total: hm(tot) + ' (' + hm(min) + ' em exame)', cheg: pk.cheg, saida: Math.floor(fim / 60) + ':' + String(fim % 60).padStart(2, '0'),
+        agora: cur ? cur.ex : 'Check-up concluído', agoraSub: cur ? cur.sala + ' · ' + cur.prof + ' · desde ' + cur.h : 'Paciente liberado · laudos seguem para o portal depois de assinados',
+        pct: String(pct), barSt: 'width: ' + pct + '%', feito: String(p), n: String(n) },
+      etapas,
+      avancar: () => this.setState(st => ({ passo: st.passo >= n ? 0 : st.passo + 1 })),
+      empresas: Object.keys(E).map(k => ({ nome: E[k].nome, func: String(E[k].func), cnpj: E[k].cnpj, cls: 'cv' + (s.emp === k ? ' sel' : ''), atual: s.emp === k ? 'true' : 'false', pick: () => this.setState({ emp: k }) })),
+      emp: { nome: emp.nome, ct: emp.ct, func: String(emp.func), atend: String(emp.atend), falt: String(emp.falt), parcial: brl(emp.parcial),
+        funcoes: emp.funcoes.map(f => ({ f: f.f, n: String(f.n), ex: f.ex, v: brl(f.v) })) }
+    };
+  }
+}
+</script>
+</body>
+</html>

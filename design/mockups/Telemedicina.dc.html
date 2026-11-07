@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Telemedicina — VidaCor</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="telemedicina" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="page-h">
+      <div class="grow"><h1>Telemedicina</h1><p>Teleconsulta e telelaudo conforme a Resolução CFM 2.314/2022 · consentimento e identificação antes de entrar · tudo registrado no prontuário</p></div>
+      <div class="seg" role="tablist" aria-label="Modo">
+        <sc-for list="{{modos}}" as="m" hint-placeholder-count="2"><button class="{{m.cls}}" role="tab" aria-selected="{{m.sel}}" onClick="{{m.ir}}">{{m.t}}</button></sc-for>
+      </div>
+    </div>
+
+    <sc-if value="{{vConsulta}}" hint-placeholder-val="{{ true }}">
+      <div style="display: grid; grid-template-columns: minmax(240px, 300px) minmax(0, 1fr); gap: 16px; align-items: start">
+        <section class="card" style="padding: 8px" aria-label="Teleconsultas de hoje">
+          <div class="lbl" style="padding: 10px 12px 6px">Hoje · Dr. Paulo Medeiros</div>
+          <sc-for list="{{agenda}}" as="a" hint-placeholder-count="4">
+            <button class="{{a.cls}}" onClick="{{a.abrir}}" aria-current="{{a.atual}}">
+              <span class="b num t14" style="width: 46px">{{a.h}}</span>
+              <span style="flex: 1; min-width: 0"><span class="nm" style="display: block">{{a.nome}}</span><span class="pv" style="display: block">Nasc. {{a.nasc}} · {{a.motivo}}</span>
+                <span class="row wrap" style="gap: 6px; margin-top: 6px"><span class="{{a.chip}}" style="height: 22px; font-size: 12px">{{a.sit}}</span></span></span>
+            </button>
+          </sc-for>
+        </section>
+
+        <div class="col" style="gap: 16px; min-width: 0">
+          <sc-if value="{{naEspera}}" hint-placeholder-val="{{ true }}">
+            <section class="card" aria-label="Sala de espera virtual">
+              <div class="card-h"><div class="grow"><h2>Sala de espera · {{pac.nome}}</h2><div class="sub">Nasc. {{pac.nasc}} · entrou às {{pac.entrou}} pelo portal · conexão {{pac.conexao}}</div></div><span class="chip c-blue">Aguardando você</span></div>
+              <div class="col" style="gap: 0">
+                <label class="li" style="cursor: pointer"><input type="checkbox" checked="{{consent}}" onChange="{{tgConsent}}" style="width: 20px; height: 20px"><div style="flex: 1"><div class="t14 b">Consentimento registrado</div><div class="s">{{consentTxt}}</div></div></label>
+                <div class="li" style="align-items: flex-start"><span class="ni k-blue" style="margin-left: 0">ID</span><div style="flex: 1">
+                  <div class="t14 b">Identificação na câmera</div><div class="s">Peça ao paciente que mostre o documento com foto e confira em voz alta</div>
+                  <div class="row wrap" style="gap: 8px; margin-top: 8px">
+                    <sc-for list="{{ids}}" as="i" hint-placeholder-count="3"><button class="{{i.cls}}" aria-pressed="{{i.on}}" onClick="{{i.tg}}" style="border: 0; cursor: pointer; height: 36px">{{i.t}}</button></sc-for>
+                  </div></div></div>
+              </div>
+              <sc-if value="{{bloqueado}}" hint-placeholder-val="{{ true }}">
+                <p class="t13 mute" style="margin: 12px 0 0">A chamada só abre com o consentimento registrado e os três itens conferidos (nome, nascimento e documento). Isso evita atender a pessoa errada.</p>
+              </sc-if>
+              <div class="row wrap" style="gap: 8px; margin-top: 12px"><button class="btn btn-p" disabled="{{bloqueado}}" onClick="{{entrar}}">Entrar na chamada</button><button class="btn btn-sm">Enviar mensagem ao paciente</button></div>
+            </section>
+          </sc-if>
+
+          <sc-if value="{{emChamada}}" hint-placeholder-val="{{ false }}">
+            <section class="card" aria-label="Chamada" style="padding: 14px">
+              <div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: stretch">
+                <div style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+                  <div class="dark" style="position: relative; border-radius: 18px; height: 340px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px">
+                    <span class="av av-lg" style="background: #1E293B; color: #CBD5E1">{{pac.ini}}</span>
+                    <span class="t14" style="color: #CBD5E1">Vídeo do paciente</span>
+                    <span class="t12" style="position: absolute; left: 14px; top: 12px; color: #E2E8F0; background: rgba(15,23,42,.7); padding: 4px 8px; border-radius: 8px">{{pac.nome}} · {{pac.nasc}} · identificado 14:02</span>
+                    <span class="t12" style="position: absolute; right: 14px; top: 12px; color: #E2E8F0; background: rgba(15,23,42,.7); padding: 4px 8px; border-radius: 8px">{{qualidade}}</span>
+                    <div style="position: absolute; right: 14px; bottom: 14px; width: 120px; height: 80px; border-radius: 12px; background: #1E293B; display: flex; align-items: center; justify-content: center"><span class="t12" style="color: #94A3B8">Você</span></div>
+                  </div>
+                  <div class="row wrap" style="gap: 8px; justify-content: center">
+                    <button class="icon-btn" aria-label="{{micLbl}}" aria-pressed="{{micOff}}" onClick="{{tgMic}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg></button>
+                    <button class="icon-btn" aria-label="Desligar ou ligar câmera"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"></rect><path d="M16 10l5-3v10l-5-3"></path></svg></button>
+                    <button class="icon-btn" aria-label="Compartilhar tela (mostrar exame)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg></button>
+                    <button class="btn btn-sm" onClick="{{simularQueda}}">Simular queda de conexão</button>
+                    <button class="btn" style="background: #C2334D; border-color: #C2334D; color: #fff" onClick="{{encerrar}}">Encerrar consulta</button>
+                  </div>
+                  <sc-if value="{{caiu}}" hint-placeholder-val="{{ false }}">
+                    <div class="banner off"><div class="t14" style="line-height: 1.5"><b>A conexão do paciente caiu às 14:11 e voltou às 14:12.</b> O sistema registrou a falha no prontuário e manteve sua evolução salva. Se cair de novo por mais de 5 min, ofereça ligar por telefone ou remarcar sem custo.</div></div>
+                  </sc-if>
+                </div>
+                <div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+                  <div class="lbl">Prontuário · {{pac.nome}} · {{pac.nasc}}</div>
+                  <div class="t13" style="padding: 10px 12px; border-radius: 12px; background: #F6F7F9; line-height: 1.5">{{pac.resumo}}</div>
+                  <label class="field">Evolução da teleconsulta<textarea class="in" rows="6" placeholder="Queixa, conduta, orientações · salva sozinha a cada 10 s"></textarea></label>
+                  <div class="row wrap" style="gap: 8px"><button class="btn btn-sm" onClick="{{emitirReceita}}">Receita (Memed)</button><button class="btn btn-sm" onClick="{{emitirAtestado}}">Atestado (Memed)</button><a class="btn btn-sm" href="Laudo.dc.html">Ver laudos</a></div>
+                  <sc-for list="{{docs}}" as="d" hint-placeholder-count="1"><div class="toast" role="status"><span style="flex: 1">{{d}}</span></div></sc-for>
+                </div>
+              </div>
+            </section>
+          </sc-if>
+
+          <sc-if value="{{encerrada}}" hint-placeholder-val="{{ false }}">
+            <div class="banner ok"><div class="t14" style="line-height: 1.5"><b>Teleconsulta encerrada às 14:24.</b> Início, fim, falhas de conexão, consentimento e documentos enviados foram gravados no prontuário de {{pac.nome}} ({{pac.nasc}}). A gravação de vídeo não é feita.</div></div>
+          </sc-if>
+
+          <section class="card" aria-label="Registro da sessão">
+            <div class="card-h"><div class="grow"><h2>Registro da sessão</h2><div class="sub">Vai para o prontuário e para o lastro · horário do servidor</div></div></div>
+            <sc-for list="{{log}}" as="l" hint-placeholder-count="3"><div class="li"><span class="num t13 b" style="width: 48px">{{l.h}}</span><div style="flex: 1" class="t14">{{l.t}}</div></div></sc-for>
+          </section>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{vLaudo}}" hint-placeholder-val="{{ false }}">
+      <div class="banner info"><div class="t14" style="line-height: 1.5"><b>Telelaudo.</b> Exames feitos em outras unidades e parceiros chegam pelo DICOM já conciliados com o paciente (nome + nascimento). Estudo sem conciliação não entra na fila. O laudo é assinado aqui com certificado ICP-Brasil e devolvido à origem.</div></div>
+      <section class="card" aria-label="Fila de telelaudo">
+        <div class="card-h"><div class="grow"><h2>Fila de telelaudo</h2><div class="sub">{{nFila}} exames · prazo contratual com cada parceiro</div></div></div>
+        <table class="tb">
+          <thead><tr><th>Paciente</th><th>Exame e origem</th><th>Prazo</th><th class="r">Ação</th></tr></thead>
+          <tbody>
+            <sc-for list="{{tele}}" as="t" hint-placeholder-count="4">
+              <tr>
+                <td><div class="b">{{t.nome}}</div><div class="t13 mute num">Nasc. {{t.nasc}}</div></td>
+                <td><div>{{t.exame}}</div><div class="t13 mute">{{t.origem}} · chegou {{t.chegou}}</div></td>
+                <td><span class="{{t.cls}}">{{t.prazo}}</span></td>
+                <td class="r"><button class="btn btn-sm" onClick="{{t.pegar}}">{{t.btn}}</button></td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </section>
+    </sc-if>
+    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { modo: 'consulta', sel: 'mhd', consent: true, id: [true, false, false], fase: 'espera', mic: true, caiu: false, docs: [], pegos: {} };
+  }
+  renderVals() {
+    const s = this.state;
+    const A = [
+      { id: 'mhd', h: '14:00', nome: 'Maria Helena Duarte', ini: 'MH', nasc: '12/03/1968', motivo: 'Retorno do ecocardiograma', base: 'Na sala de espera', entrou: '13:56', conexao: 'boa', resumo: 'Ecocardiograma 28/10: FE 58%, insuficiência mitral leve. Hipertensa, losartana 50 mg. Alergias: nenhuma.' },
+      { id: 'acr', h: '14:30', nome: 'Antônio Carlos Ribeiro', ini: 'AC', nasc: '15/06/1954', motivo: 'Resultado do teste ergométrico', base: 'Consentimento pendente', entrou: '—', conexao: '—', resumo: 'Teste ergométrico 30/10: sem isquemia induzida. Ex-tabagista.' },
+      { id: 'vla', h: '15:00', nome: 'Vera Lúcia Antunes', ini: 'VL', nasc: '18/09/1957', motivo: 'Orientação pré-MAPA', base: 'Agendada', entrou: '—', conexao: '—', resumo: 'MAPA agendado para 10/11.' },
+      { id: 'rml', h: '15:30', nome: 'Rafael Monteiro Lima', ini: 'RM', nasc: '09/11/1988', motivo: 'Retorno de palpitações', base: 'Agendada', entrou: '—', conexao: '—', resumo: 'Holter 20/10: extrassístoles raras.' }
+    ];
+    const cur = A.find(a => a.id === s.sel);
+    const isCur = cur.id === 'mhd';
+    const consent = isCur ? s.consent : false;
+    const idOk = isCur ? s.id : [false, false, false];
+    const bloq = !(consent && idOk.every(Boolean));
+    const fase = isCur ? s.fase : 'espera';
+    const sitOf = a => a.id === 'mhd' ? (s.fase === 'chamada' ? 'Em chamada' : (s.fase === 'fim' ? 'Encerrada' : a.base)) : a.base;
+    const chipOf = t => t === 'Em chamada' ? 'chip c-navy' : t === 'Encerrada' ? 'chip c-green' : t === 'Na sala de espera' ? 'chip c-blue' : t === 'Consentimento pendente' ? 'chip c-amber' : 'chip';
+    const log = [{ h: '13:56', t: 'Paciente entrou na sala de espera pelo portal' }];
+    if (isCur && s.consent) log.push({ h: '13:57', t: 'Consentimento para teleconsulta aceito no portal (termo v3)' });
+    if (fase !== 'espera') log.push({ h: '14:02', t: 'Identificação conferida: nome, nascimento e documento na câmera · início da chamada' });
+    if (fase !== 'espera' && s.caiu) log.push({ h: '14:11', t: 'Falha de conexão do paciente · reconectado às 14:12 (58 s)' });
+    s.docs.forEach((d, i) => log.push({ h: '14:' + (15 + i), t: d }));
+    if (fase === 'fim') log.push({ h: '14:24', t: 'Fim da chamada · duração 22 min' });
+    const T = [
+      { id: 't1', nome: 'Lúcia Fernandes Prado', nasc: '02/07/1959', exame: 'Raio X de tórax PA', origem: 'Unidade Centro', chegou: '07/11 08:40', prazo: '24 h · vence 08/11 08:40', cls: 'chip c-green' },
+      { id: 't2', nome: 'Sônia Maria Castro', nasc: '03/02/1962', exame: 'Ecocardiograma (laudo à distância)', origem: 'Parceiro: Clínica Litoral', chegou: '06/11 16:10', prazo: '48 h · vence 08/11 16:10', cls: 'chip c-green' },
+      { id: 't3', nome: 'Antônio Carlos Ribeiro', nasc: '15/06/1954', exame: 'Raio X de coluna', origem: 'Parceiro: Pronto Atendimento Sul', chegou: '07/11 06:15', prazo: 'Urgente · 4 h · vence 10:15', cls: 'chip c-rose' },
+      { id: 't4', nome: 'Rafael Monteiro Lima', nasc: '09/11/1988', exame: 'TC de seios da face', origem: 'Unidade Centro', chegou: '07/11 09:05', prazo: '48 h', cls: 'chip c-green' }
+    ];
+    const ID = ['Nome confere', 'Nascimento confere', 'Documento com foto'];
+    return {
+      modos: [['consulta', 'Teleconsultas · 4'], ['laudo', 'Telelaudo · 4']].map(([k, t]) => ({ t, cls: s.modo === k ? 'on' : '', sel: s.modo === k ? 'true' : 'false', ir: () => this.setState({ modo: k }) })),
+      vConsulta: s.modo === 'consulta', vLaudo: s.modo === 'laudo',
+      agenda: A.map(a => { const sit = sitOf(a); return { h: a.h, nome: a.nome, nasc: a.nasc, motivo: a.motivo, sit, chip: chipOf(sit), atual: a.id === s.sel ? 'true' : 'false', cls: 'cv' + (a.id === s.sel ? ' sel' : ''), abrir: () => this.setState({ sel: a.id }) }; }),
+      pac: { nome: cur.nome, nasc: cur.nasc, ini: cur.ini, entrou: cur.entrou, conexao: cur.conexao, resumo: cur.resumo },
+      naEspera: fase === 'espera', emChamada: fase === 'chamada', encerrada: fase === 'fim',
+      consent, tgConsent: () => { if (isCur) this.setState({ consent: !s.consent }); },
+      consentTxt: consent ? 'Aceito pelo paciente no portal às 13:57 · termo v3 · inclui limites da teleconsulta e direito de pedir presencial' : 'Ainda não aceito · o portal mostra o termo ao paciente antes de entrar',
+      ids: ID.map((t, i) => ({ t: (idOk[i] ? '✓ ' : '') + t, on: idOk[i] ? 'true' : 'false', cls: idOk[i] ? 'chip c-green' : 'chip', tg: () => { if (isCur) this.setState(st => { const n = st.id.slice(); n[i] = !n[i]; return { id: n }; }); } })),
+      bloqueado: bloq, entrar: () => this.setState({ fase: 'chamada' }),
+      micOff: s.mic ? 'false' : 'true', micLbl: s.mic ? 'Desligar microfone' : 'Ligar microfone', tgMic: () => this.setState({ mic: !s.mic }),
+      qualidade: s.caiu ? 'Conexão instável' : 'Conexão boa · 00:09:41',
+      caiu: s.caiu, simularQueda: () => this.setState({ caiu: true }),
+      encerrar: () => this.setState({ fase: 'fim' }),
+      emitirReceita: () => this.setState(st => ({ docs: st.docs.concat(['Receita assinada (ICP-Brasil) enviada pela Memed ao celular da paciente']) })),
+      emitirAtestado: () => this.setState(st => ({ docs: st.docs.concat(['Atestado de comparecimento assinado e enviado pela Memed']) })),
+      docs: s.docs, log,
+      nFila: String(T.length),
+      tele: T.map(t => ({ nome: t.nome, nasc: t.nasc, exame: t.exame, origem: t.origem, chegou: t.chegou, prazo: t.prazo, cls: t.cls,
+        btn: s.pegos[t.id] ? 'Abrir laudo' : 'Assumir', pegar: () => this.setState(st => { const n = Object.assign({}, st.pegos); n[t.id] = true; return { pegos: n }; }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

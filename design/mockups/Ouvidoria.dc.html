@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Ouvidoria — VidaCor</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="ouvidoria" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="page-h">
+      <div class="grow"><h1>Ouvidoria</h1><p>Reclamações, elogios, sugestões, denúncias e pedidos LGPD do titular · de qualquer canal, com prazo contado pelo servidor</p></div>
+      <button class="btn btn-p">Registrar manifestação</button>
+    </div>
+
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr))">
+      <div class="card" style="padding: 18px"><div class="lbl">Tempo médio de resposta</div><div class="big" style="font-size: 28px">2,4 <small>dias úteis</small></div><div class="t13 mute">Outubro · meta 5</div></div>
+      <div class="card" style="padding: 18px"><div class="lbl">Respondidas no prazo</div><div class="big" style="font-size: 28px">94%</div><div class="t13 mute">47 de 50 em outubro</div></div>
+      <div class="card" style="padding: 18px"><div class="lbl">Abertas agora</div><div class="big" style="font-size: 28px">{{nAbertas}}</div><div class="t13 mute">1 vence hoje</div></div>
+      <div class="card" style="padding: 18px"><div class="lbl">Temas mais citados</div><div class="t14" style="margin-top: 6px; line-height: 1.6"><b>Espera na recepção</b> 31% · <b>Prazo do laudo</b> 22% · <b>Estacionamento</b> 14%</div></div>
+    </div>
+
+    <div class="seg" role="tablist" aria-label="Tipo">
+      <sc-for list="{{filtros}}" as="f" hint-placeholder-count="6"><button class="{{f.cls}}" role="tab" aria-selected="{{f.sel}}" onClick="{{f.ir}}">{{f.t}}</button></sc-for>
+    </div>
+
+    <div style="display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); gap: 16px; align-items: start">
+      <section class="card" style="padding: 8px" aria-label="Manifestações">
+        <sc-for list="{{lista}}" as="m" hint-placeholder-count="6">
+          <button class="{{m.cls}}" onClick="{{m.abrir}}" aria-current="{{m.atual}}">
+            <span class="{{m.ni}}">{{m.ini}}</span>
+            <span style="flex: 1; min-width: 0">
+              <span class="nm" style="display: block">{{m.titulo}}</span>
+              <span class="pv" style="display: block">{{m.cod}} · {{m.tipo}} · {{m.canal}}</span>
+              <span class="row wrap" style="gap: 6px; margin-top: 6px"><span class="{{m.prazoCls}}" style="height: 22px; font-size: 12px">{{m.prazo}}</span></span>
+            </span>
+          </button>
+        </sc-for>
+        <sc-if value="{{vazio}}" hint-placeholder-val="{{ false }}"><div class="state"><span class="t14 b">Nada aberto neste tipo</span><span class="t13 mute">As encerradas ficam no histórico.</span></div></sc-if>
+      </section>
+
+      <section class="card" aria-label="Manifestação" style="display: flex; flex-direction: column; gap: 16px">
+        <div class="row wrap" style="gap: 10px">
+          <div style="flex: 1 1 280px; min-width: 0"><div style="font-size: 20px; font-weight: 650">{{sel.titulo}}</div><div class="t14 mute">{{sel.cod}} · {{sel.tipo}} · recebida {{sel.receb}} via {{sel.canal}}</div></div>
+          <span class="{{sel.sitCls}}">{{sel.sit}}</span>
+        </div>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 10px">
+          <div style="padding: 12px; border-radius: 14px; background: #F6F7F9"><div class="lbl">Quem</div><div class="t14 b">{{sel.quem}}</div><div class="t13 mute">{{sel.quemSub}}</div></div>
+          <div style="padding: 12px; border-radius: 14px; background: #F6F7F9"><div class="lbl">Prazo</div><div class="t14 b">{{sel.prazoData}}</div><div class="t13 mute">{{sel.prazoRegra}}</div></div>
+          <div style="padding: 12px; border-radius: 14px; background: #F6F7F9"><div class="lbl">Responsável</div><div class="t14 b">{{sel.resp}}</div><div class="t13 mute">{{sel.enc}}</div></div>
+        </div>
+        <sc-if value="{{sel.lgpd}}" hint-placeholder-val="{{ false }}">
+          <div class="banner info"><div class="t14" style="line-height: 1.5"><b>Pedido do titular (LGPD).</b> Identidade confirmada pelo portal com nome, nascimento e CPF. O relatório de dados é gerado pelo servidor e entregue só no portal, com link de uso único. Prontuário não é apagado: a lei exige guarda por 20 anos; a resposta explica isso.</div></div>
+        </sc-if>
+        <sc-if value="{{sel.denuncia}}" hint-placeholder-val="{{ false }}">
+          <div class="banner off"><div class="t14" style="line-height: 1.5"><b>Denúncia.</b> Vista só pela ouvidora e pela diretoria; a pessoa citada não tem acesso. Quem denunciou pode acompanhar pelo protocolo sem se identificar.</div></div>
+        </sc-if>
+
+        <div class="col" style="gap: 10px; padding: 14px; border-radius: 16px; background: #F6F7F9">
+          <sc-for list="{{sel.msgs}}" as="x" hint-placeholder-count="3">
+            <div class="{{x.cls}}" style="max-width: 88%"><div class="who">{{x.who}}</div>{{x.t}}<div class="meta">{{x.h}}</div></div>
+          </sc-for>
+        </div>
+
+        <div class="col" style="gap: 10px">
+          <div class="row wrap" style="gap: 8px"><span class="t14 b" style="flex: 1">Responder ao paciente</span>
+            <label class="field" style="flex-direction: row; align-items: center; gap: 8px">Modelo<select class="in" style="min-height: 38px; width: auto" onChange="{{usarModelo}}"><option value="">Escolher…</option><option value="desc">Pedido de desculpas e providência</option><option value="elog">Agradecimento por elogio</option><option value="lgpd">Resposta LGPD</option></select></label>
+          </div>
+          <label class="field"><span class="sr">Resposta</span><textarea class="in" rows="4" value="{{resposta}}" onChange="{{onResp}}" placeholder="Escreva ou escolha um modelo · diga o que aconteceu, o que foi feito e o que muda"></textarea></label>
+          <div class="row wrap" style="gap: 8px">
+            <button class="btn btn-p" onClick="{{responder}}">Enviar pelo {{sel.canal}}</button>
+            <button class="btn btn-sm" onClick="{{encaminhar}}">Encaminhar internamente</button>
+            <span class="t13 mute">A resposta vai pelo mesmo canal e fica no histórico.</span>
+          </div>
+          <sc-if value="{{enviado}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status"><span style="flex: 1">Resposta enviada a {{sel.quem}} · prazo cumprido · registrado no lastro</span></div></sc-if>
+          <sc-if value="{{encaminhado}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status"><span style="flex: 1">Encaminhado à Dra. Cecília Souto pelo chat interno · prazo interno: 2 dias úteis · o prazo ao paciente continua contando</span></div></sc-if>
+        </div>
+      </section>
+    </div>
+    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { filtro: 'todos', sel: 'o1', resp: '', env: {}, enc: {} };
+  }
+  renderVals() {
+    const s = this.state;
+    const L = [
+      { id: 'o1', cod: 'OUV-0918', tipo: 'Reclamação', k: 'rec', ni: 'ni k-rose', ini: 'R', titulo: 'Laudo de TC atrasado', canal: 'WhatsApp', receb: '03/11 14:20', quem: 'Antônio Carlos Ribeiro', quemSub: 'Nasc. 15/06/1954 · paciente', prazoData: '10/11 · faltam 2 dias úteis', prazoRegra: '5 dias úteis', prazo: 'Faltam 2 dias úteis', prazoCls: 'chip c-amber', resp: 'Patrícia Lemos', encTxt: 'Encaminhado à radiologia',
+        msgs: [['p', 'Antônio (paciente)', 'Fiz a tomografia dia 28 e até agora nada do resultado. Meu médico precisa ver na consulta de terça.', '03/11 14:20'], ['c', 'Ouvidoria · Patrícia', 'Sr. Antônio, recebemos sua mensagem (protocolo OUV-0918). Já pedimos prioridade à radiologia e voltamos a falar até amanhã.', '03/11 15:02']] },
+      { id: 'o2', cod: 'OUV-0921', tipo: 'Pedido LGPD', k: 'lgpd', ni: 'ni k-indigo', ini: 'L', titulo: 'Cópia dos meus dados e exclusão do cadastro', canal: 'Portal', receb: '05/11 09:10', quem: 'Rafael Monteiro Lima', quemSub: 'Nasc. 09/11/1988 · titular', prazoData: '20/11 · faltam 9 dias', prazoRegra: '15 dias (LGPD)', prazo: 'Faltam 9 dias', prazoCls: 'chip c-blue', resp: 'Encarregado de dados', encTxt: 'TI gera o relatório', lgpd: true,
+        msgs: [['p', 'Rafael (titular)', 'Quero saber quais dados meus vocês têm e pedir que apaguem meu cadastro.', '05/11 09:10']] },
+      { id: 'o3', cod: 'OUV-0915', tipo: 'Reclamação', k: 'rec', ni: 'ni k-rose', ini: 'R', titulo: 'Espera de 50 min na recepção', canal: 'NPS (nota 3)', receb: '31/10 18:00', quem: 'Sônia Maria Castro', quemSub: 'Nasc. 03/02/1962 · paciente', prazoData: '07/11 · vence hoje', prazoRegra: '5 dias úteis', prazo: 'Vence hoje', prazoCls: 'chip c-rose', resp: 'Ana Souza', encTxt: 'Recepção',
+        msgs: [['p', 'Sônia (pesquisa NPS)', 'Nota 3. Esperei quase uma hora com horário marcado e ninguém explicou o motivo.', '31/10 18:00']] },
+      { id: 'o4', cod: 'OUV-0919', tipo: 'Elogio', k: 'elo', ni: 'ni k-green', ini: 'E', titulo: 'Atendimento da Dra. Renata na morfológica', canal: 'Telefone', receb: '04/11 11:30', quem: 'Juliana Sampaio Rocha', quemSub: 'Nasc. 12/04/1993 · paciente', prazoData: '11/11', prazoRegra: '5 dias úteis', prazo: 'Faltam 3 dias úteis', prazoCls: 'chip c-green', resp: 'Patrícia Lemos', encTxt: 'Repassar à equipe',
+        msgs: [['p', 'Juliana (por telefone, anotado por Carla Mendes)', 'Quer agradecer a paciência da Dra. Renata e da equipe da sala 2 no exame morfológico.', '04/11 11:30']] },
+      { id: 'o5', cod: 'OUV-0920', tipo: 'Sugestão', k: 'sug', ni: 'ni k-teal', ini: 'S', titulo: 'Avisar atraso pelo WhatsApp', canal: 'Portal', receb: '04/11 20:15', quem: 'Vera Lúcia Antunes', quemSub: 'Nasc. 18/09/1957 · paciente', prazoData: '11/11', prazoRegra: '5 dias úteis', prazo: 'Faltam 3 dias úteis', prazoCls: 'chip c-green', resp: 'Patrícia Lemos', encTxt: 'Comunicação',
+        msgs: [['p', 'Vera (portal)', 'Seria ótimo receber uma mensagem quando a agenda estiver atrasada.', '04/11 20:15']] },
+      { id: 'o6', cod: 'OUV-0917', tipo: 'Denúncia', k: 'den', ni: 'ni k-amber', ini: 'D', titulo: 'Comentário inadequado na sala de espera', canal: 'Portal (anônimo)', receb: '02/11 10:05', quem: 'Anônimo', quemSub: 'Acompanha pelo protocolo', prazoData: '09/11 · faltam 1 dia útil', prazoRegra: '5 dias úteis', prazo: 'Falta 1 dia útil', prazoCls: 'chip c-amber', resp: 'Ouvidora · diretoria', encTxt: 'Sigiloso', denuncia: true,
+        msgs: [['p', 'Anônimo (portal)', 'Um funcionário comentou em voz alta o exame de outra paciente na sala de espera.', '02/11 10:05']] }
+    ];
+    const FL = [['todos', 'Todas · 6'], ['rec', 'Reclamações'], ['elo', 'Elogios'], ['sug', 'Sugestões'], ['den', 'Denúncias'], ['lgpd', 'LGPD']];
+    const vis = L.filter(m => s.filtro === 'todos' || m.k === s.filtro);
+    const cur = L.find(m => m.id === s.sel);
+    const env = !!s.env[cur.id], enc = !!s.enc[cur.id];
+    const msgs = cur.msgs.map(([w, who, t, h]) => ({ cls: w === 'p' ? 'msg' : 'msg me', who, t, h }));
+    if (env) msgs.push({ cls: 'msg me', who: 'Ouvidoria · você', t: s.resp || 'Resposta enviada.', h: 'agora' });
+    const MOD = {
+      desc: 'Olá, ' + cur.quem.split(' ')[0] + '. Pedimos desculpas pelo ocorrido. O que fizemos: ... O que muda daqui para frente: ... Protocolo ' + cur.cod + '.',
+      elog: 'Olá, ' + cur.quem.split(' ')[0] + '. Muito obrigado pelo carinho! Repassamos sua mensagem à equipe. Protocolo ' + cur.cod + '.',
+      lgpd: 'Olá, ' + cur.quem.split(' ')[0] + '. Seu relatório de dados está disponível no portal. O cadastro de contato foi removido; o prontuário precisa ser guardado por 20 anos por lei. Protocolo ' + cur.cod + '.'
+    };
+    return {
+      nAbertas: String(L.length - Object.keys(s.env).length),
+      filtros: FL.map(([k, t]) => ({ t, cls: s.filtro === k ? 'on' : '', sel: s.filtro === k ? 'true' : 'false', ir: () => this.setState({ filtro: k }) })),
+      lista: vis.map(m => ({ titulo: m.titulo, cod: m.cod, tipo: m.tipo, canal: m.canal, ni: m.ni, ini: m.ini, atual: m.id === s.sel ? 'true' : 'false',
+        cls: 'cv' + (m.id === s.sel ? ' sel' : ''), prazo: s.env[m.id] ? 'Respondida' : m.prazo, prazoCls: s.env[m.id] ? 'chip c-green' : m.prazoCls,
+        abrir: () => this.setState({ sel: m.id, resp: '' }) })),
+      vazio: vis.length === 0,
+      sel: { titulo: cur.titulo, cod: cur.cod, tipo: cur.tipo, canal: cur.canal, receb: cur.receb, quem: cur.quem, quemSub: cur.quemSub, prazoData: cur.prazoData, prazoRegra: cur.prazoRegra,
+        resp: cur.resp, enc: enc ? 'Encaminhado: Dra. Cecília Souto' : cur.encTxt, lgpd: !!cur.lgpd, denuncia: !!cur.denuncia, msgs,
+        sit: env ? 'Respondida' : 'Em andamento', sitCls: env ? 'chip c-green' : 'chip c-blue' },
+      resposta: s.resp,
+      onResp: (e) => this.setState({ resp: e && e.target ? e.target.value : '' }),
+      usarModelo: (e) => { const v = e && e.target ? e.target.value : ''; if (MOD[v]) this.setState({ resp: MOD[v] }); },
+      responder: () => this.setState(st => { const n = Object.assign({}, st.env); n[st.sel] = true; return { env: n }; }),
+      encaminhar: () => this.setState(st => { const n = Object.assign({}, st.enc); n[st.sel] = true; return { enc: n }; }),
+      enviado: env, encaminhado: enc && !env
+    };
+  }
+}
+</script>
+</body>
+</html>

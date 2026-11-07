@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Gestão de dose — VidaCor</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="dose" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="page-h">
+      <div class="grow"><h1>Gestão de dose</h1><p>Doses lidas do relatório estruturado (RDSR) de cada aparelho · comparadas ao nível de referência diagnóstico (NRD) do protocolo · nada é digitado à mão</p></div>
+      <div class="seg" role="tablist" aria-label="Modalidade">
+        <sc-for list="{{mods}}" as="m" hint-placeholder-count="3"><button class="{{m.cls}}" role="tab" aria-selected="{{m.sel}}" onClick="{{m.ir}}">{{m.t}}</button></sc-for>
+      </div>
+    </div>
+
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr))">
+      <div class="card" style="padding: 18px"><div class="lbl">Exames com dose · 01 a 07/11</div><div class="big" style="font-size: 28px">146</div><div class="t13 mute">TC 58 · raio X 88 · 100% com RDSR</div></div>
+      <div class="card" style="padding: 18px"><div class="lbl">Acima do NRD</div><div class="big" style="font-size: 28px; color: #C2334D">{{nAcima}}</div><div class="t13 mute">{{nJust}}</div></div>
+      <div class="card" style="padding: 18px"><div class="lbl">Gestantes e crianças</div><div class="big" style="font-size: 28px">3</div><div class="t13 mute">Todas com justificativa médica prévia</div></div>
+      <div class="card" style="padding: 18px"><div class="lbl">Controle de qualidade</div><div class="big" style="font-size: 28px; color: #9A5B00">1</div><div class="t13 mute">Aparelho com teste vencendo em 12 dias</div></div>
+    </div>
+
+    <section class="card" aria-label="Exames do período">
+      <div class="card-h"><div class="grow"><h2>Exames do período</h2><div class="sub">CTDIvol em mGy e DLP em mGy·cm (TC) · DAP em dGy·cm² (raio X) · NRD da clínica, revisado em 03/2026</div></div></div>
+      <table class="tb">
+        <thead><tr><th>Paciente</th><th>Exame, protocolo e aparelho</th><th class="r">Dose</th><th>Comparação com NRD</th></tr></thead>
+        <tbody>
+          <sc-for list="{{exames}}" as="e" hint-placeholder-count="6">
+            <tr>
+              <td><button class="btn-g" onClick="{{e.ver}}" style="border: 0; background: transparent; padding: 0; text-align: left; cursor: pointer; font: inherit; color: inherit"><span class="b" style="display: block">{{e.nome}}</span><span class="t13 mute num" style="display: block">Nasc. {{e.nasc}}</span></button>
+                <sc-if value="{{e.temAviso}}" hint-placeholder-val="{{ false }}"><span class="chip c-violet" style="margin-top: 6px">{{e.aviso}}</span></sc-if></td>
+              <td><div>{{e.exame}}</div><div class="t13 mute">{{e.prot}} · {{e.ap}} · {{e.data}}</div></td>
+              <td class="r num nw"><div class="b">{{e.d1}}</div><div class="t13 mute">{{e.d2}}</div></td>
+              <td><span class="{{e.cls}}">{{e.sit}}</span><div class="t12 mute" style="margin-top: 4px">{{e.det}}</div>
+                <sc-if value="{{e.pedeJust}}" hint-placeholder-val="{{ false }}"><button class="btn btn-sm" style="margin-top: 6px" onClick="{{e.justificar}}">Justificar</button></sc-if></td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+      <sc-if value="{{justAberta}}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top: 14px; padding: 16px; border-radius: 16px; background: #FFF3DF">
+          <div class="t14" style="line-height: 1.5; margin-bottom: 10px"><b>Dose acima do NRD: {{justNome}}.</b> {{justDet}} O exame já foi feito; a justificativa fica no lastro do estudo e entra na revisão mensal da física médica.</div>
+          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px">
+            <label class="field">Motivo<select class="in"><option>Paciente com IMC alto</option><option>Repetição por movimento</option><option>Fase extra solicitada pelo médico</option><option>Implante metálico</option><option>Outro</option></select></label>
+            <label class="field">Detalhe<input class="in" placeholder="Ex.: IMC 41; protocolo para obeso"></label>
+          </div>
+          <div class="row wrap" style="gap: 8px; margin-top: 12px"><button class="btn btn-sm btn-p" onClick="{{salvarJust}}">Registrar justificativa</button><button class="btn btn-sm" onClick="{{fecharJust}}">Agora não</button><span class="t13 mute">Técnico: Ricardo Prates · médico: Dra. Cecília Souto</span></div>
+        </div>
+      </sc-if>
+    </section>
+
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); align-items: start">
+      <section class="card" aria-label="Dose acumulada do paciente">
+        <div class="card-h"><div class="grow"><h2>Dose acumulada · {{pac.nome}}</h2><div class="sub">Nasc. {{pac.nasc}} · {{pac.sub}}</div></div></div>
+        <sc-if value="{{pac.temAviso}}" hint-placeholder-val="{{ false }}">
+          <div class="banner off" style="margin-bottom: 12px"><div class="t14" style="line-height: 1.5">{{pac.aviso}}</div></div>
+        </sc-if>
+        <sc-for list="{{pac.hist}}" as="h" hint-placeholder-count="3"><div class="li"><div style="flex: 1; min-width: 0"><div class="t14 b">{{h.t}}</div><div class="s">{{h.s}}</div></div><span class="num t14 b nw">{{h.d}}</span></div></sc-for>
+        <div class="row" style="margin-top: 10px; gap: 8px"><span class="t14" style="flex: 1">Dose efetiva estimada em 12 meses</span><b class="num t15">{{pac.total}}</b></div>
+        <p class="t12 mute" style="margin: 8px 0 0">Estimativa só desta clínica, para orientar o médico; não é dosimetria individual. Clique no nome de outro paciente na tabela acima para ver o dele.</p>
+      </section>
+      <section class="card" aria-label="Por aparelho e protocolo">
+        <div class="card-h"><div class="grow"><h2>Por aparelho e protocolo</h2><div class="sub">Mediana dos últimos 30 dias contra o NRD</div></div></div>
+        <sc-for list="{{protocolos}}" as="p" hint-placeholder-count="4">
+          <div class="li" style="flex-wrap: wrap"><div style="flex: 1 1 200px; min-width: 0"><div class="t14 b">{{p.t}}</div><div class="s">{{p.ap}} · {{p.n}} exames</div></div>
+            <div style="flex: 1 1 160px"><div class="bar"><i style="{{p.w}}"></i></div><div class="t12 mute" style="margin-top: 4px">{{p.txt}}</div></div></div>
+        </sc-for>
+        <div class="lbl" style="margin-top: 18px">Controle de qualidade dos aparelhos</div>
+        <sc-for list="{{cq}}" as="q" hint-placeholder-count="3"><div class="li"><div style="flex: 1; min-width: 0"><div class="t14 b">{{q.t}}</div><div class="s">{{q.s}}</div></div><span class="{{q.cls}}">{{q.tag}}</span></div></sc-for>
+        <a class="btn btn-sm" href="Aparelhos.dc.html" style="margin-top: 10px">Ver em Aparelhos</a>
+      </section>
+    </div>
+    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { mod: 'todos', pac: 'acr', just: null, feitas: {} };
+  }
+  renderVals() {
+    const s = this.state;
+    const E = [
+      { id: 'e1', pac: 'acr', mod: 'tc', nome: 'Antônio Carlos Ribeiro', nasc: '15/06/1954', exame: 'TC de tórax', prot: 'Tórax rotina', ap: 'Somatom go.Up', data: '07/11 09:12', d1: 'CTDIvol 14,2', d2: 'DLP 520', st: 'acima', det: 'NRD do protocolo: CTDIvol 12 · 18% acima' },
+      { id: 'e2', pac: 'lfp', mod: 'tc', nome: 'Lúcia Fernandes Prado', nasc: '02/07/1959', exame: 'TC de abdome sem contraste', prot: 'Abdome sem contraste (alergia a iodo)', ap: 'Somatom go.Up', data: '06/11 15:40', d1: 'CTDIvol 9,8', d2: 'DLP 470', st: 'ok', det: 'NRD 15 · dentro' },
+      { id: 'e3', pac: 'jsr', mod: 'rx', nome: 'Juliana Sampaio Rocha', nasc: '12/04/1993', exame: 'Raio X de tórax PA', prot: 'Tórax PA com avental de chumbo abdominal', ap: 'Raio X sala 5', data: '06/11 11:02', d1: 'DAP 0,9', d2: 'Entrada 0,11 mGy', st: 'ok', det: 'NRD 1,2 · dentro', aviso: 'Gestante · 24 semanas · justificado pelo solicitante' },
+      { id: 'e4', pac: 'smc', mod: 'tc', nome: 'Sônia Maria Castro', nasc: '03/02/1962', exame: 'TC de abdome com contraste', prot: 'Abdome trifásico', ap: 'Somatom go.Up', data: '05/11 10:30', d1: 'CTDIvol 16,9', d2: 'DLP 1.180', st: 'acima', det: 'NRD 15 · 13% acima · 3 fases' },
+      { id: 'e5', pac: 'rml', mod: 'rx', nome: 'Rafael Monteiro Lima', nasc: '09/11/1988', exame: 'Raio X de coluna lombar', prot: 'Lombar AP e perfil', ap: 'Raio X sala 5', data: '05/11 08:50', d1: 'DAP 11,8', d2: '1 repetição', st: 'ok', det: 'NRD 15 · dentro' },
+      { id: 'e6', pac: 'mhd', mod: 'tc', nome: 'Maria Helena Duarte', nasc: '12/03/1968', exame: 'TC de crânio', prot: 'Crânio rotina', ap: 'Somatom go.Up', data: '04/11 16:05', d1: 'CTDIvol 48', d2: 'DLP 790', st: 'ok', det: 'NRD 60 · dentro' }
+    ];
+    const P = {
+      acr: { nome: 'Antônio Carlos Ribeiro', nasc: '15/06/1954', sub: '72 anos · 4 exames com radiação em 12 meses', total: '≈ 21 mSv', aviso: 'Três TCs de tórax em 9 meses. Antes do próximo pedido, o sistema lembra o médico de considerar se o controle pode esperar ou usar baixa dose.',
+        hist: [['TC de tórax · 07/11/2026', 'Somatom go.Up · DLP 520', '≈ 7,3 mSv'], ['TC de tórax · 12/06/2026', 'Somatom go.Up · DLP 490', '≈ 6,9 mSv'], ['TC de tórax · 03/02/2026', 'Somatom go.Up · DLP 480', '≈ 6,7 mSv'], ['Raio X de tórax · 10/01/2026', 'Sala 5', '≈ 0,1 mSv']] },
+      jsr: { nome: 'Juliana Sampaio Rocha', nasc: '12/04/1993', sub: 'Gestante · 24 semanas', total: '≈ 0,02 mSv', aviso: 'Gestante: todo exame com radiação exige justificativa médica antes de agendar e proteção abdominal. Prefira USG ou ressonância quando possível.',
+        hist: [['Raio X de tórax PA · 06/11/2026', 'Sala 5 · avental abdominal registrado', '≈ 0,02 mSv']] },
+      lfp: { nome: 'Lúcia Fernandes Prado', nasc: '02/07/1959', sub: 'Alergia a iodo · 1 exame em 12 meses', total: '≈ 7,1 mSv', aviso: '', hist: [['TC de abdome sem contraste · 06/11/2026', 'Somatom go.Up · DLP 470', '≈ 7,1 mSv']] },
+      smc: { nome: 'Sônia Maria Castro', nasc: '03/02/1962', sub: '1 exame em 12 meses', total: '≈ 17,7 mSv', aviso: '', hist: [['TC de abdome trifásica · 05/11/2026', 'Somatom go.Up · DLP 1.180', '≈ 17,7 mSv']] },
+      rml: { nome: 'Rafael Monteiro Lima', nasc: '09/11/1988', sub: '1 exame em 12 meses', total: '≈ 1,4 mSv', aviso: '', hist: [['Raio X de coluna lombar · 05/11/2026', 'Sala 5 · 1 repetição por movimento', '≈ 1,4 mSv']] },
+      mhd: { nome: 'Maria Helena Duarte', nasc: '12/03/1968', sub: '1 exame em 12 meses', total: '≈ 1,7 mSv', aviso: '', hist: [['TC de crânio · 04/11/2026', 'Somatom go.Up · DLP 790', '≈ 1,7 mSv']] }
+    };
+    const cur = P[s.pac];
+    const acima = E.filter(e => e.st === 'acima');
+    const pend = acima.filter(e => !s.feitas[e.id]).length;
+    const J = E.find(e => e.id === s.just);
+    return {
+      mods: [['todos', 'TC e raio X'], ['tc', 'Tomografia'], ['rx', 'Raio X']].map(([k, t]) => ({ t, cls: s.mod === k ? 'on' : '', sel: s.mod === k ? 'true' : 'false', ir: () => this.setState({ mod: k }) })),
+      nAcima: String(acima.length), nJust: pend ? pend + ' aguardando justificativa' : 'Todas justificadas',
+      exames: E.filter(e => s.mod === 'todos' || e.mod === s.mod).map(e => {
+        const ok = !!s.feitas[e.id];
+        return { nome: e.nome, nasc: e.nasc, exame: e.exame, prot: e.prot, ap: e.ap, data: e.data, d1: e.d1, d2: e.d2, det: e.det,
+          temAviso: !!e.aviso, aviso: e.aviso || '',
+          sit: e.st === 'ok' ? 'Dentro do NRD' : (ok ? 'Acima · justificado' : 'Acima do NRD'),
+          cls: e.st === 'ok' ? 'chip c-green' : (ok ? 'chip c-blue' : 'chip c-rose'),
+          pedeJust: e.st === 'acima' && !ok, justificar: () => this.setState({ just: e.id, pac: e.pac }), ver: () => this.setState({ pac: e.pac }) };
+      }),
+      justAberta: !!J, justNome: J ? J.nome + ' (nasc. ' + J.nasc + ')' : '', justDet: J ? J.exame + ', ' + J.det + '.' : '',
+      salvarJust: () => this.setState(st => { const f = Object.assign({}, st.feitas); f[st.just] = true; return { feitas: f, just: null }; }),
+      fecharJust: () => this.setState({ just: null }),
+      pac: { nome: cur.nome, nasc: cur.nasc, sub: cur.sub, total: cur.total, temAviso: !!cur.aviso, aviso: cur.aviso, hist: cur.hist.map(([t, sub, d]) => ({ t, s: sub, d })) },
+      protocolos: [
+        { t: 'TC tórax rotina', ap: 'Somatom go.Up', n: 21, w: 'width: 88%', txt: 'CTDIvol mediano 10,6 · 88% do NRD' },
+        { t: 'TC abdome com contraste', ap: 'Somatom go.Up', n: 14, w: 'width: 94%', txt: 'CTDIvol mediano 14,1 · 94% do NRD' },
+        { t: 'TC crânio rotina', ap: 'Somatom go.Up', n: 12, w: 'width: 72%', txt: 'CTDIvol mediano 43 · 72% do NRD' },
+        { t: 'Raio X tórax PA', ap: 'Raio X sala 5', n: 46, w: 'width: 65%', txt: 'DAP mediano 0,8 · 65% do NRD' }
+      ],
+      cq: [
+        { t: 'Somatom go.Up · TC', s: 'Último teste de constância 21/10 · próximo 21/11', tag: 'Em dia', cls: 'chip c-green' },
+        { t: 'Raio X sala 5', s: 'Levantamento radiométrico 19/11/2025 · próximo 19/11/2026', tag: 'Vence em 12 dias', cls: 'chip c-amber' },
+        { t: 'Raio X móvel', s: 'Teste anual 04/04/2026 · próximo 04/04/2027', tag: 'Em dia', cls: 'chip c-green' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

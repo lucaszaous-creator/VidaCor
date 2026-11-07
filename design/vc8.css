@@ -261,3 +261,9 @@ button.nv{width:100%;border:0;background:transparent;font:inherit;font-size:15px
 .cv.sel.urg{background:#FBEFF2}
 button:disabled{cursor:not-allowed}
 .btn:disabled{opacity:.5}
+/* grupos do menu recolhíveis */
+.sec-b{width:100%;border:0;background:transparent;font-family:inherit;cursor:pointer;text-align:left;border-radius:10px}
+.sec-b:hover{color:#0F172A;background:rgba(255,255,255,.55)}
+.sec-b:focus-visible{outline:2px solid #0C72B0;outline-offset:2px}
+.sec-n{font-size:11px;letter-spacing:0;background:#E3E7ED;border-radius:999px;padding:1px 7px;color:#334155;text-transform:none}
+.sec-n:empty{display:none}

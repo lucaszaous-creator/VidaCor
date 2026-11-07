@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Convênios e tabelas</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.tab{height:38px;padding:0 14px;border-radius:999px;border:0;font:600 14px Inter,sans-serif;cursor:pointer}
+.box{display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:16px;background:#F6F7F9;min-width:0}
+.op{display:flex;align-items:center;gap:12px;width:100%;border:0;background:transparent;text-align:left;font:inherit;color:inherit;cursor:pointer;padding:4px 0;min-height:44px}
+tr.on td{background:#EEF4FB}
+tr.on td:first-child{box-shadow:inset 3px 0 0 #0A1A4A}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="convenios" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb"><a href="Faturamento.dc.html">Faturamento</a><span aria-hidden="true">›</span><b>Convênios e tabelas</b></div>
+      <div class="grow"></div>
+      <span class="t13 mute">TISS 4.01 · tabelas TUSS e CBHPM 5ª edição</span>
+    </div>
+
+    <div class="page-h">
+      <div class="grow"><h1>Convênios</h1><p>Contratos, tabelas de preço e regras de cada operadora. O servidor usa a versão vigente na data do atendimento.</p></div>
+      <button class="btn btn-p">Cadastrar operadora</button>
+    </div>
+
+    <section class="card" aria-labelledby="h-ops" style="padding: 10px 14px">
+      <h2 id="h-ops" class="sr">Operadoras</h2>
+      <table class="tb">
+        <thead><tr><th>Operadora</th><th>Contrato</th><th>Prazos</th><th class="r">Glosa no trimestre</th><th>Webservice TISS</th></tr></thead>
+        <tbody>
+          <sc-for list="{{ops}}" as="o" hint-placeholder-count="5">
+            <tr class="{{o.trCls}}">
+              <td><button class="op" onClick="{{o.abrir}}" aria-current="{{o.atual}}"><span class="ni {{o.k}}" style="font-weight: 700; font-size: 12px">{{o.ini}}</span><span style="min-width: 0"><span class="b" style="display: block">{{o.nome}}</span><span class="t13 mute">ANS {{o.ans}} · {{o.vidas}}</span></span></button></td>
+              <td><span class="{{o.sitCls}}">{{o.sit}}</span></td>
+              <td class="t13"><div>Envio até dia {{o.envio}}</div><div class="mute">Paga em {{o.paga}}</div></td>
+              <td class="r"><span class="{{o.glosaCls}}">{{o.glosa}}</span></td>
+              <td><span class="{{o.wsCls}}">{{o.ws}}</span></td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card" aria-label="Detalhe da operadora" style="display: flex; flex-direction: column; gap: 16px">
+      <div class="row wrap" style="gap: 14px">
+        <span class="ni {{op.k}}" style="width: 52px; height: 52px; border-radius: 16px; font-weight: 700">{{op.ini}}</span>
+        <div style="flex: 1 1 260px; min-width: 0"><div style="font-size: 22px; font-weight: 650">{{op.nome}}</div><div class="t14 mute">ANS {{op.ans}} · contrato nº {{op.contrato}} · {{op.vidas}}</div></div>
+        <span class="{{op.sitCls}}">{{op.sit}}</span>
+      </div>
+
+      <nav class="row wrap" role="tablist" aria-label="Seções da operadora" style="gap: 6px; border-bottom: 1px solid #E8EAEF; padding-bottom: 10px">
+        <sc-for list="{{abas}}" as="a" hint-placeholder-count="5"><button class="tab {{a.cls}}" role="tab" aria-selected="{{a.sel}}" onClick="{{a.ir}}">{{a.t}}</button></sc-for>
+      </nav>
+
+      <sc-if value="{{tContrato}}" hint-placeholder-val="{{ true }}">
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px">
+          <div class="box"><span class="lbl">Vigência</span><b class="t15">{{op.vig}}</b><span class="t13 mute">Renovação automática por 12 meses</span></div>
+          <div class="box"><span class="lbl">Reajuste anual</span><b class="t15">{{op.reaj}}</b><span class="t13 mute">Próximo previsto: {{op.proxReaj}}</span></div>
+          <div class="box"><span class="lbl">Prazo de envio</span><b class="t15">Até o dia {{op.envio}}</b><span class="t13 mute">Lote fechado no dia {{op.fecha}}</span></div>
+          <div class="box"><span class="lbl">Prazo de pagamento</span><b class="t15">{{op.paga}}</b><span class="t13 mute">Recurso de glosa em até 30 dias</span></div>
+        </div>
+        <div class="col" style="gap: 0">
+          <span class="lbl" style="margin-bottom: 4px">Anexos do contrato</span>
+          <div class="li"><span class="ni k-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t14 b">Contrato de credenciamento assinado</div><div class="s">PDF · 2,1 MB · hash conferido · enviado por Marcos Teixeira em 12/01/2026</div></div><button class="btn btn-sm">Abrir</button></div>
+          <div class="li"><span class="ni k-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t14 b">Aditivo 03 · inclusão de tomografia</div><div class="s">PDF · 480 KB · vigente desde 01/06/2026</div></div><button class="btn btn-sm">Abrir</button></div>
+          <div class="li"><span class="ni k-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t14 b">Carta de reajuste 2027</div><div class="s">Aguardando resposta da operadora · pedido enviado em 15/10/2026</div></div><span class="chip c-amber">Em negociação</span></div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{tTabela}}" hint-placeholder-val="{{ false }}">
+        <div class="row wrap" style="gap: 10px">
+          <label class="search" style="flex: 1 1 260px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="sr">Buscar na tabela</span><input type="search" placeholder="Código TUSS ou descrição"></label>
+          <button class="btn btn-sm">Importar tabela (XML ou planilha)</button>
+          <button class="btn btn-sm btn-p" onClick="{{abrirReaj}}">Reajuste em lote</button>
+        </div>
+        <div class="t13 mute">Tabela {{op.nome}} v{{op.tabVer}} · 142 procedimentos · base {{op.base}}</div>
+        <table class="tb">
+          <thead><tr><th>TUSS e descrição</th><th class="r">Valor</th><th>Vigência</th></tr></thead>
+          <tbody>
+            <sc-for list="{{tabela}}" as="t" hint-placeholder-count="6">
+              <tr><td><span class="num t13 mute">{{t.tuss}}</span><div class="b">{{t.desc}}</div></td><td class="r num nw">{{t.v}}<div class="t12 mute">{{t.ant}}</div></td><td class="t13">{{t.vig}}</td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+
+        <sc-if value="{{reajAberto}}" hint-placeholder-val="{{ false }}">
+          <div style="border: 2px solid #0A1A4A; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 14px">
+            <div class="row wrap" style="gap: 10px"><div class="grow"><div class="t15 b">Reajuste em lote · {{op.nome}}</div><div class="t13 mute">Cria a tabela v{{op.tabProx}} com vigência futura. A atual continua valendo até lá.</div></div><button class="btn btn-sm" onClick="{{fecharReaj}}">Cancelar</button></div>
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 14px">
+              <div class="col" style="gap: 8px"><span class="lbl">Percentual</span><div class="seg" role="group" aria-label="Percentual de reajuste"><sc-for list="{{pcts}}" as="p" hint-placeholder-count="3"><button class="{{p.cls}}" aria-pressed="{{p.p}}" onClick="{{p.ir}}">{{p.t}}</button></sc-for></div></div>
+              <label class="field">Vigência a partir de<input class="in num" value="01/01/2027"></label>
+              <label class="field">Motivo e documento<input class="in" value="Carta de reajuste 2027 · IPCA"></label>
+            </div>
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 12px">
+              <div class="box"><span class="lbl">Procedimentos afetados</span><b class="t15">142</b></div>
+              <div class="box"><span class="lbl">Receita mensal estimada</span><b class="t15 num">{{impacto.receita}}</b><span class="t13 mute">base: média dos últimos 3 meses</span></div>
+              <div class="box"><span class="lbl">Agendamentos já marcados</span><b class="t15">38 após a vigência</b><span class="t13 mute">serão cobrados pelo novo valor</span></div>
+            </div>
+            <table class="tb">
+              <thead><tr><th>Maiores mudanças (prévia do servidor)</th><th class="r">Hoje</th><th class="r">Depois</th></tr></thead>
+              <tbody><sc-for list="{{impacto.itens}}" as="i" hint-placeholder-count="3"><tr><td class="b">{{i.d}}</td><td class="r num nw">{{i.a}}</td><td class="r num nw">{{i.n}}</td></tr></sc-for></tbody>
+            </table>
+            <div class="row wrap" style="gap: 10px"><button class="btn btn-p" onClick="{{enviarReaj}}">Enviar para segunda pessoa aprovar</button><span class="t13 mute">Pede sua senha de novo. Quem pede o reajuste não pode aprovar.</span></div>
+          </div>
+        </sc-if>
+        <sc-if value="{{reajPendente}}" hint-placeholder-val="{{ false }}">
+          <div class="banner info" role="status"><div class="t14" style="line-height: 1.5"><b>Reajuste de {{pctTxt}} enviado para aprovação.</b> Marcos Teixeira pediu em 07/11 às 10:14. Patrícia Lemos (coordenação) recebeu no chat. Até aprovar, nenhum valor muda; depois, vale a partir de 01/01/2027.</div></div>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{tAut}}" hint-placeholder-val="{{ false }}">
+        <p class="t14 mute" style="margin: 0">O agendamento só é confirmado com a guia autorizada quando a regra pede. O sistema confere carteirinha, validade e saldo de TUSS.</p>
+        <table class="tb">
+          <thead><tr><th>Exame</th><th>Senha</th><th>Validade da senha</th><th>Documentos exigidos</th></tr></thead>
+          <tbody>
+            <sc-for list="{{op.aut}}" as="r" hint-placeholder-count="4">
+              <tr><td class="b">{{r.ex}}</td><td><span class="{{r.cls}}">{{r.senha}}</span></td><td class="t13">{{r.val}}</td><td class="t13">{{r.docs}}</td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+        <div class="row wrap" style="gap: 8px"><a class="btn btn-sm" href="Autorizacao.dc.html">Ver autorizações em andamento</a><span class="t13 mute">Regras v5 · alteradas por Marcos Teixeira, conferidas por Patrícia Lemos em 02/09/2026</span></div>
+      </sc-if>
+
+      <sc-if value="{{tAud}}" hint-placeholder-val="{{ false }}">
+        <p class="t14 mute" style="margin: 0">Conferências feitas antes de cada lote ir para a operadora. Cada regra tem versão; a guia guarda qual versão foi aplicada.</p>
+        <div class="col" style="gap: 0">
+          <sc-for list="{{op.aud}}" as="r" hint-placeholder-count="4">
+            <div class="li"><span class="ni {{r.k}}" style="font-size: 12px; font-weight: 700">{{r.id}}</span><div style="flex: 1; min-width: 0"><div class="t14 b">{{r.t}}</div><div class="s">{{r.s}}</div></div><span class="{{r.cls}}">{{r.acao}}</span></div>
+          </sc-for>
+        </div>
+        <div class="row wrap" style="gap: 8px"><a class="btn btn-sm" href="Auditoria-Faturamento.dc.html">Abrir auditoria pré-faturamento</a><span class="t13 mute">Conjunto de regras v9 · vigente desde 01/10/2026 · mudar pede segunda pessoa</span></div>
+      </sc-if>
+
+      <sc-if value="{{tContato}}" hint-placeholder-val="{{ false }}">
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 12px">
+          <div class="box"><span class="lbl">Relacionamento com prestador</span><b class="t15">{{op.contato}}</b><span class="t13 mute">{{op.fone}} · prestador@{{op.dom}}.exemplo</span></div>
+          <div class="box"><span class="lbl">Portal do prestador</span><b class="t15">portal.{{op.dom}}.exemplo</b><span class="t13 mute">Login guardado no cofre de senhas da clínica, não nesta tela</span></div>
+          <div class="box"><span class="lbl">Webservice TISS</span><b class="t15">{{op.ws}}</b><span class="t13 mute">{{op.wsObs}}</span></div>
+        </div>
+        <div class="col" style="gap: 0">
+          <span class="lbl" style="margin-bottom: 4px">Últimos contatos</span>
+          <div class="li"><span class="ni k-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t14 b">Recurso de glosa do lote 2026-09 enviado</div><div class="s">Marcos Teixeira · protocolo 88123-4 · 28/10/2026</div></div></div>
+          <div class="li"><span class="ni k-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></span><div style="flex: 1; min-width: 0"><div class="t14 b">Reunião sobre reajuste 2027</div><div class="s">Patrícia Lemos · ata anexada · 15/10/2026</div></div></div>
+        </div>
+      </sc-if>
+    </section>
+    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sel: 'uni', aba: 'tabela', reaj: false, pend: false, pct: 5.2 };
+  }
+  renderVals() {
+    const s = this.state;
+    const O = [
+      { id: 'uni', nome: 'Unimed', ini: 'UN', k: 'k-green', ans: '34.567-8', vidas: '41% dos atendimentos', sit: 'Vigente até 12/2027', sitCls: 'chip c-green', envio: '10', fecha: '5', paga: '30 dias', glosa: '2,1%', glosaCls: 'chip c-green', ws: 'Sim', wsCls: 'chip c-green', contrato: 'UN-2021-0457', vig: '01/2021 a 12/2027', reaj: 'IPCA em janeiro', proxReaj: '01/2027 · 5,2% proposto', base: 'CBHPM 5ª ed. + 10%', tabVer: '14', tabProx: '15', contato: 'Fernanda Ruas', fone: '(48) 3000-1100', dom: 'unimed', wsObs: 'Elegibilidade, autorização e envio de lote · última resposta em 0,8 s' },
+      { id: 'bra', nome: 'Bradesco Saúde', ini: 'BS', k: 'k-rose', ans: '00.571-1', vidas: '17% dos atendimentos', sit: 'Vigente até 06/2027', sitCls: 'chip c-green', envio: '5', fecha: '1', paga: '45 dias', glosa: '4,8%', glosaCls: 'chip c-amber', ws: 'Sim', wsCls: 'chip c-green', contrato: 'BS-2019-1120', vig: '07/2019 a 06/2027', reaj: 'Negociado em julho', proxReaj: '07/2027', base: 'Tabela própria', tabVer: '9', tabProx: '10', contato: 'Rodrigo Paes', fone: '(11) 4000-2200', dom: 'bradescosaude', wsObs: 'Autorização e envio de lote' },
+      { id: 'sul', nome: 'SulAmérica', ini: 'SA', k: 'k-orange', ans: '00.604-3', vidas: '12% dos atendimentos', sit: 'Renovar em 40 dias', sitCls: 'chip c-amber', envio: '15', fecha: '10', paga: '30 dias', glosa: '1,6%', glosaCls: 'chip c-green', ws: 'Sim', wsCls: 'chip c-green', contrato: 'SA-2022-0081', vig: '12/2022 a 12/2026', reaj: 'IPCA em dezembro', proxReaj: '12/2026', base: 'CBHPM 5ª ed.', tabVer: '6', tabProx: '7', contato: 'Lia Martins', fone: '(11) 4000-3300', dom: 'sulamerica', wsObs: 'Envio de lote · autorização pelo portal' },
+      { id: 'ami', nome: 'Amil', ini: 'AM', k: 'k-blue', ans: '32.640-0', vidas: '9% dos atendimentos', sit: 'Vigente até 03/2027', sitCls: 'chip c-green', envio: '20', fecha: '15', paga: '60 dias', glosa: '6,3%', glosaCls: 'chip c-rose', ws: 'Não · portal', wsCls: 'chip c-amber', contrato: 'AM-2020-2290', vig: '04/2020 a 03/2027', reaj: 'Negociado em abril', proxReaj: '04/2027', base: 'Tabela própria', tabVer: '8', tabProx: '9', contato: 'Bruno Leal', fone: '(21) 4000-4400', dom: 'amil', wsObs: 'Sem webservice: lote enviado pelo portal e protocolo anexado à mão' },
+      { id: 'pet', nome: 'Petrobras', ini: 'PB', k: 'k-teal', ans: '41.665-4', vidas: '5% dos atendimentos', sit: 'Vigente até 08/2028', sitCls: 'chip c-green', envio: '1', fecha: '28', paga: '30 dias', glosa: '0,9%', glosaCls: 'chip c-green', ws: 'Não · portal', wsCls: 'chip c-amber', contrato: 'PB-2023-0012', vig: '09/2023 a 08/2028', reaj: 'IPCA em setembro', proxReaj: '09/2027', base: 'Tabela própria', tabVer: '4', tabProx: '5', contato: 'Sérgio Amaral', fone: '(21) 4000-5500', dom: 'petrobras', wsObs: 'Sem webservice: lote enviado pelo portal' }
+    ];
+    const op = O.find(o => o.id === s.sel);
+    op.aut = [
+      { ex: 'Tomografia (todas)', senha: 'Pede senha', cls: 'chip c-amber', val: '30 dias da emissão', docs: 'Pedido médico com CID e relatório clínico' },
+      { ex: 'Ecocardiograma com estresse', senha: 'Pede senha', cls: 'chip c-amber', val: '30 dias', docs: 'Pedido médico com CID' },
+      { ex: 'USG morfológica', senha: 'Pede senha', cls: 'chip c-amber', val: '15 dias', docs: 'Pedido com idade gestacional' },
+      { ex: 'USG geral, Doppler, Raio X', senha: 'Só elegibilidade', cls: 'chip c-green', val: 'Não se aplica', docs: 'Pedido médico e carteirinha' }
+    ];
+    op.aud = [
+      { id: 'A1', k: 'k-rose', t: 'Guia sem senha em exame que exige autorização', s: 'Regra da operadora v5 · aplicada a todos os lotes', acao: 'Bloqueia', cls: 'chip c-rose' },
+      { id: 'A2', k: 'k-amber', t: 'Data do atendimento depois da validade da senha', s: 'Regra v3', acao: 'Bloqueia', cls: 'chip c-rose' },
+      { id: 'A3', k: 'k-blue', t: 'Mais de 2 USG do mesmo tipo no mês para o mesmo paciente', s: 'Regra v2 · motivo: glosa recorrente em 2025', acao: 'Pede revisão', cls: 'chip c-amber' },
+      { id: 'A4', k: 'k-gray', t: 'Laudo não assinado no momento do fechamento', s: 'Regra da clínica v1', acao: 'Bloqueia', cls: 'chip c-rose' }
+    ];
+    const T = [
+      ['40901114', 'Ecocardiograma transtorácico', 248.60], ['40901238', 'Doppler de carótidas e vertebrais', 196.20], ['40901300', 'USG morfológica do 2º trimestre', 214.60],
+      ['40901203', 'USG obstétrica', 118.40], ['40805026', 'Raio X de tórax PA e perfil', 62.10], ['41001230', 'TC de abdome com contraste', 612.00]
+    ];
+    const brl = v => 'R$ ' + v.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    const f = 1 + s.pct / 100;
+    const A = [['contrato', 'Contrato'], ['tabela', 'Tabela de preços'], ['aut', 'Regras de autorização'], ['aud', 'Auditoria pré-faturamento'], ['contato', 'Contatos e portal']];
+    return {
+      ops: O.map(o => ({ nome: o.nome, ini: o.ini, k: o.k, ans: o.ans, vidas: o.vidas, sit: o.sit, sitCls: o.sitCls, envio: o.envio, paga: o.paga, glosa: o.glosa, glosaCls: o.glosaCls, ws: o.ws, wsCls: o.wsCls,
+        trCls: o.id === s.sel ? 'on' : '', atual: o.id === s.sel ? 'true' : 'false', abrir: () => this.setState({ sel: o.id, reaj: false, pend: false }) })),
+      op,
+      abas: A.map(([k, t]) => ({ t, sel: s.aba === k ? 'true' : 'false', cls: s.aba === k ? 'chip c-navy' : 'chip', ir: () => this.setState({ aba: k }) })),
+      tContrato: s.aba === 'contrato', tTabela: s.aba === 'tabela', tAut: s.aba === 'aut', tAud: s.aba === 'aud', tContato: s.aba === 'contato',
+      tabela: T.map(([tuss, desc, v]) => ({ tuss, desc, v: brl(v), ant: 'antes ' + brl(v / 1.048), vig: 'desde 01/01/2026 · v' + op.tabVer })),
+      abrirReaj: () => this.setState({ reaj: true, pend: false }), fecharReaj: () => this.setState({ reaj: false }),
+      reajAberto: s.reaj, reajPendente: s.pend, enviarReaj: () => this.setState({ reaj: false, pend: true }),
+      pctTxt: String(s.pct).replace('.', ',') + '%',
+      pcts: [3, 5.2, 7].map(p => ({ t: String(p).replace('.', ',') + '%', cls: s.pct === p ? 'on' : '', p: s.pct === p ? 'true' : 'false', ir: () => this.setState({ pct: p }) })),
+      impacto: { receita: '+ ' + brl(184300 * s.pct / 100) + ' por mês',
+        itens: [T[5], T[0], T[2]].map(([, d, v]) => ({ d, a: brl(v), n: brl(v * f) })) }
+    };
+  }
+}
+</script>
+</body>
+</html>

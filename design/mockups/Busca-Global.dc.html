@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Busca global — VidaCor</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.pal-it{box-sizing:border-box;display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:8px 12px;border:0;border-radius:12px;background:transparent;text-align:left;font:inherit;color:#0F172A;cursor:pointer}
+.pal-it:hover{background:#F4F6F9}
+.pal-it.on{background:#EEF4FB;box-shadow:inset 3px 0 0 #0A1A4A}
+.pal-it .ni{width:30px;height:30px;border-radius:9px}
+.pal-it .ni svg{width:16px;height:16px}
+.pal-g{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5B6474;padding:12px 12px 4px}
+.pfx{height:30px;padding:0 10px;border-radius:999px;border:1px solid #D9DDE5;background:#fff;font:600 13px Inter,sans-serif;color:#334155;cursor:pointer}
+.pfx.on{background:#0A1A4A;border-color:#0A1A4A;color:#fff}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif; position: relative">
+  <div class="side"><dc-import name="Sidebar" active="inicio" hint-size="248px,1400px"></dc-import></div>
+  <main class="content" aria-hidden="true">
+    <div class="topbar"><div class="crumb"><b>Início</b></div><div class="grow"></div><div class="search" style="width: 320px; max-width: 100%"><span class="t14">Buscar em tudo</span><div class="grow"></div><span class="kbd">Ctrl K</span></div></div>
+    <div class="page-h"><div class="grow"><h1>Bom dia, Ana</h1><p>Sábado, 7 de novembro · Unidade Centro · Guichê 1</p></div></div>
+    <div class="grid g4">
+      <div class="card"><div class="lbl">Agendados hoje</div><div class="big">64</div></div>
+      <div class="card"><div class="lbl">Aguardando</div><div class="big">7</div></div>
+      <div class="card"><div class="lbl">Em exame</div><div class="big">5</div></div>
+      <div class="card"><div class="lbl">Laudos prontos</div><div class="big">22</div></div>
+    </div>
+    <div class="grid g2">
+      <div class="card" style="min-height: 280px"><div class="t15 b">Esteira da recepção</div><div class="col" style="gap: 12px; margin-top: 16px"><div class="sk" style="height: 44px"></div><div class="sk" style="height: 44px"></div><div class="sk" style="height: 44px"></div><div class="sk" style="height: 44px"></div></div></div>
+      <div class="card" style="min-height: 280px"><div class="t15 b">Salas agora</div><div class="col" style="gap: 12px; margin-top: 16px"><div class="sk" style="height: 44px"></div><div class="sk" style="height: 44px"></div><div class="sk" style="height: 44px"></div></div></div>
+    </div>
+  </main>
+
+  <div style="position: absolute; inset: 0; background: rgba(15,23,42,.48); display: flex; justify-content: center; align-items: flex-start; padding: 72px 16px 24px">
+    <div role="dialog" aria-modal="true" aria-label="Busca global" style="width: 100%; max-width: 700px; background: #fff; border-radius: 22px; box-shadow: 0 24px 64px rgba(15,23,42,.28), 0 4px 12px rgba(15,23,42,.08); overflow: hidden">
+      <div class="row" style="gap: 12px; padding: 14px 18px; border-bottom: 1px solid #E8EAEF">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5B6474" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <label class="sr" for="pal-q">Buscar pacientes, exames, guias, etiquetas, placas ou ações</label>
+        <input id="pal-q" value="{{q}}" onChange="{{onQ}}" onKeyDown="{{onKey}}" role="combobox" aria-expanded="true" aria-controls="pal-res" aria-activedescendant="{{ativoId}}" autocomplete="off" placeholder="Busque paciente, protocolo, guia, ETQ, placa… ou digite > para ações" style="flex: 1; min-width: 0; border: 0; outline: 0; font: 400 18px Inter, sans-serif; color: #0F172A; height: 44px; background: transparent">
+        <span class="kbd">Esc</span>
+      </div>
+      <div class="row wrap" style="gap: 6px; padding: 10px 18px; border-bottom: 1px solid #E8EAEF">
+        <span class="t12 mute" style="margin-right: 4px">Filtrar:</span>
+        <sc-for list="{{prefixos}}" as="p" hint-placeholder-count="4"><button class="{{p.cls}}" aria-pressed="{{p.on}}" onClick="{{p.usar}}">{{p.t}}</button></sc-for>
+      </div>
+
+      <div id="pal-res" role="listbox" aria-label="Resultados" style="max-height: 520px; overflow-y: auto; padding: 4px 8px 8px">
+        <sc-if value="{{vazio}}" hint-placeholder-val="{{ false }}">
+          <div class="state" style="padding: 28px 16px">
+            <div class="b">Nada encontrado para “{{q}}”</div>
+            <div class="t13 mute" style="max-width: 420px; line-height: 1.5">Confira a grafia. Paciente se busca também pelo nascimento (12/03/1968) ou telefone. Para ver só ações, comece com “&gt;”.</div>
+          </div>
+        </sc-if>
+        <sc-for list="{{grupos}}" as="g" hint-placeholder-count="3">
+          <div role="group" aria-label="{{g.nome}}">
+            <div class="pal-g">{{g.nome}}</div>
+            <sc-for list="{{g.itens}}" as="it" hint-placeholder-count="2">
+              <button id="{{it.id}}" class="{{it.cls}}" role="option" aria-selected="{{it.sel}}" onClick="{{it.pick}}">
+                <span class="ni {{it.k}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="{{it.ic}}"></path></svg></span>
+                <span style="flex: 1; min-width: 0"><span class="t14 b" style="display: block">{{it.t}}</span><span class="t13 mute" style="display: block">{{it.s}}</span></span>
+                <span class="kbd" style="{{it.atStyle}}">{{it.at}}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-for>
+        <sc-if value="{{temOcultos}}" hint-placeholder-val="{{ true }}">
+          <div class="row" style="gap: 10px; margin: 8px 12px 4px; padding: 10px 12px; border-radius: 12px; background: #F6F7F9">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B6474" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+            <span class="t13 mute">{{textoOcultos}}</span>
+          </div>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{temAviso}}" hint-placeholder-val="{{ false }}">
+        <div class="toast" role="status" style="margin: 0 12px 12px"><span style="flex: 1">{{aviso}}</span><a href="{{avisoHref}}" style="color: #8FC5F0; font-weight: 600">Abrir</a></div>
+      </sc-if>
+
+      <div class="row wrap" style="gap: 14px; padding: 10px 18px; border-top: 1px solid #E8EAEF; background: #FAFBFC">
+        <span class="t12 mute"><span class="kbd">↑</span> <span class="kbd">↓</span> navegar</span>
+        <span class="t12 mute"><span class="kbd">Enter</span> abrir</span>
+        <span class="t12 mute"><span class="kbd">&gt;</span> ações · <span class="kbd">#</span> protocolo · <span class="kbd">@</span> equipe</span>
+        <div class="grow"></div>
+        <span class="t12 mute">Resultados conforme o perfil Recepção</span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { q: 'maria', ativo: 0, aviso: '', avisoHref: 'Main.dc.html' };
+  }
+  norm(t) { return (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+  dados() {
+    const I = {
+      pac: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c1-4 4-6 8-6s7 2 8 6',
+      exa: 'M5 3h10l4 4v14H5zM9 12h6M9 16h6',
+      guia: 'M4 5h16v14H4zM8 9h8M8 13h5',
+      etq: 'M3 12V4h8l10 10-8 8zM7.5 8.5h.01',
+      placa: 'M3 8h18v8H3zM7 12h2M11 12h2M15 12h2',
+      acao: 'M13 3L4 14h7l-1 7 9-11h-7z',
+      pessoa: 'M16 21v-2a4 4 0 0 0-8 0v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM20 8v6M23 11h-6',
+      laudo: 'M5 3h14v18H5zM9 8h6M9 12h6M9 16h3'
+    };
+    return [
+      { g: 'Pacientes', k: 'k-violet', ic: I.pac, t: 'Maria Helena Duarte', s: '12/03/1968 · 58 anos · PAC-2019-000318 · Unimed', h: 'Paciente.dc.html', at: '' },
+      { g: 'Pacientes', k: 'k-gray', ic: I.pac, t: 'Maria Helena Duarte', s: '21/03/1968 · possível duplicado · PAC-2026-004790', h: 'Pacientes-Lista.dc.html', at: '' },
+      { g: 'Pacientes', k: 'k-violet', ic: I.pac, t: 'Sônia Maria Castro', s: '03/02/1962 · 64 anos · PAC-2022-001731 · Particular', h: 'Paciente.dc.html', at: '' },
+      { g: 'Pacientes', k: 'k-violet', ic: I.pac, t: 'Antônio Carlos Ribeiro', s: '15/06/1954 · 72 anos · PAC-2021-001204 · Petrobras', h: 'Paciente.dc.html', at: '' },
+      { g: 'Pacientes', k: 'k-violet', ic: I.pac, t: 'Juliana Sampaio Rocha', s: '12/04/1993 · 33 anos · gestante · Bradesco Saúde', h: 'Paciente.dc.html', at: '' },
+      { g: 'Exames e protocolos', k: 'k-blue', ic: I.exa, t: '#ATD-2026-118204 · Doppler de carótidas', s: 'Maria Helena Duarte · 12/03/1968 · 12/11 09:20 · Sala 3', h: 'Atendimento.dc.html', at: '', tag: 'maria helena' },
+      { g: 'Exames e protocolos', k: 'k-blue', ic: I.exa, t: '#ATD-2026-117650 · Ecocardiograma', s: 'Maria Helena Duarte · 12/03/1968 · realizado 06/11 · laudo em revisão', h: 'Atendimento.dc.html', at: '', tag: 'maria helena' },
+      { g: 'Exames e protocolos', k: 'k-blue', ic: I.exa, t: '#ATD-2026-118311 · USG morfológica', s: 'Juliana Sampaio Rocha · 12/04/1993 · hoje 10:40 · Sala 2', h: 'Atendimento.dc.html', at: '', tag: 'juliana' },
+      { g: 'Guias', k: 'k-orange', ic: I.guia, t: 'Guia 4587-221 · Unimed', s: 'Maria Helena Duarte · Doppler de carótidas · autorizada · validade 30/11', h: 'Autorizacao.dc.html', at: '', tag: 'maria helena' },
+      { g: 'Guias', k: 'k-orange', ic: I.guia, t: 'Guia 99120-04 · Petrobras', s: 'Antônio Carlos Ribeiro · MAPA · aguardando autorização', h: 'Autorizacao.dc.html', at: '', tag: 'antonio' },
+      { g: 'Etiquetas', k: 'k-amber', ic: I.etq, t: 'ETQ-7F3K-21 · pulseira', s: 'Maria Helena Duarte · 12/03/1968 · impressa 06/11 08:02 · válida', h: 'Etiquetas.dc.html', at: '', tag: 'maria helena' },
+      { g: 'Etiquetas', k: 'k-amber', ic: I.etq, t: 'ETQ-8A1C-04 · tubo e frasco', s: 'Juliana Sampaio Rocha · 12/04/1993 · hoje 09:55', h: 'Etiquetas.dc.html', at: '', tag: 'juliana' },
+      { g: 'Placas do estacionamento', k: 'k-teal', ic: I.placa, t: 'RXA-4B21', s: 'Entrada 08:12 · vinculada a Maria Helena Duarte · cortesia do exame', h: 'Main.dc.html', at: '', tag: 'maria helena' },
+      { g: 'Placas do estacionamento', k: 'k-teal', ic: I.placa, t: 'QJM-7E09', s: 'Entrada 09:40 · sem vínculo · avulso', h: 'Main.dc.html', at: '' },
+      { g: 'Ações', k: 'k-navy', ic: I.acao, t: 'Novo agendamento', s: 'Abre o agendamento com guia', h: 'Agendamento-Guia.dc.html', at: 'N', acao: true },
+      { g: 'Ações', k: 'k-navy', ic: I.acao, t: 'Abrir caixa', s: 'Conferir o troco inicial do Caixa 1', h: 'Caixa.dc.html', at: 'Ctrl Shift C', acao: true },
+      { g: 'Ações', k: 'k-navy', ic: I.acao, t: 'Reimprimir pulseira', s: 'Pede motivo e invalida a anterior', h: 'Etiquetas.dc.html', at: 'Ctrl P', acao: true },
+      { g: 'Ações', k: 'k-navy', ic: I.acao, t: 'Ir para Faturamento', s: 'Lotes TISS e glosas', h: 'Faturamento.dc.html', at: 'G F', acao: true },
+      { g: 'Ações', k: 'k-navy', ic: I.acao, t: 'Ir para Agenda', s: 'Agenda do dia por sala', h: 'Agenda.dc.html', at: 'G A', acao: true },
+      { g: 'Ações', k: 'k-navy', ic: I.acao, t: 'Novo paciente', s: 'Busca duplicados antes de salvar', h: 'Cadastro-Paciente.dc.html', at: 'Ctrl Shift N', acao: true },
+      { g: 'Equipe', k: 'k-indigo', ic: I.pessoa, t: '@Dr. Paulo Medeiros', s: 'Cardiologia · Sala 4 · disponível · abrir chat', h: 'Chat-Interno.dc.html', at: '', pes: true },
+      { g: 'Equipe', k: 'k-indigo', ic: I.pessoa, t: '@Dra. Renata Alves', s: 'Radiologia · Sala 2 · em exame', h: 'Chat-Interno.dc.html', at: '', pes: true },
+      { g: 'Equipe', k: 'k-indigo', ic: I.pessoa, t: '@Carla Mendes', s: 'Recepção · Guichê 2', h: 'Chat-Interno.dc.html', at: '', pes: true },
+      { g: 'Equipe', k: 'k-indigo', ic: I.pessoa, t: '@Marcos Teixeira', s: 'Faturamento', h: 'Chat-Interno.dc.html', at: '', pes: true },
+      { g: 'Equipe', k: 'k-indigo', ic: I.pessoa, t: '@Patrícia Lemos', s: 'Coordenação', h: 'Chat-Interno.dc.html', at: '', pes: true },
+      { g: 'Laudos', k: 'k-rose', ic: I.laudo, t: 'Laudo de ecocardiograma', s: 'Maria Helena Duarte', h: 'Laudo.dc.html', oculto: true, tag: 'maria helena' },
+      { g: 'Laudos', k: 'k-rose', ic: I.laudo, t: 'Laudo de USG de tireoide', s: 'Sônia Maria Castro', h: 'Laudo.dc.html', oculto: true, tag: 'sonia maria' }
+    ];
+  }
+  calc() {
+    const s = this.state;
+    const raw = s.q || '';
+    const pf = raw.charAt(0);
+    const modo = pf === '>' ? 'acao' : (pf === '#' ? 'prot' : (pf === '@' ? 'pes' : 'tudo'));
+    const termo = this.norm(modo === 'tudo' ? raw : raw.slice(1)).trim();
+    const D = this.dados();
+    const ok = d => {
+      if (modo === 'acao' && !d.acao) return false;
+      if (modo === 'prot' && d.g !== 'Exames e protocolos') return false;
+      if (modo === 'pes' && !d.pes) return false;
+      if (modo === 'tudo' && d.pes) return false;
+      if (!termo) return true;
+      const alvo = this.norm([d.t, d.s, d.g, d.tag || ''].join(' '));
+      return termo.split(/\s+/).every(t => alvo.includes(t));
+    };
+    let vis, ocultos = 0, recentes = false;
+    if (!termo && modo === 'tudo') {
+      recentes = true;
+      vis = [D[0], D[5], D[10], D[14], D[15]].map(d => Object.assign({}, d, { g: 'Recentes' }));
+    } else {
+      const m = D.filter(ok);
+      ocultos = m.filter(d => d.oculto).length;
+      vis = m.filter(d => !d.oculto).slice(0, 14);
+    }
+    return { vis, ocultos, recentes, modo };
+  }
+  renderVals() {
+    const s = this.state;
+    const c = this.calc();
+    const n = c.vis.length;
+    const ativo = n ? Math.min(s.ativo, n - 1) : 0;
+    const abrir = d => this.setState({ aviso: 'Abriria: ' + d.t + (d.acao ? '' : ' · ' + d.s.split(' · ')[0]), avisoHref: d.h });
+    const ordem = [];
+    c.vis.forEach(d => { if (!ordem.includes(d.g)) ordem.push(d.g); });
+    const flat = [];
+    ordem.forEach(g => c.vis.filter(d => d.g === g).forEach(d => flat.push(d)));
+    const grupos = ordem.map(g => ({ nome: g, itens: flat.map((d, i) => ({ d, i })).filter(x => x.d.g === g).map(({ d, i }) => ({
+      id: 'pal-op-' + i, t: d.t, s: d.s, k: d.k, ic: d.ic, at: d.at || '', atStyle: d.at ? '' : 'display: none',
+      cls: i === ativo ? 'pal-it on' : 'pal-it', sel: i === ativo ? 'true' : 'false', pick: () => { this.setState({ ativo: i }); abrir(d); }
+    })) }));
+    const PF = [['tudo', 'Tudo', ''], ['acao', '> Ações', '>'], ['prot', '# Protocolo', '#'], ['pes', '@ Equipe', '@']];
+    return {
+      q: s.q,
+      onQ: e => this.setState({ q: e.target.value, ativo: 0, aviso: '' }),
+      onKey: e => {
+        if (e.key === 'ArrowDown') { e.preventDefault(); this.setState({ ativo: n ? (ativo + 1) % n : 0 }); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); this.setState({ ativo: n ? (ativo - 1 + n) % n : 0 }); }
+        else if (e.key === 'Enter') { e.preventDefault(); if (flat[ativo]) abrir(flat[ativo]); }
+        else if (e.key === 'Escape') { this.setState({ q: '', ativo: 0, aviso: '' }); }
+      },
+      ativoId: n ? 'pal-op-' + ativo : '',
+      prefixos: PF.map(([k, t, p]) => ({ t, cls: c.modo === k ? 'pfx on' : 'pfx', on: c.modo === k ? 'true' : 'false',
+        usar: () => this.setState(st => { const base = (st.q || '').replace(/^[>#@]/, ''); return { q: p + base, ativo: 0, aviso: '' }; }) })),
+      grupos: flat.length ? grupos : [],
+      vazio: !c.recentes && n === 0,
+      temOcultos: true,
+      textoOcultos: 'Só aparecem resultados que o seu perfil pode abrir. A busca não indica se existe algo fora do seu acesso.',
+      temAviso: s.aviso !== '', aviso: s.aviso, avisoHref: s.avisoHref
+    };
+  }
+}
+</script>
+</body>
+</html>

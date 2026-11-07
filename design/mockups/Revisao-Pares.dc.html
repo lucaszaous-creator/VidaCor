@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Revisão por pares — VidaCor</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/fb2dedb8954c196c1d9a9203c0ff5693">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="revisao" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="page-h">
+      <div class="grow"><h1>Revisão por pares</h1><p>Amostra aleatória dos laudos do mês · educativa, confidencial e não punitiva · o revisor nunca edita o laudo de outro médico</p></div>
+      <div class="seg" role="tablist" aria-label="Visão">
+        <sc-for list="{{visoes}}" as="v" hint-placeholder-count="2"><button class="{{v.cls}}" role="tab" aria-selected="{{v.sel}}" onClick="{{v.ir}}">{{v.t}}</button></sc-for>
+      </div>
+    </div>
+
+    <sc-if value="{{vFila}}" hint-placeholder-val="{{ true }}">
+      <div class="banner info"><div class="t14" style="line-height: 1.5"><b>Novembro/2026:</b> o servidor sorteou 3% dos laudos de cada médico (28 laudos) no dia 01/11. Você recebeu 6 de colegas da sua área; nenhum é seu. O nome de quem laudou fica oculto até você enviar a classificação.</div></div>
+      <div style="display: grid; grid-template-columns: minmax(240px, 300px) minmax(0, 1fr); gap: 16px; align-items: start">
+        <section class="card" style="padding: 8px" aria-label="Fila do revisor">
+          <div class="lbl" style="padding: 10px 12px 6px">Minha fila · {{nFeitos}} de 6</div>
+          <sc-for list="{{fila}}" as="f" hint-placeholder-count="6">
+            <button class="{{f.cls}}" onClick="{{f.abrir}}" aria-current="{{f.atual}}">
+              <span style="flex: 1; min-width: 0"><span class="nm" style="display: block">{{f.exame}}</span><span class="pv" style="display: block">{{f.cod}} · laudado em {{f.data}}</span></span>
+              <span class="{{f.chip}}" style="height: 22px; font-size: 12px">{{f.sit}}</span>
+            </button>
+          </sc-for>
+        </section>
+
+        <section class="card" aria-label="Caso em revisão" style="display: flex; flex-direction: column; gap: 16px">
+          <div class="row wrap" style="gap: 10px">
+            <div style="flex: 1 1 280px; min-width: 0"><div style="font-size: 20px; font-weight: 650">{{caso.exame}}</div><div class="t14 mute">{{caso.cod}} · {{caso.pac}} · laudado em {{caso.data}}</div></div>
+            <a class="btn btn-sm" href="Visualizador.dc.html">Abrir imagens no visualizador</a>
+          </div>
+          <div class="row wrap" style="gap: 8px"><span class="chip">Laudado por: {{caso.autor}}</span><span class="chip c-blue">Indicação: {{caso.ind}}</span></div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr)); gap: 8px">
+            <div class="dimg" style="height: 130px; background: radial-gradient(60% 55% at 50% 50%, #3A4150 0%, #12161F 70%, #05070B 100%)"><span class="cap">Série 2 · axial</span></div>
+            <div class="dimg" style="height: 130px; background: radial-gradient(50% 60% at 45% 50%, #444C5C 0%, #151A24 65%, #05070B 100%)"><span class="cap">Série 3 · coronal</span></div>
+            <div class="dimg" style="height: 130px; background: radial-gradient(55% 45% at 55% 45%, #3C4454 0%, #11151D 70%, #05070B 100%)"><span class="cap">Série 4 · sagital</span></div>
+          </div>
+
+          <div style="padding: 16px; border-radius: 16px; background: #F6F7F9">
+            <div class="lbl" style="margin-bottom: 6px">Laudo original (versão assinada · somente leitura)</div>
+            <div class="t14" style="line-height: 1.6">{{caso.laudo}}</div>
+          </div>
+
+          <div class="col" style="gap: 8px">
+            <span class="t14 b">Concordância (RADPEER)</span>
+            <div class="grid" role="radiogroup" aria-label="Classificação RADPEER" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: 8px">
+              <sc-for list="{{escala}}" as="e" hint-placeholder-count="5">
+                <button class="{{e.cls}}" role="radio" aria-checked="{{e.sel}}" onClick="{{e.ir}}" style="display: block; height: auto; white-space: normal; text-align: left; padding: 10px 12px; border: 0; border-radius: 14px; cursor: pointer; font: inherit; min-height: 64px">
+                  <span class="b t14" style="display: block">{{e.cod}}</span><span class="t12" style="display: block; opacity: .85">{{e.t}}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+          <label class="field">Comentário educativo para o colega<textarea class="in" rows="3" placeholder="O que poderia ser descrito de outra forma e por quê · sem julgamento"></textarea></label>
+          <sc-if value="{{significativa}}" hint-placeholder-val="{{ false }}">
+            <div class="banner off"><div class="t14" style="line-height: 1.5"><b>Discrepância significativa ({{cls}}).</b> Ao enviar, o sistema avisa o médico que laudou e a responsável técnica. O laudo original não muda: se houver impacto para o paciente, quem laudou emite um <b>adendo</b> assinado, e o solicitante é avisado.</div></div>
+          </sc-if>
+          <sc-if value="{{enviado}}" hint-placeholder-val="{{ false }}">
+            <div class="toast" role="status"><span style="flex: 1">Revisão {{caso.cod}} enviada · classificação {{cls}} · registrada no lastro · autor revelado: {{caso.autorReal}}</span></div>
+          </sc-if>
+          <div class="row wrap" style="gap: 8px"><button class="btn btn-p" disabled="{{semClasse}}" onClick="{{enviar}}">Enviar revisão</button><button class="btn btn-sm">Declarar conflito (passar a outro revisor)</button></div>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{vRes}}" hint-placeholder-val="{{ false }}">
+      <div class="banner info"><div class="t14" style="line-height: 1.5"><b>Visão da responsável técnica (Dra. Cecília Souto).</b> O resultado individual é visto só pelo próprio médico e por ela. Não entra em avaliação de desempenho nem em repasse. Cada abertura desta tela fica no lastro.</div></div>
+      <section class="card" aria-label="Resultado por médico">
+        <div class="card-h"><div class="grow"><h2>Resultado por médico · outubro/2026</h2><div class="sub">Amostra de 3% · revisão por colega da mesma área</div></div></div>
+        <table class="tb">
+          <thead><tr><th>Médico</th><th class="r">Revisados</th><th>Concordância</th><th>Discrepâncias significativas</th></tr></thead>
+          <tbody>
+            <sc-for list="{{resultado}}" as="r" hint-placeholder-count="4">
+              <tr>
+                <td class="b">{{r.nome}}<div class="t13 mute" style="font-weight: 400">{{r.area}}</div></td>
+                <td class="r num">{{r.n}}</td>
+                <td style="width: 32%"><div class="row" style="gap: 8px"><div class="bar" style="flex: 1"><i style="{{r.w}}"></i></div><b class="num t13 nw">{{r.pct}}</b></div></td>
+                <td><span class="{{r.cls}}">{{r.disc}}</span></td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </section>
+      <section class="card" aria-label="Adendos">
+        <div class="card-h"><div class="grow"><h2>Discrepâncias e adendos</h2><div class="sub">O adendo é sempre feito por quem laudou, como nova versão com motivo</div></div></div>
+        <div class="li"><span class="ni k-amber">2b</span><div style="flex: 1; min-width: 0"><div class="t14 b">TC de abdome · REV-1041 · nódulo adrenal de 9 mm não descrito</div><div class="s">Adendo emitido pelo médico do laudo em 24/10 · solicitante avisado pelo portal do médico</div></div><span class="chip c-green">Adendo assinado</span></div>
+        <div class="li"><span class="ni k-amber">3a</span><div style="flex: 1; min-width: 0"><div class="t14 b">Raio X de tórax · REV-1046 · consolidação basal discreta</div><div class="s">Aguardando o médico do laudo · prazo 10/11</div></div><span class="chip c-amber">Aguardando adendo</span></div>
+        <div class="li"><span class="ni k-blue">2a</span><div style="flex: 1; min-width: 0"><div class="t14 b">USG de tireoide · REV-1052 · classificação TI-RADS diferente</div><div class="s">Sem impacto clínico provável · discutido na reunião de casos de 30/10</div></div><span class="chip">Educativo</span></div>
+      </section>
+    </sc-if>
+    <p class="t12 mute" style="margin: 0">Mockup · dados fictícios · VidaCor Imagem</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { visao: 'fila', sel: 0, cls: {}, env: {} };
+  }
+  renderVals() {
+    const s = this.state;
+    const F = [
+      { cod: 'REV-1101', exame: 'TC de tórax sem contraste', data: '14/10', pac: 'Paciente: Antônio Carlos Ribeiro · nasc. 15/06/1954', ind: 'tosse crônica, tabagista', autorReal: 'Dra. Cecília Souto',
+        laudo: 'Parênquima pulmonar com enfisema centrolobular leve nos lobos superiores. Nódulo sólido de 6 mm no segmento anterior do lobo superior direito, de contornos regulares. Ausência de derrame pleural. Impressão: enfisema leve; nódulo de 6 mm, sugerido controle conforme critérios de Fleischner.' },
+      { cod: 'REV-1102', exame: 'Raio X de tórax PA e perfil', data: '16/10', pac: 'Paciente: Vera Lúcia Antunes · nasc. 18/09/1957', ind: 'pré-operatório', autorReal: 'Dr. Felipe Andrade',
+        laudo: 'Campos pulmonares sem consolidações. Área cardíaca nos limites da normalidade. Seios costofrênicos livres. Impressão: exame dentro da normalidade.' },
+      { cod: 'REV-1103', exame: 'TC de abdome com contraste', data: '20/10', pac: 'Paciente: Sônia Maria Castro · nasc. 03/02/1962', ind: 'dor em flanco direito', autorReal: 'Dra. Cecília Souto',
+        laudo: 'Fígado de dimensões normais. Cálculo de 5 mm no grupamento calicinal inferior do rim direito, sem dilatação. Demais estruturas sem alterações. Impressão: nefrolitíase não obstrutiva à direita.' },
+      { cod: 'REV-1104', exame: 'Raio X de coluna lombar', data: '22/10', pac: 'Paciente: Rafael Monteiro Lima · nasc. 09/11/1988', ind: 'lombalgia', autorReal: 'Dr. Felipe Andrade',
+        laudo: 'Alinhamento preservado. Corpos vertebrais de altura normal. Espaços discais preservados. Impressão: sem alterações.' },
+      { cod: 'REV-1105', exame: 'TC de crânio sem contraste', data: '27/10', pac: 'Paciente: Maria Helena Duarte · nasc. 12/03/1968', ind: 'cefaleia', autorReal: 'Dra. Cecília Souto',
+        laudo: 'Ausência de coleções ou sangramentos. Sistema ventricular de dimensões normais. Impressão: exame sem alterações agudas.' },
+      { cod: 'REV-1106', exame: 'Raio X de joelho', data: '29/10', pac: 'Paciente: Lúcia Fernandes Prado · nasc. 02/07/1959', ind: 'dor e edema', autorReal: 'Dr. Felipe Andrade',
+        laudo: 'Redução do espaço articular femorotibial medial. Osteófitos marginais. Impressão: osteoartrose leve.' }
+    ];
+    const E = [['1', 'Concorda com a interpretação'], ['2a', 'Discrepância · erro improvável · sem impacto'], ['2b', 'Discrepância · erro improvável · pode ter impacto'], ['3a', 'Discrepância · deveria ser percebida · sem impacto'], ['3b', 'Discrepância · deveria ser percebida · pode ter impacto']];
+    const cur = F[s.sel], c = s.cls[s.sel], env = !!s.env[s.sel];
+    const nFeitos = Object.keys(s.env).length + 2;
+    const R = [['Dra. Cecília Souto', 'TC e raio X', 9, 100, 'Nenhuma', 'chip c-green'], ['Dr. Felipe Andrade', 'Raio X', 6, 83, '1 · 3a (adendo pendente)', 'chip c-amber'], ['Dra. Renata Alves', 'USG e USG GO', 14, 93, 'Nenhuma', 'chip c-green'], ['Dr. Paulo Medeiros', 'Ecocardiograma', 8, 100, 'Nenhuma', 'chip c-green'], ['Dr. Marcos Freire', 'Doppler', 7, 86, '1 · 2b (adendo assinado)', 'chip c-blue']];
+    return {
+      visoes: [['fila', 'Fila do revisor'], ['res', 'Resultados (confidencial)']].map(([k, t]) => ({ t, cls: s.visao === k ? 'on' : '', sel: s.visao === k ? 'true' : 'false', ir: () => this.setState({ visao: k }) })),
+      vFila: s.visao === 'fila', vRes: s.visao === 'res', nFeitos: String(nFeitos),
+      fila: F.map((f, i) => {
+        const done = !!s.env[i] || i > 3;
+        return { cod: f.cod, exame: f.exame, data: f.data, atual: i === s.sel ? 'true' : 'false', cls: 'cv' + (i === s.sel ? ' sel' : ''),
+          sit: done ? 'Feita' : 'A revisar', chip: done ? 'chip c-green' : 'chip c-amber', abrir: () => this.setState({ sel: i }) };
+      }),
+      caso: { cod: cur.cod, exame: cur.exame, data: cur.data, pac: cur.pac, ind: cur.ind, laudo: cur.laudo, autorReal: cur.autorReal, autor: env ? cur.autorReal : 'oculto até o envio' },
+      escala: E.map(([cod, t]) => ({ cod, t, sel: c === cod ? 'true' : 'false', ir: () => this.setState(st => { const n = Object.assign({}, st.cls); n[st.sel] = cod; return { cls: n }; }),
+        cls: c === cod ? (cod === '1' ? 'chip c-green' : (cod.indexOf('b') > 0 ? 'chip c-rose' : 'chip c-amber')) : 'chip' })),
+      significativa: c === '2b' || c === '3a' || c === '3b', cls: c || '',
+      semClasse: !c || env, enviado: env,
+      enviar: () => this.setState(st => { const n = Object.assign({}, st.env); n[st.sel] = true; return { env: n }; }),
+      resultado: R.map(([nome, area, n, p, disc, cls]) => ({ nome, area, n: String(n), pct: p + '%', w: 'width: ' + p + '%', disc, cls }))
+    };
+  }
+}
+</script>
+</body>
+</html>

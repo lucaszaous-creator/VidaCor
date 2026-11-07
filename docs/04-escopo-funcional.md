@@ -58,33 +58,18 @@ Laudo A4 com timbrado, assinatura ICP-Brasil e QR de validação · Comprovante 
 preparo com QR para check-in · Atestado de comparecimento · Recibo · Etiquetas
 de identificação.
 
-## Telas que ainda não existem (inventário de 07/11/2026)
-Prioridade: 🔴 antes do MVP · 🟠 logo após · 🟢 futuro.
+## Telas adicionadas em 07/11/2026 (inventário fechado)
+Todas as telas que faltavam passaram a ter mockup:
 
-| Prio | Tela | Por que falta |
-|---|---|---|
-| 🔴 | **Entrar no sistema** (login, 2 fatores, troca de unidade, bloqueio de tela, sessão expirada) | Porta de entrada; regras no docs/17 |
-| 🔴 | **Lista e busca de pacientes** | "Pacientes" abre direto uma ficha; falta a lista com filtros |
-| 🔴 | **Busca global Ctrl K** (pacientes, exames, guias, etiquetas e ações) | Aparece desenhada, sem tela |
-| 🔴 | **Cadastro de exames e procedimentos** (TUSS, duração, sala, aparelho, preparo, preço por convênio, quem realiza) | Agenda, caixa e faturamento dependem dele |
-| 🔴 | **Convênios e tabelas** (contratos, tabelas negociadas, reajustes, regras por operadora) | Item I6 do docs/22; alimenta autorização e auditoria |
-| 🔴 | **Usuários, perfis e permissões** (tela própria, com segunda pessoa para perfil clínico) | Hoje é um bloco em Configurações; regras no docs/18 |
-| 🔴 | **Modelos de laudo e frases** (editor, versões, por médico e por exame) | O laudo usa modelos que ainda não têm onde ser mantidos |
-| 🔴 | **Orçamento do particular** | Citado no Medware, sem tela |
-| 🔴 | **Lista de espera e encaixe** | Pedido comum da recepção |
-| 🔴 | **Contingência** (agenda do dia em PDF, lançamento posterior, conciliação) | Item E6 do docs/22 |
-| 🟠 | **Preferências do usuário** (densidade, letra, modo escuro no laudo, colunas salvas) | Pedido de UX |
-| 🟠 | **Telas em tablet (sala) e celular (médico)** | Hoje só há as de computador e os apps |
-| 🟠 | **Portal do médico solicitante** | Item I5 do docs/22 |
-| 🟠 | **Qualidade: POPs, não conformidades, eventos adversos (Notivisa)** | Item I1 |
-| 🟠 | **Revisão por pares dos laudos** | Item I2 |
-| 🟠 | **Gestão de dose** | Item I4 |
-| 🟠 | **Check-up e pacotes** | Item I7 |
-| 🟠 | **Ouvidoria / SAC** | Item I9 |
-| 🟠 | **Relatórios e exportação** (com reautenticação, docs/17) | Indicadores mostram, mas não exportam |
-| 🟢 | **Estacionamento** (entrada, saída, cobrança, vínculo com o paciente) | Câmera/cancela deixadas para depois pelo dono do produto |
-| 🟢 | **Agendamento online público** (site) | Hoje só pelo portal e WhatsApp |
-| 🟢 | **Telemedicina como tela própria** | Hoje dentro de Comunicação |
+| Grupo | Telas (`design/mockups/`) |
+|---|---|
+| Acesso e navegação | `Login` (2 fatores, unidade/estação, bloqueio, sessão expirada, tentativas, SSO) · `Pacientes-Lista` (busca, filtros, duplicados com segunda pessoa) · `Busca-Global` (Ctrl K com ações e prefixos; não indica o que está fora do acesso) · `Usuarios-Perfis` (matriz de atos, separação de funções, emergência, reautenticação) · `Preferencias` |
+| Cadastros base | `Exames-Procedimentos` (TUSS, preparo, salas, quem realiza, preço com vigência, triagem, modelo) · `Convenios-Tabelas` (contrato, tabela, reajuste com segunda pessoa, regras de autorização e auditoria) · `Modelos-Laudo` (editor com versões, frases rápidas, aprovação da responsável técnica) |
+| Particular e agenda | `Orcamento` (desconto com motivo e limite por perfil) · `Lista-Espera` (vagas abertas, sugestão por prioridade, oferta pelo WhatsApp com prazo) |
+| Operação e qualidade | `Contingencia` · `Qualidade` (POPs, não conformidades, eventos adversos/Notivisa, indicadores) · `Revisao-Pares` (RADPEER, confidencial, adendo por quem laudou) · `Gestao-Dose` (RDSR, NRD, justificativa, dose acumulada) · `Ouvidoria` (prazos, LGPD) · `Telemedicina` (CFM 2.314/2022, telelaudo) |
+| Externos e dispositivos | `Portal-Medico` · `Agendamento-Online` · `Checkup-Pacotes` · `Relatorios` (exportação com reautenticação e lastro) · `Estacionamento` (sem câmera/cancela por enquanto) · `Tablet-Sala` |
+
+O menu lateral ganhou os grupos **Cadastros** e **Qualidade e apoio**, com títulos que recolhem (a escolha fica salva).
 
 ## Fora do escopo por enquanto
 
