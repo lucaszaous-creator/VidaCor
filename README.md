@@ -18,6 +18,7 @@ para DICOM) e incluir o **estacionamento com leitura de placa**.
 | Arquitetura e infraestrutura (Rust, on-premises) | 📝 Proposta para revisão — [docs/11](docs/11-arquitetura-e-infraestrutura.md) · [ADRs](docs/adr/) |
 | Observabilidade e SLOs | 📝 Proposta — [docs/12](docs/12-observabilidade-e-metricas.md) |
 | Instalação e distribuição | 📝 Proposta — [docs/13](docs/13-instalacao-e-distribuicao.md) |
+| Regras de arquitetura e engenharia | 📝 Proposta — [docs/14](docs/14-regras-de-arquitetura-e-engenharia.md) |
 | Desenvolvimento | ⏳ Próximo passo — [docs/09](docs/09-proximos-passos.md) |
 
 **Mockup ao vivo:** https://claude.ai/artifact/NT2bm1UnVPJe9NGGs3HTii
@@ -47,6 +48,7 @@ docs/
   11-arquitetura-e-infraestrutura.md  núcleo em Rust, poliglota, servidor local
   12-observabilidade-e-metricas.md    percentis, RED/USE, Web Vitals, SLOs
   13-instalacao-e-distribuicao.md     instaladores do servidor e das estações
+  14-regras-de-arquitetura-e-engenharia.md  princípios, padrões, testes, segurança, fluxo
   adr/                          decisões de arquitetura (ADR-0001 a 0013)
 design/
   mockups/                   fonte das telas (.dc.html) + canvas.json
