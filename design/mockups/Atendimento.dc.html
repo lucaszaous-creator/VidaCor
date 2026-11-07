@@ -10,183 +10,109 @@
 <x-dc>
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style>body{margin:0;background:#F2F3F6}</style>
+<style>
+body{margin:0;background:#F2F3F6}
+.sec{display:flex;flex-direction:column;gap:8px;padding:22px 0;border-bottom:1px solid #F1F3F6}
+.sec:last-of-type{border-bottom:0}
+.sec label{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5B6474}
+.ed{width:100%;border:0;outline:0;resize:vertical;font:400 16px/1.65 Inter,sans-serif;color:#0F172A;background:transparent;padding:0;min-height:52px}
+.ed:focus{background:#FAFBFC;box-shadow:0 0 0 8px #FAFBFC;border-radius:4px}
+.tab{height:44px;padding:0 4px;border:0;background:none;font:500 15px Inter,sans-serif;color:#5B6474;border-bottom:2px solid transparent;cursor:pointer}
+.tab.on{color:#0A1A4A;font-weight:600;border-bottom-color:#0A1A4A}
+.kv{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:6px 0}
+.kv span{color:#5B6474}
+</style>
 </helmet>
 <div class="app" style="font-family: Inter, sans-serif">
   <div class="side"><dc-import name="Sidebar" active="atendimento" userName="Dr. Paulo Medeiros" userRole="Cardiologia" userInitials="PM" hint-size="248px,1400px"></dc-import></div>
   <main class="content">
     <div class="topbar">
-      <div class="crumb"><span>Atendimento médico</span><span aria-hidden="true">›</span><b>Sônia Maria Castro</b></div>
+      <a class="t14 b" href="Agenda-Medico.dc.html">← Minha agenda</a>
       <div class="grow"></div>
-      <span class="chip c-green" style="height: 36px; padding: 0 14px"><span class="d"></span>Em atendimento · 12 min</span>
-      <button class="btn btn-sm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 6h12v12H3zM15 10l6-3v10l-6-3"></path></svg>Teleconsulta</button>
-      <a class="btn btn-sm" href="Paciente.dc.html">Ficha completa</a>
+      <span class="t13 mute">Rascunho salvo às 09:12</span>
+      <a class="btn btn-sm" href="Atendimento.dc.html">Próximo: Antônio C. Ribeiro</a>
     </div>
 
-    <section class="card" aria-label="Paciente em atendimento" style="padding: 20px 22px">
-      <div class="row wrap" style="gap: 18px; align-items: center">
+    <section class="card" aria-label="Paciente em atendimento" style="padding: 20px 24px">
+      <div class="row wrap" style="gap: 16px">
         <span class="av av-lg" style="background: #E8F2FB; color: #0C72B0">SC</span>
         <div style="flex: 1 1 280px; min-width: 0">
-          <h1 style="font-size: 26px; font-weight: 650">Sônia Maria Castro</h1>
-          <div class="t14 mute" style="margin-top: 4px">64 anos · feminino · Unimed 0 000 000000000000 0 · prontuário 0048213</div>
-          <div class="row wrap" style="gap: 8px; margin-top: 10px">
-            <span class="chip c-rose">Alergia: dipirona</span>
-            <span class="chip c-amber">Hipertensa</span>
-            <span class="chip">Losartana 50 mg · 1x/dia</span>
-            <span class="chip">Sinvastatina 20 mg · à noite</span>
-          </div>
+          <h1 style="font-size: 24px; font-weight: 650">Sônia Maria Castro</h1>
+          <div class="t15 mute" style="margin-top: 4px">03/02/1962 · 64 anos · feminino · Unimed</div>
         </div>
-        <div style="display: grid; grid-template-columns: repeat(3, minmax(110px, 1fr)); gap: 10px; flex: 1 1 420px">
-          <div style="background: #F7F8FA; border-radius: 14px; padding: 12px 14px"><div class="lbl">PA</div><div class="num" style="font-size: 22px; font-weight: 650; margin-top: 2px">138/86</div><div class="t12" style="color: #9A5B00; font-weight: 600">Acima da meta</div></div>
-          <div style="background: #F7F8FA; border-radius: 14px; padding: 12px 14px"><div class="lbl">FC</div><div class="num" style="font-size: 22px; font-weight: 650; margin-top: 2px">72 <small class="t13 mute">bpm</small></div><div class="t12 mute">Regular</div></div>
-          <div style="background: #F7F8FA; border-radius: 14px; padding: 12px 14px"><div class="lbl">SpO₂</div><div class="num" style="font-size: 22px; font-weight: 650; margin-top: 2px">97%</div><div class="t12 mute">Ar ambiente</div></div>
-          <div style="background: #F7F8FA; border-radius: 14px; padding: 12px 14px"><div class="lbl">Peso</div><div class="num" style="font-size: 22px; font-weight: 650; margin-top: 2px">71 <small class="t13 mute">kg</small></div><div class="t12 mute">−2 kg em 6 meses</div></div>
-          <div style="background: #F7F8FA; border-radius: 14px; padding: 12px 14px"><div class="lbl">Altura</div><div class="num" style="font-size: 22px; font-weight: 650; margin-top: 2px">1,62 <small class="t13 mute">m</small></div><div class="t12 mute">Aferido hoje</div></div>
-          <div style="background: #F7F8FA; border-radius: 14px; padding: 12px 14px"><div class="lbl">IMC</div><div class="num" style="font-size: 22px; font-weight: 650; margin-top: 2px">27,1</div><div class="t12" style="color: #9A5B00; font-weight: 600">Sobrepeso</div></div>
+        <div class="row wrap" style="gap: 8px">
+          <span class="chip c-rose">Alergia: iodo</span>
+          <span class="chip c-amber">Hipertensa · losartana 50 mg</span>
         </div>
+      </div>
+      <div class="row wrap t14 mute" style="gap: 22px; margin-top: 16px; padding-top: 14px; border-top: 1px solid #F1F3F6">
+        <span>PA <b style="color: #0F172A">138/86</b></span>
+        <span>FC <b style="color: #0F172A">72</b></span>
+        <span>SpO₂ <b style="color: #0F172A">97%</b></span>
+        <span>Peso <b style="color: #0F172A">68 kg</b> · Altura <b style="color: #0F172A">1,62 m</b> · IMC <b style="color: #0F172A">25,9</b></span>
       </div>
     </section>
 
+    <nav class="row" aria-label="Seções do atendimento" style="gap: 26px; padding: 0 8px; border-bottom: 1px solid #E3E7ED">
+      <button class="tab on" aria-current="page">Evolução</button>
+      <button class="tab">Anamnese</button>
+      <button class="tab">Prescrição</button>
+      <button class="tab">Pedidos</button>
+      <button class="tab">Documentos</button>
+      <button class="tab">Histórico</button>
+    </nav>
+
     <div class="split">
-      <aside class="card" aria-labelledby="dia-h" style="flex: 0 1 300px; min-width: 260px; padding: 18px">
-        <div class="card-h" style="margin-bottom: 8px"><div><h2 id="dia-h" style="font-size: 17px">Meu dia</h2><div class="sub">8 consultas · 6 exames</div></div></div>
-        <div class="seg" style="margin-bottom: 10px"><button class="on" style="height: 34px; padding: 0 12px">Todos</button><button style="height: 34px; padding: 0 12px">Consultas</button><button style="height: 34px; padding: 0 12px">Exames</button></div>
-        <a class="li" href="Atendimento.dc.html" style="text-decoration: none; background: #E8F2FB; border-radius: 12px; padding: 10px 12px; border: 0; margin-bottom: 4px"><span class="num t13 b" style="width: 42px; color: #0A1A4A">08:40</span><div style="flex: 1; min-width: 0"><div class="t clamp1" style="font-size: 14px">Sônia Maria Castro</div><div class="s">Retorno · resultado de eco</div></div></a>
-        <a class="li" href="Atendimento.dc.html" style="text-decoration: none; padding: 10px 12px"><span class="num t13 b" style="width: 42px; color: #0A1A4A">09:00</span><div style="flex: 1; min-width: 0"><div class="t clamp1" style="font-size: 14px">Antônio Carlos Ribeiro</div><div class="s">Eco + Doppler · aguardando</div></div><span class="chip c-amber" style="height: 22px; font-size: 12px">19 min</span></a>
-        <a class="li" href="Atendimento.dc.html" style="text-decoration: none; padding: 10px 12px"><span class="num t13 b" style="width: 42px; color: #0A1A4A">09:30</span><div style="flex: 1; min-width: 0"><div class="t clamp1" style="font-size: 14px">Cláudia B. Nunes</div><div class="s">Primeira consulta · Unimed</div></div></a>
-        <a class="li" href="Atendimento.dc.html" style="text-decoration: none; padding: 10px 12px"><span class="num t13 b" style="width: 42px; color: #0A1A4A">10:00</span><div style="flex: 1; min-width: 0"><div class="t clamp1" style="font-size: 14px">Gustavo H. Pires</div><div class="s">Teste ergométrico</div></div></a>
-        <a class="li" href="Atendimento.dc.html" style="text-decoration: none; padding: 10px 12px"><span class="num t13 b" style="width: 42px; color: #0A1A4A">10:30</span><div style="flex: 1; min-width: 0"><div class="t clamp1" style="font-size: 14px">Hélio T. Mendes</div><div class="s">Teleconsulta · resultado</div></div><span class="chip c-blue" style="height: 22px; font-size: 12px">Vídeo</span></a>
-        <a class="li" href="Atendimento.dc.html" style="text-decoration: none; padding: 10px 12px"><span class="num t13 b" style="width: 42px; color: #0A1A4A">11:00</span><div style="flex: 1; min-width: 0"><div class="t clamp1" style="font-size: 14px">Simone A. Reis</div><div class="s">Retorno · MAPA 24 h</div></div></a>
-        <div class="sep" style="margin: 12px 0"></div>
-        <div class="lbl" style="margin-bottom: 8px">Prontuários em aberto</div>
-        <div class="row t14" style="justify-content: space-between"><span>Evoluções sem assinatura</span><span class="chip c-rose">2</span></div>
-        <div class="row t14" style="justify-content: space-between; margin-top: 8px"><span>Laudos para liberar</span><a class="chip c-violet" href="Laudo.dc.html">11</a></div>
-      </aside>
-
-      <section class="card" aria-label="Registro do atendimento" style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
-        <div class="seg" role="tablist" aria-label="Seções do atendimento">
-          <button role="tab" aria-selected="false">Anamnese</button>
-          <button role="tab" aria-selected="true" class="on">Evolução (SOAP)</button>
-          <button role="tab" aria-selected="false">Exame físico</button>
-          <button role="tab" aria-selected="false">Hipóteses e CID-10</button>
-          <button role="tab" aria-selected="false">Prescrição</button>
-          <button role="tab" aria-selected="false">Pedidos de exame</button>
-          <button role="tab" aria-selected="false">Documentos</button>
-          <a href="Laudo.dc.html" role="tab" aria-selected="false">Laudo</a>
+      <section class="card main" aria-label="Evolução" style="padding: 8px 32px 20px">
+        <div class="row" style="padding-top: 16px">
+          <button class="btn btn-sm btn-g" style="padding-left: 0">Modelo: retorno cardiológico <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+          <div class="grow"></div>
+          <button class="btn btn-sm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg>Ditar</button>
         </div>
-
-        <div class="row wrap" style="gap: 10px">
-          <label class="field" style="flex: 1 1 260px">Modelo
-            <select class="in"><option>Retorno cardiológico — hipertensão</option></select>
-          </label>
-          <button class="btn" style="align-self: flex-end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg>Ditar (F9)</button>
-          <button class="btn" style="align-self: flex-end">Copiar da última evolução</button>
+        <div class="sec">
+          <label for="s">Subjetivo</label>
+          <textarea id="s" class="ed" rows="2">Retorno para avaliar o ecocardiograma. Nega dor torácica e dispneia. Refere boa adesão à losartana.</textarea>
         </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 16px">
-          <label class="field" style="color: #0F172A; font-size: 14px">S · Subjetivo
-            <textarea class="in" rows="5">Retorna para mostrar ecocardiograma. Refere cansaço aos grandes esforços há 3 meses, sem dor torácica, sem dispneia paroxística noturna. Nega palpitações. Boa adesão à losartana; esquece a sinvastatina 2 a 3 vezes por semana.</textarea>
-          </label>
-          <label class="field" style="color: #0F172A; font-size: 14px">O · Objetivo
-            <textarea class="in" rows="5">PA 138/86 mmHg (braço esquerdo, sentada), FC 72 bpm regular. Ausculta cardíaca: ritmo regular, bulhas normofonéticas, sem sopros. Sem edema de membros inferiores. Eco 06/11: FE 66%, disfunção diastólica grau I.</textarea>
-          </label>
-          <label class="field" style="color: #0F172A; font-size: 14px">A · Avaliação
-            <textarea class="in" rows="4">Hipertensão arterial sistêmica fora da meta. Disfunção diastólica grau I, compatível com a idade e a HAS. Placa carotídea à esquerda &lt; 50%, sem repercussão hemodinâmica.</textarea>
-          </label>
-          <label class="field" style="color: #0F172A; font-size: 14px">P · Plano
-            <textarea class="in" rows="4">Aumentar losartana para 50 mg 12/12 h. Reforçar adesão à estatina. MAPA 24 h em 30 dias. Retorno com MAPA e perfil lipídico.</textarea>
-          </label>
+        <div class="sec">
+          <label for="o">Objetivo</label>
+          <textarea id="o" class="ed" rows="2">Bom estado geral. Ausculta cardíaca com ritmo regular, sem sopros. Eco de hoje: FE 66%, disfunção diastólica grau I.</textarea>
         </div>
-
-        <div class="row wrap" style="gap: 8px" aria-label="Frases rápidas">
-          <span class="lbl" style="margin-right: 4px">Frases</span>
-          <button class="chip" style="border: 0; cursor: pointer; height: 32px">+ Sem queixas novas</button>
-          <button class="chip" style="border: 0; cursor: pointer; height: 32px">+ Orientada sobre dieta hipossódica</button>
-          <button class="chip" style="border: 0; cursor: pointer; height: 32px">+ Atividade física 150 min/semana</button>
-          <button class="chip" style="border: 0; cursor: pointer; height: 32px">+ Sinais de alarme explicados</button>
+        <div class="sec">
+          <label for="a">Avaliação</label>
+          <textarea id="a" class="ed" rows="2">Hipertensão arterial controlada. Disfunção diastólica leve, compatível com a idade e a hipertensão.</textarea>
+          <div class="row wrap" style="gap: 8px; margin-top: 4px"><span class="chip">I10 · Hipertensão essencial</span><button class="btn btn-g btn-sm" style="min-height: 26px; padding: 0 6px">+ CID</button></div>
         </div>
-
-        <div style="border-top: 1px solid #E8EAEF; padding-top: 16px">
-          <div class="row wrap" style="gap: 10px; margin-bottom: 10px"><h3 style="font-size: 16px; font-weight: 600">Hipóteses e CID-10</h3>
-            <label class="search" style="flex: 1 1 260px; min-height: 40px"><span class="sr">Buscar CID-10</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><input placeholder="Buscar por código ou nome"></label>
-          </div>
-          <div class="row wrap" style="gap: 8px">
-            <span class="chip c-navy" style="height: 32px">I10 · Hipertensão essencial (primária) · principal</span>
-            <span class="chip c-blue" style="height: 32px">I51.8 · Outras doenças cardíacas mal definidas</span>
-            <span class="chip c-blue" style="height: 32px">I65.2 · Oclusão e estenose da artéria carótida</span>
-            <span class="chip c-blue" style="height: 32px">E78.5 · Hiperlipidemia não especificada</span>
-          </div>
+        <div class="sec">
+          <label for="p">Plano</label>
+          <textarea id="p" class="ed" rows="2">Manter losartana. Doppler de carótidas em 12 meses. Retorno em 6 meses.</textarea>
         </div>
-
-        <div class="split" style="gap: 16px">
-          <section aria-labelledby="rx-h" style="flex: 1 1 380px; min-width: 0; background: #F7F8FA; border-radius: 18px; padding: 18px">
-            <div class="row" style="margin-bottom: 10px"><h3 id="rx-h" style="font-size: 16px; font-weight: 600">Prescrição</h3><span class="chip" style="margin-left: auto">Integrada à Memed</span></div>
-            <div style="background: #fff; border-radius: 14px; padding: 12px 14px; margin-bottom: 8px"><div class="b t15">Losartana potássica 50 mg</div><div class="t13 mute">1 comprimido de 12 em 12 horas · uso contínuo</div></div>
-            <div style="background: #fff; border-radius: 14px; padding: 12px 14px; margin-bottom: 8px"><div class="b t15">Sinvastatina 20 mg</div><div class="t13 mute">1 comprimido à noite · uso contínuo</div></div>
-            <div role="note" style="background: #FFF3DF; color: #6B3E00; border-radius: 12px; padding: 10px 12px; font-size: 13px; line-height: 1.45"><b>Checagem automática:</b> sem interação entre os itens. Alergia registrada a dipirona: nenhum item contém o princípio ativo.</div>
-            <div class="row wrap" style="gap: 8px; margin-top: 12px"><button class="btn btn-sm">+ Medicamento</button><button class="btn btn-sm">Receita de controle especial</button></div>
-          </section>
-          <section aria-labelledby="ped-h" style="flex: 1 1 380px; min-width: 0; background: #F7F8FA; border-radius: 18px; padding: 18px">
-            <div class="row" style="margin-bottom: 10px"><h3 id="ped-h" style="font-size: 16px; font-weight: 600">Pedidos de exame</h3><span class="chip c-green" style="margin-left: auto">Guia SP/SADT gerada</span></div>
-            <div class="li" style="padding: 10px 0"><div style="flex: 1"><div class="t" style="font-size: 14px">MAPA 24 horas</div><div class="s">TUSS 20102071 · agendar em 30 dias</div></div><span class="chip c-blue">Agendar</span></div>
-            <div class="li" style="padding: 10px 0"><div style="flex: 1"><div class="t" style="font-size: 14px">Perfil lipídico completo</div><div class="s">TUSS 40301630 · laboratório externo</div></div><span class="chip">Externo</span></div>
-            <label class="field" style="margin-top: 10px">Justificativa clínica (vai para a guia)<input class="in" value="HAS fora da meta em uso de BRA; avaliar controle pressórico ambulatorial."></label>
-          </section>
-        </div>
-
-        <section aria-labelledby="doc-h" style="border-top: 1px solid #E8EAEF; padding-top: 16px">
-          <div class="row wrap" style="gap: 10px; margin-bottom: 12px"><h3 id="doc-h" style="font-size: 16px; font-weight: 600">Documentos do atendimento</h3><span class="t13 mute">Assinados com certificado ICP-Brasil · vão para o portal da paciente</span></div>
-          <div class="row wrap" style="gap: 10px">
-            <button class="btn btn-sm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6v18h12V7zM14 3v4h4"></path></svg>Atestado</button>
-            <button class="btn btn-sm">Declaração de comparecimento</button>
-            <button class="btn btn-sm">Relatório médico</button>
-            <button class="btn btn-sm">Encaminhamento</button>
-            <button class="btn btn-sm">Orientações ao paciente</button>
-          </div>
-        </section>
       </section>
 
-      <aside style="flex: 1 1 340px; min-width: 300px; max-width: 420px; display: flex; flex-direction: column; gap: 16px">
-        <section class="anat" aria-labelledby="an-h" style="padding: 16px">
-          <div class="row" style="margin-bottom: 8px"><h2 id="an-h" style="font-size: 16px; font-weight: 600; color: #fff">Achados no corpo</h2><span class="t12" style="margin-left: auto; color: #AFC0DD">Foco cardiológico</span></div>
-          <div style="position: relative">
-            <img class="body" src="/_blob/440bf98f7ba26535c5586a4be32ac7c4" alt="Modelo anatômico do tronco com coração, aorta e carótidas em destaque">
-            <button class="hs" aria-label="Coração: eco de 06/11, fração de ejeção 66%" style="left: 55.1%; top: 50%"></button>
-            <div class="hs-lb" style="left: 62%; top: 44%"><b>Coração</b><br>Eco 06/11 · FE 66%</div>
-            <button class="hs warn" aria-label="Carótidas: placa menor que 50% à esquerda" style="left: 51.1%; top: 32.9%"></button>
-            <div class="hs-lb" style="left: 4%; top: 22%"><b style="color: #C2334D">Carótidas</b><br>Placa &lt; 50% à esq.</div>
-          </div>
-          <div class="row wrap" style="gap: 6px; margin-top: 8px"><button class="tool">Corpo inteiro</button><button class="tool on">Cardio</button><button class="tool">Abdome</button></div>
-          <p class="t12" style="margin: 10px 0 0; color: #AFC0DD">Modelo anatômico: BodyParts3D © DBCLS (CC BY-SA 2.1 JP)</p>
+      <aside class="aside col" style="gap: 16px; flex: 0 1 320px; min-width: 300px">
+        <section class="card" aria-labelledby="ex-h">
+          <h2 id="ex-h" style="font-size: 16px; font-weight: 600; margin-bottom: 8px">Exames recentes</h2>
+          <div class="kv"><span>Eco · hoje</span><b>FE 66%</b></div>
+          <div class="kv"><span>Doppler carótidas · 03/2025</span><b>placa &lt; 50% esq.</b></div>
+          <div class="kv"><span>Eco · 03/2025</span><b>FE 64%</b></div>
+          <a class="t14 b" href="Paciente.dc.html" style="display: inline-block; margin-top: 8px">Ver no mapa do corpo</a>
         </section>
-
-        <section class="card" aria-labelledby="res-h">
-          <div class="card-h" style="margin-bottom: 8px"><h2 id="res-h" style="font-size: 16px">Resultados recentes</h2></div>
-          <div class="li"><span class="dimg" style="width: 56px; height: 44px"><img src="/_blob/06906023f41361ed5100eedae375c38d" alt=""></span><div style="flex: 1; min-width: 0"><div class="t" style="font-size: 14px">Ecocardiograma · 06/11</div><div class="s">FE 66% · disfunção diastólica grau I</div></div></div>
-          <div class="li"><span class="dimg" style="width: 56px; height: 44px"><img src="/_blob/5d5abc0e3f9103b34da8cedf87fc15b2" alt=""></span><div style="flex: 1; min-width: 0"><div class="t" style="font-size: 14px">Doppler de carótidas · 06/11</div><div class="s" style="color: #C2334D">Placa &lt; 50% à esquerda</div></div></div>
-          <div class="li"><span class="dimg" style="width: 56px; height: 44px"><img src="/_blob/b397e8ff60e8605ce0897e61b093b786" alt=""></span><div style="flex: 1; min-width: 0"><div class="t" style="font-size: 14px">RM de abdome · 22/04</div><div class="s">Sem alterações relevantes</div></div></div>
-        </section>
-
-        <section class="card" aria-labelledby="tl-h">
-          <div class="card-h" style="margin-bottom: 8px"><h2 id="tl-h" style="font-size: 16px">Evoluções anteriores</h2></div>
-          <div class="li"><div style="flex: 1"><div class="t" style="font-size: 14px">14/03/2025 · Dr. Paulo</div><div class="s">HAS controlada. Mantida losartana 50 mg/dia.</div></div></div>
-          <div class="li"><div style="flex: 1"><div class="t" style="font-size: 14px">02/09/2024 · Dr. Paulo</div><div class="s">Primeira consulta. Iniciada estatina.</div></div></div>
-          <div class="li"><div style="flex: 1"><div class="t" style="font-size: 14px">02/09/2024 · versão 2</div><div class="s">Correção de dose · motivo registrado</div></div></div>
+        <section class="card" aria-labelledby="ev-h">
+          <h2 id="ev-h" style="font-size: 16px; font-weight: 600; margin-bottom: 8px">Evoluções anteriores</h2>
+          <div class="kv"><span>14/03/2025 · Dr. Paulo</span><a class="b" href="Atendimento.dc.html">Abrir</a></div>
+          <div class="kv"><span>02/09/2024 · Dr. Paulo</span><a class="b" href="Atendimento.dc.html">Abrir</a></div>
         </section>
       </aside>
     </div>
 
-    <div class="row wrap" style="gap: 12px; background: #FFFFFF; border-radius: 18px; padding: 14px 18px; box-shadow: 0 1px 2px rgba(15,23,42,.04)">
-      <span class="t14 mute" style="flex: 1 1 360px">Ao finalizar, a evolução é assinada e bloqueada. Uma correção vira nova versão, com o motivo registrado.</span>
+    <div class="row wrap" style="gap: 12px; background: #FFFFFF; border-radius: 18px; padding: 14px 20px; box-shadow: 0 1px 2px rgba(15,23,42,.05)">
+      <span class="t14 mute" style="flex: 1 1 300px">Ao finalizar, a evolução é assinada e fica bloqueada. Correções viram nova versão com motivo.</span>
       <button class="btn">Salvar rascunho</button>
-      <button class="btn">Imprimir e enviar ao portal</button>
-      <button class="btn btn-p"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"></path><path d="M8.5 12l2.5 2.5 4.5-5"></path></svg>Finalizar atendimento</button>
+      <button class="btn btn-p">Finalizar e assinar</button>
     </div>
-    <p class="t12 mute" style="margin: 0 8px">Mockup · dados fictícios · textos clínicos ilustrativos</p>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
 class Component extends DCLogic {
   renderVals() { return {}; }
 }
