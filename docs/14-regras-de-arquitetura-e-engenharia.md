@@ -3,10 +3,25 @@
 > **Status:** proposta (v0.1, nov/2026). Consolida as regras que valem para
 > todo o código do VidaCor. Complementa a [11](11-arquitetura-e-infraestrutura.md)
 > (arquitetura), a [12](12-observabilidade-e-metricas.md) (métricas) e a
-> [13](13-instalacao-e-distribuicao.md) (instalação). As seis garantias obrigatórias (servidor decide, banco protege, idempotência,
-> testes reais, camadas, plano antes) estão em [15](15-padrao-de-qualidade.md) e no
+> [13](13-instalacao-e-distribuicao.md) (instalação). A **Parte 0** traz as seis garantias obrigatórias; os exemplos completos e o
+> checklist de PR estão em [15](15-padrao-de-qualidade.md) e o resumo no
 > [CLAUDE.md](../CLAUDE.md). Regras marcadas com
 > **[CI]** são verificadas automaticamente: o merge não acontece se falharem.
+
+---
+
+## Parte 0 — As seis garantias (obrigatórias, acima de qualquer outra regra)
+
+| # | Garantia | Regra | Playbook |
+|---|---|---|---|
+| **G1** | **O servidor decide; o cliente só pede** | Preço, desconto, cortesia, valor de guia, permissão, perfil e limite são calculados e validados no núcleo; valores vindos da tela são ignorados e recalculados. Nenhum segredo em código de tela ou variável do navegador (`VITE_*`, Tauri). Banco nunca exposto diretamente; RLS por paciente no portal | [/seguranca](playbooks/seguranca.md) |
+| **G2** | **Concorrência se resolve no banco** | Todo "ler, decidir, gravar" sobre recurso limitado é protegido no PostgreSQL, nesta ordem: constraint única → operação atômica (`UPDATE … WHERE condição`, conferindo linhas) → `SELECT … FOR UPDATE`. Proibido lock em memória, Redis com expiração ou cache como proteção (só com ADR). Teste com 2 requisições simultâneas | [/condicao-de-corrida](playbooks/condicao-de-corrida.md) |
+| **G3** | **Repetir não duplica** | Webhooks: assinatura verificada no corpo bruto, ID do evento gravado com chave única **antes** de agir, independência da ordem, 2xx rápido + outbox. Chamadas a provedores com chave de idempotência por operação. Rotas de escrita aceitam `Idempotency-Key`. Nunca dado pessoal como chave | [/idempotencia](playbooks/idempotencia.md) |
+| **G4** | **Teste de integração de verdade** | Rota HTTP real, PostgreSQL real de teste, mock só de terceiros. Cobre caminho feliz, erros, repetição, limites e acesso indevido. Frases aprovadas pelo dono antes. Proibido apagar, pular ou afrouxar teste; bug real fica falhando e vai para [bugs.md](bugs.md). Comando único `just test` | [/testes-integracao](playbooks/testes-integracao.md) |
+| **G5** | **Camadas separadas** | Tela sem regra; domínio sem I/O; adaptadores na borda. 400 linhas = revisão, 600 = justificar ou dividir. Refatoração sem mudar comportamento, com testes de caracterização | [/refatoracao-segura](playbooks/refatoracao-segura.md) |
+| **G6** | **Plano antes, alteração depois** | Auditoria só lê. Correção começa por plano e espera o OK do dono. Migration revisada por pessoa; nada apagado sozinho; nenhuma proteção desligada para "fazer funcionar". O que não deu para verificar é escrito como "não verificado" | [/auditoria](playbooks/auditoria.md) |
+
+As Partes A e B abaixo detalham **como** cumprir essas garantias e o resto da engenharia.
 
 ---
 
@@ -27,7 +42,8 @@
 - **Transações curtas**; nada de chamada externa dentro de transação de banco.
 - **Outbox transacional** para todo evento que sai do núcleo.
 - **Sagas** (passos com compensação) para fluxos longos, como check-in → guia → cobrança → exame.
-- **Idempotência** em toda operação que pode ser repetida: chave `Idempotency-Key` nas APIs de escrita e deduplicação nos consumidores.
+- **Idempotência** em toda operação que pode ser repetida: chave `Idempotency-Key` nas APIs de escrita e deduplicação nos consumidores (**G3**).
+- **Recursos limitados** (horário de sala, senha, caixa, lote de estoque, número de guia, convite, versão de laudo) protegidos no banco por constraint única, operação atômica ou `FOR UPDATE`, nunca por lock em memória (**G2**).
 - **Concorrência otimista** (coluna de versão) em agregados editados por mais de uma pessoa (agenda, caixa).
 - Restrições no banco (FK, `CHECK`, `UNIQUE`, `NOT NULL`) reforçam as invariantes do domínio. O banco nunca depende só do código.
 
@@ -85,6 +101,7 @@
 - Referência de verificação: **OWASP ASVS nível 2** (nível 3 para autenticação, auditoria e assinatura).
 - **Menor privilégio** em tudo: usuários, serviços, banco (um papel por módulo), rede (VLANs).
 - **Confiança zero na rede interna**: TLS e autenticação também entre serviços locais.
+- **Regra no servidor** (**G1**): nada de preço, desconto, permissão ou limite decidido só na tela.
 - **Classificação de dados**: público · interno · pessoal · **saúde (sensível)**. Dado de saúde nunca em log, métrica, URL ou cache do navegador.
 - Segredos só no cofre (SOPS/age); nunca no código ou em imagem **[CI: varredura de segredos]**.
 
@@ -110,6 +127,7 @@
 5. Documentação atualizada (OpenAPI, ADR/RFC, manual do usuário se mudou tela).
 6. Migração reversível ou plano de contorno documentado.
 7. *Feature flag* definida, quando aplicável.
+8. Checklist das seis garantias (G1–G6) do [docs/15](15-padrao-de-qualidade.md#checklist-do-pull-request) marcado no PR.
 
 ### B3. Regras de código por linguagem
 | Linguagem | Regras |
@@ -125,6 +143,7 @@ Gerais: nomes descritivos no idioma do domínio (pt-BR para o negócio, inglês 
 ### B4. Testes
 | Tipo | Regra |
 |---|---|
+| **Estilo request spec (G4)** | Fluxo crítico testado na rota HTTP real com banco real; mock só de terceiros; casos feliz, erro, repetição, limite e acesso indevido; proibido pular ou afrouxar teste |
 | **Pirâmide** | Muitos testes de unidade (domínio), testes de integração com Testcontainers (PostgreSQL, Orthanc, NATS) e poucos testes ponta a ponta (Playwright) nas jornadas principais |
 | **Cobertura** | Mínimo de **80%** nos crates de domínio e **90%** em laudos, faturamento, caixa e assinatura **[CI]** |
 | **Testes de mutação** | `cargo-mutants` nos módulos críticos, para provar que os testes pegam erro de verdade |
@@ -146,6 +165,7 @@ Gerais: nomes descritivos no idioma do domínio (pt-BR para o negócio, inglês 
 ### B6. Uso de assistentes de IA no código
 - Permitido como ferramenta, **com as mesmas regras de qualquer código**: revisão humana, testes, lint e cobertura.
 - Quem abre o PR é responsável pelo código, inclusive pelo que foi gerado.
+- Assistentes seguem o [CLAUDE.md](../CLAUDE.md) e os [playbooks](playbooks/): auditoria só lê, correção só depois de plano aprovado (**G6**).
 - Proibido colar dados de pacientes, segredos ou código sensível em ferramentas externas sem contrato que garanta a privacidade.
 
 ### B7. Documentação como código
