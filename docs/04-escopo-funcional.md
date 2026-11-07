@@ -16,6 +16,8 @@ pedido do cliente (Cliente) ou se é proposta nossa (Nova).
 | **Explorador de lastro** (`Lastro`) | Busca por qualquer código, cadeia completa do atendimento, metadados por registro, dossiê assinado | Nova |
 | **Etiquetas e rastreio** (`Etiquetas`) | Pulseira, exame, seringa, MAPA e envelope; código único; bipe na sala com bloqueio de divergência; reimpressão com motivo que invalida a anterior; lastro de eventos; impressoras por local | MW (etiquetas) + Nova |
 | **Paciente 360º** (`Paciente`) | Cadastro, alertas e alergias, **mapa anatômico realista** com exames por região, linha do tempo com imagens, evolução de medidas, documentos, financeiro, consentimentos LGPD, auditoria, acesso ao portal | MW + Cliente + Nova |
+| **Cadastro de paciente** (`Cadastro-Paciente`) | Busca de possível duplicado antes de criar (nome + nascimento parecido), mínimo para agendar e o que falta para o check-in, leitura de documento/carteirinha, nome social, nome da mãe, responsável legal, CPF validado, CEP, convênio com elegibilidade, alergias e itens de segurança, acessibilidade, consentimentos LGPD separados e convite do portal; correção de nome/nascimento com motivo invalida etiquetas | Medware |
+| **Corpo clínico** (`Corpo-Clinico`) | CRM consultado no CFM, RQE, certificado ICP-Brasil com aviso de vencimento, o que cada médico realiza/lauda/revisa por exame, escala e bloqueios, regras de repasse com versão, histórico; médico novo e mudanças só valem após segunda conferência; cadastro de médicos solicitantes | Medware |
 | **TV de chamada** (`Telao`) | Senha e sala atuais, últimas chamadas, nome abreviado (privacidade), mensagens | MW |
 
 ## Atendimento, exames e imagens
@@ -55,6 +57,34 @@ pedido do cliente (Cliente) ou se é proposta nossa (Nova).
 Laudo A4 com timbrado, assinatura ICP-Brasil e QR de validação · Comprovante e
 preparo com QR para check-in · Atestado de comparecimento · Recibo · Etiquetas
 de identificação.
+
+## Telas que ainda não existem (inventário de 07/11/2026)
+Prioridade: 🔴 antes do MVP · 🟠 logo após · 🟢 futuro.
+
+| Prio | Tela | Por que falta |
+|---|---|---|
+| 🔴 | **Entrar no sistema** (login, 2 fatores, troca de unidade, bloqueio de tela, sessão expirada) | Porta de entrada; regras no docs/17 |
+| 🔴 | **Lista e busca de pacientes** | "Pacientes" abre direto uma ficha; falta a lista com filtros |
+| 🔴 | **Busca global Ctrl K** (pacientes, exames, guias, etiquetas e ações) | Aparece desenhada, sem tela |
+| 🔴 | **Cadastro de exames e procedimentos** (TUSS, duração, sala, aparelho, preparo, preço por convênio, quem realiza) | Agenda, caixa e faturamento dependem dele |
+| 🔴 | **Convênios e tabelas** (contratos, tabelas negociadas, reajustes, regras por operadora) | Item I6 do docs/22; alimenta autorização e auditoria |
+| 🔴 | **Usuários, perfis e permissões** (tela própria, com segunda pessoa para perfil clínico) | Hoje é um bloco em Configurações; regras no docs/18 |
+| 🔴 | **Modelos de laudo e frases** (editor, versões, por médico e por exame) | O laudo usa modelos que ainda não têm onde ser mantidos |
+| 🔴 | **Orçamento do particular** | Citado no Medware, sem tela |
+| 🔴 | **Lista de espera e encaixe** | Pedido comum da recepção |
+| 🔴 | **Contingência** (agenda do dia em PDF, lançamento posterior, conciliação) | Item E6 do docs/22 |
+| 🟠 | **Preferências do usuário** (densidade, letra, modo escuro no laudo, colunas salvas) | Pedido de UX |
+| 🟠 | **Telas em tablet (sala) e celular (médico)** | Hoje só há as de computador e os apps |
+| 🟠 | **Portal do médico solicitante** | Item I5 do docs/22 |
+| 🟠 | **Qualidade: POPs, não conformidades, eventos adversos (Notivisa)** | Item I1 |
+| 🟠 | **Revisão por pares dos laudos** | Item I2 |
+| 🟠 | **Gestão de dose** | Item I4 |
+| 🟠 | **Check-up e pacotes** | Item I7 |
+| 🟠 | **Ouvidoria / SAC** | Item I9 |
+| 🟠 | **Relatórios e exportação** (com reautenticação, docs/17) | Indicadores mostram, mas não exportam |
+| 🟢 | **Estacionamento** (entrada, saída, cobrança, vínculo com o paciente) | Câmera/cancela deixadas para depois pelo dono do produto |
+| 🟢 | **Agendamento online público** (site) | Hoje só pelo portal e WhatsApp |
+| 🟢 | **Telemedicina como tela própria** | Hoje dentro de Comunicação |
 
 ## Fora do escopo por enquanto
 
