@@ -14,7 +14,7 @@ para DICOM) e incluir o **estacionamento com leitura de placa**.
 | Pesquisa do estacionamento com leitura de placa | ✅ Feita — [docs/02](docs/02-estacionamento-leitura-de-placa.md) |
 | Escopo funcional (todas as funções atuais + novas) | ✅ Primeira versão — [docs/04](docs/04-escopo-funcional.md) |
 | Design system | ✅ Primeira versão — [docs/05](docs/05-design-system.md) |
-| Mockups navegáveis (31 telas) | ✅ Terceira rodada aprovada — [docs/06](docs/06-mockups.md) |
+| Mockups navegáveis (33 telas) | ✅ Terceira rodada aprovada — [docs/06](docs/06-mockups.md) |
 | Arquitetura e infraestrutura (Rust, on-premises) | 📝 Proposta para revisão — [docs/11](docs/11-arquitetura-e-infraestrutura.md) · [ADRs](docs/adr/) |
 | Observabilidade e SLOs | 📝 Proposta — [docs/12](docs/12-observabilidade-e-metricas.md) |
 | Instalação e distribuição | 📝 Proposta — [docs/13](docs/13-instalacao-e-distribuicao.md) |
@@ -23,6 +23,7 @@ para DICOM) e incluir o **estacionamento com leitura de placa**.
 | Proteção do usuário (processo + interface) | ✅ Regra — [docs/16](docs/16-protecao-do-usuario.md) · [modelos](docs/modelos/) |
 | Segurança por classe de ataque (Cloudflare) | ✅ Regra — [docs/17](docs/17-seguranca-por-classe-de-ataque.md) · `/security-audit` |
 | Perfis, permissões e RLS | 📝 Proposta para validar — [docs/18](docs/18-perfis-permissoes-e-rls.md) |
+| Lastro e rastreabilidade | ✅ Regra — [docs/21](docs/21-lastro-e-rastreabilidade.md) |
 | Desenvolvimento | ⏳ Próximo passo — [docs/09](docs/09-proximos-passos.md) |
 
 **Mockup ao vivo:** https://claude.ai/artifact/NT2bm1UnVPJe9NGGs3HTii
@@ -63,6 +64,7 @@ docs/
   18-perfis-permissoes-e-rls.md quem vê e faz o quê; RLS no PostgreSQL
   19-menu-de-contexto.md        clique direito: regras e catálogo por objeto
   20-etiquetas-e-rastreio.md    tipos de etiqueta, o que imprimir e o lastro
+  21-lastro-e-rastreabilidade.md  metadados, cadeia do atendimento, guia obrigatória, 16 domínios
   modelos/                      design, riscos clínicos, rastreabilidade, prontidão, pós-incidente
   playbooks/                    auditoria, testes, refatoração, segurança, idempotência, corrida
   bugs.md                       bugs encontrados por testes

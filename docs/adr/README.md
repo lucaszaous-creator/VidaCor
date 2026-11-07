@@ -20,5 +20,6 @@
 | [0015](0015-protecao-do-usuario.md) | Proteção do usuário: a cerca e a rede de segurança | Proposto |
 | [0016](0016-seguranca-por-classe-de-ataque.md) | Segurança por classe de ataque (Cloudflare security-audit) | Proposto |
 | [0017](0017-permissoes-e-rls.md) | Permissões em três camadas (perfil, contexto e RLS) | Proposto |
+| [0018](0018-lastro-e-rastreabilidade.md) | Lastro e rastreabilidade em todo registro | Proposto |
 
 Visão geral em [11 · Arquitetura e infraestrutura](../11-arquitetura-e-infraestrutura.md).

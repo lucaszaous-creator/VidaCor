@@ -89,6 +89,13 @@ Baseado na skill **Cloudflare security-audit** (instalada em `.claude/skills/sec
 - **TI sem dado clínico**; separação de funções (quem pede estorno não aprova; perfil clínico novo exige segunda pessoa).
 - Toda política RLS tem teste de autorizado e não autorizado; proibido `USING (true)`, `BYPASSRLS` nos papéis da aplicação e `SET` de sessão para contexto.
 
+## Lastro e rastreabilidade (obrigatório) — [docs/21](docs/21-lastro-e-rastreabilidade.md)
+- **Nada existe solto:** todo registro tem `id` (UUIDv7 + código legível), criador, origem/canal, estação, unidade, versão, correlação, ligações tipadas, hash de arquivos, versão da regra aplicada e motivo quando há correção.
+- **Eventos imutáveis** (append-only, hash encadeado) por domínio; nada é apagado.
+- **Convênio só com guia autorizada:** o agendamento de convênio exige a seção da guia (carteirinha, nº da guia, senha, validade, TUSS autorizados e saldo, solicitante, anexos) com conferências automáticas; a guia é consumida de forma atômica e não pode ser usada por dois atendimentos; sem guia, só reserva provisória com prazo.
+- Rastrear também: worklist/MPPS/estudo com hash, dose de radiação (RDSR), lote de contraste por paciente, desinfecção de transdutores, manutenção e controle de qualidade dos aparelhos, mensagens enviadas, leituras de dado clínico, configurações versionadas.
+- Qualquer código leva à cadeia completa (explorador de lastro e dossiê assinado).
+
 ## Playbooks
 Os roteiros de auditoria e correção ficam em [docs/playbooks/](docs/playbooks/) e
 também como comandos do Claude Code em `.claude/commands/`:

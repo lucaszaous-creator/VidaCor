@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Novo agendamento · guia — VidaCor</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F2F3F6}
+.sp{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:12px;min-width:0}
+.sp.cur{background:#EEF3FA}
+.ck{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:13px;font-weight:700}
+.ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.todo{background:#fff;border:1.5px solid #CBD2DC;color:#8A93A3}.ck.cur{background:#0A1A4A;color:#fff}.ck.warn{background:#FFF3DF;color:#9A5B00}
+.vl{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:1px solid #F1F3F6}.vl:last-child{border-bottom:0}
+.fs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px}
+.att{display:flex;gap:10px;align-items:center;border:1px solid #E3E7ED;border-radius:12px;padding:10px 12px;background:#fff}
+.thumb{width:44px;height:56px;border-radius:6px;background:linear-gradient(180deg,#F1F3F6,#E3E7ED);display:flex;align-items:center;justify-content:center;font-size:10px;color:#5B6474;flex:none}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="agenda" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <a class="t14 b" href="Agenda.dc.html">← Agenda</a>
+      <h1 style="font-size: 24px; font-weight: 650; margin-left: 12px">Novo agendamento</h1>
+      <div class="grow"></div>
+      <span class="t13 mute">Rascunho salvo · reserva do horário por 10 min</span>
+    </div>
+    <ol class="card" style="list-style: none; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; padding: 10px" aria-label="Etapas do agendamento"><li class="sp ok"><span class="ck ok">✓</span><div style="min-width:0"><div class="t14 b">Paciente</div><div class="t12 mute clamp1">Antônio Carlos Ribeiro · 15/06/1954</div></div></li><li class="sp ok"><span class="ck ok">✓</span><div style="min-width:0"><div class="t14 b">Exame e horário</div><div class="t12 mute clamp1">Eco + Doppler · 12/11 08:30 · Sala 1</div></div></li><li class="sp cur"><span class="ck cur">3</span><div style="min-width:0"><div class="t14 b">Convênio e guia</div><div class="t12 mute clamp1"></div></div></li><li class="sp todo"><span class="ck todo">4</span><div style="min-width:0"><div class="t14 b">Preparo e confirmação</div><div class="t12 mute clamp1"></div></div></li></ol>
+
+    <div class="split">
+      <section class="card main" aria-labelledby="g-h" style="padding: 24px 28px">
+        <div class="row wrap" style="gap: 12px">
+          <div><h2 id="g-h" style="font-size: 20px; font-weight: 650">Convênio e guia de autorização</h2>
+          <p class="t14 mute" style="margin: 4px 0 0">A VidaCor só atende convênio com a guia já autorizada. Sem guia, o horário fica só como reserva provisória.</p></div>
+          <div class="grow"></div>
+          <div class="seg" role="radiogroup" aria-label="Forma de pagamento"><button class="on" role="radio" aria-checked="true">Convênio</button><button role="radio" aria-checked="false">Particular</button></div>
+        </div>
+
+        <h3 class="lbl" style="margin: 22px 0 10px">Beneficiário</h3>
+        <div class="fs">
+          <label class="field">Operadora<select class="in"><option>Unimed Costa do Sol</option></select></label>
+          <label class="field">Plano<input class="in" value="Unimed Pleno · Apartamento"></label>
+          <label class="field">Carteirinha<input class="in num" value="0 064 123456789012 3"></label>
+          <label class="field">Validade da carteirinha<input class="in" value="12/2027"></label>
+        </div>
+
+        <h3 class="lbl" style="margin: 24px 0 10px">Guia de autorização</h3>
+        <div class="fs">
+          <label class="field">Nº da guia na operadora<input class="in num" value="4471230"></label>
+          <label class="field">Senha de autorização<input class="in num" value="UN-88231-X"></label>
+          <label class="field">Data da autorização<input class="in" value="30/10/2026"></label>
+          <label class="field">Senha válida até<input class="in" value="20/11/2026"></label>
+          <label class="field">Caráter do atendimento<select class="in"><option>Eletivo</option></select></label>
+          <label class="field">Tipo de guia TISS<select class="in"><option>SP/SADT</option></select></label>
+        </div>
+
+        <h3 class="lbl" style="margin: 24px 0 10px">Procedimentos autorizados</h3>
+        <div class="scroll-x"><table class="tb" style="min-width: 600px"><thead><tr><th>Código TUSS</th><th>Procedimento</th><th class="r">Autorizado</th><th class="r">Neste agendamento</th><th class="r">Saldo</th></tr></thead><tbody>
+          <tr><td class="num nw">40901114</td><td>Ecocardiograma transtorácico</td><td class="r num">1</td><td class="r num">1</td><td class="r num">0</td></tr>
+          <tr><td class="num nw">40901300</td><td>Doppler colorido de carótidas</td><td class="r num">1</td><td class="r num">1</td><td class="r num">0</td></tr>
+        </tbody></table></div>
+
+        <h3 class="lbl" style="margin: 24px 0 10px">Solicitante</h3>
+        <div class="fs">
+          <label class="field">Médico solicitante<input class="in" value="Dr. Hugo Lemos"></label>
+          <label class="field">CRM / UF<input class="in" value="[000000] / RJ"></label>
+          <label class="field">CBO<input class="in" value="225120 · Cardiologista"></label>
+          <label class="field">Data do pedido<input class="in" value="28/10/2026"></label>
+          <label class="field">CID-10 (se a operadora exigir)<input class="in" value="I10 · Hipertensão essencial"></label>
+          <label class="field">Indicação clínica<input class="in" value="Controle de HAS; avaliar função"></label>
+        </div>
+
+        <h3 class="lbl" style="margin: 24px 0 10px">Anexos</h3>
+        <div class="row wrap" style="gap: 10px">
+          <div class="att"><span class="thumb">PDF</span><div><div class="t14 b">Pedido médico</div><div class="t12 mute">foto · 28/10 · SHA-256 3f9a…c21</div></div></div>
+          <div class="att"><span class="thumb">PDF</span><div><div class="t14 b">Autorização Unimed</div><div class="t12 mute">PDF do portal · 30/10 · SHA-256 a71d…09e</div></div></div>
+          <button class="btn btn-sm">+ Fotografar ou anexar</button>
+        </div>
+      </section>
+
+      <aside class="aside col" style="gap: 16px; flex: 0 1 380px; min-width: 340px">
+        <section class="card" aria-labelledby="v-h">
+          <h2 id="v-h" style="font-size: 16px; font-weight: 600; margin-bottom: 4px">Conferência automática</h2>
+          <ul style="list-style: none; margin: 0; padding: 0"><li class="vl"><span class="ck ok">✓</span><div><div class="t14">Carteirinha confere com o paciente</div><div class="t12 mute">0 064 123456789012 3 · válida até 12/2027</div></div></li><li class="vl"><span class="ck ok">✓</span><div><div class="t14">Elegível hoje</div><div class="t12 mute">consultado na Unimed às 10:14</div></div></li><li class="vl"><span class="ck ok">✓</span><div><div class="t14">Procedimentos autorizados cobrem o agendado</div><div class="t12 mute">TUSS 40901114 e 40901300 · 1 de cada</div></div></li><li class="vl"><span class="ck ok">✓</span><div><div class="t14">Senha válida na data do exame</div><div class="t12 mute">válida até 20/11 · exame em 12/11</div></div></li><li class="vl"><span class="ck ok">✓</span><div><div class="t14">Guia ainda não usada</div><div class="t12 mute">nenhum outro atendimento com esta guia</div></div></li><li class="vl"><span class="ck warn">!</span><div><div class="t14">Pedido médico com mais de 30 dias?</div><div class="t12 mute">emitido em 28/10 · dentro do prazo da Unimed (60 dias)</div></div></li></ul>
+        </section>
+        <section class="card" aria-labelledby="l-h" style="background: #F6F8FB; box-shadow: none">
+          <h2 id="l-h" style="font-size: 15px; font-weight: 600">Lastro desta guia</h2>
+          <div class="t13" style="margin-top: 8px; line-height: 1.6">Digitada por <b>Ana Souza</b> · Guichê 2 · 10:16<br>Elegibilidade: protocolo <span class="num">ELG-77120</span><br>Vai ligar: agendamento → check-in → exame (ACC) → guia TISS → lote → pagamento</div>
+          <a class="t14 b" href="Lastro.dc.html" style="display: inline-block; margin-top: 8px">Ver no explorador de lastro</a>
+        </section>
+        <section class="card" aria-label="Sem guia" style="border: 1px dashed #F3C98B; box-shadow: none">
+          <div class="t14 b">Ainda sem guia?</div>
+          <p class="t13 mute" style="margin: 6px 0 10px">O horário vira <b>reserva provisória por 48 h</b>. O paciente recebe pelo WhatsApp o pedido para enviar a autorização. Sem guia até o prazo, a vaga é liberada e oferecida à lista de espera.</p>
+          <button class="btn btn-sm">Reservar sem guia (48 h)</button>
+        </section>
+      </aside>
+    </div>
+
+    <div class="row wrap" style="gap: 12px; background: #fff; border-radius: 18px; padding: 14px 20px; box-shadow: 0 1px 2px rgba(15,23,42,.05)">
+      <span class="t14 mute" style="flex: 1 1 300px">A guia fica reservada para este agendamento: outro atendimento não consegue usá-la.</span>
+      <button class="btn">Voltar</button>
+      <button class="btn btn-p">Continuar para preparo e confirmação</button>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1600}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

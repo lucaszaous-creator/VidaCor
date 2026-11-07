@@ -16,9 +16,11 @@ do canvas; as cópias locais estão em `design/assets/` (veja
 |---|---|---|
 | — | `Sidebar.dc.html` | Menu lateral compartilhado |
 | 1 | `Main.dc.html` | Início (painel do dia) |
+| 2b | `Agendamento-Guia.dc.html` | Novo agendamento: convênio e guia (autorização) com conferências |
 | 2 | `Agenda.dc.html` | Agenda por sala e agendamento |
 | 3 | `Recepcao.dc.html` | Recepção, senhas, **esteira do paciente** e check-in |
 | 4 | `Caixa.dc.html` | Caixa do particular |
+| 4e | `Lastro.dc.html` | Explorador de lastro: cadeia completa do atendimento e metadados |
 | 4c | `Etiquetas.dc.html` | Etiquetas e rastreio (lastro, divergências, impressoras) |
 | 4d | `Etiquetas-Modelos.dc.html` | Modelos de etiqueta em tamanho real |
 | 5 | `Paciente.dc.html` | Paciente 360º + anatomia |

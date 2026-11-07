@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Explorador de lastro — VidaCor</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/853c2170559ca366b1acd78dfcd0297c">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F2F3F6}
+.ph{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;padding:14px 0;border-bottom:1px solid #F1F3F6}
+.ph:last-child{border-bottom:0}
+.ph-h{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5B6474;padding-top:12px}
+.ph-n{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.nd{display:flex;gap:10px;align-items:flex-start;text-align:left;background:#fff;border:1px solid #E8EAEF;border-radius:12px;padding:10px 12px;font:inherit;color:inherit;cursor:pointer;min-width:0}
+.nd:hover{border-color:#C9D2DE}.nd.sel{border-color:#0A1A4A;box-shadow:0 0 0 1px #0A1A4A}
+.nd.todo{background:#FAFBFC;border-style:dashed}
+.nd-b{display:flex;flex-direction:column;gap:2px;min-width:0}
+.nd-b b{font-size:14px;font-weight:600}
+.nd-i{font-size:11.5px;color:#0C72B0;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ck{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:12px;font-weight:700;margin-top:2px}
+.ck.ok{background:#E5F5EC;color:#1F7A4D}.ck.cur{background:#EFEBFC;color:#5B45B5}.ck.todo{background:#fff;border:1.5px solid #CBD2DC}
+.kv{display:flex;flex-direction:column;gap:2px;padding:10px 0;border-bottom:1px solid #F1F3F6;font-size:14px}
+.kv:last-child{border-bottom:0}.kv span{font-size:12px;color:#5B6474;font-weight:600;text-transform:uppercase;letter-spacing:.05em}.kv b{font-weight:500;word-break:break-word}
+</style>
+</helmet>
+<div class="app" style="font-family: Inter, sans-serif">
+  <div class="side"><dc-import name="Sidebar" active="lastro" hint-size="248px,1400px"></dc-import></div>
+  <main class="content">
+    <div class="topbar">
+      <h1 style="font-size: 24px; font-weight: 650">Lastro</h1>
+      <div class="grow"></div>
+      <label class="search" style="max-width: 520px; flex: 1 1 380px; min-height: 44px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM21 21l-4.3-4.3"></path></svg><span class="sr">Buscar por qualquer código</span><input type="search" value="ACC 2026-118790" placeholder="Qualquer código: ACC, guia, ETQ, StudyUID, NFS-e, PIX, lote, placa"></label>
+      <button class="btn btn-sm">Exportar dossiê (PDF assinado)</button>
+    </div>
+
+    <section class="card row wrap" style="gap: 18px; padding: 18px 22px" aria-label="Resumo">
+      <div style="flex: 1 1 320px"><div class="lbl">Atendimento ATD-2026-118790</div><div style="font-size: 20px; font-weight: 650; margin-top: 4px">Antônio Carlos Ribeiro · 15/06/1954</div><div class="t14 mute" style="margin-top: 2px">Eco + Doppler de carótidas · Unimed · 06/11/2026</div></div>
+      <div class="row wrap t14" style="gap: 20px"><span><b>21</b> <span class="mute">registros ligados</span></span><span><b>5</b> <span class="mute">documentos com hash</span></span><span><b>3</b> <span class="mute">integrações</span></span><span><b style="color:#5B45B5">2</b> <span class="mute">etapas em andamento</span></span></div>
+    </section>
+
+    <div class="split">
+      <section class="card main" aria-label="Cadeia do atendimento" style="padding: 8px 22px"><section class="ph"><div class="ph-h">Agendamento</div><div class="ph-n"><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">AGD-2026-031877</span><b>Agendamento</b><span class="t12 mute">Criado pelo WhatsApp (robô) · confirmado por Ana Souza · 05/11 16:02</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">CONF-88412</span><b>Confirmação</b><span class="t12 mute">WhatsApp · modelo “confirmação D-1” v3 · lida 05/11 18:10</span></span></button></div></section><section class="ph"><div class="ph-h">Autorização</div><div class="ph-n"><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">GUIA 4471230</span><b>Guia da operadora</b><span class="t12 mute">Senha UN-88231-X · válida até 20/11 · 2 procedimentos TUSS</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">ELG-77120</span><b>Elegibilidade</b><span class="t12 mute">Unimed · elegível · 06/11 08:21</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">DOC 3f9a…c21</span><b>Pedido médico</b><span class="t12 mute">Foto · Dr. Hugo Lemos CRM [000000]/RJ · 28/10</span></span></button></div></section><section class="ph"><div class="ph-h">Chegada</div><div class="ph-n"><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">ATD-2026-118790</span><b>Atendimento</b><span class="t12 mute">Check-in 08:21 · Guichê 2 · Ana Souza</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">ETQ-2026-018734</span><b>Pulseira</b><span class="t12 mute">Impressa 08:24 · bipada na Sala 1 às 08:41</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">TERMO v4</span><b>Termo de consentimento</b><span class="t12 mute">Assinado no tablet · 08:23 · hash 9b2e…71f</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">PLACA QRT4B21</span><b>Estacionamento</b><span class="t12 mute">Entrada 08:12 · cortesia validada pelo exame</span></span></button></div></section><section class="ph"><div class="ph-h">Exame</div><div class="ph-n"><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">ACC 2026-118790</span><b>Pedido de exame (accession)</b><span class="t12 mute">Worklist enviada ao GE Vivid E95 (VIVID_S1)</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">MPPS 1.2.840…5521</span><b>Execução no aparelho</b><span class="t12 mute">Início 08:41 · fim 09:02 · Téc. Carla</span></span></button><button class="nd ok sel"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">STUDY 1.2.840…88.1</span><b>Estudo DICOM</b><span class="t12 mute">38 imagens · 4 vídeos · 18 medidas (SR)</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">DESINF T-07</span><b>Transdutor</b><span class="t12 mute">Desinfecção nível alto · ciclo 07:55 · lote DES-221</span></span></button></div></section><section class="ph"><div class="ph-h">Laudo</div><div class="ph-n"><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">LAU-2026-044120 v1</span><b>Laudo</b><span class="t12 mute">Rascunho com medidas do aparelho · Dr. Paulo</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">ASS ICP 5F:2A…</span><b>Assinatura digital</b><span class="t12 mute">Certificado ICP-Brasil · carimbo do tempo 10:42</span></span></button><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">PORTAL</span><b>Publicação</b><span class="t12 mute">Liberado no portal 10:43 · aviso WhatsApp lido 11:02</span></span></button></div></section><section class="ph"><div class="ph-h">Faturamento</div><div class="ph-n"><button class="nd ok"><span class="ck ok">✓</span><span class="nd-b"><span class="num nd-i">GUIA TISS 900812</span><b>Guia SP/SADT</b><span class="t12 mute">Gerada do atendimento · XML TISS 4.01</span></span></button><button class="nd cur"><span class="ck cur">…</span><span class="nd-b"><span class="num nd-i">LOTE 2026-11-03</span><b>Lote</b><span class="t12 mute">Enviado 07/11 · protocolo ANS 7781203</span></span></button><button class="nd todo"><span class="ck todo"></span><span class="nd-b"><span class="num nd-i">DEMONSTRATIVO</span><b>Retorno da operadora</b><span class="t12 mute">aguardando</span></span></button></div></section><section class="ph"><div class="ph-h">Financeiro</div><div class="ph-n"><button class="nd todo"><span class="ck todo"></span><span class="nd-b"><span class="num nd-i">PAGTO</span><b>Recebimento</b><span class="t12 mute">aguardando o demonstrativo</span></span></button><button class="nd todo"><span class="ck todo"></span><span class="nd-b"><span class="num nd-i">REPASSE</span><b>Repasse ao médico</b><span class="t12 mute">regra 40% · competência 11/2026</span></span></button></div></section></section>
+      <aside class="aside" style="flex: 0 1 400px; min-width: 340px">
+        <section class="card" aria-labelledby="m-h">
+          <div class="lbl">Registro selecionado</div>
+          <h2 id="m-h" style="font-size: 18px; font-weight: 650; margin-top: 6px">Estudo DICOM</h2>
+          <div style="margin-top: 8px"><div class="kv"><span>Identificador</span><b>StudyInstanceUID 1.2.840.113619.2.55.3.604688.88.1</b></div><div class="kv"><span>Criado</span><b>06/11/2026 08:41:12 · pelo aparelho VIVID_S1 (10.0.20.11)</b></div><div class="kv"><span>Recebido pelo VidaCor</span><b>08:41:13 → 09:02:40 · 42 objetos DICOM</b></div><div class="kv"><span>Integridade</span><b>SHA-256 de cada objeto guardado · 0 divergências</b></div><div class="kv"><span>Conciliação</span><b>Paciente e ACC conferidos automaticamente (nome + nascimento + accession)</b></div><div class="kv"><span>Armazenamento</span><b>PACS local · réplica no servidor de contingência · backup externo 07/11 02:10</b></div><div class="kv"><span>Retenção</span><b>20 anos (prontuário) · até 11/2046</b></div><div class="kv"><span>Acessos</span><b>Dr. Paulo (laudo) · Téc. Carla (execução) · paciente (portal, 2 imagens-chave)</b></div><div class="kv"><span>Ligado a</span><b>ACC 2026-118790 · MPPS 1.2.840…5521 · LAU-2026-044120 v1 · ETQ-2026-018734</b></div></div>
+          <div class="row wrap" style="gap: 8px; margin-top: 12px"><a class="btn btn-sm" href="Visualizador.dc.html">Abrir imagens</a><button class="btn btn-sm">Histórico de eventos</button></div>
+        </section>
+      </aside>
+    </div>
+    <p class="t12 mute" style="margin: 0 8px">Mockup · dados e identificadores fictícios</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1650}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
