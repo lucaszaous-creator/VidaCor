@@ -101,3 +101,4 @@ Auditoria completa de segurança: `/security-audit` (skill da Cloudflare, ver do
 - Laudo só vai ao portal **depois de assinado**.
 - Dado de saúde **nunca** em log, métrica, URL ou cache do navegador.
 - Imagem DICOM sem paciente conciliado **nunca** vai para laudo.
+- **Etiquetas** ([docs/20](docs/20-etiquetas-e-rastreio.md)): código único por etiqueta, eventos imutáveis, reimpressão com motivo invalida a anterior, pulseira bipada na sala errada **bloqueia** o exame; etiqueta só com nome, nascimento e códigos (nunca diagnóstico).

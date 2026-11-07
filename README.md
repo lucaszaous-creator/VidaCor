@@ -14,7 +14,7 @@ para DICOM) e incluir o **estacionamento com leitura de placa**.
 | Pesquisa do estacionamento com leitura de placa | ✅ Feita — [docs/02](docs/02-estacionamento-leitura-de-placa.md) |
 | Escopo funcional (todas as funções atuais + novas) | ✅ Primeira versão — [docs/04](docs/04-escopo-funcional.md) |
 | Design system | ✅ Primeira versão — [docs/05](docs/05-design-system.md) |
-| Mockups navegáveis (28 telas) | ✅ Terceira rodada aprovada — [docs/06](docs/06-mockups.md) |
+| Mockups navegáveis (31 telas) | ✅ Terceira rodada aprovada — [docs/06](docs/06-mockups.md) |
 | Arquitetura e infraestrutura (Rust, on-premises) | 📝 Proposta para revisão — [docs/11](docs/11-arquitetura-e-infraestrutura.md) · [ADRs](docs/adr/) |
 | Observabilidade e SLOs | 📝 Proposta — [docs/12](docs/12-observabilidade-e-metricas.md) |
 | Instalação e distribuição | 📝 Proposta — [docs/13](docs/13-instalacao-e-distribuicao.md) |
@@ -62,6 +62,7 @@ docs/
   17-seguranca-por-classe-de-ataque.md  regras SEC-* baseadas na skill Cloudflare security-audit
   18-perfis-permissoes-e-rls.md quem vê e faz o quê; RLS no PostgreSQL
   19-menu-de-contexto.md        clique direito: regras e catálogo por objeto
+  20-etiquetas-e-rastreio.md    tipos de etiqueta, o que imprimir e o lastro
   modelos/                      design, riscos clínicos, rastreabilidade, prontidão, pós-incidente
   playbooks/                    auditoria, testes, refatoração, segurança, idempotência, corrida
   bugs.md                       bugs encontrados por testes
