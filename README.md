@@ -16,6 +16,8 @@ para DICOM) e incluir o **estacionamento com leitura de placa**.
 | Design system | ✅ Primeira versão — [docs/05](docs/05-design-system.md) |
 | Mockups navegáveis (25 telas) | ✅ Terceira rodada aprovada — [docs/06](docs/06-mockups.md) |
 | Arquitetura e infraestrutura (Rust, on-premises) | 📝 Proposta para revisão — [docs/11](docs/11-arquitetura-e-infraestrutura.md) · [ADRs](docs/adr/) |
+| Observabilidade e SLOs | 📝 Proposta — [docs/12](docs/12-observabilidade-e-metricas.md) |
+| Instalação e distribuição | 📝 Proposta — [docs/13](docs/13-instalacao-e-distribuicao.md) |
 | Desenvolvimento | ⏳ Próximo passo — [docs/09](docs/09-proximos-passos.md) |
 
 **Mockup ao vivo:** https://claude.ai/artifact/NT2bm1UnVPJe9NGGs3HTii
@@ -43,7 +45,9 @@ docs/
   09-proximos-passos.md
   10-assets-e-licencas.md       origem do modelo 3D, imagens DICOM e logo
   11-arquitetura-e-infraestrutura.md  núcleo em Rust, poliglota, servidor local
-  adr/                          decisões de arquitetura (ADR-0001 a 0011)
+  12-observabilidade-e-metricas.md    percentis, RED/USE, Web Vitals, SLOs
+  13-instalacao-e-distribuicao.md     instaladores do servidor e das estações
+  adr/                          decisões de arquitetura (ADR-0001 a 0013)
 design/
   mockups/                   fonte das telas (.dc.html) + canvas.json
   assets/vidacor.css         design system usado pelos mockups

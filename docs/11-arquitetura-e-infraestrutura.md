@@ -168,10 +168,10 @@ retentativa exponencial e idempotência; falhas ficam visíveis em Configuraçõ
 |---|---|
 | Sistema operacional | Debian 12 / Ubuntu 24.04 LTS |
 | Sistema de arquivos | ZFS (snapshots, compressão, criptografia nativa) |
-| Execução | Contêineres (Docker Engine + Compose, ou Podman), um *stack* por ambiente |
+| Execução | Contêineres (Docker Engine + Compose, ou Podman), um *stack* por ambiente; instaladores do servidor e das estações em [13](13-instalacao-e-distribuicao.md) |
 | Proxy reverso e TLS interno | Caddy (certificados de uma CA interna) |
 | Segredos | SOPS + age no repositório de infraestrutura; nada em texto puro |
-| Observabilidade | OpenTelemetry → Prometheus (métricas), Loki (logs), Tempo (traces), Grafana (painéis e alertas) |
+| Observabilidade | OpenTelemetry → Prometheus (métricas), Loki (logs), Tempo (traces), Grafana (painéis e alertas) — detalhado em [12](12-observabilidade-e-metricas.md) |
 | Backup | `pgBackRest` (PostgreSQL, com PITR) + `restic` (imagens e arquivos) para o destino externo; **teste de restauração mensal** |
 | Atualizações | Imagens versionadas e assinadas, publicadas pela CI; janela de manutenção fora do expediente; rollback em um comando |
 

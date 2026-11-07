@@ -14,4 +14,7 @@
 | [0010](0010-identidade-keycloak.md) | Identidade com Keycloak (OIDC) | Proposto |
 | [0011](0011-portal-fora-do-servidor-local.md) | Portal do paciente fora do servidor local | Proposto |
 
+| [0012](0012-observabilidade-opentelemetry-slo.md) | Observabilidade com OpenTelemetry, histogramas e SLOs | Proposto |
+| [0013](0013-distribuicao-instaladores.md) | Distribuição por instaladores e atualização pelo servidor local | Proposto |
+
 Visão geral em [11 · Arquitetura e infraestrutura](../11-arquitetura-e-infraestrutura.md).
