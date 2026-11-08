@@ -252,6 +252,10 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await page.getByRole('button', { name: /Aparelho 2/ }).click();
   await esperar(page, 'region', 'Detalhe do aparelho');
   await ok('37-aparelhos');
+  await ir('/lista-espera');
+  await page.getByRole('button', { name: /Maria Helena Duarte de Albuquerque/ }).click();
+  await esperar(page, 'region', 'Pedido de espera');
+  await ok('38-lista-espera');
   estado.sessao = SESSOES.tv;
   await ir('/telao');
   await esperar(page, 'region', 'Chamada atual');

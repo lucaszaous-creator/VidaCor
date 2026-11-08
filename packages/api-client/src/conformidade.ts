@@ -9,6 +9,7 @@ import type { AutorizacaoDetalhe, AutorizacaoResumo, NovoPedidoAutorizacao, Pedi
 import type { MenuDoObjeto } from './contrato-menu';
 import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel';
 import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-orcamento';
+import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
@@ -163,3 +164,8 @@ export type ConfereAparelhoCadastrado = Cabe<AparelhoCadastrado, S['AparelhoCada
 export type ConferePainelDosAparelhos = Cabe<PainelDosAparelhos, S['PainelDosAparelhos']>;
 export type ConfereNovoAparelho = Cabe<NovoAparelho, S['NovoAparelho']>;
 export type ConfereMudancaDeAparelho = Cabe<MudancaDeAparelho, S['MudancaDeAparelho']>;
+export type ConferePedidoDeEspera = Cabe<PedidoDeEspera, S['PedidoDeEspera']>;
+export type ConferePedidoInclusao = Cabe<PedidoInclusao, S['PedidoInclusao']>;
+export type ConfereOfertaDeVaga = Cabe<OfertaDeVaga, S['Oferta']>;
+export type ConferePedidoBloqueio = Cabe<PedidoBloqueio, S['PedidoBloqueio']>;
+export type ConfereBloqueioDeSala = Cabe<BloqueioDeSala, S['Bloqueio']>;

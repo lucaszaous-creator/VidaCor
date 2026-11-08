@@ -262,3 +262,32 @@ export const manipuladoresAparelhos = [
     return HttpResponse.json(aparelhoSimulado('9', c.nome, 'Sala 2', c.ae_title), { status: 201 });
   }),
 ];
+
+/** Lista de espera simulada (regras reais em `crates/api/tests/lista_espera.rs`). */
+const pedidoSimulado = (id: string, nome: string, nasc: string, prioridade: string, oferta: boolean) => ({
+  id, codigo: `ESP-${id}`, posicao: Number(id), paciente: { id: `p${id}`, nome, nascimento: nasc }, exame: { codigo_tuss: '40901114', nome: 'Ecocardiograma transtorácico' },
+  prioridade, preferencia: 'qualquer', justificativa: prioridade === 'urgente' ? 'suspeita de valvopatia' : null, medico_solicitante: prioridade === 'urgente' ? 'Dr. Paulo Medeiros' : null,
+  operadora: null, guia_codigo: null, situacao: oferta ? 'ofertado' : 'aguardando', desde: '2026-11-02T12:00:00Z',
+  oferta: oferta ? { id: 'of1', codigo: 'OFE-1', sala_nome: 'Sala 1', inicio: '2026-11-09T13:00:00Z', expira_em: '2026-11-09T12:20:00Z' } : null,
+});
+export const manipuladoresEspera = [
+  http.get('*/v1/lista-espera', () =>
+    temPerfil('recepcao', 'gerente')
+      ? HttpResponse.json([pedidoSimulado('1', 'Maria Helena Duarte', '1968-03-12', 'urgente', true), pedidoSimulado('2', 'Vera Lúcia Antunes', '1957-09-18', 'rotina', false)])
+      : semPermissao('ver a lista de espera'),
+  ),
+  http.post('*/v1/lista-espera', async ({ request }) => {
+    const c = (await registrar('incluir-espera', request)) as { prioridade: string };
+    return HttpResponse.json(pedidoSimulado('3', 'Vera Lúcia Antunes', '1957-09-18', c.prioridade, false), { status: 201 });
+  }),
+  http.post('*/v1/ofertas/:id/aceite', async ({ request }) => {
+    const c = (await registrar('aceitar-oferta', request)) as { confirmacao: { nome: string; nascimento: string } };
+    if (c.confirmacao.nome !== 'Maria Helena Duarte' || c.confirmacao.nascimento !== '1968-03-12')
+      return problema(422, 'identificacao-nao-confere', 'Nome ou data de nascimento não conferem com o cadastro do paciente da oferta. Nada foi agendado. Confira com o paciente.');
+    return HttpResponse.json({ id: 'of1', codigo: 'OFE-1', espera_id: '1', espera_codigo: 'ESP-1', paciente: { id: 'p1', nome: 'Maria Helena Duarte', nascimento: '1968-03-12' }, exame: { codigo_tuss: '40901114', nome: 'Ecocardiograma transtorácico' }, sala: { id: 's1', nome: 'Sala 1' }, inicio: '2026-11-09T13:00:00Z', fim: '2026-11-09T13:30:00Z', expira_em: '2026-11-09T12:20:00Z', situacao: 'aceita', origem_vaga: 'cancelamento', agendamento_codigo: 'AGD-2026-000099', motivo: null });
+  }),
+  http.post('*/v1/bloqueios', async ({ request }) => {
+    const c = (await registrar('bloquear', request)) as { motivo: string; inicio: string; fim: string };
+    return HttpResponse.json([{ id: 'b1', codigo: 'BLQ-1', sala: { id: 's2', nome: 'Sala 2' }, tipo: 'manutencao', inicio: c.inicio, fim: c.fim, motivo: c.motivo, situacao: 'ativo', retirado_em: null, motivo_retirada: null }], { status: 201 });
+  }),
+];

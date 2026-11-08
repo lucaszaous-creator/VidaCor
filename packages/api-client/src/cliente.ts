@@ -53,6 +53,7 @@ import type { CadeiaDoAtendimento } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
 import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel';
 import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-orcamento';
+import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
 import type { DecisaoDePerfil, ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
 import type { ContaBancaria, NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
@@ -317,6 +318,26 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
     /** Painel da TV de chamada (dispositivo TV, recepção e gerência). */
     painelDeChamada: (): Promise<Painel> => ler<Painel>('/v1/painel-de-chamada'),
 
+    /** Lista de espera e ofertas de vaga (recepção e gerência). */
+    espera: {
+      listar: (): Promise<PedidoDeEspera[]> => ler<PedidoDeEspera[]>('/v1/lista-espera'),
+      incluir: (corpo: PedidoInclusao, o: OpcoesDeEscrita): Promise<PedidoDeEspera> => criar<PedidoDeEspera>('POST', '/v1/lista-espera', corpo, o),
+      sair: (id: string, motivo: string, o: OpcoesDeEscrita): Promise<unknown> => criar<unknown>('POST', `/v1/lista-espera/${seg(id)}/saida`, { motivo }, o),
+      aceitar: (ofertaId: string, nome: string, nascimento: string, o: OpcoesDeEscrita): Promise<OfertaDeVaga> =>
+        criar<OfertaDeVaga>('POST', `/v1/ofertas/${seg(ofertaId)}/aceite`, { confirmacao: { nome, nascimento } }, o),
+      recusar: (ofertaId: string, motivo: string, o: OpcoesDeEscrita): Promise<OfertaDeVaga> =>
+        criar<OfertaDeVaga>('POST', `/v1/ofertas/${seg(ofertaId)}/recusa`, { motivo }, o),
+    },
+
+    /** Bloqueios de sala e horário (recepção e gerência). */
+    bloqueios: {
+      listar: (de: string, ate: string): Promise<BloqueioDeSala[]> =>
+        ler<BloqueioDeSala[]>(`/v1/bloqueios?de=${encodeURIComponent(de)}&ate=${encodeURIComponent(ate)}`),
+      criar: (corpo: PedidoBloqueio, o: OpcoesDeEscrita): Promise<BloqueioDeSala[]> => criar<BloqueioDeSala[]>('POST', '/v1/bloqueios', corpo, o),
+      retirar: (id: string, motivo: string, o: OpcoesDeEscrita): Promise<BloqueioDeSala> =>
+        criar<BloqueioDeSala>('POST', `/v1/bloqueios/${seg(id)}/retirada`, { motivo }, o),
+    },
+
     /** Aparelhos e integração DICOM (TI e gerência). */
     aparelhos: {
       painel: (): Promise<PainelDosAparelhos> => ler<PainelDosAparelhos>('/v1/aparelhos'),
@@ -370,6 +391,9 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
     agendamentos: {
       criar: (corpo: PedidoAgendamento, o: OpcoesDeEscrita): Promise<AgendamentoCriado> =>
         criar<AgendamentoCriado>('POST', '/v1/agendamentos', corpo, o),
+      /** Cancela com motivo; a vaga vai à lista de espera. Com guia consumida, `409 guia-consumida`. */
+      cancelar: (id: string, motivo: string, o: OpcoesDeEscrita): Promise<unknown> =>
+        criar<unknown>('POST', `/v1/agendamentos/${seg(id)}/cancelamento`, { motivo }, o),
       /** Confirma a reserva provisória com a guia entregue (FC-AGD-09). */
       vincularGuia: (id: string, guiaId: string, o: OpcoesDeEscrita): Promise<AgendamentoCriado> =>
         criar<AgendamentoCriado>('POST', `/v1/agendamentos/${seg(id)}/guia`, { guia_id: guiaId }, o),
