@@ -310,3 +310,18 @@ export const integracoesSimuladas = [
 export const manipuladoresConfiguracoes = [
   http.get('*/v1/configuracoes/integracoes', () => (temPerfil('ti', 'gerente') ? HttpResponse.json(integracoesSimuladas) : semPermissao('ver as configurações'))),
 ];
+
+/** Paciente 360 simulado (regras reais em `crates/api/tests/paciente_visao.rs`). */
+export const manipuladoresPaciente = [
+  http.get('*/v1/pacientes/:id/visao', ({ params }) =>
+    temPerfil('recepcao', 'gerente', 'medico', 'tecnico')
+      ? HttpResponse.json({
+          identificacao: { id: String(params.id), codigo: 'PAC-2026-000004', nome: 'Vera Lúcia Antunes', nome_social: null, nascimento: '1957-09-18', sexo: 'F', cpf_mascarado: '***.***.***-25', celular: '21900000017', email: 'vera@exemplo.invalid', alergias: ['dipirona'], nega_alergias: false },
+          proximos: [{ id: 'a1', codigo: 'AGD-1', inicio: '2026-11-12T11:00:00Z', exame: 'MAPA 24 h', sala: 'Posto MAPA e Holter', medico: null, situacao: 'confirmado' }],
+          historico: [{ id: 'a2', codigo: 'AGD-2', inicio: '2026-05-10T12:00:00Z', exame: 'Ecocardiograma transtorácico', sala: 'Sala 1', medico: 'Dr. Paulo Medeiros', situacao: 'concluido' }],
+          faltas: 0,
+          exames_externos: 1,
+        })
+      : semPermissao('ver o paciente'),
+  ),
+];

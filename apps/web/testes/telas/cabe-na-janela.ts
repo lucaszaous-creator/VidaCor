@@ -260,6 +260,9 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await page.getByRole('button', { name: /Integração whatsapp/ }).click();
   await esperar(page, 'region', 'Detalhe da integração');
   await ok('39-configuracoes');
+  await ir(`/pacientes?id=${SONIA.paciente.id}`);
+  await esperar(page, 'region', 'Cadastro e contato');
+  await ok('40-paciente');
   estado.sessao = SESSOES.tv;
   await ir('/telao');
   await esperar(page, 'region', 'Chamada atual');

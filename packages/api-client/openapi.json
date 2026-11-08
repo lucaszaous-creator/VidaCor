@@ -6672,6 +6672,58 @@
         }
       }
     },
+    "/v1/pacientes/{id}/visao": {
+      "get": {
+        "tags": [
+          "pacientes"
+        ],
+        "summary": "Visão geral do paciente (recepção, gerência, técnico e médico, na unidade).",
+        "operationId": "visao_do_paciente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VisaoDoPaciente"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/painel-de-chamada": {
       "get": {
         "tags": [
@@ -8378,6 +8430,45 @@
             "items": {
               "$ref": "#/components/schemas/ItemAgenda"
             }
+          }
+        }
+      },
+      "AgendamentoDoPaciente": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "inicio",
+          "exame",
+          "sala",
+          "situacao"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "medico": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sala": {
+            "type": "string"
+          },
+          "situacao": {
+            "type": "string"
           }
         }
       },
@@ -10521,6 +10612,76 @@
           "validade": {
             "type": "string",
             "format": "date"
+          }
+        }
+      },
+      "IdentificacaoDoPaciente": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "nome",
+          "nascimento",
+          "alergias"
+        ],
+        "properties": {
+          "alergias": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "celular": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "codigo": {
+            "type": "string",
+            "description": "Prontuário (código legível)."
+          },
+          "cpf_mascarado": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Só os dois últimos dígitos (***.***.***-17)."
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nega_alergias": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "nome": {
+            "type": "string"
+          },
+          "nome_social": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sexo": {
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -14859,6 +15020,41 @@
           "versao": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "VisaoDoPaciente": {
+        "type": "object",
+        "required": [
+          "identificacao",
+          "proximos",
+          "historico",
+          "faltas",
+          "exames_externos"
+        ],
+        "properties": {
+          "exames_externos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "faltas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "historico": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgendamentoDoPaciente"
+            }
+          },
+          "identificacao": {
+            "$ref": "#/components/schemas/IdentificacaoDoPaciente"
+          },
+          "proximos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgendamentoDoPaciente"
+            }
           }
         }
       },

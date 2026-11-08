@@ -26,6 +26,7 @@ const SECOES: { id: string; titulo: string; itens: ItemComPerfis[] }[] = [
         perfis: [...RECEPCAO, 'gerente', 'medico', 'tecnico', 'enfermagem'],
       },
       { id: 'agendar', rotulo: 'Novo agendamento', href: '/agendamentos/novo', icone: 'agendar', cor: 'blue', perfis: [...RECEPCAO, 'gerente'] },
+      { id: 'paciente', rotulo: 'Pacientes', href: '/pacientes', icone: 'recepcao', cor: 'blue', perfis: [...RECEPCAO, 'gerente', 'medico', 'tecnico'] },
       { id: 'lista-espera', rotulo: 'Lista de espera', href: '/lista-espera', icone: 'agenda', cor: 'blue', perfis: [...RECEPCAO, 'gerente'] },
       { id: 'orcamento', rotulo: 'Orçamento particular', href: '/orcamentos', icone: 'caixa', cor: 'blue', perfis: [...RECEPCAO, 'gerente'] },
       { id: 'exame-externo', rotulo: 'Exame externo', href: '/exames-externos', icone: 'imagem', cor: 'blue', perfis: [...RECEPCAO, 'gerente'] },

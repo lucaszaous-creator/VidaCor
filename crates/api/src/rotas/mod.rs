@@ -36,6 +36,7 @@ pub mod menu;
 pub mod nfse;
 pub mod ofertas;
 pub mod orcamentos;
+pub mod paciente_visao;
 pub mod pacientes;
 pub mod pendencias;
 pub mod portal;
@@ -85,6 +86,7 @@ pub fn rotas() -> Router<Estado> {
             get(cadastro::duplicados),
         )
         .route("/v1/pacientes/{id}/correcao", post(pacientes::corrigir))
+        .route("/v1/pacientes/{id}/visao", get(paciente_visao::visao))
         .route("/v1/salas/{sala_id}/bipes", post(sala::bipe))
         .route("/v1/salas/{sala_id}/fila", get(sala::fila))
         .route("/v1/guias", post(agendamentos::registrar_guia))

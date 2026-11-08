@@ -95,6 +95,7 @@ pub struct ProblemaDoc {
         crate::rotas::chamada::chamar,
         crate::rotas::chamada::painel,
         crate::rotas::configuracoes::integracoes,
+        crate::rotas::paciente_visao::visao,
         crate::rotas::cancelamento::cancelar,
         crate::rotas::visualizacao::abrir,
         crate::rotas::bloqueios::criar,

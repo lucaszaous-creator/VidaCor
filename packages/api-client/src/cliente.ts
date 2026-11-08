@@ -54,6 +54,7 @@ import type { Indicadores } from './contrato-indicadores';
 import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel';
 import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-orcamento';
 import type { IntegracaoVista } from './contrato-configuracoes';
+import type { VisaoDoPaciente } from './contrato-paciente';
 import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
 import type { DecisaoDePerfil, ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
@@ -379,6 +380,8 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
         ),
       /** Cadastro; `409 possivel-duplicado` traz `candidatos` quando ainda não conferido. */
       cadastrar: (corpo: NovoPaciente, o: OpcoesDeEscrita): Promise<PacienteCadastrado> => criar<PacienteCadastrado>('POST', '/v1/pacientes', corpo, o),
+      /** Paciente 360: identificação (CPF mascarado), próximos e histórico; leitura auditada. */
+      visao: (id: string): Promise<VisaoDoPaciente> => ler<VisaoDoPaciente>(`/v1/pacientes/${seg(id)}/visao`),
       examesExternos: (id: string): Promise<ExameExterno[]> => ler<ExameExterno[]>(`/v1/pacientes/${seg(id)}/exames-externos`),
       /** Importação de exame externo (só leitura) depois da conferência de identidade. */
       importarExameExterno: (id: string, corpo: ImportacaoExterna, o: OpcoesDeEscrita): Promise<ExameExterno> =>

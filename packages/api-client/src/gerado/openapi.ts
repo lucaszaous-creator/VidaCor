@@ -1817,6 +1817,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/pacientes/{id}/visao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Visão geral do paciente (recepção, gerência, técnico e médico, na unidade). */
+        get: operations["visao_do_paciente"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/painel-de-chamada": {
         parameters: {
             query?: never;
@@ -2424,6 +2441,17 @@ export interface components {
             /** Format: date */
             data: string;
             itens: components["schemas"]["ItemAgenda"][];
+        };
+        AgendamentoDoPaciente: {
+            codigo: string;
+            exame: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            inicio: string;
+            medico?: string | null;
+            sala: string;
+            situacao: string;
         };
         Aparelho: {
             ae_title: string;
@@ -3056,6 +3084,23 @@ export interface components {
             situacao: string;
             /** Format: date */
             validade: string;
+        };
+        IdentificacaoDoPaciente: {
+            alergias: string[];
+            celular?: string | null;
+            /** @description Prontuário (código legível). */
+            codigo: string;
+            /** @description Só os dois últimos dígitos (***.***.***-17). */
+            cpf_mascarado?: string | null;
+            email?: string | null;
+            /** Format: uuid */
+            id: string;
+            /** Format: date */
+            nascimento: string;
+            nega_alergias?: boolean | null;
+            nome: string;
+            nome_social?: string | null;
+            sexo?: string | null;
         };
         ImportacaoDeExtrato: {
             /** Format: uuid */
@@ -4421,6 +4466,15 @@ export interface components {
             motivo: string;
             /** Format: int32 */
             versao: number;
+        };
+        VisaoDoPaciente: {
+            /** Format: int64 */
+            exames_externos: number;
+            /** Format: int64 */
+            faltas: number;
+            historico: components["schemas"]["AgendamentoDoPaciente"][];
+            identificacao: components["schemas"]["IdentificacaoDoPaciente"];
+            proximos: components["schemas"]["AgendamentoDoPaciente"][];
         };
         Visualizacao: {
             estudo_codigo: string;
@@ -9011,6 +9065,43 @@ export interface operations {
                 };
             };
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    visao_do_paciente: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VisaoDoPaciente"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
