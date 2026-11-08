@@ -1,7 +1,9 @@
-import { Link, Outlet } from '@tanstack/react-router';
-import { BotaoDeIcone } from '@vidacor/design-system';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { Link, Outlet, useNavigate } from '@tanstack/react-router';
+import { Botao, BotaoDeIcone } from '@vidacor/design-system';
 import { useState } from 'react';
 import simbolo from '../../assets/simbolo.png';
+import { useDependencias } from '../../contexto';
 
 const ESCALAS = [1, 1.15, 1.3, 1.5];
 
@@ -12,6 +14,10 @@ const ESCALAS = [1, 1.15, 1.3, 1.5];
 export function CascaDoPortal() {
   const [nivel, setNivel] = useState(0);
   const escala = ESCALAS[nivel] ?? 1;
+  const { api } = useDependencias();
+  const cliente = useQueryClient();
+  const navegar = useNavigate();
+  const sessao = useQuery({ queryKey: ['portal', 'sessao'], queryFn: () => api.portal.sessao(), retry: false });
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg)', overflow: 'hidden' }}>
       <header className="row" style={{ gap: 12, padding: '10px 24px', background: '#fff', borderBottom: '1px solid var(--line)' }}>
@@ -20,6 +26,22 @@ export function CascaDoPortal() {
           <b style={{ fontSize: 16, color: 'var(--navy)' }}>Meu VidaCor</b>
         </Link>
         <div className="grow" />
+        {sessao.data !== undefined && (
+          <>
+            <span className="t14">Olá, {sessao.data.primeiro_nome}</span>
+            <Botao
+              pequeno
+              onPress={() => {
+                void api.portal.sair().finally(() => {
+                  cliente.clear();
+                  void navegar({ to: '/portal/entrar' });
+                });
+              }}
+            >
+              Sair
+            </Botao>
+          </>
+        )}
         <span className="t13 mute" aria-live="polite">
           Letra {Math.round(escala * 100)}%
         </span>

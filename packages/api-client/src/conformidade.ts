@@ -6,6 +6,7 @@
  */
 import type { components } from './gerado/openapi';
 import type { MenuDoObjeto } from './contrato-menu';
+import type { ConviteEmitido, SessaoDoPortal, SituacaoDoConvite } from './contrato-portal';
 import type { EstornoDetalhado, NovoPedidoDesconto, PedidoDesconto } from './contrato-pendencias';
 import type { NovoAtendimento, PacienteResumo, Sala, SalaDaUnidade, Sessao } from './contrato-m0';
 import type {
@@ -67,3 +68,6 @@ export type ConferePedidoDesconto = Cabe<PedidoDesconto, S['PedidoDesconto']>;
 export type ConfereNovoPedidoDesconto = Cabe<NovoPedidoDesconto, S['NovoPedidoDesconto']>;
 export type ConfereEstornoDetalhado = Cabe<EstornoDetalhado, S['EstornoDetalhado']>;
 export type ConfereMenuDoObjeto = Cabe<MenuDoObjeto, S['MenuDoObjeto']>;
+export type ConfereConviteEmitido = Cabe<ConviteEmitido, S['ConviteEmitido']>;
+export type ConfereSituacaoDoConvite = Cabe<SituacaoDoConvite, S['SituacaoDoConvite']>;
+export type ConfereSessaoDoPortal = Cabe<SessaoDoPortal, S['SessaoDoPortal']>;

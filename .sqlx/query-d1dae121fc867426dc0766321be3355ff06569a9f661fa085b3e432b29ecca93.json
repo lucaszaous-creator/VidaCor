@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE portal.convite SET revogado_em = now(), motivo_revogacao = 'convite novo', versao = versao + 1\n          WHERE paciente_id = $1 AND usado_em IS NULL AND revogado_em IS NULL",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "d1dae121fc867426dc0766321be3355ff06569a9f661fa085b3e432b29ecca93"
+}

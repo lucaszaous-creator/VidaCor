@@ -1,3 +1,4 @@
+import { ConviteDoPortal } from './ConviteDoPortal';
 import { useQuery } from '@tanstack/react-query';
 import type { AtendimentoFase1, CorrecaoCadastro, ItemDaAgendaFase1, Reimpressao } from '@vidacor/api-client';
 import {
@@ -276,6 +277,7 @@ export function PainelDoPaciente({ item, retomada }: PropsDoPainel) {
       ) : (
         <AtendimentoDoPaciente key={atendimentoId} item={item} atendimentoId={atendimentoId} retomada={retomada} />
       )}
+      <ConviteDoPortal key={item.paciente.id} pacienteId={item.paciente.id} nome={item.paciente.nome} />
     </div>
   );
 }

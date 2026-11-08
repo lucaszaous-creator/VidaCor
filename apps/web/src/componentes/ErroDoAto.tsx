@@ -66,7 +66,8 @@ export function ErroDoAto({ erro, ato, aoReautenticar, naoPreservado, aoTentarDe
     );
   }
 
-  if (erro instanceof ErroDaApi && erro.status === 401) {
+  // 401 de login recusado (portal) não é sessão terminada: mostra a mensagem do servidor.
+  if (erro instanceof ErroDaApi && erro.status === 401 && erro.codigo !== 'login-nao-confere') {
     return (
       <Aviso
         nivel="bloqueante"

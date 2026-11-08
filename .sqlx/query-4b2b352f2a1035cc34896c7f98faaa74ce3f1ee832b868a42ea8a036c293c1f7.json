@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE portal.sessao SET revogada_em = now() WHERE conta_id = $1 AND revogada_em IS NULL",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "4b2b352f2a1035cc34896c7f98faaa74ce3f1ee832b868a42ea8a036c293c1f7"
+}

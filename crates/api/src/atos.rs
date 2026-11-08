@@ -26,6 +26,7 @@ pub enum Ato {
     ContingenciaEncerrar,
     ContingenciaKit,
     EstudoConciliar,
+    PortalConvidar,
 }
 
 impl Ato {
@@ -58,6 +59,8 @@ impl Ato {
             A::ContingenciaEncerrar | A::ContingenciaKit => &["gerente"],
             // Vínculo manual de imagem: médico, com dois identificadores (docs/18 § 5).
             A::EstudoConciliar => &["medico"],
+            // Convite do portal (docs/04 Cadastro): recepção e gerência.
+            A::PortalConvidar => &["recepcao", "gerente"],
         };
         perfis.contains(&perfil)
     }
@@ -67,7 +70,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 22] = [
+    const TODOS: [Ato; 23] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -90,6 +93,7 @@ mod testes {
         Ato::ContingenciaEncerrar,
         Ato::ContingenciaKit,
         Ato::EstudoConciliar,
+        Ato::PortalConvidar,
     ];
 
     #[test]

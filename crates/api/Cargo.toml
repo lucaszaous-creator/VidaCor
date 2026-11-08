@@ -39,6 +39,7 @@ utoipa = { version = "5.4.0", features = ["axum_extras", "uuid", "chrono"] }
 uuid = { version = "1.18.1", features = ["v7", "serde"] }
 openidconnect = { version = "4", default-features = false, features = ["reqwest", "rustls-tls"] }
 hmac = "0.12"
+argon2 = { version = "0.5.3", features = ["std"] }
 
 [dev-dependencies]
 http-body-util = "0.1.3"

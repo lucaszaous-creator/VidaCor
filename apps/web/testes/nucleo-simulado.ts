@@ -9,6 +9,7 @@ import { setupServer } from 'msw/node';
 import { agendaDoDia, atendimentoDe, itensDaAgenda, SALAS, SESSAO } from './dados/ficticios';
 import { manipuladoresFase1, reiniciarFase1 } from './nucleo-fase1';
 import { manipuladoresMenu } from './nucleo-menu';
+import { manipuladoresPortal, portalSimulado } from './nucleo-portal';
 import { manipuladoresPendencias, reiniciarPendencias } from './nucleo-pendencias';
 import { problema } from './problema';
 
@@ -31,6 +32,7 @@ export function reiniciarNucleo(): void {
   estado.pedidosDeCheckin = [];
   reiniciarFase1();
   reiniciarPendencias();
+  portalSimulado.logado = false;
 }
 
 function normalizar(nome: string): string {
@@ -105,4 +107,4 @@ export const manipuladores = [
   }),
 ];
 
-export const servidor = setupServer(...manipuladoresMenu, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores);
+export const servidor = setupServer(...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores);

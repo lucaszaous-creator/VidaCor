@@ -778,6 +778,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/pacientes/{id}/convites-portal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** A recepção convida o paciente para o portal (convite novo revoga o anterior). */
+        post: operations["convidar_para_o_portal"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/pacientes/{id}/correcao": {
         parameters: {
             query?: never;
@@ -864,6 +881,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/portal/convites/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Situação do convite antes de pedir os dados (sem dizer de quem é). */
+        get: operations["situacao_do_convite"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/portal/convites/{token}/aceite": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** O paciente aceita o convite: confere o nascimento, escolhe login e senha e já entra. */
+        post: operations["aceitar_convite"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/portal/laudos": {
         parameters: {
             query?: never;
@@ -892,6 +943,41 @@ export interface paths {
         get: operations["meu_laudo"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/portal/sessao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Sessão atual do paciente (401 sem sessão: a tela leva ao login). */
+        get: operations["portal_sessao"];
+        put?: never;
+        /** Login do paciente no portal (mensagem única: não diz se o login existe). */
+        post: operations["portal_entrar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/portal/sessao/encerramento": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sai do portal: a sessão é revogada no servidor e o cookie apagado. */
+        post: operations["portal_sair"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1155,6 +1241,15 @@ export interface components {
             perigo: boolean;
             rotulo: string;
         };
+        Aceite: {
+            login: string;
+            /**
+             * Format: date
+             * @description Nascimento do paciente (AAAA-MM-DD), conferido com o cadastro.
+             */
+            nascimento: string;
+            senha: string;
+        };
         AcessoEmergencia: {
             codigo: string;
             /** Format: date-time */
@@ -1249,6 +1344,18 @@ export interface components {
             responsavel_id: string;
             situacao: string;
         };
+        ConviteEmitido: {
+            /**
+             * @description Caminho do aceite com o token; aparece só na primeira resposta. Na repetição (mesma
+             *     `Idempotency-Key`) vem nulo: o banco guarda só o hash, e o link não é recriado.
+             */
+            caminho?: string | null;
+            codigo: string;
+            /** Format: date-time */
+            expira_em: string;
+            /** Format: uuid */
+            id: string;
+        };
         Correcao: {
             /** @description Etiquetas que foram invalidadas e precisam ser reimpressas. */
             etiquetas_invalidadas: string[];
@@ -1277,6 +1384,10 @@ export interface components {
             codigo: string;
             /** @description resolvida. */
             situacao: string;
+        };
+        Entrada: {
+            login: string;
+            senha: string;
         };
         EstornoAprovado: {
             /** Format: uuid */
@@ -1830,6 +1941,14 @@ export interface components {
             csrf: string;
             unidade: components["schemas"]["UnidadeSessao"];
             usuario: components["schemas"]["UsuarioSessao"];
+        };
+        SessaoDoPortal: {
+            /** @description Primeiro nome, para a saudação. */
+            primeiro_nome: string;
+        };
+        SituacaoDoConvite: {
+            /** @description valido ou indisponivel (vencido, usado, revogado ou inexistente: a mesma resposta). */
+            situacao: string;
         };
         Triagem: {
             codigo: string;
@@ -3624,6 +3743,45 @@ export interface operations {
             };
         };
     };
+    convidar_para_o_portal: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConviteEmitido"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     corrigir: {
         parameters: {
             query?: never;
@@ -3859,6 +4017,74 @@ export interface operations {
             };
         };
     };
+    situacao_do_convite: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SituacaoDoConvite"];
+                };
+            };
+        };
+    };
+    aceitar_convite: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Aceite"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     meus_laudos: {
         parameters: {
             query?: never;
@@ -3904,6 +4130,87 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["ProblemaDoc"];
                 };
+            };
+        };
+    };
+    portal_sessao: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessaoDoPortal"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    portal_entrar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Entrada"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    portal_sair: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

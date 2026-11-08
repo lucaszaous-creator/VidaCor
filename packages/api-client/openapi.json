@@ -2545,6 +2545,67 @@
         }
       }
     },
+    "/v1/pacientes/{id}/convites-portal": {
+      "post": {
+        "tags": [
+          "portal"
+        ],
+        "summary": "A recepção convida o paciente para o portal (convite novo revoga o anterior).",
+        "operationId": "convidar_para_o_portal",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConviteEmitido"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/pacientes/{id}/correcao": {
       "post": {
         "tags": [
@@ -2891,6 +2952,101 @@
         }
       }
     },
+    "/v1/portal/convites/{token}": {
+      "get": {
+        "tags": [
+          "portal"
+        ],
+        "summary": "Situação do convite antes de pedir os dados (sem dizer de quem é).",
+        "operationId": "situacao_do_convite",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SituacaoDoConvite"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/portal/convites/{token}/aceite": {
+      "post": {
+        "tags": [
+          "portal"
+        ],
+        "summary": "O paciente aceita o convite: confere o nascimento, escolhe login e senha e já entra.",
+        "operationId": "aceitar_convite",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Aceite"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/portal/laudos": {
       "get": {
         "tags": [
@@ -2953,6 +3109,93 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/v1/portal/sessao": {
+      "get": {
+        "tags": [
+          "portal"
+        ],
+        "summary": "Sessão atual do paciente (401 sem sessão: a tela leva ao login).",
+        "operationId": "portal_sessao",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessaoDoPortal"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "portal"
+        ],
+        "summary": "Login do paciente no portal (mensagem única: não diz se o login existe).",
+        "operationId": "portal_entrar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Entrada"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/portal/sessao/encerramento": {
+      "post": {
+        "tags": [
+          "portal"
+        ],
+        "summary": "Sai do portal: a sessão é revogada no servidor e o cookie apagado.",
+        "operationId": "portal_sair",
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
@@ -3591,6 +3834,27 @@
           }
         }
       },
+      "Aceite": {
+        "type": "object",
+        "required": [
+          "nascimento",
+          "login",
+          "senha"
+        ],
+        "properties": {
+          "login": {
+            "type": "string"
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date",
+            "description": "Nascimento do paciente (AAAA-MM-DD), conferido com o cadastro."
+          },
+          "senha": {
+            "type": "string"
+          }
+        }
+      },
       "AcessoEmergencia": {
         "type": "object",
         "required": [
@@ -3918,6 +4182,34 @@
           }
         }
       },
+      "ConviteEmitido": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "expira_em"
+        ],
+        "properties": {
+          "caminho": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Caminho do aceite com o token; aparece só na primeira resposta. Na repetição (mesma\n`Idempotency-Key`) vem nulo: o banco guarda só o hash, e o link não é recriado."
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "expira_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
       "Correcao": {
         "type": "object",
         "required": [
@@ -4010,6 +4302,21 @@
           "situacao": {
             "type": "string",
             "description": "resolvida."
+          }
+        }
+      },
+      "Entrada": {
+        "type": "object",
+        "required": [
+          "login",
+          "senha"
+        ],
+        "properties": {
+          "login": {
+            "type": "string"
+          },
+          "senha": {
+            "type": "string"
           }
         }
       },
@@ -5781,6 +6088,30 @@
           },
           "usuario": {
             "$ref": "#/components/schemas/UsuarioSessao"
+          }
+        }
+      },
+      "SessaoDoPortal": {
+        "type": "object",
+        "required": [
+          "primeiro_nome"
+        ],
+        "properties": {
+          "primeiro_nome": {
+            "type": "string",
+            "description": "Primeiro nome, para a saudação."
+          }
+        }
+      },
+      "SituacaoDoConvite": {
+        "type": "object",
+        "required": [
+          "situacao"
+        ],
+        "properties": {
+          "situacao": {
+            "type": "string",
+            "description": "valido ou indisponivel (vencido, usado, revogado ou inexistente: a mesma resposta)."
           }
         }
       },

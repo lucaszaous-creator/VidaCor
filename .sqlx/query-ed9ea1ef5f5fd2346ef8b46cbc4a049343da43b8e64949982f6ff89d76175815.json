@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE portal.convite SET usado_em = now(), versao = versao + 1\n          WHERE id = $1 AND usado_em IS NULL AND revogado_em IS NULL AND expira_em > now() RETURNING id",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "portal.convite",
+            "name": "id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "ed9ea1ef5f5fd2346ef8b46cbc4a049343da43b8e64949982f6ff89d76175815"
+}

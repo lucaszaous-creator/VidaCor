@@ -14,6 +14,8 @@ import { chaves, consultaSessao } from './consultas';
 import type { Dependencias } from './contexto';
 import { TelaNovoAgendamento } from './telas/agendamento/TelaNovoAgendamento';
 import { TelaAgenda } from './telas/agenda/TelaAgenda';
+import { TelaConvite } from './telas/portal/TelaConvite';
+import { TelaEntrarNoPortal } from './telas/portal/TelaEntrarNoPortal';
 import { TelaPendencias } from './telas/pendencias/TelaPendencias';
 import { TelaCaixa } from './telas/caixa/TelaCaixa';
 import { TelaContingencia } from './telas/contingencia/TelaContingencia';
@@ -165,11 +167,13 @@ const rotaPortal = createRoute({ getParentRoute: () => raiz, path: '/portal', co
 const rotaPortalInicio = createRoute({ getParentRoute: () => rotaPortal, path: '/', component: TelaPortal });
 const rotaPortalLaudo = createRoute({ getParentRoute: () => rotaPortal, path: '/laudos/$laudoId', component: TelaLaudoDoPortal });
 const rotaPortalLink = createRoute({ getParentRoute: () => rotaPortal, path: '/link/$token', component: TelaLinkCompartilhado });
+const rotaPortalEntrar = createRoute({ getParentRoute: () => rotaPortal, path: '/entrar', component: TelaEntrarNoPortal });
+const rotaPortalConvite = createRoute({ getParentRoute: () => rotaPortal, path: '/convite/$token', component: TelaConvite });
 
 const arvore = raiz.addChildren([
   rotaEntrar,
   rotaReautenticado,
-  rotaPortal.addChildren([rotaPortalInicio, rotaPortalLaudo, rotaPortalLink]),
+  rotaPortal.addChildren([rotaPortalInicio, rotaPortalLaudo, rotaPortalLink, rotaPortalEntrar, rotaPortalConvite]),
   rotaApp.addChildren([
     rotaInicio,
     rotaAgenda,

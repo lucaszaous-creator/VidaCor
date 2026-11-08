@@ -15,6 +15,7 @@ pub mod menu;
 pub mod pacientes;
 pub mod pendencias;
 pub mod portal;
+pub mod portal_acesso;
 pub mod respostas;
 pub mod sala;
 pub mod saude;
@@ -80,6 +81,20 @@ pub fn rotas() -> Router<Estado> {
             post(laudos::acesso_emergencia),
         )
         .route("/v1/laudos/{id}/links", post(portal::criar_link))
+        .route(
+            "/v1/pacientes/{id}/convites-portal",
+            post(portal_acesso::convidar),
+        )
+        .route("/v1/portal/convites/{token}", get(portal_acesso::situacao))
+        .route(
+            "/v1/portal/convites/{token}/aceite",
+            post(portal_acesso::aceitar),
+        )
+        .route(
+            "/v1/portal/sessao",
+            get(portal_acesso::atual).post(portal_acesso::entrar),
+        )
+        .route("/v1/portal/sessao/encerramento", post(portal_acesso::sair))
         .route("/v1/portal/laudos", get(portal::meus_laudos))
         .route("/v1/portal/laudos/{id}", get(portal::meu_laudo))
         .route("/v1/links/{token}", get(portal::abrir_link))

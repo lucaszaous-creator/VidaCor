@@ -49,6 +49,7 @@ import type {
 } from './contrato-fase1';
 import type { ConsultaAgenda, PacienteResumo, SalaDaUnidade, Saude, Sessao } from './contrato-m0';
 import type { MenuDoObjeto, ObjetoDoMenu } from './contrato-menu';
+import type { AceiteDoConvite, ConviteEmitido, EntradaNoPortal, SessaoDoPortal, SituacaoDoConvite } from './contrato-portal';
 import type { Decisao, EstornoDetalhado, NovoPedidoDesconto, PedidoDesconto, SituacaoDoEstorno, SituacaoDoPedidoDeDesconto } from './contrato-pendencias';
 import { ErroDaApi, ErroSemConexao, ehProblemaHttp, problemaInesperado } from './erros';
 
@@ -212,6 +213,11 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
     return pedir<T>({ metodo, caminho, corpo, escrita: true });
   }
 
+  /** Escrita do portal do paciente: sessão própria (cookie do portal), sem o CSRF da equipe. */
+  async function noPortal(caminho: string, corpo: unknown): Promise<void> {
+    await pedir<undefined>({ metodo: 'POST', caminho, corpo });
+  }
+
   function ler<T>(caminho: string): Promise<T> {
     return pedir<T>({ metodo: 'GET', caminho });
   }
@@ -284,6 +290,9 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
       /** Correção de cadastro com motivo (reautenticação). */
       corrigir: (id: string, corpo: PedidoCorrecaoCadastro, o: OpcoesDeEscrita): Promise<CorrecaoCadastro> =>
         criar<CorrecaoCadastro>('POST', `/v1/pacientes/${seg(id)}/correcao`, corpo, o),
+      /** Convite do portal: o link aparece só na primeira resposta (repetição: `caminho` nulo). */
+      convidarParaPortal: (id: string, o: OpcoesDeEscrita): Promise<ConviteEmitido> =>
+        criar<ConviteEmitido>('POST', `/v1/pacientes/${seg(id)}/convites-portal`, {}, o),
     },
 
     guias: {
@@ -334,6 +343,15 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
       laudo: (id: string): Promise<LaudoDoPortal> => ler<LaudoDoPortal>(`/v1/portal/laudos/${seg(id)}`),
       /** Laudo compartilhado por link; `410 link-expirado` quando venceu. */
       link: (token: string): Promise<LaudoDoPortal> => ler<LaudoDoPortal>(`/v1/links/${seg(token)}`),
+      /** Sessão do paciente (401 sem sessão). */
+      sessao: (): Promise<SessaoDoPortal> => ler<SessaoDoPortal>('/v1/portal/sessao'),
+      /** Login; erro único `401 login-nao-confere`; `429 acesso-em-espera` depois de 5 erros. */
+      entrar: (corpo: EntradaNoPortal): Promise<void> => noPortal('/v1/portal/sessao', corpo),
+      sair: (): Promise<void> => noPortal('/v1/portal/sessao/encerramento', {}),
+      situacaoDoConvite: (token: string): Promise<SituacaoDoConvite> => ler<SituacaoDoConvite>(`/v1/portal/convites/${seg(token)}`),
+      /** Aceite: confere o nascimento, grava login e senha e já entra (cookie de sessão do portal). */
+      aceitarConvite: (token: string, corpo: AceiteDoConvite): Promise<void> =>
+        noPortal(`/v1/portal/convites/${seg(token)}/aceite`, corpo),
     },
 
     caixas: {

@@ -17,7 +17,15 @@ export function ErroDoPortal({ erro, aoTentarDeNovo }: { erro: unknown; aoTentar
   );
   if (e.tipo === 'sem-sessao') {
     return (
-      <Aviso nivel="atencao" titulo="Entre no portal para ver seus resultados.">
+      <Aviso
+        nivel="atencao"
+        titulo="Entre no portal para ver seus resultados."
+        acoes={
+          <Link to="/portal/entrar" className="btn btn-p btn-sm">
+            Entrar
+          </Link>
+        }
+      >
         Sua sessão terminou ou ainda não começou. Nada foi mostrado.
       </Aviso>
     );
