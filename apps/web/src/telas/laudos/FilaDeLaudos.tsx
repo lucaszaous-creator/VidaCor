@@ -47,6 +47,7 @@ export function FilaDeLaudos({ atual }: { atual?: string }) {
             marca={l.conversar_antes ? 'Conversar antes de liberar' : undefined}
             selecionada={l.id === atual}
             contextoDoMenu={l.exame}
+            menuDe={{ objeto: 'laudo', id: l.id }}
             aoAbrir={() => {
               void navegar({ to: '/laudos/$laudoId', params: { laudoId: l.id } });
             }}

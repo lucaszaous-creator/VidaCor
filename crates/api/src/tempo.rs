@@ -3,6 +3,9 @@
 use chrono::{DateTime, Datelike, NaiveDate, TimeZone, Utc};
 use chrono_tz::America::Sao_Paulo;
 
+/// Fuso da clínica.
+pub const FUSO: chrono_tz::Tz = Sao_Paulo;
+
 #[must_use]
 pub fn agora() -> DateTime<Utc> {
     Utc::now()

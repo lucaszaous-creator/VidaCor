@@ -13,12 +13,12 @@ import {
   formatarDataHora,
   formatarHora,
   Gaveta,
-  MenuDeContexto,
   useMenuDeContexto,
 } from '@vidacor/design-system';
 import { useState, type ReactNode } from 'react';
 import { FUSO_DA_CLINICA } from './grade';
-import { ACOES_DO_AGENDAMENTO, cabecalhoDoMenu, MOTIVO_SEM_ACOES } from './menu';
+import { MenuDoServidor } from '../../componentes/MenuDoServidor';
+import { cabecalhoDoMenu } from './menu';
 import { ResumoDoAtendimento } from './ResumoDoAtendimento';
 import { aparenciaDoAgendamento } from './situacoes';
 import { useCheckIn } from './useCheckIn';
@@ -40,13 +40,7 @@ function MaisOpcoes({ item }: { item: ItemDaAgendaFase1 }) {
           menu.abrirEm(e.target as HTMLElement);
         }}
       />
-      <MenuDeContexto
-        estado={menu}
-        cabecalho={cabecalhoDoMenu(item)}
-        acoes={ACOES_DO_AGENDAMENTO}
-        motivoSemAcoes={MOTIVO_SEM_ACOES}
-        aoEscolher={() => undefined}
-      />
+      <MenuDoServidor estado={menu} objeto="agendamento" id={item.id} cabecalho={cabecalhoDoMenu(item)} />
     </>
   );
 }

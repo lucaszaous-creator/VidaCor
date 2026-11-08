@@ -53,6 +53,19 @@ async function entrar(page, usuario) {
         if (ruim) falhas++;
         console.log(`${ruim ? 'FALHA' : 'ok   '} ${usuario} ${tela} ${w}x${h} h1="${m.titulo}"${m.rolaV ? ' ROLA-PAGINA' : ''}${m.rolaH ? ' ROLA-LATERAL' : ''}${m.alerta.length ? ' alerta=' + JSON.stringify(m.alerta) : ''}${erros.length ? ' ' + JSON.stringify([...new Set(erros)]) : ''}`);
         if (PASTA && w === 1440) await page.screenshot({ path: `${PASTA}/${usuario}${tela.replace(/\//g, '_')}.png` });
+        // Menu de contexto vindo do servidor: abre com Shift+F10 no primeiro paciente da lista.
+        const alvo = page.locator('button.lp[aria-haspopup="menu"]').first();
+        if (w === 1440 && await alvo.count()) {
+          await alvo.focus(); await page.keyboard.press('Shift+F10');
+          const menu = page.getByRole('menu');
+          await menu.waitFor({ timeout: 5000 }).catch(() => undefined);
+          await page.waitForLoadState('networkidle');
+          const itens = await menu.getByRole('menuitem').allTextContents().catch(() => []);
+          const semAcao = itens.length === 1 && /não tem ações|Não foi possível/.test(itens[0]);
+          if (semAcao || itens.length === 0) falhas++;
+          console.log(`${semAcao || itens.length === 0 ? 'FALHA' : 'ok   '} ${usuario} ${tela} menu: ${JSON.stringify(itens.map(t => t.trim().slice(0, 60)))}`);
+          await page.keyboard.press('Escape');
+        }
       }
     }
     await ctx.close();

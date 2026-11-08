@@ -33,7 +33,15 @@ impl Ato {
     pub fn concedido_a(self, perfil: &str) -> bool {
         use Ato as A;
         let perfis: &[&str] = match self {
-            A::AgendaVer => &["recepcao", "tecnico", "medico", "gerente", "faturista"],
+            // Caixa vê a agenda do dia (N0) para receber (docs/18 § 4, BUG-2026-001).
+            A::AgendaVer => &[
+                "recepcao",
+                "tecnico",
+                "medico",
+                "gerente",
+                "faturista",
+                "caixa",
+            ],
             A::AgendaAgendar => &["recepcao", "gerente"],
             A::GuiaRegistrar => &["recepcao", "faturista"],
             A::RecepcaoVer => &["recepcao", "tecnico", "gerente", "caixa"],

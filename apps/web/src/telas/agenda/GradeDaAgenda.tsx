@@ -1,7 +1,8 @@
 import type { ItemDaAgendaFase1 } from '@vidacor/api-client';
-import { formatarData, formatarHora, MenuDeContexto, useMenuDeContexto } from '@vidacor/design-system';
+import { formatarData, formatarHora, useMenuDeContexto } from '@vidacor/design-system';
 import { FUSO_DA_CLINICA, nomeCurto, rotuloDaHora, type Grade, type ItemPosicionado } from './grade';
-import { ACOES_DO_AGENDAMENTO, cabecalhoDoMenu, MOTIVO_SEM_ACOES } from './menu';
+import { MenuDoServidor } from '../../componentes/MenuDoServidor';
+import { cabecalhoDoMenu } from './menu';
 import { aparenciaDoAgendamento } from './situacoes';
 
 interface PropsDoEvento {
@@ -35,13 +36,7 @@ function EventoDaAgenda({ posicionado, selecionado, aoAbrir }: PropsDoEvento) {
         </span>
         <span className="s">{sub}</span>
       </button>
-      <MenuDeContexto
-        estado={menu}
-        cabecalho={cabecalhoDoMenu(item)}
-        acoes={ACOES_DO_AGENDAMENTO}
-        motivoSemAcoes={MOTIVO_SEM_ACOES}
-        aoEscolher={() => undefined}
-      />
+      <MenuDoServidor estado={menu} objeto="agendamento" id={item.id} cabecalho={cabecalhoDoMenu(item)} />
     </>
   );
 }

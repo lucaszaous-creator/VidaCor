@@ -396,3 +396,34 @@ async fn aprovar_e_recusar_ao_mesmo_tempo_so_uma_decisao_vale() {
         1
     );
 }
+
+/// BUG-2026-001: o caixa vê N0 e N1 (docs/18 § 4) e precisa da agenda do dia com os atendimentos
+/// para receber; o RLS e o ato da agenda não incluíam o caixa.
+#[tokio::test]
+async fn caixa_ve_a_agenda_do_dia_com_os_atendimentos_para_receber() {
+    let amb = Ambiente::novo().await;
+    amb.fazer_checkin("Antônio Carlos Ribeiro", "1954-06-15")
+        .await;
+    let carla = amb.entrar("carla.caixa").await;
+    let (st, _, agenda) = amb
+        .pedir(amb.get(&format!("/v1/agenda?data={}", amb.s.dia), Some(&carla)))
+        .await;
+    assert_eq!(st, StatusCode::OK, "{agenda}");
+    let sonia = agenda["itens"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|i| i["paciente"]["nome"] == "Antônio Carlos Ribeiro")
+        .expect("Antônio na agenda do caixa");
+    assert!(sonia["atendimento_id"].is_string(), "{sonia}");
+    let (s2, _, m) = amb
+        .pedir(amb.get(
+            &format!(
+                "/v1/menu/agendamento/{}",
+                amb.s.agendamentos["Antônio Carlos Ribeiro"]
+            ),
+            Some(&carla),
+        ))
+        .await;
+    assert_eq!(s2, StatusCode::OK, "{m}");
+}

@@ -224,6 +224,7 @@ export function TelaSala() {
                       }
                       selecionada={i.paciente.id === paciente?.id}
                       contextoDoMenu={i.exame}
+                      menuDe={{ objeto: 'atendimento', id: i.atendimento_id }}
                       aoAbrir={() => {
                         campo.current?.focus();
                       }}

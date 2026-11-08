@@ -2344,6 +2344,162 @@
         }
       }
     },
+    "/v1/menu/agendamento/{id}": {
+      "get": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "Menu de contexto de um agendamento (agenda, recepção).",
+        "operationId": "agendamento",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MenuDoObjeto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/menu/atendimento/{id}": {
+      "get": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "Menu de contexto de um atendimento (fila da sala): as mesmas ações do agendamento dele.",
+        "operationId": "atendimento",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MenuDoObjeto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/menu/laudo/{id}": {
+      "get": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "Menu de contexto de um laudo (fila de laudos).",
+        "operationId": "laudo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MenuDoObjeto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/pacientes": {
       "get": {
         "tags": [
@@ -3396,6 +3552,45 @@
   },
   "components": {
     "schemas": {
+      "AcaoDoMenu": {
+        "type": "object",
+        "required": [
+          "id",
+          "rotulo",
+          "estado",
+          "perigo"
+        ],
+        "properties": {
+          "destino": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Caminho da tela que faz a ação (relativo, só com UUID). Sem destino: ação local da tela\n(ex.: copiar nome e nascimento)."
+          },
+          "estado": {
+            "type": "string",
+            "description": "disponivel ou indisponivel."
+          },
+          "id": {
+            "type": "string"
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Obrigatório quando indisponível."
+          },
+          "perigo": {
+            "type": "boolean",
+            "description": "Destrutiva: vai para o fim, em vermelho."
+          },
+          "rotulo": {
+            "type": "string"
+          }
+        }
+      },
       "AcessoEmergencia": {
         "type": "object",
         "required": [
@@ -3554,6 +3749,21 @@
           "valida_ate": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "CabecalhoDoMenu": {
+        "type": "object",
+        "required": [
+          "titulo",
+          "subtitulo"
+        ],
+        "properties": {
+          "subtitulo": {
+            "type": "string"
+          },
+          "titulo": {
+            "type": "string"
           }
         }
       },
@@ -4541,6 +4751,24 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "MenuDoObjeto": {
+        "type": "object",
+        "required": [
+          "cabecalho",
+          "acoes"
+        ],
+        "properties": {
+          "acoes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AcaoDoMenu"
+            }
+          },
+          "cabecalho": {
+            "$ref": "#/components/schemas/CabecalhoDoMenu"
           }
         }
       },

@@ -11,6 +11,7 @@ pub mod estudos;
 pub mod etiquetas;
 pub mod eventos;
 pub mod laudos;
+pub mod menu;
 pub mod pacientes;
 pub mod pendencias;
 pub mod portal;
@@ -91,6 +92,9 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/autorizacoes-desconto", post(caixa::autorizar_desconto))
         .route("/v1/estornos/{id}/aprovacao", post(caixa::aprovar_estorno))
         .route("/v1/estornos", get(estornos::listar))
+        .route("/v1/menu/agendamento/{id}", get(menu::agendamento))
+        .route("/v1/menu/atendimento/{id}", get(menu::atendimento))
+        .route("/v1/menu/laudo/{id}", get(menu::laudo))
         .route("/v1/estornos/{id}", get(estornos::obter))
         .route("/v1/estornos/{id}/recusa", post(estornos::recusar))
         .route(

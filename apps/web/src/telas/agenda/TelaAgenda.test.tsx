@@ -66,22 +66,33 @@ describe('Agenda do dia', () => {
     expect(await screen.findByText('Você não tem acesso à agenda')).toBeInTheDocument();
   });
 
-  it('menu de contexto do agendamento abre com Shift+F10 e não inventa ações', async () => {
+  it('menu de contexto do agendamento abre com Shift+F10 com as ações do servidor (disponível e apagada com motivo)', async () => {
+    const usuario = userEvent.setup();
+    renderizar(URL_DO_DIA);
+    const alvo = await screen.findByRole('button', { name: /^Antônio Carlos Ribeiro, nascimento/ });
+    alvo.focus();
+    await usuario.keyboard('{Shift>}{F10}{/Shift}');
+    expect(screen.getByText(/Nascimento 15\/06\/1954/)).toBeInTheDocument();
+    const menu = await screen.findByRole('menu', { name: 'Ações de Antônio Carlos Ribeiro' });
+    expect(await within(menu).findByRole('menuitem', { name: /Fazer check-in/ })).not.toHaveAttribute('aria-disabled', 'true');
+    const reimprimir = within(menu).getByRole('menuitem', { name: /Reimprimir pulseira/ });
+    expect(reimprimir).toHaveAttribute('aria-disabled', 'true');
+    expect(reimprimir).toHaveTextContent('Faça o check-in antes');
+    await usuario.keyboard('{Escape}');
+    await waitFor(() => {
+      expect(alvo).toHaveFocus();
+    });
+  });
+
+  it('escolher uma ação do menu leva à tela que faz a ação', async () => {
     const usuario = userEvent.setup();
     renderizar(URL_DO_DIA);
     const alvo = await screen.findByRole('button', { name: /^Antônio Carlos Ribeiro, nascimento/ });
     alvo.focus();
     await usuario.keyboard('{Shift>}{F10}{/Shift}');
     const menu = await screen.findByRole('menu', { name: 'Ações de Antônio Carlos Ribeiro' });
-    expect(screen.getByText(/Nascimento 15\/06\/1954, 09:00, Eco e Doppler de carótidas/)).toBeInTheDocument();
-    const itens = within(menu).getAllByRole('menuitem');
-    expect(itens).toHaveLength(1);
-    expect(itens[0]).toHaveAttribute('aria-disabled', 'true');
-    expect(itens[0]).toHaveTextContent('Disponível na próxima entrega');
-    await usuario.keyboard('{Escape}');
-    await waitFor(() => {
-      expect(alvo).toHaveFocus();
-    });
+    await usuario.click(await within(menu).findByRole('menuitem', { name: /Fazer check-in/ }));
+    expect(await screen.findByRole('heading', { name: 'Recepção e pulseiras' })).toBeInTheDocument();
   });
 
   it('avisa quando o estudo chega pelo SSE, com nome e nascimento', async () => {

@@ -69,18 +69,18 @@ describe('Recepção: check-in com dois identificadores e pulseira (FC-CHK)', ()
     expect(await violacoesDeAcessibilidade(container)).toEqual([]);
   });
 
-  it('menu de contexto do paciente abre pelo teclado (Shift+F10), com nome e nascimento, sem inventar ações', async () => {
+  it('menu de contexto do paciente abre pelo teclado (Shift+F10), com nome e nascimento, com as ações do servidor', async () => {
     const usuario = userEvent.setup();
     renderizar(URL);
     const alvo = await screen.findByRole('button', { name: /^Antônio Carlos Ribeiro, nascimento 15\/06\/1954, 09:00/ });
     alvo.focus();
     await usuario.keyboard('{Shift>}{F10}{/Shift}');
+    expect(screen.getByText(/Nascimento 15\/06\/1954/)).toBeInTheDocument();
     const menu = await screen.findByRole('menu', { name: 'Ações de Antônio Carlos Ribeiro' });
-    expect(screen.getByText(/Nascimento 15\/06\/1954, 09:00, Eco e Doppler de carótidas/)).toBeInTheDocument();
-    const itens = within(menu).getAllByRole('menuitem');
-    expect(itens).toHaveLength(1);
-    expect(itens[0]).toHaveAttribute('aria-disabled', 'true');
-    expect(itens[0]).toHaveTextContent('Ações deste item ainda não vêm do servidor');
+    expect(await within(menu).findByRole('menuitem', { name: /Fazer check-in/ })).not.toHaveAttribute('aria-disabled', 'true');
+    const reimprimir = within(menu).getByRole('menuitem', { name: /Reimprimir pulseira/ });
+    expect(reimprimir).toHaveAttribute('aria-disabled', 'true');
+    expect(reimprimir).toHaveTextContent('Faça o check-in antes');
     await usuario.keyboard('{Escape}');
     await waitFor(() => {
       expect(alvo).toHaveFocus();

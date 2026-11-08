@@ -1,15 +1,8 @@
 import type { ItemDaAgendaFase1 } from '@vidacor/api-client';
-import { formatarData, formatarHora, type AcaoDoMenu, type CabecalhoDoMenu } from '@vidacor/design-system';
+import { formatarData, formatarHora, type CabecalhoDoMenu } from '@vidacor/design-system';
 import { FUSO_DA_CLINICA } from './grade';
 
-/**
- * Ações do menu de contexto do agendamento. Vêm do servidor (docs/19 § 8); o contrato v1 do M0 ainda
- * não tem a rota de ações, então a lista é vazia e o menu diz o motivo. Nada é inventado na tela.
- */
-export const ACOES_DO_AGENDAMENTO: AcaoDoMenu[] = [];
-
-export const MOTIVO_SEM_ACOES = 'Disponível na próxima entrega';
-
+/** Cabeçalho do menu do agendamento enquanto o servidor manda as ações (docs/19 § 8). */
 export function cabecalhoDoMenu(item: ItemDaAgendaFase1): CabecalhoDoMenu {
   return {
     titulo: item.paciente.nome,

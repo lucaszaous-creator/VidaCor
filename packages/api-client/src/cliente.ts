@@ -48,6 +48,7 @@ import type {
   PedidoNumeros,
 } from './contrato-fase1';
 import type { ConsultaAgenda, PacienteResumo, SalaDaUnidade, Saude, Sessao } from './contrato-m0';
+import type { MenuDoObjeto, ObjetoDoMenu } from './contrato-menu';
 import type { Decisao, EstornoDetalhado, NovoPedidoDesconto, PedidoDesconto, SituacaoDoEstorno, SituacaoDoPedidoDeDesconto } from './contrato-pendencias';
 import { ErroDaApi, ErroSemConexao, ehProblemaHttp, problemaInesperado } from './erros';
 
@@ -365,6 +366,11 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
       /** Aprovação (reautenticação; quem pediu não aprova: `403 separacao-de-funcoes`). */
       aprovar: (id: string, o: OpcoesDeEscrita): Promise<Estorno> =>
         criar<Estorno>('POST', `/v1/estornos/${seg(id)}/aprovacao`, {}, o),
+    },
+
+    menu: {
+      /** Ações do objeto para o perfil e o estado atual; a tela só mostra (docs/19 § 8). */
+      de: (objeto: ObjetoDoMenu, id: string): Promise<MenuDoObjeto> => ler<MenuDoObjeto>(`/v1/menu/${objeto}/${seg(id)}`),
     },
 
     pedidosDeDesconto: {

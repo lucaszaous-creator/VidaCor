@@ -710,6 +710,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/menu/agendamento/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Menu de contexto de um agendamento (agenda, recepção). */
+        get: operations["agendamento"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/menu/atendimento/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Menu de contexto de um atendimento (fila da sala): as mesmas ações do agendamento dele. */
+        get: operations["atendimento"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/menu/laudo/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Menu de contexto de um laudo (fila de laudos). */
+        get: operations["laudo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/pacientes": {
         parameters: {
             query?: never;
@@ -1089,6 +1140,21 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AcaoDoMenu: {
+            /**
+             * @description Caminho da tela que faz a ação (relativo, só com UUID). Sem destino: ação local da tela
+             *     (ex.: copiar nome e nascimento).
+             */
+            destino?: string | null;
+            /** @description disponivel ou indisponivel. */
+            estado: string;
+            id: string;
+            /** @description Obrigatório quando indisponível. */
+            motivo?: string | null;
+            /** @description Destrutiva: vai para o fim, em vermelho. */
+            perigo: boolean;
+            rotulo: string;
+        };
         AcessoEmergencia: {
             codigo: string;
             /** Format: date-time */
@@ -1130,6 +1196,10 @@ export interface components {
             id: string;
             /** Format: date-time */
             valida_ate: string;
+        };
+        CabecalhoDoMenu: {
+            subtitulo: string;
+            titulo: string;
         };
         Caixa: {
             /** Format: date-time */
@@ -1428,6 +1498,10 @@ export interface components {
             id: string;
             nome: string;
             perfis: string[];
+        };
+        MenuDoObjeto: {
+            acoes: components["schemas"]["AcaoDoMenu"][];
+            cabecalho: components["schemas"]["CabecalhoDoMenu"];
         };
         NovoPedidoDesconto: {
             motivo: string;
@@ -3400,6 +3474,117 @@ export interface operations {
                 };
             };
             410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    agendamento: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MenuDoObjeto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    atendimento: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MenuDoObjeto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    laudo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MenuDoObjeto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

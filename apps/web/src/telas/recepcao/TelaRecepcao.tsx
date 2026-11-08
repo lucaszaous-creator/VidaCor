@@ -28,7 +28,7 @@ export function TelaRecepcao() {
   const retomada = useRetomada();
   const agendamentoDaRetomada = useRouterState({ select: (s) => (s.location.search as Record<string, unknown>).agendamento });
   const [selecionado, setSelecionado] = useState<string | null>(() =>
-    retomada !== null && typeof agendamentoDaRetomada === 'string' ? agendamentoDaRetomada : null,
+    typeof agendamentoDaRetomada === 'string' && /^[0-9a-f-]{36}$/i.test(agendamentoDaRetomada) ? agendamentoDaRetomada : null,
   );
   const [filtro, setFiltro] = useState('');
   const agenda = useQuery(consultaAgenda(api, data, busca.sala));
@@ -79,6 +79,7 @@ export function TelaRecepcao() {
                   marca={i.homonimos.length > 0 ? 'Homônimo hoje: confira o nascimento' : undefined}
                   selecionada={i.id === selecionado}
                   contextoDoMenu={`${formatarHora(i.inicio, FUSO_DA_CLINICA)}, ${i.exame.nome}`}
+                  menuDe={{ objeto: 'agendamento', id: i.id }}
                   aoAbrir={() => {
                     setSelecionado(i.id);
                   }}

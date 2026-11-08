@@ -5,6 +5,7 @@
  * Valem os tipos da Fase 1, que são os usados pelas telas.
  */
 import type { components } from './gerado/openapi';
+import type { MenuDoObjeto } from './contrato-menu';
 import type { EstornoDetalhado, NovoPedidoDesconto, PedidoDesconto } from './contrato-pendencias';
 import type { NovoAtendimento, PacienteResumo, Sala, SalaDaUnidade, Sessao } from './contrato-m0';
 import type {
@@ -65,3 +66,4 @@ export type ConferePedidoRecebimento = Cabe<PedidoRecebimento, S['PedidoRecebime
 export type ConferePedidoDesconto = Cabe<PedidoDesconto, S['PedidoDesconto']>;
 export type ConfereNovoPedidoDesconto = Cabe<NovoPedidoDesconto, S['NovoPedidoDesconto']>;
 export type ConfereEstornoDetalhado = Cabe<EstornoDetalhado, S['EstornoDetalhado']>;
+export type ConfereMenuDoObjeto = Cabe<MenuDoObjeto, S['MenuDoObjeto']>;

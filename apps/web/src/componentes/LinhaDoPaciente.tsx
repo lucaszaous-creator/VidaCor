@@ -1,12 +1,14 @@
 import { Chip, formatarData, MenuDeContexto, useMenuDeContexto, type AcaoDoMenu, type CorDoChip } from '@vidacor/design-system';
+import type { ObjetoDoMenu } from '@vidacor/api-client';
 import type { ReactNode } from 'react';
+import { MenuDoServidor } from './MenuDoServidor';
 
 /**
- * Enquanto o núcleo não manda a lista de ações de cada objeto (docs/19 § 8; a rota não está no
- * docs/30), o menu abre vazio e diz o motivo. A tela não inventa ações.
+ * Objetos sem rota de ações no servidor (pendências, estudos) abrem o menu vazio com o motivo. A tela
+ * não inventa ações (docs/19 § 8).
  */
 export const ACOES_DO_SERVIDOR: AcaoDoMenu[] = [];
-export const MOTIVO_SEM_ACOES = 'Ações deste item ainda não vêm do servidor';
+export const MOTIVO_SEM_ACOES = 'Este item ainda não tem ações no menu';
 
 export interface PropsDaLinhaDoPaciente {
   nome: string;
@@ -23,12 +25,15 @@ export interface PropsDaLinhaDoPaciente {
   aoAbrir: () => void;
   /** Complemento do cabeçalho do menu (exame, horário). */
   contextoDoMenu?: string;
+  /** Objeto cujas ações o servidor manda (agendamento, laudo). */
+  menuDe?: { objeto: ObjetoDoMenu; id: string };
 }
 
 /** Linha de paciente em lista de painel, com os dois identificadores e menu de contexto. */
-export function LinhaDoPaciente({ nome, nascimento, inicio, detalhe, situacao, marca, selecionada, aoAbrir, contextoDoMenu }: PropsDaLinhaDoPaciente) {
+export function LinhaDoPaciente({ nome, nascimento, inicio, detalhe, situacao, marca, selecionada, aoAbrir, contextoDoMenu, menuDe }: PropsDaLinhaDoPaciente) {
   const menu = useMenuDeContexto();
   const nasc = formatarData(nascimento);
+  const cabecalho = { titulo: nome, subtitulo: `Nascimento ${nasc}${contextoDoMenu === undefined ? '' : `, ${contextoDoMenu}`}` };
   return (
     <>
       <button
@@ -60,13 +65,11 @@ export function LinhaDoPaciente({ nome, nascimento, inicio, detalhe, situacao, m
         </span>
         {situacao !== undefined && <Chip cor={situacao.cor} texto={situacao.texto} />}
       </button>
-      <MenuDeContexto
-        estado={menu}
-        cabecalho={{ titulo: nome, subtitulo: `Nascimento ${nasc}${contextoDoMenu === undefined ? '' : `, ${contextoDoMenu}`}` }}
-        acoes={ACOES_DO_SERVIDOR}
-        motivoSemAcoes={MOTIVO_SEM_ACOES}
-        aoEscolher={() => undefined}
-      />
+      {menuDe === undefined ? (
+        <MenuDeContexto estado={menu} cabecalho={cabecalho} acoes={ACOES_DO_SERVIDOR} motivoSemAcoes={MOTIVO_SEM_ACOES} aoEscolher={() => undefined} />
+      ) : (
+        <MenuDoServidor estado={menu} objeto={menuDe.objeto} id={menuDe.id} cabecalho={cabecalho} />
+      )}
     </>
   );
 }
