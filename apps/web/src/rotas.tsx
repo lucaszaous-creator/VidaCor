@@ -16,6 +16,8 @@ import { TelaNovoAgendamento } from './telas/agendamento/TelaNovoAgendamento';
 import { TelaAgenda } from './telas/agenda/TelaAgenda';
 import { TelaCadastroPaciente } from './telas/cadastro/TelaCadastroPaciente';
 import { TelaEstoque } from './telas/estoque/TelaEstoque';
+import { TelaAuditoriaFaturamento } from './telas/faturamento/TelaAuditoriaFaturamento';
+import { TelaFaturamento, type AbaDoFaturamento } from './telas/faturamento/TelaFaturamento';
 import { TelaLastro } from './telas/lastro/TelaLastro';
 import { TelaConvite } from './telas/portal/TelaConvite';
 import { TelaEntrarNoPortal } from './telas/portal/TelaEntrarNoPortal';
@@ -97,6 +99,19 @@ export function lerBuscaDoEstorno(busca: Record<string, unknown>): BuscaDoEstorn
   return estorno === undefined ? {} : { estorno };
 }
 
+export interface BuscaDoFaturamento {
+  aba?: AbaDoFaturamento;
+  id?: string;
+}
+
+export function lerBuscaDoFaturamento(busca: Record<string, unknown>): BuscaDoFaturamento {
+  const r: BuscaDoFaturamento = {};
+  if (busca.aba === 'guias' || busca.aba === 'lotes' || busca.aba === 'glosas') r.aba = busca.aba;
+  const id = lerUuid(busca.id);
+  if (id !== undefined) r.id = id;
+  return r;
+}
+
 const raiz = createRootRouteWithContext<ContextoDoRoteador>()({ component: Outlet });
 
 const rotaEntrar = createRoute({ getParentRoute: () => raiz, path: '/entrar', component: TelaEntrar });
@@ -141,6 +156,8 @@ const rotaNovoAgendamento = createRoute({ getParentRoute: () => rotaApp, path: '
 const rotaNovoPaciente = createRoute({ getParentRoute: () => rotaApp, path: '/pacientes/novo', component: TelaCadastroPaciente });
 const rotaEstoque = createRoute({ getParentRoute: () => rotaApp, path: '/estoque', component: TelaEstoque });
 const rotaLastro = createRoute({ getParentRoute: () => rotaApp, path: '/lastro', component: TelaLastro });
+const rotaFaturamento = createRoute({ getParentRoute: () => rotaApp, path: '/faturamento', validateSearch: lerBuscaDoFaturamento, component: TelaFaturamento });
+const rotaAuditoriaFaturamento = createRoute({ getParentRoute: () => rotaApp, path: '/faturamento/auditoria', component: TelaAuditoriaFaturamento });
 const rotaSala = createRoute({ getParentRoute: () => rotaApp, path: '/sala', validateSearch: lerBuscaDaSala, component: TelaSala });
 const rotaTriagem = createRoute({ getParentRoute: () => rotaApp, path: '/triagem/$atendimentoId', component: TelaTriagem });
 const rotaFilaDeLaudos = createRoute({ getParentRoute: () => rotaApp, path: '/laudos', component: TelaFilaDeLaudos });
@@ -194,6 +211,8 @@ const arvore = raiz.addChildren([
     rotaNovoPaciente,
     rotaEstoque,
     rotaLastro,
+    rotaFaturamento,
+    rotaAuditoriaFaturamento,
     rotaAutorizacao,
     rotaEstornos,
     rotaContingencia,
