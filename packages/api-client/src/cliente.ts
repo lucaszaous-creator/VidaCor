@@ -57,6 +57,7 @@ import type { IntegracaoVista } from './contrato-configuracoes';
 import type { VisaoDoPaciente } from './contrato-paciente';
 import type { InicioDoDia } from './contrato-inicio';
 import type { FluxoDeLaudos } from './contrato-fluxo';
+import type { ResultadoDaBusca } from './contrato-busca';
 import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
 import type { DecisaoDePerfil, ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
@@ -356,6 +357,9 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
 
     /** Painel da TV de chamada (dispositivo TV, recepção e gerência). */
     painelDeChamada: (): Promise<Painel> => ler<Painel>('/v1/painel-de-chamada'),
+
+    /** Busca global: só o que o perfil pode ver. */
+    buscar: (q: string): Promise<ResultadoDaBusca[]> => ler<ResultadoDaBusca[]>(`/v1/busca?q=${encodeURIComponent(q)}`),
 
     /** Fluxo de laudos para a coordenação (só metadados). */
     fluxoDeLaudos: (): Promise<FluxoDeLaudos> => ler<FluxoDeLaudos>('/v1/laudos/fluxo'),

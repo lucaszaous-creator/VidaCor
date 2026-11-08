@@ -1640,6 +1640,51 @@
         }
       }
     },
+    "/v1/busca": {
+      "get": {
+        "tags": [
+          "sessao"
+        ],
+        "summary": "Busca em tudo o que o perfil pode ver (qualquer pessoa da equipe com sessão).",
+        "operationId": "busca_global",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Nome (3+ letras), nascimento (dd/mm/aaaa), celular (10 ou 11 dígitos) ou código (ex.: AGD-2026-000123).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResultadoDaBusca"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/caixa/a-receber": {
       "get": {
         "tags": [
@@ -14955,6 +15000,36 @@
           "prontas": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "ResultadoDaBusca": {
+        "type": "object",
+        "required": [
+          "tipo",
+          "id",
+          "titulo",
+          "detalhe",
+          "destino"
+        ],
+        "properties": {
+          "destino": {
+            "type": "string",
+            "description": "Caminho da tela que abre o objeto (só identificadores técnicos)."
+          },
+          "detalhe": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tipo": {
+            "type": "string",
+            "description": "paciente, agendamento, atendimento, etiqueta ou laudo."
+          },
+          "titulo": {
+            "type": "string"
           }
         }
       },

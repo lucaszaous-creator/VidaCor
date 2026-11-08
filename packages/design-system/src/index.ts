@@ -15,6 +15,8 @@ export type { PropsDoCard } from './componentes/Card';
 export { Chip } from './componentes/Chip';
 export type { CorDoChip, PropsDoChip } from './componentes/Chip';
 export { Dialogo } from './componentes/Dialogo';
+export { Janela } from './componentes/Janela';
+export type { PropsDaJanela } from './componentes/Janela';
 export type { PacienteDoDialogo, PropsDoDialogo } from './componentes/Dialogo';
 export { Carregando, ErroTela, SemConexao, SemPermissao, Vazio } from './componentes/Estados';
 export type {

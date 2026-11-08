@@ -12,6 +12,7 @@ pub mod autorizacoes_contrato;
 pub mod autorizacoes_portal;
 pub mod autorizacoes_resposta;
 pub mod bloqueios;
+pub mod busca;
 pub mod cadastro;
 pub mod caixa;
 pub mod cancelamento;
@@ -176,6 +177,7 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/atendimentos/{id}/chamadas", post(chamada::chamar))
         .route("/v1/painel-de-chamada", get(chamada::painel))
         .route("/v1/inicio", get(inicio::inicio))
+        .route("/v1/busca", get(busca::buscar))
         .route("/v1/laudos/fluxo", get(fluxo_laudos::fluxo))
         .route(
             "/v1/configuracoes/integracoes",

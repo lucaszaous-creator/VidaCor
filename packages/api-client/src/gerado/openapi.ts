@@ -373,6 +373,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/busca": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Busca em tudo o que o perfil pode ver (qualquer pessoa da equipe com sessão). */
+        get: operations["busca_global"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/caixa/a-receber": {
         parameters: {
             query?: never;
@@ -4482,6 +4499,16 @@ export interface components {
             /** Format: int64 */
             prontas: number;
         };
+        ResultadoDaBusca: {
+            /** @description Caminho da tela que abre o objeto (só identificadores técnicos). */
+            destino: string;
+            detalhe: string;
+            /** Format: uuid */
+            id: string;
+            /** @description paciente, agendamento, atendimento, etiqueta ou laudo. */
+            tipo: string;
+            titulo: string;
+        };
         ResumoAuditoria: {
             /** Format: int64 */
             bloqueadas: number;
@@ -5807,6 +5834,36 @@ export interface operations {
                 };
             };
             /** @description motivo-invalido */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    busca_global: {
+        parameters: {
+            query: {
+                /** @description Nome (3+ letras), nascimento (dd/mm/aaaa), celular (10 ou 11 dígitos) ou código (ex.: AGD-2026-000123). */
+                q: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResultadoDaBusca"][];
+                };
+            };
             422: {
                 headers: {
                     [name: string]: unknown;

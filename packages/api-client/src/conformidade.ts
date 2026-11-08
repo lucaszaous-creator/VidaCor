@@ -13,6 +13,7 @@ import type { IntegracaoVista } from './contrato-configuracoes';
 import type { VisaoDoPaciente } from './contrato-paciente';
 import type { InicioDoDia } from './contrato-inicio';
 import type { FluxoDeLaudos } from './contrato-fluxo';
+import type { ResultadoDaBusca } from './contrato-busca';
 import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
 import type { CadeiaDoAtendimento, PedidoDossie } from './contrato-lastro';
@@ -178,3 +179,4 @@ export type ConfereIntegracaoVista = Cabe<IntegracaoVista, S['IntegracaoVista']>
 export type ConfereVisaoDoPaciente = Cabe<VisaoDoPaciente, S['VisaoDoPaciente']>;
 export type ConfereInicioDoDia = Cabe<InicioDoDia, S['InicioDoDia']>;
 export type ConfereFluxoDeLaudos = Cabe<FluxoDeLaudos, S['FluxoDeLaudos']>;
+export type ConfereResultadoDaBusca = Cabe<ResultadoDaBusca, S['ResultadoDaBusca']>;

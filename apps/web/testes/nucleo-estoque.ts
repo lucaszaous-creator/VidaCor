@@ -358,3 +358,17 @@ export const manipuladoresFluxo = [
       : semPermissao('ver o fluxo de laudos'),
   ),
 ];
+
+/** Busca global simulada (regras reais em `crates/api/tests/busca.rs`). */
+export const manipuladoresBusca = [
+  http.get('*/v1/busca', ({ request }) => {
+    const q = new URL(request.url).searchParams.get('q') ?? '';
+    if (q.trim().length < 3) return problema(422, 'busca-invalida', 'Digite pelo menos 3 letras.');
+    if (!temPerfil('recepcao', 'gerente', 'tecnico', 'medico')) return HttpResponse.json([]);
+    return HttpResponse.json(
+      q.toLowerCase().startsWith('vera')
+        ? [{ tipo: 'paciente', id: '0194f000-0000-7000-8000-0000000000c4', titulo: 'Vera Lúcia Antunes', detalhe: 'nascimento 18/09/1957, prontuário PAC-2026-000004', destino: '/pacientes?id=0194f000-0000-7000-8000-0000000000c4' }]
+        : [],
+    );
+  }),
+];
