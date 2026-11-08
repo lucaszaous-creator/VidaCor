@@ -14,6 +14,7 @@ export const chaves = {
   pacientes: (texto: string) => ['pacientes', texto] as const,
   filaDeLaudos: ['laudos', 'fila'] as const,
   laudo: (id: string) => ['laudos', id] as const,
+  achadosDoLaudo: (id: string) => ['laudos', id, 'achados'] as const,
   portalLaudos: ['portal', 'laudos'] as const,
   portalLaudo: (id: string) => ['portal', 'laudos', id] as const,
   link: (token: string) => ['link', token] as const,

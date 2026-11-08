@@ -9,6 +9,7 @@ import { setupServer } from 'msw/node';
 import { agendaDoDia, atendimentoDe, itensDaAgenda, SALAS, SESSAO } from './dados/ficticios';
 import { manipuladoresFase1, reiniciarFase1 } from './nucleo-fase1';
 import { lastroSimulado, manipuladoresEstoque, manipuladoresLastro } from './nucleo-estoque';
+import { manipuladoresLaudoEstruturado, reiniciarLaudoEstruturado } from './nucleo-laudo-estruturado';
 import { manipuladoresMenu } from './nucleo-menu';
 import { manipuladoresCadastro, manipuladoresPortal, portalSimulado } from './nucleo-portal';
 import { manipuladoresAReceber, manipuladoresPendencias, reiniciarPendencias } from './nucleo-pendencias';
@@ -33,6 +34,7 @@ export function reiniciarNucleo(): void {
   estado.pedidosDeCheckin = [];
   reiniciarFase1();
   reiniciarPendencias();
+  reiniciarLaudoEstruturado();
   portalSimulado.logado = false;
   lastroSimulado.integra = true;
 }
@@ -109,4 +111,4 @@ export const manipuladores = [
   }),
 ];
 
-export const servidor = setupServer(...manipuladoresLastro, ...manipuladoresEstoque, ...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores);
+export const servidor = setupServer(...manipuladoresLaudoEstruturado, ...manipuladoresLastro, ...manipuladoresEstoque, ...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores);

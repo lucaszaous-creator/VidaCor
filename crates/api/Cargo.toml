@@ -15,6 +15,7 @@ path = "src/main.rs"
 vidacor-comum = { path = "../comum" }
 vidacor-dominio-recepcao = { path = "../dominio-recepcao" }
 vidacor-dominio-triagem = { path = "../dominio-triagem" }
+vidacor-dominio-laudo = { path = "../dominio-laudo" }
 anyhow = "1.0.100"
 axum = { version = "0.8.9", features = ["macros"] }
 base64 = "0.22.1"

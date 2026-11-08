@@ -1,0 +1,41 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, numero FROM laudos.achado WHERE laudo_id = $1 AND versao_numero = $2 AND situacao = 'ativo' ORDER BY numero",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "numero",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "numero"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "eae1a770233f3f075fac41df3f22fcae241c4a7c672cbba44e419ba2f85a7510"
+}

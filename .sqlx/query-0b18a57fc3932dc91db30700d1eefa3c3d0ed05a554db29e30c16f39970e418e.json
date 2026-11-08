@@ -1,0 +1,210 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, codigo, numero, versao_numero, sistema, localizacao, maior_diametro_dmm, descritores,\n                  pontos, categoria, categoria_nome, conduta, regra_versao, texto_achado, texto_conclusao, criado_em\n             FROM laudos.achado\n            WHERE laudo_id = $1 AND versao_numero = $2 AND situacao = 'ativo' AND ($3::uuid IS NULL OR id = $3)\n            ORDER BY numero",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "numero",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "versao_numero",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "versao_numero"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "sistema",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "sistema"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "localizacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "localizacao"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "maior_diametro_dmm",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "maior_diametro_dmm"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "descritores",
+        "type_info": "Jsonb",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "descritores"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "pontos",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "pontos"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "categoria",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "categoria"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "categoria_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "categoria_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "conduta",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "conduta"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "regra_versao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "regra_versao"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "texto_achado",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "texto_achado"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "texto_conclusao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "texto_conclusao"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "0b18a57fc3932dc91db30700d1eefa3c3d0ed05a554db29e30c16f39970e418e"
+}

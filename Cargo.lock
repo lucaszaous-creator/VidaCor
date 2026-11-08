@@ -3764,6 +3764,7 @@ dependencies = [
  "utoipa",
  "uuid",
  "vidacor-comum",
+ "vidacor-dominio-laudo",
  "vidacor-dominio-recepcao",
  "vidacor-dominio-triagem",
 ]
@@ -3777,6 +3778,15 @@ dependencies = [
  "thiserror 2.0.21",
  "unicode-normalization",
  "uuid",
+]
+
+[[package]]
+name = "vidacor-dominio-laudo"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "thiserror 2.0.21",
 ]
 
 [[package]]

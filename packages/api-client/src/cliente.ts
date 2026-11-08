@@ -52,6 +52,7 @@ import type { MenuDoObjeto, ObjetoDoMenu } from './contrato-menu';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
 import type { ContrasteAplicado, EntradaDeEstoque, ItemDeEstoque, MovimentoFeito, RastreioDoLote } from './contrato-estoque';
 import type { AceiteDoConvite, ConviteEmitido, EntradaNoPortal, NovoPaciente, PacienteCadastrado, PossivelDuplicado, SessaoDoPortal, SituacaoDoConvite } from './contrato-portal';
+import type { AchadoEstruturado, AchadosDoLaudo, NovoAchado } from './contrato-laudo-estruturado';
 import type { AtendimentoAReceber, Decisao, EstornoDetalhado, NovoPedidoDesconto, PedidoDesconto, SituacaoDoEstorno, SituacaoDoPedidoDeDesconto } from './contrato-pendencias';
 import { ErroDaApi, ErroSemConexao, ehProblemaHttp, problemaInesperado } from './erros';
 
@@ -338,6 +339,14 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
         criar<LinkCriado>('POST', `/v1/laudos/${seg(id)}/links`, { horas }, o),
       acessoDeEmergencia: (id: string, corpo: PedidoAcessoEmergencia, o: OpcoesDeEscrita): Promise<AcessoDeEmergencia> =>
         criar<AcessoDeEmergencia>('POST', `/v1/laudos/${seg(id)}/acesso-emergencia`, corpo, o),
+      /** Achados estruturados da versão em edição (ou da vigente, se assinado). Leitura auditada. */
+      achados: (id: string): Promise<AchadosDoLaudo> => ler<AchadosDoLaudo>(`/v1/laudos/${seg(id)}/achados`),
+      /** Novo achado no rascunho: o servidor calcula categoria e conduta e grava a versão da regra. */
+      criarAchado: (id: string, corpo: NovoAchado, o: OpcoesDeEscrita): Promise<AchadoEstruturado> =>
+        criar<AchadoEstruturado>('POST', `/v1/laudos/${seg(id)}/achados`, corpo, o),
+      /** Remove do rascunho (nada é apagado); repetir devolve a mesma lista. */
+      removerAchado: (id: string, achadoId: string): Promise<AchadosDoLaudo> =>
+        escrever<AchadosDoLaudo>('POST', `/v1/laudos/${seg(id)}/achados/${seg(achadoId)}/remocao`, {}),
     },
 
     estudos: {

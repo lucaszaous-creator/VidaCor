@@ -2200,6 +2200,218 @@
         }
       }
     },
+    "/v1/laudos/{id}/achados": {
+      "get": {
+        "tags": [
+          "laudos"
+        ],
+        "summary": "Achados estruturados do laudo (médico com vínculo de cuidado ou acesso de emergência). Toda\nleitura é auditada, como a do laudo.",
+        "operationId": "listar_achados_do_laudo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AchadosDoLaudo"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "laudos"
+        ],
+        "summary": "Registra um achado no rascunho (só o médico atribuído). O servidor calcula pontos, categoria,\nconduta e texto e grava a versão da regra; categoria vinda da tela é ignorada (G1).",
+        "operationId": "criar_achado_do_laudo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovoAchado"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Achado"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/laudos/{id}/achados/{achado_id}/remocao": {
+      "post": {
+        "tags": [
+          "laudos"
+        ],
+        "summary": "Remove um achado do rascunho (só o médico atribuído). Nada é apagado: o achado fica marcado como\nremovido, com quem e quando. Repetir não muda nada e devolve a mesma lista.",
+        "operationId": "remover_achado_do_laudo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "achado_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AchadosDoLaudo"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/laudos/{id}/assinatura": {
       "post": {
         "tags": [
@@ -4345,6 +4557,160 @@
           }
         }
       },
+      "Achado": {
+        "type": "object",
+        "description": "Achado estruturado com o resultado calculado pelo servidor e a versão da regra aplicada.",
+        "required": [
+          "id",
+          "codigo",
+          "numero",
+          "rotulo",
+          "versao_numero",
+          "sistema",
+          "localizacao",
+          "categoria",
+          "categoria_nome",
+          "conduta",
+          "regra_versao",
+          "texto_achado",
+          "texto_conclusao",
+          "criado_em"
+        ],
+        "properties": {
+          "birads": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/DescritoresBirads"
+              }
+            ]
+          },
+          "categoria": {
+            "type": "string",
+            "description": "TR1 a TR5 ou 0 a 6 (com 4A, 4B, 4C)."
+          },
+          "categoria_nome": {
+            "type": "string"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "conduta": {
+            "type": "string"
+          },
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "localizacao": {
+            "type": "string"
+          },
+          "maior_diametro_mm": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "numero": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Ordem no laudo (N1, N2...)."
+          },
+          "pontos": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "Pontos do TI-RADS (ausente no BI-RADS)."
+          },
+          "regra_versao": {
+            "type": "string",
+            "description": "Ex.: TIRADS-ACR-2017.1. Gravada no achado; mudança de versão não altera achados antigos."
+          },
+          "rotulo": {
+            "type": "string"
+          },
+          "sistema": {
+            "$ref": "#/components/schemas/SistemaClassificacao"
+          },
+          "texto_achado": {
+            "type": "string",
+            "description": "Frase sugerida para o texto do laudo (o médico revisa e edita)."
+          },
+          "texto_conclusao": {
+            "type": "string"
+          },
+          "tirads": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/DescritoresTirads"
+              }
+            ]
+          },
+          "versao_numero": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Versão do laudo a que o achado pertence."
+          }
+        }
+      },
+      "AchadosDoLaudo": {
+        "type": "object",
+        "description": "Achados da versão em edição do laudo (ou da vigente, se assinado).",
+        "required": [
+          "laudo_id",
+          "versao_numero",
+          "editavel",
+          "achados",
+          "texto_achados",
+          "texto_conclusao",
+          "regras_vigentes"
+        ],
+        "properties": {
+          "achados": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Achado"
+            }
+          },
+          "editavel": {
+            "type": "boolean",
+            "description": "Verdadeiro só para o médico atribuído com versão em rascunho."
+          },
+          "laudo_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "regras_vigentes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RegraVigente"
+            }
+          },
+          "texto_achados": {
+            "type": "string",
+            "description": "Frases dos achados, uma por linha, para o médico revisar e levar ao texto do laudo."
+          },
+          "texto_conclusao": {
+            "type": "string"
+          },
+          "versao_numero": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "AgendaDoDia": {
         "type": "object",
         "required": [
@@ -4630,6 +4996,31 @@
           }
         }
       },
+      "CategoriaBirads": {
+        "type": "string",
+        "description": "Categoria BI-RADS atribuída pelo médico (códigos do atlas).",
+        "enum": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4A",
+          "4B",
+          "4C",
+          "5",
+          "6"
+        ]
+      },
+      "ComposicaoTirads": {
+        "type": "string",
+        "enum": [
+          "cistica_ou_quase_cistica",
+          "espongiforme",
+          "mista_cistica_e_solida",
+          "solida_ou_quase_solida",
+          "indeterminada_por_calcificacao"
+        ]
+      },
       "Conduta": {
         "type": "object",
         "required": [
@@ -4828,6 +5219,68 @@
           }
         }
       },
+      "DescritoresBirads": {
+        "type": "object",
+        "required": [
+          "lado",
+          "categoria_atribuida",
+          "biopsia_maligna_confirmada"
+        ],
+        "properties": {
+          "biopsia_maligna_confirmada": {
+            "type": "boolean"
+          },
+          "categoria_atribuida": {
+            "$ref": "#/components/schemas/CategoriaBirads",
+            "description": "Categoria final escolhida pelo médico; o servidor confere a coerência com a massa."
+          },
+          "lado": {
+            "$ref": "#/components/schemas/LadoBirads"
+          },
+          "massa": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/MassaBirads",
+                "description": "Ausente em BI-RADS 1 (negativo) e, se o médico quiser, em 0."
+              }
+            ]
+          }
+        }
+      },
+      "DescritoresTirads": {
+        "type": "object",
+        "required": [
+          "composicao",
+          "ecogenicidade",
+          "forma",
+          "margem",
+          "focos"
+        ],
+        "properties": {
+          "composicao": {
+            "$ref": "#/components/schemas/ComposicaoTirads"
+          },
+          "ecogenicidade": {
+            "$ref": "#/components/schemas/EcogenicidadeTirads"
+          },
+          "focos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FocoTirads"
+            },
+            "description": "Pode ter mais de um (os pontos somam); vazio vale \"nenhum\"."
+          },
+          "forma": {
+            "$ref": "#/components/schemas/FormaTirads"
+          },
+          "margem": {
+            "$ref": "#/components/schemas/MargemTirads"
+          }
+        }
+      },
       "DivergenciaAberta": {
         "type": "object",
         "required": [
@@ -4864,6 +5317,16 @@
             "description": "resolvida."
           }
         }
+      },
+      "EcogenicidadeTirads": {
+        "type": "string",
+        "enum": [
+          "anecoica",
+          "hiper_ou_isoecoica",
+          "hipoecoica",
+          "muito_hipoecoica",
+          "indeterminada"
+        ]
       },
       "Entrada": {
         "type": "object",
@@ -5273,6 +5736,30 @@
           }
         }
       },
+      "FocoTirads": {
+        "type": "string",
+        "enum": [
+          "nenhum_ou_cauda_de_cometa",
+          "macrocalcificacoes",
+          "calcificacoes_perifericas",
+          "focos_puntiformes"
+        ]
+      },
+      "FormaBirads": {
+        "type": "string",
+        "enum": [
+          "oval",
+          "redonda",
+          "irregular"
+        ]
+      },
+      "FormaTirads": {
+        "type": "string",
+        "enum": [
+          "mais_largo_que_alto",
+          "mais_alto_que_largo"
+        ]
+      },
       "Guia": {
         "type": "object",
         "required": [
@@ -5609,6 +6096,13 @@
           }
         }
       },
+      "LadoBirads": {
+        "type": "string",
+        "enum": [
+          "direita",
+          "esquerda"
+        ]
+      },
       "Laudo": {
         "type": "object",
         "required": [
@@ -5754,6 +6248,56 @@
           }
         }
       },
+      "MargemBirads": {
+        "type": "string",
+        "enum": [
+          "circunscrita",
+          "indistinta",
+          "angular",
+          "microlobulada",
+          "espiculada"
+        ]
+      },
+      "MargemTirads": {
+        "type": "string",
+        "enum": [
+          "lisa",
+          "mal_definida",
+          "lobulada_ou_irregular",
+          "extensao_extratireoidiana",
+          "indeterminada"
+        ]
+      },
+      "MassaBirads": {
+        "type": "object",
+        "required": [
+          "forma",
+          "orientacao",
+          "margens",
+          "padrao_ecogenico",
+          "posterior"
+        ],
+        "properties": {
+          "forma": {
+            "$ref": "#/components/schemas/FormaBirads"
+          },
+          "margens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MargemBirads"
+            }
+          },
+          "orientacao": {
+            "$ref": "#/components/schemas/OrientacaoBirads"
+          },
+          "padrao_ecogenico": {
+            "$ref": "#/components/schemas/PadraoEcogenicoBirads"
+          },
+          "posterior": {
+            "$ref": "#/components/schemas/PosteriorBirads"
+          }
+        }
+      },
       "Membro": {
         "type": "object",
         "required": [
@@ -5858,6 +6402,51 @@
           }
         }
       },
+      "NovoAchado": {
+        "type": "object",
+        "description": "Novo achado. Só os descritores do sistema escolhido são lidos; pontos, categoria e conduta\nenviados pela tela são ignorados (o servidor calcula, G1).",
+        "required": [
+          "sistema",
+          "localizacao"
+        ],
+        "properties": {
+          "birads": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/DescritoresBirads"
+              }
+            ]
+          },
+          "localizacao": {
+            "type": "string",
+            "description": "Ex.: \"Lobo direito, terço médio\" ou \"Quadrante superolateral, 2 horas\" (até 120 caracteres)."
+          },
+          "maior_diametro_mm": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double",
+            "description": "Maior diâmetro em milímetros (uma casa decimal). Obrigatório no TI-RADS e quando há massa."
+          },
+          "sistema": {
+            "$ref": "#/components/schemas/SistemaClassificacao"
+          },
+          "tirads": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/DescritoresTirads"
+              }
+            ]
+          }
+        }
+      },
       "NovoPaciente": {
         "type": "object",
         "required": [
@@ -5955,6 +6544,13 @@
           }
         }
       },
+      "OrientacaoBirads": {
+        "type": "string",
+        "enum": [
+          "paralela",
+          "nao_paralela"
+        ]
+      },
       "PacienteCadastrado": {
         "type": "object",
         "required": [
@@ -6025,6 +6621,17 @@
             "type": "string"
           }
         }
+      },
+      "PadraoEcogenicoBirads": {
+        "type": "string",
+        "enum": [
+          "anecoico",
+          "hiperecoico",
+          "complexo_cistico_e_solido",
+          "hipoecoico",
+          "isoecoico",
+          "heterogeneo"
+        ]
       },
       "PedidoAbertura": {
         "type": "object",
@@ -6724,6 +7331,15 @@
           }
         }
       },
+      "PosteriorBirads": {
+        "type": "string",
+        "enum": [
+          "nenhum",
+          "reforco",
+          "sombra",
+          "combinado"
+        ]
+      },
       "ProblemaDoc": {
         "type": "object",
         "description": "Erro em Problem Details (RFC 9457).",
@@ -6933,6 +7549,22 @@
           }
         }
       },
+      "RegraVigente": {
+        "type": "object",
+        "description": "Regra vigente de um sistema de classificação.",
+        "required": [
+          "sistema",
+          "versao"
+        ],
+        "properties": {
+          "sistema": {
+            "$ref": "#/components/schemas/SistemaClassificacao"
+          },
+          "versao": {
+            "type": "string"
+          }
+        }
+      },
       "Reimpressao": {
         "type": "object",
         "required": [
@@ -7070,6 +7702,13 @@
             "description": "Primeiro nome, para a saudação."
           }
         }
+      },
+      "SistemaClassificacao": {
+        "type": "string",
+        "enum": [
+          "tirads",
+          "birads"
+        ]
       },
       "SituacaoDoConvite": {
         "type": "object",

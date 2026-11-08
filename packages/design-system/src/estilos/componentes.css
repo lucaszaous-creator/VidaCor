@@ -132,6 +132,13 @@
 .sn-op[data-focus-visible] { outline: 2px solid var(--foco); outline-offset: 2px; }
 .sn[data-invalid] .sn-op { border-color: var(--rose); }
 
+/* Grupo de opções em pílula (Laudo-Estruturado.dc.html, .grp e .opt) */
+.grp-op { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 8px 12px; align-items: start; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.grp-op:last-child { border-bottom: 0; }
+.grp-op-rotulo { font-size: 14px; color: var(--mute); padding-top: 9px; }
+.grp-op .sn-op { min-width: 0; }
+.grp-op [data-disabled] .sn-op, .grp-op .sn-op[data-disabled] { opacity: .55; cursor: default; }
+
 /* Pré-visualização da pulseira (Etiquetas.dc.html, .et-prev) */
 .etq-faixa {
   border: 1px solid #CBD2DC; border-radius: 10px; background: #fff; padding: 12px 14px;
