@@ -206,16 +206,16 @@ export function TelaNovoAgendamento() {
                 <div className="row wrap" style={{ gap: 8 }} role="group" aria-label="Horários livres">
                   {horarios.data?.map((h) => (
                     <button
-                      key={h.inicio}
+                      key={h}
                       type="button"
                       className="slot-free"
-                      style={{ minWidth: 88, padding: '0 12px', ...(h.inicio === inicio ? { background: 'var(--navy)', color: '#fff', borderStyle: 'solid' } : {}) }}
-                      aria-pressed={h.inicio === inicio}
+                      style={{ minWidth: 88, padding: '0 12px', ...(h === inicio ? { background: 'var(--navy)', color: '#fff', borderStyle: 'solid' } : {}) }}
+                      aria-pressed={h === inicio}
                       onClick={() => {
-                        setInicio(h.inicio);
+                        setInicio(h);
                       }}
                     >
-                      {formatarHora(h.inicio, FUSO_DA_CLINICA)}
+                      {formatarHora(h, FUSO_DA_CLINICA)}
                     </button>
                   ))}
                 </div>

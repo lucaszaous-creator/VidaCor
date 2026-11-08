@@ -1,4 +1,4 @@
-import type { ItemDaAgenda } from '@vidacor/api-client';
+import type { ItemDaAgendaFase1 } from '@vidacor/api-client';
 import { formatarData, formatarHora, MenuDeContexto, useMenuDeContexto } from '@vidacor/design-system';
 import { FUSO_DA_CLINICA, nomeCurto, rotuloDaHora, type Grade, type ItemPosicionado } from './grade';
 import { ACOES_DO_AGENDAMENTO, cabecalhoDoMenu, MOTIVO_SEM_ACOES } from './menu';
@@ -7,7 +7,7 @@ import { aparenciaDoAgendamento } from './situacoes';
 interface PropsDoEvento {
   posicionado: ItemPosicionado;
   selecionado: boolean;
-  aoAbrir: (item: ItemDaAgenda) => void;
+  aoAbrir: (item: ItemDaAgendaFase1) => void;
 }
 
 function EventoDaAgenda({ posicionado, selecionado, aoAbrir }: PropsDoEvento) {
@@ -49,7 +49,7 @@ function EventoDaAgenda({ posicionado, selecionado, aoAbrir }: PropsDoEvento) {
 export interface PropsDaGrade {
   grade: Grade;
   selecionado: string | null;
-  aoAbrir: (item: ItemDaAgenda) => void;
+  aoAbrir: (item: ItemDaAgendaFase1) => void;
 }
 
 /** Agenda do dia por sala (Agenda.dc.html): uma coluna por sala, meia hora por linha. */

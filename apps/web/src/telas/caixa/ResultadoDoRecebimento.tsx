@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import type { Estorno, Recebimento } from '@vidacor/api-client';
 import { AreaDeTexto, Aviso, Botao, BotaoDeIcone, Chip, DialogoDeFormulario, formatarDinheiro, type CorDoChip } from '@vidacor/design-system';
 import { useState } from 'react';
@@ -96,8 +97,26 @@ function PedidoDeEstorno({ recebimento }: { recebimento: Recebimento }) {
   );
 }
 
-/** Recebimento como o servidor calculou: itens, subtotal, desconto, total e versão da tabela (FC-CXA-01). */
-export function ResultadoDoRecebimento({ r }: { r: Recebimento }) {
+/**
+ * Recebimento como o servidor calculou: itens, subtotal, desconto, total e versão da tabela
+ * (FC-CXA-01). O PIX copia e cola vem `null` até o PSP devolver a cobrança (docs/30 § 7): a tela
+ * consulta o recebimento até ele aparecer, e depois segue a situação até o pagamento.
+ */
+export function ResultadoDoRecebimento({ r: inicial }: { r: Recebimento }) {
+  const { api, intervaloDoRecebimentoMs = 2000 } = useDependencias();
+  const consulta = useQuery({
+    queryKey: ['recebimento', inicial.id],
+    queryFn: () => api.recebimentos.obter(inicial.id),
+    initialData: inicial,
+    refetchInterval: (q) => {
+      const atual = q.state.data;
+      if (atual === undefined) return false;
+      const semPix = atual.forma === 'pix' && (atual.pix === null || atual.pix === undefined);
+      return semPix || atual.situacao === 'aguardando_pagamento' ? intervaloDoRecebimentoMs : false;
+    },
+  });
+  const r = consulta.data;
+  const pix = r.pix ?? null;
   const s = SITUACAO[r.situacao] ?? { texto: 'Situação não reconhecida', cor: 'cinza' as const };
   return (
     <div className="col" style={{ gap: 12 }}>
@@ -142,12 +161,17 @@ export function ResultadoDoRecebimento({ r }: { r: Recebimento }) {
         </tbody>
       </table>
       <span className="t13 mute">
-        Valores calculados pelo servidor pela tabela <span className="num">{r.tabela_versao}</span>.
+        Valores calculados pelo servidor pela tabela versão <span className="num">{r.tabela_versao}</span>.
       </span>
-      {r.pix !== null && (
+      {r.forma === 'pix' && pix === null && (
+        <Aviso nivel="informativo" titulo="Gerando a cobrança PIX.">
+          O recebimento foi registrado; o código copia e cola aparece aqui assim que o banco devolver a cobrança.
+        </Aviso>
+      )}
+      {pix !== null && (
         <>
-          <CopiaECola codigo={r.pix.copia_e_cola} />
-          <span className="t13 mute num">txid {r.pix.txid}. A situação acima é a do momento do registro; a baixa acontece no servidor quando o banco confirmar.</span>
+          <CopiaECola codigo={pix.copia_e_cola} />
+          <span className="t13 mute num">txid {pix.txid}. A situação acima muda para pago quando o banco confirmar.</span>
         </>
       )}
       <PedidoDeEstorno recebimento={r} />

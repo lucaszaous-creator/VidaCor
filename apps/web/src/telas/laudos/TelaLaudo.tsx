@@ -21,7 +21,7 @@ import { chaves, consultaLaudo } from '../../consultas';
 import { useDependencias } from '../../contexto';
 import { useRetomada, type Retomada } from '../../reautenticacao';
 import { FUSO_DA_CLINICA } from '../agenda/grade';
-import { AcessoDeEmergencia, BotaoDeLiberacao, DialogoDeAssinatura, DialogoDeRetificacao } from './AtosDoLaudo';
+import { AcessoDeEmergencia, BotaoDeLiberacao, BotaoDePublicacao, CompartilharLaudo, DialogoDeAssinatura, DialogoDeRetificacao } from './AtosDoLaudo';
 import { FilaDeLaudos, SITUACAO_DO_LAUDO } from './FilaDeLaudos';
 import { useRascunho } from './useRascunho';
 
@@ -59,7 +59,7 @@ function SituacaoDoRascunho({ r }: { r: ReturnType<typeof useRascunho> }) {
   );
 }
 
-function Versoes({ versoes, vigente }: { versoes: VersaoDoLaudo[]; vigente: number }) {
+function Versoes({ versoes, vigente }: { versoes: VersaoDoLaudo[]; vigente: number | null }) {
   return (
     <div className="col" style={{ gap: 8 }}>
       <h3 className="t15 b">Versões</h3>
@@ -71,11 +71,11 @@ function Versoes({ versoes, vigente }: { versoes: VersaoDoLaudo[]; vigente: numb
               <b className="t14">Versão {v.numero}</b>
               <Chip cor={s.cor} texto={v.numero === vigente && v.situacao === 'assinada' ? 'Vigente' : s.texto} />
               <span className="t13 mute">
-                {v.assinada_em === null ? '' : `${v.assinada_por ?? ''}, ${formatarDataHora(v.assinada_em, FUSO_DA_CLINICA)}`}
+                {v.assinada_em === null || v.assinada_em === undefined ? '' : `Assinada em ${formatarDataHora(v.assinada_em, FUSO_DA_CLINICA)}`}
               </span>
             </summary>
-            {v.motivo !== null && <p className="t13" style={{ margin: '6px 0' }}>Motivo da retificação: {v.motivo}</p>}
-            {v.hash_documento !== null && <p className="t13 mute num" style={{ margin: '6px 0' }}>Hash do documento: {v.hash_documento}</p>}
+            {v.motivo !== null && v.motivo !== undefined && <p className="t13" style={{ margin: '6px 0' }}>Motivo da retificação: {v.motivo}</p>}
+            {v.hash_documento !== null && v.hash_documento !== undefined && <p className="t13 mute num" style={{ margin: '6px 0' }}>Hash do documento: {v.hash_documento}</p>}
             <pre className="texto-laudo">{v.texto}</pre>
           </details>
         );
@@ -89,7 +89,7 @@ function EditorDoRascunho({ laudo, versao, retomada }: { laudo: Laudo; versao: V
   const [assinando, setAssinando] = useState(retomada?.retomar === 'assinar');
   return (
     <>
-      {versao.motivo !== null && (
+      {versao.motivo !== null && versao.motivo !== undefined && (
         <Aviso nivel="informativo" titulo={`Retificação, versão ${String(versao.numero)}.`}>
           Motivo: {versao.motivo}. Ao assinar, a versão anterior fica marcada como substituída.
         </Aviso>
@@ -155,7 +155,7 @@ function ConteudoDoLaudo({ laudo, retomada }: { laudo: Laudo; retomada: Retomada
     <div className="col" style={{ gap: 14 }}>
       <div className="row wrap" style={{ gap: 10 }}>
         <h2 className="t15 b">
-          {laudo.exame.nome}, <span className="num">{laudo.codigo}</span>
+          {laudo.exame}, <span className="num">{laudo.codigo}</span>
         </h2>
         <Chip cor={sit.cor} texto={sit.texto} />
       </div>
@@ -166,9 +166,10 @@ function ConteudoDoLaudo({ laudo, retomada }: { laudo: Laudo; retomada: Retomada
         vigente !== undefined && (
           <>
             <Aviso nivel="feito" titulo={`Laudo assinado, versão ${String(vigente.numero)}.`}>
-              {vigente.assinada_por ?? ''}
-              {vigente.assinada_em === null ? '' : `, ${formatarDataHora(vigente.assinada_em, FUSO_DA_CLINICA)}`}. O texto está travado; para
-              corrigir, crie uma retificação com motivo.
+              {vigente.assinada_em === null || vigente.assinada_em === undefined
+                ? 'Assinado'
+                : `Assinado em ${formatarDataHora(vigente.assinada_em, FUSO_DA_CLINICA)}`}
+              . O texto está travado; para corrigir, crie uma retificação com motivo.
             </Aviso>
             {laudo.publicado_no_portal ? (
               <Aviso nivel="informativo" titulo="Publicado no portal do paciente." />
@@ -176,7 +177,11 @@ function ConteudoDoLaudo({ laudo, retomada }: { laudo: Laudo; retomada: Retomada
               <Aviso nivel="atencao" titulo="Retido: conversar antes de liberar." acoes={<BotaoDeLiberacao laudo={laudo} />}>
                 O laudo não foi ao portal. Libere depois de conversar com o paciente.
               </Aviso>
-            ) : null}
+            ) : (
+              <Aviso nivel="atencao" titulo="Assinado e ainda não publicado no portal." acoes={<BotaoDePublicacao laudo={laudo} />}>
+                A publicação automática não aconteceu. Publique agora para o paciente ver o resultado.
+              </Aviso>
+            )}
             <section aria-label={`Texto assinado, versão ${String(vigente.numero)}`}>
               <pre className="texto-laudo">{vigente.texto}</pre>
             </section>
@@ -189,6 +194,7 @@ function ConteudoDoLaudo({ laudo, retomada }: { laudo: Laudo; retomada: Retomada
                 Retificar
               </Botao>
             </div>
+            <CompartilharLaudo laudo={laudo} />
             {retificando && (
               <DialogoDeRetificacao
                 laudo={laudo}
@@ -202,7 +208,7 @@ function ConteudoDoLaudo({ laudo, retomada }: { laudo: Laudo; retomada: Retomada
           </>
         )
       )}
-      <Versoes versoes={laudo.versoes} vigente={laudo.versao_vigente} />
+      <Versoes versoes={laudo.versoes} vigente={laudo.versao_vigente ?? null} />
     </div>
   );
 }
@@ -246,7 +252,7 @@ export function TelaLaudo() {
         <BarraDoPaciente
           nome={l.paciente.nome}
           nascimento={formatarData(l.paciente.nascimento)}
-          resumo={`${l.exame.nome}${l.estudo === null ? '' : `, accession ${l.estudo.accession}, ${String(l.estudo.imagens)} imagens`}`}
+          resumo={`${l.exame}, ${l.codigo}${l.estudo === null || l.estudo === undefined ? '' : `, ${String(l.estudo.imagens)} imagens`}`}
         />
       )}
       <div className="fill" style={{ display: 'grid', gridTemplateColumns: '300px minmax(0, 1fr)', gap: 16 }}>

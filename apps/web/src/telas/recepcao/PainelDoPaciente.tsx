@@ -46,14 +46,22 @@ export function AlertaDeHomonimo({ item }: { item: ItemDaAgendaFase1 }) {
 
 function PulseiraEmitida({ atendimento }: { atendimento: AtendimentoFase1 }) {
   const p = atendimento.paciente;
+  const pulseira = atendimento.pulseira ?? null;
+  if (pulseira === null) {
+    return (
+      <Aviso nivel="atencao" titulo="Sem pulseira válida.">
+        Nenhuma pulseira deste atendimento está valendo. Reimprima antes de o paciente seguir para a sala.
+      </Aviso>
+    );
+  }
   return (
     <div className="etq-impressao">
       <EtiquetaPulseira
         nome={p.nome}
         nascimento={formatarData(p.nascimento)}
-        codigo={atendimento.pulseira.codigo}
+        codigo={pulseira.codigo}
         accession={atendimento.accession}
-        situacao={atendimento.pulseira.situacao}
+        situacao={pulseira.situacao}
       />
     </div>
   );
@@ -138,6 +146,7 @@ function AtendimentoDoPaciente({ item, atendimentoId, retomada }: PropsDoAtendim
   }
   const a = consulta.data;
   const ap = aparenciaDoAtendimento(a.situacao);
+  const codigoParaReimprimir = a.pulseira?.codigo ?? correcao?.etiquetas_invalidadas.at(-1) ?? null;
 
   let pulseira: ReactNode;
   if (reimpressao !== null) {
@@ -155,10 +164,10 @@ function AtendimentoDoPaciente({ item, atendimentoId, retomada }: PropsDoAtendim
       <ListaDeDados
         larguraDoRotulo={96}
         itens={[
-          { rotulo: 'Senha', valor: <b className="num">{a.senha}</b> },
+          { rotulo: 'Senha', valor: <b className="num">{a.senha ?? 'Ainda não emitida'}</b> },
           { rotulo: 'Código', valor: <span className="num">{a.codigo}</span> },
           { rotulo: 'Accession', valor: <span className="num">{a.accession}</span> },
-          { rotulo: 'Laudo', valor: a.laudo_situacao === null ? 'Ainda não iniciado' : (LAUDO[a.laudo_situacao] ?? a.laudo_situacao) },
+          { rotulo: 'Laudo', valor: a.laudo_situacao === null || a.laudo_situacao === undefined ? 'Ainda não iniciado' : (LAUDO[a.laudo_situacao] ?? a.laudo_situacao) },
         ]}
       />
       {correcao !== null && (
@@ -187,6 +196,7 @@ function AtendimentoDoPaciente({ item, atendimentoId, retomada }: PropsDoAtendim
         <BotaoImprimir />
         <Botao
           pequeno
+          isDisabled={codigoParaReimprimir === null}
           onPress={() => {
             setMotivoInicial('');
             setDialogo('reimprimir');
@@ -206,6 +216,7 @@ function AtendimentoDoPaciente({ item, atendimentoId, retomada }: PropsDoAtendim
       {dialogo === 'reimprimir' && (
         <DialogoDeReimpressao
           atendimento={a}
+          codigo={codigoParaReimprimir ?? ''}
           aberto
           motivoInicial={motivoInicial}
           aoFechar={() => {

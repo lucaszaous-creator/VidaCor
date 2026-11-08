@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { http } from 'msw';
 import { beforeEach, describe, expect, it } from 'vitest';
@@ -44,6 +44,7 @@ describe('Caixa do particular (FC-CXA, FC-PIX)', () => {
 
   it('o total vem do servidor com a versão da tabela; a tela não manda total e mostra o PIX copia e cola', async () => {
     fase1.caixa = caixaAberto();
+    fase1.pspRespondeu = false;
     const usuario = userEvent.setup();
     const { container } = renderizar(URL);
     await preencher(usuario);
@@ -51,9 +52,17 @@ describe('Caixa do particular (FC-CXA, FC-PIX)', () => {
     const tabela = await screen.findByRole('table', { name: 'Itens calculados pelo servidor' });
     expect(tabela).toHaveTextContent('Ecocardiograma transtorácico TUSS 40901114R$ 380,00');
     expect(tabela).toHaveTextContent('TotalR$ 380,00');
-    expect(screen.getByText(/pela tabela/)).toHaveTextContent('Valores calculados pelo servidor pela tabela PART-12.');
+    expect(screen.getByText(/pela tabela/)).toHaveTextContent('Valores calculados pelo servidor pela tabela versão 12.');
     expect(screen.getByText('Aguardando pagamento')).toBeInTheDocument();
-    expect(screen.getByText('00020126580014br.gov.bcb.pix0136vidacor-ficticio-4410')).toBeInTheDocument();
+    // O PSP devolve a cobrança pelo outbox: a tela avisa e consulta o recebimento até o PIX chegar.
+    expect(await screen.findByText(/Gerando a cobrança PIX\./)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(fase1.recebimento?.consultas).toBeGreaterThan(0);
+    });
+    fase1.pspRespondeu = true;
+    expect(await screen.findByText('00020126580014br.gov.bcb.pix0136vidacor-ficticio-4410')).toBeInTheDocument();
+    expect(screen.queryByText(/Gerando a cobrança PIX\./)).not.toBeInTheDocument();
+    expect(pedidosDe('recebimento')).toHaveLength(1);
     expect(pedidosDe('recebimento')[0]?.corpo).toEqual({
       paciente_id: SONIA.paciente.id,
       atendimento_id: SONIA.atendimento_id,
@@ -112,14 +121,17 @@ describe('Caixa do particular (FC-CXA, FC-PIX)', () => {
     expect(await screen.findByRole('textbox', { name: 'Fundo de troco (R$)' })).toBeInTheDocument();
   });
 
-  it('valor inválido (422) mostra a mensagem do servidor', async () => {
+  it.each([
+    [422, 'valor-invalido', 'Um item tem valor zero ou negativo. Nada foi recebido.'],
+    [409, 'sem-tabela-de-precos', 'Não há tabela de preços vigente hoje. Nada foi recebido. Avise a coordenação.'],
+  ])('recebimento com erro %i %s mostra a mensagem do servidor', async (status, codigo, detalhe) => {
     fase1.caixa = caixaAberto();
-    servidor.use(http.post('*/v1/recebimentos', () => problema(422, 'valor-invalido', 'Um item tem valor zero ou negativo. Nada foi recebido.')));
+    servidor.use(http.post('*/v1/recebimentos', () => problema(status, codigo, detalhe)));
     const usuario = userEvent.setup();
     renderizar(URL);
     await preencher(usuario);
     await usuario.click(screen.getByRole('button', { name: 'Registrar recebimento' }));
-    await esperarAlertaDoServidor('Um item tem valor zero ou negativo.', 'valor-invalido');
+    await esperarAlertaDoServidor(detalhe, codigo);
   });
 
   it('quem pede o estorno não vê o botão de aprovar', async () => {

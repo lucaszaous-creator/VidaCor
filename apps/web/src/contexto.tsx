@@ -13,6 +13,8 @@ export interface Dependencias {
   imprimir?: () => void;
   /** Espera depois da última tecla antes de salvar o rascunho (padrão 1,2 s; testes usam 0). */
   atrasoDoRascunhoMs?: number;
+  /** Intervalo da consulta do recebimento até o PIX e o pagamento chegarem (padrão 2 s). */
+  intervaloDoRecebimentoMs?: number;
 }
 
 export const ContextoDeDependencias = createContext<Dependencias | null>(null);

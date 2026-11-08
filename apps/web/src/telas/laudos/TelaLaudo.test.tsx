@@ -97,6 +97,9 @@ describe('Laudo: rascunho, assinatura e versões (FC-LAU)', () => {
   it.each([
     [403, 'sem-permissao', 'Só o médico atribuído assina este laudo. Nada foi assinado.'],
     [409, 'assinatura-concorrente', 'O laudo acabou de ser assinado em outra estação. Nada foi assinado de novo.'],
+    [422, 'pin-recusado', 'O PIN do certificado não confere. Nada foi assinado. Digite o PIN de novo.'],
+    [503, 'assinatura-indisponivel', 'O serviço de assinatura está fora do ar. Nada foi assinado e o rascunho está salvo. Tente de novo em alguns minutos.'],
+    [403, 'laudo-de-outro-medico', 'Este laudo está atribuído a outro médico. Nada foi assinado.'],
   ])('assinatura com erro %i %s mostra a mensagem do servidor', async (status, codigo, detalhe) => {
     servidor.use(http.post('*/v1/laudos/:id/assinatura', () => problema(status, codigo, detalhe)));
     const usuario = userEvent.setup();
@@ -173,6 +176,34 @@ describe('Laudo: rascunho, assinatura e versões (FC-LAU)', () => {
     await usuario.click(within(dialogo).getByRole('button', { name: 'Liberar no portal' }));
     expect(await screen.findByText(/Publicado no portal do paciente\./)).toBeInTheDocument();
     expect(pedidosDe('liberacao')[0]?.chave).toMatch(UUID);
+  });
+
+  it('laudo assinado e não publicado: publicação manual com confirmação nominal', async () => {
+    laudoJaAssinado();
+    fase1.laudo = { ...fase1.laudo, publicado_no_portal: false };
+    const usuario = userEvent.setup();
+    renderizar(URL);
+    await usuario.click(await screen.findByRole('button', { name: 'Publicar no portal' }));
+    const dialogo = await screen.findByRole('alertdialog', { name: 'Publicar o laudo de Antônio Carlos Ribeiro no portal?' });
+    expect(dialogo).toHaveTextContent('Antônio Carlos Ribeiro, nascimento 15/06/1954');
+    await usuario.click(within(dialogo).getByRole('button', { name: 'Publicar no portal' }));
+    expect(await screen.findByText(/Publicado no portal do paciente\./)).toBeInTheDocument();
+    expect(pedidosDe('publicacao')[0]?.chave).toMatch(UUID);
+  });
+
+  it('link para médico externo mostra o token uma única vez', async () => {
+    laudoJaAssinado();
+    const usuario = userEvent.setup();
+    renderizar(URL);
+    const form = await screen.findByRole('form', { name: 'Compartilhar com médico externo' });
+    await usuario.click(within(form).getByRole('button', { name: 'Criar link' }));
+    expect(within(form).getByText('Escolha por quanto tempo o link vale.')).toBeInTheDocument();
+    await usuario.selectOptions(within(form).getByRole('combobox', { name: 'Validade do link' }), '24');
+    await usuario.click(within(form).getByRole('button', { name: 'Criar link' }));
+    const feito = await within(form).findByText(/Link criado\./);
+    expect(feito.closest('[role="status"]')).toHaveTextContent('/portal/link/tk-ficticio-unico-8f2a');
+    expect(feito.closest('[role="status"]')).toHaveTextContent('o servidor não mostra este endereço de novo');
+    expect(pedidosDe('link')[0]?.corpo).toEqual({ horas: 24 });
   });
 
   it('liberar rascunho no portal é recusado (409 laudo-nao-assinado)', async () => {

@@ -44,7 +44,7 @@ describe('Agendamento de convênio com guia (FC-AGD)', () => {
     await prepararAgendamento(usuario);
     expect(screen.getByRole('button', { name: '09:00' })).toHaveAttribute('aria-pressed', 'true');
     await registrarGuia(usuario);
-    expect(screen.getByRole('region', { name: 'Convênio e guia' })).toHaveTextContent('Saldo conferido pelo servidor: 1');
+    expect(screen.getByRole('region', { name: 'Convênio e guia' })).toHaveTextContent('Autorizado 1, saldo conferido pelo servidor: 1');
     expect(pedidosDe('guia')[0]?.corpo).toEqual({
       operadora: GUIA_UNIMED.operadora,
       numero: 'UN-55120',
@@ -109,6 +109,7 @@ describe('Agendamento de convênio com guia (FC-AGD)', () => {
     [409, 'guia-em-uso', 'A guia UN-55120 já está em uso. Nada foi agendado. É preciso outra guia.', { atendimento_codigo: 'ATD-2026-118790' }, 'Guia em uso no atendimento ATD-2026-118790: registre outra guia.'],
     [422, 'procedimento-nao-autorizado', 'O procedimento não está autorizado na guia. Nada foi agendado.', { tuss: '40901220' }, 'Procedimento TUSS 40901220 fora da guia: peça autorização à operadora.'],
     [422, 'senha-vencida', 'A senha da guia vence antes da data do exame. Nada foi agendado.', { validade: '2026-11-20' }, 'A senha vale até 20/11/2026: remarque antes disso ou peça prorrogação.'],
+    [422, 'procedimento-desconhecido', 'O procedimento 40901300 não está no catálogo. Nada foi agendado. Confira o código TUSS.', {}, ''],
     [422, 'saldo-esgotado', 'O saldo do procedimento 40901114 na guia é zero. Nada foi agendado. Peça nova autorização.', {}, ''],
     [403, 'sem-permissao', 'Seu perfil não pode agendar. Nada foi feito.', {}, ''],
   ])('erro %i %s: mensagem do servidor com o que fazer', async (status, codigo, detalhe, extras, complemento) => {

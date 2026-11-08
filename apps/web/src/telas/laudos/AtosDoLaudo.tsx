@@ -1,12 +1,13 @@
 import { useQueryClient } from '@tanstack/react-query';
 import type { Laudo } from '@vidacor/api-client';
-import { AreaDeTexto, Aviso, Botao, Campo, Dialogo, DialogoDeFormulario, formatarData } from '@vidacor/design-system';
+import { AreaDeTexto, Aviso, Botao, Campo, Dialogo, DialogoDeFormulario, Escolha, formatarData, formatarDataHora } from '@vidacor/design-system';
 import { useState } from 'react';
 import { ErroDoAto } from '../../componentes/ErroDoAto';
 import { chaves } from '../../consultas';
 import { useDependencias } from '../../contexto';
 import { useOperacao } from '../../operacao';
 import { useReautenticar, type Retomada } from '../../reautenticacao';
+import { FUSO_DA_CLINICA } from '../agenda/grade';
 
 function useAtualizarLaudo(id: string) {
   const queryClient = useQueryClient();
@@ -64,7 +65,7 @@ export function DialogoDeAssinatura({ laudo, retomada, antesDeAssinar, aoFechar 
       aoConfirmar={() => void assinar()}
     >
       <p className="t14" style={{ margin: 0, lineHeight: 1.5 }}>
-        {laudo.exame.nome}, {laudo.codigo}. Depois de assinado o texto fica travado; correção vira nova versão com motivo.
+        {laudo.exame}, {laudo.codigo}. Depois de assinado o texto fica travado; correção vira nova versão com motivo.
         {laudo.conversar_antes ? ' Marcado para conversar antes: não vai ao portal até você liberar.' : ' Vai ao portal do paciente depois de assinado.'}
       </p>
       {retomada?.retomar === 'assinar' && op.erro === null && (
@@ -286,6 +287,107 @@ export function AcessoDeEmergencia({ laudoId, retomada, aoLiberar }: PropsDaEmer
           Usar acesso de emergência
         </Botao>
       </div>
+    </form>
+  );
+}
+
+/** Publicação manual no portal (docs/30 § 7), quando o laudo assinado não foi publicado. Confirmação nominal (R3). */
+export function BotaoDePublicacao({ laudo }: { laudo: Laudo }) {
+  const { api } = useDependencias();
+  const queryClient = useQueryClient();
+  const [aberto, setAberto] = useState(false);
+  const op = useOperacao((_: null, chave: string) => api.laudos.publicar(laudo.id, { idempotencyKey: chave }), {
+    aoConcluir: async () => {
+      setAberto(false);
+      await queryClient.invalidateQueries({ queryKey: chaves.laudo(laudo.id) });
+    },
+    aoFalhar: () => {
+      setAberto(false);
+    },
+  });
+  const p = laudo.paciente;
+  return (
+    <>
+      <Botao
+        pequeno
+        variante="principal"
+        onPress={() => {
+          setAberto(true);
+        }}
+      >
+        Publicar no portal
+      </Botao>
+      {op.erro !== null && <ErroDoAto erro={op.erro} ato="publicar o laudo no portal" />}
+      <Dialogo
+        aberto={aberto}
+        titulo={`Publicar o laudo de ${p.nome} no portal?`}
+        paciente={{ nome: p.nome, nascimento: formatarData(p.nascimento) }}
+        rotuloConfirmar="Publicar no portal"
+        ocupado={op.enviando}
+        aoFechar={() => {
+          setAberto(false);
+        }}
+        aoConfirmar={() => {
+          op.enviar(null);
+        }}
+      >
+        <p className="t14" style={{ margin: 0, lineHeight: 1.5 }}>
+          O paciente passa a ver o laudo no portal e recebe um aviso pelo canal autorizado.
+        </p>
+      </Dialogo>
+    </>
+  );
+}
+
+const HORAS = [
+  { valor: '24', rotulo: '24 horas' },
+  { valor: '48', rotulo: '48 horas' },
+  { valor: '72', rotulo: '72 horas' },
+];
+
+/** Link do laudo para médico externo (docs/30 § 7): o token aparece uma única vez. */
+export function CompartilharLaudo({ laudo }: { laudo: Laudo }) {
+  const { api } = useDependencias();
+  const [horas, setHoras] = useState('');
+  const [tentou, setTentou] = useState(false);
+  const op = useOperacao((h: number, chave: string) => api.laudos.criarLink(laudo.id, h, { idempotencyKey: chave }));
+  const link = op.resultado;
+  return (
+    <form
+      className="col"
+      style={{ gap: 10 }}
+      noValidate
+      aria-label="Compartilhar com médico externo"
+      onSubmit={(ev) => {
+        ev.preventDefault();
+        setTentou(true);
+        if (horas !== '') op.enviar(Number(horas));
+      }}
+    >
+      <h3 className="t15 b">Compartilhar com médico externo</h3>
+      {link === null ? (
+        <>
+          <Escolha
+            rotulo="Validade do link"
+            valor={horas}
+            aoMudar={setHoras}
+            vazio="Escolha a validade"
+            opcoes={HORAS}
+            erro={tentou && horas === '' ? 'Escolha por quanto tempo o link vale.' : null}
+          />
+          {op.erro !== null && <ErroDoAto erro={op.erro} ato="criar o link" />}
+          <div className="row">
+            <Botao type="submit" ocupado={op.enviando}>
+              Criar link
+            </Botao>
+          </div>
+        </>
+      ) : (
+        <Aviso nivel="feito" titulo="Link criado.">
+          Endereço: <span className="num" style={{ overflowWrap: 'anywhere' }}>{`${window.location.origin}/portal/link/${link.token}`}</span>. Vale até{' '}
+          {formatarDataHora(link.expira_em, FUSO_DA_CLINICA)}. Copie agora: o servidor não mostra este endereço de novo.
+        </Aviso>
+      )}
     </form>
   );
 }

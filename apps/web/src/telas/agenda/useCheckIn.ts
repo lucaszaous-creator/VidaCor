@@ -5,7 +5,7 @@ import {
   ErroSemConexao,
   novaChaveDeIdempotencia,
   type AtendimentoFase1,
-  type ItemDaAgenda,
+  type ItemDaAgendaFase1,
 } from '@vidacor/api-client';
 import { useRef, useState } from 'react';
 import { chaves } from '../../consultas';
@@ -24,7 +24,7 @@ export interface ErrosDosCampos {
  * operação e é reaproveitada em toda retentativa (G3); só é trocada depois que o servidor recusou
  * (4xx), porque aí o próximo envio é outra tentativa, com outros dados.
  */
-export function useCheckIn(item: ItemDaAgenda) {
+export function useCheckIn(item: ItemDaAgendaFase1) {
   const { api } = useDependencias();
   const queryClient = useQueryClient();
   const [nome, setNome] = useState('');

@@ -65,7 +65,7 @@ function ResultadoDaTriagem({ t }: { t: Triagem }) {
         itens={[
           {
             rotulo: 'TFG',
-            valor: t.tfg_calculada === null ? 'Não calculada pelo servidor' : `${String(t.tfg_calculada)} mL/min/1,73 m², calculada pelo servidor (CKD-EPI 2021)`,
+            valor: t.tfg_calculada === null || t.tfg_calculada === undefined ? 'Não calculada pelo servidor' : `${String(t.tfg_calculada)} mL/min/1,73 m², calculada pelo servidor (CKD-EPI 2021)`,
           },
           { rotulo: 'Regra aplicada', valor: <span className="num">{t.regra_versao}</span> },
           {
@@ -81,9 +81,9 @@ function ResultadoDaTriagem({ t }: { t: Triagem }) {
           {
             rotulo: 'Conduta médica',
             valor:
-              t.conduta === null
+              t.conduta === null || t.conduta === undefined
                 ? 'Não registrada'
-                : `${t.conduta.texto} (${t.conduta.medico}, ${formatarDataHora(t.conduta.registrada_em, FUSO_DA_CLINICA)})`,
+                : `${t.conduta.texto} (registrada em ${formatarDataHora(t.conduta.registrada_em, FUSO_DA_CLINICA)})`,
           },
         ]}
       />
@@ -195,7 +195,7 @@ export function TelaTriagem() {
     );
   }
   const a = atendimento.data;
-  const triagem = triagemSalva.data ?? a.triagem;
+  const triagem = triagemSalva.data ?? a.triagem ?? null;
   const ehMedico = sessao.data?.usuario.perfis.includes('medico') ?? false;
   const creat = lerCreatinina(creatinina);
   const faltam = PERGUNTAS.filter((p) => respostas[p.chave] === null);
@@ -297,8 +297,9 @@ export function TelaTriagem() {
                 O exame foi liberado. A conduta, o seu nome, o horário e a versão da regra ficaram no lastro.
               </Aviso>
             )}
-            {triagem?.resultado === 'precisa_aprovacao_medica' &&
-              triagem.conduta === null &&
+            {triagem !== null &&
+              !triagem.exame_liberado &&
+              (triagem.conduta ?? null) === null &&
               (ehMedico ? (
                 <Conduta
                   atendimentoId={atendimentoId}

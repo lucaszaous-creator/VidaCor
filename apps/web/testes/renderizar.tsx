@@ -48,6 +48,7 @@ export function renderizar(url: string) {
         imprimir,
         atrasoDoAvisoDeEventosMs: 0,
         atrasoDoRascunhoMs: 0,
+        intervaloDoRecebimentoMs: 30,
         criarFonteDeEventos: (u) => {
           const f = new FonteFalsa(u);
           fontes.push(f);

@@ -15,7 +15,7 @@ describe('Menu lateral por perfil (conforto; o servidor decide)', () => {
   it.each([
     ['recepção', SESSOES.recepcao, ['Agenda e check-in', 'Novo agendamento', 'Recepção e pulseiras', 'Contingência']],
     ['técnico', SESSOES.tecnico, ['Agenda e check-in', 'Sala de exame']],
-    ['médico', SESSOES.medico, ['Agenda e check-in', 'Sala de exame', 'Laudar']],
+    ['médico', SESSOES.medico, ['Agenda e check-in', 'Sala de exame', 'Laudar', 'Conciliar estudos']],
     ['caixa', SESSOES.caixa, ['Caixa (particular)']],
     ['gerência', SESSOES.gerente, ['Agenda e check-in', 'Novo agendamento', 'Recepção e pulseiras', 'Autorizar desconto', 'Aprovar estorno', 'Contingência']],
     ['TI', SESSOES.ti, []],
@@ -65,7 +65,7 @@ describe('Menu lateral por perfil (conforto; o servidor decide)', () => {
     estado.sessao = SESSOES.tecnico;
     renderizar('/agenda?data=2026-11-06');
     const faixa = await screen.findByText(/Contingência CTG-2026-0007 aberta/);
-    expect(faixa.closest('[role="status"]')).toHaveTextContent('atinge toda a unidade: servidor local fora do ar. Declarada às 10:42, responsável Patrícia Lemos.');
+    expect(faixa.closest('[role="status"]')).toHaveTextContent('atinge toda a unidade: servidor local fora do ar. Declarada às 10:42.');
     expect(within(faixa.closest('[role="status"]') as HTMLElement).getByRole('link', { name: 'Abrir contingência' })).toHaveAttribute('href', '/contingencia');
   });
 });

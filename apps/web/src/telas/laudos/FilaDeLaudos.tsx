@@ -42,11 +42,11 @@ export function FilaDeLaudos({ atual }: { atual?: string }) {
             key={l.id}
             nome={l.paciente.nome}
             nascimento={l.paciente.nascimento}
-            detalhe={l.exame.nome}
+            detalhe={l.exame}
             situacao={SITUACAO_DO_LAUDO[l.situacao] ?? { texto: 'Situação não reconhecida', cor: 'cinza' }}
             marca={l.conversar_antes ? 'Conversar antes de liberar' : undefined}
             selecionada={l.id === atual}
-            contextoDoMenu={l.exame.nome}
+            contextoDoMenu={l.exame}
             aoAbrir={() => {
               void navegar({ to: '/laudos/$laudoId', params: { laudoId: l.id } });
             }}

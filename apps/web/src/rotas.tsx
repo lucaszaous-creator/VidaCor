@@ -18,6 +18,7 @@ import { TelaAutorizacaoDesconto } from './telas/caixa/TelaAutorizacaoDesconto';
 import { TelaCaixa } from './telas/caixa/TelaCaixa';
 import { TelaEstornos } from './telas/caixa/TelaEstornos';
 import { TelaContingencia } from './telas/contingencia/TelaContingencia';
+import { TelaEstudos } from './telas/estudos/TelaEstudos';
 import { TelaFilaDeLaudos } from './telas/laudos/TelaFilaDeLaudos';
 import { TelaLaudo } from './telas/laudos/TelaLaudo';
 import { CascaDoPortal } from './telas/portal/CascaDoPortal';
@@ -147,6 +148,7 @@ const rotaAutorizacao = createRoute({
   component: TelaAutorizacaoDesconto,
 });
 const rotaEstornos = createRoute({ getParentRoute: () => rotaApp, path: '/caixa/estornos', validateSearch: lerBuscaDoEstorno, component: TelaEstornos });
+const rotaEstudos = createRoute({ getParentRoute: () => rotaApp, path: '/estudos', validateSearch: lerBuscaDaAgenda, component: TelaEstudos });
 const rotaContingencia = createRoute({ getParentRoute: () => rotaApp, path: '/contingencia', component: TelaContingencia });
 
 /** Portal do paciente: sessão de paciente separada da equipe (docs/30 § 4), mesma aplicação e design system. */
@@ -171,6 +173,7 @@ const arvore = raiz.addChildren([
     rotaAutorizacao,
     rotaEstornos,
     rotaContingencia,
+    rotaEstudos,
   ]),
 ]);
 

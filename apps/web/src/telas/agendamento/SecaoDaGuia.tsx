@@ -1,6 +1,6 @@
 import type { CalendarDate } from '@internationalized/date';
 import type { Guia, PedidoGuia } from '@vidacor/api-client';
-import { Botao, BotaoDeIcone, CaixaDeMarcar, Campo, CampoDeData, Escolha, formatarData, ListaDeDados } from '@vidacor/design-system';
+import { Aviso, Botao, BotaoDeIcone, CaixaDeMarcar, Campo, CampoDeData, Escolha, formatarData, ListaDeDados } from '@vidacor/design-system';
 import { useState } from 'react';
 import { ErroDoAto } from '../../componentes/ErroDoAto';
 import { useDependencias } from '../../contexto';
@@ -166,17 +166,22 @@ export function GuiaRegistrada({ guia, escolhidos, aoEscolher, aoTrocar }: Props
     <div className="col" style={{ gap: 10 }}>
       <ListaDeDados
         itens={[
-          { rotulo: 'Guia', valor: <span className="num">{guia.numero}</span> },
+          { rotulo: 'Guia', valor: <span className="num">{guia.numero}, registro {guia.codigo}</span> },
           { rotulo: 'Operadora', valor: guia.operadora },
           { rotulo: 'Senha válida até', valor: <span className="num">{formatarData(guia.validade)}</span> },
         ]}
       />
+      {guia.em_uso_por !== null && guia.em_uso_por !== undefined && (
+        <Aviso nivel="atencao" titulo="Guia em uso.">
+          Esta guia já está no atendimento {guia.em_uso_por}. Registre outra guia para este agendamento.
+        </Aviso>
+      )}
       <h3 className="t14 b">Procedimentos autorizados</h3>
       {guia.procedimentos.map((p) => (
         <CaixaDeMarcar
           key={p.tuss}
           rotulo={`TUSS ${p.tuss}`}
-          detalhe={`Saldo conferido pelo servidor: ${String(p.saldo)}`}
+          detalhe={`Autorizado ${String(p.autorizado)}, saldo conferido pelo servidor: ${String(p.saldo)}`}
           marcado={escolhidos.includes(p.tuss)}
           aoMudar={(m) => {
             aoEscolher(m ? [...escolhidos, p.tuss] : escolhidos.filter((t) => t !== p.tuss));

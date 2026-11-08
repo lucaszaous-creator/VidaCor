@@ -115,7 +115,13 @@ export async function simularNucleo(page: Page, estado: EstadoDaSimulacao): Prom
     if (c.startsWith('/v1/portal/laudos/')) return json(route, PORTAL_LAUDO_ECO);
     if (c.startsWith('/v1/links/')) return problema(route, 410, 'link-expirado', 'Este link expirou.');
     if (c === '/v1/caixas/meu') return json(route, estado.caixaAberto ? caixaAberto() : null);
-    if (c === '/v1/recebimentos') return json(route, recebimentoSonia(500, 'pix'), 201);
+    if (c === '/v1/recebimentos') return json(route, recebimentoSonia(500, 'pix', false), 201);
+    if (c.startsWith('/v1/recebimentos/')) return json(route, recebimentoSonia(500, 'pix'));
+    if (c === '/v1/estudos/pendentes') {
+      return json(route, [
+        { id: '00000024-0000-7000-8000-000000000001', codigo: 'EST-2026-000081', accession: null, imagens: 31, recebido_em: '2026-11-06T13:05:00Z', pendencia: 'Patient ID C-0414 sem accession' },
+      ]);
+    }
     return route.fulfill({ status: 404, contentType: 'application/problem+json', body: '{}' });
   });
 }

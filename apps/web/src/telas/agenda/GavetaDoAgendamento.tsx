@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router';
-import type { ItemDaAgenda } from '@vidacor/api-client';
+import type { ItemDaAgendaFase1 } from '@vidacor/api-client';
 import {
   Aviso,
   Botao,
@@ -10,6 +10,7 @@ import {
   Chip,
   Dialogo,
   formatarData,
+  formatarDataHora,
   formatarHora,
   Gaveta,
   MenuDeContexto,
@@ -22,12 +23,12 @@ import { ResumoDoAtendimento } from './ResumoDoAtendimento';
 import { aparenciaDoAgendamento } from './situacoes';
 import { useCheckIn } from './useCheckIn';
 
-function quando(item: ItemDaAgenda): string {
+function quando(item: ItemDaAgendaFase1): string {
   return `${formatarHora(item.inicio, FUSO_DA_CLINICA)} às ${formatarHora(item.fim, FUSO_DA_CLINICA)}, ${item.sala.nome}`;
 }
 
 /** Botão de mais opções no cabeçalho: o menu de contexto nunca é a única forma (docs/19 § 1). */
-function MaisOpcoes({ item }: { item: ItemDaAgenda }) {
+function MaisOpcoes({ item }: { item: ItemDaAgendaFase1 }) {
   const menu = useMenuDeContexto();
   return (
     <>
@@ -51,7 +52,7 @@ function MaisOpcoes({ item }: { item: ItemDaAgenda }) {
 }
 
 interface PropsDaGavetaBase {
-  item: ItemDaAgenda;
+  item: ItemDaAgendaFase1;
   rotulo: string;
   rodape?: ReactNode;
   aoFechar: () => void;
@@ -74,7 +75,7 @@ function GavetaBase({ item, rotulo, rodape, aoFechar, children }: PropsDaGavetaB
   );
 }
 
-function DadosDoAgendamento({ item }: { item: ItemDaAgenda }) {
+function DadosDoAgendamento({ item }: { item: ItemDaAgendaFase1 }) {
   const ap = aparenciaDoAgendamento(item.situacao);
   return (
     <>
@@ -88,13 +89,19 @@ function DadosDoAgendamento({ item }: { item: ItemDaAgenda }) {
         <dd>{item.sala.nome}</dd>
         <dt>Protocolo</dt>
         <dd className="num">{item.codigo}</dd>
+        {item.situacao === 'reserva_provisoria' && item.expira_em !== null && item.expira_em !== undefined && (
+          <>
+            <dt>Reserva até</dt>
+            <dd className="num">{formatarDataHora(item.expira_em, FUSO_DA_CLINICA)}, sem guia o horário volta a ficar livre</dd>
+          </>
+        )}
       </dl>
     </>
   );
 }
 
 interface PropsDoCheckIn {
-  item: ItemDaAgenda;
+  item: ItemDaAgendaFase1;
   aoVoltar: () => void;
   aoFechar: () => void;
 }
@@ -122,8 +129,10 @@ function CheckIn({ item, aoVoltar, aoFechar }: PropsDoCheckIn) {
       >
         <Aviso nivel="feito" titulo="Check-in feito.">
           Atendimento <b className="num">{c.atendimento.codigo}</b>, accession{' '}
-          <b className="num">{c.atendimento.accession}</b>, senha <b className="num">{c.atendimento.senha}</b>, pulseira{' '}
-          <b className="num">{c.atendimento.pulseira.codigo}</b>. Imprima a pulseira em Recepção e pulseiras.
+          <b className="num">{c.atendimento.accession}</b>
+          {c.atendimento.senha === null || c.atendimento.senha === undefined ? '' : `, senha ${c.atendimento.senha}`}
+          {c.atendimento.pulseira === null || c.atendimento.pulseira === undefined ? '' : `, pulseira ${c.atendimento.pulseira.codigo}`}. Imprima a
+          pulseira em Recepção e pulseiras.
         </Aviso>
         <ResumoDoAtendimento atendimentoId={c.atendimento.id} />
       </GavetaBase>
@@ -235,7 +244,7 @@ function CheckIn({ item, aoVoltar, aoFechar }: PropsDoCheckIn) {
 }
 
 export interface PropsDaGavetaDoAgendamento {
-  item: ItemDaAgenda;
+  item: ItemDaAgendaFase1;
   aoFechar: () => void;
 }
 

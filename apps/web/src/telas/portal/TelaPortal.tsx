@@ -33,8 +33,8 @@ export function ErroDoPortal({ erro, aoTentarDeNovo }: { erro: unknown; aoTentar
 }
 
 /** Marca de retificação (FC-LAU-05): o paciente vê só a versão vigente, sabendo que ela corrigiu outra. */
-export function MarcaDeRetificacao({ laudo }: { laudo: Pick<LaudoDoPortal, 'retificado' | 'versao'> }) {
-  return laudo.retificado ? <Chip cor="ambar" texto={`Retificado, versão ${String(laudo.versao)}`} /> : <Chip cor="verde" texto="Assinado" />;
+export function MarcaDeRetificacao({ laudo }: { laudo: Pick<LaudoDoPortal, 'retificado'> }) {
+  return laudo.retificado ? <Chip cor="ambar" texto="Retificado" /> : <Chip cor="verde" texto="Assinado" />;
 }
 
 /** Portal do paciente: laudos publicados (só assinados e liberados), com a marca de retificação. */
@@ -53,13 +53,13 @@ export function TelaPortal() {
             {lista.data.map((l) => (
               <li key={l.id} className="li">
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div className="t">{l.exame.nome}</div>
+                  <div className="t">{l.exame}</div>
                   <div className="s">
-                    {formatarDataHora(l.assinado_em, FUSO_DA_CLINICA)}, {l.medico}
+                    Publicado em {formatarDataHora(l.publicado_em, FUSO_DA_CLINICA)}
                   </div>
                 </div>
                 <MarcaDeRetificacao laudo={l} />
-                <Link to="/portal/laudos/$laudoId" params={{ laudoId: l.id }} className="btn btn-sm" aria-label={`Ler o laudo de ${l.exame.nome}`}>
+                <Link to="/portal/laudos/$laudoId" params={{ laudoId: l.id }} className="btn btn-sm" aria-label={`Ler o laudo de ${l.exame}`}>
                   Ler laudo
                 </Link>
               </li>

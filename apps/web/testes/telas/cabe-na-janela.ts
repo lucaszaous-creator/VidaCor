@@ -167,6 +167,10 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await esperar(page, 'alertdialog', 'Assinar o laudo de Antônio Carlos Ribeiro (15/06/1954)?');
   await ok('17-laudo-assinatura');
   await page.keyboard.press('Escape');
+  await ir(`/estudos?data=${DATA_DOS_TESTES}`);
+  await page.getByRole('button', { name: /EST-2026-000081/ }).click();
+  await esperar(page, 'combobox', 'Atendimento do dia');
+  await ok('18a-estudos');
   estado.sessao = SESSOES.medicoSemVinculo;
   estado.semVinculo = true;
   await ir(`/laudos/${LAUDO_ANTONIO_ID}`);
@@ -176,7 +180,7 @@ const fase1: Passo = async (page, estado, ir, ok) => {
 
   await ir('/portal');
   await esperar(page, 'region', 'Laudos publicados');
-  await page.getByText('Retificado, versão 2').waitFor();
+  await page.getByText('Retificado', { exact: true }).waitFor();
   await ok('19-portal');
   await ir(`/portal/laudos/${PORTAL_LAUDO_ECO.id}`);
   await esperar(page, 'article', 'Laudo de Ecocardiograma transtorácico');

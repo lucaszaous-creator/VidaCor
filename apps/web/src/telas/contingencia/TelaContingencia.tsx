@@ -20,6 +20,7 @@ import { useDependencias } from '../../contexto';
 import { useOperacao } from '../../operacao';
 import { FUSO_DA_CLINICA } from '../agenda/grade';
 import { FormularioDeFicha, FormularioDeRecibo, type Lancamento } from './Lancamentos';
+import { NumerosSemUso, ResolverDivergencia } from './Numeros';
 
 const NIVEIS: { valor: NivelDeContingencia; rotulo: string }[] = [
   { valor: 'externo', rotulo: 'Externo (internet, portal, WhatsApp, TISS)' },
@@ -79,18 +80,20 @@ function ListaDeLancamentos({ itens }: { itens: Lancamento[] }) {
       {itens.map((l, i) => {
         let texto: string;
         let chip: { texto: string; cor: 'verde' | 'ambar' };
+        const divergencia =
+          l.tipo === 'ficha' ? (l.resultado.situacao === 'divergencia-aberta' ? l.resultado.divergencia : null) : l.resultado.divergencia;
         if (l.tipo === 'ficha') {
           if (l.resultado.situacao === 'lancada') {
             texto = `Ficha F-ATD ${l.numero}: atendimento ${l.resultado.atendimento.codigo} de ${l.resultado.atendimento.paciente.nome}. Registrado em contingência.`;
             chip = { texto: 'Lançada', cor: 'verde' };
           } else {
-            texto = `Ficha F-ATD ${l.numero}: divergência ${l.resultado.divergencia.codigo} aberta. ${l.resultado.divergencia.descricao}`;
+            texto = `Ficha F-ATD ${l.numero}: divergência ${l.resultado.divergencia.codigo} aberta. ${l.resultado.divergencia.descricao ?? ''}`;
             chip = { texto: 'Divergência', cor: 'ambar' };
           }
         } else {
           const r = l.resultado;
           texto = `Recibo F-REC ${l.numero}: papel ${formatarDinheiro(r.valor_papel_centavos)}, tabela ${formatarDinheiro(r.valor_recalculado_centavos)}.${
-            r.divergencia === null ? '' : ` Divergência ${r.divergencia.codigo} aberta: ${r.divergencia.descricao}`
+            r.divergencia === null ? '' : ` Divergência ${r.divergencia.codigo} aberta: ${r.divergencia.descricao ?? ''}`
           }`;
           chip = r.divergencia === null ? { texto: 'Lançado', cor: 'verde' } : { texto: 'Divergência', cor: 'ambar' };
         }
@@ -100,6 +103,7 @@ function ListaDeLancamentos({ itens }: { itens: Lancamento[] }) {
               {texto}
             </span>
             <Chip cor={chip.cor} texto={chip.texto} />
+            {divergencia !== null && <ResolverDivergencia divergencia={divergencia} />}
           </li>
         );
       })}
@@ -210,6 +214,7 @@ export function TelaContingencia() {
                 abas={[
                   { id: 'ficha', rotulo: 'Ficha F-ATD', conteudo: <div style={{ paddingTop: 12 }}><FormularioDeFicha contingenciaId={c.id} aoLancar={lancar} /></div> },
                   { id: 'recibo', rotulo: 'Recibo F-REC', conteudo: <div style={{ paddingTop: 12 }}><FormularioDeRecibo contingenciaId={c.id} aoLancar={lancar} /></div> },
+                  { id: 'numeros', rotulo: 'Números sem uso', conteudo: <div style={{ paddingTop: 12 }}><NumerosSemUso contingenciaId={c.id} /></div> },
                 ]}
               />
             </div>
@@ -226,7 +231,6 @@ export function TelaContingencia() {
                 itens={[
                   { rotulo: 'Nível', valor: NIVEIS.find((n) => n.valor === c.nivel)?.rotulo ?? c.nivel },
                   { rotulo: 'Motivo', valor: c.motivo },
-                  { rotulo: 'Responsável', valor: c.responsavel },
                   { rotulo: 'Declarada', valor: formatarDataHora(c.declarada_em, FUSO_DA_CLINICA) },
                 ]}
               />

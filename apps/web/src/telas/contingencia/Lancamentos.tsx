@@ -1,15 +1,19 @@
 import type { CalendarDate } from '@internationalized/date';
 import type { PacienteResumo, PedidoFicha, PedidoRecibo, ReciboLancado, ResultadoDaFicha } from '@vidacor/api-client';
-import { Botao, Campo, CampoDeData, lerReais } from '@vidacor/design-system';
+import { Botao, Campo, CampoDeData, Escolha, formatarData, formatarHora, lerReais } from '@vidacor/design-system';
+import { useQuery } from '@tanstack/react-query';
 import { useId, useState, type ChangeEvent } from 'react';
 import { EscolhaDePaciente } from '../../componentes/EscolhaDePaciente';
 import { ErroDoAto } from '../../componentes/ErroDoAto';
+import { consultaAgenda, consultaSessao } from '../../consultas';
 import { useDependencias } from '../../contexto';
+import { FUSO_DA_CLINICA } from '../agenda/grade';
 import { useOperacao } from '../../operacao';
 
 const NUMERO = /^\d{4}$/;
 const HORA = /^([01]\d|2[0-3]):[0-5]\d$/;
 const TUSS = /^\d{8}$/;
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /** Data e hora do papel no fuso desta estação, em RFC 3339 (conversão de formato, sem regra). */
 function instante(data: CalendarDate | null, hora: string): string | null {
@@ -50,13 +54,15 @@ interface PropsDaFicha {
 export function FormularioDeFicha({ contingenciaId, aoLancar }: PropsDaFicha) {
   const { api } = useDependencias();
   const idArquivo = useId();
+  const sessao = useQuery(consultaSessao(api));
   const [numero, setNumero] = useState('');
-  const [paciente, setPaciente] = useState<PacienteResumo | null>(null);
+  const [agendamentoId, setAgendamentoId] = useState('');
   const [nome, setNome] = useState('');
   const [nascimento, setNascimento] = useState<CalendarDate | null>(null);
   const [data, setData] = useState<CalendarDate | null>(null);
   const [hora, setHora] = useState('');
-  const [atendidoPor, setAtendidoPor] = useState('');
+  const [quem, setQuem] = useState('');
+  const [outro, setOutro] = useState('');
   const [anexo, setAnexo] = useState<{ nome: string; hash: string } | null>(null);
   const [erroDoAnexo, setErroDoAnexo] = useState<string | null>(null);
   const [tentou, setTentou] = useState(false);
@@ -65,7 +71,7 @@ export function FormularioDeFicha({ contingenciaId, aoLancar }: PropsDaFicha) {
       aoLancar({ tipo: 'ficha', numero, resultado: r });
       op.reiniciar();
       setNumero('');
-      setPaciente(null);
+      setAgendamentoId('');
       setNome('');
       setNascimento(null);
       setHora('');
@@ -74,6 +80,11 @@ export function FormularioDeFicha({ contingenciaId, aoLancar }: PropsDaFicha) {
     },
   });
   const ocorrido = instante(data, hora);
+  const dia = data?.toString() ?? '';
+  const agenda = useQuery({ ...consultaAgenda(api, dia, undefined), enabled: dia !== '' });
+  const eu = sessao.data?.usuario;
+  const atendidoPor = quem === 'outro' ? outro.trim() : quem;
+  const atendidoOk = UUID.test(atendidoPor);
 
   async function anexar(ev: ChangeEvent<HTMLInputElement>): Promise<void> {
     const arquivo = ev.target.files?.[0];
@@ -89,17 +100,17 @@ export function FormularioDeFicha({ contingenciaId, aoLancar }: PropsDaFicha) {
 
   function lancar(): void {
     setTentou(true);
-    if (!NUMERO.test(numero.trim()) || paciente === null || nome.trim() === '' || nascimento === null || ocorrido === null || atendidoPor.trim() === '' || anexo === null) {
+    if (!NUMERO.test(numero.trim()) || agendamentoId === '' || nome.trim() === '' || nascimento === null || ocorrido === null || !atendidoOk || anexo === null) {
       return;
     }
     op.enviar({
       formulario: 'F-ATD',
-      numero: numero.trim(),
-      paciente_id: paciente.id,
+      numero: Number(numero.trim()),
+      agendamento_id: agendamentoId,
       nome: nome.trim(),
       nascimento: nascimento.toString(),
       ocorrido_em: ocorrido,
-      atendido_por: atendidoPor.trim(),
+      atendido_por: atendidoPor,
       anexo_sha256: anexo.hash,
     });
   }
@@ -117,14 +128,43 @@ export function FormularioDeFicha({ contingenciaId, aoLancar }: PropsDaFicha) {
     >
       <h3 className="t15 b">Ficha de atendimento F-ATD</h3>
       <Campo rotulo="Número da ficha" value={numero} onChange={setNumero} inputMode="numeric" ajuda="Quatro dígitos, como no papel (ex.: 0412)." erro={tentou && !NUMERO.test(numero.trim()) ? 'Digite os quatro dígitos da ficha.' : null} />
-      <EscolhaDePaciente rotulo="Paciente no cadastro" paciente={paciente} aoEscolher={setPaciente} erro={tentou && paciente === null ? 'Escolha o paciente no cadastro.' : null} />
+      <div className="grid g2" style={{ gap: 10 }}>
+        <CampoDeData rotulo="Dia do atendimento" valor={data} aoMudar={(d) => { setData(d); setAgendamentoId(''); }} erro={tentou && data === null ? 'Digite o dia.' : null} />
+        <Campo rotulo="Hora do atendimento" value={hora} onChange={setHora} placeholder="10:50" erro={tentou && !HORA.test(hora.trim()) ? 'Digite a hora como 10:50.' : null} />
+      </div>
+      <Escolha
+        rotulo="Agendamento (código impresso na agenda do kit)"
+        valor={agendamentoId}
+        aoMudar={setAgendamentoId}
+        vazio={dia === '' ? 'Digite o dia do atendimento primeiro' : 'Escolha o agendamento'}
+        opcoes={(agenda.data?.itens ?? []).map((i) => ({
+          valor: i.id,
+          rotulo: `${i.codigo}, ${formatarHora(i.inicio, FUSO_DA_CLINICA)}, ${i.paciente.nome}, ${formatarData(i.paciente.nascimento)}`,
+        }))}
+        erro={tentou && agendamentoId === '' ? 'Escolha o agendamento pelo código do papel.' : null}
+      />
       <div className="grid g2" style={{ gap: 10 }}>
         <Campo rotulo="Nome como está no papel" value={nome} onChange={setNome} erro={tentou && nome.trim() === '' ? 'Copie o nome do papel.' : null} />
         <CampoDeData rotulo="Nascimento como está no papel" valor={nascimento} aoMudar={setNascimento} erro={tentou && nascimento === null ? 'Copie o nascimento do papel.' : null} />
-        <CampoDeData rotulo="Dia do atendimento" valor={data} aoMudar={setData} erro={tentou && data === null ? 'Digite o dia.' : null} />
-        <Campo rotulo="Hora do atendimento" value={hora} onChange={setHora} placeholder="10:50" erro={tentou && !HORA.test(hora.trim()) ? 'Digite a hora como 10:50.' : null} />
       </div>
-      <Campo rotulo="Atendido por (como no papel)" value={atendidoPor} onChange={setAtendidoPor} erro={tentou && atendidoPor.trim() === '' ? 'Digite quem atendeu.' : null} />
+      <Escolha
+        rotulo="Quem atendeu"
+        valor={quem}
+        aoMudar={setQuem}
+        vazio="Escolha quem atendeu"
+        opcoes={[...(eu === undefined ? [] : [{ valor: eu.id, rotulo: `Eu, ${eu.nome}` }]), { valor: 'outro', rotulo: 'Outro profissional (identificador)' }]}
+        erro={tentou && quem === '' ? 'Escolha quem atendeu.' : null}
+      />
+      {quem === 'outro' && (
+        <Campo
+          rotulo="Identificador do profissional"
+          value={outro}
+          onChange={setOutro}
+          autoComplete="off"
+          ajuda="Como aparece no cadastro do corpo clínico."
+          erro={tentou && !atendidoOk ? 'Cole o identificador do profissional como está no cadastro.' : null}
+        />
+      )}
       <div className="field">
         <label htmlFor={idArquivo}>Ficha digitalizada (PDF)</label>
         <input id={idArquivo} type="file" accept="application/pdf" className="in" style={{ paddingTop: 10 }} onChange={(ev) => void anexar(ev)} />
@@ -168,7 +208,7 @@ export function FormularioDeRecibo({ contingenciaId, aoLancar }: PropsDaFicha) {
   function lancar(): void {
     setTentou(true);
     if (!NUMERO.test(numero.trim()) || paciente === null || !TUSS.test(tuss.trim()) || centavos === null || ocorrido === null) return;
-    op.enviar({ formulario: 'F-REC', numero: numero.trim(), paciente_id: paciente.id, tuss: tuss.trim(), valor_papel_centavos: centavos, ocorrido_em: ocorrido });
+    op.enviar({ numero: Number(numero.trim()), paciente_id: paciente.id, tuss: tuss.trim(), valor_papel_centavos: centavos, ocorrido_em: ocorrido });
   }
 
   return (

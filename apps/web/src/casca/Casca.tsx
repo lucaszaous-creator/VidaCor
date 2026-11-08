@@ -70,7 +70,7 @@ function FaixaDeContingencia() {
       <Icone nome="contingencia" tamanho={20} />
       <span className="t14" style={{ flex: 1, minWidth: 0 }}>
         <b>Contingência {c.codigo} aberta</b>, atinge {NIVEIS[c.nivel] ?? c.nivel}: {c.motivo}. Declarada às{' '}
-        {formatarHora(c.declarada_em, FUSO_DA_CLINICA)}, responsável {c.responsavel}. O atendimento segue nas fichas em papel.
+        {formatarHora(c.declarada_em, FUSO_DA_CLINICA)}. O atendimento segue nas fichas em papel.
       </span>
       <Link to="/contingencia" className="btn btn-sm">
         Abrir contingência

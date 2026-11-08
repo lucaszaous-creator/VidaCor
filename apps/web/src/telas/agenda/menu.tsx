@@ -1,4 +1,4 @@
-import type { ItemDaAgenda } from '@vidacor/api-client';
+import type { ItemDaAgendaFase1 } from '@vidacor/api-client';
 import { formatarData, formatarHora, type AcaoDoMenu, type CabecalhoDoMenu } from '@vidacor/design-system';
 import { FUSO_DA_CLINICA } from './grade';
 
@@ -10,7 +10,7 @@ export const ACOES_DO_AGENDAMENTO: AcaoDoMenu[] = [];
 
 export const MOTIVO_SEM_ACOES = 'Disponível na próxima entrega';
 
-export function cabecalhoDoMenu(item: ItemDaAgenda): CabecalhoDoMenu {
+export function cabecalhoDoMenu(item: ItemDaAgendaFase1): CabecalhoDoMenu {
   return {
     titulo: item.paciente.nome,
     subtitulo: `Nascimento ${formatarData(item.paciente.nascimento)}, ${formatarHora(item.inicio, FUSO_DA_CLINICA)}, ${item.exame.nome}`,

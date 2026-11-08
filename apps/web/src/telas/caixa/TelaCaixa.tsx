@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getRouteApi } from '@tanstack/react-router';
-import type { Caixa, FechamentoDeCaixa } from '@vidacor/api-client';
+import type { Caixa } from '@vidacor/api-client';
 import {
   Aviso,
   Botao,
@@ -66,8 +66,19 @@ function AbrirCaixa() {
   );
 }
 
-function Fechamento({ f }: { f: FechamentoDeCaixa }) {
-  const d = f.diferenca_centavos;
+function valor(c: number | null | undefined) {
+  return c === null || c === undefined ? 'Não informado pelo servidor' : <span className="num">{formatarDinheiro(c)}</span>;
+}
+
+function Fechamento({ f }: { f: Caixa }) {
+  const d = f.diferenca_centavos ?? null;
+  if (d === null) {
+    return (
+      <Aviso nivel="atencao" titulo="Caixa fechado, sem a conferência do servidor.">
+        O servidor não devolveu o esperado e a diferença. Avise a coordenação antes de guardar o dinheiro.
+      </Aviso>
+    );
+  }
   const leitura = d === 0 ? 'Sem diferença' : d < 0 ? `Falta de ${formatarDinheiro(-d)}` : `Sobra de ${formatarDinheiro(d)}`;
   return (
     <div className="col" style={{ gap: 12, maxWidth: 520 }}>
@@ -77,8 +88,8 @@ function Fechamento({ f }: { f: FechamentoDeCaixa }) {
       <ListaDeDados
         larguraDoRotulo={160}
         itens={[
-          { rotulo: 'Esperado', valor: <span className="num">{formatarDinheiro(f.esperado_centavos)}</span> },
-          { rotulo: 'Contado', valor: <span className="num">{formatarDinheiro(f.contado_centavos)}</span> },
+          { rotulo: 'Esperado', valor: valor(f.esperado_centavos) },
+          { rotulo: 'Contado', valor: valor(f.contado_centavos) },
           { rotulo: 'Diferença', valor: <b className="num">{formatarDinheiro(d)}</b> },
         ]}
       />
@@ -86,7 +97,7 @@ function Fechamento({ f }: { f: FechamentoDeCaixa }) {
   );
 }
 
-function BotaoFecharCaixa({ caixa, aoFechar }: { caixa: Caixa; aoFechar: (f: FechamentoDeCaixa) => void }) {
+function BotaoFecharCaixa({ caixa, aoFechar }: { caixa: Caixa; aoFechar: (f: Caixa) => void }) {
   const { api } = useDependencias();
   const queryClient = useQueryClient();
   const [aberto, setAberto] = useState(false);
@@ -146,7 +157,7 @@ export function TelaCaixa() {
   const busca = rota.useSearch();
   const data = busca.data ?? hojeNaClinica();
   const meu = useQuery(consultaMeuCaixa(api));
-  const [fechamento, setFechamento] = useState<FechamentoDeCaixa | null>(null);
+  const [fechamento, setFechamento] = useState<Caixa | null>(null);
   const caixa = meu.data;
 
   return (

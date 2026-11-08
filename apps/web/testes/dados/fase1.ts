@@ -59,7 +59,7 @@ export const ATENDIMENTO_VERA: AtendimentoDetalhadoFase1 = {
   ...atendimentoDe(VERA, 30),
   id: VERA.atendimento_id ?? uuid('0000000f', 30),
   senha: 'A007',
-  pulseira: { codigo: 'ETQ-2026-018760', situacao: 'valida' },
+  pulseira: { codigo: 'ETQ-2026-018760', situacao: 'valida', tipo: 'pulseira' },
   situacao: 'aguardando_sala',
 };
 
@@ -86,7 +86,7 @@ export function filaDaSala1(): FilaDaSala {
         atendimento_id: SONIA.atendimento_id ?? '',
         codigo: 'ATD-2026-118734',
         paciente: SONIA.paciente,
-        exame: { codigo_tuss: '40901114', nome: 'Ecocardiograma' },
+        exame: 'Ecocardiograma',
         inicio: horario('08:00'),
         situacao: 'em_exame',
         requer_contraste: false,
@@ -96,7 +96,7 @@ export function filaDaSala1(): FilaDaSala {
         atendimento_id: ATENDIMENTO_ANTONIO.id,
         codigo: ATENDIMENTO_ANTONIO.codigo,
         paciente: ANTONIO.paciente,
-        exame: { codigo_tuss: '40901300', nome: 'Eco e Doppler de carótidas' },
+        exame: 'Eco e Doppler de carótidas',
         inicio: horario('09:00'),
         situacao: 'aguardando_sala',
         requer_contraste: false,
@@ -114,7 +114,7 @@ export function filaDaSala6(triagem: Triagem | null): FilaDaSala {
         atendimento_id: ATENDIMENTO_VERA.id,
         codigo: ATENDIMENTO_VERA.codigo,
         paciente: VERA.paciente,
-        exame: { codigo_tuss: '41001230', nome: 'TC de abdome com contraste' },
+        exame: 'TC de abdome com contraste',
         inicio: horario('07:00'),
         situacao: 'aguardando_sala',
         requer_contraste: true,
@@ -126,6 +126,8 @@ export function filaDaSala6(triagem: Triagem | null): FilaDaSala {
 
 /** Triagem com creatinina 1,4 de 28/10/2026: TFG 40, precisa de aprovação médica (FC-TRI-02). */
 export const TRIAGEM_PRECISA_APROVACAO: Triagem = {
+  codigo: 'TRI-2026-000412',
+  exame_liberado: false,
   resultado: 'precisa_aprovacao_medica',
   tfg_calculada: 40,
   motivos: ['TFG 40 mL/min/1,73 m², abaixo de 45', 'Usa metformina'],
@@ -134,6 +136,8 @@ export const TRIAGEM_PRECISA_APROVACAO: Triagem = {
 };
 
 export const TRIAGEM_LIBERADA: Triagem = {
+  codigo: 'TRI-2026-000413',
+  exame_liberado: true,
   resultado: 'liberado',
   tfg_calculada: 92,
   motivos: [],
@@ -153,10 +157,7 @@ export const PACIENTES: PacienteResumo[] = [
 ];
 
 export function horariosLivres(data: string): HorarioLivre[] {
-  return ['08:30', '09:00', '09:30', '10:00', '10:30', '11:00'].map((h, i, todos) => ({
-    inicio: horario(h, data),
-    fim: horario(todos[i + 1] ?? '11:30', data),
-  }));
+  return ['08:30', '09:00', '09:30', '10:00', '10:30', '11:00'].map((h) => horario(h, data));
 }
 
 export const GUIA_UNIMED = {
@@ -176,7 +177,7 @@ export function laudoAntonio(): Laudo {
     id: LAUDO_ANTONIO_ID,
     codigo: 'LAU-2026-004120',
     paciente: ANTONIO.paciente,
-    exame: { codigo_tuss: '40901114', nome: 'Ecocardiograma transtorácico' },
+    exame: 'Ecocardiograma transtorácico',
     situacao: 'rascunho',
     conversar_antes: false,
     publicado_no_portal: false,
@@ -192,7 +193,7 @@ export function laudoAntonio(): Laudo {
         hash_documento: null,
       },
     ],
-    estudo: { accession: 'ACC-2026-052311', imagens: 42 },
+    estudo: { study_uid: '1.2.826.0.1.3680043.8.498.2', imagens: 42, recebido_em: '2026-11-06T12:40:00Z' },
   };
 }
 
@@ -202,52 +203,49 @@ export function filaDeLaudos(): ItemDaFilaDeLaudos[] {
       id: LAUDO_ANTONIO_ID,
       codigo: 'LAU-2026-004120',
       paciente: ANTONIO.paciente,
-      exame: { codigo_tuss: '40901114', nome: 'Ecocardiograma transtorácico' },
+      exame: 'Ecocardiograma transtorácico',
       situacao: 'rascunho',
       conversar_antes: false,
+      recebido_em: '2026-11-06T12:40:00Z',
     },
     {
       id: LAUDO_SONIA_ID,
       codigo: 'LAU-2026-004118',
       paciente: SONIA.paciente,
-      exame: { codigo_tuss: '40901114', nome: 'Ecocardiograma transtorácico' },
+      exame: 'Ecocardiograma transtorácico',
       situacao: 'rascunho',
       conversar_antes: true,
+      recebido_em: '2026-11-06T11:50:00Z',
     },
   ];
 }
 
 export const PORTAL_LAUDO_ECO: LaudoDoPortal = {
   id: uuid('0000001b', 1),
-  codigo: 'LAU-2026-004118',
-  exame: { codigo_tuss: '40901114', nome: 'Ecocardiograma transtorácico' },
-  assinado_em: '2026-11-06T12:04:00Z',
-  medico: 'Dr. Paulo Medeiros',
+  exame: 'Ecocardiograma transtorácico',
+  publicado_em: '2026-11-06T12:04:00Z',
   retificado: true,
-  versao: 2,
   texto: 'Ventrículo esquerdo com dimensões normais.\nÁtrio esquerdo de 38 mm.\n<b>sem negrito</b>',
 };
 
 export const PORTAL_LAUDO_DOPPLER: LaudoDoPortal = {
   id: uuid('0000001b', 2),
-  codigo: 'LAU-2026-003990',
-  exame: { codigo_tuss: '40901300', nome: 'Doppler colorido de carótidas' },
-  assinado_em: '2025-03-14T13:30:00Z',
-  medico: 'Dr. Marcos Freire',
+  exame: 'Doppler colorido de carótidas',
+  publicado_em: '2025-03-14T13:30:00Z',
   retificado: false,
-  versao: 1,
   texto: 'Placa menor que 50% na carótida esquerda.',
 };
 
 export function itensDoPortal(): ItemDoPortal[] {
-  return [PORTAL_LAUDO_ECO, PORTAL_LAUDO_DOPPLER].map((l) => ({ id: l.id, codigo: l.codigo, exame: l.exame, assinado_em: l.assinado_em, medico: l.medico, retificado: l.retificado, versao: l.versao }));
+  return [PORTAL_LAUDO_ECO, PORTAL_LAUDO_DOPPLER];
 }
 
 export function caixaAberto(): Caixa {
-  return { id: uuid('0000001c', 1), codigo: 'CX-2026-000312', aberto_em: '2026-11-06T10:02:00Z', fundo_centavos: 20000, situacao: 'aberto' };
+  return { id: uuid('0000001c', 1), codigo: 'CX-2026-000312', aberto_em: '2026-11-06T10:02:00Z', fundo_centavos: 20000 };
 }
 
-export function recebimentoSonia(descontoPb: number, forma: string): Recebimento {
+/** Recebimento como o servidor devolve; `comPix` falso simula o PSP ainda sem a cobrança. */
+export function recebimentoSonia(descontoPb: number, forma: string, comPix = true): Recebimento {
   const subtotal = 38000;
   const desconto = Math.round((subtotal * descontoPb) / 10_000);
   return {
@@ -257,9 +255,10 @@ export function recebimentoSonia(descontoPb: number, forma: string): Recebimento
     subtotal_centavos: subtotal,
     desconto_centavos: desconto,
     total_centavos: subtotal - desconto,
-    tabela_versao: 'PART-12',
+    forma,
+    tabela_versao: 12,
     situacao: 'aguardando_pagamento',
-    pix: forma === 'pix' ? { txid: 'VC2026110600004410', copia_e_cola: '00020126580014br.gov.bcb.pix0136vidacor-ficticio-4410' } : null,
+    pix: forma === 'pix' && comPix ? { txid: 'VC2026110600004410', copia_e_cola: '00020126580014br.gov.bcb.pix0136vidacor-ficticio-4410' } : null,
   };
 }
 
@@ -269,7 +268,8 @@ export function contingenciaAberta(): Contingencia {
     codigo: 'CTG-2026-0007',
     nivel: 'total',
     motivo: 'servidor local fora do ar',
-    responsavel: 'Patrícia Lemos',
+    responsavel_id: SESSOES.gerente.usuario.id,
+    declarada_por: SESSOES.recepcao.usuario.id,
     declarada_em: '2026-11-06T13:42:00Z',
     situacao: 'aberta',
   };

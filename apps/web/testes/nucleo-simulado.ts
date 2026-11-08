@@ -90,8 +90,11 @@ export const manipuladores = [
         'O nome ou o nascimento informado não confere com o cadastro. Nada foi gravado. Confira o documento do paciente e digite de novo.',
       );
     }
-    const { id, codigo, accession, agendamento_id, paciente, situacao, senha, pulseira, criado_em } = atendimentoDe(item, estado.porChave.size + 1);
-    const criado: AtendimentoFase1 = { id, codigo, accession, agendamento_id, paciente, situacao, senha, pulseira, criado_em };
+    const { id, codigo, accession, agendamento_id, paciente, sala, requer_contraste, situacao, senha, pulseira, criado_em } = atendimentoDe(
+      item,
+      estado.porChave.size + 1,
+    );
+    const criado: AtendimentoFase1 = { id, codigo, accession, agendamento_id, paciente, sala, requer_contraste, situacao, senha, pulseira, criado_em };
     estado.porChave.set(chave, criado);
     item.atendimento_id = criado.id;
     item.situacao = 'em_atendimento';

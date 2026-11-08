@@ -18,24 +18,24 @@ beforeEach(() => {
 
 interface Ficha {
   numero: string;
-  busca: string;
-  paciente: RegExp;
+  agendamento: string;
   nome: string;
   nascimento: string;
 }
 
-const FICHA_MARIA: Ficha = { numero: '0412', busca: 'Maria Helena', paciente: /^Maria Helena Duarte, nascimento 12\/03\/1968/, nome: 'Maria Helena Duarte', nascimento: '12031968' };
+const FICHA_MARIA: Ficha = { numero: '0412', agendamento: MARIA_HELENA.id, nome: 'Maria Helena Duarte', nascimento: '12031968' };
 
 async function lancarFicha(usuario: UserEvent, f: Ficha): Promise<void> {
   const form = await screen.findByRole('form', { name: 'Ficha F-ATD' });
   await usuario.type(within(form).getByRole('textbox', { name: 'Número da ficha' }), f.numero);
-  await usuario.type(within(form).getByRole('searchbox', { name: 'Paciente no cadastro' }), f.busca);
-  await usuario.click(await within(form).findByRole('button', { name: f.paciente }));
-  await usuario.type(within(form).getByRole('textbox', { name: 'Nome como está no papel' }), f.nome);
-  await digitarData(usuario, 'Nascimento como está no papel', f.nascimento, form);
   await digitarData(usuario, 'Dia do atendimento', '06112026', form);
   await usuario.type(within(form).getByRole('textbox', { name: 'Hora do atendimento' }), '10:50');
-  await usuario.type(within(form).getByRole('textbox', { name: 'Atendido por (como no papel)' }), 'Dr. Paulo Medeiros');
+  const agendamento = within(form).getByRole('combobox', { name: 'Agendamento (código impresso na agenda do kit)' });
+  await within(form).findByRole('option', { name: /^AG-2611-4100, 07:00, Maria Helena Duarte, 12\/03\/1968$/ });
+  await usuario.selectOptions(agendamento, f.agendamento);
+  await usuario.type(within(form).getByRole('textbox', { name: 'Nome como está no papel' }), f.nome);
+  await digitarData(usuario, 'Nascimento como está no papel', f.nascimento, form);
+  await usuario.selectOptions(within(form).getByRole('combobox', { name: 'Quem atendeu' }), within(form).getByRole('option', { name: /^Eu, / }));
   await usuario.upload(within(form).getByLabelText('Ficha digitalizada (PDF)'), new File([CONTEUDO_PDF], `f-atd-${f.numero}.pdf`, { type: 'application/pdf' }));
   await within(form).findByText(/SHA-256/);
   await usuario.click(within(form).getByRole('button', { name: 'Lançar ficha' }));
@@ -91,11 +91,11 @@ describe('Contingência (FC-CTG)', () => {
     expect(pedido?.chave).toMatch(UUID);
     expect(pedido?.corpo).toMatchObject({
       formulario: 'F-ATD',
-      numero: '0412',
-      paciente_id: MARIA_HELENA.paciente.id,
+      numero: 412,
+      agendamento_id: MARIA_HELENA.id,
       nome: 'Maria Helena Duarte',
       nascimento: '1968-03-12',
-      atendido_por: 'Dr. Paulo Medeiros',
+      atendido_por: SESSOES.recepcao.usuario.id,
       anexo_sha256: createHash('sha256').update(CONTEUDO_PDF).digest('hex'),
     });
     expect(await violacoesDeAcessibilidade(container)).toEqual([]);
@@ -105,15 +105,39 @@ describe('Contingência (FC-CTG)', () => {
     fase1.contingencia = contingenciaAberta();
     const usuario = userEvent.setup();
     renderizar('/contingencia');
-    await lancarFicha(usuario, {
-      numero: '0414',
-      busca: 'Juliana',
-      paciente: /^Juliana Sampaio Rocha, nascimento 12\/04\/1993/,
-      nome: JULIANA.paciente.nome,
-      nascimento: '12041992',
-    });
+    await lancarFicha(usuario, { numero: '0414', agendamento: JULIANA.id, nome: JULIANA.paciente.nome, nascimento: '12041992' });
     const lista = await screen.findByRole('list', { name: 'Lançamentos desta sessão' });
     expect(await within(lista).findByText(/Ficha F-ATD 0414: divergência DIV-2026-000031 aberta\./)).toHaveTextContent('Nenhum cadastro foi alterado');
+  });
+
+  it('divergência aberta pode ser resolvida pela gerência', async () => {
+    fase1.contingencia = contingenciaAberta();
+    estado.sessao = SESSOES.gerente;
+    const usuario = userEvent.setup();
+    renderizar('/contingencia');
+    await lancarFicha(usuario, { numero: '0414', agendamento: JULIANA.id, nome: JULIANA.paciente.nome, nascimento: '12041992' });
+    await usuario.click(await screen.findByRole('button', { name: 'Resolver DIV-2026-000031' }));
+    const dialogo = await screen.findByRole('dialog', { name: 'Resolver a divergência DIV-2026-000031?' });
+    await usuario.type(within(dialogo).getByRole('textbox', { name: 'Resolução' }), 'papel com ano errado; cadastro conferido com o documento');
+    await usuario.click(within(dialogo).getByRole('button', { name: 'Registrar resolução' }));
+    expect(await screen.findByText('Resolvida')).toBeInTheDocument();
+    expect(pedidosDe('resolucao')[0]?.corpo).toEqual({ resolucao: 'papel com ano errado; cadastro conferido com o documento' });
+  });
+
+  it('números da faixa sem uso são registrados como devolvidos ou anulados', async () => {
+    fase1.contingencia = contingenciaAberta();
+    const usuario = userEvent.setup();
+    renderizar('/contingencia');
+    await usuario.click(await screen.findByRole('tab', { name: 'Números sem uso' }));
+    const form = await screen.findByRole('form', { name: 'Números sem uso' });
+    await usuario.selectOptions(within(form).getByRole('combobox', { name: 'Formulário' }), 'F-ATD');
+    await usuario.selectOptions(within(form).getByRole('combobox', { name: 'Situação' }), 'devolvido');
+    await usuario.type(within(form).getByRole('textbox', { name: 'Do número' }), '0480');
+    await usuario.type(within(form).getByRole('textbox', { name: 'Até o número' }), '0499');
+    await usuario.click(within(form).getByRole('button', { name: 'Registrar números' }));
+    expect(await within(form).findByText(/Números registrados\./)).toBeInTheDocument();
+    expect(pedidosDe('numeros')[0]?.corpo).toEqual({ formulario: 'F-ATD', de: 480, ate: 499, situacao: 'devolvido' });
+    expect(pedidosDe('numeros')[0]?.chave).toMatch(UUID);
   });
 
   it.each([
@@ -144,7 +168,7 @@ describe('Contingência (FC-CTG)', () => {
     await usuario.click(within(form).getByRole('button', { name: 'Lançar recibo' }));
     const lista = await screen.findByRole('list', { name: 'Lançamentos desta sessão' });
     expect(await within(lista).findByText(/Recibo F-REC 0207: papel R\$ 300,00, tabela R\$ 380,00\. Divergência DIV-2026-000040 aberta/)).toBeInTheDocument();
-    expect(pedidosDe('recibo')[0]?.corpo).toMatchObject({ formulario: 'F-REC', numero: '0207', paciente_id: SONIA.paciente.id, valor_papel_centavos: 30000 });
+    expect(pedidosDe('recibo')[0]?.corpo).toMatchObject({ numero: 207, paciente_id: SONIA.paciente.id, valor_papel_centavos: 30000 });
   });
 
   it('encerramento com pendência (409) lista o que falta; sem pendência, encerra', async () => {

@@ -12,17 +12,17 @@ const rota = getRouteApi('/portal/laudos/$laudoId');
 /** Leitura do laudo publicado, sempre como texto (nunca HTML). */
 export function LeituraDoLaudo({ laudo }: { laudo: LaudoDoPortal }) {
   return (
-    <article className="card col" style={{ gap: 12 }} aria-label={`Laudo de ${laudo.exame.nome}`}>
+    <article className="card col" style={{ gap: 12 }} aria-label={`Laudo de ${laudo.exame}`}>
       <div className="row wrap" style={{ gap: 10 }}>
-        <h1 style={{ fontSize: 22, fontWeight: 650 }}>{laudo.exame.nome}</h1>
+        <h1 style={{ fontSize: 22, fontWeight: 650 }}>{laudo.exame}</h1>
         <MarcaDeRetificacao laudo={laudo} />
       </div>
       <div className="t14 mute">
-        {laudo.medico}, assinado em {formatarDataHora(laudo.assinado_em, FUSO_DA_CLINICA)}. Laudo {laudo.codigo}.
+        Publicado em {formatarDataHora(laudo.publicado_em, FUSO_DA_CLINICA)}.
       </div>
       {laudo.retificado && (
         <Aviso nivel="informativo" titulo="Este laudo foi corrigido pelo médico.">
-          Você está vendo a versão {laudo.versao}, que substitui a anterior.
+          Você está vendo a versão corrigida, que substitui a anterior.
         </Aviso>
       )}
       <pre className="texto-laudo">{laudo.texto}</pre>

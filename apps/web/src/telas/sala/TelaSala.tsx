@@ -20,6 +20,14 @@ const TRIAGEM: Record<string, string> = {
   precisa_aprovacao_medica: 'triagem aguarda a conduta médica',
 };
 
+/** Código da divergência aberta pelo servidor no bloqueio (docs/30 § 7), quando veio. */
+function divergenciaAberta(erro: unknown): string | null {
+  if (!(erro instanceof ErroDaApi)) return null;
+  const d = erro.campo('divergencia') as { codigo?: unknown } | string | undefined;
+  if (typeof d === 'string') return d;
+  return typeof d?.codigo === 'string' ? d.codigo : null;
+}
+
 function salaCorreta(erro: unknown): { id: string; nome: string } | null {
   if (!(erro instanceof ErroDaApi) || erro.codigo !== 'paciente-de-outra-sala') {
     return null;
@@ -82,6 +90,7 @@ export function TelaSala() {
   }
 
   const outra = salaCorreta(bipe.erro);
+  const divergencia = divergenciaAberta(bipe.erro);
   const paciente = emFoco?.atendimento.paciente;
 
   return (
@@ -166,7 +175,14 @@ export function TelaSala() {
                       </Link>
                     )
                   }
-                  complemento={outra === null ? undefined : <b>Paciente da {outra.nome}: encaminhe e bipe a próxima pulseira.</b>}
+                  complemento={
+                    outra === null ? undefined : (
+                      <>
+                        <b>Paciente da {outra.nome}: encaminhe e bipe a próxima pulseira.</b>
+                        {divergencia !== null && ` Divergência ${divergencia} registrada.`}
+                      </>
+                    )
+                  }
                 />
               )}
             </div>
@@ -199,15 +215,15 @@ export function TelaSala() {
                       nome={i.paciente.nome}
                       nascimento={i.paciente.nascimento}
                       inicio={formatarHora(i.inicio, FUSO_DA_CLINICA)}
-                      detalhe={i.exame.nome}
+                      detalhe={i.exame}
                       situacao={{ texto: ap.texto, cor: ap.cor }}
                       marca={
                         i.requer_contraste
-                          ? `Contraste: ${i.triagem_resultado === null ? 'sem triagem' : (TRIAGEM[i.triagem_resultado] ?? i.triagem_resultado)}`
+                          ? `Contraste: ${i.triagem_resultado === null || i.triagem_resultado === undefined ? 'sem triagem' : (TRIAGEM[i.triagem_resultado] ?? i.triagem_resultado)}`
                           : undefined
                       }
                       selecionada={i.paciente.id === paciente?.id}
-                      contextoDoMenu={i.exame.nome}
+                      contextoDoMenu={i.exame}
                       aoAbrir={() => {
                         campo.current?.focus();
                       }}

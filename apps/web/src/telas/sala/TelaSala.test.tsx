@@ -52,6 +52,7 @@ describe('Sala de exame: bipe da pulseira (FC-PUL)', () => {
     await bipar(PULSEIRAS.juliana);
     const alerta = await esperarAlertaDoServidor('A pulseira é de Juliana Sampaio Rocha, 12/04/1993, agendada para a Sala 2.', 'paciente-de-outra-sala');
     expect(alerta).toHaveTextContent('Paciente da Sala 2, obstétrica: encaminhe e bipe a próxima pulseira.');
+    expect(alerta).toHaveTextContent('Divergência DIV-2026-000029 registrada.');
     expect(within(alerta).getByRole('link', { name: 'Ver a fila da Sala 2, obstétrica' })).toBeInTheDocument();
     expect(screen.getByText('Nenhum paciente em foco.')).toBeInTheDocument();
   });
@@ -81,15 +82,14 @@ describe('Sala de exame: bipe da pulseira (FC-PUL)', () => {
     await esperarAlertaDoServidor('a conduta ainda não foi registrada', 'conduta-medica-pendente');
   });
 
-  it('técnico de outra sala recebe 403 com a mensagem do servidor', async () => {
-    servidor.use(
-      http.post('*/v1/salas/:id/bipes', () =>
-        problema(403, 'sem-permissao', 'Você está lotado na Sala 6 e não libera exames da Sala 1. Nada foi enviado ao aparelho.'),
-      ),
-    );
+  it.each([
+    [403, 'fora-da-sala', 'Você está lotado na Sala 6 e não libera exames da Sala 1. Nada foi enviado ao aparelho.'],
+    [409, 'sala-sem-aparelho', 'A Sala 1 está sem aparelho cadastrado. Nada foi enviado. Avise a TI.'],
+  ])('bipe com erro %i %s mostra a mensagem do servidor', async (status, codigo, detalhe) => {
+    servidor.use(http.post('*/v1/salas/:id/bipes', () => problema(status, codigo, detalhe)));
     renderizar(`/sala?sala=${SALA_1.id}`);
     await bipar(PULSEIRAS.antonio);
-    await esperarAlertaDoServidor('Você está lotado na Sala 6 e não libera exames da Sala 1.', 'sem-permissao');
+    await esperarAlertaDoServidor(detalhe, codigo);
   });
 
   it('rede caiu: reenvia o mesmo bipe com a MESMA chave', async () => {

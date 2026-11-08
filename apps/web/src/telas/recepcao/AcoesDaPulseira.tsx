@@ -42,6 +42,8 @@ export function BotaoImprimir({ rotulo = 'Imprimir pulseira' }: { rotulo?: strin
 
 interface PropsDaReimpressao {
   atendimento: AtendimentoDetalhadoFase1;
+  /** Etiqueta a reimprimir: a válida, ou a última invalidada pela correção de cadastro. */
+  codigo: string;
   aberto: boolean;
   motivoInicial?: string;
   aoFechar: () => void;
@@ -49,12 +51,12 @@ interface PropsDaReimpressao {
 }
 
 /** Reimpressão com motivo obrigatório (FC-ETQ-01, 02): a etiqueta atual deixa de valer. */
-export function DialogoDeReimpressao({ atendimento, aberto, motivoInicial = '', aoFechar, aoConcluir }: PropsDaReimpressao) {
+export function DialogoDeReimpressao({ atendimento, codigo, aberto, motivoInicial = '', aoFechar, aoConcluir }: PropsDaReimpressao) {
   const { api } = useDependencias();
   const queryClient = useQueryClient();
   const [motivo, setMotivo] = useState(motivoInicial);
   const [tentou, setTentou] = useState(false);
-  const op = useOperacao((m: string, chave: string) => api.etiquetas.reimprimir(atendimento.pulseira.codigo, { motivo: m }, { idempotencyKey: chave }), {
+  const op = useOperacao((m: string, chave: string) => api.etiquetas.reimprimir(codigo, { motivo: m }, { idempotencyKey: chave }), {
     aoConcluir: async (r) => {
       aoConcluir(r);
       await queryClient.invalidateQueries({ queryKey: chaves.atendimento(atendimento.id) });
@@ -89,7 +91,7 @@ export function DialogoDeReimpressao({ atendimento, aberto, motivoInicial = '', 
         erro={tentou && motivo === '' ? 'Escolha o motivo da reimpressão.' : null}
       />
       <p className="t14" style={{ margin: 0, lineHeight: 1.5 }}>
-        A pulseira <b className="num">{atendimento.pulseira.codigo}</b> deixa de valer. Se for bipada depois, o sistema bloqueia e avisa.
+        A pulseira <b className="num">{codigo}</b> deixa de valer. Se for bipada depois, o sistema bloqueia e avisa.
       </p>
       {op.erro !== null && <ErroDoAto erro={op.erro} ato="reimprimir a pulseira" aoTentarDeNovo={() => { op.enviar(motivo); }} />}
     </DialogoDeFormulario>

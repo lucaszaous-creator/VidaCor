@@ -16,7 +16,7 @@ describe('Portal do paciente (FC-LAU-03, FC-LAU-05, FC-ACE)', () => {
     const usuario = userEvent.setup();
     const { container } = renderizar('/portal');
     const lista = await screen.findByRole('region', { name: 'Laudos publicados' });
-    expect(await within(lista).findByText('Retificado, versão 2')).toBeInTheDocument();
+    expect(await within(lista).findByText('Retificado')).toBeInTheDocument();
     expect(within(lista).getByText('Doppler colorido de carótidas')).toBeInTheDocument();
     expect(within(lista).getByRole('link', { name: 'Ler o laudo de Ecocardiograma transtorácico' })).toHaveAttribute(
       'href',
@@ -33,7 +33,7 @@ describe('Portal do paciente (FC-LAU-03, FC-LAU-05, FC-ACE)', () => {
     const { container } = renderizar(`/portal/laudos/${PORTAL_LAUDO_ECO.id}`);
     const laudo = await screen.findByRole('article', { name: 'Laudo de Ecocardiograma transtorácico' });
     expect(laudo).toHaveTextContent('Este laudo foi corrigido pelo médico.');
-    expect(laudo).toHaveTextContent('Você está vendo a versão 2, que substitui a anterior.');
+    expect(laudo).toHaveTextContent('Você está vendo a versão corrigida, que substitui a anterior.');
     expect(laudo).toHaveTextContent('<b>sem negrito</b>');
     expect(laudo.querySelector('pre b')).toBeNull();
     expect(await violacoesDeAcessibilidade(container)).toEqual([]);

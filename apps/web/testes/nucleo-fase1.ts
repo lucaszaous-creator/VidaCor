@@ -8,7 +8,6 @@ import type {
   AtendimentoFase1,
   Caixa,
   Contingencia,
-  Estorno,
   Guia,
   Laudo,
   PedidoAgendamento,
@@ -21,7 +20,7 @@ import type {
   Triagem,
 } from '@vidacor/api-client';
 import { http, HttpResponse } from 'msw';
-import { SALAS, uuid } from './dados/ficticios';
+import { itensDaAgenda, SALAS, uuid } from './dados/ficticios';
 import {
   APARELHO_SALA_1,
   APARELHO_SALA_6,
@@ -60,6 +59,13 @@ export interface PedidoRegistrado {
   corpo: unknown;
 }
 
+interface EstornoSimulado {
+  id: string;
+  situacao: string;
+  motivo: string;
+  pedido_por: string;
+}
+
 export interface EstadoFase1 {
   /** Atos que respondem `401 reautenticacao-necessaria` até o teste tirar daqui. */
   exigirReautenticacao: Set<string>;
@@ -70,11 +76,16 @@ export interface EstadoFase1 {
   laudo: Laudo;
   acessoDeEmergencia: boolean;
   caixa: Caixa | null;
-  estornos: Map<string, Estorno>;
+  estornos: Map<string, EstornoSimulado>;
   contingencia: Contingencia | null;
   fichas: Map<string, AtendimentoFase1>;
   divergenciasAbertas: string[];
   guias: Map<string, Guia>;
+  /** Último recebimento criado; o PIX só aparece na consulta seguinte (PSP pelo outbox). */
+  recebimento: { pb: number; forma: string; consultas: number } | null;
+  /** O PSP já devolveu a cobrança PIX (o teste segura para ver o estado intermediário). */
+  pspRespondeu: boolean;
+  estudosConciliados: Set<string>;
 }
 
 export const fase1: EstadoFase1 = novoEstado();
@@ -94,6 +105,9 @@ function novoEstado(): EstadoFase1 {
     fichas: new Map(),
     divergenciasAbertas: [],
     guias: new Map(),
+    recebimento: null,
+    pspRespondeu: true,
+    estudosConciliados: new Set(),
   };
 }
 
@@ -231,7 +245,7 @@ export const manipuladoresFase1 = [
         409,
         'paciente-de-outra-sala',
         'A pulseira é de Juliana Sampaio Rocha, 12/04/1993, agendada para a Sala 2. O exame ficou bloqueado na Sala 1, o aparelho não recebeu a lista e a divergência foi aberta. Encaminhe a paciente à Sala 2.',
-        { sala_correta: { id: SALA_2.id, nome: SALA_2.nome } },
+        { sala_correta: { id: SALA_2.id, nome: SALA_2.nome }, divergencia: { id: uuid('00000023', 1), codigo: 'DIV-2026-000029' } },
       );
     }
     if (codigo === PULSEIRAS.vera) {
@@ -276,7 +290,8 @@ export const manipuladoresFase1 = [
     fase1.triagemVera = {
       ...(fase1.triagemVera ?? TRIAGEM_PRECISA_APROVACAO),
       resultado: 'liberado_com_ressalvas',
-      conduta: { texto: corpo.conduta, medico: estado.sessao.usuario.nome, registrada_em: '2026-11-06T11:58:00Z' },
+      exame_liberado: true,
+      conduta: { texto: corpo.conduta, medico_id: estado.sessao.usuario.id, registrada_em: '2026-11-06T11:58:00Z' },
     };
     return HttpResponse.json(fase1.triagemVera);
   }),
@@ -289,12 +304,13 @@ export const manipuladoresFase1 = [
     const corpo = (await registrar('guia', request)) as PedidoGuia;
     const guia: Guia = {
       id: uuid('0000001f', fase1.guias.size + 1),
+      codigo: `GUI-2026-${String(fase1.guias.size + 1).padStart(6, '0')}`,
       numero: corpo.numero,
       operadora: corpo.operadora,
       validade: corpo.validade,
       situacao: 'disponivel',
-      procedimentos: corpo.procedimentos.map((p) => ({ tuss: p.tuss, saldo: p.quantidade })),
-      atendimento_codigo: null,
+      procedimentos: corpo.procedimentos.map((p) => ({ tuss: p.tuss, autorizado: p.quantidade, saldo: p.quantidade })),
+      em_uso_por: null,
     };
     fase1.guias.set(guia.id, guia);
     return HttpResponse.json(guia, { status: 201 });
@@ -383,7 +399,7 @@ export const manipuladoresFase1 = [
     }
     const versoes = fase1.laudo.versoes.map((v) =>
       v.numero === rascunho.numero
-        ? versaoAssinada(v.texto, v.numero, v.motivo)
+        ? versaoAssinada(v.texto, v.numero, v.motivo ?? null)
         : v.situacao === 'assinada'
           ? { ...v, situacao: 'substituida' as const }
           : v,
@@ -439,6 +455,39 @@ export const manipuladoresFase1 = [
     return HttpResponse.json({ valido_ate: '2026-11-06T13:10:00Z' }, { status: 201 });
   }),
 
+  http.post('*/v1/laudos/:id/publicacao', async ({ request }) => {
+    await registrar('publicacao', request);
+    if (fase1.laudo.situacao !== 'assinado') {
+      return problema(409, 'laudo-nao-assinado', 'O laudo ainda não foi assinado e não vai ao portal. Nada foi publicado.');
+    }
+    fase1.laudo = { ...fase1.laudo, publicado_no_portal: true };
+    return HttpResponse.json({ publicado: true });
+  }),
+  http.post('*/v1/laudos/:id/links', async ({ request }) => {
+    const corpo = (await registrar('link', request)) as { horas: number };
+    return HttpResponse.json({ token: 'tk-ficticio-unico-8f2a', expira_em: corpo.horas === 24 ? '2026-11-07T12:00:00Z' : '2026-11-08T12:00:00Z' }, { status: 201 });
+  }),
+
+  /* -------------------------------------------- Estudos --------------------------------------- */
+  http.get('*/v1/estudos/pendentes', () => {
+    if (!temPerfil('medico')) return semPermissao('conciliar estudos');
+    return HttpResponse.json(
+      [
+        { id: uuid('00000024', 1), codigo: 'EST-2026-000081', accession: null, imagens: 31, recebido_em: '2026-11-06T13:05:00Z', pendencia: 'Patient ID C-0414 sem accession' },
+        { id: uuid('00000024', 2), codigo: 'EST-2026-000082', accession: 'ACC-2026-099999', imagens: 12, recebido_em: '2026-11-06T13:20:00Z', pendencia: 'Accession desconhecido' },
+      ].filter((e) => !fase1.estudosConciliados.has(e.id)),
+    );
+  }),
+  http.post('*/v1/estudos/:id/conciliacao', async ({ request, params }) => {
+    const corpo = (await registrar('conciliacao', request)) as { atendimento_id: string; nome: string; nascimento: string };
+    const item = itensDaAgenda().find((i) => i.atendimento_id === corpo.atendimento_id);
+    if (item?.paciente.nascimento !== corpo.nascimento || item.paciente.nome !== corpo.nome.trim()) {
+      return problema(422, 'identificacao-nao-confere', 'O nome ou o nascimento não confere com o atendimento escolhido. O estudo não foi conciliado. Confira os dois identificadores.');
+    }
+    fase1.estudosConciliados.add(String(params.id));
+    return HttpResponse.json({ conciliado: true });
+  }),
+
   /* -------------------------------------------- Portal ---------------------------------------- */
   http.get('*/v1/portal/laudos', () => HttpResponse.json(itensDoPortal())),
   http.get('*/v1/portal/laudos/:id', ({ params }) => {
@@ -481,44 +530,42 @@ export const manipuladoresFase1 = [
         { limite_pontos_base: 500 },
       );
     }
-    return HttpResponse.json(recebimentoSonia(pb, corpo.forma), { status: 201 });
+    fase1.recebimento = { pb, forma: corpo.forma, consultas: 0 };
+    return HttpResponse.json(recebimentoSonia(pb, corpo.forma, false), { status: 201 });
+  }),
+  http.get('*/v1/recebimentos/:id', () => {
+    const r = fase1.recebimento;
+    if (r === null) return problema(404, 'nao-encontrado', 'Recebimento não encontrado.');
+    r.consultas += 1;
+    return HttpResponse.json(recebimentoSonia(r.pb, r.forma, fase1.pspRespondeu));
   }),
   http.post('*/v1/autorizacoes-desconto', async ({ request }) => {
     await registrar('autorizacao', request);
     if (!temPerfil('gerente')) return semPermissao('autorizar desconto');
     const re = reautenticacao('autorizacao');
     if (re !== null) return re;
-    return HttpResponse.json({ id: uuid('00000021', 1), valida_ate: '2026-11-06T13:40:00Z' }, { status: 201 });
+    return HttpResponse.json({ id: uuid('00000021', 1), codigo: 'AUT-2026-000077', valida_ate: '2026-11-06T13:40:00Z' }, { status: 201 });
   }),
-  http.post('*/v1/recebimentos/:id/estornos', async ({ request, params }) => {
+  http.post('*/v1/recebimentos/:id/estornos', async ({ request }) => {
     const corpo = (await registrar('pedir-estorno', request)) as { motivo: string };
-    const e: Estorno = {
-      id: uuid('00000022', 1),
-      recebimento_id: String(params.id),
-      situacao: 'pedido',
-      motivo: corpo.motivo,
-      pedido_por: estado.sessao.usuario.id,
-      aprovado_por: null,
-    };
+    const e: EstornoSimulado = { id: uuid('00000022', 1), situacao: 'pedido', motivo: corpo.motivo, pedido_por: estado.sessao.usuario.id };
     fase1.estornos.set(e.id, e);
     return HttpResponse.json(e, { status: 201 });
   }),
   http.post('*/v1/estornos/:id/aprovacao', async ({ request, params }) => {
     await registrar('aprovar-estorno', request);
-    const e = fase1.estornos.get(String(params.id)) ?? {
+    const e: EstornoSimulado = fase1.estornos.get(String(params.id)) ?? {
       id: String(params.id),
-      recebimento_id: uuid('0000001d', 1),
-      situacao: 'pedido' as const,
+      situacao: 'pedido',
       motivo: 'cobrança em duplicidade',
       pedido_por: uuid('0000000a', 7),
-      aprovado_por: null,
     };
     if (e.pedido_por === estado.sessao.usuario.id) {
       return problema(403, 'separacao-de-funcoes', 'Quem pediu o estorno não pode aprovar o próprio pedido. Nada foi estornado. Peça a aprovação à gerência ou ao financeiro.');
     }
     const re = reautenticacao('aprovar-estorno');
     if (re !== null) return re;
-    return HttpResponse.json({ ...e, situacao: 'aprovado', aprovado_por: estado.sessao.usuario.id });
+    return HttpResponse.json({ id: e.id, situacao: 'aprovado', motivo: e.motivo });
   }),
 
   /* ------------------------------------------ Contingência ------------------------------------ */
@@ -531,15 +578,16 @@ export const manipuladoresFase1 = [
   }),
   http.post('*/v1/contingencias/:id/fichas', async ({ request }) => {
     const corpo = (await registrar('ficha', request)) as PedidoFicha;
-    const n = Number(corpo.numero);
+    const n = corpo.numero;
     if (!(n >= 400 && n <= 499)) {
-      return problema(422, 'numero-fora-da-faixa', `A ficha F-ATD ${corpo.numero} não está na faixa reservada para hoje (0400 a 0499). Nada foi lançado. Confira o número no papel.`);
+      return problema(422, 'numero-fora-da-faixa', `A ficha F-ATD ${String(corpo.numero).padStart(4, '0')} não está na faixa reservada para hoje (0400 a 0499). Nada foi lançado. Confira o número no papel.`);
     }
-    const ja = fase1.fichas.get(corpo.numero);
+    const ja = fase1.fichas.get(String(corpo.numero));
     if (ja !== undefined) {
-      return problema(409, 'ficha-ja-lancada', `A ficha F-ATD ${corpo.numero} já foi lançada no atendimento ${ja.codigo}. Nada foi lançado de novo.`);
+      return problema(409, 'ficha-ja-lancada', `A ficha F-ATD ${String(corpo.numero).padStart(4, '0')} já foi lançada no atendimento ${ja.codigo}. Nada foi lançado de novo.`);
     }
-    const cadastro = PACIENTES.find((p) => p.id === corpo.paciente_id);
+    const agendado = itensDaAgenda().find((i) => i.id === corpo.agendamento_id);
+    const cadastro = agendado?.paciente;
     if (cadastro !== undefined && cadastro.nascimento !== corpo.nascimento) {
       const codigo = `DIV-2026-${String(31 + fase1.divergenciasAbertas.length).padStart(6, '0')}`;
       fase1.divergenciasAbertas.push(codigo);
@@ -552,15 +600,16 @@ export const manipuladoresFase1 = [
       id: uuid('0000000f', 700 + n),
       codigo: `ATD-2026-${String(119000 + n).padStart(6, '0')}`,
       accession: `ACC-2026-${String(53000 + n).padStart(6, '0')}`,
-      agendamento_id: uuid('0000000d', 700 + n),
+      agendamento_id: corpo.agendamento_id,
       paciente: cadastro ?? MARIA_HELENA.paciente,
+      sala: agendado?.sala ?? SALA_1,
+      requer_contraste: false,
       situacao: 'exame_concluido',
       senha: 'C001',
-      pulseira: { codigo: `ETQ-2026-${String(19000 + n).padStart(6, '0')}`, situacao: 'valida' },
+      pulseira: { codigo: `ETQ-2026-${String(19000 + n).padStart(6, '0')}`, situacao: 'valida', tipo: 'pulseira' },
       criado_em: '2026-11-06T14:10:00Z',
-      origem: 'contingencia',
     };
-    fase1.fichas.set(corpo.numero, atendimento);
+    fase1.fichas.set(String(corpo.numero), atendimento);
     return HttpResponse.json(atendimento, { status: 201 });
   }),
   http.post('*/v1/contingencias/:id/recibos', async ({ request }) => {
@@ -569,13 +618,23 @@ export const manipuladoresFase1 = [
     if (divergente) fase1.divergenciasAbertas.push('DIV-2026-000040');
     return HttpResponse.json(
       {
-        codigo: `REC-2026-00${corpo.numero}`,
+        codigo: `REC-2026-00${String(corpo.numero).padStart(4, '0')}`,
         valor_papel_centavos: corpo.valor_papel_centavos,
         valor_recalculado_centavos: 38000,
         divergencia: divergente ? { codigo: 'DIV-2026-000040', tipo: 'preco', descricao: 'Valor do papel difere da tabela vigente na data.' } : null,
       },
       { status: 201 },
     );
+  }),
+  http.post('*/v1/contingencias/:id/numeros', async ({ request }) => {
+    const corpo = (await registrar('numeros', request)) as { de: number; ate: number };
+    if (corpo.de > corpo.ate) return problema(422, 'faixa-invalida', 'O número inicial é maior que o final. Nada foi registrado.');
+    return HttpResponse.json({ registrados: corpo.ate - corpo.de + 1 });
+  }),
+  http.post('*/v1/divergencias/:id/resolucao', async ({ request }) => {
+    await registrar('resolucao', request);
+    if (!temPerfil('gerente', 'coordenacao')) return semPermissao('resolver divergência');
+    return HttpResponse.json({ situacao: 'resolvida' });
   }),
   http.post('*/v1/contingencias/:id/encerramento', async ({ request }) => {
     await registrar('encerrar', request);

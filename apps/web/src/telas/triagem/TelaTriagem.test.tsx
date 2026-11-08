@@ -89,7 +89,7 @@ describe('Triagem com contraste (FC-TRI)', () => {
     await usuario.click(screen.getByRole('button', { name: 'Registrar conduta e liberar' }));
     expect(await screen.findByText(/Conduta registrada\./)).toBeInTheDocument();
     expect(pedidosDe('conduta')[1]?.chave).toBe(chave);
-    expect(screen.getByRole('region', { name: 'Resultado da triagem' })).toHaveTextContent('prosseguir com hidratação (Dra. Cecília Souto');
+    expect(screen.getByRole('region', { name: 'Resultado da triagem' })).toHaveTextContent('prosseguir com hidratação (registrada em 06/11/2026 08:58)');
   });
 
   it('médico sem vínculo recebe 403 e a tela mostra a mensagem do servidor', async () => {
@@ -97,14 +97,31 @@ describe('Triagem com contraste (FC-TRI)', () => {
     estado.sessao = SESSOES.medico;
     servidor.use(
       http.post('*/v1/atendimentos/:id/triagem/conduta', () =>
-        problema(403, 'sem-permissao', 'Só a médica com vínculo de cuidado registra a conduta. Nada foi gravado.'),
+        problema(403, 'sem-vinculo-de-cuidado', 'Só a médica com vínculo de cuidado registra a conduta. Nada foi gravado.'),
       ),
     );
     const usuario = userEvent.setup();
     renderizar(URL);
     await usuario.type(await screen.findByRole('textbox', { name: 'Conduta' }), 'prosseguir');
     await usuario.click(screen.getByRole('button', { name: 'Registrar conduta e liberar' }));
-    await esperarAlertaDoServidor('Só a médica com vínculo de cuidado registra a conduta.', 'sem-permissao');
+    await esperarAlertaDoServidor('Só a médica com vínculo de cuidado registra a conduta.', 'sem-vinculo-de-cuidado');
+  });
+
+  it('cadastro sem sexo (422) impede o cálculo e a tela diz o que fazer', async () => {
+    servidor.use(
+      http.post('*/v1/atendimentos/:id/triagem', () =>
+        problema(422, 'cadastro-sem-sexo', 'O cadastro da paciente não tem o sexo, necessário para calcular a TFG. Nada foi gravado. Peça à recepção para completar o cadastro.'),
+      ),
+    );
+    const usuario = userEvent.setup();
+    renderizar(URL);
+    for (const pergunta of ['Já teve reação a contraste iodado?', 'Existe possibilidade de gravidez?', 'Está amamentando?', 'Usa metformina?']) {
+      await usuario.click(within(await screen.findByRole('radiogroup', { name: pergunta })).getByRole('radio', { name: 'Não' }));
+    }
+    await usuario.type(screen.getByRole('textbox', { name: 'Creatinina (mg/dL)' }), '0,9');
+    await digitarData(usuario, 'Data do exame de creatinina', '28102026');
+    await usuario.click(screen.getByRole('button', { name: 'Salvar triagem' }));
+    await esperarAlertaDoServidor('O cadastro da paciente não tem o sexo', 'cadastro-sem-sexo');
   });
 
   it('técnico que tenta salvar triagem sem permissão vê a mensagem do servidor', async () => {
