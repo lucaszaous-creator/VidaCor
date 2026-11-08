@@ -94,6 +94,22 @@ Roteiro, ainda não executado. Só começa com os ADRs 0002 a 0019 aprovados e c
 5. Testes: integração G4 da rota de check-in (feliz, erro, repetição, limite, acesso indevido) e um teste de RLS autorizado e não autorizado.
 6. Saída: M0 do `docs/25` §3.1 com evidências; o que não deu para verificar é escrito "não verificado" com o motivo.
 
+### 5.2 Exemplo de fatia vertical: agendamento de convênio com guia
+
+Como o fluxo acima se aplica às frases FC-AGD-01 a FC-AGD-11 do `docs/27` §1:
+
+| Passo | O que se faz |
+|---|---|
+| Entrada | REQ-AGD-*, frases FC-AGD aprovadas, mockup `design/mockups/Agendamento-Guia.dc.html`, regra de guia do `docs/21` §3.3 |
+| Testes primeiro | Um teste de integração por frase: guia consumida (01), guia em uso 409 (02), duas requisições simultâneas com a mesma guia (03), mesma `Idempotency-Key` (04), procedimento fora 422 (05), senha vencida 422 (06), saldo zero 422 (07), reserva provisória expira (08), perfil sem permissão 403 (10), mesmo horário da sala (11) |
+| Domínio | `dominio-agenda`: validade da senha na data do exame, procedimentos autorizados, prazo da reserva provisória (regra pura) |
+| Banco | Índice único de horário ativo da sala; índice único de consumo da guia; `UPDATE` atômico do saldo conferindo linhas afetadas; metadados de lastro e ligação guia-atendimento |
+| Rota | `POST /v1/agendamentos` com ato `agenda.agendar`, `Idempotency-Key`, Problem Details R8 |
+| Tela | Seção da guia com conferências automáticas; mensagens do servidor; horário ocupado não clicável |
+| Saída | PR com os testes verdes, matriz de rastreabilidade atualizada, evidência em 1440×900 e 1280×800 |
+
+Paciente de exemplo: Antônio Carlos Ribeiro, 15/06/1954, guia UN-55120 (`design/dados-ficticios.md`, `docs/27`).
+
 ## 6. Regras inegociáveis
 
 - **G1** Preço, desconto, cortesia, valor de guia, permissão, perfil e limite calculados no núcleo; valor vindo do cliente é ignorado e recalculado. Nenhum segredo em código de tela, `VITE_*` ou configuração do Tauri. Banco nunca exposto.
@@ -149,6 +165,10 @@ Roteiro, ainda não executado. Só começa com os ADRs 0002 a 0019 aprovados e c
 - Corrigir bug "de passagem" durante refatoração; refatorar sem testes de caracterização.
 - Introduzir cache, fila ou serviço novo sem medição e sem ADR.
 - Colar dado de paciente, segredo ou código sensível em ferramenta externa (docs/14 B6).
+- Usar dado real de paciente em teste, seed ou exemplo; apontar teste para banco de produção.
+- Declarar contexto RLS com `SET` de sessão; criar política `USING (true)`; papel da aplicação com `BYPASSRLS`.
+- Gerar conteúdo de etiqueta ou laudo no cliente ou no comando Tauri em vez do servidor.
+- Mudar texto, fluxo ou tela fora do mockup aprovado sem passar pela skill `ux-ui`.
 
 ## 9. Quem assina e quando escalar
 

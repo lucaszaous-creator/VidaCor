@@ -65,3 +65,18 @@ TypeScript e o cliente gerado.
 - Integração G4 no backend do portal: paciente A não vê dado de B (rota e RLS), convite de uso único, link expirado.
 - Ponta a ponta com a skill `e2e` (`@e2e-dev/mobile` para iOS e Android quando houver app; web para o portal), regras `E2E-*`.
 - Acessibilidade com leitor de tela do sistema (VoiceOver, TalkBack) nas tarefas do paciente.
+
+## 7. Checklist antes de liberar qualquer versão móvel
+
+- [ ] ADR da tecnologia móvel aprovado e registrado em `docs/decisoes.md`
+- [ ] Nenhuma regra de preço, permissão ou limite no app; tudo vem do contrato OpenAPI
+- [ ] Nenhum segredo no pacote; varredura de segredos limpa
+- [ ] Token só no armazenamento seguro do sistema; limpo no logout e na troca de conta
+- [ ] Conteúdo oculto ao ir para segundo plano; nada de dado de saúde em cache persistente ou log
+- [ ] Notificações sem conteúdo clínico
+- [ ] Só laudo assinado e liberado; "conversar antes" respeitado
+- [ ] Teste de acesso indevido (paciente A e B) e de RLS no backend do portal
+- [ ] Acessibilidade com VoiceOver e TalkBack; letra ajustável
+- [ ] Testes ponta a ponta com a skill `e2e` nas tarefas do paciente
+- [ ] Atualização publicada com assinatura e proveniência (skill `devops-seguranca`)
+- [ ] Revisão de prontidão assinada (`docs/modelos/prontidao-para-producao.md`)
