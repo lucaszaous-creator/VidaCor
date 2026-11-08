@@ -9,6 +9,8 @@ use vidacor_comum::Problema;
 pub struct ErroApi {
     // Em caixa: o erro viaja em `Result` por toda rota e não deve pesar no caminho feliz.
     problema: Box<Problema>,
+    /// Campos a mais no corpo (ex.: `sugestoes`, `sala_correta`), para a tela oferecer a ação.
+    extras: Option<Box<serde_json::Map<String, serde_json::Value>>>,
 }
 
 impl ErroApi {
@@ -16,7 +18,17 @@ impl ErroApi {
     pub fn novo(status: StatusCode, codigo: &str, titulo: &str, detalhe: &str) -> Self {
         Self {
             problema: Box::new(Problema::novo(status.as_u16(), codigo, titulo, detalhe)),
+            extras: None,
         }
+    }
+
+    /// Acrescenta um campo ao corpo do erro.
+    #[must_use]
+    pub fn com_extra(mut self, chave: &str, valor: serde_json::Value) -> Self {
+        self.extras
+            .get_or_insert_with(Default::default)
+            .insert(chave.to_owned(), valor);
+        self
     }
 
     #[must_use]
@@ -115,7 +127,13 @@ impl IntoResponse for ErroApi {
         }
         let status =
             StatusCode::from_u16(problema.status).unwrap_or(StatusCode::INTERNAL_SERVER_ERROR);
-        let corpo = serde_json::to_vec(&problema).unwrap_or_default();
+        let mut valor = serde_json::to_value(&problema).unwrap_or_default();
+        if let (Some(extras), Some(objeto)) = (self.extras, valor.as_object_mut()) {
+            for (k, v) in *extras {
+                objeto.entry(k).or_insert(v);
+            }
+        }
+        let corpo = serde_json::to_vec(&valor).unwrap_or_default();
         let mut resposta = (status, corpo).into_response();
         resposta.headers_mut().insert(
             header::CONTENT_TYPE,

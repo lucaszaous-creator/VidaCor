@@ -102,7 +102,7 @@ async fn fc_chk_04_homonimo_do_dia_aparece_com_os_dois_nascimentos() {
     let outro = Uuid::now_v7();
     sqlx::query("INSERT INTO identidade.paciente (id, codigo, nome, nascimento, sexo, origem, unidade_id, correlacao) VALUES ($1,'PAC-2026-000099','Antonio Carlos Ribeiro','1980-01-02','M','seed',$2,'seed')")
         .bind(outro).bind(comum::UNIDADE_A).execute(&amb.admin).await.unwrap();
-    sqlx::query("INSERT INTO agenda.agendamento (id, codigo, sala_id, paciente_id, inicio, fim, exame_tuss, exame_nome, situacao, origem, unidade_id, correlacao) VALUES ($1,'AGD-2026-000099',$2,$3,(SELECT inicio FROM agenda.agendamento WHERE codigo='AGD-2026-000001') + interval '3 hours',(SELECT inicio FROM agenda.agendamento WHERE codigo='AGD-2026-000001') + interval '210 minutes','40901114','Ecocardiograma','confirmado','seed',$4,'seed')")
+    sqlx::query("INSERT INTO agenda.agendamento (id, codigo, sala_id, paciente_id, inicio, fim, exame_tuss, exame_nome, situacao, origem, unidade_id, correlacao) VALUES ($1,'AGD-2026-000099',$2,$3,(SELECT inicio FROM agenda.agendamento WHERE codigo='AGD-SEED-000001') + interval '3 hours',(SELECT inicio FROM agenda.agendamento WHERE codigo='AGD-SEED-000001') + interval '210 minutes','40901114','Ecocardiograma','confirmado','seed',$4,'seed')")
         .bind(Uuid::now_v7()).bind(amb.sala1).bind(outro).bind(comum::UNIDADE_A).execute(&amb.admin).await.unwrap();
     let ana = amb.entrar("ana.souza").await;
     let (_, _, agenda) = amb

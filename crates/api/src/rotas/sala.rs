@@ -121,20 +121,13 @@ pub async fn bipe(
             criado_por: Some(usuario.id), origem: "sala", unidade_id: a.unidade_id, correlacao: &correlacao,
         }).await?;
         tx.commit().await?;
-        let mut erro = ErroApi::conflito(
+        return Ok(ErroApi::conflito(
             "paciente-de-outra-sala",
             &format!("Esta pulseira é de paciente agendado na {}. O exame foi bloqueado nesta sala e nada foi enviado ao aparelho. Encaminhe o paciente à {}.", a.sala_nome, a.sala_nome),
         )
-        .into_response();
-        // Acrescenta a sala correta ao corpo para a tela oferecer o encaminhamento.
-        let corpo = axum::body::to_bytes(std::mem::take(erro.body_mut()), 64 * 1024)
-            .await
-            .map_err(ErroApi::interno)?;
-        let mut v: serde_json::Value = serde_json::from_slice(&corpo).map_err(ErroApi::interno)?;
-        v["sala_correta"] = json!({ "id": a.sala_id, "nome": a.sala_nome });
-        v["divergencia"] = json!(div_codigo.como_str());
-        *erro.body_mut() = axum::body::Body::from(v.to_string());
-        return Ok(erro);
+        .com_extra("sala_correta", json!({ "id": a.sala_id, "nome": a.sala_nome }))
+        .com_extra("divergencia", json!(div_codigo.como_str()))
+        .into_response());
     }
 
     if a.requer_contraste {

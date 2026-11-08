@@ -1,6 +1,7 @@
 //! Rotas `/v1` (docs/29 § 6.2). Toda rota declara o ato exigido no próprio handler.
 
 pub mod agenda;
+pub mod agendamentos;
 pub mod atendimentos;
 pub mod etiquetas;
 pub mod eventos;
@@ -39,6 +40,16 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/pacientes/{id}/correcao", post(pacientes::corrigir))
         .route("/v1/salas/{sala_id}/bipes", post(sala::bipe))
         .route("/v1/salas/{sala_id}/fila", get(sala::fila))
+        .route("/v1/guias", post(agendamentos::registrar_guia))
+        .route("/v1/agendamentos", post(agendamentos::agendar))
+        .route(
+            "/v1/agendamentos/{id}/guia",
+            post(agendamentos::confirmar_com_guia),
+        )
+        .route(
+            "/v1/salas/{sala_id}/horarios-livres",
+            get(agendamentos::horarios_livres),
+        )
         .route("/v1/eventos", get(eventos::fluxo))
         .fallback(nao_existe)
 }

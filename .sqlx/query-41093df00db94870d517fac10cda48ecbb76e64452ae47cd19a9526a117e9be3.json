@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE agenda.agendamento SET situacao = 'confirmado', guia_id = $2, expira_em = NULL, versao = versao + 1\n          WHERE id = $1 AND situacao = 'reserva_provisoria'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "41093df00db94870d517fac10cda48ecbb76e64452ae47cd19a9526a117e9be3"
+}

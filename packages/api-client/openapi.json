@@ -85,6 +85,140 @@
         }
       }
     },
+    "/v1/agendamentos": {
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Agenda um exame (com guia, reserva provisória ou particular).",
+        "operationId": "agendar",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoAgendamento"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemAgenda"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "guia-em-uso, horario-ocupado (com sugestoes)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "procedimento-nao-autorizado, senha-vencida, saldo-esgotado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agendamentos/{id}/guia": {
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Registra a guia de uma reserva provisória dentro do prazo e confirma o agendamento (FC-AGD-09).",
+        "operationId": "confirmar_com_guia",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoGuiaDaReserva"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemAgenda"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/atendimentos": {
       "post": {
         "tags": [
@@ -529,6 +663,78 @@
         }
       }
     },
+    "/v1/guias": {
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Registra a guia autorizada pela operadora (carteirinha, número, senha, validade e procedimentos).",
+        "operationId": "registrar_guia",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoGuia"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Guia"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/pacientes": {
       "get": {
         "tags": [
@@ -826,6 +1032,51 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/salas/{sala_id}/horarios-livres": {
+      "get": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Horários livres de 30 minutos da sala no dia.",
+        "operationId": "horarios_livres",
+        "parameters": [
+          {
+            "name": "sala_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "data",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
                 }
               }
             }
@@ -1270,6 +1521,54 @@
           }
         }
       },
+      "Guia": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "operadora",
+          "numero",
+          "validade",
+          "situacao",
+          "procedimentos"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "em_uso_por": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Atendimento ou agendamento que consumiu a guia."
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "numero": {
+            "type": "string"
+          },
+          "operadora": {
+            "type": "string"
+          },
+          "procedimentos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SaldoProcedimento"
+            }
+          },
+          "situacao": {
+            "type": "string",
+            "description": "disponivel ou consumida."
+          },
+          "validade": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
       "ItemAgenda": {
         "type": "object",
         "required": [
@@ -1417,6 +1716,52 @@
           }
         }
       },
+      "PedidoAgendamento": {
+        "type": "object",
+        "required": [
+          "paciente_id",
+          "sala_id",
+          "inicio",
+          "procedimentos"
+        ],
+        "properties": {
+          "guia_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "medico_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "paciente_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "procedimentos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reserva_provisoria": {
+            "type": "boolean"
+          },
+          "sala_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
       "PedidoBipe": {
         "type": "object",
         "required": [
@@ -1468,6 +1813,62 @@
           "nascimento": {
             "type": "string",
             "format": "date"
+          }
+        }
+      },
+      "PedidoGuia": {
+        "type": "object",
+        "required": [
+          "operadora",
+          "numero",
+          "carteirinha",
+          "senha",
+          "validade",
+          "paciente_id",
+          "solicitante",
+          "procedimentos"
+        ],
+        "properties": {
+          "carteirinha": {
+            "type": "string"
+          },
+          "numero": {
+            "type": "string"
+          },
+          "operadora": {
+            "type": "string"
+          },
+          "paciente_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "procedimentos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProcedimentoGuia"
+            }
+          },
+          "senha": {
+            "type": "string"
+          },
+          "solicitante": {
+            "type": "string"
+          },
+          "validade": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "PedidoGuiaDaReserva": {
+        "type": "object",
+        "required": [
+          "guia_id"
+        ],
+        "properties": {
+          "guia_id": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },
@@ -1561,6 +1962,22 @@
           }
         }
       },
+      "ProcedimentoGuia": {
+        "type": "object",
+        "required": [
+          "tuss",
+          "quantidade"
+        ],
+        "properties": {
+          "quantidade": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tuss": {
+            "type": "string"
+          }
+        }
+      },
       "Reimpressao": {
         "type": "object",
         "required": [
@@ -1608,6 +2025,27 @@
             "format": "uuid"
           },
           "nome": {
+            "type": "string"
+          }
+        }
+      },
+      "SaldoProcedimento": {
+        "type": "object",
+        "required": [
+          "tuss",
+          "autorizado",
+          "saldo"
+        ],
+        "properties": {
+          "autorizado": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "saldo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tuss": {
             "type": "string"
           }
         }

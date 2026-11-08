@@ -254,6 +254,9 @@ pub async fn rodar(estado: Estado, orthanc: Orthanc) {
             }
         }
         if let Some(u) = unidade {
+            if let Err(e) = crate::rotas::agendamentos::expirar_reservas(&estado, u).await {
+                tracing::warn!(erro = ?e, "expiração de reservas provisórias");
+            }
             if let Err(e) = conciliar(&estado, &orthanc, u).await {
                 tracing::warn!(erro = %e, "conciliação com o Orthanc");
             }

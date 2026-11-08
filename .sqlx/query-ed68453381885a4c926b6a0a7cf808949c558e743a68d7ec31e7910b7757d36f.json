@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT tuss FROM agenda.agendamento_procedimento WHERE agendamento_id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento_procedimento",
+            "name": "tuss"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "ed68453381885a4c926b6a0a7cf808949c558e743a68d7ec31e7910b7757d36f"
+}

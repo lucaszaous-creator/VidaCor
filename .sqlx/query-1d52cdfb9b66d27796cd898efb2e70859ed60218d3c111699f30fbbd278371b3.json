@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE agenda.agendamento SET situacao = 'expirada', motivo = 'guia não entregue no prazo', versao = versao + 1\n          WHERE situacao = 'reserva_provisoria' AND expira_em <= now() AND unidade_id = $1\n          RETURNING id, codigo, sala_id, inicio",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "sala_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "sala_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "inicio",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "inicio"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "1d52cdfb9b66d27796cd898efb2e70859ed60218d3c111699f30fbbd278371b3"
+}

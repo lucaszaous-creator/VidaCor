@@ -346,7 +346,7 @@ async fn semear(admin: &PgPool) -> Semente {
     let mut agendamentos = std::collections::HashMap::new();
     for (codigo, paciente, sala, minutos, tuss, exame, contraste, medico) in [
         (
-            "AGD-2026-000001",
+            "AGD-SEED-000001",
             "Antônio Carlos Ribeiro",
             1,
             0,
@@ -356,7 +356,7 @@ async fn semear(admin: &PgPool) -> Semente {
             Some("medico.a"),
         ),
         (
-            "AGD-2026-000002",
+            "AGD-SEED-000002",
             "Maria Helena Duarte",
             1,
             30,
@@ -366,7 +366,7 @@ async fn semear(admin: &PgPool) -> Semente {
             None,
         ),
         (
-            "AGD-2026-000003",
+            "AGD-SEED-000003",
             "Juliana Sampaio Rocha",
             2,
             60,
@@ -376,7 +376,7 @@ async fn semear(admin: &PgPool) -> Semente {
             None,
         ),
         (
-            "AGD-2026-000004",
+            "AGD-SEED-000004",
             "Vera Lúcia Antunes",
             6,
             90,

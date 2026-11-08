@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO convenio.guia_procedimento (guia_id, tuss, autorizado, saldo) VALUES ($1, $2, $3, $3)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "e1e7a8724a21e289094077bb819a416a596e9d9947804f11ac892cb167f53ec7"
+}

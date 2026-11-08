@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT comum.proximo_numero('AGD', $1)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "proximo_numero",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "0f65fa7c38530b5991fd112dd5c3a05bd62b89274dcb2c36032817ba10a6a9ae"
+}

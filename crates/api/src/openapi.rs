@@ -43,6 +43,10 @@ pub struct ProblemaDoc {
         crate::rotas::pacientes::corrigir,
         crate::rotas::sala::bipe,
         crate::rotas::sala::fila,
+        crate::rotas::agendamentos::registrar_guia,
+        crate::rotas::agendamentos::agendar,
+        crate::rotas::agendamentos::confirmar_com_guia,
+        crate::rotas::agendamentos::horarios_livres,
         crate::rotas::eventos::fluxo,
     ),
     components(schemas(ProblemaDoc))
