@@ -45,6 +45,7 @@ pub struct PedidoCheckin {
 
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct EstudoResumo {
+    pub id: Uuid,
     pub study_uid: String,
     pub imagens: i32,
     pub recebido_em: DateTime<Utc>,
@@ -395,7 +396,7 @@ pub async fn carregar(
         r#"SELECT t.id, t.codigo, t.accession, t.agendamento_id, t.situacao, t.senha, t.criado_em,
                   s.id AS sala_id, s.nome AS sala_nome, a.requer_contraste,
                   p.id AS paciente_id, p.nome, p.nascimento,
-                  e.study_uid AS "study_uid?", e.imagens AS "imagens?", e.recebido_em AS "recebido_em?",
+                  e.id AS "estudo_id?", e.study_uid AS "study_uid?", e.imagens AS "imagens?", e.recebido_em AS "recebido_em?",
                   g.codigo AS "pulseira_codigo?", g.situacao AS "pulseira_situacao?"
              FROM recepcao.atendimento t
              JOIN agenda.agendamento a ON a.id = t.agendamento_id
@@ -411,8 +412,9 @@ pub async fn carregar(
     else {
         return Ok(None);
     };
-    let estudo = match (l.study_uid, l.imagens, l.recebido_em) {
-        (Some(study_uid), Some(imagens), Some(recebido_em)) => Some(EstudoResumo {
+    let estudo = match (l.estudo_id, l.study_uid, l.imagens, l.recebido_em) {
+        (Some(id), Some(study_uid), Some(imagens), Some(recebido_em)) => Some(EstudoResumo {
+            id,
             study_uid,
             imagens,
             recebido_em,

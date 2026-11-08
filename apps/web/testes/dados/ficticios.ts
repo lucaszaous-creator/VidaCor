@@ -134,6 +134,6 @@ export function atendimentoDe(item: ItemDaAgendaFase1, sequencia: number, comEst
     criado_em: `${DATA_DOS_TESTES}T12:01:00Z`,
     triagem: null,
     laudo_situacao: null,
-    estudo: comEstudo ? { study_uid: '1.2.826.0.1.3680043.8.498.1', imagens: 24, recebido_em: `${DATA_DOS_TESTES}T12:20:00Z` } : null,
+    estudo: comEstudo ? { id: '0194f000-0000-7000-8000-0000000e5702', study_uid: '1.2.826.0.1.3680043.8.498.1', imagens: 24, recebido_em: `${DATA_DOS_TESTES}T12:20:00Z` } : null,
   };
 }

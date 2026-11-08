@@ -95,6 +95,7 @@ pub struct ProblemaDoc {
         crate::rotas::chamada::chamar,
         crate::rotas::chamada::painel,
         crate::rotas::cancelamento::cancelar,
+        crate::rotas::visualizacao::abrir,
         crate::rotas::bloqueios::criar,
         crate::rotas::bloqueios::listar,
         crate::rotas::bloqueios::retirar,

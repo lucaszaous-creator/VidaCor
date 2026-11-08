@@ -22,6 +22,7 @@ import { useDependencias } from '../../contexto';
 import { useRetomada, type Retomada } from '../../reautenticacao';
 import { FUSO_DA_CLINICA } from '../agenda/grade';
 import { AcessoDeEmergencia, BotaoDeLiberacao, BotaoDePublicacao, CompartilharLaudo, DialogoDeAssinatura, DialogoDeRetificacao } from './AtosDoLaudo';
+import { AbrirImagens } from './AbrirImagens';
 import { FilaDeLaudos, SITUACAO_DO_LAUDO } from './FilaDeLaudos';
 import { PainelDeAchados } from './PainelDeAchados';
 import { useRascunho } from './useRascunho';
@@ -261,6 +262,7 @@ export function TelaLaudo() {
           nome={l.paciente.nome}
           nascimento={formatarData(l.paciente.nascimento)}
           resumo={`${l.exame}, ${l.codigo}${l.estudo === null || l.estudo === undefined ? '' : `, ${String(l.estudo.imagens)} imagens`}`}
+          acoes={l.estudo === null || l.estudo === undefined ? undefined : <AbrirImagens key={l.estudo.id} estudoId={l.estudo.id} />}
         />
       )}
       <div className="fill" style={{ display: 'grid', gridTemplateColumns: '300px minmax(0, 1fr)', gap: 16 }}>

@@ -764,6 +764,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/estudos/{id}/visualizacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Autoriza e registra a abertura das imagens do estudo (médico com vínculo, técnico lotado). */
+        get: operations["abrir_imagens_do_estudo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/etiquetas/{codigo}/reimpressao": {
         parameters: {
             query?: never;
@@ -2872,6 +2889,8 @@ export interface components {
             recebido_em: string;
         };
         EstudoResumo: {
+            /** Format: uuid */
+            id: string;
             /** Format: int32 */
             imagens: number;
             /** Format: date-time */
@@ -4362,6 +4381,14 @@ export interface components {
             motivo: string;
             /** Format: int32 */
             versao: number;
+        };
+        Visualizacao: {
+            estudo_codigo: string;
+            /** Format: int32 */
+            imagens: number;
+            study_uid: string;
+            /** @description Endereço do visualizador com o estudo; nulo se o visualizador não estiver instalado. */
+            url?: string | null;
         };
         WebhookAceito: {
             /** @description recebido ou ja_processado. */
@@ -6234,6 +6261,52 @@ export interface operations {
                 };
             };
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    abrir_imagens_do_estudo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Visualizacao"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description estudo-sem-paciente */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

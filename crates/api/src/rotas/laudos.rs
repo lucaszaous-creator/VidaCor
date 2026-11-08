@@ -92,7 +92,7 @@ pub(crate) async fn carregar(
     let Some(l) = sqlx::query!(
         r#"SELECT l.id, l.codigo, l.situacao, l.conversar_antes, l.versao_vigente, l.medico_atribuido_id,
                   p.id AS paciente_id, p.nome, p.nascimento, ag.exame_nome,
-                  e.study_uid, e.imagens, e.recebido_em,
+                  e.id AS estudo_id, e.study_uid, e.imagens, e.recebido_em,
                   EXISTS (SELECT 1 FROM portal.publicacao_existe(l.id)) AS "publicado!"
              FROM laudos.laudo l
              JOIN identidade.paciente p ON p.id = l.paciente_id
@@ -131,6 +131,7 @@ pub(crate) async fn carregar(
         medico_atribuido_id: l.medico_atribuido_id,
         versoes,
         estudo: Some(crate::rotas::atendimentos::EstudoResumo {
+            id: l.estudo_id,
             study_uid: l.study_uid,
             imagens: l.imagens,
             recebido_em: l.recebido_em,

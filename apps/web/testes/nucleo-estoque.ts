@@ -291,3 +291,12 @@ export const manipuladoresEspera = [
     return HttpResponse.json([{ id: 'b1', codigo: 'BLQ-1', sala: { id: 's2', nome: 'Sala 2' }, tipo: 'manutencao', inicio: c.inicio, fim: c.fim, motivo: c.motivo, situacao: 'ativo', retirado_em: null, motivo_retirada: null }], { status: 201 });
   }),
 ];
+
+/** Abertura de imagens simulada (regras reais em `crates/api/tests/visualizacao.rs`). */
+export const manipuladoresVisualizacao = [
+  http.get('*/v1/estudos/:id/visualizacao', () =>
+    temPerfil('medico', 'tecnico')
+      ? HttpResponse.json({ estudo_codigo: 'EST-2026-000081', study_uid: '1.2.826.0.1.3680043.8.498.2', imagens: 42, url: 'http://127.0.0.1:3000/viewer?StudyInstanceUIDs=1.2.826.0.1.3680043.8.498.2' })
+      : semPermissao('abrir as imagens'),
+  ),
+];

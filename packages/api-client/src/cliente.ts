@@ -433,6 +433,9 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
 
     estudos: {
       pendentes: (): Promise<EstudoPendente[]> => ler<EstudoPendente[]>('/v1/estudos/pendentes'),
+      /** Autoriza e registra a abertura das imagens; `url` nula se o visualizador não estiver instalado. */
+      visualizacao: (id: string): Promise<{ estudo_codigo: string; study_uid: string; imagens: number; url?: string | null }> =>
+        ler<{ estudo_codigo: string; study_uid: string; imagens: number; url?: string | null }>(`/v1/estudos/${seg(id)}/visualizacao`),
       /** Conciliação manual com os dois identificadores (médico). */
       conciliar: (id: string, corpo: PedidoConciliacao, o: OpcoesDeEscrita): Promise<unknown> =>
         criar<unknown>('POST', `/v1/estudos/${seg(id)}/conciliacao`, corpo, o),

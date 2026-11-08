@@ -268,4 +268,14 @@ describe('Laudo: acesso indevido (FC-ACE)', () => {
     expect(await screen.findByText('Seu perfil não lê laudos')).toBeInTheDocument();
     expect(screen.queryByText(/Átrio esquerdo/)).not.toBeInTheDocument();
   });
+
+  it('abre as imagens só depois de o servidor autorizar e registrar', async () => {
+    const usuario = userEvent.setup();
+    renderizar(URL);
+    await usuario.click(await screen.findByRole('button', { name: 'Abrir imagens' }));
+    const link = await screen.findByRole('link', { name: 'Abrir no visualizador (42 imagens)' });
+    expect(link).toHaveAttribute('href', 'http://127.0.0.1:3000/viewer?StudyInstanceUIDs=1.2.826.0.1.3680043.8.498.2');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  });
 });
+

@@ -27,6 +27,8 @@ pub struct Config {
     /// Cookie com `Secure`. Só fica desligado em `dev` sem TLS.
     pub cookie_seguro: bool,
     pub orthanc_url: Option<String>,
+    /// Endereço público do visualizador OHIF (ADR-0006). Sem ele, a tela diz que não está instalado.
+    pub visualizador_url: Option<String>,
     /// Unidade a que o servidor local pertence (estudos recebidos do PACS).
     pub unidade_servidor: Option<Uuid>,
     pub oidc: Option<ConfigOidc>,
@@ -74,6 +76,7 @@ impl Config {
             url_api: var("VIDACOR_URL_API").unwrap_or_else(|| "http://127.0.0.1:5173".to_owned()),
             cookie_seguro: var("VIDACOR_COOKIE_INSEGURO_DEV").is_none(),
             orthanc_url: var("VIDACOR_ORTHANC_URL"),
+            visualizador_url: var("VIDACOR_VISUALIZADOR_URL"),
             unidade_servidor,
             oidc,
             pix_webhook_segredo: var("VIDACOR_PIX_WEBHOOK_SEGREDO"),

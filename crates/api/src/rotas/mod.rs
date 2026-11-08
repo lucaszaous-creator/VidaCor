@@ -47,6 +47,7 @@ pub mod sessao;
 pub mod triagem;
 pub mod usuarios;
 pub mod vagas;
+pub mod visualizacao;
 pub mod webhooks;
 
 use crate::estado::Estado;
@@ -166,6 +167,7 @@ pub fn rotas() -> Router<Estado> {
             "/v1/agendamentos/{id}/cancelamento",
             post(cancelamento::cancelar),
         )
+        .route("/v1/estudos/{id}/visualizacao", get(visualizacao::abrir))
         .route(
             "/v1/bloqueios",
             get(bloqueios::listar).post(bloqueios::criar),

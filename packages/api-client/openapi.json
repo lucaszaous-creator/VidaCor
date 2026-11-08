@@ -2743,6 +2743,68 @@
         }
       }
     },
+    "/v1/estudos/{id}/visualizacao": {
+      "get": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "Autoriza e registra a abertura das imagens do estudo (médico com vínculo, técnico lotado).",
+        "operationId": "abrir_imagens_do_estudo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Visualizacao"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "estudo-sem-paciente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/etiquetas/{codigo}/reimpressao": {
       "post": {
         "tags": [
@@ -9912,11 +9974,16 @@
       "EstudoResumo": {
         "type": "object",
         "required": [
+          "id",
           "study_uid",
           "imagens",
           "recebido_em"
         ],
         "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
           "imagens": {
             "type": "integer",
             "format": "int32"
@@ -14686,6 +14753,33 @@
           "versao": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "Visualizacao": {
+        "type": "object",
+        "required": [
+          "estudo_codigo",
+          "study_uid",
+          "imagens"
+        ],
+        "properties": {
+          "estudo_codigo": {
+            "type": "string"
+          },
+          "imagens": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "study_uid": {
+            "type": "string"
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Endereço do visualizador com o estudo; nulo se o visualizador não estiver instalado."
           }
         }
       },

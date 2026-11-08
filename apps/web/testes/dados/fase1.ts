@@ -196,7 +196,7 @@ export function laudoAntonio(): Laudo {
         hash_documento: null,
       },
     ],
-    estudo: { study_uid: '1.2.826.0.1.3680043.8.498.2', imagens: 42, recebido_em: '2026-11-06T12:40:00Z' },
+    estudo: { id: '0194f000-0000-7000-8000-0000000e5701', study_uid: '1.2.826.0.1.3680043.8.498.2', imagens: 42, recebido_em: '2026-11-06T12:40:00Z' },
   };
 }
 

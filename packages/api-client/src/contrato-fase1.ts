@@ -48,6 +48,8 @@ export const SITUACOES_ATENDIMENTO_FASE1 = ['aguardando_sala', 'aguardando_exame
 export type SituacaoAtendimentoFase1 = (typeof SITUACOES_ATENDIMENTO_FASE1)[number];
 
 export interface EstudoResumo {
+  /** Identificador do estudo para abrir as imagens (rota autoriza e audita). */
+  id: string;
   study_uid: string;
   imagens: number;
   recebido_em: string;

@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT t.id, t.codigo, t.accession, t.agendamento_id, t.situacao, t.senha, t.criado_em,\n                  s.id AS sala_id, s.nome AS sala_nome, a.requer_contraste,\n                  p.id AS paciente_id, p.nome, p.nascimento,\n                  e.study_uid AS \"study_uid?\", e.imagens AS \"imagens?\", e.recebido_em AS \"recebido_em?\",\n                  g.codigo AS \"pulseira_codigo?\", g.situacao AS \"pulseira_situacao?\"\n             FROM recepcao.atendimento t\n             JOIN agenda.agendamento a ON a.id = t.agendamento_id\n             JOIN agenda.sala s ON s.id = t.sala_id\n             JOIN identidade.paciente p ON p.id = t.paciente_id\n             LEFT JOIN exames.estudo e ON e.atendimento_id = t.id AND e.conciliado\n             LEFT JOIN recepcao.etiqueta g ON g.atendimento_id = t.id AND g.situacao = 'valida'\n            WHERE t.id = $1",
+  "query": "SELECT t.id, t.codigo, t.accession, t.agendamento_id, t.situacao, t.senha, t.criado_em,\n                  s.id AS sala_id, s.nome AS sala_nome, a.requer_contraste,\n                  p.id AS paciente_id, p.nome, p.nascimento,\n                  e.id AS \"estudo_id?\", e.study_uid AS \"study_uid?\", e.imagens AS \"imagens?\", e.recebido_em AS \"recebido_em?\",\n                  g.codigo AS \"pulseira_codigo?\", g.situacao AS \"pulseira_situacao?\"\n             FROM recepcao.atendimento t\n             JOIN agenda.agendamento a ON a.id = t.agendamento_id\n             JOIN agenda.sala s ON s.id = t.sala_id\n             JOIN identidade.paciente p ON p.id = t.paciente_id\n             LEFT JOIN exames.estudo e ON e.atendimento_id = t.id AND e.conciliado\n             LEFT JOIN recepcao.etiqueta g ON g.atendimento_id = t.id AND g.situacao = 'valida'\n            WHERE t.id = $1",
   "describe": {
     "columns": [
       {
@@ -148,6 +148,17 @@
       },
       {
         "ordinal": 13,
+        "name": "estudo_id?",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "exames.estudo",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
         "name": "study_uid?",
         "type_info": "Text",
         "origin": {
@@ -158,7 +169,7 @@
         }
       },
       {
-        "ordinal": 14,
+        "ordinal": 15,
         "name": "imagens?",
         "type_info": "Int4",
         "origin": {
@@ -169,7 +180,7 @@
         }
       },
       {
-        "ordinal": 15,
+        "ordinal": 16,
         "name": "recebido_em?",
         "type_info": "Timestamptz",
         "origin": {
@@ -180,7 +191,7 @@
         }
       },
       {
-        "ordinal": 16,
+        "ordinal": 17,
         "name": "pulseira_codigo?",
         "type_info": "Text",
         "origin": {
@@ -191,7 +202,7 @@
         }
       },
       {
-        "ordinal": 17,
+        "ordinal": 18,
         "name": "pulseira_situacao?",
         "type_info": "Text",
         "origin": {
@@ -225,8 +236,9 @@
       true,
       true,
       true,
+      true,
       true
     ]
   },
-  "hash": "b0481524088a56c39851c2680ffe008205610e6209a1ca906302387c7a3f5faf"
+  "hash": "aad439098b644f16316103a712e56924fa0b8aaa32e0bd352ff2776876e7efd6"
 }

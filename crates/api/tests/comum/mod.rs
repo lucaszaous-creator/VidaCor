@@ -141,6 +141,7 @@ impl Ambiente {
             url_api: "http://127.0.0.1:5173".into(),
             cookie_seguro: true,
             orthanc_url: None,
+            visualizador_url: Some("http://127.0.0.1:3000/viewer".to_owned()),
             unidade_servidor: Some(UNIDADE_A),
             oidc: None,
             pix_webhook_segredo: Some(SEGREDO_PIX.to_owned()),
