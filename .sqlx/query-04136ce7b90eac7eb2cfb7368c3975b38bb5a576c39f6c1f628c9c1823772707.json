@@ -1,0 +1,116 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT pc.tuss, pc.nome, pc.modalidade, pc.duracao_min, pc.requer_contraste, pc.ativo, pc.versao,\n                  (SELECT p.valor_centavos FROM financeiro.preco p WHERE p.tabela_id = $1 AND p.tuss = pc.tuss) AS preco,\n                  (SELECT p.valor_centavos FROM financeiro.preco p WHERE p.tabela_id = $2 AND p.tuss = pc.tuss) AS proximo\n             FROM agenda.procedimento pc\n            WHERE ($3::text IS NULL OR pc.tuss = $3)\n            ORDER BY pc.ativo DESC, pc.nome LIMIT 1000",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "modalidade",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "modalidade"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "duracao_min",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "duracao_min"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "requer_contraste",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "requer_contraste"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "ativo",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "ativo"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "versao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "versao"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "preco",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 8,
+        "name": "proximo",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      null,
+      null
+    ]
+  },
+  "hash": "04136ce7b90eac7eb2cfb7368c3975b38bb5a576c39f6c1f628c9c1823772707"
+}

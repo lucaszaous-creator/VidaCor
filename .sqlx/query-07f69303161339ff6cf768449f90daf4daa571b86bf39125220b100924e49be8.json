@@ -1,0 +1,29 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE documentos.cabecalho SET vigente = false, versao = versao + 1\n                  WHERE unidade_id = $1 AND vigente AND numero = $2 RETURNING numero",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "numero",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "numero"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "07f69303161339ff6cf768449f90daf4daa571b86bf39125220b100924e49be8"
+}

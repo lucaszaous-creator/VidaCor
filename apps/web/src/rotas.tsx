@@ -25,6 +25,8 @@ import { TelaFinanceiro } from './telas/financeiro/TelaFinanceiro';
 import { TelaUsuarios } from './telas/usuarios/TelaUsuarios';
 import { TelaAparelhos } from './telas/aparelhos/TelaAparelhos';
 import { TelaFluxoDeLaudos } from './telas/fluxo/TelaFluxoDeLaudos';
+import { TelaCorpoClinico } from './telas/corpo-clinico/TelaCorpoClinico';
+import { TelaExames } from './telas/exames/TelaExames';
 import { TelaInicio } from './telas/inicio/TelaInicio';
 import { TelaOuvidoria } from './telas/ouvidoria/TelaOuvidoria';
 import { TelaPaciente } from './telas/paciente/TelaPaciente';
@@ -159,6 +161,8 @@ const rotaApp = createRoute({
 });
 
 const rotaAparelhos = createRoute({ getParentRoute: () => rotaApp, path: '/aparelhos', component: TelaAparelhos });
+const rotaCorpoClinico = createRoute({ getParentRoute: () => rotaApp, path: '/corpo-clinico', component: TelaCorpoClinico });
+const rotaExames = createRoute({ getParentRoute: () => rotaApp, path: '/exames', component: TelaExames });
 const rotaPaciente = createRoute({
   getParentRoute: () => rotaApp,
   path: '/pacientes',
@@ -254,6 +258,8 @@ const arvore = raiz.addChildren([
     rotaFluxoDeLaudos,
     rotaOuvidoria,
     rotaAparelhos,
+    rotaCorpoClinico,
+    rotaExames,
     rotaAgenda,
     rotaRecepcao,
     rotaNovoAgendamento,

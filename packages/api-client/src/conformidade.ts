@@ -17,6 +17,22 @@ import type { ResultadoDaBusca } from './contrato-busca';
 import type { Manifestacao, NovaManifestacao, PainelDaOuvidoria, ProtocoloDaManifestacao } from './contrato-ouvidoria';
 import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
+import type {
+  CabecalhoDaUnidade,
+  CabecalhoDosDocumentos,
+  CatalogoDeExames,
+  DecisaoDoCorpoClinico,
+  MedicoDoCorpoClinico,
+  MudancaNoProcedimento,
+  MudancaRegistradaNoCatalogo,
+  NovaVersaoDaTabela,
+  NovoCabecalho,
+  NovoPedidoDoCorpoClinico,
+  NovoProcedimento,
+  PedidoDoCorpoClinico,
+  ProcedimentoDoCatalogo,
+  VersaoDaTabelaDePreco,
+} from './contrato-cadastros';
 import type { CadeiaDoAtendimento, PedidoDossie } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
 import type { ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
@@ -185,3 +201,19 @@ export type ConfereNovaManifestacao = Cabe<NovaManifestacao, S['NovaManifestacao
 export type ConfereProtocoloDaManifestacao = Cabe<ProtocoloDaManifestacao, S['ProtocoloDaManifestacao']>;
 export type ConfereManifestacao = Cabe<Manifestacao, S['Manifestacao']>;
 export type ConferePainelDaOuvidoria = Cabe<PainelDaOuvidoria, S['PainelDaOuvidoria']>;
+
+// Cadastros base: corpo clínico, catálogo de exames com tabela de preços e cabeçalho dos documentos.
+export type ConfereMedicoDoCorpoClinico = Cabe<MedicoDoCorpoClinico, S['MedicoDoCorpoClinico']>;
+export type ConferePedidoDoCorpoClinico = Cabe<PedidoDoCorpoClinico, S['PedidoDoCorpoClinico']>;
+export type ConfereNovoPedidoDoCorpoClinico = Cabe<NovoPedidoDoCorpoClinico, S['NovoPedidoDoCorpoClinico']>;
+export type ConfereDecisaoDoCorpoClinico = Cabe<DecisaoDoCorpoClinico, S['DecisaoDoCorpoClinico']>;
+export type ConfereCatalogoDeExames = Cabe<CatalogoDeExames, S['CatalogoDeExames']>;
+export type ConfereProcedimentoDoCatalogo = Cabe<ProcedimentoDoCatalogo, S['ProcedimentoDoCatalogo']>;
+export type ConfereVersaoDaTabelaDePreco = Cabe<VersaoDaTabelaDePreco, S['VersaoDaTabelaDePreco']>;
+export type ConfereMudancaRegistradaNoCatalogo = Cabe<MudancaRegistradaNoCatalogo, S['MudancaRegistradaNoCatalogo']>;
+export type ConfereNovoProcedimento = Cabe<NovoProcedimento, S['NovoProcedimento']>;
+export type ConfereMudancaNoProcedimento = Cabe<MudancaNoProcedimento, S['MudancaNoProcedimento']>;
+export type ConfereNovaVersaoDaTabela = Cabe<NovaVersaoDaTabela, S['NovaVersaoDaTabela']>;
+export type ConfereCabecalhoDaUnidade = Cabe<CabecalhoDaUnidade, S['CabecalhoDaUnidade']>;
+export type ConfereCabecalhoDosDocumentos = Cabe<CabecalhoDosDocumentos, S['CabecalhoDosDocumentos']>;
+export type ConfereNovoCabecalho = Cabe<NovoCabecalho, S['NovoCabecalho']>;

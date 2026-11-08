@@ -1,0 +1,173 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT u.id, u.codigo, u.nome, u.ativo,\n                  r.conselho AS \"conselho?\", r.uf AS \"uf?\", r.numero AS \"numero?\", r.rqe AS \"rqe?\",\n                  r.especialidade AS \"especialidade?\", r.criado_em AS \"registro_desde?\",\n                  h.realiza AS \"realiza?\", h.lauda AS \"lauda?\", h.criado_em AS \"habilitacao_desde?\"\n             FROM identidade.usuario u\n             LEFT JOIN documentos.registro_profissional r ON r.usuario_id = u.id AND r.conselho = 'CRM' AND r.vigente\n             LEFT JOIN corpo.habilitacao h ON h.usuario_id = u.id AND h.vigente\n            WHERE u.unidade_id = $1 AND 'medico' = ANY(u.perfis) AND ($2::uuid IS NULL OR u.id = $2)\n            ORDER BY u.nome LIMIT 500",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "ativo",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "ativo"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "conselho?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.registro_profissional",
+            "name": "conselho"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "uf?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.registro_profissional",
+            "name": "uf"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "numero?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.registro_profissional",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "rqe?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.registro_profissional",
+            "name": "rqe"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "especialidade?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.registro_profissional",
+            "name": "especialidade"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "registro_desde?",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "documentos.registro_profissional",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "realiza?",
+        "type_info": "TextArray",
+        "origin": {
+          "Table": {
+            "table": "corpo.habilitacao",
+            "name": "realiza"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "lauda?",
+        "type_info": "TextArray",
+        "origin": {
+          "Table": {
+            "table": "corpo.habilitacao",
+            "name": "lauda"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "habilitacao_desde?",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "corpo.habilitacao",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "8760bde4f770d83f4b27379c89e8228cae973ddc0b745ab0a62973f1af0ec7c0"
+}

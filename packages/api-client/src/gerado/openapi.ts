@@ -458,6 +458,82 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/catalogo/procedimentos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Catálogo de exames com o preço vigente desta unidade e as versões da tabela (recepção e gerência). */
+        get: operations["listar_catalogo_de_exames"];
+        put?: never;
+        /** Inclui procedimento no catálogo (gerência; `Idempotency-Key`). O código TUSS é único. */
+        post: operations["incluir_procedimento"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/catalogo/procedimentos/{tuss}/historico": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Histórico de mudanças do procedimento, com motivo e quem fez (recepção e gerência). */
+        get: operations["historico_do_procedimento"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/catalogo/procedimentos/{tuss}/mudancas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Muda duração, modalidade ou ativo, com motivo (gerência). Atômico pela versão vista: duas mudanças
+         *     sobre a mesma versão, só a primeira entra (G2). Nada é apagado.
+         */
+        post: operations["mudar_procedimento"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/catalogo/tabelas-de-preco": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Publica versão nova da tabela de preços desta unidade (gerência; `Idempotency-Key`). A vigente
+         *     não muda: a nova começa numa data futura, depois do início da última versão. Duas versões no
+         *     mesmo dia, ou publicadas ao mesmo tempo, só uma entra (restrição única no banco, G2).
+         */
+        post: operations["publicar_tabela_de_precos"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/comunicacao/lembretes": {
         parameters: {
             query?: never;
@@ -469,6 +545,24 @@ export interface paths {
         put?: never;
         /** Enfileira a confirmação por WhatsApp dos agendamentos do dia (repetir não manda de novo). */
         post: operations["lembretes"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/configuracoes/cabecalho": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Cabeçalho vigente e versões anteriores (gerência). */
+        get: operations["ver_cabecalho_dos_documentos"];
+        put?: never;
+        /** Publica a versão nova do cabeçalho (gerência; `Idempotency-Key`). Vale para os próximos PDFs. */
+        post: operations["publicar_cabecalho_dos_documentos"];
         delete?: never;
         options?: never;
         head?: never;
@@ -605,6 +699,80 @@ export interface paths {
         put?: never;
         /** Lança o recibo manual: grava o valor recalculado pela tabela da data e abre divergência se diferir (FC-CTG-07). */
         post: operations["lancar_recibo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/corpo-clinico": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Médicos da unidade com registro, habilitação e pedidos aguardando conferência (gerência). */
+        get: operations["listar_corpo_clinico"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/corpo-clinico/pedidos/{id}/decisao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * A segunda pessoa confere o pedido (gerência; quem pediu e o próprio médico não decidem;
+         *     reautenticação). Aprovado, a versão nova entra vigente e a anterior deixa de ser.
+         */
+        post: operations["decidir_pedido_do_corpo_clinico"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/corpo-clinico/{id}/historico": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Histórico de pedidos do médico, com quem pediu, quem conferiu e os motivos (gerência). */
+        get: operations["historico_do_medico"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/corpo-clinico/{id}/pedidos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Pede uma mudança no cadastro do médico (registro ou habilitação). Só vale depois da conferência
+         *     de outra pessoa (gerência; reautenticação; `Idempotency-Key`).
+         */
+        post: operations["pedir_mudanca_no_corpo_clinico"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2837,9 +3005,32 @@ export interface components {
             /** @description feriado, manutencao ou outro. */
             tipo: string;
         };
+        CabecalhoDaUnidade: {
+            cnpj?: string | null;
+            /** Format: date-time */
+            desde: string;
+            endereco?: string | null;
+            motivo?: string | null;
+            nome: string;
+            /** Format: int32 */
+            numero: number;
+            publicado_por?: string | null;
+            razao_social?: string | null;
+            responsavel_crm?: string | null;
+            responsavel_nome?: string | null;
+            /** @description Texto impresso no rodapé do PDF. */
+            responsavel_tecnico?: string | null;
+            site?: string | null;
+            telefone?: string | null;
+        };
         CabecalhoDoMenu: {
             subtitulo: string;
             titulo: string;
+        };
+        CabecalhoDosDocumentos: {
+            /** @description Todas as versões, da mais nova para a mais antiga. */
+            versoes: components["schemas"]["CabecalhoDaUnidade"][];
+            vigente?: null | components["schemas"]["CabecalhoDaUnidade"];
         };
         CadeiaDoAtendimento: {
             atendimento_codigo: string;
@@ -2904,6 +3095,11 @@ export interface components {
             recebido_em: string;
             /** Format: int32 */
             versao_vigente?: number | null;
+        };
+        CatalogoDeExames: {
+            procedimentos: components["schemas"]["ProcedimentoDoCatalogo"][];
+            /** @description Versões da tabela de preços desta unidade, da mais nova para a mais antiga. */
+            tabelas: components["schemas"]["VersaoDaTabelaDePreco"][];
         };
         CatalogoDoOrcamento: {
             exames: components["schemas"]["ExameComPreco"][];
@@ -3089,10 +3285,26 @@ export interface components {
             /** Format: int32 */
             versao: number;
         };
+        DadosDaHabilitacao: {
+            /** @description Modalidades que lauda. */
+            lauda: string[];
+            /** @description Modalidades que realiza na sala (US, CT...). */
+            realiza: string[];
+        };
+        DadosDoRegistro: {
+            especialidade?: string | null;
+            numero: string;
+            rqe?: string | null;
+            uf: string;
+        };
         Decisao: {
             motivo: string;
         };
         DecisaoDePerfil: {
+            aprovar: boolean;
+            motivo: string;
+        };
+        DecisaoDoCorpoClinico: {
             aprovar: boolean;
             motivo: string;
         };
@@ -3156,6 +3368,14 @@ export interface components {
             /** Format: int32 */
             tentativas: number;
             ultimo_erro?: string | null;
+        };
+        EstadoDoProcedimento: {
+            ativo: boolean;
+            /** Format: int32 */
+            duracao_min: number;
+            modalidade?: string | null;
+            nome: string;
+            requer_contraste: boolean;
         };
         EstornoAprovado: {
             /** Format: uuid */
@@ -3408,6 +3628,12 @@ export interface components {
             situacao: string;
             /** Format: date */
             validade: string;
+        };
+        HabilitacaoVigente: {
+            /** Format: date-time */
+            desde: string;
+            lauda: string[];
+            realiza: string[];
         };
         IdentificacaoDoPaciente: {
             alergias: string[];
@@ -3760,6 +3986,18 @@ export interface components {
             padrao_ecogenico: components["schemas"]["PadraoEcogenicoBirads"];
             posterior: components["schemas"]["PosteriorBirads"];
         };
+        MedicoDoCorpoClinico: {
+            ativo: boolean;
+            codigo: string;
+            habilitacao?: null | components["schemas"]["HabilitacaoVigente"];
+            /** Format: uuid */
+            id: string;
+            nome: string;
+            pendentes: components["schemas"]["PedidoDoCorpoClinico"][];
+            registro?: null | components["schemas"]["RegistroVigente"];
+            /** @description ativo, aguardando_conferencia, sem_registro ou inativo. */
+            situacao: string;
+        };
         Membro: {
             /** Format: uuid */
             id: string;
@@ -3798,6 +4036,31 @@ export interface components {
             perfil?: string | null;
             /** @description conceder, retirar, desativar ou reativar. */
             tipo: string;
+        };
+        MudancaNoProcedimento: {
+            ativo?: boolean | null;
+            /** Format: int32 */
+            duracao_min?: number | null;
+            modalidade?: string | null;
+            motivo: string;
+            /**
+             * Format: int32
+             * @description Versão do cadastro que a tela mostrou.
+             */
+            versao: number;
+        };
+        MudancaRegistradaNoCatalogo: {
+            antes?: null | components["schemas"]["EstadoDoProcedimento"];
+            codigo: string;
+            depois: components["schemas"]["EstadoDoProcedimento"];
+            /** Format: date-time */
+            em: string;
+            motivo: string;
+            quem: string;
+            /** @description incluir, alterar, desativar ou reativar. */
+            tipo: string;
+            /** Format: int32 */
+            versao_do_procedimento: number;
         };
         NaoConformidade: {
             /** Format: date-time */
@@ -3866,6 +4129,16 @@ export interface components {
             /** Format: date */
             vigente_desde: string;
         };
+        NovaVersaoDaTabela: {
+            descricao: string;
+            motivo: string;
+            precos: components["schemas"]["PrecoDaVersao"][];
+            /**
+             * Format: date
+             * @description Primeiro dia da nova versão: depois de hoje e depois do início da última versão.
+             */
+            vigente_desde: string;
+        };
         /**
          * @description Novo achado. Só os descritores do sistema escolhido são lidos; pontos, categoria e conduta
          *     enviados pela tela são ignorados (o servidor calcula, G1).
@@ -3889,6 +4162,24 @@ export interface components {
             nome: string;
             /** Format: uuid */
             sala_id: string;
+        };
+        NovoCabecalho: {
+            cnpj: string;
+            endereco: string;
+            /** @description Obrigatório a partir da segunda versão. */
+            motivo?: string | null;
+            nome: string;
+            /**
+             * Format: int32
+             * @description Versão que a tela mostrou (nenhuma na primeira vez).
+             */
+            numero_atual?: number | null;
+            razao_social: string;
+            responsavel_crm_numero: string;
+            responsavel_crm_uf: string;
+            responsavel_nome: string;
+            site?: string | null;
+            telefone: string;
         };
         NovoEventoAdverso: {
             anonimo?: boolean;
@@ -3945,6 +4236,22 @@ export interface components {
             paciente_id: string;
             /** Format: int32 */
             pontos_base: number;
+        };
+        NovoPedidoDoCorpoClinico: {
+            habilitacao?: null | components["schemas"]["DadosDaHabilitacao"];
+            motivo: string;
+            registro?: null | components["schemas"]["DadosDoRegistro"];
+            /** @description registro ou habilitacao. */
+            tipo: string;
+        };
+        NovoProcedimento: {
+            /** Format: int32 */
+            duracao_min: number;
+            modalidade: string;
+            motivo: string;
+            nome: string;
+            requer_contraste: boolean;
+            tuss: string;
         };
         NovoTitulo: {
             categoria: string;
@@ -4321,6 +4628,27 @@ export interface components {
             situacao: string;
             solicitante: components["schemas"]["Pessoa"];
         };
+        PedidoDoCorpoClinico: {
+            codigo: string;
+            /** Format: date-time */
+            decidido_em?: string | null;
+            decidido_por?: string | null;
+            habilitacao?: null | components["schemas"]["DadosDaHabilitacao"];
+            /** Format: uuid */
+            id: string;
+            motivo: string;
+            motivo_decisao?: string | null;
+            /** Format: date-time */
+            pedido_em: string;
+            pedido_por: string;
+            /** Format: uuid */
+            pedido_por_id: string;
+            registro?: null | components["schemas"]["DadosDoRegistro"];
+            /** @description aguardando, aplicado ou recusado. */
+            situacao: string;
+            /** @description registro ou habilitacao. */
+            tipo: string;
+        };
         PedidoDossie: {
             /** @description Qualquer código do atendimento (o mesmo da busca no explorador). */
             codigo: string;
@@ -4532,6 +4860,11 @@ export interface components {
         };
         /** @enum {string} */
         PosteriorBirads: "nenhum" | "reforco" | "sombra" | "combinado";
+        PrecoDaVersao: {
+            tuss: string;
+            /** Format: int64 */
+            valor_centavos: number;
+        };
         PreferenciaWhatsapp: {
             motivo: string;
             whatsapp: boolean;
@@ -4558,6 +4891,30 @@ export interface components {
              * @description Nulo quando o procedimento não está na tabela vigente.
              */
             valor_centavos?: number | null;
+        };
+        ProcedimentoDoCatalogo: {
+            ativo: boolean;
+            /** Format: int32 */
+            duracao_min: number;
+            modalidade?: string | null;
+            nome: string;
+            /**
+             * Format: int64
+             * @description Preço do particular na tabela vigente desta unidade (sem preço: não cobra no caixa).
+             */
+            preco_centavos?: number | null;
+            /**
+             * Format: int64
+             * @description Preço na próxima versão já publicada, se houver.
+             */
+            proximo_preco_centavos?: number | null;
+            requer_contraste: boolean;
+            tuss: string;
+            /**
+             * Format: int32
+             * @description Versão do cadastro; a mudança informa a versão que viu (G2).
+             */
+            versao: number;
         };
         ProcedimentoDoPedido: {
             /**
@@ -4673,6 +5030,15 @@ export interface components {
             justificativa: string;
             /** @description aguardando_envio ou enviado. */
             situacao: string;
+        };
+        RegistroVigente: {
+            conselho: string;
+            /** Format: date-time */
+            desde: string;
+            especialidade?: string | null;
+            numero: string;
+            rqe?: string | null;
+            uf: string;
         };
         RegraDoConjunto: {
             efeito: string;
@@ -4994,6 +5360,23 @@ export interface components {
             motivo: string;
             /** Format: int32 */
             versao: number;
+        };
+        VersaoDaTabelaDePreco: {
+            descricao: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: int64 */
+            itens: number;
+            motivo?: string | null;
+            /** Format: date-time */
+            publicada_em: string;
+            publicada_por?: string | null;
+            /** @description vigente, futura ou anterior. */
+            situacao: string;
+            /** Format: int32 */
+            versao: number;
+            /** Format: date */
+            vigente_desde: string;
         };
         VisaoDoPaciente: {
             /** Format: int64 */
@@ -6267,6 +6650,225 @@ export interface operations {
             };
         };
     };
+    listar_catalogo_de_exames: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogoDeExames"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    incluir_procedimento: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoProcedimento"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProcedimentoDoCatalogo"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    historico_do_procedimento: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tuss: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MudancaRegistradaNoCatalogo"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    mudar_procedimento: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tuss: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MudancaNoProcedimento"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProcedimentoDoCatalogo"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    publicar_tabela_de_precos: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovaVersaoDaTabela"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VersaoDaTabelaDePreco"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     lembretes: {
         parameters: {
             query?: never;
@@ -6289,6 +6891,82 @@ export interface operations {
                 };
             };
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    ver_cabecalho_dos_documentos: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CabecalhoDosDocumentos"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    publicar_cabecalho_dos_documentos: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoCabecalho"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CabecalhoDosDocumentos"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -6567,6 +7245,202 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReciboLancado"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_corpo_clinico: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MedicoDoCorpoClinico"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    decidir_pedido_do_corpo_clinico: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecisaoDoCorpoClinico"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MedicoDoCorpoClinico"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    historico_do_medico: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PedidoDoCorpoClinico"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    pedir_mudanca_no_corpo_clinico: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoPedidoDoCorpoClinico"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MedicoDoCorpoClinico"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
                 };
             };
             409: {

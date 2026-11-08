@@ -57,6 +57,10 @@ pub enum Ato {
     OuvidoriaRegistrar,
     OuvidoriaTratar,
     QualidadeTratar,
+    CorpoClinicoAdministrar,
+    CatalogoVer,
+    CatalogoAdministrar,
+    CabecalhoAdministrar,
 }
 
 impl Ato {
@@ -132,6 +136,15 @@ impl Ato {
             // Autorização pedida pelo sistema (docs/22 E4): recepção e faturista pedem; gerente acompanha.
             A::AutorizacaoPedir => &["recepcao", "faturista"],
             A::AutorizacaoVer => &["recepcao", "faturista", "gerente"],
+            // Corpo clínico (docs/04: médico novo e mudanças só valem após segunda conferência): a
+            // gerência pede; a conferência é de OUTRA pessoa da gerência (PerfilConferir).
+            A::CorpoClinicoAdministrar => &["gerente"],
+            // Exames e procedimentos e tabela de preços (docs/04 Cadastros base): a recepção consulta;
+            // a gerência inclui, muda e publica versão nova de preços (DEC-2026-11-08-93 e 94).
+            A::CatalogoVer => &["recepcao", "gerente"],
+            A::CatalogoAdministrar => &["gerente"],
+            // Cabeçalho impresso nos documentos da unidade (DEC-2026-11-08-92).
+            A::CabecalhoAdministrar => &["gerente"],
         };
         perfis.contains(&perfil)
     }
@@ -141,7 +154,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 53] = [
+    const TODOS: [Ato; 57] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -195,6 +208,10 @@ mod testes {
         Ato::OuvidoriaRegistrar,
         Ato::OuvidoriaTratar,
         Ato::QualidadeTratar,
+        Ato::CorpoClinicoAdministrar,
+        Ato::CatalogoVer,
+        Ato::CatalogoAdministrar,
+        Ato::CabecalhoAdministrar,
     ];
 
     #[test]
@@ -264,6 +281,25 @@ mod testes {
             ] {
                 assert!(!ato.concedido_a(p), "{ato:?} {p}");
             }
+        }
+    }
+
+    #[test]
+    fn cadastros_base_sao_da_gerencia_e_a_recepcao_so_consulta_o_catalogo() {
+        for ato in [
+            Ato::CorpoClinicoAdministrar,
+            Ato::CatalogoAdministrar,
+            Ato::CabecalhoAdministrar,
+        ] {
+            assert!(ato.concedido_a("gerente"), "{ato:?}");
+            for p in ["recepcao", "medico", "ti", "caixa", "financeiro", "tecnico"] {
+                assert!(!ato.concedido_a(p), "{ato:?} {p}");
+            }
+        }
+        assert!(Ato::CatalogoVer.concedido_a("recepcao"));
+        assert!(Ato::CatalogoVer.concedido_a("gerente"));
+        for p in ["ti", "medico", "caixa", "tv"] {
+            assert!(!Ato::CatalogoVer.concedido_a(p), "{p}");
         }
     }
 }
