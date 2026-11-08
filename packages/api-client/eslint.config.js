@@ -13,6 +13,8 @@ export default tseslint.config(
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
+      // Conflita com no-non-null-assertion (strict): preferimos a asserção explícita de tipo.
+      '@typescript-eslint/non-nullable-type-assertion-style': 'off',
       // SEC-CLI-3: nada de token ou dado de saúde no armazenamento do navegador.
       'no-restricted-globals': [
         'error',
