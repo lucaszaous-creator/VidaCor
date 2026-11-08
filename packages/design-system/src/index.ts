@@ -35,6 +35,8 @@ export type {
   EstadoDoMenuDeContexto,
   PropsDoMenuDeContexto,
 } from './componentes/MenuDeContexto';
+export { GrupoDeOpcoes, OpcoesMultiplas } from './componentes/Opcoes';
+export type { PropsDasOpcoesMultiplas, PropsDoGrupoDeOpcoes } from './componentes/Opcoes';
 export { MenuLateral } from './componentes/MenuLateral';
 export type { CorDoModulo, ItemDoMenu, PropsDoLink, PropsDoMenuLateral, SecaoDoMenu } from './componentes/MenuLateral';
 export { Tabela } from './componentes/Tabela';

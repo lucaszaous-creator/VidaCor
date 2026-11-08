@@ -25,6 +25,7 @@ import {
   TRIAGEM_PRECISA_APROVACAO,
 } from '../dados/fase1.ts';
 import { agendaDoDia, atendimentoDe, itensDaAgenda, SALAS } from '../dados/ficticios.ts';
+import { achadosDoLaudoAntonio } from '../dados/laudo-estruturado.ts';
 import { estornoDaSonia, pedidoDaSonia } from '../dados/pendencias.ts';
 
 export interface EstadoDaSimulacao {
@@ -112,6 +113,7 @@ export async function simularNucleo(page: Page, estado: EstadoDaSimulacao): Prom
       return json(route, laudoAntonio());
     }
     if (/^\/v1\/laudos\/[^/]+\/rascunho$/.test(c)) return json(route, laudoAntonio());
+    if (/^\/v1\/laudos\/[^/]+\/achados$/.test(c)) return json(route, achadosDoLaudoAntonio(laudoAntonio().id));
     if (c === '/v1/portal/laudos') return json(route, itensDoPortal());
     if (c.startsWith('/v1/portal/laudos/')) return json(route, PORTAL_LAUDO_ECO);
     if (c.startsWith('/v1/links/')) return problema(route, 410, 'link-expirado', 'Este link expirou.');

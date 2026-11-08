@@ -163,6 +163,9 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await ir(`/laudos/${LAUDO_ANTONIO_ID}`);
   await esperar(page, 'textbox', 'Texto do laudo, versão 1');
   await ok('16-laudo-rascunho');
+  await page.getByRole('region', { name: 'Achados estruturados' }).scrollIntoViewIfNeeded();
+  await esperar(page, 'button', 'Registrar achado');
+  await ok('16b-laudo-achados-estruturados');
   await page.getByRole('button', { name: 'Assinar (ICP-Brasil)' }).click();
   await esperar(page, 'alertdialog', 'Assinar o laudo de Antônio Carlos Ribeiro (15/06/1954)?');
   await ok('17-laudo-assinatura');

@@ -23,6 +23,7 @@ import { useRetomada, type Retomada } from '../../reautenticacao';
 import { FUSO_DA_CLINICA } from '../agenda/grade';
 import { AcessoDeEmergencia, BotaoDeLiberacao, BotaoDePublicacao, CompartilharLaudo, DialogoDeAssinatura, DialogoDeRetificacao } from './AtosDoLaudo';
 import { FilaDeLaudos, SITUACAO_DO_LAUDO } from './FilaDeLaudos';
+import { PainelDeAchados } from './PainelDeAchados';
 import { useRascunho } from './useRascunho';
 
 const rota = getRouteApi('/app/laudos/$laudoId');
@@ -107,6 +108,12 @@ function EditorDoRascunho({ laudo, versao, retomada }: { laudo: Laudo; versao: V
           Assinar (ICP-Brasil)
         </Botao>
       </div>
+      <PainelDeAchados
+        laudo={laudo}
+        aoLevarAoTexto={(t) => {
+          r.mudar(r.texto.trim() === '' ? t : `${r.texto}\n\n${t}`);
+        }}
+      />
       {assinando && (
         <DialogoDeAssinatura
           laudo={laudo}
@@ -185,6 +192,7 @@ function ConteudoDoLaudo({ laudo, retomada }: { laudo: Laudo; retomada: Retomada
             <section aria-label={`Texto assinado, versão ${String(vigente.numero)}`}>
               <pre className="texto-laudo">{vigente.texto}</pre>
             </section>
+            <PainelDeAchados laudo={laudo} />
             <div className="row">
               <Botao
                 onPress={() => {
