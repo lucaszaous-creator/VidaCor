@@ -25,6 +25,7 @@ import {
   TRIAGEM_PRECISA_APROVACAO,
 } from '../dados/fase1.ts';
 import { agendaDoDia, atendimentoDe, itensDaAgenda, SALAS } from '../dados/ficticios.ts';
+import { CONTRATO_UNIMED, faturamentoInicial, painelDe } from '../dados/faturamento.ts';
 import { achadosDoLaudoAntonio } from '../dados/laudo-estruturado.ts';
 import { estornoDaSonia, pedidoDaSonia } from '../dados/pendencias.ts';
 
@@ -141,6 +142,23 @@ export async function simularNucleo(page: Page, estado: EstadoDaSimulacao): Prom
     if (c === '/v1/lastro/cadeia') {
       const evs = Array.from({ length: 30 }, (_, i) => ({ sequencia: i + 1, dominio: 'recepcao', tipo: 'evento_de_teste', registro_codigo: 'ATD-2026-000031', criado_em: '2026-11-06T11:00:00Z', origem: 'recepcao', hash: '3f9ac21b77e0', integro: true }));
       return json(route, { paciente: { id: 'p', nome: 'Sônia Maria Castro', nascimento: '1962-02-03' }, atendimento_codigo: 'ATD-2026-000031', nos: Array.from({ length: 12 }, (_, i) => ({ tipo: 'etiqueta', id: `n${String(i)}`, codigo: `ETQ-2026-0000${String(i)}`, situacao: 'valida', criado_em: '2026-11-06T11:00:00Z' })), eventos: evs, integra: true });
+    }
+    if (c.startsWith('/v1/faturamento/')) {
+      // Lista longa de propósito: rola dentro do painel, nunca a página.
+      const f = faturamentoInicial();
+      const base = f.contas[1];
+      if (base !== undefined) {
+        for (let i = 0; i < 24; i += 1) {
+          f.contas.push({ ...base, resumo: { ...base.resumo, id: `${base.resumo.id.slice(0, -2)}${String(10 + i)}`, codigo: `FAT-2026-0002${String(10 + i)}` } });
+        }
+      }
+      if (c === '/v1/faturamento/contas') return json(route, f.contas.map((x) => x.resumo));
+      if (c.startsWith('/v1/faturamento/contas/')) return json(route, f.contas.find((x) => c.endsWith(x.resumo.id)) ?? f.contas[1]);
+      if (c === '/v1/faturamento/auditoria') return json(route, painelDe(f));
+      if (c === '/v1/faturamento/contratos') return json(route, [CONTRATO_UNIMED]);
+      if (c === '/v1/faturamento/lotes') return json(route, f.lotes);
+      if (c.startsWith('/v1/faturamento/lotes/')) return json(route, { lote: f.lotes[0], contas: [f.contas[2]?.resumo] });
+      if (c === '/v1/faturamento/glosas') return json(route, f.glosas);
     }
     if (c === '/v1/estoque/itens') {
       return json(route, [{ id: 'i1', codigo: 'ITM-CTR', nome: 'Contraste iodado não iônico 350, 100 ml', medida: 'frasco', minimo: 20, local: 'Tomografia', contraste: true, saldo_valido: 8, abaixo_do_minimo: true, lotes: [{ id: 'l1', numero: 'L2408-77', validade: '2027-03-31', saldo: 3, vencido: false }, { id: 'l2', numero: 'L2501-12', validade: '2027-09-30', saldo: 5, vencido: false }] }]);

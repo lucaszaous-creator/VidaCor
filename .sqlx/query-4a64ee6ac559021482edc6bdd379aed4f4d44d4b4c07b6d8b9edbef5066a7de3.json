@@ -1,0 +1,100 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, registro_ans, codigo_prestador, nome_prestador, cnes, regra_versao, prazo_envio_dias\n           FROM faturamento.contrato WHERE id = $1 AND ativo",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "registro_ans",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "registro_ans"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "codigo_prestador",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "codigo_prestador"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "nome_prestador",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "nome_prestador"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "cnes",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "cnes"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "regra_versao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "regra_versao"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "prazo_envio_dias",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "prazo_envio_dias"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "4a64ee6ac559021482edc6bdd379aed4f4d44d4b4c07b6d8b9edbef5066a7de3"
+}

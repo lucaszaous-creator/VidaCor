@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT l.codigo, l.situacao, l.arquivo, k.registro_ans FROM faturamento.lote l\n           JOIN faturamento.contrato k ON k.id = l.contrato_id WHERE l.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "arquivo",
+        "type_info": "Bytea",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "arquivo"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "registro_ans",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "registro_ans"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "c6c2e9f4061f4712bdfbbfa9677163885d356a77d87f266647a9f2c583fcdea4"
+}

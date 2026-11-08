@@ -48,6 +48,8 @@ const SECOES: { id: string; titulo: string; itens: ItemComPerfis[] }[] = [
       { id: 'indicadores', rotulo: 'Indicadores', href: '/indicadores', icone: 'agenda', cor: 'indigo', perfis: ['gerente', 'financeiro'] },
       { id: 'estoque', rotulo: 'Estoque', href: '/estoque', icone: 'etiquetas', cor: 'green', perfis: ['estoque', 'gerente'] },
       { id: 'pendencias', rotulo: 'Pendências do caixa', href: '/caixa/pendencias', icone: 'autorizacao', cor: 'green', perfis: ['gerente', 'financeiro'] },
+      { id: 'faturamento', rotulo: 'Faturamento TISS', href: '/faturamento', icone: 'caixa', cor: 'green', perfis: ['faturista', 'gerente'] },
+      { id: 'auditoria-faturamento', rotulo: 'Auditoria do faturamento', href: '/faturamento/auditoria', icone: 'confere', cor: 'green', perfis: ['faturista', 'gerente'] },
     ],
   },
   {

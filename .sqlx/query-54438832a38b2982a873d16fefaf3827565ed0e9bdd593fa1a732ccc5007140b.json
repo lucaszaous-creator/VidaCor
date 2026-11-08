@@ -1,0 +1,47 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO faturamento.conta (id, codigo, atendimento_id, guia_id, contrato_id, operadora, paciente_id,\n                    paciente_nome, paciente_nascimento, data_execucao, numero_guia_operadora, senha, data_autorizacao,\n                    validade_senha, carteirinha, solicitante_nome, tabela_id, criado_por, origem, unidade_id, correlacao)\n             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, 'faturamento', $19, $20)\n             ON CONFLICT DO NOTHING RETURNING id",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text",
+        "Date",
+        "Date",
+        "Text",
+        "Text",
+        "Date",
+        "Date",
+        "Text",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "54438832a38b2982a873d16fefaf3827565ed0e9bdd593fa1a732ccc5007140b"
+}

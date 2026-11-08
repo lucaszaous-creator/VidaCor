@@ -1,0 +1,170 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT p.regra, p.regra_versao, p.efeito, p.origem_regra, p.titulo, p.detalhe, p.o_que_fazer,\n                  c.id AS conta_id, c.codigo, c.paciente_nome, c.paciente_nascimento, c.operadora, c.numero_guia_operadora\n             FROM faturamento.pendencia p JOIN faturamento.conta c ON c.id = p.conta_id\n            WHERE p.situacao = 'aberta' AND c.lote_id IS NULL\n            ORDER BY CASE p.efeito WHEN 'bloqueia' THEN 0 WHEN 'corrigir_antes' THEN 1 ELSE 2 END, p.regra, c.codigo\n            LIMIT 2000",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "regra",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.pendencia",
+            "name": "regra"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "regra_versao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.pendencia",
+            "name": "regra_versao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "efeito",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.pendencia",
+            "name": "efeito"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "origem_regra",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.pendencia",
+            "name": "origem_regra"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "titulo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.pendencia",
+            "name": "titulo"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "detalhe",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.pendencia",
+            "name": "detalhe"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "o_que_fazer",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.pendencia",
+            "name": "o_que_fazer"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "conta_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "paciente_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "paciente_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "paciente_nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "paciente_nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "operadora",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "operadora"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "numero_guia_operadora",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "numero_guia_operadora"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "c02e18998440decab515e0ddbb897de2c97bc3a69ebb407512e7f3058701d988"
+}

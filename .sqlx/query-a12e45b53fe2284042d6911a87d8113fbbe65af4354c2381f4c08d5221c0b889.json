@@ -1,0 +1,38 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT operadora, regra_versao FROM faturamento.contrato WHERE ativo ORDER BY operadora",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "operadora",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "operadora"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "regra_versao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "regra_versao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "a12e45b53fe2284042d6911a87d8113fbbe65af4354c2381f4c08d5221c0b889"
+}

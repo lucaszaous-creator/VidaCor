@@ -1,0 +1,27 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO faturamento.lote (id, codigo, contrato_id, numero, versao_tiss, quantidade_guias, valor_total_centavos,\n                arquivo, hash_tiss, sha256, chave_envio, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 'faturamento', $13, $14)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Int8",
+        "Text",
+        "Int4",
+        "Int8",
+        "Bytea",
+        "Text",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "330c51186daa3df45562531aee1d024e28ba40dd7130b81d8865016cd0cb420b"
+}

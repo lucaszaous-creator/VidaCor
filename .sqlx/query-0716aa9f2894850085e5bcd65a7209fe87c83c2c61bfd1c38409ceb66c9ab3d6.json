@@ -1,0 +1,83 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT c.codigo, c.versao, c.lote_id, c.contrato_id, c.data_execucao,\n                  to_jsonb(c) || jsonb_build_object('itens',\n                     (SELECT coalesce(jsonb_agg(to_jsonb(i) ORDER BY i.sequencial), '[]'::jsonb)\n                        FROM faturamento.conta_item i WHERE i.conta_id = c.id)) AS \"anterior!\"\n             FROM faturamento.conta c WHERE c.id = $1 FOR UPDATE",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "versao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "versao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "lote_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "lote_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "contrato_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "contrato_id"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "data_execucao",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "data_execucao"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "anterior!",
+        "type_info": "Jsonb",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      true,
+      false,
+      null
+    ]
+  },
+  "hash": "0716aa9f2894850085e5bcd65a7209fe87c83c2c61bfd1c38409ceb66c9ab3d6"
+}

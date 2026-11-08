@@ -1,0 +1,221 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT g.id, g.codigo, g.conta_id, c.codigo AS conta_codigo, c.paciente_nome, c.paciente_nascimento,\n                  c.operadora, g.codigo_glosa, g.motivo, g.valor_centavos, g.prazo_recurso, g.situacao,\n                  r.id AS \"recurso_id?\", r.codigo AS \"recurso_codigo?\", r.justificativa AS \"justificativa?\",\n                  r.situacao AS \"recurso_situacao?\", r.criado_em AS \"recurso_em?\"\n             FROM faturamento.glosa g\n             JOIN faturamento.conta c ON c.id = g.conta_id\n             LEFT JOIN faturamento.recurso r ON r.glosa_id = g.id\n            WHERE ($1::uuid IS NULL OR g.conta_id = $1) AND ($2::uuid IS NULL OR g.id = $2)\n            ORDER BY g.situacao, g.prazo_recurso, g.codigo\n            LIMIT 500",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.glosa",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.glosa",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "conta_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.glosa",
+            "name": "conta_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "conta_codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "paciente_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "paciente_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "paciente_nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "paciente_nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "operadora",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "operadora"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "codigo_glosa",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.glosa",
+            "name": "codigo_glosa"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.glosa",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "valor_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "faturamento.glosa",
+            "name": "valor_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "prazo_recurso",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "faturamento.glosa",
+            "name": "prazo_recurso"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.glosa",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "recurso_id?",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.recurso",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "recurso_codigo?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.recurso",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "justificativa?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.recurso",
+            "name": "justificativa"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "recurso_situacao?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.recurso",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "recurso_em?",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "faturamento.recurso",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "f4063cc9e6053d982d0ec0902c9bd0b5a428350edbe513c86ff5bf81c5d3f461"
+}

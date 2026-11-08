@@ -87,6 +87,23 @@ pub async fn processar_um(estado: &Estado, orthanc: &Orthanc) -> Result<bool> {
             }
             None => Err(anyhow::anyhow!("carga sem recebimento_id")),
         },
+        "tiss.enviar_lote" => match item.carga["lote_id"].as_str().and_then(|v| v.parse().ok()) {
+            Some(lote) => {
+                crate::rotas::faturamento::lotes::enviar_pelo_outbox(
+                    estado,
+                    item.unidade_id,
+                    lote,
+                    item.chave_idempotencia,
+                )
+                .await
+            }
+            None => Err(anyhow::anyhow!("carga sem lote_id")),
+        },
+        // Recurso de glosa por webservice (tissRecursoGlosa) entra numa próxima entrega: fica
+        // pendente no outbox, visível, sem se perder (R7).
+        "tiss.recurso_glosa" => Err(anyhow::anyhow!(
+            "envio de recurso de glosa por webservice ainda não configurado"
+        )),
         "pix.estornar" => match (estado.psp.clone(), item.carga["txid"].as_str()) {
             (Some(psp), Some(txid)) => psp.estornar(item.chave_idempotencia, txid).await,
             _ => Err(anyhow::anyhow!("PSP não configurado ou carga sem txid")),

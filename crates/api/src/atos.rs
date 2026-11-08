@@ -39,6 +39,11 @@ pub enum Ato {
     FinanceiroAprovar,
     UsuarioAdministrar,
     PerfilConferir,
+    FaturamentoVer,
+    FaturamentoAuditar,
+    LoteGerar,
+    DemonstrativoRegistrar,
+    GlosaRecorrer,
 }
 
 impl Ato {
@@ -86,6 +91,11 @@ impl Ato {
             // clínico (segunda pessoa) é da gerência.
             A::UsuarioAdministrar => &["ti", "gerente"],
             A::PerfilConferir => &["gerente"],
+            // Faturamento TISS (docs/18 § 5: faturista gera guia, lote e recurso; gerente acompanha).
+            A::FaturamentoVer => &["faturista", "gerente"],
+            A::FaturamentoAuditar | A::LoteGerar | A::DemonstrativoRegistrar | A::GlosaRecorrer => {
+                &["faturista"]
+            }
         };
         perfis.contains(&perfil)
     }
@@ -95,7 +105,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 35] = [
+    const TODOS: [Ato; 40] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -131,6 +141,11 @@ mod testes {
         Ato::FinanceiroAprovar,
         Ato::UsuarioAdministrar,
         Ato::PerfilConferir,
+        Ato::FaturamentoVer,
+        Ato::FaturamentoAuditar,
+        Ato::LoteGerar,
+        Ato::DemonstrativoRegistrar,
+        Ato::GlosaRecorrer,
     ];
 
     #[test]
@@ -154,6 +169,30 @@ mod testes {
         for p in ["gerente", "medico", "caixa", "tecnico", "financeiro"] {
             assert!(!Ato::RecepcaoCheckin.concedido_a(p), "{p}");
         }
+    }
+
+    #[test]
+    fn faturamento_so_para_faturista_e_gerente_so_le() {
+        for ato in [
+            Ato::FaturamentoAuditar,
+            Ato::LoteGerar,
+            Ato::DemonstrativoRegistrar,
+            Ato::GlosaRecorrer,
+        ] {
+            assert!(ato.concedido_a("faturista"), "{ato:?}");
+            for p in [
+                "recepcao",
+                "caixa",
+                "medico",
+                "gerente",
+                "financeiro",
+                "tecnico",
+            ] {
+                assert!(!ato.concedido_a(p), "{ato:?} {p}");
+            }
+        }
+        assert!(Ato::FaturamentoVer.concedido_a("gerente"));
+        assert!(!Ato::FaturamentoVer.concedido_a("financeiro"));
     }
 
     #[test]

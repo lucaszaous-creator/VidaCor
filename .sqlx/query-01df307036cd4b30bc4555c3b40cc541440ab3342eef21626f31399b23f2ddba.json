@@ -1,0 +1,239 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT l.id, l.codigo, l.numero, l.contrato_id, k.operadora, l.quantidade_guias, l.valor_total_centavos,\n                  l.situacao, l.versao_tiss, l.hash_tiss, l.sha256, l.protocolo, l.criado_em, l.enviado_em,\n                  o.tentativas AS \"tentativas?\", o.ultimo_erro, (o.id IS NOT NULL AND o.concluido_em IS NULL) AS \"envio_pendente!\",\n                  d.valor_pago_centavos AS \"pago?\", d.valor_glosado_centavos AS \"glosado?\"\n             FROM faturamento.lote l\n             JOIN faturamento.contrato k ON k.id = l.contrato_id\n             LEFT JOIN integracao.outbox o ON o.tipo = 'tiss.enviar_lote' AND o.referencia = l.id\n             LEFT JOIN faturamento.demonstrativo d ON d.lote_id = l.id\n            WHERE ($1::uuid IS NULL OR l.id = $1)\n            ORDER BY l.criado_em DESC LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "numero",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "contrato_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "contrato_id"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "operadora",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "operadora"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "quantidade_guias",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "quantidade_guias"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "valor_total_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "valor_total_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "versao_tiss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "versao_tiss"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "hash_tiss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "hash_tiss"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "sha256",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "sha256"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "protocolo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "protocolo"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "enviado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "enviado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "tentativas?",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "integracao.outbox",
+            "name": "tentativas"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "ultimo_erro",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "integracao.outbox",
+            "name": "ultimo_erro"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "envio_pendente!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 17,
+        "name": "pago?",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "faturamento.demonstrativo",
+            "name": "valor_pago_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 18,
+        "name": "glosado?",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "faturamento.demonstrativo",
+            "name": "valor_glosado_centavos"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      null,
+      false,
+      false
+    ]
+  },
+  "hash": "01df307036cd4b30bc4555c3b40cc541440ab3342eef21626f31399b23f2ddba"
+}

@@ -11,6 +11,20 @@ import type { Indicadores } from './contrato-indicadores';
 import type { MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
 import type { NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
 import type { ComunicacaoDoPaciente, LembretesEnfileirados } from './contrato-comunicacao';
+import type {
+  ContaDetalhe,
+  ContratoDeConvenio,
+  Glosa,
+  LoteDetalhe,
+  LoteTiss,
+  PainelAuditoria,
+  PedidoCorrecaoConta,
+  PedidoDemonstrativo,
+  PedidoLote,
+  PedidoRecurso,
+  ResultadoConferencia,
+  ContaResumo,
+} from './contrato-faturamento';
 import type { EntradaDeEstoque, ItemDeEstoque, MovimentoFeito, RastreioDoLote } from './contrato-estoque';
 import type { AchadoEstruturado, AchadosDoLaudo, DescritoresBirads, DescritoresTirads, NovoAchado } from './contrato-laudo-estruturado';
 import type { ConviteEmitido, NovoPaciente, PacienteCadastrado, PossivelDuplicado, SessaoDoPortal, SituacaoDoConvite } from './contrato-portal';
@@ -108,3 +122,20 @@ export type ConfereUsuarioAdministrado = Cabe<UsuarioAdministrado, S['UsuarioAdm
 export type ConfereNovoUsuario = Cabe<NovoUsuario, S['NovoUsuario']>;
 export type ConfereMudancaDePerfil = Cabe<MudancaDePerfil, S['MudancaDePerfil']>;
 export type ConfereNotaFiscal = Cabe<NotaFiscal, S['NotaFiscal']>;
+
+// Faturamento TISS (E5).
+export type ConfereContaResumo = Cabe<ContaResumo, S['ContaResumo']>;
+export type ConfereContaDetalhe = Cabe<ContaDetalhe, S['ContaDetalhe']>;
+export type ConfereGlosa = Cabe<Glosa, S['Glosa']>;
+export type ConfereLote = Cabe<LoteTiss, S['Lote']>;
+export type ConfereLoteDetalhe = Cabe<LoteDetalhe, S['LoteDetalhe']>;
+export type ConferePainelAuditoria = Cabe<PainelAuditoria, S['PainelAuditoria']>;
+export type ConfereContrato = Cabe<ContratoDeConvenio, S['Contrato']>;
+export type ConfereResultadoConferencia = Cabe<ResultadoConferencia, S['ResultadoConferencia']>;
+export type ConferePedidoLote = Cabe<PedidoLote, S['PedidoLote']>;
+export type ConferePedidoCorrecaoConta = Cabe<PedidoCorrecaoConta, S['PedidoCorrecaoConta']>;
+export type ConferePedidoDemonstrativo = Cabe<PedidoDemonstrativo, S['PedidoDemonstrativo']>;
+export type ConferePedidoRecurso = Cabe<PedidoRecurso, S['PedidoRecurso']>;
+// Ao contrário: o corpo gerado cabe no escrito à mão.
+export type ConferePedidoCorrecaoContaVolta = Cabe<S['PedidoCorrecaoConta'], PedidoCorrecaoConta>;
+export type ConferePedidoDemonstrativoVolta = Cabe<S['PedidoDemonstrativo'], PedidoDemonstrativo>;

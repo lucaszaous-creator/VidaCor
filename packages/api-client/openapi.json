@@ -1969,6 +1969,789 @@
         }
       }
     },
+    "/v1/faturamento/auditoria": {
+      "get": {
+        "tags": [
+          "faturamento"
+        ],
+        "summary": "Painel da auditoria: contas fora de lote por situação, pendências agrupadas por regra e os\nconjuntos de regras com as operadoras que os usam.",
+        "operationId": "painel_auditoria_faturamento",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PainelAuditoria"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/faturamento/conferencias": {
+      "post": {
+        "tags": [
+          "faturamento"
+        ],
+        "summary": "Conferir guias: apura as contas novas e confere todas as contas fora de lote pelas regras de\ncada operadora (só o faturista).",
+        "operationId": "conferir_guias",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoConferencia"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/faturamento/contas": {
+      "get": {
+        "tags": [
+          "faturamento"
+        ],
+        "summary": "Guias do faturamento com situação, prazo e pendências (faturista e gerente).",
+        "operationId": "listar_contas_faturamento",
+        "parameters": [
+          {
+            "name": "situacao",
+            "in": "query",
+            "description": "Situação da conta (ex.: `com_pendencia`).",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "lote_id",
+            "in": "query",
+            "description": "Contas de um lote.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ContaResumo"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/faturamento/contas/{id}": {
+      "get": {
+        "tags": [
+          "faturamento"
+        ],
+        "summary": "Detalhe de uma guia do faturamento.",
+        "operationId": "obter_conta_faturamento",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContaDetalhe"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/faturamento/contas/{id}/correcao": {
+      "post": {
+        "tags": [
+          "faturamento"
+        ],
+        "summary": "Corrige a conta antes do lote (só o faturista): a versão anterior fica no histórico com o motivo,\na conta ganha versão nova e é conferida de novo. Conta em lote não muda (corrige-se por recurso).",
+        "operationId": "corrigir_conta",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoCorrecaoConta"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContaDetalhe"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/faturamento/contratos": {
+      "get": {
+        "tags": [
+          "faturamento"
+        ],
+        "summary": "Contratos ativos da unidade, com as guias prontas para lote de cada um.",
+        "operationId": "listar_contratos_faturamento",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Contrato"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/faturamento/glosas": {
+      "get": {
+        "tags": [
+          "faturamento"
+        ],
+        "summary": "Glosas recebidas, das abertas com prazo mais curto para as em recurso.",
+        "operationId": "listar_glosas",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Glosa"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/faturamento/glosas/{id}/recurso": {
+      "post": {
+        "tags": [
+          "faturamento"
+        ],
+        "summary": "Registra o recurso de uma glosa (só o faturista), dentro do prazo do contrato. Um recurso por\nglosa; o envio à operadora fica no outbox, visível até sair.",
+        "operationId": "recorrer_glosa",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoRecurso"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Glosa"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/faturamento/lotes": {
+      "get": {
+        "tags": [
+          "faturamento"
+        ],
+        "summary": "Lotes da unidade, do mais recente para o mais antigo.",
+        "operationId": "listar_lotes",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Lote"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "faturamento"
+        ],
+        "summary": "Gera o lote de uma operadora com as guias prontas (só o faturista). Cada guia é conferida de novo\nna hora; a que ganhou pendência fica de fora. Duas gerações simultâneas dão um lote só: o contrato\nfica travado e cada conta entra em um lote só (G2).",
+        "operationId": "gerar_lote",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoLote"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoteDetalhe"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/faturamento/lotes/{id}": {
+      "get": {
+        "tags": [
+          "faturamento"
+        ],
+        "summary": "Lote com as guias e a situação do envio.",
+        "operationId": "obter_lote",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoteDetalhe"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/faturamento/lotes/{id}/arquivo": {
+      "get": {
+        "tags": [
+          "faturamento"
+        ],
+        "summary": "Arquivo XML do lote como foi gerado (para conferência). Nunca vai para cache.",
+        "operationId": "baixar_arquivo_do_lote",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "XML TISS em ISO-8859-1",
+            "content": {
+              "application/xml": {}
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/faturamento/lotes/{id}/demonstrativo": {
+      "post": {
+        "tags": [
+          "faturamento"
+        ],
+        "summary": "Registra o demonstrativo de retorno do lote, conta a conta (só o faturista): valor pago e glosas\ncom código e motivo. Pago mais glosado fecha com o apresentado em cada guia (G1: o servidor\nconfere a conta).",
+        "operationId": "registrar_demonstrativo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoDemonstrativo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoteDetalhe"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/faturamento/lotes/{id}/envio": {
+      "post": {
+        "tags": [
+          "faturamento"
+        ],
+        "summary": "Pede o envio do lote à operadora (só o faturista). O envio sai pelo outbox com a chave do lote;\npedir de novo não cria outro envio.",
+        "operationId": "enviar_lote",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoteDetalhe"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/financeiro/contas": {
       "get": {
         "tags": [
@@ -6107,6 +6890,36 @@
           }
         }
       },
+      "ConjuntoDeRegras": {
+        "type": "object",
+        "required": [
+          "versao",
+          "nome",
+          "operadoras",
+          "regras"
+        ],
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "operadoras": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Operadoras com contrato nesta unidade que usam este conjunto."
+          },
+          "regras": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RegraDoConjunto"
+            }
+          },
+          "versao": {
+            "type": "string"
+          }
+        }
+      },
       "ContaBancaria": {
         "type": "object",
         "required": [
@@ -6124,6 +6937,194 @@
           },
           "nome": {
             "type": "string"
+          }
+        }
+      },
+      "ContaDetalhe": {
+        "type": "object",
+        "required": [
+          "resumo",
+          "carteirinha",
+          "senha",
+          "validade_senha",
+          "solicitante",
+          "assinatura_beneficiario",
+          "itens",
+          "pendencias",
+          "historico",
+          "versao",
+          "glosas"
+        ],
+        "properties": {
+          "assinatura_beneficiario": {
+            "type": "boolean"
+          },
+          "carteirinha": {
+            "type": "string"
+          },
+          "cid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "glosas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Glosa"
+            }
+          },
+          "historico": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VersaoDaConta"
+            },
+            "description": "Versões anteriores, da mais recente para a mais antiga."
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemDaConta"
+            }
+          },
+          "pendencias": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PendenciaDaConta"
+            }
+          },
+          "resumo": {
+            "$ref": "#/components/schemas/ContaResumo"
+          },
+          "senha": {
+            "type": "string"
+          },
+          "solicitante": {
+            "$ref": "#/components/schemas/Solicitante"
+          },
+          "validade_senha": {
+            "type": "string",
+            "format": "date"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ContaPendente": {
+        "type": "object",
+        "required": [
+          "conta_id",
+          "codigo",
+          "paciente",
+          "operadora",
+          "numero_guia_operadora",
+          "detalhe"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "conta_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "detalhe": {
+            "type": "string"
+          },
+          "numero_guia_operadora": {
+            "type": "string"
+          },
+          "operadora": {
+            "type": "string"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteDaConta"
+          }
+        }
+      },
+      "ContaResumo": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "paciente",
+          "operadora",
+          "numero_guia_operadora",
+          "procedimentos",
+          "valor_total_centavos",
+          "situacao",
+          "data_execucao",
+          "pendencias_que_impedem",
+          "pendencias_de_atencao"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "description": "Número da guia no prestador (ex.: `FAT-2026-000123`)."
+          },
+          "data_execucao": {
+            "type": "string",
+            "format": "date"
+          },
+          "enviar_ate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date",
+            "description": "Último dia para enviar, pelo contrato (nulo sem contrato)."
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "lote_codigo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "numero_guia_operadora": {
+            "type": "string"
+          },
+          "operadora": {
+            "type": "string"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteDaConta"
+          },
+          "pendencias_de_atencao": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pendencias_que_impedem": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Pendências abertas que deixam a guia fora do lote (bloqueia ou corrigir antes)."
+          },
+          "procedimentos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Código TUSS e descrição de cada procedimento executado."
+          },
+          "regra_versao": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Versão da regra da última conferência (ex.: `AUD-UNIMED-2026.1`)."
+          },
+          "situacao": {
+            "type": "string",
+            "description": "em_conferencia, pronta, com_pendencia, em_lote, enviada, paga, paga_com_glosa ou glosada."
+          },
+          "valor_total_centavos": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -6191,6 +7192,49 @@
           "quantidade": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "Contrato": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "operadora",
+          "registro_ans",
+          "regra_versao",
+          "prazo_envio_dias",
+          "prazo_recurso_dias",
+          "contas_prontas"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "contas_prontas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "operadora": {
+            "type": "string"
+          },
+          "prazo_envio_dias": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "prazo_recurso_dias": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "registro_ans": {
+            "type": "string"
+          },
+          "regra_versao": {
+            "type": "string"
           }
         }
       },
@@ -6440,6 +7484,25 @@
           "validade": {
             "type": "string",
             "format": "date"
+          }
+        }
+      },
+      "EnvioPendente": {
+        "type": "object",
+        "description": "Envio à operadora ainda pendente no outbox (R7: visível, não se perde).",
+        "required": [
+          "tentativas"
+        ],
+        "properties": {
+          "tentativas": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ultimo_erro": {
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -6851,6 +7914,134 @@
           "mais_alto_que_largo"
         ]
       },
+      "Glosa": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "conta_id",
+          "conta_codigo",
+          "paciente",
+          "operadora",
+          "codigo_glosa",
+          "motivo",
+          "valor_centavos",
+          "prazo_recurso",
+          "situacao"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "codigo_glosa": {
+            "type": "string",
+            "description": "Código do motivo de glosa da tabela TISS (4 dígitos)."
+          },
+          "conta_codigo": {
+            "type": "string"
+          },
+          "conta_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "operadora": {
+            "type": "string"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteDaConta"
+          },
+          "prazo_recurso": {
+            "type": "string",
+            "format": "date"
+          },
+          "recurso": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Recurso"
+              }
+            ]
+          },
+          "situacao": {
+            "type": "string",
+            "description": "aberta ou em_recurso."
+          },
+          "valor_centavos": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "GlosaRecebida": {
+        "type": "object",
+        "required": [
+          "codigo_glosa",
+          "motivo",
+          "valor_centavos"
+        ],
+        "properties": {
+          "codigo_glosa": {
+            "type": "string"
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "valor_centavos": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "GrupoDePendencias": {
+        "type": "object",
+        "required": [
+          "regra",
+          "titulo",
+          "efeito",
+          "origem",
+          "o_que_fazer",
+          "regra_versoes",
+          "contas"
+        ],
+        "properties": {
+          "contas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContaPendente"
+            }
+          },
+          "efeito": {
+            "type": "string"
+          },
+          "o_que_fazer": {
+            "type": "string"
+          },
+          "origem": {
+            "type": "string"
+          },
+          "regra": {
+            "type": "string"
+          },
+          "regra_versoes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "titulo": {
+            "type": "string"
+          }
+        }
+      },
       "Guia": {
         "type": "object",
         "required": [
@@ -7078,6 +8269,39 @@
           "situacao": {
             "type": "string",
             "description": "agendado, confirmado, em_atendimento, concluido, faltou ou cancelado."
+          }
+        }
+      },
+      "ItemDaConta": {
+        "type": "object",
+        "required": [
+          "sequencial",
+          "tuss",
+          "descricao",
+          "quantidade"
+        ],
+        "properties": {
+          "descricao": {
+            "type": "string"
+          },
+          "quantidade": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sequencial": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tuss": {
+            "type": "string"
+          },
+          "valor_unitario_centavos": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "description": "Nulo quando o código não está na tabela da operadora."
           }
         }
       },
@@ -7473,6 +8697,123 @@
           "token": {
             "type": "string",
             "description": "Mostrado uma única vez; o banco guarda só o hash."
+          }
+        }
+      },
+      "Lote": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "numero",
+          "contrato_id",
+          "operadora",
+          "quantidade_guias",
+          "valor_total_centavos",
+          "situacao",
+          "versao_tiss",
+          "hash_tiss",
+          "sha256",
+          "criado_em"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "contrato_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "enviado_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "envio_pendente": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/EnvioPendente"
+              }
+            ]
+          },
+          "hash_tiss": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "numero": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "operadora": {
+            "type": "string"
+          },
+          "protocolo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "quantidade_guias": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "gerado, aguardando_envio, enviado ou demonstrativo_recebido."
+          },
+          "valor_glosado_centavos": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
+          },
+          "valor_pago_centavos": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
+          },
+          "valor_total_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "versao_tiss": {
+            "type": "string"
+          }
+        }
+      },
+      "LoteDetalhe": {
+        "type": "object",
+        "required": [
+          "lote",
+          "contas"
+        ],
+        "properties": {
+          "contas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContaResumo"
+            }
+          },
+          "lote": {
+            "$ref": "#/components/schemas/Lote"
           }
         }
       },
@@ -8024,6 +9365,23 @@
           }
         }
       },
+      "PacienteDaConta": {
+        "type": "object",
+        "description": "Dois identificadores do paciente (N1), como em todo ato com paciente.",
+        "required": [
+          "nome",
+          "nascimento"
+        ],
+        "properties": {
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
       "PacienteDoLote": {
         "type": "object",
         "required": [
@@ -8080,6 +9438,31 @@
           "isoecoico",
           "heterogeneo"
         ]
+      },
+      "PainelAuditoria": {
+        "type": "object",
+        "required": [
+          "resumo",
+          "grupos",
+          "conjuntos"
+        ],
+        "properties": {
+          "conjuntos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConjuntoDeRegras"
+            }
+          },
+          "grupos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GrupoDePendencias"
+            }
+          },
+          "resumo": {
+            "$ref": "#/components/schemas/ResumoAuditoria"
+          }
+        }
       },
       "PedidoAbertura": {
         "type": "object",
@@ -8295,6 +9678,45 @@
           }
         }
       },
+      "PedidoCorrecaoConta": {
+        "type": "object",
+        "description": "Correção da conta antes do lote: gera versão nova com motivo e confere de novo.",
+        "required": [
+          "motivo"
+        ],
+        "properties": {
+          "assinatura_beneficiario": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "cid": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "CID-10 sem ponto (ex.: `R51`)."
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "reaplicar_tabela": {
+            "type": "boolean",
+            "description": "Reaplica a tabela de preços vigente na data do exame."
+          },
+          "solicitante": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/SolicitanteCorrigido"
+              }
+            ]
+          }
+        }
+      },
       "PedidoDeclaracao": {
         "type": "object",
         "required": [
@@ -8325,6 +9747,26 @@
           "responsavel_id": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "PedidoDemonstrativo": {
+        "type": "object",
+        "description": "Demonstrativo de retorno da operadora, conta a conta.",
+        "required": [
+          "recebido_em",
+          "contas"
+        ],
+        "properties": {
+          "contas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RetornoDaConta"
+            }
+          },
+          "recebido_em": {
+            "type": "string",
+            "format": "date"
           }
         }
       },
@@ -8557,6 +9999,18 @@
           }
         }
       },
+      "PedidoLote": {
+        "type": "object",
+        "required": [
+          "contrato_id"
+        ],
+        "properties": {
+          "contrato_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
       "PedidoNovaPulseira": {
         "type": "object",
         "properties": {
@@ -8712,6 +10166,17 @@
           }
         }
       },
+      "PedidoRecurso": {
+        "type": "object",
+        "required": [
+          "justificativa"
+        ],
+        "properties": {
+          "justificativa": {
+            "type": "string"
+          }
+        }
+      },
       "PedidoReimpressao": {
         "type": "object",
         "properties": {
@@ -8788,6 +10253,43 @@
           },
           "usa_metformina": {
             "type": "boolean"
+          }
+        }
+      },
+      "PendenciaDaConta": {
+        "type": "object",
+        "required": [
+          "regra",
+          "regra_versao",
+          "efeito",
+          "origem",
+          "titulo",
+          "detalhe",
+          "o_que_fazer"
+        ],
+        "properties": {
+          "detalhe": {
+            "type": "string"
+          },
+          "efeito": {
+            "type": "string",
+            "description": "bloqueia, corrigir_antes ou atencao."
+          },
+          "o_que_fazer": {
+            "type": "string"
+          },
+          "origem": {
+            "type": "string",
+            "description": "De onde veio a regra (padrão TISS, manual do prestador, contrato, regra da clínica)."
+          },
+          "regra": {
+            "type": "string"
+          },
+          "regra_versao": {
+            "type": "string"
+          },
+          "titulo": {
+            "type": "string"
           }
         }
       },
@@ -9096,6 +10598,59 @@
           }
         }
       },
+      "Recurso": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "justificativa",
+          "situacao",
+          "criado_em"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "justificativa": {
+            "type": "string"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "aguardando_envio ou enviado."
+          }
+        }
+      },
+      "RegraDoConjunto": {
+        "type": "object",
+        "required": [
+          "regra",
+          "titulo",
+          "efeito",
+          "origem"
+        ],
+        "properties": {
+          "efeito": {
+            "type": "string"
+          },
+          "origem": {
+            "type": "string"
+          },
+          "regra": {
+            "type": "string"
+          },
+          "titulo": {
+            "type": "string"
+          }
+        }
+      },
       "RegraRepasse": {
         "type": "object",
         "required": [
@@ -9253,6 +10808,61 @@
           }
         }
       },
+      "ResultadoConferencia": {
+        "type": "object",
+        "description": "Resultado de \"Conferir guias\": contas novas apuradas e situação depois da auditoria.",
+        "required": [
+          "novas",
+          "conferidas",
+          "prontas",
+          "com_pendencia"
+        ],
+        "properties": {
+          "com_pendencia": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "conferidas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "novas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "prontas": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ResumoAuditoria": {
+        "type": "object",
+        "required": [
+          "conferidas",
+          "prontas",
+          "corrigir_antes",
+          "bloqueadas"
+        ],
+        "properties": {
+          "bloqueadas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "conferidas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "corrigir_antes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "prontas": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "ResumoFinanceiro": {
         "type": "object",
         "required": [
@@ -9290,6 +10900,29 @@
             "format": "int64"
           },
           "saldo_em_contas_centavos": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "RetornoDaConta": {
+        "type": "object",
+        "required": [
+          "conta_id",
+          "valor_pago_centavos"
+        ],
+        "properties": {
+          "conta_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "glosas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GlosaRecebida"
+            }
+          },
+          "valor_pago_centavos": {
             "type": "integer",
             "format": "int64"
           }
@@ -9414,6 +11047,67 @@
           "situacao": {
             "type": "string",
             "description": "valido ou indisponivel (vencido, usado, revogado ou inexistente: a mesma resposta)."
+          }
+        }
+      },
+      "Solicitante": {
+        "type": "object",
+        "required": [
+          "nome"
+        ],
+        "properties": {
+          "cbos": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "CBO-S de 6 dígitos."
+          },
+          "conselho": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Código do conselho no TISS (06 = CRM)."
+          },
+          "nome": {
+            "type": "string"
+          },
+          "numero": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "uf": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Código IBGE da UF (33 = RJ)."
+          }
+        }
+      },
+      "SolicitanteCorrigido": {
+        "type": "object",
+        "required": [
+          "conselho",
+          "numero",
+          "uf",
+          "cbos"
+        ],
+        "properties": {
+          "cbos": {
+            "type": "string"
+          },
+          "conselho": {
+            "type": "string"
+          },
+          "numero": {
+            "type": "string"
+          },
+          "uf": {
+            "type": "string"
           }
         }
       },
@@ -9662,6 +11356,27 @@
           },
           "texto": {
             "type": "string"
+          }
+        }
+      },
+      "VersaoDaConta": {
+        "type": "object",
+        "required": [
+          "versao",
+          "motivo",
+          "criado_em"
+        ],
+        "properties": {
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

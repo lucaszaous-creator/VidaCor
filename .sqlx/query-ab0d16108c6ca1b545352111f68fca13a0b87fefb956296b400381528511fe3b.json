@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE faturamento.pendencia SET situacao = 'superada', superada_em = now()\n          WHERE conta_id = $1 AND situacao = 'aberta'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "ab0d16108c6ca1b545352111f68fca13a0b87fefb956296b400381528511fe3b"
+}

@@ -26,6 +26,8 @@ pub struct Estado {
     pub mensageiro: Option<Arc<dyn crate::mensageiro::Mensageiro>>,
     /// NFS-e. Sem configuração, a emissão fica pendente no outbox (R7).
     pub prefeitura: Option<Arc<dyn crate::prefeitura::Prefeitura>>,
+    /// Webservice TISS das operadoras. Sem configuração, o envio do lote fica pendente no outbox (R7).
+    pub operadora: Option<Arc<dyn crate::operadora::Operadora>>,
 }
 
 impl Estado {
@@ -43,6 +45,7 @@ impl Estado {
             correio: None,
             mensageiro: None,
             prefeitura: None,
+            operadora: None,
         }
     }
 }

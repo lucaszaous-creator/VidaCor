@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE faturamento.lote SET situacao = 'aguardando_envio', versao = versao + 1 WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "74037d7ee466a80fbd787c0b99f8e13d58e2a215bae15a49d438428790cc3202"
+}
