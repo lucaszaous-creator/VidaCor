@@ -24,7 +24,13 @@ terminou.**
 ## 3. O que vai impresso
 - **Sempre:** nome completo, data de nascimento, código único da etiqueta (**ETQ**) e número do exame (**ACC**), em texto, código de barras e QR.
 - **Quando se aplica:** "P" de preferencial; aviso de **ALERGIA** sem dizer qual (o detalhe só no sistema); data de devolução (MAPA).
-- **Nunca:** diagnóstico, resultado, CPF completo, convênio na pulseira, link que abra dado sem login.
+- **Por tipo (decisão DEC-2026-11-08-03):**
+  - pulseira: só identificação, "P" e o aviso genérico de ALERGIA (pode haver vários exames no dia);
+  - exame e pedido: acrescenta **código TUSS e nome curto do exame**, data, hora e sala, para conferir pedido, sala e guia;
+  - seringa de contraste: produto, volume, lote e validade;
+  - MAPA/Holter: número do aparelho e data de devolução;
+  - envelope: sem exame (sai da clínica); o resultado só abre no portal com login.
+- **Nunca:** diagnóstico, hipótese, resultado, condição clínica (ex.: "gestante", qual alergia), CPF completo, convênio na pulseira, link que abra dado sem login.
 - O QR do envelope leva ao portal, que **exige login** do paciente.
 
 ## 4. Regras do lastro

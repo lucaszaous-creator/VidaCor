@@ -36,8 +36,8 @@ body{margin:0;background:#F2F3F6}
         <h1 style="margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.02em">Minha agenda</h1>
         <div class="t13 mute" style="margin-top: 2px">Sexta, 6 de novembro. Sala 1 (eco) até 12:00, Sala 4 (ergométrico) das 13:00 às 17:00.</div>
       </div>
-      <button class="btn btn-sm">Bloquear horário</button>
-      <button class="btn btn-sm">Pedir troca de agenda</button>
+      <button class="btn btn-sm" onClick="{{abrirBloq}}">Bloquear horário</button>
+      <button class="btn btn-sm" onClick="{{abrirTroca}}">Pedir troca de agenda</button>
     </header>
 
     <section class="card kpis" aria-label="Resumo do meu dia">
@@ -107,6 +107,57 @@ body{margin:0;background:#F2F3F6}
         <div class="t13 mute" style="padding-top: 10px; border-top: 1px solid #E8EAEF; line-height: 1.45">Você vê o prontuário completo só de quem tem vínculo de atendimento com você.</div>
       </aside>
     </div>
+
+    <sc-if value="{{drwBloq}}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{fecharDrw}}" style="position: fixed; inset: 0; background: rgba(15,23,42,.28); z-index: 40"></div>
+      <aside role="dialog" aria-label="Bloquear horário" style="position: fixed; top: 12px; right: 12px; bottom: 12px; width: 420px; max-width: calc(100% - 24px); background: #fff; border-radius: 18px; box-shadow: 0 18px 48px rgba(15,23,42,.18); display: flex; flex-direction: column; z-index: 41; overflow: hidden">
+        <div class="row" style="padding: 16px 12px 12px 20px; border-bottom: 1px solid #E8EAEF">
+          <div style="flex: 1; min-width: 0"><h2 style="font-size: 18px; font-weight: 650; margin: 0">Bloquear horário</h2><div class="t13 mute">Agenda do Dr. Paulo Medeiros</div></div>
+          <button class="icon-btn" aria-label="Fechar" onClick="{{fecharDrw}}" style="width: 36px; height: 36px; border: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+        </div>
+        <div class="scroll" style="padding: 16px 20px; display: flex; flex-direction: column; gap: 14px">
+          <sc-if value="{{bloqForm}}" hint-placeholder-val="{{ true }}">
+            <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+              <label class="field">De<input class="in num" value="20/11/2026"></label>
+              <label class="field">Até<input class="in num" value="22/11/2026"></label>
+              <label class="field">Início<input class="in num" value="07:00"></label>
+              <label class="field">Fim<input class="in num" value="18:30"></label>
+            </div>
+            <label class="field">Motivo<select class="in" value="{{bloqMotivo}}" onChange="{{onBloqMotivo}}"><option value="">Escolha o motivo</option><option>Congresso ou curso</option><option>Férias</option><option>Licença médica</option><option>Compromisso pessoal</option></select></label>
+            <div class="banner off"><div class="t14" style="line-height: 1.5"><b>14 pacientes já agendados</b> nesse período. Com a aprovação, a recepção oferece novos horários pelo WhatsApp e ninguém perde o lugar na fila.</div></div>
+            <div class="t13 mute">O bloqueio vale depois da aprovação da coordenação (Patrícia Lemos). Fica registrado no lastro com o motivo.</div>
+          </sc-if>
+          <sc-if value="{{bloqFeito}}" hint-placeholder-val="{{ false }}">
+            <div class="banner ok" role="status"><div class="t14" style="line-height: 1.5"><b>Pedido BLQ-2026-0042 enviado</b> à coordenação às 08:41. Enquanto não for aprovado, a agenda continua aberta. Você recebe a resposta no chat da equipe.</div></div>
+            <dl class="kv" style="margin: 0"><dt>Período</dt><dd>20 a 22/11, dia inteiro</dd><dt>Motivo</dt><dd>{{bloqMotivo}}</dd><dt>Afetados</dt><dd>14 pacientes</dd><dt>Situação</dt><dd>Aguardando aprovação</dd></dl>
+          </sc-if></div>
+        <div class="row" style="gap: 8px; padding: 14px 20px 18px; border-top: 1px solid #E8EAEF"><sc-if value="{{bloqForm}}" hint-placeholder-val="{{ true }}"><span class="t13 mute" style="flex: 1">{{bloqAviso}}</span><button class="btn btn-sm" onClick="{{fecharDrw}}">Cancelar</button><button class="btn btn-sm btn-p" disabled="{{bloqSemMotivo}}" onClick="{{enviarBloq}}">Enviar para aprovação</button></sc-if><sc-if value="{{bloqFeito}}" hint-placeholder-val="{{ false }}"><button class="btn btn-sm btn-p" onClick="{{fecharDrw}}" style="margin-left: auto">Fechar</button></sc-if></div>
+      </aside>
+    </sc-if>
+
+    <sc-if value="{{drwTroca}}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{fecharDrw}}" style="position: fixed; inset: 0; background: rgba(15,23,42,.28); z-index: 40"></div>
+      <aside role="dialog" aria-label="Pedir troca de agenda" style="position: fixed; top: 12px; right: 12px; bottom: 12px; width: 420px; max-width: calc(100% - 24px); background: #fff; border-radius: 18px; box-shadow: 0 18px 48px rgba(15,23,42,.18); display: flex; flex-direction: column; z-index: 41; overflow: hidden">
+        <div class="row" style="padding: 16px 12px 12px 20px; border-bottom: 1px solid #E8EAEF">
+          <div style="flex: 1; min-width: 0"><h2 style="font-size: 18px; font-weight: 650; margin: 0">Pedir troca de agenda</h2><div class="t13 mute">Troca de turno com outro médico</div></div>
+          <button class="icon-btn" aria-label="Fechar" onClick="{{fecharDrw}}" style="width: 36px; height: 36px; border: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+        </div>
+        <div class="scroll" style="padding: 16px 20px; display: flex; flex-direction: column; gap: 14px">
+          <sc-if value="{{trocaForm}}" hint-placeholder-val="{{ true }}">
+            <label class="field">Trocar com<select class="in" value="{{trocaCom}}" onChange="{{onTrocaCom}}"><option value="">Escolha o médico</option><option>Dr. Marcos Freire</option><option>Dra. Cecília Souto</option></select></label>
+            <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+              <label class="field">Meu turno<select class="in"><option>Terça 17/11, tarde</option><option>Quinta 19/11, manhã</option></select></label>
+              <label class="field">Turno dele<select class="in"><option>Quarta 18/11, tarde</option><option>Sexta 20/11, manhã</option></select></label>
+            </div>
+            <label class="field">Motivo<input class="in" placeholder="Ex.: consulta médica pessoal"></label>
+            <div class="t13 mute">Só são oferecidos médicos liberados para os mesmos exames (corpo clínico). A troca vale quando o outro médico aceitar e a coordenação confirmar.</div>
+          </sc-if>
+          <sc-if value="{{trocaFeito}}" hint-placeholder-val="{{ false }}">
+            <div class="banner ok" role="status"><div class="t14" style="line-height: 1.5"><b>Pedido TRC-2026-0017 enviado</b> para {{trocaCom}} às 08:42. Depois do aceite, vai para a coordenação. Os pacientes só são avisados quando a troca for confirmada.</div></div>
+          </sc-if></div>
+        <div class="row" style="gap: 8px; padding: 14px 20px 18px; border-top: 1px solid #E8EAEF"><sc-if value="{{trocaForm}}" hint-placeholder-val="{{ true }}"><button class="btn btn-sm" onClick="{{fecharDrw}}" style="margin-left: auto">Cancelar</button><button class="btn btn-sm btn-p" disabled="{{trocaSemCom}}" onClick="{{enviarTroca}}">Enviar pedido</button></sc-if><sc-if value="{{trocaFeito}}" hint-placeholder-val="{{ false }}"><button class="btn btn-sm btn-p" onClick="{{fecharDrw}}" style="margin-left: auto">Fechar</button></sc-if></div>
+      </aside>
+    </sc-if>
   </main>
 </div>
 </x-dc>
@@ -114,7 +165,7 @@ body{margin:0;background:#F2F3F6}
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { aba: 'todos', lado: 'avisos', chamado: false };
+    this.state = { aba: 'todos', lado: 'avisos', chamado: false, drw: '', bloqMotivo: '', bloqOk: false, trocaCom: '', trocaOk: false };
   }
   renderVals() {
     const s = this.state;
@@ -157,7 +208,17 @@ class Component extends DCLogic {
       ['Antônio Carlos Ribeiro: hipertenso, usa losartana', 'Informado na triagem antes do exame', 'background: #FFF3DF; color: #9A5B00', 'M12 7v6M12 17h.01M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z']
     ];
     const SEM = [['Segunda', 12, 70], ['Terça', 15, 88], ['Quarta', 0, 0], ['Quinta', 13, 76], ['Sexta, hoje', 14, 82], ['Sábado', 0, 0]];
-    return {
+    const st = this.state;
+    const extras = {
+      abrirBloq: () => this.setState({ drw: 'bloq', bloqOk: false }), abrirTroca: () => this.setState({ drw: 'troca', trocaOk: false }),
+      fecharDrw: () => this.setState({ drw: '' }),
+      drwBloq: st.drw === 'bloq', bloqForm: !st.bloqOk, bloqFeito: st.bloqOk,
+      bloqMotivo: st.bloqMotivo, onBloqMotivo: e => this.setState({ bloqMotivo: e.target.value }), bloqSemMotivo: !st.bloqMotivo,
+      bloqAviso: st.bloqMotivo ? '' : 'Escolha o motivo para enviar.', enviarBloq: () => this.setState({ bloqOk: true }),
+      drwTroca: st.drw === 'troca', trocaForm: !st.trocaOk, trocaFeito: st.trocaOk,
+      trocaCom: st.trocaCom, onTrocaCom: e => this.setState({ trocaCom: e.target.value }), trocaSemCom: !st.trocaCom, enviarTroca: () => this.setState({ trocaOk: true })
+    };
+    return Object.assign(extras, {
       nEsp: s.chamado ? '0' : '1', espSub: s.chamado ? 'Antônio chamado para a Sala 1' : 'Antônio C. Ribeiro, 19 min',
       abas: A.map(([k, t]) => ({ t, n: String(conta(k)), cls: s.aba === k ? 'on' : '', atual: s.aba === k ? 'page' : 'false', ir: () => this.setState({ aba: k }) })),
       lista, vazio: lista.length === 0,
@@ -166,7 +227,7 @@ class Component extends DCLogic {
       ladoAvisos: s.lado === 'avisos', ladoSemana: s.lado === 'semana',
       avisos: AV.map(([t, sub, cor, ic]) => ({ t, s: sub, cor, ok: ic.charAt(1) === '2', al: ic.charAt(1) !== '2' })),
       semana: SEM.map(([d, n, p]) => ({ d, cls: d.indexOf('hoje') > 0 ? 'b' : '', n: n ? n + ' pacientes' : (d === 'Quarta' ? 'Congresso, bloqueado' : 'Sem agenda'), w: 'width: ' + p + '%' }))
-    };
+    });
   }
 }
 </script>

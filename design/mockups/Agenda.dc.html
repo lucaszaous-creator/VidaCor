@@ -51,13 +51,13 @@ body{margin:0;background:#F2F3F6}
         <sc-for list="{{visoes}}" as="v" hint-placeholder-count="2"><button class="{{v.cls}}" aria-pressed="{{v.on}}" onClick="{{v.ir}}" style="height: 40px">{{v.t}}</button></sc-for>
       </div>
       <label class="sr" for="ag-sala">Salas</label>
-      <select id="ag-sala" class="in" style="width: auto; min-height: 40px; border-radius: 999px; font-size: 14px; font-weight: 550"><option>Todas as salas</option><option>Sala 1, ecocardiograma</option><option>Sala 2, USG obstétrica</option><option>Sala 6, tomografia</option></select>
+      <select id="ag-sala" class="in" value="{{salaSel}}" onChange="{{onSala}}" style="width: auto; min-height: 40px; border-radius: 999px; font-size: 14px; font-weight: 550"><sc-for list="{{opSalas}}" as="o" hint-placeholder-count="8"><option value="{{o.v}}">{{o.t}}</option></sc-for></select>
       <a class="btn btn-p" href="Agendamento-Guia.dc.html">Agendar</a>
     </header>
 
     <div class="row wrap t13 mute" style="gap: 16px; padding: 0 4px">
-      <span><b style="color: #0F172A">42</b> agendados</span>
-      <span><b style="color: #0C72B0">7</b> horários livres</span>
+      <span><b style="color: #0F172A">{{nAg}}</b> agendados</span>
+      <span><b style="color: #0C72B0">{{nLivres}}</b> horários livres</span>
       <a href="Lista-Espera.dc.html"><b>3</b> na lista de espera</a>
       <a href="Comunicacao.dc.html"><b>6</b> sem confirmação amanhã</a>
       <a href="Lista-Espera.dc.html"><b>2</b> pedidos do app</a>
@@ -71,16 +71,16 @@ body{margin:0;background:#F2F3F6}
       <sc-if value="{{modoDia}}" hint-placeholder-val="{{ true }}">
         <section class="card pane" aria-label="Agenda do dia por sala" style="padding: 0; flex: 1 1 auto">
           <div class="scroll">
-            <div class="gd">
-              <div class="gh">
+            <div class="gd" style="{{gdCols}}">
+              <div class="gh" style="{{gdCols}}">
                 <div></div>
                 <sc-for list="{{salas}}" as="s" hint-placeholder-count="7"><div><div class="t14 b clamp1">{{s.t}}</div><div class="t12 mute clamp1">{{s.q}}</div></div></sc-for>
               </div>
               <sc-for list="{{linhas}}" as="l" hint-placeholder-count="24">
                 <div style="{{l.ln}}"></div><div class="hr" style="{{l.pos}}">{{l.h}}</div>
               </sc-for>
-              <div class="blk" style="grid-column: 5; grid-row: 2 / span 12">Sala fechada pela manhã</div>
-              <div class="blk" style="grid-column: 6; grid-row: 9 / span 3; flex-direction: column; background: #F7FBFE; border: 1.5px dashed #BFD9EE"><b class="t13" style="color: #0C72B0">Ordem de chegada</b><span class="t12 mute">10:30 às 12:00</span></div>
+              <sc-if value="{{blkErgo}}" hint-placeholder-val="{{ true }}"><div class="blk" style="{{blkErgoPos}}">Sala fechada pela manhã</div></sc-if>
+              <sc-if value="{{blkRx}}" hint-placeholder-val="{{ true }}"><div class="blk" style="{{blkRxPos}}; flex-direction: column; background: #F7FBFE; border: 1.5px solid #BFD9EE"><b class="t13" style="color: #0C72B0">Ordem de chegada</b><span class="t12 mute">10:30 às 12:00</span></div></sc-if>
               <div class="blk" style="grid-column: 2 / -1; grid-row: 12 / span 2">Intervalo, 12:00 às 13:00</div>
               <sc-for list="{{eventos}}" as="e" hint-placeholder-count="12">
                 <button class="{{e.cls}}" style="{{e.pos}}" onClick="{{e.abrir}}" aria-label="{{e.aria}}"><span class="n"><i class="dot" style="{{e.dot}}"></i><span class="nm">{{e.curto}}</span></span><span class="s">{{e.sub}}</span></button>
@@ -88,8 +88,8 @@ body{margin:0;background:#F2F3F6}
               <sc-for list="{{livres}}" as="f" hint-placeholder-count="7">
                 <button class="{{f.cls}}" style="{{f.pos}}" onClick="{{f.abrir}}" aria-label="{{f.aria}}">Livre {{f.h}}</button>
               </sc-for>
-              <div aria-hidden="true" style="grid-column: 2 / -1; grid-row: 5; align-self: start; margin-top: 15px; height: 2px; background: #C2334D; z-index: 0"></div>
-              <div style="grid-column: 1; grid-row: 5; align-self: start; margin-top: 8px; font: 700 11px Inter, sans-serif; color: #C2334D; text-align: right; padding-right: 8px; z-index: 3">08:40</div>
+              <sc-if value="{{ehHoje}}" hint-placeholder-val="{{ true }}"><div aria-hidden="true" style="grid-column: 2 / -1; grid-row: 5; align-self: start; margin-top: 15px; height: 2px; background: #C2334D; z-index: 0"></div>
+              <div style="grid-column: 1; grid-row: 5; align-self: start; margin-top: 8px; font: 700 11px Inter, sans-serif; color: #C2334D; text-align: right; padding-right: 8px; z-index: 3">08:40</div></sc-if>
             </div>
           </div>
         </section>
@@ -159,13 +159,13 @@ body{margin:0;background:#F2F3F6}
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { dia: 0, visao: 'dia', sel: '', canc: {}, cancelando: false };
+    this.state = { dia: 0, visao: 'dia', sel: '', canc: {}, cancelando: false, sala: 'todas' };
   }
   hora(r) { const m = 7 * 60 + (r - 2) * 30; return String(Math.floor(m / 60)).padStart(2, '0') + ':' + (m % 60 ? '30' : '00'); }
   curto(n) { const p = n.split(' '); return p.length > 2 ? p[0] + ' ' + p[1].charAt(0) + '. ' + p[p.length - 1] : n; }
   renderVals() {
     const s = this.state;
-    const SALAS = [['Sala 1, eco', 'Dr. Paulo Medeiros'], ['Sala 2, obstétrica', 'Dra. Renata Alves'], ['Sala 3, USG e Doppler', 'Dr. Marcos Freire'], ['Sala 4, ergométrico', 'Dr. Paulo Medeiros'], ['Sala 5, raio X', 'Téc. Bruno Sales'], ['Sala 6, tomografia', 'Dra. Cecília Souto'], ['Sala 7, MAPA', 'Enf. Lívia Prates']];
+    const SALAS = [['Sala 1, eco', 'Dr. Paulo Medeiros'], ['Sala 2, obstétrica', 'Dra. Renata Alves'], ['Sala 3, USG e Doppler', 'Dr. Marcos Freire'], ['Sala 4, ergométrico', 'Dr. Paulo Medeiros'], ['Sala 5, raio X', 'Téc. Bruno Sales'], ['Sala 6, tomografia', 'Dra. Cecília Souto'], ['Posto MAPA e Holter', 'Enf. Lívia Prates']];
     // [col, row, span, estado, nome, nascimento, exame, convênio]
     const E = [
       [2, 2, 1, 'done', 'Maria Helena Duarte', '12/03/1968', 'Ecocardiograma', 'Unimed'],
@@ -207,41 +207,61 @@ class Component extends DCLogic {
       [8, 6, 1, '', 'Jorge Luiz Batista', '01/08/1959', 'Instalação de Holter', 'Unimed'],
       [8, 22, 1, '', 'Renan Farias Alves', '18/02/1984', 'Instalação de MAPA', 'Particular']
     ];
-    const ST = { done: ['Concluído', 'chip', '#CBD2DC'], now: ['Em exame', 'chip c-violet', '#5B45B5'], wait: ['Aguardando', 'chip c-amber', '#D97706'], '': ['Agendado', 'chip c-blue', 'transparent'], cx: ['Cancelado', 'chip', 'transparent'] };
-    const ACAO = { done: ['Abrir ficha', 'Paciente.dc.html'], now: ['Ver atendimento', 'Atendimento.dc.html'], wait: ['Abrir check-in', 'Recepcao.dc.html'], '': ['Abrir ficha', 'Paciente.dc.html'], cx: ['Abrir ficha', 'Paciente.dc.html'] };
+    // dia: -1 ontem, 0 hoje, 1 e 2 próximos dias úteis. Fora de hoje a lista é outra (os mesmos pacientes não se repetem)
+    const dia = s.visao === 'dia' ? s.dia : 0;
+    const nomes = E.map(e => [e[4], e[5], e[7]]);
+    const porSala = {};
+    E.forEach((e, i) => { (porSala[e[0]] = porSala[e[0]] || []).push(i); });
+    const Ed = dia === 0 ? E : E.map((e, i) => {
+      const grupo = porSala[e[0]], k = grupo.indexOf(i), outro = grupo[(k + dia + 2) % grupo.length];
+      const [n, nasc, conv] = nomes[outro];
+      return [e[0], e[1], e[2], dia < 0 ? (i % 11 === 3 ? 'falta' : 'done') : '', n, nasc, e[6], conv];
+    }).filter((e, i) => dia < 0 || i % 5 !== 1);
+    const vis = c => s.sala === 'todas' || String(c) === s.sala;
+    const coluna = c => s.sala === 'todas' ? c : 2;
+    const ST = { falta: ['Faltou', 'chip c-rose', 'transparent'], done: ['Concluído', 'chip', '#CBD2DC'], now: ['Em exame', 'chip c-violet', '#5B45B5'], wait: ['Aguardando', 'chip c-amber', '#D97706'], '': ['Agendado', 'chip c-blue', 'transparent'], cx: ['Cancelado', 'chip', 'transparent'] };
+    const ACAO = { falta: ['Abrir ficha', 'Paciente.dc.html'], done: ['Abrir ficha', 'Paciente.dc.html'], now: ['Ver atendimento', 'Atendimento.dc.html'], wait: ['Abrir check-in', 'Recepcao.dc.html'], '': ['Abrir ficha', 'Paciente.dc.html'], cx: ['Abrir ficha', 'Paciente.dc.html'] };
     const F = [[3, 6], [4, 4], [4, 7], [6, 7], [7, 8], [2, 7], [8, 8]];
-    const pos = (c, r, n) => 'grid-column: ' + c + '; grid-row: ' + r + ' / span ' + n;
+    const pos = (c, r, n) => 'grid-column: ' + coluna(c) + '; grid-row: ' + r + ' / span ' + n;
     const fim = (r, n) => this.hora(r + n);
-    const est = (e, i) => s.canc['e' + i] ? 'cx' : e[3];
-    const eventos = E.map((e, i) => {
+    const est = (e, i) => s.canc[dia + ':e' + i] ? 'cx' : e[3];
+    const eventos = Ed.map((e, i) => ({ e, i })).filter(x => vis(x.e[0])).map(({ e, i }) => {
       const st = est(e, i), id = 'e' + i;
-      const sub = st === 'now' ? 'Em exame' : (st === 'wait' ? 'Aguardando' : (st === 'cx' ? 'Cancelado' : e[6]));
+      const sub = st === 'now' ? 'Em exame' : (st === 'wait' ? 'Aguardando' : (st === 'cx' ? 'Cancelado' : (st === 'falta' ? 'Faltou' : e[6])));
       return { cls: 'ev ' + st + (s.sel === id ? ' sel' : ''), pos: pos(e[0], e[1], e[2]), curto: this.curto(e[4]), sub,
         dot: 'background: ' + ST[st][2] + (st === 'now' || st === 'wait' ? '' : '; display: none'),
         aria: e[4] + ', ' + this.hora(e[1]) + ', ' + ST[st][0], abrir: () => this.setState({ sel: id, cancelando: false }) };
     });
-    const livres = F.map(([c, r], i) => ({ cls: 'free' + (s.sel === 'f' + i ? ' sel' : ''), pos: pos(c, r, 1), h: this.hora(r), aria: 'Horário livre às ' + this.hora(r) + ', ' + SALAS[c - 2][0], abrir: () => this.setState({ sel: 'f' + i, cancelando: false }) }));
+    const Fd = dia < 0 ? [] : (dia === 0 ? F : F.filter((x, k) => (k + dia) % 2 === 0));
+    const livres = Fd.map(([c, r], i) => ({ c, r, i })).filter(x => vis(x.c)).map(({ c, r, i }) => ({ cls: 'free' + (s.sel === 'f' + i ? ' sel' : ''), pos: pos(c, r, 1), h: this.hora(r), aria: 'Horário livre às ' + this.hora(r) + ', ' + SALAS[c - 2][0], abrir: () => this.setState({ sel: 'f' + i, cancelando: false }) }));
     let d = {};
     if (s.sel.charAt(0) === 'e') {
-      const i = +s.sel.slice(1), e = E[i], st = est(e, i), sala = SALAS[e[0] - 2];
+      const i = +s.sel.slice(1), e = Ed[i], st = est(e, i), sala = SALAS[e[0] - 2];
       d = { quando: this.hora(e[1]) + ' às ' + fim(e[1], e[2]), titulo: e[4], nasc: e[5], primeiro: e[4].split(' ')[0], ehPac: true, ehLivre: false,
         st: ST[st][0], stCls: ST[st][1], acao: ACAO[st][0], href: ACAO[st][1], podeMexer: st === '' && !s.cancelando,
         kv: [{ k: 'Exame', v: e[6] }, { k: 'Sala', v: sala[0] }, { k: 'Responsável', v: sala[1] }, { k: 'Convênio', v: e[7] }, { k: 'Protocolo', v: 'AG-2611-' + String(4100 + i * 7) }],
         cancelando: s.cancelando && st === '', cancelado: st === 'cx',
         cancelar: () => this.setState({ cancelando: true }), voltar: () => this.setState({ cancelando: false }),
-        confirmar: () => this.setState(p => ({ cancelando: false, canc: Object.assign({}, p.canc, { [s.sel]: true }) })) };
+        confirmar: () => this.setState(p => ({ cancelando: false, canc: Object.assign({}, p.canc, { [dia + ':' + s.sel]: true }) })) };
     } else if (s.sel.charAt(0) === 'f') {
-      const f = F[+s.sel.slice(1)], sala = SALAS[f[0] - 2];
+      const f = Fd[+s.sel.slice(1)], sala = SALAS[f[0] - 2];
       d = { quando: this.hora(f[1]) + ' às ' + fim(f[1], 1), titulo: 'Horário livre', nasc: sala[0], ehPac: false, ehLivre: true, kv: [{ k: 'Sala', v: sala[0] }, { k: 'Responsável', v: sala[1] }, { k: 'Duração', v: '30 min' }, { k: 'Na espera', v: '3 pacientes compatíveis' }], cancelando: false, cancelado: false };
     }
     const T = ['Quinta, 5 de novembro', 'Sexta, 6 de novembro', 'Sábado, 7 de novembro', 'Segunda, 9 de novembro'];
     const W = [['Segunda, 2/11', 38, 6, 84, ''], ['Terça, 3/11', 41, 3, 93, 'Sala 2 lotada'], ['Quarta, 4/11', 36, 8, 82, 'Dr. Paulo em congresso'], ['Quinta, 5/11', 44, 2, 96, '2 faltas, 1 encaixe'], ['Sexta, 6/11', 42, 7, 86, 'Hoje'], ['Sábado, 7/11', 18, 12, 60, 'Só manhã']];
     return {
       titulo: s.visao === 'semana' ? 'Semana de 2 a 7 de novembro' : T[Math.max(0, Math.min(T.length - 1, s.dia + 1))],
-      diaAnt: () => this.setState(p => ({ dia: Math.max(-1, p.dia - 1) })), diaProx: () => this.setState(p => ({ dia: Math.min(2, p.dia + 1) })), diaHoje: () => this.setState({ dia: 0 }),
+      diaAnt: () => this.setState(p => ({ dia: Math.max(-1, p.dia - 1), sel: '' })), diaProx: () => this.setState(p => ({ dia: Math.min(2, p.dia + 1), sel: '' })), diaHoje: () => this.setState({ dia: 0, sel: '' }),
+      ehHoje: dia === 0 && vis(2),
+      nAg: String(Ed.filter((e, i) => vis(e[0]) && est(e, i) !== 'cx').length), nLivres: String(livres.length),
+      salaSel: s.sala, onSala: ev => this.setState({ sala: ev.target.value, sel: '' }),
+      opSalas: [{ v: 'todas', t: 'Todas as salas' }].concat(SALAS.map((x, i) => ({ v: String(i + 2), t: x[0] }))),
+      gdCols: 'grid-template-columns: 56px repeat(' + (s.sala === 'todas' ? 7 : 1) + ', minmax(0, 1fr))',
+      blkErgo: vis(5) && dia >= 0, blkErgoPos: 'grid-column: ' + coluna(5) + '; grid-row: 2 / span 12',
+      blkRx: vis(6) && dia >= 0, blkRxPos: 'grid-column: ' + coluna(6) + '; grid-row: 9 / span 3',
       visoes: [['dia', 'Dia'], ['semana', 'Semana']].map(([k, t]) => ({ t, cls: s.visao === k ? 'on' : '', on: s.visao === k ? 'true' : 'false', ir: () => this.setState({ visao: k, sel: '' }) })),
       modoDia: s.visao === 'dia', modoSemana: s.visao === 'semana',
-      salas: [['Eco', 'Sala 1, Dr. Paulo'], ['Obstétrica', 'Sala 2, Dra. Renata'], ['USG e Doppler', 'Sala 3, Dr. Marcos'], ['Ergométrico', 'Sala 4, Dr. Paulo'], ['Raio X', 'Sala 5, Téc. Bruno'], ['Tomografia', 'Sala 6, Dra. Cecília'], ['MAPA e Holter', 'Sala 7, Enf. Lívia']].map(([t, q]) => ({ t, q })),
+      salas: [['Eco', 'Sala 1, Dr. Paulo'], ['Obstétrica', 'Sala 2, Dra. Renata'], ['USG e Doppler', 'Sala 3, Dr. Marcos'], ['Ergométrico', 'Sala 4, Dr. Paulo'], ['Raio X', 'Sala 5, Téc. Bruno'], ['Tomografia', 'Sala 6, Dra. Cecília'], ['MAPA e Holter', 'Posto, Enf. Lívia']].map(([t, q], i) => ({ t, q, i })).filter(x => vis(x.i + 2)),
       linhas: Array.from({ length: 24 }, (_, k) => { const r = k + 2; return { ln: 'grid-column: 1 / -1; grid-row: ' + r + '; border-top: 1px solid ' + (k % 2 ? '#F4F5F7' : '#E8EAEF'), pos: 'grid-column: 1; grid-row: ' + r, h: k % 2 ? '' : this.hora(r) }; }),
       eventos, livres,
       temDrw: s.sel !== '' && s.visao === 'dia', d, fechar: () => this.setState({ sel: '', cancelando: false }),

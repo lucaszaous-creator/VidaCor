@@ -141,7 +141,7 @@ class Component extends DCLogic {
       { id: 'r6', t: 'Valor diferente da tabela vigente', ver: 'Unimed v24', op: 'Unimed', ef: 'Corrigir antes', efCls: 'chip c-amber', fazer: 'Aplique a tabela 2026 da Unimed (versão 14).', acao: 'Aplicar tabela 2026', ok: 'Aplicada',
         guias: [['Cláudia Bastos Nunes', '22/08/1965', '2026-1102-0012', 'Cobrado R$ 236,80, tabela atual R$ 248,60'], ['Antônio Carlos Ribeiro', '15/06/1954', '2026-1103-0031', 'Cobrado R$ 186,90, tabela atual R$ 196,20']] },
       { id: 'r7', t: 'Prazo de envio vence em 7 dias', ver: 'Amil v14', op: 'Amil', ef: 'Atenção', efCls: 'chip c-blue', fazer: 'Inclua no próximo lote da Amil.', acao: 'Incluir no lote', ok: 'No lote',
-        guias: [['Neusa Aparecida Freitas', '05/01/1949', '2026-1104-0033', 'Envio até 14/11'], ['Paulo Roberto Dias', '11/02/1975', '2026-1101-0060', 'Envio até 14/11']] },
+        guias: [['Neusa Aparecida Freitas', '22/04/1961', '2026-1104-0033', 'Envio até 14/11'], ['Paulo Roberto Dias', '27/01/1960', '2026-1101-0060', 'Envio até 14/11']] },
       { id: 'r8', t: 'Carteirinha, elegibilidade e senha', ver: 'Todas as regras', op: 'Todas', ef: 'OK', efCls: 'chip c-green', fazer: 'Nada a fazer.', guias: [], tudoOk: true }
     ];
     const resolvidas = r => r.guias.filter((g, i) => s.feito[r.id + i]).length;

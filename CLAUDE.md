@@ -16,6 +16,12 @@ Servidor **local**. Núcleo em **Rust** (axum, sqlx), banco **PostgreSQL**, tela
 **Estado atual:** documentação, mockups e arquitetura. Ainda não há código de
 produção. Quando houver, o comando único de verificação será `just test`.
 
+## Regra de decisão (obrigatória) — [ADR-0019](docs/adr/0019-decisoes-pelo-mais-profissional-com-lastro.md)
+Na dúvida entre caminhos, escolha **o mais profissional e o mais rastreável** e registre em
+[docs/decisoes.md](docs/decisoes.md): data, quem decidiu, alternativas, motivo, onde foi aplicado e como desfazer.
+Nada é apagado para resolver. Só pergunte ao dono do produto o que depende de informação que só ele tem ou de
+aprovação formal; mesmo assim, leve uma proposta pronta com premissas marcadas "a confirmar".
+
 ## As seis garantias (inegociáveis)
 
 ### G1 · O servidor decide; o cliente só pede

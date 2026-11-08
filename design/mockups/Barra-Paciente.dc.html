@@ -13,25 +13,24 @@
 <style>body{margin:0}</style>
 </helmet>
 <div style="font-family: Inter, sans-serif; color: #0F172A; position: relative">
-  <section class="pbar" aria-label="Paciente em foco: {{nome}}, nascido em {{nasc}}">
-    <div class="id" style="flex: 1 1 320px">
-      <span class="av" style="width: 48px; height: 48px; font-size: 15px; background: #E3F0FA; color: #0C72B0">{{ini}}</span>
-      <div style="min-width: 0; line-height: 1.3">
-        <div class="nm">{{nome}}</div>
-        <div class="dn"><b>{{nasc}}</b>, {{idade}}, {{sexo}}, {{convenio}}</div>
+  <section aria-label="Paciente em foco: {{nome}}, nascido em {{nasc}}" style="display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 16px; padding: 10px 14px; border-radius: 16px; background: #fff; box-shadow: 0 1px 2px rgba(15,23,42,.05)">
+    <div class="row" style="gap: 12px; min-width: 0">
+      <span class="av" style="width: 40px; height: 40px; font-size: 14px; background: #E3F0FA; color: #0C72B0">{{ini}}</span>
+      <div style="min-width: 0; line-height: 1.3; white-space: nowrap">
+        <div style="font-size: 16px; font-weight: 650">{{nome}}</div>
+        <div class="t13" style="color: #334155"><b>{{nasc}}</b>, {{idade}}, {{sexo}}</div>
       </div>
     </div>
-    <div class="row wrap" style="gap: 8px; flex: 1 1 360px">
-      <sc-if value="{{temAlergia}}" hint-placeholder-val="{{ true }}"><span class="al-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 8v5M12 16.5h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg>Alergia: {{alergia}}</span></sc-if>
-      <span class="t14" style="color: #334155">{{exame}}, {{local}}</span>
-      <sc-for list="{{alertas}}" as="a" hint-placeholder-count="1"><span class="t14 b" style="color: #9A5B00">{{a}}</span></sc-for>
-      <sc-if value="{{conferida}}" hint-placeholder-val="{{ true }}"><span class="chip c-green"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Pulseira conferida {{conferidaHora}}</span></sc-if>
-      <sc-if value="{{naoConferida}}" hint-placeholder-val="{{ false }}"><span class="chip c-rose">Pulseira não bipada</span></sc-if>
+    <div class="row" style="gap: 10px; min-width: 0; white-space: nowrap; overflow: hidden">
+      <sc-if value="{{temAlergia}}" hint-placeholder-val="{{ true }}"><span class="al-chip" style="flex: none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 8v5M12 16.5h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg>Alergia: {{alergia}}</span></sc-if>
+      <sc-if value="{{conferida}}" hint-placeholder-val="{{ true }}"><span class="chip c-green" style="flex: none" title="Pulseira conferida às {{conferidaHora}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Pulseira {{conferidaHora}}</span></sc-if>
+      <sc-if value="{{naoConferida}}" hint-placeholder-val="{{ false }}"><span class="chip c-rose" style="flex: none">Pulseira não bipada</span></sc-if>
+      <span class="t13" style="min-width: 0; overflow: hidden; text-overflow: ellipsis; color: #334155" title="{{resumo}}"><sc-for list="{{alertas}}" as="a" hint-placeholder-count="1"><b style="color: #9A5B00">{{a}}</b>, </sc-for>{{exame}}, {{local}}, {{convenio}}</span>
     </div>
     <div class="row" style="gap: 8px">
       <button class="btn btn-sm" aria-expanded="{{menuAria}}" aria-haspopup="listbox" onClick="{{toggle}}">Trocar paciente
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
-      <a class="icon-btn" href="Paciente.dc.html" aria-label="Abrir ficha completa de {{nome}}" title="Ficha completa"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 4h6v6M20 4l-8 8M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></a>
+      <a class="icon-btn" href="Paciente.dc.html" aria-label="Abrir ficha completa de {{nome}}" title="Ficha completa" style="width: 36px; height: 36px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 4h6v6M20 4l-8 8M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></a>
     </div>
   </section>
   <sc-if value="{{menuAberto}}" hint-placeholder-val="{{ false }}">
@@ -49,7 +48,7 @@
   </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"ini":{"editor":"text","default":"SC"},"nome":{"editor":"text","default":"Sônia Maria Castro"},"nasc":{"editor":"text","default":"03/02/1962"},"idade":{"editor":"text","default":"64 anos"},"sexo":{"editor":"text","default":"feminino"},"convenio":{"editor":"text","default":"Unimed"},"exame":{"editor":"text","default":"Ecocardiograma"},"local":{"editor":"text","default":"Sala 1"},"alergia":{"editor":"text","default":"dipirona"},"alertas":{"editor":"text","default":"Hipertensa (losartana)"},"conferida":{"editor":"text","default":"08:31"},"$preview":{"width":1100,"height":140}}'>
+<script type="text/x-dc" data-dc-script data-props='{"ini":{"editor":"text","default":"SC"},"nome":{"editor":"text","default":"Sônia Maria Castro"},"nasc":{"editor":"text","default":"03/02/1962"},"idade":{"editor":"text","default":"64 anos"},"sexo":{"editor":"text","default":"feminino"},"convenio":{"editor":"text","default":"Unimed"},"exame":{"editor":"text","default":"Ecocardiograma"},"local":{"editor":"text","default":"Sala 1"},"alergia":{"editor":"text","default":"dipirona"},"alertas":{"editor":"text","default":"Hipertensa (losartana)"},"conferida":{"editor":"text","default":"08:31"},"$preview":{"width":1100,"height":80}}'>
 class Component extends DCLogic {
   constructor(props) { super(props); this.state = { aberto: false, troca: null }; }
   renderVals() {
@@ -69,6 +68,7 @@ class Component extends DCLogic {
       alergia: cur.alergia, temAlergia: !!cur.alergia,
       alertas: cur.alertas ? String(cur.alertas).split(',').map(s => s.trim()).filter(Boolean) : [],
       conferida: conf, naoConferida: !conf, conferidaHora: cur.conferida,
+      resumo: [cur.alertas, cur.exame, base.local, cur.convenio].filter(Boolean).join(', '),
       menuAberto: !!this.state.aberto, menuAria: this.state.aberto ? 'true' : 'false',
       toggle: () => this.setState(s => ({ aberto: !s.aberto })),
       outros: outros.map(o => ({ ini: o.ini, nome: o.nome, nasc: o.nasc, exame: o.exame, hora: o.hora,

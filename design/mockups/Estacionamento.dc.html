@@ -52,7 +52,7 @@ body{margin:0}
       <div><div class="t13 mute">Vagas livres</div><div class="v num">{{livres}} <span class="t13 mute" style="font-weight: 500">de 40</span></div></div>
       <div><div class="t13 mute">Ocupadas</div><div class="v num">{{ocupadas}}</div></div>
       <div><div class="t13 mute">Preferenciais livres</div><div class="v num">2 <span class="t13 mute" style="font-weight: 500">de 4</span></div></div>
-      <div><div class="t13 mute">Mensalistas no pátio</div><div class="v num">5 <span class="t13 mute" style="font-weight: 500">de 8</span></div></div>
+      <div><div class="t13 mute">Mensalistas no pátio</div><div class="v num">{{mensNo}} <span class="t13 mute" style="font-weight: 500">de {{mensTot}} contratos</span></div></div>
     </section>
 
     <nav class="tabs" aria-label="Seções">
@@ -191,8 +191,21 @@ class Component extends DCLogic {
       { placa: 'QIT9A44', ent: '09:10', min: 90, tipo: 'pac', vin: 'Antônio Carlos Ribeiro', vinSub: '15/06/1954, ecocardiograma 09:30', cort: 120 },
       { placa: 'RTA2C55', ent: '10:31', min: 9, tipo: 'pac', vin: 'Juliana Sampaio Rocha', vinSub: '12/04/1993, gestante, vaga preferencial', cort: 120 },
       { placa: 'SBC1E08', ent: '08:45', min: 115, tipo: 'vis', vin: 'Visitante', vinSub: 'Acompanhante, sem exame no próprio nome', cort: 0 },
-      { placa: 'PWZ6H31', ent: '07:05', min: 215, tipo: 'mens', vin: 'Dr. Paulo Medeiros', vinSub: 'Mensalista, vaga M1', cort: 0 }
+      { placa: 'PWZ6H31', ent: '07:05', min: 215, tipo: 'mens', vin: 'Dr. Paulo Medeiros', vinSub: 'Mensalista, vaga M1', cort: 0 },
+      { placa: 'QDR2K70', ent: '07:40', min: 180, tipo: 'mens', vin: 'Dra. Renata Alves', vinSub: 'Mensalista, vaga rotativa', cort: 0 },
+      { placa: 'TCS5L21', ent: '06:52', min: 228, tipo: 'mens', vin: 'Dra. Cecília Souto', vinSub: 'Mensalista, vaga M2', cort: 0 }
     ].concat(s.extra).filter(v => s.fora.indexOf(v.placa) < 0);
+    // contratos de mensalista; a situação "no pátio" vem da lista de veículos, não é digitada
+    const MENS = [
+      ['PWZ6H31', 'Dr. Paulo Medeiros', 'Vaga fixa M1, desconto em folha', ''],
+      ['TCS5L21', 'Dra. Cecília Souto', 'Vaga fixa M2, desconto em folha', ''],
+      ['QDR2K70', 'Dra. Renata Alves', 'Vaga rotativa, desconto em folha', ''],
+      ['RFE8M13', 'Dr. Marcos Freire', 'Vaga rotativa, boleto', 'Boleto vence 10/11'],
+      ['SAN0P49', 'Ana Souza (recepção)', 'Vaga rotativa, desconto em folha', ''],
+      ['BSL7R02', 'Bruno Sales (técnico)', 'Vaga rotativa, desconto em folha', ''],
+      ['PLM3T88', 'Patrícia Lemos (coordenação)', 'Vaga rotativa, desconto em folha', ''],
+      ['MTX9G15', 'Marcos Teixeira (faturamento)', 'Vaga rotativa, boleto', '']
+    ];
     const calc = v => {
       if (v.tipo === 'mens') return { cob: 0, val: 0 };
       const cob = Math.max(0, v.min - v.cort); return { cob, val: Math.ceil(cob / 60) * 8 };
@@ -247,12 +260,9 @@ class Component extends DCLogic {
         this.setState(st => ({ extra: st.extra.concat([nv]), manual: false, placaNova: '', aba: 'pat', sel: p, toast: 'Entrada de ' + p + ' registrada com o motivo. A cortesia começa a contar agora.',
           hist: [['agora', 'Entrada ' + p, 'Manual, motivo registrado; portaria']].concat(st.hist) })); },
       mapa, mapaAria: 'Mapa do pátio: ' + (40 - ocup) + ' vagas livres de 40',
-      mensal: [
-        { placa: 'PWZ6H31', nome: 'Dr. Paulo Medeiros', plano: 'Vaga fixa M1, desconto em folha', sit: 'No pátio', cls: 'chip c-green' },
-        { placa: 'QDR2K70', nome: 'Dra. Renata Alves', plano: 'Vaga rotativa, desconto em folha', sit: 'No pátio', cls: 'chip c-green' },
-        { placa: 'RFE8M13', nome: 'Dr. Marcos Freire', plano: 'Vaga rotativa, boleto', sit: 'Boleto vence 10/11', cls: 'chip c-amber' },
-        { placa: 'SAN0P49', nome: 'Ana Souza (recepção)', plano: 'Vaga rotativa, desconto em folha', sit: 'Fora', cls: 'chip' }
-      ],
+      mensal: MENS.map(m => { const no = base.some(v => v.placa === m[0]); return { placa: m[0], nome: m[1], plano: m[2],
+        sit: m[3] ? m[3] : (no ? 'No pátio' : 'Fora'), cls: m[3] ? 'chip c-amber' : (no ? 'chip c-green' : 'chip') }; }),
+      mensNo: String(base.filter(v => v.tipo === 'mens').length), mensTot: String(MENS.length),
       hist: s.hist.map(([h, t, sub]) => ({ h, t, s: sub }))
     };
   }

@@ -21,5 +21,6 @@
 | [0016](0016-seguranca-por-classe-de-ataque.md) | Segurança por classe de ataque (Cloudflare security-audit) | Proposto |
 | [0017](0017-permissoes-e-rls.md) | Permissões em três camadas (perfil, contexto e RLS) | Proposto |
 | [0018](0018-lastro-e-rastreabilidade.md) | Lastro e rastreabilidade em todo registro | Proposto |
+| [0019](0019-decisoes-pelo-mais-profissional-com-lastro.md) | Decidir pelo mais profissional e rastreável, com registro | Aceito |
 
 Visão geral em [11 · Arquitetura e infraestrutura](../11-arquitetura-e-infraestrutura.md).

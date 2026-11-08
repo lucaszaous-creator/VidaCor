@@ -215,7 +215,7 @@ class Component extends DCLogic {
       ['ent', 'Irene Couto Lago', 'USG de mama', 'usg', 'RA', 'Enviado ao médico', 'chip c-green'],
       ['ent', 'Sílvio Ramos Neto', 'MAPA 24 h', 'card', 'PM', 'Lido no portal 07:55', 'chip c-green']
     ];
-    const NASC = { 'Maria Helena Duarte': '12/03/1968', 'Beatriz Lima Cunha': '22/01/1990', 'José Augusto Pereira': '04/05/1949', 'Marta Silveira Reis': '17/10/1971' };
+    const NASC = { 'Maria Helena Duarte': '12/03/1968', 'Beatriz Lima Cunha': '19/07/1995', 'José Augusto Pereira': '04/05/1949', 'Marta Silveira Reis': '17/10/1971' };
     const norm = t => (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
     const q = norm(s.q).trim();
     const vis = C.filter(c => (s.rec === 'todos' || (s.rec === 'urg' ? c[7] : c[8])) && (!s.med || c[4] === s.med) && (!s.mod || c[3] === s.mod) && (!q || norm(c[1] + ' ' + c[2] + ' ' + DR[c[4]]).includes(q)));
