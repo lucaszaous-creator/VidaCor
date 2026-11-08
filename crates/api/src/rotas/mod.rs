@@ -12,13 +12,16 @@ pub mod autorizacoes_contrato;
 pub mod autorizacoes_portal;
 pub mod autorizacoes_resposta;
 pub mod bloqueios;
+pub mod cabecalho;
 pub mod cadastro;
 pub mod caixa;
 pub mod cancelamento;
+pub mod catalogo;
 pub mod chamada;
 pub mod comunicacao;
 pub mod configuracoes;
 pub mod contingencia;
+pub mod corpo_clinico;
 pub mod documentos;
 pub mod equipe;
 pub mod estoque;
@@ -202,6 +205,39 @@ pub fn rotas() -> Router<Estado> {
             get(aparelhos::listar).post(aparelhos::cadastrar),
         )
         .route("/v1/aparelhos/{id}/mudancas", post(aparelhos::mudar))
+        .route("/v1/corpo-clinico", get(corpo_clinico::listar))
+        .route(
+            "/v1/corpo-clinico/{id}/historico",
+            get(corpo_clinico::historico),
+        )
+        .route(
+            "/v1/corpo-clinico/{id}/pedidos",
+            post(corpo_clinico::pedidos::pedir),
+        )
+        .route(
+            "/v1/corpo-clinico/pedidos/{id}/decisao",
+            post(corpo_clinico::pedidos::decidir),
+        )
+        .route(
+            "/v1/catalogo/procedimentos",
+            get(catalogo::listar).post(catalogo::mudancas::incluir),
+        )
+        .route(
+            "/v1/catalogo/procedimentos/{tuss}/historico",
+            get(catalogo::historico),
+        )
+        .route(
+            "/v1/catalogo/procedimentos/{tuss}/mudancas",
+            post(catalogo::mudancas::mudar),
+        )
+        .route(
+            "/v1/catalogo/tabelas-de-preco",
+            post(catalogo::precos::publicar_tabela),
+        )
+        .route(
+            "/v1/configuracoes/cabecalho",
+            get(cabecalho::ver).post(cabecalho::publicar),
+        )
         .route("/v1/orcamentos/catalogo", get(orcamentos::catalogo))
         .route(
             "/v1/orcamentos",

@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO corpo.habilitacao (id, usuario_id, realiza, lauda, pedido_id, motivo, criado_por, origem, unidade_id, correlacao)\n             VALUES ($1, $2, $3, $4, $5, $6, $7, 'corpo_clinico', $8, $9)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "TextArray",
+        "TextArray",
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "1206d1f6b69fcb0714e37de3254a5cce5c1aa52074290f91b8587805b52b3c95"
+}

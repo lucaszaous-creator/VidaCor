@@ -16,6 +16,7 @@ import { manipuladoresDocumentos } from './nucleo-documentos';
 import { manipuladoresMenu } from './nucleo-menu';
 import { manipuladoresCadastro, manipuladoresPortal, portalSimulado } from './nucleo-portal';
 import { manipuladoresAReceber, manipuladoresPendencias, reiniciarPendencias } from './nucleo-pendencias';
+import { manipuladoresCadastros, reiniciarCadastros } from './nucleo-cadastros';
 import { problema } from './problema';
 
 export { problema } from './problema';
@@ -41,6 +42,7 @@ export function reiniciarNucleo(): void {
   reiniciarLaudoEstruturado();
   reiniciarFaturamento();
   reiniciarAutorizacoes();
+  reiniciarCadastros();
   portalSimulado.logado = false;
   lastroSimulado.integra = true;
   comunicacaoSimulada.whatsapp = true;
@@ -119,4 +121,4 @@ export const manipuladores = [
   }),
 ];
 
-export const servidor = setupServer(...manipuladoresDocumentos, ...manipuladoresInicio, ...manipuladoresPaciente, ...manipuladoresConfiguracoes, ...manipuladoresVisualizacao, ...manipuladoresEspera, ...manipuladoresAparelhos, ...manipuladoresOrcamento, ...manipuladoresAutorizacao, ...manipuladoresPainel, ...manipuladoresExterno, ...manipuladoresFaturamento, ...manipuladoresNfse, ...manipuladoresUsuarios, ...manipuladoresFinanceiro, ...manipuladoresComunicacao, ...manipuladoresIndicadores, ...manipuladoresLaudoEstruturado, ...manipuladoresLastro, ...manipuladoresEstoque, ...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores);
+export const servidor = setupServer(...manipuladoresCadastros, ...manipuladoresDocumentos, ...manipuladoresInicio, ...manipuladoresPaciente, ...manipuladoresConfiguracoes, ...manipuladoresVisualizacao, ...manipuladoresEspera, ...manipuladoresAparelhos, ...manipuladoresOrcamento, ...manipuladoresAutorizacao, ...manipuladoresPainel, ...manipuladoresExterno, ...manipuladoresFaturamento, ...manipuladoresNfse, ...manipuladoresUsuarios, ...manipuladoresFinanceiro, ...manipuladoresComunicacao, ...manipuladoresIndicadores, ...manipuladoresLaudoEstruturado, ...manipuladoresLastro, ...manipuladoresEstoque, ...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores);

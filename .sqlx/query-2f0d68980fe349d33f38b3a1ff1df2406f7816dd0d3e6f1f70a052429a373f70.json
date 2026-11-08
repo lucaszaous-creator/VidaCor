@@ -1,0 +1,31 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT u.nome FROM documentos.registro_profissional r JOIN identidade.usuario u ON u.id = r.usuario_id\n              WHERE r.unidade_id = $1 AND r.conselho = 'CRM' AND r.uf = $2 AND r.numero = $3 AND r.vigente AND r.usuario_id <> $4",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "2f0d68980fe349d33f38b3a1ff1df2406f7816dd0d3e6f1f70a052429a373f70"
+}

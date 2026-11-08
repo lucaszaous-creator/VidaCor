@@ -1,0 +1,107 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT t.id, t.versao, t.vigente_desde, t.descricao, t.motivo, t.criado_em, u.nome AS \"publicada_por?\",\n                  (SELECT count(*) FROM financeiro.preco p WHERE p.tabela_id = t.id) AS \"itens!\"\n             FROM financeiro.tabela_preco t LEFT JOIN identidade.usuario u ON u.id = t.criado_por\n            WHERE t.unidade_id = $1 ORDER BY t.versao DESC LIMIT 100",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "financeiro.tabela_preco",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "versao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "financeiro.tabela_preco",
+            "name": "versao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "vigente_desde",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "financeiro.tabela_preco",
+            "name": "vigente_desde"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "descricao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.tabela_preco",
+            "name": "descricao"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.tabela_preco",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "financeiro.tabela_preco",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "publicada_por?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "itens!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      null
+    ]
+  },
+  "hash": "b148bbea38064401a85b91afb7d9b57660c44deaa346b14381b1f9001340ac12"
+}

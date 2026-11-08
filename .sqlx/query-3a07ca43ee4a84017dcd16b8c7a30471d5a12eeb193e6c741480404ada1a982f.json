@@ -1,0 +1,184 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT c.numero, c.nome, c.razao_social, c.cnpj, c.endereco, c.telefone, c.site, c.responsavel_nome,\n                  c.responsavel_crm, c.responsavel_tecnico, c.motivo, c.vigente, c.criado_em, u.nome AS \"publicado_por?\"\n             FROM documentos.cabecalho c LEFT JOIN identidade.usuario u ON u.id = c.criado_por\n            WHERE c.unidade_id = $1 ORDER BY c.numero DESC LIMIT 100",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "numero",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "razao_social",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "razao_social"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "cnpj",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "cnpj"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "endereco",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "endereco"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "telefone",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "telefone"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "site",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "site"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "responsavel_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "responsavel_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "responsavel_crm",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "responsavel_crm"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "responsavel_tecnico",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "responsavel_tecnico"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "vigente",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "vigente"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "publicado_por?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "3a07ca43ee4a84017dcd16b8c7a30471d5a12eeb193e6c741480404ada1a982f"
+}

@@ -58,6 +58,21 @@ import type { VisaoDoPaciente } from './contrato-paciente';
 import type { InicioDoDia } from './contrato-inicio';
 import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
+import type {
+  CabecalhoDosDocumentos,
+  CatalogoDeExames,
+  DecisaoDoCorpoClinico,
+  MedicoDoCorpoClinico,
+  MudancaNoProcedimento,
+  MudancaRegistradaNoCatalogo,
+  NovaVersaoDaTabela,
+  NovoCabecalho,
+  NovoPedidoDoCorpoClinico,
+  NovoProcedimento,
+  PedidoDoCorpoClinico,
+  ProcedimentoDoCatalogo,
+  VersaoDaTabelaDePreco,
+} from './contrato-cadastros';
 import type { DecisaoDePerfil, ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
 import type { ContaBancaria, NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
 import type { ComunicacaoDoPaciente, LembretesEnfileirados, PreferenciaWhatsapp } from './contrato-comunicacao';
@@ -388,6 +403,34 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
       cadastrar: (corpo: NovoAparelho, o: OpcoesDeEscrita): Promise<AparelhoCadastrado> => criar<AparelhoCadastrado>('POST', '/v1/aparelhos', corpo, o),
       mudar: (id: string, corpo: MudancaDeAparelho, o: OpcoesDeEscrita): Promise<AparelhoCadastrado> =>
         criar<AparelhoCadastrado>('POST', `/v1/aparelhos/${seg(id)}/mudancas`, corpo, o),
+    },
+
+    /** Corpo clínico (gerência): toda mudança espera a conferência de outra pessoa e pede reautenticação. */
+    corpoClinico: {
+      listar: (): Promise<MedicoDoCorpoClinico[]> => ler<MedicoDoCorpoClinico[]>('/v1/corpo-clinico'),
+      historico: (id: string): Promise<PedidoDoCorpoClinico[]> => ler<PedidoDoCorpoClinico[]>(`/v1/corpo-clinico/${seg(id)}/historico`),
+      pedir: (id: string, corpo: NovoPedidoDoCorpoClinico, o: OpcoesDeEscrita): Promise<MedicoDoCorpoClinico> =>
+        criar<MedicoDoCorpoClinico>('POST', `/v1/corpo-clinico/${seg(id)}/pedidos`, corpo, o),
+      decidir: (pedidoId: string, corpo: DecisaoDoCorpoClinico, o: OpcoesDeEscrita): Promise<MedicoDoCorpoClinico> =>
+        criar<MedicoDoCorpoClinico>('POST', `/v1/corpo-clinico/pedidos/${seg(pedidoId)}/decisao`, corpo, o),
+    },
+
+    /** Exames e procedimentos e tabela de preços versionada (recepção consulta; gerência muda). */
+    catalogo: {
+      listar: (): Promise<CatalogoDeExames> => ler<CatalogoDeExames>('/v1/catalogo/procedimentos'),
+      historico: (tuss: string): Promise<MudancaRegistradaNoCatalogo[]> => ler<MudancaRegistradaNoCatalogo[]>(`/v1/catalogo/procedimentos/${seg(tuss)}/historico`),
+      incluir: (corpo: NovoProcedimento, o: OpcoesDeEscrita): Promise<ProcedimentoDoCatalogo> => criar<ProcedimentoDoCatalogo>('POST', '/v1/catalogo/procedimentos', corpo, o),
+      mudar: (tuss: string, corpo: MudancaNoProcedimento, o: OpcoesDeEscrita): Promise<ProcedimentoDoCatalogo> =>
+        criar<ProcedimentoDoCatalogo>('POST', `/v1/catalogo/procedimentos/${seg(tuss)}/mudancas`, corpo, o),
+      publicarTabela: (corpo: NovaVersaoDaTabela, o: OpcoesDeEscrita): Promise<VersaoDaTabelaDePreco> =>
+        criar<VersaoDaTabelaDePreco>('POST', '/v1/catalogo/tabelas-de-preco', corpo, o),
+    },
+
+    /** Cabeçalho impresso nos documentos da unidade (gerência), versionado. */
+    cabecalho: {
+      ver: (): Promise<CabecalhoDosDocumentos> => ler<CabecalhoDosDocumentos>('/v1/configuracoes/cabecalho'),
+      publicar: (corpo: NovoCabecalho, o: OpcoesDeEscrita): Promise<CabecalhoDosDocumentos> =>
+        criar<CabecalhoDosDocumentos>('POST', '/v1/configuracoes/cabecalho', corpo, o),
     },
 
     /** Orçamento do particular: o servidor calcula preço, pacote e desconto (G1). */
