@@ -43,12 +43,12 @@ pub struct RespostaDoPortal {
     pub data_autorizacao: Option<NaiveDate>,
     pub validade: Option<NaiveDate>,
     #[serde(default)]
-    pub procedimentos: Vec<ProcedimentoRespondidoSerial>,
+    pub procedimentos: Vec<ProcedimentoRespondido>,
     pub motivo: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
-pub struct ProcedimentoRespondidoSerial {
+pub struct ProcedimentoRespondido {
     pub tuss: String,
     pub autorizado: i32,
 }
