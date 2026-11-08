@@ -1,8 +1,10 @@
 //! Rotas `/v1` (docs/29 § 6.2). Toda rota declara o ato exigido no próprio handler.
 
+pub mod a_receber;
 pub mod agenda;
 pub mod agendamentos;
 pub mod atendimentos;
+pub mod cadastro;
 pub mod caixa;
 pub mod contingencia;
 pub mod equipe;
@@ -48,7 +50,14 @@ pub fn rotas() -> Router<Estado> {
             "/v1/etiquetas/{codigo}/reimpressao",
             post(etiquetas::reimprimir),
         )
-        .route("/v1/pacientes", get(pacientes::buscar))
+        .route(
+            "/v1/pacientes",
+            get(pacientes::buscar).post(cadastro::cadastrar),
+        )
+        .route(
+            "/v1/pacientes/possiveis-duplicados",
+            get(cadastro::duplicados),
+        )
         .route("/v1/pacientes/{id}/correcao", post(pacientes::corrigir))
         .route("/v1/salas/{sala_id}/bipes", post(sala::bipe))
         .route("/v1/salas/{sala_id}/fila", get(sala::fila))
@@ -100,6 +109,7 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/links/{token}", get(portal::abrir_link))
         .route("/v1/caixas", post(caixa::abrir))
         .route("/v1/caixas/meu", get(caixa::meu))
+        .route("/v1/caixa/a-receber", get(a_receber::a_receber))
         .route("/v1/caixas/{id}/fechamento", post(caixa::fechar))
         .route("/v1/recebimentos", post(caixa::receber))
         .route("/v1/recebimentos/{id}", get(caixa::obter_recebimento))

@@ -13,11 +13,11 @@ beforeEach(() => {
 
 describe('Menu lateral por perfil (conforto; o servidor decide)', () => {
   it.each([
-    ['recepção', SESSOES.recepcao, ['Agenda e check-in', 'Novo agendamento', 'Recepção e pulseiras', 'Contingência']],
+    ['recepção', SESSOES.recepcao, ['Agenda e check-in', 'Novo agendamento', 'Novo paciente', 'Recepção e pulseiras', 'Contingência']],
     ['técnico', SESSOES.tecnico, ['Agenda e check-in', 'Sala de exame']],
     ['médico', SESSOES.medico, ['Agenda e check-in', 'Sala de exame', 'Laudar', 'Conciliar estudos']],
     ['caixa', SESSOES.caixa, ['Caixa (particular)']],
-    ['gerência', SESSOES.gerente, ['Agenda e check-in', 'Novo agendamento', 'Recepção e pulseiras', 'Pendências do caixa', 'Contingência']],
+    ['gerência', SESSOES.gerente, ['Agenda e check-in', 'Novo agendamento', 'Novo paciente', 'Recepção e pulseiras', 'Pendências do caixa', 'Contingência']],
     ['TI', SESSOES.ti, []],
   ])('%s vê só os módulos do perfil', (_nome, sessao, esperados) => {
     expect(secoesDoMenu(sessao.usuario.perfis).flatMap((s) => s.itens.map((i) => i.rotulo))).toEqual(esperados);

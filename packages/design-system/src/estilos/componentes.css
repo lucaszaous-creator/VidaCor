@@ -166,3 +166,9 @@
 @media (prefers-reduced-motion: reduce) {
   .drw, .dlg, .cm { transition: none; animation: none; }
 }
+
+/* Área que rola dentro do painel contém os filhos posicionados (ex.: a caixa de marcar escondida do
+   React Aria): sem isso eles escapam do recorte e fazem a página rolar ("a tela cabe na janela"). */
+.pane > .scroll {
+  position: relative;
+}

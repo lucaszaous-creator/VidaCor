@@ -160,6 +160,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/caixa/a-receber": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Atendimentos do dia com check-in, para receber (só o caixa). */
+        get: operations["a_receber"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/caixas": {
         parameters: {
             query?: never;
@@ -771,6 +788,24 @@ export interface paths {
         /** Busca pacientes da unidade pelo nome (até 20), com os dois identificadores. */
         get: operations["buscar"];
         put?: never;
+        /** Cadastra o paciente (recepção). Possível duplicado não conferido: `409 possivel-duplicado` com a lista. */
+        post: operations["cadastrar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/pacientes/possiveis-duplicados": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Possíveis duplicados antes de salvar (a tela pergunta "é a mesma pessoa?"). */
+        get: operations["duplicados"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -1285,6 +1320,17 @@ export interface components {
             situacao: string;
             triagem?: null | components["schemas"]["Triagem"];
         };
+        AtendimentoAReceber: {
+            /** Format: uuid */
+            atendimento_id: string;
+            codigo: string;
+            /** Format: date-time */
+            inicio: string;
+            paciente: components["schemas"]["PacienteResumo"];
+            procedimentos: components["schemas"]["ProcedimentoACobrar"][];
+            /** @description Já há recebimento pago ou aguardando para este atendimento. */
+            recebido: boolean;
+        };
         AutorizacaoDesconto: {
             codigo: string;
             /** Format: uuid */
@@ -1614,6 +1660,23 @@ export interface components {
             acoes: components["schemas"]["AcaoDoMenu"][];
             cabecalho: components["schemas"]["CabecalhoDoMenu"];
         };
+        NovoPaciente: {
+            alergias?: string[];
+            /** @description Só dígitos, com DDD (10 ou 11). */
+            celular: string;
+            cpf?: string | null;
+            /** @description A recepção conferiu os possíveis duplicados mostrados e confirma que é outra pessoa. */
+            duplicado_conferido?: boolean;
+            email?: string | null;
+            /** Format: date */
+            nascimento: string;
+            nega_alergias?: boolean;
+            nome: string;
+            nome_mae?: string | null;
+            nome_social?: string | null;
+            /** @description F ou M. */
+            sexo: string;
+        };
         NovoPedidoDesconto: {
             motivo: string;
             /** Format: uuid */
@@ -1624,6 +1687,14 @@ export interface components {
         NumerosSituados: {
             /** Format: int64 */
             numeros_situados: number;
+        };
+        PacienteCadastrado: {
+            codigo: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date */
+            nascimento: string;
+            nome: string;
         };
         PacienteResumo: {
             /** Format: uuid */
@@ -1850,6 +1921,14 @@ export interface components {
             copia_e_cola: string;
             txid: string;
         };
+        PossivelDuplicado: {
+            /** @description Mesmo CPF: não pode ser descartado (o CPF é único). */
+            bloqueante: boolean;
+            codigo: string;
+            /** @description Por que parece a mesma pessoa. */
+            motivo: string;
+            paciente: components["schemas"]["PacienteResumo"];
+        };
         /** @description Erro em Problem Details (RFC 9457). */
         ProblemaDoc: {
             /** @description Código estável (ex.: `identificacao-nao-confere`). */
@@ -1862,6 +1941,16 @@ export interface components {
             /** @description Código de suporte. */
             trace_id?: string | null;
             type: string;
+        };
+        ProcedimentoACobrar: {
+            /** @description Descrição da tabela de preços (a mesma do recibo). */
+            descricao: string;
+            tuss: string;
+            /**
+             * Format: int64
+             * @description Nulo quando o procedimento não está na tabela vigente.
+             */
+            valor_centavos?: number | null;
         };
         ProcedimentoGuia: {
             /** Format: int32 */
@@ -2438,6 +2527,36 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    a_receber: {
+        parameters: {
+            query?: {
+                /** @description AAAA-MM-DD; padrão: hoje. */
+                data?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AtendimentoAReceber"][];
                 };
             };
             403: {
@@ -3734,6 +3853,86 @@ export interface operations {
                 };
             };
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    cadastrar: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoPaciente"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PacienteCadastrado"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    duplicados: {
+        parameters: {
+            query: {
+                nome: string;
+                nascimento: string;
+                cpf?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PossivelDuplicado"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };

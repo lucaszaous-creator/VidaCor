@@ -52,20 +52,13 @@ async fn checkin_aparece_disponivel_e_depois_do_checkin_fica_apagado_com_motivo(
 }
 
 #[tokio::test]
-async fn caixa_nao_ve_checkin_e_ti_nao_tem_menu() {
+async fn caixa_nao_abre_o_menu_da_agenda_e_ti_nao_tem_menu() {
     let amb = Ambiente::novo().await;
     let uri = format!("/v1/menu/agendamento/{}", amb.s.agendamentos[ANTONIO]);
+    // O agendamento traz o exame pedido (N3): o caixa puro não o lê (docs/18 § 4).
     let carla = amb.entrar("carla.caixa").await;
-    let (st, _, m) = amb.pedir(amb.get(&uri, Some(&carla))).await;
-    assert_eq!(st, StatusCode::OK);
-    assert!(
-        acao(&m, "checkin").is_none(),
-        "o perfil nunca terá: não aparece"
-    );
-    assert_eq!(
-        acao(&m, "receber").unwrap()["motivo"],
-        "Faça o check-in antes"
-    );
+    let (st, _, _) = amb.pedir(amb.get(&uri, Some(&carla))).await;
+    assert_eq!(st, StatusCode::NOT_FOUND);
     let ti = amb.entrar("ti.a").await;
     let (s403, _, _) = amb.pedir(amb.get(&uri, Some(&ti))).await;
     assert_eq!(s403, StatusCode::FORBIDDEN);

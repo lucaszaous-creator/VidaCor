@@ -395,6 +395,9 @@ async fn semear(admin: &PgPool) -> Semente {
             .bind(id).bind(codigo).bind(nome).bind(nasc).bind(sexo).bind(UNIDADE_A).execute(&mut *tx).await.unwrap();
         pacientes.insert(nome, id);
     }
+    // Códigos da semente ocupam PAC-2026-00000N: o contador do cadastro começa depois (migration 0020).
+    sqlx::query("INSERT INTO comum.contador (prefixo, ano, valor) VALUES ('PAC', 2026, 100) ON CONFLICT (prefixo, ano) DO UPDATE SET valor = GREATEST(comum.contador.valor, 100)")
+        .execute(&mut *tx).await.unwrap();
     let mut agendamentos = std::collections::HashMap::new();
     for (codigo, paciente, sala, minutos, tuss, exame, contraste, medico) in [
         (

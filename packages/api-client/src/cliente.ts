@@ -49,8 +49,8 @@ import type {
 } from './contrato-fase1';
 import type { ConsultaAgenda, PacienteResumo, SalaDaUnidade, Saude, Sessao } from './contrato-m0';
 import type { MenuDoObjeto, ObjetoDoMenu } from './contrato-menu';
-import type { AceiteDoConvite, ConviteEmitido, EntradaNoPortal, SessaoDoPortal, SituacaoDoConvite } from './contrato-portal';
-import type { Decisao, EstornoDetalhado, NovoPedidoDesconto, PedidoDesconto, SituacaoDoEstorno, SituacaoDoPedidoDeDesconto } from './contrato-pendencias';
+import type { AceiteDoConvite, ConviteEmitido, EntradaNoPortal, NovoPaciente, PacienteCadastrado, PossivelDuplicado, SessaoDoPortal, SituacaoDoConvite } from './contrato-portal';
+import type { AtendimentoAReceber, Decisao, EstornoDetalhado, NovoPedidoDesconto, PedidoDesconto, SituacaoDoEstorno, SituacaoDoPedidoDeDesconto } from './contrato-pendencias';
 import { ErroDaApi, ErroSemConexao, ehProblemaHttp, problemaInesperado } from './erros';
 
 export interface OpcoesDoCliente {
@@ -290,6 +290,13 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
       /** Correção de cadastro com motivo (reautenticação). */
       corrigir: (id: string, corpo: PedidoCorrecaoCadastro, o: OpcoesDeEscrita): Promise<CorrecaoCadastro> =>
         criar<CorrecaoCadastro>('POST', `/v1/pacientes/${seg(id)}/correcao`, corpo, o),
+      /** Possíveis duplicados (nome e nascimento parecidos, mesmo CPF) antes de salvar. */
+      possiveisDuplicados: (nome: string, nascimento: string, cpf?: string): Promise<PossivelDuplicado[]> =>
+        ler<PossivelDuplicado[]>(
+          `/v1/pacientes/possiveis-duplicados?${new URLSearchParams({ nome, nascimento, ...(cpf === undefined || cpf === '' ? {} : { cpf }) }).toString()}`,
+        ),
+      /** Cadastro; `409 possivel-duplicado` traz `candidatos` quando ainda não conferido. */
+      cadastrar: (corpo: NovoPaciente, o: OpcoesDeEscrita): Promise<PacienteCadastrado> => criar<PacienteCadastrado>('POST', '/v1/pacientes', corpo, o),
       /** Convite do portal: o link aparece só na primeira resposta (repetição: `caminho` nulo). */
       convidarParaPortal: (id: string, o: OpcoesDeEscrita): Promise<ConviteEmitido> =>
         criar<ConviteEmitido>('POST', `/v1/pacientes/${seg(id)}/convites-portal`, {}, o),
@@ -356,6 +363,8 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
 
     caixas: {
       meu: (): Promise<Caixa | null> => ler<Caixa | null>('/v1/caixas/meu'),
+      /** Atendimentos do dia para receber: paciente, horário e procedimentos pela tabela de preços. */
+      aReceber: (data: string): Promise<AtendimentoAReceber[]> => ler<AtendimentoAReceber[]>(`/v1/caixa/a-receber?${new URLSearchParams({ data }).toString()}`),
       abrir: (fundoCentavos: number, o: OpcoesDeEscrita): Promise<Caixa> =>
         criar<Caixa>('POST', '/v1/caixas', { fundo_centavos: fundoCentavos }, o),
       /** Fechamento: o servidor devolve o caixa com esperado, contado e diferença. */

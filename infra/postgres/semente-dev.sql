@@ -94,4 +94,9 @@ INSERT INTO identidade.usuario (id, codigo, login, nome, perfis, origem, unidade
 SELECT gen_random_uuid(), 'USR-' || login, login, nome, perfis, 'semente', '0194f000-0000-7000-8000-0000000000a1', 'semente-dev'
 FROM (VALUES ('carla.caixa', 'Carla Mendes', ARRAY['caixa']), ('patricia.lemos', 'Patrícia Lemos', ARRAY['gerente'])) AS u(login, nome, perfis)
 ON CONFLICT (login) DO NOTHING;
+-- O contador do cadastro começa depois dos códigos da semente (migration 0020).
+INSERT INTO comum.contador (prefixo, ano, valor)
+SELECT 'PAC', substring(codigo FROM 5 FOR 4)::int, max(substring(codigo FROM 10)::bigint)
+  FROM identidade.paciente WHERE codigo ~ '^PAC-[0-9]{4}-[0-9]{6}$' GROUP BY 2
+ON CONFLICT (prefixo, ano) DO UPDATE SET valor = GREATEST(comum.contador.valor, EXCLUDED.valor);
 COMMIT;

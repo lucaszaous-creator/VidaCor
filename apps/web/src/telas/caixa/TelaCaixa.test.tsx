@@ -22,7 +22,11 @@ async function preencher(usuario: UserEvent, opcoes: { percentual?: string; form
   const paciente = await screen.findByRole('combobox', { name: 'Paciente (check-in feito hoje)' });
   await screen.findByRole('option', { name: /^Sônia Maria Castro, 03\/02\/1962/ });
   await usuario.selectOptions(paciente, SONIA.atendimento_id ?? '');
-  await usuario.type(screen.getByRole('textbox', { name: 'Procedimentos (códigos TUSS)' }), '40901114');
+  const tuss = screen.getByRole('textbox', { name: 'Procedimentos (códigos TUSS)' });
+  // Os procedimentos vêm preenchidos pelo servidor (lista a receber); a recepção pode ajustar.
+  expect(tuss).toHaveValue(SONIA.exame.codigo_tuss);
+  await usuario.clear(tuss);
+  await usuario.type(tuss, '40901114');
   if (opcoes.percentual !== undefined) {
     await usuario.type(screen.getByRole('textbox', { name: 'Desconto (%)' }), opcoes.percentual);
     await usuario.selectOptions(screen.getByRole('combobox', { name: 'Motivo do desconto' }), 'Tabela social');

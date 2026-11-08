@@ -3,7 +3,6 @@ import { ErroDaApi, type FormaDePagamento, type PedidoRecebimento } from '@vidac
 import { Botao, Campo, Escolha, formatarData, formatarHora, formatarPontosBase, lerPercentual } from '@vidacor/design-system';
 import { useCallback, useState } from 'react';
 import { ErroDoAto } from '../../componentes/ErroDoAto';
-import { consultaAgenda } from '../../consultas';
 import { useDependencias } from '../../contexto';
 import { useOperacao } from '../../operacao';
 import { FUSO_DA_CLINICA } from '../agenda/grade';
@@ -29,7 +28,7 @@ interface Props {
  */
 export function FormularioDeRecebimento({ data, aoAbrirCaixa }: Props) {
   const { api } = useDependencias();
-  const agenda = useQuery(consultaAgenda(api, data, undefined));
+  const aReceber = useQuery({ queryKey: ['caixa', 'a-receber', data], queryFn: () => api.caixas.aReceber(data) });
   const [atendimentoId, setAtendimentoId] = useState('');
   const [tuss, setTuss] = useState('');
   const [percentual, setPercentual] = useState('');
@@ -49,7 +48,7 @@ export function FormularioDeRecebimento({ data, aoAbrirCaixa }: Props) {
     setAutorizacao('');
   }, []);
 
-  const atendidos = (agenda.data?.itens ?? []).filter((i) => typeof i.atendimento_id === 'string');
+  const atendidos = (aReceber.data ?? []).filter((i) => !i.recebido);
   const item = atendidos.find((i) => i.atendimento_id === atendimentoId);
   const pontos = percentual.trim() === '' ? 0 : lerPercentual(percentual);
   const codigos = tuss
@@ -124,10 +123,15 @@ export function FormularioDeRecebimento({ data, aoAbrirCaixa }: Props) {
       <Escolha
         rotulo="Paciente (check-in feito hoje)"
         valor={atendimentoId}
-        aoMudar={setAtendimentoId}
+        aoMudar={(v) => {
+          setAtendimentoId(v);
+          // Os procedimentos do atendimento vêm do servidor (tabela de preços); a recepção ainda pode ajustar.
+          const escolhido = atendidos.find((i) => i.atendimento_id === v);
+          if (escolhido !== undefined) setTuss(escolhido.procedimentos.map((p) => p.tuss).join(', '));
+        }}
         vazio="Escolha o paciente"
         opcoes={atendidos.map((i) => ({
-          valor: i.atendimento_id ?? '',
+          valor: i.atendimento_id,
           rotulo: `${i.paciente.nome}, ${formatarData(i.paciente.nascimento)}, ${formatarHora(i.inicio, FUSO_DA_CLINICA)}`,
         }))}
         erro={erros.paciente}

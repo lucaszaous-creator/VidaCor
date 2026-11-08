@@ -1,0 +1,29 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id FROM financeiro.tabela_preco WHERE unidade_id = $1 AND vigente_desde <= $2 ORDER BY versao DESC LIMIT 1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "financeiro.tabela_preco",
+            "name": "id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Date"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "a21e03498ee1c887ae47b00ae1ff39d606a2eea7d6aff21138b2b81d0ee483d9"
+}

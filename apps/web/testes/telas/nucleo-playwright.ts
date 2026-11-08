@@ -117,6 +117,14 @@ export async function simularNucleo(page: Page, estado: EstadoDaSimulacao): Prom
     if (c.startsWith('/v1/links/')) return problema(route, 410, 'link-expirado', 'Este link expirou.');
     if (c === '/v1/pedidos-desconto') return json(route, [pedidoDaSonia()]);
     if (c === '/v1/estornos') return json(route, [estornoDaSonia()]);
+    if (c === '/v1/caixa/a-receber') {
+      return json(
+        route,
+        itensDaAgenda()
+          .filter((i) => typeof i.atendimento_id === 'string')
+          .map((i) => ({ atendimento_id: i.atendimento_id, codigo: i.codigo, paciente: i.paciente, inicio: i.inicio, procedimentos: [{ tuss: i.exame.codigo_tuss, descricao: i.exame.nome, valor_centavos: 38000 }], recebido: false })),
+      );
+    }
     if (c === '/v1/caixas/meu') return json(route, estado.caixaAberto ? caixaAberto() : null);
     if (c === '/v1/recebimentos') return json(route, recebimentoSonia(500, 'pix', false), 201);
     if (c.startsWith('/v1/recebimentos/')) return json(route, recebimentoSonia(500, 'pix'));

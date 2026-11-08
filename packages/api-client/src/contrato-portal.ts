@@ -26,3 +26,33 @@ export interface EntradaNoPortal {
 export interface SessaoDoPortal {
   primeiro_nome: string;
 }
+
+/* Cadastro de paciente (migration 0020). */
+export interface PossivelDuplicado {
+  paciente: { id: string; nome: string; nascimento: string };
+  codigo: string;
+  motivo: string;
+  /** Mesmo CPF: não pode ser descartado. */
+  bloqueante: boolean;
+}
+
+export interface NovoPaciente {
+  nome: string;
+  nome_social?: string | null;
+  nascimento: string;
+  sexo: 'F' | 'M';
+  cpf?: string | null;
+  nome_mae?: string | null;
+  celular: string;
+  email?: string | null;
+  alergias: string[];
+  nega_alergias: boolean;
+  duplicado_conferido: boolean;
+}
+
+export interface PacienteCadastrado {
+  id: string;
+  codigo: string;
+  nome: string;
+  nascimento: string;
+}

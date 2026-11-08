@@ -678,6 +678,55 @@
         }
       }
     },
+    "/v1/caixa/a-receber": {
+      "get": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "Atendimentos do dia com check-in, para receber (só o caixa).",
+        "operationId": "a_receber",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "query",
+            "description": "AAAA-MM-DD; padrão: hoje.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AtendimentoAReceber"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/caixas": {
       "post": {
         "tags": [
@@ -2543,6 +2592,140 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": [
+          "pacientes"
+        ],
+        "summary": "Cadastra o paciente (recepção). Possível duplicado não conferido: `409 possivel-duplicado` com a lista.",
+        "operationId": "cadastrar",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovoPaciente"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PacienteCadastrado"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pacientes/possiveis-duplicados": {
+      "get": {
+        "tags": [
+          "pacientes"
+        ],
+        "summary": "Possíveis duplicados antes de salvar (a tela pergunta \"é a mesma pessoa?\").",
+        "operationId": "duplicados",
+        "parameters": [
+          {
+            "name": "nome",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "nascimento",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "cpf",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PossivelDuplicado"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/v1/pacientes/{id}/convites-portal": {
@@ -3995,6 +4178,43 @@
           }
         }
       },
+      "AtendimentoAReceber": {
+        "type": "object",
+        "required": [
+          "atendimento_id",
+          "codigo",
+          "paciente",
+          "inicio",
+          "procedimentos",
+          "recebido"
+        ],
+        "properties": {
+          "atendimento_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "procedimentos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProcedimentoACobrar"
+            }
+          },
+          "recebido": {
+            "type": "boolean",
+            "description": "Já há recebimento pago ou aguardando para este atendimento."
+          }
+        }
+      },
       "AutorizacaoDesconto": {
         "type": "object",
         "required": [
@@ -5079,6 +5299,69 @@
           }
         }
       },
+      "NovoPaciente": {
+        "type": "object",
+        "required": [
+          "nome",
+          "nascimento",
+          "sexo",
+          "celular"
+        ],
+        "properties": {
+          "alergias": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "celular": {
+            "type": "string",
+            "description": "Só dígitos, com DDD (10 ou 11)."
+          },
+          "cpf": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "duplicado_conferido": {
+            "type": "boolean",
+            "description": "A recepção conferiu os possíveis duplicados mostrados e confirma que é outra pessoa."
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nega_alergias": {
+            "type": "boolean"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "nome_mae": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "nome_social": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sexo": {
+            "type": "string",
+            "description": "F ou M."
+          }
+        }
+      },
       "NovoPedidoDesconto": {
         "type": "object",
         "required": [
@@ -5110,6 +5393,31 @@
             "type": "integer",
             "format": "int64",
             "minimum": 0
+          }
+        }
+      },
+      "PacienteCadastrado": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "nome",
+          "nascimento"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string"
           }
         }
       },
@@ -5807,6 +6115,31 @@
           }
         }
       },
+      "PossivelDuplicado": {
+        "type": "object",
+        "required": [
+          "paciente",
+          "codigo",
+          "motivo",
+          "bloqueante"
+        ],
+        "properties": {
+          "bloqueante": {
+            "type": "boolean",
+            "description": "Mesmo CPF: não pode ser descartado (o CPF é único)."
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "motivo": {
+            "type": "string",
+            "description": "Por que parece a mesma pessoa."
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          }
+        }
+      },
       "ProblemaDoc": {
         "type": "object",
         "description": "Erro em Problem Details (RFC 9457).",
@@ -5843,6 +6176,30 @@
           },
           "type": {
             "type": "string"
+          }
+        }
+      },
+      "ProcedimentoACobrar": {
+        "type": "object",
+        "required": [
+          "tuss",
+          "descricao"
+        ],
+        "properties": {
+          "descricao": {
+            "type": "string",
+            "description": "Descrição da tabela de preços (a mesma do recibo)."
+          },
+          "tuss": {
+            "type": "string"
+          },
+          "valor_centavos": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "description": "Nulo quando o procedimento não está na tabela vigente."
           }
         }
       },

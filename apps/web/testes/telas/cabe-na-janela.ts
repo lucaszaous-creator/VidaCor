@@ -216,6 +216,9 @@ const fase1: Passo = async (page, estado, ir, ok) => {
 
   estado.sessao = SESSOES.recepcao;
   estado.contingenciaAberta = false;
+  await ir('/pacientes/novo');
+  await esperar(page, 'heading', 'Novo paciente');
+  await ok('28-cadastro-paciente');
   await ir('/contingencia');
   await page.getByText('Nenhuma contingência aberta').waitFor();
   await ok('26-contingencia');

@@ -85,7 +85,7 @@ export function TelaPendencias() {
   return (
     <>
       <CabecalhoDaTela titulo="Pendências do caixa" complemento={<span className="t14 mute">Descontos acima do limite e estornos pedidos</span>} />
-      <div className="fill" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.2fr)', gap: 16 }}>
+      <div className="fill" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.2fr)', gridTemplateRows: 'minmax(0, 1fr)', gap: 16 }}>
         <section className="card pane" aria-label="Pendências">
           <div className="scroll">
             <Abas

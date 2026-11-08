@@ -27,6 +27,7 @@ pub enum Ato {
     ContingenciaKit,
     EstudoConciliar,
     PortalConvidar,
+    PacienteCadastrar,
 }
 
 impl Ato {
@@ -34,15 +35,8 @@ impl Ato {
     pub fn concedido_a(self, perfil: &str) -> bool {
         use Ato as A;
         let perfis: &[&str] = match self {
-            // Caixa vê a agenda do dia (N0) para receber (docs/18 § 4, BUG-2026-001).
-            A::AgendaVer => &[
-                "recepcao",
-                "tecnico",
-                "medico",
-                "gerente",
-                "faturista",
-                "caixa",
-            ],
+            // A agenda traz o exame pedido (N3): o caixa recebe pela rota própria (BUG-2026-001).
+            A::AgendaVer => &["recepcao", "tecnico", "medico", "gerente", "faturista"],
             A::AgendaAgendar => &["recepcao", "gerente"],
             A::GuiaRegistrar => &["recepcao", "faturista"],
             A::RecepcaoVer => &["recepcao", "tecnico", "gerente", "caixa"],
@@ -61,6 +55,8 @@ impl Ato {
             A::EstudoConciliar => &["medico"],
             // Convite do portal (docs/04 Cadastro): recepção e gerência.
             A::PortalConvidar => &["recepcao", "gerente"],
+            // Cadastro de paciente (docs/18 § 5: recepção; gerência pela supervisão).
+            A::PacienteCadastrar => &["recepcao", "gerente"],
         };
         perfis.contains(&perfil)
     }
@@ -70,7 +66,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 23] = [
+    const TODOS: [Ato; 24] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -94,6 +90,7 @@ mod testes {
         Ato::ContingenciaKit,
         Ato::EstudoConciliar,
         Ato::PortalConvidar,
+        Ato::PacienteCadastrar,
     ];
 
     #[test]

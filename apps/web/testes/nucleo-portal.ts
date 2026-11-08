@@ -40,3 +40,21 @@ export const manipuladoresPortal = [
     );
   }),
 ];
+
+/* Cadastro de paciente: Maria Helena Duarte 12/03/1968 já existe (regras reais em tests/cadastro.rs). */
+export const manipuladoresCadastro = [
+  http.get('*/v1/pacientes/possiveis-duplicados', ({ request }) => {
+    const u = new URL(request.url);
+    const parecido = u.searchParams.get('nome')?.toLowerCase().startsWith('maria helena') === true && u.searchParams.get('nascimento')?.startsWith('1968-03') === true;
+    return HttpResponse.json(
+      parecido
+        ? [{ paciente: { id: '0000000b-0000-7000-8000-000000000002', nome: 'Maria Helena Duarte', nascimento: '1968-03-12' }, codigo: 'PAC-2026-000002', motivo: 'Mesmo nome e nascimento parecido (dia e mês trocados ou dígito diferente)', bloqueante: false }]
+        : [],
+    );
+  }),
+  http.post('*/v1/pacientes', async ({ request }) => {
+    const corpo = (await registrar('cadastrar-paciente', request)) as { nome: string; nascimento: string };
+    if (!temPerfil('recepcao', 'gerente')) return semPermissao('cadastrar paciente');
+    return HttpResponse.json({ id: '0000000b-0000-7000-8000-000000000099', codigo: 'PAC-2026-000101', nome: corpo.nome, nascimento: corpo.nascimento }, { status: 201 });
+  }),
+];

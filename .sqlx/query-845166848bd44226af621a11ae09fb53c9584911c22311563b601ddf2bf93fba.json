@@ -1,0 +1,104 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT a.id, a.codigo, g.inicio, p.id AS paciente_id, p.nome, p.nascimento,\n                  coalesce((SELECT array_agg(ap.tuss ORDER BY ap.tuss) FROM agenda.agendamento_procedimento ap WHERE ap.agendamento_id = g.id),\n                           ARRAY[g.exame_tuss]) AS \"tuss!\",\n                  EXISTS (SELECT 1 FROM caixa.recebimento r WHERE r.atendimento_id = a.id AND r.situacao IN ('pago','aguardando_pagamento')) AS \"recebido!\"\n           FROM recepcao.atendimento a\n           JOIN agenda.agendamento g ON g.id = a.agendamento_id\n           JOIN identidade.paciente p ON p.id = a.paciente_id\n           WHERE a.unidade_id = $1 AND g.inicio >= $2 AND g.inicio < $3 AND a.situacao <> 'cancelado'\n           ORDER BY g.inicio",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "inicio",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "inicio"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "paciente_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "tuss!",
+        "type_info": "TextArray",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 7,
+        "name": "recebido!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      null,
+      null
+    ]
+  },
+  "hash": "845166848bd44226af621a11ae09fb53c9584911c22311563b601ddf2bf93fba"
+}

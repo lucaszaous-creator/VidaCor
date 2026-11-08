@@ -84,3 +84,22 @@ export const manipuladoresPendencias = [
     return HttpResponse.json(e);
   }),
 ];
+
+/** Lista do caixa a partir dos itens com check-in (o núcleo real lê em contexto de sistema). */
+export const manipuladoresAReceber = [
+  http.get('*/v1/caixa/a-receber', () => {
+    if (!temPerfil('caixa')) return semPermissao('ver o que há a receber');
+    return HttpResponse.json(
+      estado.itens
+        .filter((i) => typeof i.atendimento_id === 'string')
+        .map((i) => ({
+          atendimento_id: i.atendimento_id,
+          codigo: `ATD-${i.codigo}`,
+          paciente: i.paciente,
+          inicio: i.inicio,
+          procedimentos: [{ tuss: i.exame.codigo_tuss, descricao: i.exame.nome, valor_centavos: 38000 }],
+          recebido: false,
+        })),
+    );
+  }),
+];

@@ -397,33 +397,44 @@ async fn aprovar_e_recusar_ao_mesmo_tempo_so_uma_decisao_vale() {
     );
 }
 
-/// BUG-2026-001: o caixa vê N0 e N1 (docs/18 § 4) e precisa da agenda do dia com os atendimentos
-/// para receber; o RLS e o ato da agenda não incluíam o caixa.
+/// BUG-2026-001: o caixa precisa da lista do dia para receber, sem ler a agenda (exame pedido é N3,
+/// docs/18 § 2 e § 4). A rota própria devolve paciente, horário e procedimentos pela tabela de preços.
 #[tokio::test]
-async fn caixa_ve_a_agenda_do_dia_com_os_atendimentos_para_receber() {
+async fn caixa_recebe_pela_lista_a_receber_sem_ler_a_agenda() {
     let amb = Ambiente::novo().await;
+    preparar(&amb).await;
     amb.fazer_checkin("Antônio Carlos Ribeiro", "1954-06-15")
         .await;
     let carla = amb.entrar("carla.caixa").await;
-    let (st, _, agenda) = amb
+    let (s403, _, _) = amb
         .pedir(amb.get(&format!("/v1/agenda?data={}", amb.s.dia), Some(&carla)))
         .await;
-    assert_eq!(st, StatusCode::OK, "{agenda}");
-    let sonia = agenda["itens"]
+    assert_eq!(
+        s403,
+        StatusCode::FORBIDDEN,
+        "a agenda (N3) continua fechada ao caixa"
+    );
+    let (st, _, lista) = amb
+        .pedir(amb.get(
+            &format!("/v1/caixa/a-receber?data={}", amb.s.dia),
+            Some(&carla),
+        ))
+        .await;
+    assert_eq!(st, StatusCode::OK, "{lista}");
+    let antonio = lista
         .as_array()
         .unwrap()
         .iter()
         .find(|i| i["paciente"]["nome"] == "Antônio Carlos Ribeiro")
-        .expect("Antônio na agenda do caixa");
-    assert!(sonia["atendimento_id"].is_string(), "{sonia}");
-    let (s2, _, m) = amb
+        .expect("Antônio na lista do caixa");
+    assert_eq!(antonio["recebido"], false);
+    assert!(antonio["procedimentos"][0]["tuss"].is_string(), "{antonio}");
+    let ana = amb.entrar("ana.souza").await;
+    let (s2, _, _) = amb
         .pedir(amb.get(
-            &format!(
-                "/v1/menu/agendamento/{}",
-                amb.s.agendamentos["Antônio Carlos Ribeiro"]
-            ),
-            Some(&carla),
+            &format!("/v1/caixa/a-receber?data={}", amb.s.dia),
+            Some(&ana),
         ))
         .await;
-    assert_eq!(s2, StatusCode::OK, "{m}");
+    assert_eq!(s2, StatusCode::FORBIDDEN, "só o caixa");
 }

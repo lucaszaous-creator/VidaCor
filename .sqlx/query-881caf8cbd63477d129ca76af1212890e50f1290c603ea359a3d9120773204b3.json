@@ -1,0 +1,21 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO identidade.paciente_versao (id, paciente_id, versao, nome, nascimento, sexo, motivo, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, 1, $3, $4, $5, 'cadastro inicial', $6, 'recepcao', $7, $8)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Date",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "881caf8cbd63477d129ca76af1212890e50f1290c603ea359a3d9120773204b3"
+}

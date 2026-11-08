@@ -3,6 +3,8 @@
 
 #![cfg_attr(test, allow(clippy::panic, clippy::unwrap_used, clippy::expect_used))]
 
+pub mod cadastro;
+
 use serde::{Deserialize, Serialize};
 use vidacor_comum::{DataNascimento, NomeCompleto};
 

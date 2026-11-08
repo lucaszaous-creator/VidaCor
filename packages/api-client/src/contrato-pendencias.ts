@@ -54,3 +54,19 @@ export interface EstornoDetalhado {
 export interface Decisao {
   motivo: string;
 }
+
+/** O que o caixa tem a receber no dia (sem o exame da agenda: N3; procedimentos pela tabela, N2). */
+export interface ProcedimentoACobrar {
+  tuss: string;
+  descricao: string;
+  valor_centavos?: number | null;
+}
+
+export interface AtendimentoAReceber {
+  atendimento_id: string;
+  codigo: string;
+  paciente: PacienteResumo;
+  inicio: string;
+  procedimentos: ProcedimentoACobrar[];
+  recebido: boolean;
+}

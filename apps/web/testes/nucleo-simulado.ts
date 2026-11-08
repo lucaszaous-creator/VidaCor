@@ -9,8 +9,8 @@ import { setupServer } from 'msw/node';
 import { agendaDoDia, atendimentoDe, itensDaAgenda, SALAS, SESSAO } from './dados/ficticios';
 import { manipuladoresFase1, reiniciarFase1 } from './nucleo-fase1';
 import { manipuladoresMenu } from './nucleo-menu';
-import { manipuladoresPortal, portalSimulado } from './nucleo-portal';
-import { manipuladoresPendencias, reiniciarPendencias } from './nucleo-pendencias';
+import { manipuladoresCadastro, manipuladoresPortal, portalSimulado } from './nucleo-portal';
+import { manipuladoresAReceber, manipuladoresPendencias, reiniciarPendencias } from './nucleo-pendencias';
 import { problema } from './problema';
 
 export { problema } from './problema';
@@ -107,4 +107,4 @@ export const manipuladores = [
   }),
 ];
 
-export const servidor = setupServer(...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores);
+export const servidor = setupServer(...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores);

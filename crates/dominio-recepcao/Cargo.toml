@@ -9,6 +9,7 @@ description = "Regras da recepção (check-in) do VidaCor, sem I/O"
 
 [dependencies]
 vidacor-comum = { path = "../comum" }
+chrono = { version = "0.4.42", default-features = false, features = ["std"] }
 serde = { version = "1.0.228", features = ["derive"] }
 thiserror = "2.0.17"
 

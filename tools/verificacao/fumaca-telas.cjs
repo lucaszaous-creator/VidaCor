@@ -17,7 +17,7 @@ function totp(b32) {
 const BASE = process.env.VIDACOR_URL || 'http://127.0.0.1:5173';
 const PASTA = process.argv[2];
 const PERFIS = [
-  ['ana.souza', ['/recepcao', '/agendamentos/novo', '/contingencia']],
+  ['ana.souza', ['/recepcao', '/agendamentos/novo', '/pacientes/novo', '/contingencia']],
   ['bruno.sales', ['/sala']],
   ['paulo.mendes', ['/laudos', '/estudos']],
   ['carla.caixa', ['/caixa']],
