@@ -1,0 +1,25 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO integracao.idempotencia (usuario_id, rota, chave) VALUES ($1, $2, $3)\n         ON CONFLICT DO NOTHING RETURNING 1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "?column?",
+        "type_info": "Int4",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "a021376918fc6ee40967219f5fd8c0e838e956f19a20f8168c80cd1fcddd12ba"
+}

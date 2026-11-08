@@ -1,0 +1,76 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE integracao.outbox o SET tentativas = o.tentativas + 1, proximo_em = now() + interval '2 minutes'\n          WHERE o.id = (SELECT id FROM integracao.outbox\n                         WHERE concluido_em IS NULL AND proximo_em <= now() AND tentativas < $1\n                         ORDER BY criado_em LIMIT 1 FOR UPDATE SKIP LOCKED)\n          RETURNING o.id, o.tipo, o.carga, o.unidade_id, o.tentativas",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "integracao.outbox",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "tipo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "integracao.outbox",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "carga",
+        "type_info": "Jsonb",
+        "origin": {
+          "Table": {
+            "table": "integracao.outbox",
+            "name": "carga"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "unidade_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "integracao.outbox",
+            "name": "unidade_id"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "tentativas",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "integracao.outbox",
+            "name": "tentativas"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "4abc727b1f60021d046663aa3a50c15d4c4ad9f84e9b1c79c374edf8ee769a5d"
+}

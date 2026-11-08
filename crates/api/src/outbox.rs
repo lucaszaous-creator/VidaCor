@@ -1,0 +1,260 @@
+//! Trabalhadores do núcleo (docs/11 § 6, ADR-0007):
+//! - outbox: entrega a worklist ao Orthanc com retentativa e backoff, fora da transação do negócio;
+//! - conciliação: lê os estudos estáveis do Orthanc e liga cada um ao atendimento pelo accession
+//!   (REQ-EXA-002). Estudo sem atendimento fica pendente e nunca vai para laudo.
+
+use crate::banco::{self, ContextoBanco};
+use crate::estado::Estado;
+use crate::eventos::EventoTela;
+use crate::lastro::{self, NovoEvento};
+use crate::orthanc::{self, ItemWorklist, Orthanc};
+use anyhow::{Context, Result};
+use serde_json::json;
+use std::time::Duration;
+use uuid::Uuid;
+use vidacor_comum::{novo_id, CodigoLegivel};
+
+const MAX_TENTATIVAS: i32 = 12;
+
+/// Processa um item do outbox, se houver. Devolve `true` quando processou algum.
+///
+/// # Errors
+/// Falha de banco ao reservar ou concluir o item.
+pub async fn processar_um(estado: &Estado, orthanc: &Orthanc) -> Result<bool> {
+    // Reserva com prazo (lease): outro trabalhador não pega o mesmo item; se este cair, o item volta.
+    let Some(item) = sqlx::query!(
+        "UPDATE integracao.outbox o SET tentativas = o.tentativas + 1, proximo_em = now() + interval '2 minutes'
+          WHERE o.id = (SELECT id FROM integracao.outbox
+                         WHERE concluido_em IS NULL AND proximo_em <= now() AND tentativas < $1
+                         ORDER BY criado_em LIMIT 1 FOR UPDATE SKIP LOCKED)
+          RETURNING o.id, o.tipo, o.carga, o.unidade_id, o.tentativas",
+        MAX_TENTATIVAS
+    )
+    .fetch_optional(&estado.banco)
+    .await?
+    else {
+        return Ok(false);
+    };
+
+    let resultado = match item.tipo.as_str() {
+        "worklist.criar" => criar_worklist(estado, orthanc, item.unidade_id, &item.carga).await,
+        outro => Err(anyhow::anyhow!("tipo de outbox desconhecido: {outro}")),
+    };
+
+    match resultado {
+        Ok(()) => {
+            sqlx::query!(
+                "UPDATE integracao.outbox SET concluido_em = now(), ultimo_erro = NULL WHERE id = $1",
+                item.id
+            )
+            .execute(&estado.banco)
+            .await?;
+        }
+        Err(erro) => {
+            // Backoff exponencial com teto (SEC-DIS-7). O erro não leva dado de paciente.
+            let espera = 2_i64.saturating_pow(u32::try_from(item.tentativas.min(10)).unwrap_or(10));
+            tracing::warn!(outbox = %item.id, tentativas = item.tentativas, erro = %erro, "entrega do outbox falhou");
+            sqlx::query!(
+                "UPDATE integracao.outbox SET ultimo_erro = $2, proximo_em = now() + make_interval(secs => $3)
+                  WHERE id = $1",
+                item.id,
+                erro.to_string().chars().take(500).collect::<String>(),
+                f64::from(i32::try_from(espera.min(3600)).unwrap_or(3600))
+            )
+            .execute(&estado.banco)
+            .await?;
+        }
+    }
+    Ok(true)
+}
+
+async fn criar_worklist(
+    estado: &Estado,
+    orthanc: &Orthanc,
+    unidade_id: Uuid,
+    carga: &serde_json::Value,
+) -> Result<()> {
+    let atendimento_id: Uuid = carga["atendimento_id"]
+        .as_str()
+        .context("carga sem atendimento_id")?
+        .parse()?;
+    let mut tx = banco::transacao(&estado.banco, &ContextoBanco::sistema(unidade_id)).await?;
+    let d = sqlx::query!(
+        r#"SELECT t.accession, p.codigo AS paciente_codigo, p.nome, p.nascimento,
+                  s.ae_title, a.inicio
+             FROM recepcao.atendimento t
+             JOIN identidade.paciente p ON p.id = t.paciente_id
+             JOIN agenda.sala s ON s.id = t.sala_id
+             JOIN agenda.agendamento a ON a.id = t.agendamento_id
+            WHERE t.id = $1"#,
+        atendimento_id
+    )
+    .fetch_optional(&mut *tx)
+    .await?
+    .context("atendimento do outbox não encontrado")?;
+    tx.commit().await?;
+
+    let nome = orthanc::nome_dicom(&d.nome);
+    let nascimento = d.nascimento.format("%Y%m%d").to_string();
+    let data = d.inicio.format("%Y%m%d").to_string();
+    orthanc
+        .criar_worklist(&ItemWorklist {
+            accession: &d.accession,
+            paciente_codigo: &d.paciente_codigo,
+            paciente_nome_dicom: &nome,
+            nascimento: &nascimento,
+            ae_title: d.ae_title.as_deref().unwrap_or("VIDACOR"),
+            data_agendada: &data,
+        })
+        .await
+}
+
+/// Lê as mudanças do Orthanc desde o cursor e concilia os estudos estáveis.
+///
+/// # Errors
+/// Falha de banco ou do Orthanc.
+pub async fn conciliar(estado: &Estado, orthanc: &Orthanc, unidade_id: Uuid) -> Result<()> {
+    let desde = sqlx::query_scalar!(
+        "INSERT INTO integracao.cursor_orthanc (unidade_id) VALUES ($1)
+         ON CONFLICT (unidade_id) DO UPDATE SET unidade_id = EXCLUDED.unidade_id
+         RETURNING ultima_mudanca",
+        unidade_id
+    )
+    .fetch_one(&estado.banco)
+    .await?;
+    let mudancas = orthanc.mudancas(desde).await?;
+    for mudanca in mudancas.itens.iter().filter(|m| m.tipo == "StableStudy") {
+        let estudo = orthanc.estudo(&mudanca.id).await?;
+        registrar_estudo(estado, unidade_id, &estudo).await?;
+        sqlx::query!(
+            "UPDATE integracao.cursor_orthanc SET ultima_mudanca = $2, atualizado_em = now() WHERE unidade_id = $1",
+            unidade_id,
+            mudanca.seq
+        )
+        .execute(&estado.banco)
+        .await?;
+    }
+    sqlx::query!(
+        "UPDATE integracao.cursor_orthanc SET ultima_mudanca = GREATEST(ultima_mudanca, $2), atualizado_em = now()
+          WHERE unidade_id = $1",
+        unidade_id,
+        mudancas.ultima
+    )
+    .execute(&estado.banco)
+    .await?;
+    Ok(())
+}
+
+/// Grava o estudo e o concilia pelo accession. Repetir não duplica (study_uid único, G3).
+///
+/// # Errors
+/// Falha de banco.
+pub async fn registrar_estudo(
+    estado: &Estado,
+    unidade_id: Uuid,
+    estudo: &orthanc::EstudoOrthanc,
+) -> Result<()> {
+    let mut tx = banco::transacao(&estado.banco, &ContextoBanco::sistema(unidade_id)).await?;
+    let atendimento = match &estudo.accession {
+        Some(acc) => {
+            sqlx::query!(
+                "SELECT id, codigo FROM recepcao.atendimento WHERE accession = $1",
+                acc
+            )
+            .fetch_optional(&mut *tx)
+            .await?
+        }
+        None => None,
+    };
+    let ano = crate::tempo::ano_local();
+    let numero = sqlx::query_scalar!("SELECT comum.proximo_numero('EST', $1)", ano)
+        .fetch_one(&mut *tx)
+        .await?
+        .context("contador EST sem valor")?;
+    let codigo = CodigoLegivel::novo("EST", ano, numero);
+    let correlacao = format!("orthanc:{}", estudo.orthanc_id);
+    let gravado = sqlx::query!(
+        r#"INSERT INTO exames.estudo
+             (id, codigo, study_uid, orthanc_id, accession, atendimento_id, imagens, conciliado,
+              origem, unidade_id, correlacao)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'aparelho', $9, $10)
+           ON CONFLICT (study_uid) DO UPDATE SET imagens = EXCLUDED.imagens, versao = exames.estudo.versao + 1
+           RETURNING id, (xmax = 0) AS "novo!""#,
+        novo_id(),
+        codigo.como_str(),
+        estudo.study_uid,
+        estudo.orthanc_id,
+        estudo.accession,
+        atendimento.as_ref().map(|a| a.id),
+        estudo.imagens,
+        atendimento.is_some(),
+        unidade_id,
+        correlacao
+    )
+    .fetch_one(&mut *tx)
+    .await?;
+
+    if gravado.novo {
+        lastro::registrar(
+            &mut tx,
+            NovoEvento {
+                dominio: "exames",
+                tipo: if atendimento.is_some() {
+                    "estudo_conciliado"
+                } else {
+                    "estudo_sem_conciliacao"
+                },
+                registro_id: gravado.id,
+                registro_codigo: Some(codigo.como_str()),
+                dados: json!({
+                    "study_uid": estudo.study_uid,
+                    "accession": estudo.accession,
+                    "atendimento": atendimento.as_ref().map(|a| a.codigo.clone()),
+                    "imagens": estudo.imagens
+                }),
+                criado_por: None,
+                origem: "aparelho",
+                unidade_id,
+                correlacao: &correlacao,
+            },
+        )
+        .await?;
+    }
+    tx.commit().await?;
+
+    if let Some(a) = atendimento {
+        let _ = estado.eventos.send(EventoTela {
+            unidade_id,
+            tipo: "estudo-recebido",
+            perfis: &["recepcao", "tecnico", "medico", "gerente"],
+            dados: json!({ "atendimento_id": a.id, "accession": estudo.accession, "imagens": estudo.imagens }),
+        });
+    }
+    Ok(())
+}
+
+/// Laço dos trabalhadores. Erros são registrados e o laço continua (o atendimento não para, R7).
+pub async fn rodar(estado: Estado, orthanc: Orthanc) {
+    let unidade = estado.config.unidade_servidor;
+    loop {
+        loop {
+            match processar_um(&estado, &orthanc).await {
+                Ok(true) => continue,
+                Ok(false) => break,
+                Err(e) => {
+                    tracing::error!(erro = %e, "trabalhador do outbox");
+                    break;
+                }
+            }
+        }
+        if let Some(u) = unidade {
+            if let Err(e) = conciliar(&estado, &orthanc, u).await {
+                tracing::warn!(erro = %e, "conciliação com o Orthanc");
+            }
+        }
+        tokio::select! {
+            () = estado.outbox_aviso.notified() => {}
+            () = tokio::time::sleep(Duration::from_secs(2)) => {}
+        }
+    }
+}

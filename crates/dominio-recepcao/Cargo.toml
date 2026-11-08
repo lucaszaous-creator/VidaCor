@@ -1,0 +1,19 @@
+[package]
+name = "vidacor-dominio-recepcao"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Regras da recepção (check-in) do VidaCor, sem I/O"
+
+[dependencies]
+vidacor-comum = { path = "../comum" }
+serde = { version = "1.0.228", features = ["derive"] }
+thiserror = "2.0.17"
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+chrono = { version = "0.4.42", default-features = false, features = ["std"] }

@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT comum.proximo_numero('ATD', $1)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "proximo_numero",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "41cb811fde09fd7d8c012c907d55e2ab06b707178cfd79a332dba4432bb4ced5"
+}

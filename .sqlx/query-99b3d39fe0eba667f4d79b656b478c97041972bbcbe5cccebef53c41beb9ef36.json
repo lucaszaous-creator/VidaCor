@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE identidade.sessao SET revogada_em = now() WHERE id = $1 AND revogada_em IS NULL",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "99b3d39fe0eba667f4d79b656b478c97041972bbcbe5cccebef53c41beb9ef36"
+}

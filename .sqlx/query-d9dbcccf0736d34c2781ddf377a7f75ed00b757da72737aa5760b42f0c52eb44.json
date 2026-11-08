@@ -1,0 +1,88 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT t.accession, p.codigo AS paciente_codigo, p.nome, p.nascimento,\n                  s.ae_title, a.inicio\n             FROM recepcao.atendimento t\n             JOIN identidade.paciente p ON p.id = t.paciente_id\n             JOIN agenda.sala s ON s.id = t.sala_id\n             JOIN agenda.agendamento a ON a.id = t.agendamento_id\n            WHERE t.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "accession",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "accession"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "paciente_codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "ae_title",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "ae_title"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "inicio",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "inicio"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "d9dbcccf0736d34c2781ddf377a7f75ed00b757da72737aa5760b42f0c52eb44"
+}

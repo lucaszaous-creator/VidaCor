@@ -1,0 +1,784 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "VidaCor API",
+    "description": "Núcleo VidaCor (docs/29)",
+    "license": {
+      "name": "LicenseRef-VidaCor-Proprietario",
+      "identifier": "LicenseRef-VidaCor-Proprietario"
+    },
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/v1/agenda": {
+      "get": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Agenda do dia por sala, com os dois identificadores do paciente (REQ-AGD-001).",
+        "operationId": "agenda_do_dia",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "query",
+            "description": "Dia no formato AAAA-MM-DD (horário de Brasília).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "sala_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgendaDoDia"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/atendimentos": {
+      "post": {
+        "tags": [
+          "recepcao"
+        ],
+        "summary": "Faz o check-in de um agendamento, conferindo nome completo e data de nascimento.",
+        "operationId": "checkin",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoCheckin"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Atendimento"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "idempotency-key-ausente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "agendamento-nao-encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "checkin-ja-realizado ou situacao-nao-permite-checkin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "identificacao-nao-confere",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/atendimentos/{id}": {
+      "get": {
+        "tags": [
+          "recepcao"
+        ],
+        "summary": "Um atendimento da unidade, com o estudo recebido, se houver.",
+        "operationId": "obter",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Atendimento"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/eventos": {
+      "get": {
+        "tags": [
+          "eventos"
+        ],
+        "summary": "Eventos em tempo real (ex.: `estudo-recebido`).",
+        "operationId": "fluxo",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "text/event-stream": {}
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/salas": {
+      "get": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Salas da unidade do usuário.",
+        "operationId": "salas",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Sala"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/saude": {
+      "get": {
+        "tags": [
+          "sistema"
+        ],
+        "summary": "Verificação de vida e prontidão.",
+        "operationId": "saude",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Saude"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessao": {
+      "get": {
+        "tags": [
+          "sessao"
+        ],
+        "summary": "Quem está conectado.",
+        "operationId": "atual",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessaoAtual"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessao/entrar": {
+      "get": {
+        "tags": [
+          "sessao"
+        ],
+        "summary": "Inicia o login no provedor de identidade (OIDC com PKCE, state e nonce).",
+        "operationId": "entrar",
+        "responses": {
+          "303": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/sessao/retorno": {
+      "get": {
+        "tags": [
+          "sessao"
+        ],
+        "summary": "Retorno do provedor de identidade: confere state, nonce e token e cria a sessão.",
+        "operationId": "retorno",
+        "responses": {
+          "303": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/sessao/sair": {
+      "post": {
+        "tags": [
+          "sessao"
+        ],
+        "summary": "Encerra a sessão.",
+        "operationId": "sair",
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AgendaDoDia": {
+        "type": "object",
+        "required": [
+          "data",
+          "itens"
+        ],
+        "properties": {
+          "data": {
+            "type": "string",
+            "format": "date"
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemAgenda"
+            }
+          }
+        }
+      },
+      "Atendimento": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "accession",
+          "agendamento_id",
+          "paciente",
+          "situacao",
+          "criado_em"
+        ],
+        "properties": {
+          "accession": {
+            "type": "string"
+          },
+          "agendamento_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "estudo": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/EstudoResumo"
+              }
+            ]
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "aguardando_exame, em_exame, exame_concluido ou cancelado."
+          }
+        }
+      },
+      "Confirmacao": {
+        "type": "object",
+        "required": [
+          "nome",
+          "nascimento"
+        ],
+        "properties": {
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string",
+            "description": "Nome completo como no documento do paciente."
+          }
+        }
+      },
+      "EstudoResumo": {
+        "type": "object",
+        "required": [
+          "study_uid",
+          "imagens",
+          "recebido_em"
+        ],
+        "properties": {
+          "imagens": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "recebido_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "study_uid": {
+            "type": "string"
+          }
+        }
+      },
+      "Exame": {
+        "type": "object",
+        "required": [
+          "codigo_tuss",
+          "nome"
+        ],
+        "properties": {
+          "codigo_tuss": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
+      "ItemAgenda": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "inicio",
+          "fim",
+          "sala",
+          "paciente",
+          "exame",
+          "situacao"
+        ],
+        "properties": {
+          "atendimento_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "exame": {
+            "$ref": "#/components/schemas/Exame"
+          },
+          "fim": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "sala": {
+            "$ref": "#/components/schemas/Sala"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "agendado, confirmado, em_atendimento, concluido, faltou ou cancelado."
+          }
+        }
+      },
+      "PacienteResumo": {
+        "type": "object",
+        "required": [
+          "id",
+          "nome",
+          "nascimento"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
+      "PedidoCheckin": {
+        "type": "object",
+        "required": [
+          "agendamento_id",
+          "confirmacao"
+        ],
+        "properties": {
+          "agendamento_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "confirmacao": {
+            "$ref": "#/components/schemas/Confirmacao"
+          }
+        }
+      },
+      "ProblemaDoc": {
+        "type": "object",
+        "description": "Erro em Problem Details (RFC 9457).",
+        "required": [
+          "type",
+          "title",
+          "status",
+          "detail",
+          "codigo"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "description": "Código estável (ex.: `identificacao-nao-confere`)."
+          },
+          "detail": {
+            "type": "string",
+            "description": "Mensagem para a tela: o que aconteceu, o que foi feito e o que fazer agora."
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "title": {
+            "type": "string"
+          },
+          "trace_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Código de suporte."
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "Sala": {
+        "type": "object",
+        "required": [
+          "id",
+          "nome"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
+      "Saude": {
+        "type": "object",
+        "required": [
+          "situacao"
+        ],
+        "properties": {
+          "situacao": {
+            "type": "string",
+            "description": "`ok` quando o núcleo responde e o banco aceita consultas."
+          }
+        }
+      },
+      "SessaoAtual": {
+        "type": "object",
+        "required": [
+          "usuario",
+          "unidade",
+          "csrf"
+        ],
+        "properties": {
+          "csrf": {
+            "type": "string",
+            "description": "Valor a enviar no cabeçalho `X-CSRF-Token` em toda escrita."
+          },
+          "unidade": {
+            "$ref": "#/components/schemas/UnidadeSessao"
+          },
+          "usuario": {
+            "$ref": "#/components/schemas/UsuarioSessao"
+          }
+        }
+      },
+      "UnidadeSessao": {
+        "type": "object",
+        "required": [
+          "id",
+          "nome"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
+      "UsuarioSessao": {
+        "type": "object",
+        "required": [
+          "id",
+          "nome",
+          "perfis"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "perfis": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

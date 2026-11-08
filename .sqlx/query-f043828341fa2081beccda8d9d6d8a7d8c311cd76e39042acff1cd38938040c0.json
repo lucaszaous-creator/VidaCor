@@ -1,0 +1,42 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT status, resposta FROM integracao.idempotencia\n          WHERE usuario_id = $1 AND rota = $2 AND chave = $3",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "status",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "integracao.idempotencia",
+            "name": "status"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "resposta",
+        "type_info": "Jsonb",
+        "origin": {
+          "Table": {
+            "table": "integracao.idempotencia",
+            "name": "resposta"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      true,
+      true
+    ]
+  },
+  "hash": "f043828341fa2081beccda8d9d6d8a7d8c311cd76e39042acff1cd38938040c0"
+}

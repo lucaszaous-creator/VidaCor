@@ -1,0 +1,44 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO exames.estudo\n             (id, codigo, study_uid, orthanc_id, accession, atendimento_id, imagens, conciliado,\n              origem, unidade_id, correlacao)\n           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'aparelho', $9, $10)\n           ON CONFLICT (study_uid) DO UPDATE SET imagens = EXCLUDED.imagens, versao = exames.estudo.versao + 1\n           RETURNING id, (xmax = 0) AS \"novo!\"",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "exames.estudo",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "novo!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Uuid",
+        "Int4",
+        "Bool",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      null
+    ]
+  },
+  "hash": "d7b86cd637e75b99292c9c58b3d4da92fffcfa295bd175daa0c98602ad9b7674"
+}
