@@ -86,7 +86,12 @@ async fn conciliar_ate_estabilizar(amb: &Ambiente, orthanc: &Orthanc, esperado: 
         outbox::conciliar(&amb.estado, orthanc, UNIDADE_A)
             .await
             .unwrap();
-        if amb.contar("SELECT count(*) FROM exames.estudo").await >= esperado {
+        // Só os conciliados: o Orthanc é compartilhado entre os testes e pode trazer estudos de outro.
+        if amb
+            .contar("SELECT count(*) FROM exames.estudo WHERE conciliado")
+            .await
+            >= esperado
+        {
             return;
         }
         tokio::time::sleep(Duration::from_millis(500)).await;
