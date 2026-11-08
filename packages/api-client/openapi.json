@@ -4850,6 +4850,120 @@
         }
       }
     },
+    "/v1/pacientes/{id}/exames-externos": {
+      "get": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "Exames externos do paciente (recepção, técnico, médico, gerência).",
+        "operationId": "listar_exames_externos",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExameExterno"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "Importa o exame externo depois da conferência de identidade (recepção; Idempotency-Key).",
+        "operationId": "importar_exame_externo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportacaoExterna"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExameExterno"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/pedidos-desconto": {
       "get": {
         "tags": [
@@ -7643,6 +7757,40 @@
           }
         }
       },
+      "EstudoExterno": {
+        "type": "object",
+        "required": [
+          "study_uid",
+          "descricao",
+          "modalidade",
+          "data_estudo",
+          "imagens",
+          "sha256"
+        ],
+        "properties": {
+          "data_estudo": {
+            "type": "string",
+            "format": "date"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "imagens": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modalidade": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "description": "SHA-256 (hex) do conjunto recebido."
+          },
+          "study_uid": {
+            "type": "string"
+          }
+        }
+      },
       "EstudoPendente": {
         "type": "object",
         "required": [
@@ -7793,6 +7941,58 @@
           },
           "nome": {
             "type": "string"
+          }
+        }
+      },
+      "ExameExterno": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "instituicao",
+          "origem",
+          "nome_na_origem",
+          "criado_em",
+          "estudos",
+          "somente_leitura"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "estudos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EstudoExterno"
+            }
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "id_na_origem": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "instituicao": {
+            "type": "string"
+          },
+          "nome_na_origem": {
+            "type": "string",
+            "description": "Identificação original guardada (IHE PIR)."
+          },
+          "origem": {
+            "type": "string"
+          },
+          "somente_leitura": {
+            "type": "boolean",
+            "description": "Sempre verdadeiro: exame externo é só leitura e nunca vira laudo da VidaCor."
           }
         }
       },
@@ -8106,6 +8306,50 @@
             "items": {
               "$ref": "#/components/schemas/LinhaDoExtrato"
             }
+          }
+        }
+      },
+      "ImportacaoExterna": {
+        "type": "object",
+        "required": [
+          "instituicao",
+          "origem",
+          "nome_na_origem",
+          "nascimento_na_origem",
+          "documento_conferido",
+          "estudos"
+        ],
+        "properties": {
+          "documento_conferido": {
+            "type": "boolean",
+            "description": "A recepção conferiu com o documento do paciente."
+          },
+          "estudos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EstudoExterno"
+            }
+          },
+          "id_na_origem": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "instituicao": {
+            "type": "string"
+          },
+          "nascimento_na_origem": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome_na_origem": {
+            "type": "string",
+            "description": "Nome como veio nas imagens (formato DICOM, ex.: PRADO^LUCIA^F)."
+          },
+          "origem": {
+            "type": "string",
+            "description": "link, arquivo ou dicomweb."
           }
         }
       },

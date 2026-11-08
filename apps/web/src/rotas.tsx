@@ -22,6 +22,7 @@ import { TelaLastro } from './telas/lastro/TelaLastro';
 import { TelaIndicadores } from './telas/indicadores/TelaIndicadores';
 import { TelaFinanceiro } from './telas/financeiro/TelaFinanceiro';
 import { TelaUsuarios } from './telas/usuarios/TelaUsuarios';
+import { TelaExameExterno } from './telas/externo/TelaExameExterno';
 import { TelaConvite } from './telas/portal/TelaConvite';
 import { TelaEntrarNoPortal } from './telas/portal/TelaEntrarNoPortal';
 import { TelaPendencias } from './telas/pendencias/TelaPendencias';
@@ -162,6 +163,7 @@ const rotaLastro = createRoute({ getParentRoute: () => rotaApp, path: '/lastro',
 const rotaIndicadores = createRoute({ getParentRoute: () => rotaApp, path: '/indicadores', component: TelaIndicadores });
 const rotaFinanceiro = createRoute({ getParentRoute: () => rotaApp, path: '/financeiro', component: TelaFinanceiro });
 const rotaUsuarios = createRoute({ getParentRoute: () => rotaApp, path: '/usuarios', component: TelaUsuarios });
+const rotaExameExterno = createRoute({ getParentRoute: () => rotaApp, path: '/exames-externos', component: TelaExameExterno });
 const rotaFaturamento = createRoute({ getParentRoute: () => rotaApp, path: '/faturamento', validateSearch: lerBuscaDoFaturamento, component: TelaFaturamento });
 const rotaAuditoriaFaturamento = createRoute({ getParentRoute: () => rotaApp, path: '/faturamento/auditoria', component: TelaAuditoriaFaturamento });
 const rotaSala = createRoute({ getParentRoute: () => rotaApp, path: '/sala', validateSearch: lerBuscaDaSala, component: TelaSala });
@@ -220,6 +222,7 @@ const arvore = raiz.addChildren([
     rotaIndicadores,
     rotaFinanceiro,
     rotaUsuarios,
+    rotaExameExterno,
     rotaFaturamento,
     rotaAuditoriaFaturamento,
     rotaAutorizacao,

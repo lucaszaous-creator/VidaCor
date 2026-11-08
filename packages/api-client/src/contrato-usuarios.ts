@@ -31,3 +31,33 @@ export interface DecisaoDePerfil {
   aprovar: boolean;
   motivo: string;
 }
+
+/* Exame externo (migration 0045). */
+export interface EstudoExterno {
+  study_uid: string;
+  descricao: string;
+  modalidade: string;
+  data_estudo: string;
+  imagens: number;
+  sha256: string;
+}
+export interface ImportacaoExterna {
+  instituicao: string;
+  origem: 'link' | 'arquivo' | 'dicomweb';
+  nome_na_origem: string;
+  nascimento_na_origem: string;
+  id_na_origem?: string | null;
+  documento_conferido: boolean;
+  estudos: EstudoExterno[];
+}
+export interface ExameExterno {
+  id: string;
+  codigo: string;
+  instituicao: string;
+  origem: string;
+  nome_na_origem: string;
+  id_na_origem?: string | null;
+  criado_em: string;
+  estudos: EstudoExterno[];
+  somente_leitura: boolean;
+}

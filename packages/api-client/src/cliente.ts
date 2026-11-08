@@ -51,7 +51,7 @@ import type { ConsultaAgenda, PacienteResumo, SalaDaUnidade, Saude, Sessao } fro
 import type { MenuDoObjeto, ObjetoDoMenu } from './contrato-menu';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
-import type { DecisaoDePerfil, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
+import type { DecisaoDePerfil, ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
 import type { ContaBancaria, NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
 import type { ComunicacaoDoPaciente, LembretesEnfileirados, PreferenciaWhatsapp } from './contrato-comunicacao';
 import type {
@@ -319,6 +319,10 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
         ),
       /** Cadastro; `409 possivel-duplicado` traz `candidatos` quando ainda não conferido. */
       cadastrar: (corpo: NovoPaciente, o: OpcoesDeEscrita): Promise<PacienteCadastrado> => criar<PacienteCadastrado>('POST', '/v1/pacientes', corpo, o),
+      examesExternos: (id: string): Promise<ExameExterno[]> => ler<ExameExterno[]>(`/v1/pacientes/${seg(id)}/exames-externos`),
+      /** Importação de exame externo (só leitura) depois da conferência de identidade. */
+      importarExameExterno: (id: string, corpo: ImportacaoExterna, o: OpcoesDeEscrita): Promise<ExameExterno> =>
+        criar<ExameExterno>('POST', `/v1/pacientes/${seg(id)}/exames-externos`, corpo, o),
       /** Convite do portal por e-mail (endereço do cadastro); `422 paciente-sem-email` sem e-mail. */
       convidarParaPortal: (id: string, o: OpcoesDeEscrita): Promise<ConviteEmitido> =>
         criar<ConviteEmitido>('POST', `/v1/pacientes/${seg(id)}/convites-portal`, {}, o),

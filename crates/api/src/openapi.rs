@@ -92,6 +92,8 @@ pub struct ProblemaDoc {
         crate::rotas::comunicacao::lembretes,
         crate::rotas::financeiro::titulos,
         crate::rotas::usuarios::listar,
+        crate::rotas::externo::listar,
+        crate::rotas::externo::importar,
         crate::rotas::usuarios::criar,
         crate::rotas::usuarios::mudar,
         crate::rotas::usuarios::decidir,

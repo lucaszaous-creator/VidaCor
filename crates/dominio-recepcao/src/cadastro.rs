@@ -225,3 +225,58 @@ mod testes {
         );
     }
 }
+
+/// Nome no formato DICOM (`SOBRENOME^PRENOMES^...`) compatível com o nome do cadastro: o sobrenome
+/// da origem é um dos nomes do cadastro e cada prenome da origem bate com um nome do cadastro por
+/// inteiro ou pela inicial (origem abreviada). Usado na importação de exame externo (docs/22 E3);
+/// o nascimento é conferido à parte e tem de ser igual.
+#[must_use]
+pub fn nome_dicom_compativel(pn: &str, nome: &NomeCompleto) -> bool {
+    let cadastro: Vec<String> = nome
+        .forma_de_comparacao()
+        .split(' ')
+        .map(str::to_owned)
+        .collect();
+    let norm = |s: &str| {
+        NomeCompleto::novo(&format!("{s} x"))
+            .map(|n| n.forma_de_comparacao().trim_end_matches(" x").to_owned())
+            .unwrap_or_default()
+    };
+    let mut partes = pn.split('^');
+    let sobrenome = norm(partes.next().unwrap_or_default().trim());
+    if sobrenome.is_empty()
+        || !sobrenome
+            .split(' ')
+            .all(|s| cadastro.iter().any(|c| c == s))
+    {
+        return false;
+    }
+    let prenomes: Vec<String> = partes
+        .flat_map(|p| p.split(' ').map(str::to_owned).collect::<Vec<_>>())
+        .map(|p| norm(&p))
+        .filter(|p| !p.is_empty())
+        .collect();
+    !prenomes.is_empty()
+        && prenomes.iter().all(|p| {
+            cadastro
+                .iter()
+                .any(|c| c == p || (p.chars().count() == 1 && c.starts_with(p.as_str())))
+        })
+}
+
+#[cfg(test)]
+mod testes_dicom {
+    #![allow(clippy::unwrap_used)]
+    use super::*;
+
+    #[test]
+    fn prado_lucia_f_confere_com_lucia_fernandes_prado() {
+        let n = NomeCompleto::novo("Lúcia Fernandes Prado").unwrap();
+        assert!(nome_dicom_compativel("PRADO^LUCIA^F", &n));
+        assert!(nome_dicom_compativel("PRADO^LÚCIA FERNANDES", &n));
+        assert!(!nome_dicom_compativel("PRADO^MARIA", &n), "outro prenome");
+        assert!(!nome_dicom_compativel("SILVA^LUCIA", &n), "outro sobrenome");
+        assert!(!nome_dicom_compativel("PRADO", &n), "sem prenome não basta");
+        assert!(!nome_dicom_compativel("", &n));
+    }
+}

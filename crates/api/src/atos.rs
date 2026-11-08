@@ -39,6 +39,7 @@ pub enum Ato {
     FinanceiroAprovar,
     UsuarioAdministrar,
     PerfilConferir,
+    ExameExternoImportar,
     FaturamentoVer,
     FaturamentoAuditar,
     LoteGerar,
@@ -91,6 +92,8 @@ impl Ato {
             // clínico (segunda pessoa) é da gerência.
             A::UsuarioAdministrar => &["ti", "gerente"],
             A::PerfilConferir => &["gerente"],
+            // Exame externo (docs/22 E3): a recepção importa com conferência de identidade.
+            A::ExameExternoImportar => &["recepcao", "gerente"],
             // Faturamento TISS (docs/18 § 5: faturista gera guia, lote e recurso; gerente acompanha).
             A::FaturamentoVer => &["faturista", "gerente"],
             A::FaturamentoAuditar | A::LoteGerar | A::DemonstrativoRegistrar | A::GlosaRecorrer => {
@@ -105,7 +108,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 40] = [
+    const TODOS: [Ato; 41] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -141,6 +144,7 @@ mod testes {
         Ato::FinanceiroAprovar,
         Ato::UsuarioAdministrar,
         Ato::PerfilConferir,
+        Ato::ExameExternoImportar,
         Ato::FaturamentoVer,
         Ato::FaturamentoAuditar,
         Ato::LoteGerar,

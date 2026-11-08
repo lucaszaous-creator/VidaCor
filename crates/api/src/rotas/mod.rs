@@ -16,6 +16,7 @@ pub mod estornos;
 pub mod estudos;
 pub mod etiquetas;
 pub mod eventos;
+pub mod externo;
 pub mod faturamento;
 pub mod financeiro;
 pub mod indicadores;
@@ -143,6 +144,10 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/lastro/cadeia", get(lastro_explorador::cadeia))
         .route("/v1/indicadores", get(indicadores::indicadores))
         .route("/v1/usuarios", get(usuarios::listar).post(usuarios::criar))
+        .route(
+            "/v1/pacientes/{id}/exames-externos",
+            get(externo::listar).post(externo::importar),
+        )
         .route("/v1/usuarios/{id}/mudancas", post(usuarios::mudar))
         .route("/v1/usuarios/pedidos/{id}/decisao", post(usuarios::decidir))
         .route(

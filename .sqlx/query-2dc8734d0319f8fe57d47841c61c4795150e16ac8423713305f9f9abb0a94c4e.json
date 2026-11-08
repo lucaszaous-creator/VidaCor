@@ -1,0 +1,24 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO exames.externo (id, codigo, paciente_id, instituicao, origem, nome_na_origem, nascimento_na_origem, id_na_origem, documento_conferido, conferido_por, criado_por, origem_registro, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, true, $9, $9, 'recepcao', $10, $11)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text",
+        "Text",
+        "Text",
+        "Date",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "2dc8734d0319f8fe57d47841c61c4795150e16ac8423713305f9f9abb0a94c4e"
+}

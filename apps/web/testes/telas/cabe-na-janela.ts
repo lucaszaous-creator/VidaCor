@@ -242,6 +242,9 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await page.getByRole('button', { name: /Dra\. Renata Alves/ }).click();
   await esperar(page, 'region', 'Detalhe do usuário');
   await ok('33-usuarios');
+  await ir('/exames-externos');
+  await esperar(page, 'region', 'Exames externos do paciente');
+  await ok('34-exame-externo');
   estado.sessao = SESSOES.faturista;
   await ir('/faturamento');
   await page.getByRole('button', { name: /^Maria Helena Duarte, nascimento 12\/03\/1968/ }).first().click();

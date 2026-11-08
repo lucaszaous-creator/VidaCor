@@ -173,3 +173,13 @@ export const manipuladoresNfse = [
     HttpResponse.json({ numero: '004812', codigo_verificacao: 'A1B2C3D4', valor_centavos: 38000, situacao: 'emitida', emitida_em: '2026-11-06T12:00:00Z', cancelada_em: null }),
   ),
 ];
+
+/** Exame externo simulado (regras reais em `crates/api/tests/exame_externo.rs`). */
+export const manipuladoresExterno = [
+  http.get('*/v1/pacientes/:id/exames-externos', () => HttpResponse.json([])),
+  http.post('*/v1/pacientes/:id/exames-externos', async ({ request }) => {
+    const c = (await registrar('importar-externo', request)) as { nome_na_origem: string; nascimento_na_origem: string; estudos: unknown[] };
+    if (c.nascimento_na_origem !== '1957-09-18') return problema(409, 'nascimento-diferente', 'O nascimento no exame externo é diferente do cadastro. Nada foi importado: pode ser exame de outra pessoa.');
+    return HttpResponse.json({ id: 'x1', codigo: 'EXT-2026-000001', instituicao: 'Hospital São Lucas', origem: 'link', nome_na_origem: c.nome_na_origem, id_na_origem: null, criado_em: '2026-11-06T12:00:00Z', estudos: c.estudos, somente_leitura: true }, { status: 201 });
+  }),
+];

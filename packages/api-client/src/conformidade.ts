@@ -8,7 +8,7 @@ import type { components } from './gerado/openapi';
 import type { MenuDoObjeto } from './contrato-menu';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
-import type { MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
+import type { ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
 import type { NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
 import type { ComunicacaoDoPaciente, LembretesEnfileirados } from './contrato-comunicacao';
 import type {
@@ -139,3 +139,5 @@ export type ConferePedidoRecurso = Cabe<PedidoRecurso, S['PedidoRecurso']>;
 // Ao contrário: o corpo gerado cabe no escrito à mão.
 export type ConferePedidoCorrecaoContaVolta = Cabe<S['PedidoCorrecaoConta'], PedidoCorrecaoConta>;
 export type ConferePedidoDemonstrativoVolta = Cabe<S['PedidoDemonstrativo'], PedidoDemonstrativo>;
+export type ConfereExameExterno = Cabe<ExameExterno, S['ExameExterno']>;
+export type ConfereImportacaoExterna = Cabe<ImportacaoExterna, S['ImportacaoExterna']>;

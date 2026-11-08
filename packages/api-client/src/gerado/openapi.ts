@@ -1430,6 +1430,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/pacientes/{id}/exames-externos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Exames externos do paciente (recepção, técnico, médico, gerência). */
+        get: operations["listar_exames_externos"];
+        put?: never;
+        /** Importa o exame externo depois da conferência de identidade (recepção; Idempotency-Key). */
+        post: operations["importar_exame_externo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/pedidos-desconto": {
         parameters: {
             query?: never;
@@ -2346,6 +2364,17 @@ export interface components {
             conciliado: boolean;
             estudo: string;
         };
+        EstudoExterno: {
+            /** Format: date */
+            data_estudo: string;
+            descricao: string;
+            /** Format: int32 */
+            imagens: number;
+            modalidade: string;
+            /** @description SHA-256 (hex) do conjunto recebido. */
+            sha256: string;
+            study_uid: string;
+        };
         EstudoPendente: {
             accession?: string | null;
             codigo: string;
@@ -2391,6 +2420,21 @@ export interface components {
         Exame: {
             codigo_tuss: string;
             nome: string;
+        };
+        ExameExterno: {
+            codigo: string;
+            /** Format: date-time */
+            criado_em: string;
+            estudos: components["schemas"]["EstudoExterno"][];
+            /** Format: uuid */
+            id: string;
+            id_na_origem?: string | null;
+            instituicao: string;
+            /** @description Identificação original guardada (IHE PIR). */
+            nome_na_origem: string;
+            origem: string;
+            /** @description Sempre verdadeiro: exame externo é só leitura e nunca vira laudo da VidaCor. */
+            somente_leitura: boolean;
         };
         ExtratoImportado: {
             /** Format: int64 */
@@ -2480,6 +2524,19 @@ export interface components {
             /** Format: uuid */
             conta_id: string;
             linhas: components["schemas"]["LinhaDoExtrato"][];
+        };
+        ImportacaoExterna: {
+            /** @description A recepção conferiu com o documento do paciente. */
+            documento_conferido: boolean;
+            estudos: components["schemas"]["EstudoExterno"][];
+            id_na_origem?: string | null;
+            instituicao: string;
+            /** Format: date */
+            nascimento_na_origem: string;
+            /** @description Nome como veio nas imagens (formato DICOM, ex.: PRADO^LUCIA^F). */
+            nome_na_origem: string;
+            /** @description link, arquivo ou dicomweb. */
+            origem: string;
         };
         Indicadores: {
             /** Format: int64 */
@@ -6833,6 +6890,78 @@ export interface operations {
                 };
             };
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_exames_externos: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExameExterno"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    importar_exame_externo: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ImportacaoExterna"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExameExterno"];
+                };
+            };
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
