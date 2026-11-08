@@ -2,7 +2,7 @@
 //! atendimento com guia consumida e exame feito, confere todas as contas fora de lote pelas regras da
 //! operadora e corrige a conta com versão e motivo (nada é apagado).
 
-use super::contrato::{ContaDetalhe, PedidoCorrecao, ResultadoConferencia};
+use super::contrato::{ContaDetalhe, PedidoCorrecaoConta, ResultadoConferencia};
 use super::{
     auditar_conta, consultas, conta_nao_encontrada, contrato_da_operadora, precos_vigentes,
     SITUACOES_ABERTAS,
@@ -200,7 +200,7 @@ fn so_digitos(v: &str, n: usize) -> bool {
 }
 
 /// Confere o pedido de correção antes de abrir a transação (erro de preenchimento não toca no banco).
-fn validar(p: &PedidoCorrecao) -> Result<(), ErroApi> {
+fn validar(p: &PedidoCorrecaoConta) -> Result<(), ErroApi> {
     let motivo = p.motivo.trim().chars().count();
     if !(5..=300).contains(&motivo) {
         return Err(ErroApi::invalido(
@@ -249,7 +249,7 @@ fn validar(p: &PedidoCorrecao) -> Result<(), ErroApi> {
 /// Corrige a conta antes do lote (só o faturista): a versão anterior fica no histórico com o motivo,
 /// a conta ganha versão nova e é conferida de novo. Conta em lote não muda (corrige-se por recurso).
 #[utoipa::path(post, operation_id = "corrigir_conta", path = "/v1/faturamento/contas/{id}/correcao", tag = "faturamento",
-    params(("id" = Uuid, Path), ("Idempotency-Key" = Uuid, Header)), request_body = PedidoCorrecao,
+    params(("id" = Uuid, Path), ("Idempotency-Key" = Uuid, Header)), request_body = PedidoCorrecaoConta,
     responses((status = 200, body = ContaDetalhe), (status = 403, body = crate::openapi::ProblemaDoc), (status = 404, body = crate::openapi::ProblemaDoc),
               (status = 409, body = crate::openapi::ProblemaDoc), (status = 422, body = crate::openapi::ProblemaDoc)))]
 pub async fn corrigir(
@@ -257,7 +257,7 @@ pub async fn corrigir(
     usuario: Usuario,
     ChaveIdempotencia(chave): ChaveIdempotencia,
     Path(id): Path<Uuid>,
-    Corpo(p): Corpo<PedidoCorrecao>,
+    Corpo(p): Corpo<PedidoCorrecaoConta>,
 ) -> Result<Response, ErroApi> {
     usuario.exigir(Ato::FaturamentoAuditar)?;
     validar(&p)?;

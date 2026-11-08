@@ -248,7 +248,7 @@ pub struct SolicitanteCorrigido {
 
 /// Correção da conta antes do lote: gera versão nova com motivo e confere de novo.
 #[derive(Debug, Clone, Deserialize, ToSchema)]
-pub struct PedidoCorrecao {
+pub struct PedidoCorrecaoConta {
     pub motivo: String,
     pub solicitante: Option<SolicitanteCorrigido>,
     /// CID-10 sem ponto (ex.: `R51`).
