@@ -9,7 +9,6 @@ import type {
   Contingencia,
   CorrecaoCadastro,
   Estorno,
-  FechamentoDeCaixa,
   FilaDaSala,
   Guia,
   HorarioLivre,
@@ -43,6 +42,10 @@ import type {
   ResultadoDoBipe,
   Triagem,
   Divergencia,
+  EstudoPendente,
+  LinkCriado,
+  PedidoConciliacao,
+  PedidoNumeros,
 } from './contrato-fase1';
 import type { ConsultaAgenda, PacienteResumo, Sala, Saude, Sessao } from './contrato-m0';
 import { ErroDaApi, ErroSemConexao, ehProblemaHttp, problemaInesperado } from './erros';
@@ -307,8 +310,21 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
         escrever<Laudo>('POST', `/v1/laudos/${seg(id)}/conversar-antes`, corpo),
       liberar: (id: string, o: OpcoesDeEscrita): Promise<Laudo> =>
         criar<Laudo>('POST', `/v1/laudos/${seg(id)}/liberacao`, {}, o),
+      /** Publicação manual no portal (409 para rascunho). */
+      publicar: (id: string, o: OpcoesDeEscrita): Promise<unknown> =>
+        criar<unknown>('POST', `/v1/laudos/${seg(id)}/publicacao`, {}, o),
+      /** Link para médico externo; o token vem uma única vez. */
+      criarLink: (id: string, horas: number, o: OpcoesDeEscrita): Promise<LinkCriado> =>
+        criar<LinkCriado>('POST', `/v1/laudos/${seg(id)}/links`, { horas }, o),
       acessoDeEmergencia: (id: string, corpo: PedidoAcessoEmergencia, o: OpcoesDeEscrita): Promise<AcessoDeEmergencia> =>
         criar<AcessoDeEmergencia>('POST', `/v1/laudos/${seg(id)}/acesso-emergencia`, corpo, o),
+    },
+
+    estudos: {
+      pendentes: (): Promise<EstudoPendente[]> => ler<EstudoPendente[]>('/v1/estudos/pendentes'),
+      /** Conciliação manual com os dois identificadores (médico). */
+      conciliar: (id: string, corpo: PedidoConciliacao, o: OpcoesDeEscrita): Promise<unknown> =>
+        criar<unknown>('POST', `/v1/estudos/${seg(id)}/conciliacao`, corpo, o),
     },
 
     portal: {
@@ -322,14 +338,17 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
       meu: (): Promise<Caixa | null> => ler<Caixa | null>('/v1/caixas/meu'),
       abrir: (fundoCentavos: number, o: OpcoesDeEscrita): Promise<Caixa> =>
         criar<Caixa>('POST', '/v1/caixas', { fundo_centavos: fundoCentavos }, o),
-      fechar: (id: string, contadoCentavos: number, o: OpcoesDeEscrita): Promise<FechamentoDeCaixa> =>
-        criar<FechamentoDeCaixa>('POST', `/v1/caixas/${seg(id)}/fechamento`, { contado_centavos: contadoCentavos }, o),
+      /** Fechamento: o servidor devolve o caixa com esperado, contado e diferença. */
+      fechar: (id: string, contadoCentavos: number, o: OpcoesDeEscrita): Promise<Caixa> =>
+        criar<Caixa>('POST', `/v1/caixas/${seg(id)}/fechamento`, { contado_centavos: contadoCentavos }, o),
     },
 
     recebimentos: {
       /** O servidor calcula o total pela tabela vigente; a tela não manda total (FC-CXA-01, 02). */
       criar: (corpo: PedidoRecebimento, o: OpcoesDeEscrita): Promise<Recebimento> =>
         criar<Recebimento>('POST', '/v1/recebimentos', corpo, o),
+      /** Situação atual; o PIX copia e cola aparece quando o PSP devolver a cobrança. */
+      obter: (id: string): Promise<Recebimento> => ler<Recebimento>(`/v1/recebimentos/${seg(id)}`),
       pedirEstorno: (id: string, corpo: PedidoEstorno, o: OpcoesDeEscrita): Promise<Estorno> =>
         criar<Estorno>('POST', `/v1/recebimentos/${seg(id)}/estornos`, corpo, o),
     },
@@ -366,8 +385,17 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
       },
       lancarRecibo: (id: string, corpo: PedidoRecibo, o: OpcoesDeEscrita): Promise<ReciboLancado> =>
         criar<ReciboLancado>('POST', `/v1/contingencias/${seg(id)}/recibos`, corpo, o),
+      /** Números da faixa devolvidos sem uso ou anulados. */
+      numeros: (id: string, corpo: PedidoNumeros, o: OpcoesDeEscrita): Promise<unknown> =>
+        criar<unknown>('POST', `/v1/contingencias/${seg(id)}/numeros`, corpo, o),
       encerrar: (id: string, o: OpcoesDeEscrita): Promise<Contingencia> =>
         criar<Contingencia>('POST', `/v1/contingencias/${seg(id)}/encerramento`, {}, o),
+    },
+
+    divergencias: {
+      /** Resolução de divergência (gerência). */
+      resolver: (id: string, resolucao: string, o: OpcoesDeEscrita): Promise<unknown> =>
+        criar<unknown>('POST', `/v1/divergencias/${seg(id)}/resolucao`, { resolucao }, o),
     },
 
     /** Endereço do fluxo SSE (`abrirEventos`). */

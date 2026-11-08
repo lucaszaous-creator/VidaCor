@@ -125,12 +125,12 @@ describe('cliente da API, rotas da Fase 1', () => {
     const api = criarCliente({ base: BASE, fetch: fn });
     const corpo = {
       formulario: 'F-ATD' as const,
-      numero: '0412',
-      paciente_id: 'p',
+      numero: 412,
+      agendamento_id: 'ag-1',
       nome: 'Maria Helena Duarte',
       nascimento: '1968-03-12',
       ocorrido_em: '2026-11-06T10:50:00-03:00',
-      atendido_por: 'Dr. Paulo Medeiros',
+      atendido_por: 'u-4',
       anexo_sha256: 'a'.repeat(64),
     };
     await expect(api.contingencias.lancarFicha('c-1', corpo, { idempotencyKey: 'k1' })).resolves.toEqual({
