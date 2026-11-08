@@ -1,6 +1,8 @@
 //! Rotas `/v1` (docs/29 § 6.2). Toda rota declara o ato exigido no próprio handler.
 
 pub mod a_receber;
+pub mod achados;
+pub mod achados_contrato;
 pub mod agenda;
 pub mod agendamentos;
 pub mod atendimentos;
@@ -88,6 +90,14 @@ pub fn rotas() -> Router<Estado> {
         .route(
             "/v1/laudos/{id}/acesso-emergencia",
             post(laudos::acesso_emergencia),
+        )
+        .route(
+            "/v1/laudos/{id}/achados",
+            get(achados::listar).post(achados::criar),
+        )
+        .route(
+            "/v1/laudos/{id}/achados/{achado_id}/remocao",
+            post(achados::remover),
         )
         .route("/v1/laudos/{id}/links", post(portal::criar_link))
         .route(

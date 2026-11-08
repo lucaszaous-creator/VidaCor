@@ -1,0 +1,53 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT codigo, versao_numero, situacao FROM laudos.achado WHERE id = $1 AND laudo_id = $2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "versao_numero",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "versao_numero"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "situacao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "236cc73912c5f9382fa2f45f048ea747a37ef52e28fdb8618e1c70c62f7d191e"
+}

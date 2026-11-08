@@ -1,0 +1,31 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT count(*) FILTER (WHERE situacao = 'ativo') AS \"ativos!\", coalesce(max(numero), 0) AS \"maior!\"\n             FROM laudos.achado WHERE laudo_id = $1 AND versao_numero = $2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "ativos!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 1,
+        "name": "maior!",
+        "type_info": "Int4",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      null,
+      null
+    ]
+  },
+  "hash": "65d4a13b35b487fbe2e9b32008c086b661a58ef4ac07b90a1507c3b30e882035"
+}

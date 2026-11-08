@@ -67,7 +67,7 @@ fn nao_encontrado() -> ErroApi {
     )
 }
 
-async fn auditar(
+pub(crate) async fn auditar(
     conexao: &mut PgConnection,
     quem: Uuid,
     laudo: Uuid,
@@ -85,7 +85,10 @@ async fn auditar(
 }
 
 /// Carrega o laudo visível no contexto (RLS: vínculo ou acesso de emergência).
-async fn carregar(conexao: &mut PgConnection, id: Uuid) -> Result<Option<Laudo>, ErroApi> {
+pub(crate) async fn carregar(
+    conexao: &mut PgConnection,
+    id: Uuid,
+) -> Result<Option<Laudo>, ErroApi> {
     let Some(l) = sqlx::query!(
         r#"SELECT l.id, l.codigo, l.situacao, l.conversar_antes, l.versao_vigente, l.medico_atribuido_id,
                   p.id AS paciente_id, p.nome, p.nascimento, ag.exame_nome,
@@ -136,7 +139,7 @@ async fn carregar(conexao: &mut PgConnection, id: Uuid) -> Result<Option<Laudo>,
 }
 
 /// Busca o laudo para um ato do médico atribuído: 404 se não existe, 403 sem vínculo ou sem atribuição.
-async fn do_medico_atribuido(
+pub(crate) async fn do_medico_atribuido(
     conexao: &mut PgConnection,
     usuario: &Usuario,
     id: Uuid,
@@ -247,18 +250,29 @@ pub async fn obter(
             Ok(Json(laudo))
         }
         None => {
-            let existe = sqlx::query_scalar!("SELECT laudos.paciente_do_laudo($1)", id)
-                .fetch_one(&mut *tx)
-                .await?;
-            auditar(&mut tx, usuario.id, id, "negado", None).await?;
+            let erro = negado(&mut tx, usuario.id, id).await?;
             tx.commit().await?;
-            Err(if existe.is_some() {
-                sem_vinculo()
-            } else {
-                nao_encontrado()
-            })
+            Err(erro)
         }
     }
+}
+
+/// Leitura negada pelo RLS: audita a tentativa e diz se é falta de vínculo (403, com oferta de
+/// acesso de emergência) ou laudo inexistente nesta unidade (404).
+pub(crate) async fn negado(
+    conexao: &mut PgConnection,
+    quem: Uuid,
+    id: Uuid,
+) -> Result<ErroApi, ErroApi> {
+    let existe = sqlx::query_scalar!("SELECT laudos.paciente_do_laudo($1)", id)
+        .fetch_one(&mut *conexao)
+        .await?;
+    auditar(conexao, quem, id, "negado", None).await?;
+    Ok(if existe.is_some() {
+        sem_vinculo()
+    } else {
+        nao_encontrado()
+    })
 }
 
 #[derive(Deserialize, ToSchema)]
@@ -356,13 +370,20 @@ pub async fn assinar(
     }
     let numero = rascunho.numero;
     let texto = rascunho.texto.clone();
+    // Achados estruturados entram no documento assinado (E2); sem achado, o hash é o de sempre.
+    let achados = crate::rotas::achados::canonico_para_assinatura(&mut tx, id, numero).await?;
+    let documento = if achados.is_empty() {
+        texto.clone()
+    } else {
+        format!("{texto}\nVIDACOR-ACHADOS-1\n{achados}")
+    };
     let hash = crate::laudos::hash_documento(
         &laudo.codigo,
         numero,
         &laudo.paciente.nome,
         &laudo.paciente.nascimento.to_string(),
         &laudo.exame,
-        &texto,
+        &documento,
     );
     tx.commit().await?;
 
@@ -387,6 +408,13 @@ pub async fn assinar(
     let travado = sqlx::query!("SELECT unidade_id, conversar_antes, versao_vigente FROM laudos.laudo WHERE id = $1 FOR UPDATE", id)
         .fetch_one(&mut *tx)
         .await?;
+    // Achado incluído ou removido enquanto o provedor assinava: o hash não confere mais.
+    if crate::rotas::achados::canonico_para_assinatura(&mut tx, id, numero).await? != achados {
+        return Err(ErroApi::conflito(
+            "assinatura-concorrente",
+            "Os achados do laudo mudaram enquanto você assinava. Nada foi assinado. Confira os achados e assine de novo.",
+        ));
+    }
     if let Some(anterior) = travado.versao_vigente {
         sqlx::query!("UPDATE laudos.versao SET situacao = 'substituida', versao = versao + 1 WHERE laudo_id = $1 AND numero = $2 AND situacao = 'assinada'", id, anterior)
             .execute(&mut *tx)
@@ -421,7 +449,7 @@ pub async fn assinar(
     .await?;
     lastro::registrar(&mut tx, NovoEvento {
         dominio: "laudos", tipo: "laudo_assinado", registro_id: id, registro_codigo: Some(&laudo.codigo),
-        dados: json!({ "versao": numero, "hash_documento": hash, "certificado": assinatura.certificado, "carimbo_tempo": assinatura.carimbo_tempo, "reautenticado": true }),
+        dados: json!({ "versao": numero, "hash_documento": hash, "certificado": assinatura.certificado, "carimbo_tempo": assinatura.carimbo_tempo, "reautenticado": true, "achados": achados.lines().count() }),
         criado_por: Some(usuario.id), origem: "consultorio", unidade_id: travado.unidade_id, correlacao: &correlacao,
     }).await?;
     if !travado.conversar_antes {
@@ -489,6 +517,21 @@ pub async fn retificar(
     .execute(&mut *tx)
     .await?;
     sqlx::query!("UPDATE laudos.laudo SET situacao = 'retificacao_em_rascunho', versao = versao + 1 WHERE id = $1", id).execute(&mut *tx).await?;
+    // Os achados estruturados da versão vigente seguem para a retificação (E2, DEC-2026-11-08-60).
+    let achados_copiados = match laudo.versao_vigente {
+        Some(vigente) => {
+            crate::rotas::achados::copiar_para_retificacao(
+                &mut tx,
+                id,
+                vigente,
+                proximo,
+                &usuario,
+                &correlacao,
+            )
+            .await?
+        }
+        None => 0,
+    };
     lastro::registrar(
         &mut tx,
         NovoEvento {
@@ -496,7 +539,7 @@ pub async fn retificar(
             tipo: "retificacao_aberta",
             registro_id: id,
             registro_codigo: Some(&laudo.codigo),
-            dados: json!({ "versao": proximo, "motivo": motivo }),
+            dados: json!({ "versao": proximo, "motivo": motivo, "achados_copiados": achados_copiados }),
             criado_por: Some(usuario.id),
             origem: "consultorio",
             unidade_id: unidade,

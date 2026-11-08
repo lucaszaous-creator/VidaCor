@@ -3687,6 +3687,7 @@ dependencies = [
  "utoipa",
  "uuid",
  "vidacor-comum",
+ "vidacor-dominio-laudo",
  "vidacor-dominio-recepcao",
  "vidacor-dominio-triagem",
 ]
