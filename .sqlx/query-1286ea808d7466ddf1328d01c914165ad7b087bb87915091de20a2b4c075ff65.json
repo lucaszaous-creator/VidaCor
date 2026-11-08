@@ -1,0 +1,113 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT numero, sistema, regra_versao, categoria, localizacao, maior_diametro_dmm, texto_achado, texto_conclusao\n           FROM laudos.achado WHERE laudo_id = $1 AND versao_numero = $2 AND situacao = 'ativo' ORDER BY numero",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "numero",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "sistema",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "sistema"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "regra_versao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "regra_versao"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "categoria",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "categoria"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "localizacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "localizacao"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "maior_diametro_dmm",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "maior_diametro_dmm"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "texto_achado",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "texto_achado"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "texto_conclusao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.achado",
+            "name": "texto_conclusao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "1286ea808d7466ddf1328d01c914165ad7b087bb87915091de20a2b4c075ff65"
+}

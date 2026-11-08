@@ -11,7 +11,7 @@ import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel
 import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-orcamento';
 import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
-import type { CadeiaDoAtendimento } from './contrato-lastro';
+import type { CadeiaDoAtendimento, PedidoDossie } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
 import type { ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
 import type { NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
@@ -106,6 +106,7 @@ export type ConfereEntradaDeEstoque = Cabe<EntradaDeEstoque, S['EntradaDeEstoque
 export type ConfereMovimentoFeito = Cabe<MovimentoFeito, S['MovimentoFeito']>;
 export type ConfereRastreioDoLote = Cabe<RastreioDoLote, S['RastreioDoLote']>;
 export type ConfereCadeiaDoAtendimento = Cabe<CadeiaDoAtendimento, S['CadeiaDoAtendimento']>;
+export type ConferePedidoDossie = Cabe<PedidoDossie, S['PedidoDossie']>;
 
 // Laudo estruturado (E2).
 export type ConfereNovoAchado = Cabe<NovoAchado, S['NovoAchado']>;

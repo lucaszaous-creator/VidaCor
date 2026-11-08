@@ -255,6 +255,12 @@ pub fn acoes_do_laudo(
         .is_some_and(|m| m != u.id)
         .then(|| "Laudo atribuído a outro médico".to_owned());
     let mut v = vec![acao("abrir", "Abrir no laudo", abrir.clone())];
+    // Laudo impresso: só versão assinada (com retificação em rascunho, imprime a vigente).
+    v.push(
+        acao("pdf", "Baixar PDF", abrir.clone()).indisponivel_se(
+            (situacao == "rascunho").then(|| "Laudo ainda não assinado".to_owned()),
+        ),
+    );
     if u.pode(Ato::LaudoEscrever) {
         v.push(
             acao("assinar", "Assinar", abrir.clone()).indisponivel_se(if assinado {
@@ -403,6 +409,27 @@ mod testes {
         let r = acoes_do_agendamento(&usuario("recepcao"), &agendado(true), hoje());
         let ultima = r.last().unwrap();
         assert_eq!((ultima.id.as_str(), ultima.perigo), ("reimprimir", true));
+    }
+
+    #[test]
+    fn pdf_do_laudo_so_depois_de_assinado() {
+        let estado = |situacao: &str| {
+            let r = acoes_do_laudo(&usuario("medico"), Uuid::nil(), situacao, None);
+            let pdf = r.iter().find(|a| a.id == "pdf").unwrap();
+            (pdf.estado.clone(), pdf.motivo.clone())
+        };
+        assert_eq!(
+            estado("rascunho"),
+            (
+                "indisponivel".to_owned(),
+                Some("Laudo ainda não assinado".to_owned())
+            )
+        );
+        assert_eq!(estado("assinado"), ("disponivel".to_owned(), None));
+        assert_eq!(
+            estado("retificacao_em_rascunho"),
+            ("disponivel".to_owned(), None)
+        );
     }
 
     #[test]

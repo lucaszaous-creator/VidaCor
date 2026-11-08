@@ -15,6 +15,7 @@ import {
   type CorDoChip,
 } from '@vidacor/design-system';
 import { useState } from 'react';
+import { BaixarDocumento } from '../../componentes/BaixarDocumento';
 import { CabecalhoDaTela, EstadoDaConsulta } from '../../componentes/Bloco';
 import { ErroDoAto } from '../../componentes/ErroDoAto';
 import { chaves, consultaLaudo } from '../../consultas';
@@ -154,6 +155,12 @@ function ConversarAntes({ laudo }: { laudo: Laudo }) {
   );
 }
 
+/** Laudo impresso: só versão assinada; com retificação em rascunho, sai a vigente. */
+function PdfDoLaudo({ laudo }: { laudo: Laudo }) {
+  const { api } = useDependencias();
+  return <BaixarDocumento rotulo="Baixar PDF" ato="baixar o PDF do laudo" baixar={() => api.laudos.baixarPdf(laudo.id)} />;
+}
+
 function ConteudoDoLaudo({ laudo, retomada }: { laudo: Laudo; retomada: Retomada | null }) {
   const [retificando, setRetificando] = useState(retomada?.retomar === 'retificar');
   const rascunho = laudo.versoes.find((v) => v.situacao === 'rascunho');
@@ -169,7 +176,17 @@ function ConteudoDoLaudo({ laudo, retomada }: { laudo: Laudo; retomada: Retomada
       </div>
       <ConversarAntes laudo={laudo} />
       {rascunho !== undefined ? (
-        <EditorDoRascunho key={rascunho.numero} laudo={laudo} versao={rascunho} retomada={retomada} />
+        <>
+          {vigente?.situacao === 'assinada' && (
+            <section className="col" aria-label={`Versão ${String(vigente.numero)} assinada (vigente)`} style={{ gap: 6 }}>
+              <p className="t13 mute" style={{ margin: 0 }}>
+                Até a retificação ser assinada, a versão {vigente.numero} continua valendo e é a que sai no PDF.
+              </p>
+              <PdfDoLaudo laudo={laudo} />
+            </section>
+          )}
+          <EditorDoRascunho key={rascunho.numero} laudo={laudo} versao={rascunho} retomada={retomada} />
+        </>
       ) : (
         vigente !== undefined && (
           <>
@@ -194,7 +211,7 @@ function ConteudoDoLaudo({ laudo, retomada }: { laudo: Laudo; retomada: Retomada
               <pre className="texto-laudo">{vigente.texto}</pre>
             </section>
             <PainelDeAchados laudo={laudo} />
-            <div className="row">
+            <div className="row wrap" style={{ gap: 10, alignItems: 'flex-start' }}>
               <Botao
                 onPress={() => {
                   setRetificando(true);
@@ -202,6 +219,9 @@ function ConteudoDoLaudo({ laudo, retomada }: { laudo: Laudo; retomada: Retomada
               >
                 Retificar
               </Botao>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <PdfDoLaudo laudo={laudo} />
+              </div>
             </div>
             <CompartilharLaudo laudo={laudo} />
             {retificando && (

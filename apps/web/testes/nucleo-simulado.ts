@@ -12,6 +12,7 @@ import { comunicacaoSimulada, lastroSimulado, manipuladoresComunicacao, manipula
 import { manipuladoresAutorizacao, reiniciarAutorizacoes } from './nucleo-autorizacao';
 import { manipuladoresFaturamento, reiniciarFaturamento } from './nucleo-faturamento';
 import { manipuladoresLaudoEstruturado, reiniciarLaudoEstruturado } from './nucleo-laudo-estruturado';
+import { manipuladoresDocumentos } from './nucleo-documentos';
 import { manipuladoresMenu } from './nucleo-menu';
 import { manipuladoresCadastro, manipuladoresPortal, portalSimulado } from './nucleo-portal';
 import { manipuladoresAReceber, manipuladoresPendencias, reiniciarPendencias } from './nucleo-pendencias';
@@ -118,4 +119,4 @@ export const manipuladores = [
   }),
 ];
 
-export const servidor = setupServer(...manipuladoresVisualizacao, ...manipuladoresEspera, ...manipuladoresAparelhos, ...manipuladoresOrcamento, ...manipuladoresAutorizacao, ...manipuladoresPainel, ...manipuladoresExterno, ...manipuladoresFaturamento, ...manipuladoresNfse, ...manipuladoresUsuarios, ...manipuladoresFinanceiro, ...manipuladoresComunicacao, ...manipuladoresIndicadores, ...manipuladoresLaudoEstruturado, ...manipuladoresLastro, ...manipuladoresEstoque, ...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores);
+export const servidor = setupServer(...manipuladoresDocumentos, ...manipuladoresVisualizacao, ...manipuladoresEspera, ...manipuladoresAparelhos, ...manipuladoresOrcamento, ...manipuladoresAutorizacao, ...manipuladoresPainel, ...manipuladoresExterno, ...manipuladoresFaturamento, ...manipuladoresNfse, ...manipuladoresUsuarios, ...manipuladoresFinanceiro, ...manipuladoresComunicacao, ...manipuladoresIndicadores, ...manipuladoresLaudoEstruturado, ...manipuladoresLastro, ...manipuladoresEstoque, ...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores);

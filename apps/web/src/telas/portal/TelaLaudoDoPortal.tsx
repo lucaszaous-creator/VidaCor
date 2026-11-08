@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getRouteApi, Link } from '@tanstack/react-router';
 import { ErroDaApi, type LaudoDoPortal } from '@vidacor/api-client';
 import { Aviso, Carregando, formatarDataHora } from '@vidacor/design-system';
+import { BaixarDocumento } from '../../componentes/BaixarDocumento';
 import { consultaPortalLaudo } from '../../consultas';
 import { useDependencias } from '../../contexto';
 import { FUSO_DA_CLINICA } from '../agenda/grade';
@@ -54,7 +55,19 @@ export function TelaLaudoDoPortal() {
       ) : (
         consulta.isError && <ErroDoPortal erro={consulta.error} aoTentarDeNovo={() => void consulta.refetch()} />
       )}
-      {consulta.data !== undefined && <LeituraDoLaudo laudo={consulta.data} />}
+      {consulta.data !== undefined && (
+        <>
+          <LeituraDoLaudo laudo={consulta.data} />
+          <BaixarDocumento
+            rotulo="Baixar PDF"
+            ato="baixar o PDF do laudo"
+            variante="principal"
+            simples
+            baixar={() => api.portal.baixarPdf(laudoId)}
+            mostrarErro={(erro, tentar) => <ErroDoPortal erro={erro} aoTentarDeNovo={tentar} />}
+          />
+        </>
+      )}
     </>
   );
 }

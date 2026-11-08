@@ -18,6 +18,7 @@ pub mod cancelamento;
 pub mod chamada;
 pub mod comunicacao;
 pub mod contingencia;
+pub mod documentos;
 pub mod equipe;
 pub mod estoque;
 pub mod estornos;
@@ -97,6 +98,7 @@ pub fn rotas() -> Router<Estado> {
             get(agendamentos::horarios_livres),
         )
         .route("/v1/laudos/fila", get(laudos::fila))
+        .route("/v1/laudos/{id}/pdf", get(documentos::laudo_pdf))
         .route("/v1/laudos/{id}", get(laudos::obter))
         .route(
             "/v1/laudos/{id}/rascunho",
@@ -139,6 +141,10 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/portal/sessao/encerramento", post(portal_acesso::sair))
         .route("/v1/portal/laudos", get(portal::meus_laudos))
         .route("/v1/portal/laudos/{id}", get(portal::meu_laudo))
+        .route(
+            "/v1/portal/laudos/{id}/pdf",
+            get(documentos::portal_laudo_pdf),
+        )
         .route("/v1/links/{token}", get(portal::abrir_link))
         .route("/v1/caixas", post(caixa::abrir))
         .route("/v1/caixas/meu", get(caixa::meu))
@@ -155,6 +161,7 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/estoque/lotes/{id}/rastreio", get(estoque::rastreio))
         .route("/v1/atendimentos/{id}/contraste", post(estoque::contraste))
         .route("/v1/lastro/cadeia", get(lastro_explorador::cadeia))
+        .route("/v1/lastro/dossie", post(documentos::dossie))
         .route("/v1/indicadores", get(indicadores::indicadores))
         .route("/v1/usuarios", get(usuarios::listar).post(usuarios::criar))
         .route(

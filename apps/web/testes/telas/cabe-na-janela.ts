@@ -180,6 +180,13 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await esperar(page, 'textbox', 'Justificativa');
   await ok('18-laudo-sem-vinculo');
   estado.semVinculo = false;
+  estado.sessao = SESSOES.medico;
+  estado.laudoAssinado = true;
+  await ir(`/laudos/${LAUDO_ANTONIO_ID}`);
+  await page.getByRole('button', { name: 'Baixar PDF' }).click();
+  await page.getByText(/PDF baixado: LAU-2026-004120-v1\.pdf\./).waitFor();
+  await ok('18b-laudo-assinado-pdf');
+  estado.laudoAssinado = false;
 
   await ir('/portal');
   await esperar(page, 'region', 'Laudos publicados');
@@ -188,6 +195,9 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await ir(`/portal/laudos/${PORTAL_LAUDO_ECO.id}`);
   await esperar(page, 'article', 'Laudo de Ecocardiograma transtorácico');
   await ok('20-portal-laudo');
+  await page.getByRole('button', { name: 'Baixar PDF' }).click();
+  await page.getByText(/PDF baixado: LAU-2026-000031-v2\.pdf\./).waitFor();
+  await ok('20b-portal-laudo-pdf');
   await ir('/portal/link/token-expirado');
   await page.getByText(/Este link expirou\./).waitFor();
   await ok('21-portal-link-expirado');
@@ -232,6 +242,9 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await page.getByRole('button', { name: 'Abrir cadeia' }).click();
   await esperar(page, 'heading', 'Sônia Maria Castro');
   await ok('30-lastro');
+  await page.getByRole('button', { name: 'Dossiê em PDF' }).click();
+  await page.getByText(/PDF baixado: DOS-2026-000003\.pdf\./).waitFor();
+  await ok('30b-lastro-dossie-pdf');
   await ir('/indicadores');
   await esperar(page, 'region', 'Resumo');
   await ok('31-indicadores');

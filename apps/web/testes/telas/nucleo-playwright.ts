@@ -36,14 +36,42 @@ export interface EstadoDaSimulacao {
   caixaAberto: boolean;
   contingenciaAberta: boolean;
   semVinculo: boolean;
+  /** O laudo do Antônio aparece assinado (versão 1 vigente), com o PDF disponível. */
+  laudoAssinado: boolean;
 }
 
 export function novoEstado(): EstadoDaSimulacao {
-  return { sessao: SESSOES.recepcao, checkinFeito: false, caixaAberto: false, contingenciaAberta: false, semVinculo: false };
+  return { sessao: SESSOES.recepcao, checkinFeito: false, caixaAberto: false, contingenciaAberta: false, semVinculo: false, laudoAssinado: false };
 }
 
 function json(route: Route, corpo: unknown, status = 200): Promise<void> {
   return route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(corpo) });
+}
+
+/** Começo de um PDF com os cabeçalhos do núcleo (SHA-256 e emissão); o conteúdo não importa aqui. */
+function pdf(route: Route, arquivo: string, codigo: string): Promise<void> {
+  return route.fulfill({
+    status: 200,
+    contentType: 'application/pdf',
+    headers: {
+      'Content-Disposition': `attachment; filename="${arquivo}"`,
+      'X-Documento-Sha256': '9f2c4e7a1b3d5f60718293a4b5c6d7e8f9012345a6b7c8d9e0f1a2b3c4d5e6f7',
+      'X-Documento-Codigo': codigo,
+    },
+    body: '%PDF-1.7',
+  });
+}
+
+function laudoDaSimulacao(assinado: boolean) {
+  const l = laudoAntonio();
+  if (!assinado) return l;
+  return {
+    ...l,
+    situacao: 'assinado',
+    publicado_no_portal: true,
+    versao_vigente: 1,
+    versoes: l.versoes.map((v) => ({ ...v, situacao: 'assinada', assinada_por: 'Dr. Paulo Medeiros', assinada_em: '2026-11-06T12:04:00Z', hash_documento: 'a'.repeat(64) })),
+  };
 }
 
 function problema(route: Route, status: number, codigo: string, detail: string, extras: Record<string, unknown> = {}): Promise<void> {
@@ -108,11 +136,14 @@ export async function simularNucleo(page: Page, estado: EstadoDaSimulacao): Prom
       return json(route, { atendimento: { ...ATENDIMENTO_ANTONIO, situacao: 'em_exame' }, aparelho: APARELHO_SALA_1, worklist: 'enviada' });
     }
     if (c === '/v1/laudos/fila') return json(route, filaDeLaudos());
+    if (/^\/v1\/laudos\/[^/]+\/pdf$/.test(c)) return pdf(route, 'LAU-2026-004120-v1.pdf', 'DOC-2026-000007');
+    if (/^\/v1\/portal\/laudos\/[^/]+\/pdf$/.test(c)) return pdf(route, 'LAU-2026-000031-v2.pdf', 'DOC-2026-000008');
+    if (c === '/v1/lastro/dossie') return pdf(route, 'DOS-2026-000003.pdf', 'DOS-2026-000003');
     if (/^\/v1\/laudos\/[^/]+$/.test(c)) {
       if (estado.semVinculo) {
         return problema(route, 403, 'sem-vinculo-de-cuidado', 'Você não tem vínculo de cuidado com este paciente. O laudo não foi aberto. Se for uma emergência, use o acesso de emergência com justificativa.');
       }
-      return json(route, laudoAntonio());
+      return json(route, laudoDaSimulacao(estado.laudoAssinado));
     }
     if (/^\/v1\/laudos\/[^/]+\/rascunho$/.test(c)) return json(route, laudoAntonio());
     if (/^\/v1\/laudos\/[^/]+\/achados$/.test(c)) return json(route, achadosDoLaudoAntonio(laudoAntonio().id));

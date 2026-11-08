@@ -31,7 +31,7 @@ pub struct LaudoDoPortal {
     pub publicado_em: DateTime<Utc>,
 }
 
-fn nao_encontrado() -> ErroApi {
+pub(crate) fn nao_encontrado() -> ErroApi {
     ErroApi::nao_encontrado(
         "nao-encontrado",
         "Não encontramos este documento. Confira o endereço ou volte à lista dos seus exames.",

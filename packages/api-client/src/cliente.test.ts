@@ -226,3 +226,56 @@ describe('Problem Details sem trace_id', () => {
     expect(erro.traceId).toBe('');
   });
 });
+
+describe('documentos em PDF', () => {
+  function pdf(): Response {
+    return new Response(new Uint8Array([0x25, 0x50, 0x44, 0x46, 0x2d]), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': 'attachment; filename="LAU-2026-000001-v1.pdf"',
+        'X-Documento-Sha256': 'a'.repeat(64),
+        'X-Documento-Codigo': 'DOC-2026-000001',
+      },
+    });
+  }
+
+  it('baixa o PDF do laudo com o hash e o código da emissão dados pelo servidor', async () => {
+    const { fn, chamadas } = fetchFalso([pdf]);
+    const api = criarCliente({ base: BASE, fetch: fn });
+    const doc = await api.laudos.baixarPdf('l/1');
+    expect(chamadas[0]?.url).toBe(`${BASE}/v1/laudos/l%2F1/pdf`);
+    expect(chamadas[0]?.init.cache).toBe('no-store');
+    expect(doc.nomeDoArquivo).toBe('LAU-2026-000001-v1.pdf');
+    expect(doc.sha256).toBe('a'.repeat(64));
+    expect(doc.codigoDaEmissao).toBe('DOC-2026-000001');
+    expect(new Uint8Array(await doc.conteudo.arrayBuffer()).slice(0, 4)).toEqual(new Uint8Array([0x25, 0x50, 0x44, 0x46]));
+  });
+
+  it('laudo não assinado vira ErroDaApi com a mensagem do servidor', async () => {
+    const problema = { type: 'about:blank', title: 'Conflito', status: 409, detail: 'Este laudo ainda não foi assinado.', codigo: 'laudo-nao-assinado', trace_id: 't-1' };
+    const { fn } = fetchFalso([() => json(problema, 409, 'application/problem+json')]);
+    const api = criarCliente({ base: BASE, fetch: fn });
+    const erro = (await api.laudos.baixarPdf('l-1').catch((e: unknown) => e)) as ErroDaApi;
+    expect(erro).toBeInstanceOf(ErroDaApi);
+    expect(erro.codigo).toBe('laudo-nao-assinado');
+  });
+
+  it('o dossiê vai por POST com o CSRF da sessão e sem chave de idempotência', async () => {
+    const { fn, chamadas } = fetchFalso([() => json(SESSAO), pdf]);
+    const api = criarCliente({ base: BASE, fetch: fn });
+    await api.lastro.dossie({ codigo: 'ATD-2026-000001' });
+    expect(chamadas[1]?.url).toBe(`${BASE}/v1/lastro/dossie`);
+    expect(chamadas[1]?.init.method).toBe('POST');
+    expect(cabecalho(chamadas[1], 'X-CSRF-Token')).toBe(SESSAO.csrf);
+    expect(cabecalho(chamadas[1], 'Idempotency-Key')).toBeUndefined();
+    expect(chamadas[1]?.init.body).toBe(JSON.stringify({ codigo: 'ATD-2026-000001' }));
+  });
+
+  it('o portal baixa pelo caminho do portal', async () => {
+    const { fn, chamadas } = fetchFalso([pdf]);
+    const api = criarCliente({ base: BASE, fetch: fn });
+    await api.portal.baixarPdf('l-9');
+    expect(chamadas[0]?.url).toBe(`${BASE}/v1/portal/laudos/l-9/pdf`);
+  });
+});

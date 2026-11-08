@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import type { ClienteVidaCor, FonteDeEventos } from '@vidacor/api-client';
+import type { ClienteVidaCor, DocumentoBaixado, FonteDeEventos } from '@vidacor/api-client';
 
 /** Dependências da aplicação, trocáveis nos testes (núcleo simulado, SSE falso). */
 export interface Dependencias {
@@ -11,6 +11,8 @@ export interface Dependencias {
   irPara: (url: string) => void;
   /** Impressão da página (pulseira). Padrão: `window.print()`; testes trocam por um espião. */
   imprimir?: () => void;
+  /** Entrega de arquivo baixado (PDF). Padrão: download pelo navegador; testes trocam por um espião. */
+  salvarArquivo?: (doc: DocumentoBaixado) => void;
   /** Espera depois da última tecla antes de salvar o rascunho (padrão 1,2 s; testes usam 0). */
   atrasoDoRascunhoMs?: number;
   /** Intervalo da consulta do recebimento até o PIX e o pagamento chegarem (padrão 2 s). */

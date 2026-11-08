@@ -39,6 +39,32 @@ describe('Portal do paciente (FC-LAU-03, FC-LAU-05, FC-ACE)', () => {
     expect(await violacoesDeAcessibilidade(container)).toEqual([]);
   });
 
+  it('o paciente baixa o PDF do próprio laudo, sem detalhe técnico na confirmação', async () => {
+    const usuario = userEvent.setup();
+    const { container, salvarArquivo } = renderizar(`/portal/laudos/${PORTAL_LAUDO_ECO.id}`);
+    await screen.findByRole('article', { name: 'Laudo de Ecocardiograma transtorácico' });
+    await usuario.click(screen.getByRole('button', { name: 'Baixar PDF' }));
+    const status = await screen.findByText(/PDF baixado: LAU-2026-000031-v2\.pdf\./);
+    expect(status).not.toHaveTextContent('SHA-256');
+    expect(salvarArquivo).toHaveBeenCalledTimes(1);
+    expect(await violacoesDeAcessibilidade(container)).toEqual([]);
+  });
+
+  it('PDF recusado com a sessão encerrada pede para entrar no portal e nada é baixado', async () => {
+    const usuario = userEvent.setup();
+    servidor.use(http.get('*/v1/portal/laudos/:id/pdf', () => problema(401, 'sem-sessao', 'Entre no portal.')));
+    const { salvarArquivo } = renderizar(`/portal/laudos/${PORTAL_LAUDO_ECO.id}`);
+    await usuario.click(await screen.findByRole('button', { name: 'Baixar PDF' }));
+    expect(await screen.findByText(/Entre no portal para ver seus resultados\./)).toBeInTheDocument();
+    expect(salvarArquivo).not.toHaveBeenCalled();
+  });
+
+  it('link compartilhado não oferece o PDF (só o paciente, na sessão dele)', async () => {
+    renderizar('/portal/link/link-valido');
+    await screen.findByRole('article', { name: 'Laudo de Doppler colorido de carótidas' });
+    expect(screen.queryByRole('button', { name: 'Baixar PDF' })).not.toBeInTheDocument();
+  });
+
   it('laudo de outro paciente e laudo inexistente recebem a mesma mensagem neutra (404)', async () => {
     const primeira = renderizar('/portal/laudos/0000001b-0000-7000-8000-000000000099');
     expect(await screen.findByText(/Laudo não encontrado\./)).toBeInTheDocument();

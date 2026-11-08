@@ -1,0 +1,88 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT nome, endereco, telefone, site, cnpj, responsavel_tecnico FROM documentos.cabecalho WHERE unidade_id = $1 AND vigente",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "endereco",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "endereco"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "telefone",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "telefone"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "site",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "site"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "cnpj",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "cnpj"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "responsavel_tecnico",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.cabecalho",
+            "name": "responsavel_tecnico"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "2bdd57569b785f876bfc353128cf071a5d6b849b82757ad1f96d4fa9d79b328b"
+}

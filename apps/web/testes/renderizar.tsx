@@ -36,6 +36,7 @@ export function renderizar(url: string) {
   const fontes: FonteFalsa[] = [];
   const irPara = vi.fn();
   const imprimir = vi.fn();
+  const salvarArquivo = vi.fn();
   const queryClient = criarQueryClient();
   queryClient.setDefaultOptions({ queries: { retry: false } });
   const tela = render(
@@ -46,6 +47,7 @@ export function renderizar(url: string) {
         api: criarCliente({ esperar: () => Promise.resolve() }),
         irPara,
         imprimir,
+        salvarArquivo,
         atrasoDoAvisoDeEventosMs: 0,
         atrasoDoRascunhoMs: 0,
         intervaloDoRecebimentoMs: 30,
@@ -57,5 +59,5 @@ export function renderizar(url: string) {
       }}
     />,
   );
-  return { ...tela, fontes, irPara, imprimir, queryClient };
+  return { ...tela, fontes, irPara, imprimir, salvarArquivo, queryClient };
 }
