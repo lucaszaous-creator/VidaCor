@@ -127,6 +127,12 @@ export async function simularNucleo(page: Page, estado: EstadoDaSimulacao): Prom
           .map((i) => ({ atendimento_id: i.atendimento_id, codigo: i.codigo, paciente: i.paciente, inicio: i.inicio, procedimentos: [{ tuss: i.exame.codigo_tuss, descricao: i.exame.nome, valor_centavos: 38000 }], recebido: false })),
       );
     }
+    if (c === '/v1/indicadores') {
+      return json(route, { de: '2026-10-08', ate: '2026-11-06', agendamentos: 120, atendimentos: 104, faltas: 9, taxa_de_faltas: 0.08, receita_centavos: 4480000, recebimentos: 118, ticket_medio_centavos: 37966, tempo_medio_de_laudo_horas: 6.4,
+        producao: Array.from({ length: 25 }, (_, k) => ({ exame: `Exame número ${String(k)} com nome comprido para quebrar`, atendimentos: 50 - k })),
+        por_medico: Array.from({ length: 12 }, (_, k) => ({ medico: `Dr. Médico ${String(k)}`, laudos: 10 + k, horas_medias: 3 + k })),
+        ocupacao: Array.from({ length: 70 }, (_, k) => ({ dia_da_semana: k % 7, hora: 7 + Math.floor(k / 7), agendamentos: (k * 7) % 13 })) });
+    }
     if (c === '/v1/lastro/cadeia') {
       const evs = Array.from({ length: 30 }, (_, i) => ({ sequencia: i + 1, dominio: 'recepcao', tipo: 'evento_de_teste', registro_codigo: 'ATD-2026-000031', criado_em: '2026-11-06T11:00:00Z', origem: 'recepcao', hash: '3f9ac21b77e0', integro: true }));
       return json(route, { paciente: { id: 'p', nome: 'Sônia Maria Castro', nascimento: '1962-02-03' }, atendimento_codigo: 'ATD-2026-000031', nos: Array.from({ length: 12 }, (_, i) => ({ tipo: 'etiqueta', id: `n${String(i)}`, codigo: `ETQ-2026-0000${String(i)}`, situacao: 'valida', criado_em: '2026-11-06T11:00:00Z' })), eventos: evs, integra: true });

@@ -50,6 +50,7 @@ import type {
 import type { ConsultaAgenda, PacienteResumo, SalaDaUnidade, Saude, Sessao } from './contrato-m0';
 import type { MenuDoObjeto, ObjetoDoMenu } from './contrato-menu';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
+import type { Indicadores } from './contrato-indicadores';
 import type { ContrasteAplicado, EntradaDeEstoque, ItemDeEstoque, MovimentoFeito, RastreioDoLote } from './contrato-estoque';
 import type { AceiteDoConvite, ConviteEmitido, EntradaNoPortal, NovoPaciente, PacienteCadastrado, PossivelDuplicado, SessaoDoPortal, SituacaoDoConvite } from './contrato-portal';
 import type { AchadoEstruturado, AchadosDoLaudo, NovoAchado } from './contrato-laudo-estruturado';
@@ -409,6 +410,11 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
     menu: {
       /** Ações do objeto para o perfil e o estado atual; a tela só mostra (docs/19 § 8). */
       de: (objeto: ObjetoDoMenu, id: string): Promise<MenuDoObjeto> => ler<MenuDoObjeto>(`/v1/menu/${objeto}/${seg(id)}`),
+    },
+
+    indicadores: {
+      /** Agregados do período (até um ano), sem paciente. */
+      doPeriodo: (de: string, ate: string): Promise<Indicadores> => ler<Indicadores>(`/v1/indicadores?${new URLSearchParams({ de, ate }).toString()}`),
     },
 
     lastro: {

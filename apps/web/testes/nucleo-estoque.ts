@@ -65,3 +65,35 @@ export const manipuladoresLastro = [
     });
   }),
 ];
+
+/** Indicadores simulados (regras reais em `crates/api/tests/indicadores.rs`). */
+export const manipuladoresIndicadores = [
+  http.get('*/v1/indicadores', ({ request }) => {
+    if (!temPerfil('gerente', 'financeiro')) return semPermissao('ver indicadores');
+    const u = new URL(request.url);
+    return HttpResponse.json({
+      de: u.searchParams.get('de'),
+      ate: u.searchParams.get('ate'),
+      agendamentos: 120,
+      atendimentos: 104,
+      faltas: 9,
+      taxa_de_faltas: 0.08,
+      receita_centavos: 4480000,
+      recebimentos: 118,
+      ticket_medio_centavos: 37966,
+      tempo_medio_de_laudo_horas: 6.4,
+      producao: [
+        { exame: 'Ecocardiograma transtorácico', atendimentos: 41 },
+        { exame: 'USG de tireoide', atendimentos: 22 },
+      ],
+      por_medico: [
+        { medico: 'Dr. Paulo Medeiros', laudos: 60, horas_medias: 5.2 },
+        { medico: 'Dr. Marcos Freire', laudos: 20, horas_medias: 11.5 },
+      ],
+      ocupacao: [
+        { dia_da_semana: 1, hora: 8, agendamentos: 12 },
+        { dia_da_semana: 2, hora: 9, agendamentos: 4 },
+      ],
+    });
+  }),
+];

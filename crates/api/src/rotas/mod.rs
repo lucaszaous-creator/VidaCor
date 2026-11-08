@@ -15,6 +15,7 @@ pub mod estornos;
 pub mod estudos;
 pub mod etiquetas;
 pub mod eventos;
+pub mod indicadores;
 pub mod lastro_explorador;
 pub mod laudos;
 pub mod menu;
@@ -133,6 +134,7 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/estoque/lotes/{id}/rastreio", get(estoque::rastreio))
         .route("/v1/atendimentos/{id}/contraste", post(estoque::contraste))
         .route("/v1/lastro/cadeia", get(lastro_explorador::cadeia))
+        .route("/v1/indicadores", get(indicadores::indicadores))
         .route("/v1/estornos", get(estornos::listar))
         .route("/v1/menu/agendamento/{id}", get(menu::agendamento))
         .route("/v1/menu/atendimento/{id}", get(menu::atendimento))

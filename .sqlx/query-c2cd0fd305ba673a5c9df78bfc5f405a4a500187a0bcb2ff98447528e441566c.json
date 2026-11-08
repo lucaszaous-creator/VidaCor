@@ -1,0 +1,37 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT g.exame_nome AS \"exame!\", count(*) AS \"atendimentos!\" FROM recepcao.atendimento a JOIN agenda.agendamento g ON g.id = a.agendamento_id\n           WHERE a.unidade_id = $1 AND g.inicio >= $2 AND g.inicio < $3 AND a.situacao <> 'cancelado'\n           GROUP BY g.exame_nome ORDER BY 2 DESC, 1 LIMIT 30",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "exame!",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "exame_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "atendimentos!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      null
+    ]
+  },
+  "hash": "c2cd0fd305ba673a5c9df78bfc5f405a4a500187a0bcb2ff98447528e441566c"
+}

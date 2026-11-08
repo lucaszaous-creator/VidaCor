@@ -1,0 +1,39 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT extract(dow FROM inicio AT TIME ZONE 'America/Sao_Paulo')::int AS \"dia_da_semana!\",\n                  extract(hour FROM inicio AT TIME ZONE 'America/Sao_Paulo')::int AS \"hora!\", count(*) AS \"agendamentos!\"\n           FROM agenda.agendamento WHERE unidade_id = $1 AND inicio >= $2 AND inicio < $3 AND situacao NOT IN ('cancelado','expirada')\n           GROUP BY 1, 2 ORDER BY 1, 2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "dia_da_semana!",
+        "type_info": "Int4",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 1,
+        "name": "hora!",
+        "type_info": "Int4",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "agendamentos!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "de7ae0917068302d0771031338ea52368b9bd10e58fe968e602b1f02e54054dc"
+}

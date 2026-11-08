@@ -33,6 +33,7 @@ pub enum Ato {
     ContrasteRegistrar,
     LoteRastrear,
     LastroExplorar,
+    IndicadoresVer,
 }
 
 impl Ato {
@@ -70,6 +71,8 @@ impl Ato {
             A::LoteRastrear => &["gerente"],
             // Explorador de lastro: gerência e auditor/DPO (docs/18 § 4: metadados de acesso).
             A::LastroExplorar => &["gerente", "auditor"],
+            // Indicadores agregados, sem paciente (docs/25 MVP).
+            A::IndicadoresVer => &["gerente", "financeiro"],
         };
         perfis.contains(&perfil)
     }
@@ -79,7 +82,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 29] = [
+    const TODOS: [Ato; 30] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -109,6 +112,7 @@ mod testes {
         Ato::ContrasteRegistrar,
         Ato::LoteRastrear,
         Ato::LastroExplorar,
+        Ato::IndicadoresVer,
     ];
 
     #[test]

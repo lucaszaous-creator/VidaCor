@@ -87,6 +87,7 @@ pub struct ProblemaDoc {
         crate::rotas::cadastro::cadastrar,
         crate::rotas::estoque::itens,
         crate::rotas::lastro_explorador::cadeia,
+        crate::rotas::indicadores::indicadores,
         crate::rotas::estoque::entrada,
         crate::rotas::estoque::contraste,
         crate::rotas::estoque::rastreio,

@@ -7,6 +7,7 @@
 import type { components } from './gerado/openapi';
 import type { MenuDoObjeto } from './contrato-menu';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
+import type { Indicadores } from './contrato-indicadores';
 import type { EntradaDeEstoque, ItemDeEstoque, MovimentoFeito, RastreioDoLote } from './contrato-estoque';
 import type { AchadoEstruturado, AchadosDoLaudo, DescritoresBirads, DescritoresTirads, NovoAchado } from './contrato-laudo-estruturado';
 import type { ConviteEmitido, NovoPaciente, PacienteCadastrado, PossivelDuplicado, SessaoDoPortal, SituacaoDoConvite } from './contrato-portal';
@@ -92,3 +93,4 @@ export type ConfereDescritoresTirads = Cabe<DescritoresTirads, S['DescritoresTir
 export type ConfereDescritoresBirads = Cabe<DescritoresBirads, S['DescritoresBirads']>;
 // Ao contrário também: o corpo gerado cabe no escrito à mão (nada do servidor ficou de fora da tela).
 export type ConfereNovoAchadoVolta = Cabe<S['NovoAchado'], NovoAchado>;
+export type ConfereIndicadores = Cabe<Indicadores, S['Indicadores']>;

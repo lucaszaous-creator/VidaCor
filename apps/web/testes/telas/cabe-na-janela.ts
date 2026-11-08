@@ -232,6 +232,9 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await page.getByRole('button', { name: 'Abrir cadeia' }).click();
   await esperar(page, 'heading', 'Sônia Maria Castro');
   await ok('30-lastro');
+  await ir('/indicadores');
+  await esperar(page, 'region', 'Resumo');
+  await ok('31-indicadores');
   estado.sessao = SESSOES.recepcao;
   await ir('/contingencia');
   await page.getByText('Nenhuma contingência aberta').waitFor();

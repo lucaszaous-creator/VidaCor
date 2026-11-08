@@ -602,6 +602,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/indicadores": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Indicadores do período (gerência). */
+        get: operations["indicadores"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/lastro/cadeia": {
         parameters: {
             query?: never;
@@ -1794,6 +1811,37 @@ export interface components {
             /** Format: date */
             validade: string;
         };
+        Indicadores: {
+            /** Format: int64 */
+            agendamentos: number;
+            /** Format: date */
+            ate: string;
+            /** Format: int64 */
+            atendimentos: number;
+            /** Format: date */
+            de: string;
+            /** Format: int64 */
+            faltas: number;
+            ocupacao: components["schemas"]["OcupacaoPorHora"][];
+            por_medico: components["schemas"]["LaudoPorMedico"][];
+            producao: components["schemas"]["ProducaoPorExame"][];
+            /** Format: int64 */
+            recebimentos: number;
+            /**
+             * Format: int64
+             * @description Recebimentos pagos menos estornados, em centavos.
+             */
+            receita_centavos: number;
+            /**
+             * Format: double
+             * @description Faltas sobre agendamentos que já passaram (0 a 1).
+             */
+            taxa_de_faltas?: number | null;
+            /** Format: double */
+            tempo_medio_de_laudo_horas?: number | null;
+            /** Format: int64 */
+            ticket_medio_centavos?: number | null;
+        };
         ItemAgenda: {
             /** Format: uuid */
             atendimento_id?: string | null;
@@ -1914,6 +1962,16 @@ export interface components {
             retificado: boolean;
             texto: string;
         };
+        LaudoPorMedico: {
+            /**
+             * Format: double
+             * @description Horas entre o estudo recebido e a assinatura (média). Nulo sem laudo assinado.
+             */
+            horas_medias?: number | null;
+            /** Format: int64 */
+            laudos: number;
+            medico: string;
+        };
         LinkCriado: {
             /** Format: date-time */
             expira_em: string;
@@ -2015,6 +2073,17 @@ export interface components {
         NumerosSituados: {
             /** Format: int64 */
             numeros_situados: number;
+        };
+        OcupacaoPorHora: {
+            /** Format: int64 */
+            agendamentos: number;
+            /**
+             * Format: int32
+             * @description 0 = domingo.
+             */
+            dia_da_semana: number;
+            /** Format: int32 */
+            hora: number;
         };
         /** @enum {string} */
         OrientacaoBirads: "paralela" | "nao_paralela";
@@ -2298,6 +2367,11 @@ export interface components {
             /** Format: int32 */
             quantidade: number;
             tuss: string;
+        };
+        ProducaoPorExame: {
+            /** Format: int64 */
+            atendimentos: number;
+            exame: string;
         };
         Publicacao: {
             /** @description Falso quando a versão já estava publicada (repetir não duplica). */
@@ -3793,6 +3867,46 @@ export interface operations {
                 };
             };
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    indicadores: {
+        parameters: {
+            query: {
+                /** @description Início (AAAA-MM-DD), incluído. */
+                de: string;
+                /** @description Fim (AAAA-MM-DD), incluído. No máximo 366 dias. */
+                ate: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Indicadores"];
+                };
+            };
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };

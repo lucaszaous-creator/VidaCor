@@ -2000,6 +2000,69 @@
         }
       }
     },
+    "/v1/indicadores": {
+      "get": {
+        "tags": [
+          "indicadores"
+        ],
+        "summary": "Indicadores do período (gerência).",
+        "operationId": "indicadores",
+        "parameters": [
+          {
+            "name": "de",
+            "in": "query",
+            "description": "Início (AAAA-MM-DD), incluído.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "ate",
+            "in": "query",
+            "description": "Fim (AAAA-MM-DD), incluído. No máximo 366 dias.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Indicadores"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/lastro/cadeia": {
       "get": {
         "tags": [
@@ -5808,6 +5871,92 @@
           }
         }
       },
+      "Indicadores": {
+        "type": "object",
+        "required": [
+          "de",
+          "ate",
+          "agendamentos",
+          "atendimentos",
+          "faltas",
+          "receita_centavos",
+          "recebimentos",
+          "producao",
+          "por_medico",
+          "ocupacao"
+        ],
+        "properties": {
+          "agendamentos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ate": {
+            "type": "string",
+            "format": "date"
+          },
+          "atendimentos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "de": {
+            "type": "string",
+            "format": "date"
+          },
+          "faltas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ocupacao": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OcupacaoPorHora"
+            }
+          },
+          "por_medico": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LaudoPorMedico"
+            }
+          },
+          "producao": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProducaoPorExame"
+            }
+          },
+          "recebimentos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "receita_centavos": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Recebimentos pagos menos estornados, em centavos."
+          },
+          "taxa_de_faltas": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double",
+            "description": "Faltas sobre agendamentos que já passaram (0 a 1)."
+          },
+          "tempo_medio_de_laudo_horas": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "ticket_medio_centavos": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
+          }
+        }
+      },
       "ItemAgenda": {
         "type": "object",
         "required": [
@@ -6201,6 +6350,30 @@
           }
         }
       },
+      "LaudoPorMedico": {
+        "type": "object",
+        "required": [
+          "medico",
+          "laudos"
+        ],
+        "properties": {
+          "horas_medias": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double",
+            "description": "Horas entre o estudo recebido e a assinatura (média). Nulo sem laudo assinado."
+          },
+          "laudos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "medico": {
+            "type": "string"
+          }
+        }
+      },
       "LinkCriado": {
         "type": "object",
         "required": [
@@ -6541,6 +6714,29 @@
             "type": "integer",
             "format": "int64",
             "minimum": 0
+          }
+        }
+      },
+      "OcupacaoPorHora": {
+        "type": "object",
+        "required": [
+          "dia_da_semana",
+          "hora",
+          "agendamentos"
+        ],
+        "properties": {
+          "agendamentos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dia_da_semana": {
+            "type": "integer",
+            "format": "int32",
+            "description": "0 = domingo."
+          },
+          "hora": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -7415,6 +7611,22 @@
             "format": "int32"
           },
           "tuss": {
+            "type": "string"
+          }
+        }
+      },
+      "ProducaoPorExame": {
+        "type": "object",
+        "required": [
+          "exame",
+          "atendimentos"
+        ],
+        "properties": {
+          "atendimentos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "exame": {
             "type": "string"
           }
         }
