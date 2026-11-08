@@ -33,10 +33,12 @@ async fn registrar_mudanca(
     correlacao: &str,
 ) -> Result<(), ErroApi> {
     let codigo = proximo(&mut *tx, "PRM").await?;
+    // O evento de lastro aponta para a própria linha do histórico.
+    let id = novo_id();
     sqlx::query!(
         "INSERT INTO agenda.procedimento_mudanca (id, codigo, tuss, tipo, motivo, versao_do_procedimento, antes, depois, criado_por, origem, unidade_id, correlacao)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'catalogo', $10, $11)",
-        novo_id(), codigo.como_str(), tuss, tipo, motivo, versao, antes, depois, usuario.id, usuario.unidade_id, correlacao
+        id, codigo.como_str(), tuss, tipo, motivo, versao, antes, depois, usuario.id, usuario.unidade_id, correlacao
     )
     .execute(&mut *tx)
     .await
@@ -49,7 +51,7 @@ async fn registrar_mudanca(
         NovoEvento {
             dominio: "catalogo",
             tipo: &format!("procedimento_{tipo}"),
-            registro_id: novo_id(),
+            registro_id: id,
             registro_codigo: Some(codigo.como_str()),
             dados: json!({ "tuss": tuss, "motivo": motivo, "versao": versao, "antes": antes, "depois": depois }),
             criado_por: Some(usuario.id),

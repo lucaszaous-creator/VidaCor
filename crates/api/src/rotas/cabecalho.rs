@@ -290,11 +290,12 @@ pub async fn publicar(
         }
         None => 1,
     };
+    let id = novo_id();
     sqlx::query!(
         "INSERT INTO documentos.cabecalho (id, numero, nome, razao_social, cnpj, endereco, telefone, site, responsavel_nome, responsavel_crm,
                                            responsavel_tecnico, motivo, criado_por, origem, unidade_id, correlacao)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 'configuracoes', $14, $15)",
-        novo_id(), numero, nome, razao, cnpj, endereco, telefone, site, responsavel, responsavel_crm, texto_impresso, motivo,
+        id, numero, nome, razao, cnpj, endereco, telefone, site, responsavel, responsavel_crm, texto_impresso, motivo,
         usuario.id, usuario.unidade_id, correlacao
     )
     .execute(&mut *tx)
@@ -308,7 +309,7 @@ pub async fn publicar(
         NovoEvento {
             dominio: "documentos",
             tipo: "cabecalho_publicado",
-            registro_id: usuario.unidade_id,
+            registro_id: id,
             registro_codigo: None,
             dados: json!({ "numero": numero, "motivo": motivo, "cnpj": cnpj }),
             criado_por: Some(usuario.id),
