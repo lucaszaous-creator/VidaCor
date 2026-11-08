@@ -64,7 +64,7 @@ export function TelaSala() {
   const [ultimoCodigo, setUltimoCodigo] = useState('');
   const [emFoco, setEmFoco] = useState<ResultadoDoBipe | null>(null);
   const salas = useQuery(consultaSalas(api));
-  const salaId = busca.sala ?? salas.data?.[0]?.id;
+  const salaId = busca.sala ?? (salas.data?.find((s) => s.lotado) ?? salas.data?.[0])?.id;
   const sala = salas.data?.find((s) => s.id === salaId);
   const fila = useQuery({ ...consultaFilaDaSala(api, salaId ?? ''), enabled: salaId !== undefined });
 

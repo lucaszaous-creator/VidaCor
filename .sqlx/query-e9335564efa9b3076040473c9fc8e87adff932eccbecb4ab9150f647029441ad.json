@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT id, nome FROM agenda.sala WHERE unidade_id = $1 ORDER BY codigo",
+  "query": "SELECT s.id, s.nome,\n                  EXISTS (SELECT 1 FROM identidade.lotacao l WHERE l.sala_id = s.id AND l.usuario_id = $2) AS \"lotado!\"\n           FROM agenda.sala s WHERE s.unidade_id = $1 ORDER BY s.codigo",
   "describe": {
     "columns": [
       {
@@ -24,17 +24,25 @@
             "name": "nome"
           }
         }
+      },
+      {
+        "ordinal": 2,
+        "name": "lotado!",
+        "type_info": "Bool",
+        "origin": "Expression"
       }
     ],
     "parameters": {
       "Left": [
+        "Uuid",
         "Uuid"
       ]
     },
     "nullable": [
       false,
-      false
+      false,
+      null
     ]
   },
-  "hash": "0554d4a971b7c04b5559af3f00de0a2418a9ad8f19effe201f6cde20f4a5edb9"
+  "hash": "e9335564efa9b3076040473c9fc8e87adff932eccbecb4ab9150f647029441ad"
 }

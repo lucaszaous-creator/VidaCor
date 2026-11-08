@@ -16,19 +16,32 @@ pub struct Sala {
     pub nome: String,
 }
 
+/// Sala da lista `/v1/salas`, com a lotação do usuário da sessão.
+#[derive(Serialize, ToSchema)]
+pub struct SalaDaUnidade {
+    pub id: Uuid,
+    pub nome: String,
+    /// O usuário da sessão está lotado nesta sala (FC-PUL-05). A tela do técnico abre na primeira
+    /// sala lotada; quem decide se pode bipar continua sendo o servidor.
+    pub lotado: bool,
+}
+
 /// Salas da unidade do usuário.
 #[utoipa::path(get, path = "/v1/salas", tag = "agenda",
-    responses((status = 200, body = Vec<Sala>), (status = 401, body = crate::openapi::ProblemaDoc),
+    responses((status = 200, body = Vec<SalaDaUnidade>), (status = 401, body = crate::openapi::ProblemaDoc),
               (status = 403, body = crate::openapi::ProblemaDoc)))]
 pub async fn salas(
     State(estado): State<Estado>,
     usuario: Usuario,
-) -> Result<Json<Vec<Sala>>, ErroApi> {
+) -> Result<Json<Vec<SalaDaUnidade>>, ErroApi> {
     usuario.exigir(Ato::AgendaVer)?;
     let linhas = sqlx::query_as!(
-        Sala,
-        "SELECT id, nome FROM agenda.sala WHERE unidade_id = $1 ORDER BY codigo",
-        usuario.unidade_id
+        SalaDaUnidade,
+        r#"SELECT s.id, s.nome,
+                  EXISTS (SELECT 1 FROM identidade.lotacao l WHERE l.sala_id = s.id AND l.usuario_id = $2) AS "lotado!"
+           FROM agenda.sala s WHERE s.unidade_id = $1 ORDER BY s.codigo"#,
+        usuario.unidade_id,
+        usuario.id
     )
     .fetch_all(&estado.banco)
     .await?;

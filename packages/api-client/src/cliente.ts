@@ -47,7 +47,7 @@ import type {
   PedidoConciliacao,
   PedidoNumeros,
 } from './contrato-fase1';
-import type { ConsultaAgenda, PacienteResumo, Sala, Saude, Sessao } from './contrato-m0';
+import type { ConsultaAgenda, PacienteResumo, SalaDaUnidade, Saude, Sessao } from './contrato-m0';
 import { ErroDaApi, ErroSemConexao, ehProblemaHttp, problemaInesperado } from './erros';
 
 export interface OpcoesDoCliente {
@@ -236,7 +236,7 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
     },
 
     salas: {
-      listar: (): Promise<Sala[]> => ler<Sala[]>('/v1/salas'),
+      listar: (): Promise<SalaDaUnidade[]> => ler<SalaDaUnidade[]>('/v1/salas'),
       /** Fila do dia da sala (ato `sala.ver`). */
       fila: (salaId: string): Promise<FilaDaSala> => ler<FilaDaSala>(`/v1/salas/${seg(salaId)}/fila`),
       /** Bipe da pulseira (leitor = teclado + Enter). Quem decide se libera é o servidor. */

@@ -60,4 +60,38 @@ FROM (VALUES
 JOIN agenda.sala s ON s.codigo = a.sala
 JOIN identidade.paciente p ON p.codigo = a.paciente
 ON CONFLICT (codigo) DO NOTHING;
+-- Sexo do cadastro (TFG na triagem)
+UPDATE identidade.paciente SET sexo = CASE WHEN nome IN ('Antônio Carlos Ribeiro','Rafael Monteiro Lima') THEN 'M' ELSE 'F' END WHERE sexo IS NULL;
+
+-- Aparelhos por sala (worklist no AE Title do aparelho)
+INSERT INTO agenda.aparelho (id, codigo, nome, ae_title, modalidade, sala_id, origem, unidade_id, correlacao)
+SELECT gen_random_uuid(), 'APA-' || s.codigo, a.nome, a.ae, a.modalidade, s.id, 'semente', s.unidade_id, 'semente-dev'
+FROM (VALUES ('SALA-1','Vivid E95','VIVIDE95','US'), ('SALA-2','Voluson E10','VOLUSON10','US'), ('SALA-3','LOGIQ E10','LOGIQE10','US'),
+             ('SALA-5','Optima XR240','OPTIMAXR','DX'), ('SALA-6','Revolution CT','REVOCT','CT')) AS a(sala, nome, ae, modalidade)
+JOIN agenda.sala s ON s.codigo = a.sala
+ON CONFLICT DO NOTHING;
+
+-- Lotação do técnico
+INSERT INTO identidade.lotacao (usuario_id, sala_id, origem, unidade_id, correlacao)
+SELECT u.id, s.id, 'semente', u.unidade_id, 'semente-dev' FROM identidade.usuario u JOIN agenda.sala s ON s.codigo IN ('SALA-1','SALA-2','SALA-3','SALA-6')
+WHERE u.login = 'bruno.sales' ON CONFLICT DO NOTHING;
+
+-- Médico dos agendamentos (vínculo de cuidado e laudo atribuído)
+UPDATE agenda.agendamento SET medico_id = (SELECT id FROM identidade.usuario WHERE login = 'paulo.mendes') WHERE medico_id IS NULL;
+UPDATE agenda.agendamento SET requer_contraste = true WHERE exame_nome ILIKE '%contraste%';
+
+-- Tabela de preços do particular, versão 12
+INSERT INTO financeiro.tabela_preco (id, versao, vigente_desde, descricao, origem, unidade_id, correlacao)
+VALUES ('0194f000-0000-7000-8000-00000000c012', 12, DATE '2026-01-01', 'Particular 2026', 'semente', '0194f000-0000-7000-8000-0000000000a1', 'semente-dev')
+ON CONFLICT DO NOTHING;
+INSERT INTO financeiro.preco (tabela_id, tuss, valor_centavos)
+SELECT '0194f000-0000-7000-8000-00000000c012', tuss, valor FROM (VALUES ('40901114', 38000), ('40901300', 42000), ('40901203', 32000),
+  ('40901122', 18000), ('40801012', 9000), ('41001109', 95000)) AS p(tuss, valor)
+ON CONFLICT DO NOTHING;
+
+-- Caixa e gerência para a demonstração
+INSERT INTO identidade.usuario (id, codigo, login, nome, perfis, origem, unidade_id, correlacao)
+SELECT gen_random_uuid(), 'USR-' || login, login, nome, perfis, 'semente', '0194f000-0000-7000-8000-0000000000a1', 'semente-dev'
+FROM (VALUES ('carla.caixa', 'Carla Mendes', ARRAY['caixa']), ('patricia.lemos', 'Patrícia Lemos', ARRAY['gerente'])) AS u(login, nome, perfis)
+ON CONFLICT (login) DO NOTHING;
 COMMIT;

@@ -2566,7 +2566,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Sala"
+                    "$ref": "#/components/schemas/SalaDaUnidade"
                   }
                 }
               }
@@ -4856,6 +4856,28 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
+      "SalaDaUnidade": {
+        "type": "object",
+        "description": "Sala da lista `/v1/salas`, com a lotação do usuário da sessão.",
+        "required": [
+          "id",
+          "nome",
+          "lotado"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "lotado": {
+            "type": "boolean",
+            "description": "O usuário da sessão está lotado nesta sala (FC-PUL-05). A tela do técnico abre na primeira\nsala lotada; quem decide se pode bipar continua sendo o servidor."
           },
           "nome": {
             "type": "string"

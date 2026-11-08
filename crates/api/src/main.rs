@@ -67,6 +67,13 @@ async fn main() -> Result<()> {
             vidacor_api::assinatura::AssinadorDesenvolvimento,
         ));
     }
+    // PSP de desenvolvimento (sem dinheiro de verdade) só com escolha explícita.
+    if std::env::var("VIDACOR_PSP").as_deref() == Ok("desenvolvimento") {
+        tracing::warn!("PSP do PIX de DESENVOLVIMENTO ligado: cobranças sem valor");
+        estado.psp = Some(std::sync::Arc::new(
+            vidacor_api::pix::PspDesenvolvimento::default(),
+        ));
+    }
 
     if let Some(url) = orthanc_url {
         let orthanc = Orthanc::novo(&url)?;

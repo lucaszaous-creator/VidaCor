@@ -450,3 +450,23 @@ async fn equipe_lista_nome_e_perfis_da_propria_unidade() {
         "outra unidade não aparece"
     );
 }
+
+#[tokio::test]
+async fn lista_de_salas_diz_onde_o_tecnico_esta_lotado() {
+    let amb = Ambiente::novo().await;
+    let lotado = |salas: &serde_json::Value, id: uuid::Uuid| {
+        salas
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|s| s["id"] == id.to_string())
+            .map(|s| s["lotado"].clone())
+    };
+    let bruno = amb.entrar("bruno.sales").await;
+    let (st, _, salas) = amb.pedir(amb.get("/v1/salas", Some(&bruno))).await;
+    assert_eq!(st, StatusCode::OK);
+    assert_eq!(lotado(&salas, amb.sala1), Some(serde_json::json!(true)));
+    let ricardo = amb.entrar("ricardo.lopes").await;
+    let (_, _, salas2) = amb.pedir(amb.get("/v1/salas", Some(&ricardo))).await;
+    assert_eq!(lotado(&salas2, amb.sala1), Some(serde_json::json!(false)));
+}

@@ -130,6 +130,42 @@
       "requiredActions": [
         "CONFIGURE_TOTP"
       ]
+    },
+    {
+      "username": "carla.caixa",
+      "enabled": true,
+      "firstName": "Carla",
+      "lastName": "Mendes",
+      "email": "carla.caixa@vidacor.invalid",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "VidaCor-dev-2026",
+          "temporary": false
+        }
+      ],
+      "requiredActions": [
+        "CONFIGURE_TOTP"
+      ]
+    },
+    {
+      "username": "patricia.lemos",
+      "enabled": true,
+      "firstName": "Patrícia",
+      "lastName": "Lemos",
+      "email": "patricia.lemos@vidacor.invalid",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "VidaCor-dev-2026",
+          "temporary": false
+        }
+      ],
+      "requiredActions": [
+        "CONFIGURE_TOTP"
+      ]
     }
   ]
 }

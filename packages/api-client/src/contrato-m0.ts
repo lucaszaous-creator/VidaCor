@@ -41,6 +41,11 @@ export interface Sala {
   nome: string;
 }
 
+/** Sala da lista `/v1/salas`, com a lotação do usuário da sessão (FC-PUL-05). */
+export interface SalaDaUnidade extends Sala {
+  lotado: boolean;
+}
+
 /** Os dois identificadores do paciente (nome completo e nascimento). */
 export interface PacienteResumo {
   id: string;

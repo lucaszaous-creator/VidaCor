@@ -5,7 +5,7 @@
  * Valem os tipos da Fase 1, que são os usados pelas telas.
  */
 import type { components } from './gerado/openapi';
-import type { NovoAtendimento, PacienteResumo, Sala, Sessao } from './contrato-m0';
+import type { NovoAtendimento, PacienteResumo, Sala, SalaDaUnidade, Sessao } from './contrato-m0';
 import type {
   AgendaFase1,
   AtendimentoFase1,
@@ -34,6 +34,7 @@ type S = components['schemas'];
 type Cabe<A extends B, B> = A;
 
 export type ConfereSala = Cabe<Sala, S['Sala']>;
+export type ConfereSalaDaUnidade = Cabe<SalaDaUnidade, S['SalaDaUnidade']>;
 export type ConferePaciente = Cabe<PacienteResumo, S['PacienteResumo']>;
 export type ConfereSessao = Cabe<Sessao, S['SessaoAtual']>;
 export type ConferePedidoCheckin = Cabe<NovoAtendimento, S['PedidoCheckin']>;

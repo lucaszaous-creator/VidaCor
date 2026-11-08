@@ -3,7 +3,7 @@
  * design/mockups/Agenda.dc.html (sexta, 06/11/2026). Nenhum dado real de paciente.
  * Só sintaxe apagável de TypeScript: este arquivo também roda direto no Node (teste Playwright).
  */
-import type { AgendaFase1, AtendimentoDetalhadoFase1, ItemDaAgendaFase1, Sala, Sessao, SituacaoAgendamento } from '@vidacor/api-client';
+import type { AgendaFase1, AtendimentoDetalhadoFase1, ItemDaAgendaFase1, Sala, SalaDaUnidade, Sessao, SituacaoAgendamento } from '@vidacor/api-client';
 
 export const DATA_DOS_TESTES = '2026-11-06';
 
@@ -17,7 +17,7 @@ export const SESSAO: Sessao = {
   csrf: 'csrf-ficticio-dos-testes',
 };
 
-export const SALAS: Sala[] = [
+export const SALAS: SalaDaUnidade[] = [
   'Sala 1, eco',
   'Sala 2, obstétrica',
   'Sala 3, USG e Doppler',
@@ -25,7 +25,7 @@ export const SALAS: Sala[] = [
   'Sala 5, raio X',
   'Sala 6, tomografia',
   'Posto MAPA e Holter',
-].map((nome, i) => ({ id: uuid('0000000c', i + 1), nome }));
+].map((nome, i) => ({ id: uuid('0000000c', i + 1), nome, lotado: i < 3 }));
 
 // [coluna da sala (2 a 8), linha (2 = 07:00), meias horas, estado do mockup, nome, nascimento, exame]
 type Linha = [number, number, number, string, string, string, string];

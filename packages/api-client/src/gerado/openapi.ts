@@ -1545,6 +1545,17 @@ export interface components {
             id: string;
             nome: string;
         };
+        /** @description Sala da lista `/v1/salas`, com a lotação do usuário da sessão. */
+        SalaDaUnidade: {
+            /** Format: uuid */
+            id: string;
+            /**
+             * @description O usuário da sessão está lotado nesta sala (FC-PUL-05). A tela do técnico abre na primeira
+             *     sala lotada; quem decide se pode bipar continua sendo o servidor.
+             */
+            lotado: boolean;
+            nome: string;
+        };
         SaldoProcedimento: {
             /** Format: int32 */
             autorizado: number;
@@ -3377,7 +3388,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Sala"][];
+                    "application/json": components["schemas"]["SalaDaUnidade"][];
                 };
             };
             401: {
