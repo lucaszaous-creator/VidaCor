@@ -1336,6 +1336,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/laudos/fluxo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Quadro do fluxo de laudos de hoje e o que segue aberto (coordenação). */
+        get: operations["fluxo_de_laudos"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/laudos/{id}": {
         parameters: {
             query?: never;
@@ -2707,6 +2724,27 @@ export interface components {
         CancelamentoDeOrcamento: {
             motivo: string;
         };
+        CartaoDoFluxo: {
+            /** Format: date-time */
+            assinado_em?: string | null;
+            atrasado: boolean;
+            codigo: string;
+            etapa: string;
+            exame: string;
+            /** Format: uuid */
+            laudo_id: string;
+            medico?: string | null;
+            modalidade: string;
+            /** Format: date */
+            paciente_nascimento: string;
+            paciente_nome: string;
+            /** Format: date-time */
+            prazo_em: string;
+            /** Format: date-time */
+            recebido_em: string;
+            /** Format: int32 */
+            versao_vigente?: number | null;
+        };
         CatalogoDoOrcamento: {
             exames: components["schemas"]["ExameComPreco"][];
             /**
@@ -3032,6 +3070,11 @@ export interface components {
             recebido_em: string;
             study_uid: string;
         };
+        EtapaDoFluxo: {
+            etapa: string;
+            /** Format: int64 */
+            quantidade: number;
+        };
         Etiqueta: {
             codigo: string;
             motivo_invalidacao?: string | null;
@@ -3108,6 +3151,20 @@ export interface components {
         FilaDaSala: {
             itens: components["schemas"]["ItemFila"][];
             sala: components["schemas"]["Sala"];
+        };
+        FluxoDeLaudos: {
+            /** Format: int64 */
+            atrasados: number;
+            cartoes: components["schemas"]["CartaoDoFluxo"][];
+            etapas: components["schemas"]["EtapaDoFluxo"][];
+            /** Format: int64 */
+            no_prazo_percentual?: number | null;
+            /** Format: int64 */
+            prazo_horas: number;
+            producao: components["schemas"]["ProducaoDoMedico"][];
+            retificacoes: components["schemas"]["RetificacaoRecente"][];
+            /** Format: int64 */
+            vencem_em_2h: number;
         };
         /** @enum {string} */
         FocoTirads: "nenhum_ou_cauda_de_cometa" | "macrocalcificacoes" | "calcificacoes_perifericas" | "focos_puntiformes";
@@ -4250,6 +4307,18 @@ export interface components {
             autorizado: number;
             tuss: string;
         };
+        ProducaoDoMedico: {
+            /** Format: int64 */
+            assinados_hoje: number;
+            medico: string;
+            /** Format: int64 */
+            na_fila: number;
+            /**
+             * Format: double
+             * @description Horas do recebimento das imagens à assinatura, nos assinados hoje.
+             */
+            tempo_medio_horas?: number | null;
+        };
         ProducaoPorExame: {
             /** Format: int64 */
             atendimentos: number;
@@ -4438,6 +4507,19 @@ export interface components {
             saidas_do_mes_centavos: number;
             /** Format: int64 */
             saldo_em_contas_centavos: number;
+        };
+        RetificacaoRecente: {
+            /** Format: date-time */
+            assinada_em?: string | null;
+            codigo: string;
+            exame: string;
+            /** Format: uuid */
+            laudo_id: string;
+            medico?: string | null;
+            motivo?: string | null;
+            paciente_nome: string;
+            /** Format: int32 */
+            versao: number;
         };
         RetornoDaConta: {
             /** Format: uuid */
@@ -7757,6 +7839,33 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ItemFilaLaudo"][];
+                };
+            };
+        };
+    };
+    fluxo_de_laudos: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FluxoDeLaudos"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
                 };
             };
         };

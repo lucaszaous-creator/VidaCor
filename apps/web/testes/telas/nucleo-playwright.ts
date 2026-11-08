@@ -136,6 +136,11 @@ export async function simularNucleo(page: Page, estado: EstadoDaSimulacao): Prom
       return json(route, { atendimento: { ...ATENDIMENTO_ANTONIO, situacao: 'em_exame' }, aparelho: APARELHO_SALA_1, worklist: 'enviada' });
     }
     if (c === '/v1/laudos/fila') return json(route, filaDeLaudos());
+    if (c === '/v1/laudos/fluxo') {
+      const etapas = ['a_laudar', 'em_retificacao', 'aguardando_conversa', 'assinado', 'entregue'];
+      const cartoes = Array.from({ length: 40 }, (_, k) => ({ laudo_id: `l${String(k)}`, codigo: `LAU-${String(k)}`, etapa: etapas[k % 5], paciente_nome: k === 0 ? 'Maria Helena Duarte de Albuquerque Cavalcanti' : `Paciente fictício ${String(k)}`, paciente_nascimento: '1968-03-12', exame: 'Ecocardiograma transtorácico com Doppler', modalidade: 'US', medico: 'Dr. Paulo Medeiros', recebido_em: '2026-11-06T11:00:00Z', prazo_em: '2026-11-07T11:00:00Z', assinado_em: null, versao_vigente: k % 5 === 3 ? 2 : null, atrasado: k % 3 === 0 }));
+      return json(route, { prazo_horas: 24, no_prazo_percentual: 87, atrasados: 14, vencem_em_2h: 5, etapas: etapas.map((etapa) => ({ etapa, quantidade: 8 })), cartoes, producao: Array.from({ length: 6 }, (_, k) => ({ medico: `Dr. Médico ${String(k)}`, assinados_hoje: k, tempo_medio_horas: 3.4, na_fila: 2 })), retificacoes: Array.from({ length: 5 }, (_, k) => ({ laudo_id: `r${String(k)}`, codigo: `LAU-R${String(k)}`, paciente_nome: 'Caio Vieira Moraes', exame: 'Raio X de tórax', versao: 2, assinada_em: '2026-11-06T13:22:00Z', motivo: 'Lateralidade corrigida de direita para esquerda.', medico: 'Dra. Cecília Souto' })) });
+    }
     if (/^\/v1\/laudos\/[^/]+\/pdf$/.test(c)) return pdf(route, 'LAU-2026-004120-v1.pdf', 'DOC-2026-000007');
     if (/^\/v1\/portal\/laudos\/[^/]+\/pdf$/.test(c)) return pdf(route, 'LAU-2026-000031-v2.pdf', 'DOC-2026-000008');
     if (c === '/v1/lastro/dossie') return pdf(route, 'DOS-2026-000003.pdf', 'DOS-2026-000003');

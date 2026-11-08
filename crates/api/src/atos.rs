@@ -53,6 +53,7 @@ pub enum Ato {
     AutorizacaoVer,
     BloqueioGerir,
     EsperaGerir,
+    FluxoLaudosVer,
 }
 
 impl Ato {
@@ -118,6 +119,8 @@ impl Ato {
             // Bloqueio de sala e horário, lista de espera e oferta de vaga (docs/04 Agenda e
             // Lista-Espera): recepção e gerência (DEC-2026-11-08-82).
             A::BloqueioGerir | A::EsperaGerir => &["recepcao", "gerente"],
+            // Fluxo de laudos: coordenação (só metadados, sem texto de laudo).
+            A::FluxoLaudosVer => &["gerente"],
             // Autorização pedida pelo sistema (docs/22 E4): recepção e faturista pedem; gerente acompanha.
             A::AutorizacaoPedir => &["recepcao", "faturista"],
             A::AutorizacaoVer => &["recepcao", "faturista", "gerente"],
@@ -130,7 +133,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 49] = [
+    const TODOS: [Ato; 50] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -180,6 +183,7 @@ mod testes {
         Ato::AutorizacaoVer,
         Ato::BloqueioGerir,
         Ato::EsperaGerir,
+        Ato::FluxoLaudosVer,
     ];
 
     #[test]

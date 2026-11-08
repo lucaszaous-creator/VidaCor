@@ -100,6 +100,7 @@ pub struct ProblemaDoc {
         crate::rotas::configuracoes::integracoes,
         crate::rotas::paciente_visao::visao,
         crate::rotas::inicio::inicio,
+        crate::rotas::fluxo_laudos::fluxo,
         crate::rotas::cancelamento::cancelar,
         crate::rotas::visualizacao::abrir,
         crate::rotas::bloqueios::criar,

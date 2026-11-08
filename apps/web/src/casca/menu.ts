@@ -45,6 +45,7 @@ const SECOES: { id: string; titulo: string; itens: ItemComPerfis[] }[] = [
     itens: [
       { id: 'sala', rotulo: 'Sala de exame', href: '/sala', icone: 'sala', cor: 'teal', perfis: ['tecnico', 'enfermagem', 'medico'] },
       { id: 'laudos', rotulo: 'Laudar', href: '/laudos', icone: 'laudos', cor: 'violet', perfis: ['medico'] },
+      { id: 'fluxo-laudos', rotulo: 'Fluxo de laudos', href: '/fluxo-de-laudos', icone: 'laudos', cor: 'violet', perfis: ['gerente'] },
       { id: 'estudos', rotulo: 'Conciliar estudos', href: '/estudos', icone: 'imagem', cor: 'indigo', perfis: ['medico'] },
     ],
   },

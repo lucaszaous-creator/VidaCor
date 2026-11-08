@@ -339,3 +339,22 @@ export const manipuladoresInicio = [
       : semPermissao('ver o início'),
   ),
 ];
+
+/** Fluxo de laudos simulado (regras reais em `crates/api/tests/fluxo_laudos.rs`). */
+const cartaoSimulado = (id: string, nome: string, etapa: string, medico: string, atrasado: boolean) => ({
+  laudo_id: id, codigo: `LAU-${id}`, etapa, paciente_nome: nome, paciente_nascimento: '1968-03-12', exame: 'Ecocardiograma transtorácico', modalidade: 'US',
+  medico, recebido_em: '2026-11-06T11:00:00Z', prazo_em: '2026-11-07T11:00:00Z', assinado_em: etapa === 'assinado' ? '2026-11-06T13:00:00Z' : null, versao_vigente: etapa === 'assinado' ? 1 : null, atrasado,
+});
+export const manipuladoresFluxo = [
+  http.get('*/v1/laudos/fluxo', () =>
+    temPerfil('gerente')
+      ? HttpResponse.json({
+          prazo_horas: 24, no_prazo_percentual: 87, atrasados: 1, vencem_em_2h: 0,
+          etapas: ['a_laudar', 'em_retificacao', 'aguardando_conversa', 'assinado', 'entregue'].map((etapa) => ({ etapa, quantidade: etapa === 'a_laudar' ? 2 : etapa === 'assinado' ? 1 : 0 })),
+          cartoes: [cartaoSimulado('1', 'Maria Helena Duarte', 'a_laudar', 'Dr. Paulo Medeiros', true), cartaoSimulado('2', 'Vera Lúcia Antunes', 'a_laudar', 'Dra. Cecília Souto', false), cartaoSimulado('3', 'Sônia Maria Castro', 'assinado', 'Dr. Paulo Medeiros', false)],
+          producao: [{ medico: 'Dr. Paulo Medeiros', assinados_hoje: 1, tempo_medio_horas: 2, na_fila: 1 }],
+          retificacoes: [{ laudo_id: '9', codigo: 'LAU-9', paciente_nome: 'Caio Vieira Moraes', exame: 'Raio X de tórax', versao: 2, assinada_em: '2026-11-06T13:22:00Z', motivo: 'Lateralidade corrigida.', medico: 'Dra. Cecília Souto' }],
+        })
+      : semPermissao('ver o fluxo de laudos'),
+  ),
+];

@@ -4515,6 +4515,37 @@
         }
       }
     },
+    "/v1/laudos/fluxo": {
+      "get": {
+        "tags": [
+          "laudos"
+        ],
+        "summary": "Quadro do fluxo de laudos de hoje e o que segue aberto (coordenação).",
+        "operationId": "fluxo_de_laudos",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FluxoDeLaudos"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/laudos/{id}": {
       "get": {
         "tags": [
@@ -9271,6 +9302,77 @@
           }
         }
       },
+      "CartaoDoFluxo": {
+        "type": "object",
+        "required": [
+          "laudo_id",
+          "codigo",
+          "etapa",
+          "paciente_nome",
+          "paciente_nascimento",
+          "exame",
+          "modalidade",
+          "recebido_em",
+          "prazo_em",
+          "atrasado"
+        ],
+        "properties": {
+          "assinado_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "atrasado": {
+            "type": "boolean"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "etapa": {
+            "type": "string"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "laudo_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "medico": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "modalidade": {
+            "type": "string"
+          },
+          "paciente_nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "paciente_nome": {
+            "type": "string"
+          },
+          "prazo_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "recebido_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "versao_vigente": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
+          }
+        }
+      },
       "CatalogoDoOrcamento": {
         "type": "object",
         "required": [
@@ -10338,6 +10440,22 @@
           }
         }
       },
+      "EtapaDoFluxo": {
+        "type": "object",
+        "required": [
+          "etapa",
+          "quantidade"
+        ],
+        "properties": {
+          "etapa": {
+            "type": "string"
+          },
+          "quantidade": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "Etiqueta": {
         "type": "object",
         "required": [
@@ -10594,6 +10712,63 @@
           },
           "sala": {
             "$ref": "#/components/schemas/Sala"
+          }
+        }
+      },
+      "FluxoDeLaudos": {
+        "type": "object",
+        "required": [
+          "prazo_horas",
+          "etapas",
+          "atrasados",
+          "vencem_em_2h",
+          "cartoes",
+          "producao",
+          "retificacoes"
+        ],
+        "properties": {
+          "atrasados": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "cartoes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CartaoDoFluxo"
+            }
+          },
+          "etapas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EtapaDoFluxo"
+            }
+          },
+          "no_prazo_percentual": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
+          },
+          "prazo_horas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "producao": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProducaoDoMedico"
+            }
+          },
+          "retificacoes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RetificacaoRecente"
+            }
+          },
+          "vencem_em_2h": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -14237,6 +14412,35 @@
           }
         }
       },
+      "ProducaoDoMedico": {
+        "type": "object",
+        "required": [
+          "medico",
+          "assinados_hoje",
+          "na_fila"
+        ],
+        "properties": {
+          "assinados_hoje": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "medico": {
+            "type": "string"
+          },
+          "na_fila": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tempo_medio_horas": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double",
+            "description": "Horas do recebimento das imagens à assinatura, nos assinados hoje."
+          }
+        }
+      },
       "ProducaoPorExame": {
         "type": "object",
         "required": [
@@ -14820,6 +15024,54 @@
           "saldo_em_contas_centavos": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "RetificacaoRecente": {
+        "type": "object",
+        "required": [
+          "laudo_id",
+          "codigo",
+          "paciente_nome",
+          "exame",
+          "versao"
+        ],
+        "properties": {
+          "assinada_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "laudo_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "medico": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "paciente_nome": {
+            "type": "string"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

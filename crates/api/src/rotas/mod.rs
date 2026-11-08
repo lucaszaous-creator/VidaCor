@@ -29,6 +29,7 @@ pub mod eventos;
 pub mod externo;
 pub mod faturamento;
 pub mod financeiro;
+pub mod fluxo_laudos;
 pub mod indicadores;
 pub mod inicio;
 pub mod lastro_explorador;
@@ -175,6 +176,7 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/atendimentos/{id}/chamadas", post(chamada::chamar))
         .route("/v1/painel-de-chamada", get(chamada::painel))
         .route("/v1/inicio", get(inicio::inicio))
+        .route("/v1/laudos/fluxo", get(fluxo_laudos::fluxo))
         .route(
             "/v1/configuracoes/integracoes",
             get(configuracoes::integracoes),
