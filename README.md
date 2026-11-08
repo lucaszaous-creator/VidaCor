@@ -23,7 +23,7 @@ para DICOM) e incluir o **estacionamento com leitura de placa**.
 | Proteção do usuário (processo + interface) | Regra — [docs/16](docs/16-protecao-do-usuario.md) · [modelos](docs/modelos/) |
 | Segurança por classe de ataque (Cloudflare) | Regra — [docs/17](docs/17-seguranca-por-classe-de-ataque.md) · `/security-audit` |
 | Testes ponta a ponta das telas (skill e2e) | Regra — [docs/28](docs/28-testes-ponta-a-ponta-e2e.md) · skill `e2e` |
-| Time de desenvolvimento (skills e agentes por papel) | Regra — [CLAUDE.md](CLAUDE.md) · skill `time-vidacor` |
+| Time de desenvolvimento (uma skill por papel) | Regra — [CLAUDE.md](CLAUDE.md) · skill `time-vidacor` |
 | Perfis, permissões e RLS | Proposta para validar — [docs/18](docs/18-perfis-permissoes-e-rls.md) |
 | Lastro e rastreabilidade | Regra — [docs/21](docs/21-lastro-e-rastreabilidade.md) |
 | Lacunas e roteiro (essencial, importante, futuro) | Aprovado — [docs/22](docs/22-lacunas-e-roadmap.md) |
@@ -48,7 +48,6 @@ CLAUDE.md / AGENTS.md        regras obrigatórias (as seis garantias) para pesso
 .claude/skills/e2e/          skill de testes ponta a ponta da TesterArmy (Apache-2.0)
 .claude/skills/time-vidacor/ coordenação do time: papéis, portões, RACI, passagens, arranque da Fase 0
 .claude/skills/produto/ ux-ui/ desenvolvimento/ qa/ devops-seguranca/  uma skill por papel
-.claude/agents/              agentes do time (produto, ux-ui, dev-backend, dev-frontend, dev-mobile, qa, devops-seguranca)
 THIRD_PARTY_NOTICES.md       licenças de terceiros
 docs/
   01-historico-da-conversa.md   tudo o que foi discutido e decidido até agora

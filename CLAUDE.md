@@ -116,12 +116,13 @@ Skill **e2e** (TesterArmy, Apache-2.0) instalada em `.claude/skills/e2e/`; regra
 - Pacotes `e2e` e `@e2e-dev/*` com versão exata; skill atualizada só por commit de origem registrado e revisado.
 
 ## Time de desenvolvimento (skills por papel)
-O trabalho segue um time com cinco papéis, cada um com skill em `.claude/skills/` e agente em `.claude/agents/`:
-**produto** (PO/PM), **ux-ui**, **desenvolvimento** (agentes `dev-backend`, `dev-frontend`, `dev-mobile`), **qa** e
+O trabalho segue um time com cinco papéis, cada um com skill em `.claude/skills/`:
+**produto** (PO/PM), **ux-ui**, **desenvolvimento** (backend, frontend, desktop e mobile), **qa** e
 **devops-seguranca**. A skill **time-vidacor** coordena: qual papel aciona cada trabalho, os portões P0 a P9 da ideia
 à produção, quem assina cada um (RACI) e o modelo de passagem entre papéis.
-- Comece pela `time-vidacor` quando não estiver claro qual papel usar; cada papel lê a sua skill antes de agir.
-- A IA prepara, a pessoa aprova: nenhum agente aprova frase, risco clínico, ADR, migration, aceite, prontidão ou escopo.
+- Comece pela `time-vidacor` quando não estiver claro qual papel usar; leia a skill do papel antes de agir nele.
+- **Os papéis são aplicados pelo assistente na própria conversa, um de cada vez.** Proibido criar subagentes ou delegar a agentes por iniciativa própria: só quando o dono do produto pedir, no número que ele pedir.
+- A IA prepara, a pessoa aprova: o assistente, em nenhum papel, aprova frase, risco clínico, ADR, migration, aceite, prontidão ou escopo.
 - As skills não substituem os documentos: em conflito vale o documento, e a skill é corrigida no mesmo PR.
 
 ## Playbooks

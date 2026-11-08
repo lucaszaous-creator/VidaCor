@@ -1,6 +1,6 @@
 ---
 name: time-vidacor
-description: Coordena o time de desenvolvimento do VidaCor (produto, UX/UI, desenvolvimento, QA, DevOps e segurança) - diz qual papel aciona cada trabalho, por quais portões um item passa da ideia à produção, quem assina cada portão e como os papéis passam o trabalho entre si. Use ao começar qualquer tarefa nova do projeto, ao planejar uma entrega ou iteração, quando não estiver claro qual papel ou skill usar, ao montar o arranque da Fase 0, ao delegar trabalho para os agentes do time ou quando dois papéis discordarem.
+description: Coordena o time de desenvolvimento do VidaCor (produto, UX/UI, desenvolvimento, QA, DevOps e segurança) - diz qual papel aciona cada trabalho, por quais portões um item passa da ideia à produção, quem assina cada portão e como os papéis passam o trabalho entre si. Use ao começar qualquer tarefa nova do projeto, ao planejar uma entrega ou iteração, quando não estiver claro qual papel ou skill usar, ao montar o arranque da Fase 0, ao trocar de papel no meio de uma tarefa ou quando dois papéis discordarem.
 ---
 
 # Time VidaCor: coordenação dos papéis
@@ -8,9 +8,14 @@ description: Coordena o time de desenvolvimento do VidaCor (produto, UX/UI, dese
 ## 1. Missão
 
 O VidaCor é construído por um time com cinco papéis. Cada papel tem uma skill com o seu jeito de
-trabalhar e um agente que pode receber trabalho delegado. Esta skill é a coordenação: diz quem
-faz o quê, em que ordem, com que portões e quem assina. O objetivo é que qualquer pessoa ou
-assistente de IA, em qualquer sessão, trabalhe como o mesmo time, com as mesmas regras.
+pensar e trabalhar. Esta skill é a coordenação: diz quem faz o quê, em que ordem, com que portões
+e quem assina. O objetivo é que qualquer pessoa ou assistente de IA, em qualquer sessão, trabalhe
+como o mesmo time, com as mesmas regras.
+
+**Os papéis são formas de pensar, não processos separados.** O assistente aplica cada papel na
+própria conversa, um de cada vez, lendo a skill do papel e anunciando a troca ("agora como QA").
+O assistente **não cria subagentes nem delega trabalho a agentes por conta própria**: só quando o
+dono do produto pedir explicitamente, na quantidade que ele pedir (DEC-2026-11-08-40).
 
 A skill não substitui os documentos. Em conflito, vale o documento e a skill é corrigida no mesmo PR.
 
@@ -34,15 +39,15 @@ A skill não substitui os documentos. Em conflito, vale o documento e a skill é
 
 ## 3. Os papéis
 
-| Papel | Skill | Agente | Equivalente humano (docs/25 § 4) | Decide |
-|---|---|---|---|---|
-| Product owner e product manager | `produto` | `produto` | Dono do produto (clínica) e gerente de projeto | Comportamento esperado, prioridade, aceite (proposta; quem assina é o dono do produto) |
-| UX/UI design | `ux-ui` | `ux-ui` | Designer de UX e UI | Fluxo, tela, mensagem, estado, acessibilidade |
-| Desenvolvimento | `desenvolvimento` | `dev-backend`, `dev-frontend`, `dev-mobile` | Tech lead, backend Rust, frontend React, integração DICOM, JVM | Como construir, dentro das garantias e dos ADRs |
-| QA | `qa` | `qa` | Analista de qualidade e automação | Se a evidência prova o comportamento |
-| DevOps e segurança | `devops-seguranca` | `devops-seguranca` | DevOps e SRE, consultoria AppSec | Como publicar e operar com segurança |
+| Papel | Skill | Equivalente humano (docs/25 § 4) | Decide |
+|---|---|---|---|
+| Product owner e product manager | `produto` | Dono do produto (clínica) e gerente de projeto | Comportamento esperado, prioridade, aceite (proposta; quem assina é o dono do produto) |
+| UX/UI design | `ux-ui` | Designer de UX e UI | Fluxo, tela, mensagem, estado, acessibilidade |
+| Desenvolvimento (backend, frontend, desktop e mobile) | `desenvolvimento` | Tech lead, backend Rust, frontend React, integração DICOM, JVM | Como construir, dentro das garantias e dos ADRs |
+| QA | `qa` | Analista de qualidade e automação | Se a evidência prova o comportamento |
+| DevOps e segurança | `devops-seguranca` | DevOps e SRE, consultoria AppSec | Como publicar e operar com segurança |
 
-Pessoas da clínica que nenhum agente substitui, e que assinam o que só elas podem assinar:
+Pessoas da clínica que nenhum assistente substitui, e que assinam o que só elas podem assinar:
 **dono do produto** (Lucas), **responsável clínico de segurança**, **usuário-chave por setor**,
 **TI da clínica**, **encarregado de dados (DPO)** e o **revisor humano** de migration e de PR.
 
@@ -85,10 +90,10 @@ Detalhe de cada portão, com o que verificar e o que bloqueia: `references/fluxo
 ## 6. Regras transversais (todos os papéis)
 
 1. **Decisão com lastro (ADR-0019):** na dúvida, o caminho mais profissional e mais rastreável, registrado em `docs/decisoes.md` com data, quem decidiu, alternativas, motivo, onde e como desfazer. Nada é apagado para resolver.
-2. **A IA prepara, a pessoa aprova.** Nenhum agente marca como aprovado o que só uma pessoa pode aprovar: frase de comportamento, risco clínico, ADR, migration, aceite, prontidão, mudança de escopo. Proposta vai pronta, com premissas marcadas "a confirmar".
+2. **A IA prepara, a pessoa aprova.** O assistente, em qualquer papel, nunca marca como aprovado o que só uma pessoa pode aprovar: frase de comportamento, risco clínico, ADR, migration, aceite, prontidão, mudança de escopo. Proposta vai pronta, com premissas marcadas "a confirmar".
 3. **Plano antes, alteração depois (G6):** auditoria só lê; correção começa por plano escrito e espera o OK do dono.
 4. **Só dado fictício** (`design/dados-ficticios.md`) fora de produção; nunca teste contra produção.
-5. **Nenhum segredo** em código de tela, em variável do navegador ou em mensagem para outro agente.
+5. **Nenhum segredo** em código de tela, em variável do navegador ou em mensagem.
 6. **Mudança em fluxo clínico** passa pelo responsável clínico de segurança.
 7. **Não se desliga proteção** para fazer funcionar; não se afrouxa teste; bug real fica falhando e vai para `docs/bugs.md`.
 8. **Se não deu para verificar**, escreva "não verificado" e o motivo.
@@ -104,13 +109,14 @@ fazer e o critério para considerar pronto. Modelos por par de papéis em
 Quem recebe confere antes de começar: se faltar algo do portão anterior, devolve com a lista do que
 falta em vez de adivinhar.
 
-## 8. Trabalhando com os agentes
+## 8. Trocando de papel na mesma conversa
 
-- Cada agente carrega a skill do seu papel antes de agir e responde com artefatos e a nota de passagem.
-- Trabalho independente pode ir em paralelo (por exemplo, `ux-ui` desenha a tela enquanto `qa` prepara o plano de testes a partir das mesmas frases). Trabalho dependente espera o portão.
-- Ao delegar, diga o objetivo, os artefatos de entrada com caminho, o que já foi decidido e o que o agente não deve fazer. O agente só sabe o que está na mensagem e no repositório.
-- O resultado de um agente é proposta até passar pelo portão. Confira antes de repassar.
-- Agentes não fazem commit em `main`, não aprovam PR, não mesclam e não rodam nada em produção.
+- Antes de agir num papel, leia a skill dele (e a referência do assunto). Diga em uma linha qual papel está assumindo.
+- Faça um papel de cada vez, na ordem dos portões. Ao terminar, escreva a nota de passagem (`references/passagens-e-modelos.md`) e só então assuma o próximo papel, que confere a nota antes de começar.
+- Um papel não aprova o próprio trabalho nem o de outro papel do assistente: o que precisa de pessoa vai para a pessoa.
+- **Sem subagentes por iniciativa própria.** Nada de criar agentes, forks ou execuções paralelas para "simular" o time. Se uma tarefa parecer grande o bastante para paralelizar, diga isso ao dono do produto com uma estimativa e espere ele pedir.
+- Quando o dono do produto pedir agentes, use o modelo de delegação de `references/passagens-e-modelos.md`, no número que ele pediu, e cada agente lê a skill do papel antes de agir.
+- Ninguém, em nenhum papel, faz commit em `main`, aprova ou mescla PR ou roda algo em produção.
 
 ## 9. Conflitos entre papéis
 
@@ -133,6 +139,6 @@ papel entrega e a ordem, está em `references/fase-0-arranque.md`.
 | Quando você precisa | Leia |
 |---|---|
 | Saber o que verificar em cada portão e o que bloqueia | `references/fluxo-de-entrega.md` |
-| Escrever uma nota de passagem ou delegar para um agente | `references/passagens-e-modelos.md` |
+| Escrever uma nota de passagem entre papéis (ou delegar, quando o dono do produto pedir agentes) | `references/passagens-e-modelos.md` |
 | Saber quem é responsável, aprova, é consultado e informado em cada artefato | `references/raci.md` |
 | Planejar o arranque (Fase 0) | `references/fase-0-arranque.md` |

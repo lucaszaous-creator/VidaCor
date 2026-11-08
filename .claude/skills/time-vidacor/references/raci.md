@@ -4,7 +4,7 @@
 antes. **I**: informado depois.
 
 Coluna "Clínica" reúne as pessoas da clínica; o papel exato está entre parênteses. A coluna "A" sempre
-é uma pessoa: um agente nunca aprova. Base: `docs/25-plano-do-projeto.md` § 9.2 e `docs/16-protecao-do-usuario.md` C1.
+é uma pessoa: o assistente, em qualquer papel, nunca aprova. Base: `docs/25-plano-do-projeto.md` § 9.2 e `docs/16-protecao-do-usuario.md` C1.
 
 | Artefato ou decisão | produto | ux-ui | desenvolvimento | qa | devops-seguranca | Clínica |
 |---|---|---|---|---|---|---|
@@ -38,6 +38,6 @@ Coluna "Clínica" reúne as pessoas da clínica; o papel exato está entre parê
 ## Regras da matriz
 
 1. Uma linha tem exatamente um "A" por tipo de decisão. Se a coluna Clínica tiver duas pessoas, cada uma aprova a sua parte (ex.: o responsável clínico aprova a parte clínica das frases).
-2. Um agente pode ser "R" e preparar tudo, mas a aprovação ("A") fica registrada com nome e data de uma pessoa.
+2. O assistente pode ser "R" e preparar tudo, mas a aprovação ("A") fica registrada com nome e data de uma pessoa.
 3. "C" é antes, não depois: consultar depois de fazer é "I".
 4. Quando o "A" não responde, o item fica parado e aparece no relatório mensal ao comitê (`docs/25` § 9.4). Não se aprova por silêncio.

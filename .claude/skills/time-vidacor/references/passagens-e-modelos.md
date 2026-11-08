@@ -1,4 +1,4 @@
-# Passagens entre papéis e modelos de delegação
+# Passagens entre papéis
 
 ## Regra geral
 
@@ -40,13 +40,15 @@ assumido de memória: o que não está em artefato com caminho não foi passado.
 | qa | devops-seguranca | Resultado de carga e caos, falhas de ambiente |
 | devops-seguranca | produto | Prontidão, janela proposta, riscos de operação, comunicação para a equipe da clínica |
 
-## Delegando para um agente do time
+## Delegando para um agente (só quando o dono do produto pedir)
 
-O agente começa sem a conversa. A mensagem precisa bastar.
+Por padrão o assistente troca de papel na própria conversa e não cria agentes. Este modelo só é
+usado quando o dono do produto pede agentes explicitamente, no número que ele pedir. O agente
+começa sem a conversa; a mensagem precisa bastar.
 
 ```markdown
 Objetivo: <o que precisa existir ao final>
-Papel: <produto | ux-ui | dev-backend | dev-frontend | dev-mobile | qa | devops-seguranca>
+Papel: <produto | ux-ui | desenvolvimento | qa | devops-seguranca> (o agente lê `.claude/skills/<papel>/SKILL.md` antes de agir)
 Entradas:
 - `<caminho>` (<o que é>)
 Já decidido (não reabrir):
