@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO auditoria.acesso (id, quem, quem_tipo, recurso, resultado, correlacao) VALUES ($1, $2, 'usuario', 'qualidade.painel', 'permitido', $3)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "f9d9c9a93544d24f5e4494044acb52e38dc5cd84d59c34d30163f8914882dd02"
+}

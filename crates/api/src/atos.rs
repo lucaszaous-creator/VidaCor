@@ -56,6 +56,7 @@ pub enum Ato {
     FluxoLaudosVer,
     OuvidoriaRegistrar,
     OuvidoriaTratar,
+    QualidadeTratar,
 }
 
 impl Ato {
@@ -126,6 +127,8 @@ impl Ato {
             // Ouvidoria: a recepção registra; a gerência (ouvidoria) lê e responde.
             A::OuvidoriaRegistrar => &["recepcao", "gerente"],
             A::OuvidoriaTratar => &["gerente"],
+            // Qualidade: a gerência (Núcleo de Segurança do Paciente) lê e trata.
+            A::QualidadeTratar => &["gerente"],
             // Autorização pedida pelo sistema (docs/22 E4): recepção e faturista pedem; gerente acompanha.
             A::AutorizacaoPedir => &["recepcao", "faturista"],
             A::AutorizacaoVer => &["recepcao", "faturista", "gerente"],
@@ -138,7 +141,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 52] = [
+    const TODOS: [Ato; 53] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -191,6 +194,7 @@ mod testes {
         Ato::FluxoLaudosVer,
         Ato::OuvidoriaRegistrar,
         Ato::OuvidoriaTratar,
+        Ato::QualidadeTratar,
     ];
 
     #[test]

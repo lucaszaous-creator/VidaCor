@@ -46,6 +46,7 @@ pub mod pacientes;
 pub mod pendencias;
 pub mod portal;
 pub mod portal_acesso;
+pub mod qualidade;
 pub mod repasse;
 pub mod respostas;
 pub mod sala;
@@ -179,6 +180,17 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/painel-de-chamada", get(chamada::painel))
         .route("/v1/inicio", get(inicio::inicio))
         .route("/v1/busca", get(busca::buscar))
+        .route("/v1/qualidade", get(qualidade::painel))
+        .route("/v1/qualidade/nao-conformidades", post(qualidade::abrir_nc))
+        .route(
+            "/v1/qualidade/nao-conformidades/{id}/andamento",
+            post(qualidade::andamento),
+        )
+        .route("/v1/qualidade/eventos", post(qualidade::notificar))
+        .route(
+            "/v1/qualidade/eventos/{id}/situacao",
+            post(qualidade::situacao_evento),
+        )
         .route(
             "/v1/ouvidoria",
             get(ouvidoria::painel).post(ouvidoria::registrar),

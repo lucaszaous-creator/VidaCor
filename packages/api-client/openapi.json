@@ -7680,6 +7680,281 @@
         }
       }
     },
+    "/v1/qualidade": {
+      "get": {
+        "tags": [
+          "qualidade"
+        ],
+        "summary": "Painel do Núcleo de Segurança do Paciente e das não conformidades (gerência).",
+        "operationId": "painel_da_qualidade",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PainelDaQualidade"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/qualidade/eventos": {
+      "post": {
+        "tags": [
+          "qualidade"
+        ],
+        "summary": "Notifica evento ou quase-erro (qualquer pessoa da equipe; pode ser anônimo; Idempotency-Key).",
+        "operationId": "notificar_evento",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovoEventoAdverso"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProtocoloDeQualidade"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/qualidade/eventos/{id}/situacao": {
+      "post": {
+        "tags": [
+          "qualidade"
+        ],
+        "summary": "Muda a situação do evento (gerência): recebido -> em_analise -> concluido, atômico.",
+        "operationId": "situacao_do_evento",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SituacaoDoEvento"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Situação registrada"
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/qualidade/nao-conformidades": {
+      "post": {
+        "tags": [
+          "qualidade"
+        ],
+        "summary": "Abre uma não conformidade (qualquer pessoa da equipe; Idempotency-Key).",
+        "operationId": "abrir_nao_conformidade",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovaNaoConformidade"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProtocoloDeQualidade"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/qualidade/nao-conformidades/{id}/andamento": {
+      "post": {
+        "tags": [
+          "qualidade"
+        ],
+        "summary": "Registra andamento da não conformidade (gerência). Atômico pela versão: quem viu versão antiga recebe 409.",
+        "operationId": "andamento_da_nao_conformidade",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AndamentoNovo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Andamento registrado"
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/recebimentos": {
       "post": {
         "tags": [
@@ -8882,6 +9157,73 @@
           },
           "situacao": {
             "type": "string"
+          }
+        }
+      },
+      "AndamentoDaNc": {
+        "type": "object",
+        "required": [
+          "texto",
+          "situacao_nova",
+          "por",
+          "em"
+        ],
+        "properties": {
+          "em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "por": {
+            "type": "string"
+          },
+          "situacao_nova": {
+            "type": "string"
+          },
+          "texto": {
+            "type": "string"
+          }
+        }
+      },
+      "AndamentoNovo": {
+        "type": "object",
+        "required": [
+          "texto",
+          "situacao",
+          "versao"
+        ],
+        "properties": {
+          "eficaz": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Obrigatório ao encerrar: a ação foi eficaz?"
+          },
+          "prazo_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "responsavel_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "aberta, em_acao, verificacao ou encerrada."
+          },
+          "texto": {
+            "type": "string"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Versão que a tela viu (evita sobrescrever o andamento de outra pessoa)."
           }
         }
       },
@@ -10732,6 +11074,67 @@
           }
         }
       },
+      "EventoDeSeguranca": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "tipo",
+          "quase_erro",
+          "gravidade",
+          "descricao",
+          "notificado_em",
+          "situacao"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "gravidade": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "notificado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "notificado_por": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Nulo quando anônimo."
+          },
+          "notificar_anvisa_ate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "paciente": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "quase_erro": {
+            "type": "boolean"
+          },
+          "situacao": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string"
+          }
+        }
+      },
       "Exame": {
         "type": "object",
         "required": [
@@ -12475,6 +12878,82 @@
           }
         }
       },
+      "NaoConformidade": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "descricao",
+          "classificacao",
+          "gravidade",
+          "situacao",
+          "vencida",
+          "aberta_por",
+          "aberta_em",
+          "versao",
+          "andamentos"
+        ],
+        "properties": {
+          "aberta_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "aberta_por": {
+            "type": "string"
+          },
+          "andamentos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AndamentoDaNc"
+            }
+          },
+          "classificacao": {
+            "type": "string"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "eficaz": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "gravidade": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "prazo_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "responsavel": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "situacao": {
+            "type": "string"
+          },
+          "vencida": {
+            "type": "boolean"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "NoDaCadeia": {
         "type": "object",
         "required": [
@@ -12582,6 +13061,25 @@
           }
         }
       },
+      "NovaNaoConformidade": {
+        "type": "object",
+        "required": [
+          "descricao",
+          "classificacao",
+          "gravidade"
+        ],
+        "properties": {
+          "classificacao": {
+            "type": "string"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "gravidade": {
+            "type": "string"
+          }
+        }
+      },
       "NovaRegraRepasse": {
         "type": "object",
         "required": [
@@ -12674,6 +13172,39 @@
           "sala_id": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "NovoEventoAdverso": {
+        "type": "object",
+        "required": [
+          "tipo",
+          "quase_erro",
+          "gravidade",
+          "descricao"
+        ],
+        "properties": {
+          "anonimo": {
+            "type": "boolean"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "gravidade": {
+            "type": "string"
+          },
+          "paciente_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "quase_erro": {
+            "type": "boolean"
+          },
+          "tipo": {
+            "type": "string"
           }
         }
       },
@@ -13405,6 +13936,57 @@
             "description": "Das respondidas nos últimos 30 dias, quantas dentro do prazo (%)."
           },
           "vencem_hoje": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "PainelDaQualidade": {
+        "type": "object",
+        "required": [
+          "nc_abertas",
+          "nc_vencidas",
+          "eventos_no_mes",
+          "quase_erros_no_mes",
+          "graves_no_mes",
+          "anvisa_pendentes",
+          "nao_conformidades",
+          "eventos"
+        ],
+        "properties": {
+          "anvisa_pendentes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "eventos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventoDeSeguranca"
+            }
+          },
+          "eventos_no_mes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "graves_no_mes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nao_conformidades": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NaoConformidade"
+            }
+          },
+          "nc_abertas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nc_vencidas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "quase_erros_no_mes": {
             "type": "integer",
             "format": "int64"
           }
@@ -14823,6 +15405,30 @@
           }
         }
       },
+      "ProtocoloDeQualidade": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "notificar_anvisa_ate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Só para evento com dano grave ou óbito."
+          }
+        }
+      },
       "ProximoPaciente": {
         "type": "object",
         "required": [
@@ -15648,6 +16254,18 @@
           "situacao": {
             "type": "string",
             "description": "valido ou indisponivel (vencido, usado, revogado ou inexistente: a mesma resposta)."
+          }
+        }
+      },
+      "SituacaoDoEvento": {
+        "type": "object",
+        "required": [
+          "situacao"
+        ],
+        "properties": {
+          "situacao": {
+            "type": "string",
+            "description": "em_analise ou concluido."
           }
         }
       },

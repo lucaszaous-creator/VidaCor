@@ -2170,6 +2170,91 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/qualidade": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Painel do Núcleo de Segurança do Paciente e das não conformidades (gerência). */
+        get: operations["painel_da_qualidade"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/qualidade/eventos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Notifica evento ou quase-erro (qualquer pessoa da equipe; pode ser anônimo; Idempotency-Key). */
+        post: operations["notificar_evento"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/qualidade/eventos/{id}/situacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Muda a situação do evento (gerência): recebido -> em_analise -> concluido, atômico. */
+        post: operations["situacao_do_evento"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/qualidade/nao-conformidades": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Abre uma não conformidade (qualquer pessoa da equipe; Idempotency-Key). */
+        post: operations["abrir_nao_conformidade"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/qualidade/nao-conformidades/{id}/andamento": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Registra andamento da não conformidade (gerência). Atômico pela versão: quem viu versão antiga recebe 409. */
+        post: operations["andamento_da_nao_conformidade"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/recebimentos": {
         parameters: {
             query?: never;
@@ -2599,6 +2684,29 @@ export interface components {
             medico?: string | null;
             sala: string;
             situacao: string;
+        };
+        AndamentoDaNc: {
+            /** Format: date-time */
+            em: string;
+            por: string;
+            situacao_nova: string;
+            texto: string;
+        };
+        AndamentoNovo: {
+            /** @description Obrigatório ao encerrar: a ação foi eficaz? */
+            eficaz?: boolean | null;
+            /** Format: date */
+            prazo_em?: string | null;
+            /** Format: uuid */
+            responsavel_id?: string | null;
+            /** @description aberta, em_acao, verificacao ou encerrada. */
+            situacao: string;
+            texto: string;
+            /**
+             * Format: int32
+             * @description Versão que a tela viu (evita sobrescrever o andamento de outra pessoa).
+             */
+            versao: number;
         };
         Aparelho: {
             ae_title: string;
@@ -3150,6 +3258,23 @@ export interface components {
             sequencia: number;
             tipo: string;
         };
+        EventoDeSeguranca: {
+            codigo: string;
+            descricao: string;
+            gravidade: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            notificado_em: string;
+            /** @description Nulo quando anônimo. */
+            notificado_por?: string | null;
+            /** Format: date-time */
+            notificar_anvisa_ate?: string | null;
+            paciente?: string | null;
+            quase_erro: boolean;
+            situacao: string;
+            tipo: string;
+        };
         Exame: {
             codigo_tuss: string;
             nome: string;
@@ -3674,6 +3799,26 @@ export interface components {
             /** @description conceder, retirar, desativar ou reativar. */
             tipo: string;
         };
+        NaoConformidade: {
+            /** Format: date-time */
+            aberta_em: string;
+            aberta_por: string;
+            andamentos: components["schemas"]["AndamentoDaNc"][];
+            classificacao: string;
+            codigo: string;
+            descricao: string;
+            eficaz?: boolean | null;
+            gravidade: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date */
+            prazo_em?: string | null;
+            responsavel?: string | null;
+            situacao: string;
+            vencida: boolean;
+            /** Format: int32 */
+            versao: number;
+        };
         NoDaCadeia: {
             codigo: string;
             /** Format: date-time */
@@ -3708,6 +3853,11 @@ export interface components {
             /** @description reclamacao, elogio, sugestao, denuncia ou lgpd. */
             tipo: string;
         };
+        NovaNaoConformidade: {
+            classificacao: string;
+            descricao: string;
+            gravidade: string;
+        };
         NovaRegraRepasse: {
             /** Format: uuid */
             medico_id: string;
@@ -3739,6 +3889,15 @@ export interface components {
             nome: string;
             /** Format: uuid */
             sala_id: string;
+        };
+        NovoEventoAdverso: {
+            anonimo?: boolean;
+            descricao: string;
+            gravidade: string;
+            /** Format: uuid */
+            paciente_id?: string | null;
+            quase_erro: boolean;
+            tipo: string;
         };
         NovoOrcamento: {
             desconto?: null | components["schemas"]["DescontoDoOrcamento"];
@@ -3965,6 +4124,22 @@ export interface components {
             no_prazo_percentual?: number | null;
             /** Format: int64 */
             vencem_hoje: number;
+        };
+        PainelDaQualidade: {
+            /** Format: int64 */
+            anvisa_pendentes: number;
+            eventos: components["schemas"]["EventoDeSeguranca"][];
+            /** Format: int64 */
+            eventos_no_mes: number;
+            /** Format: int64 */
+            graves_no_mes: number;
+            nao_conformidades: components["schemas"]["NaoConformidade"][];
+            /** Format: int64 */
+            nc_abertas: number;
+            /** Format: int64 */
+            nc_vencidas: number;
+            /** Format: int64 */
+            quase_erros_no_mes: number;
         };
         PainelDosAparelhos: {
             aparelhos: components["schemas"]["AparelhoCadastrado"][];
@@ -4429,6 +4604,16 @@ export interface components {
             /** Format: date */
             prazo_em: string;
         };
+        ProtocoloDeQualidade: {
+            codigo: string;
+            /** Format: uuid */
+            id: string;
+            /**
+             * Format: date-time
+             * @description Só para evento com dano grave ou óbito.
+             */
+            notificar_anvisa_ate?: string | null;
+        };
         ProximoPaciente: {
             /** Format: uuid */
             agendamento_id: string;
@@ -4694,6 +4879,10 @@ export interface components {
         SistemaClassificacao: "tirads" | "birads";
         SituacaoDoConvite: {
             /** @description valido ou indisponivel (vencido, usado, revogado ou inexistente: a mesma resposta). */
+            situacao: string;
+        };
+        SituacaoDoEvento: {
+            /** @description em_analise ou concluido. */
             situacao: string;
         };
         Solicitante: {
@@ -10166,6 +10355,203 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    painel_da_qualidade: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PainelDaQualidade"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    notificar_evento: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoEventoAdverso"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProtocoloDeQualidade"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    situacao_do_evento: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SituacaoDoEvento"];
+            };
+        };
+        responses: {
+            /** @description Situação registrada */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    abrir_nao_conformidade: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovaNaoConformidade"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProtocoloDeQualidade"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    andamento_da_nao_conformidade: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AndamentoNovo"];
+            };
+        };
+        responses: {
+            /** @description Andamento registrado */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
             };
         };
     };
