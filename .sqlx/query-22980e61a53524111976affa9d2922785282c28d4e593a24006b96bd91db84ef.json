@@ -1,0 +1,61 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT r.autor_id, u.nome, count(*) AS \"revisados!\",\n                  count(*) FILTER (WHERE r.classe = '1') AS \"concordantes!\",\n                  count(*) FILTER (WHERE r.pendencia = 'aguarda_autor') AS \"pendentes!\"\n             FROM laudos.revisao r JOIN identidade.usuario u ON u.id = r.autor_id\n            WHERE r.situacao = 'concluida' AND r.concluida_em >= $1\n            GROUP BY r.autor_id, u.nome ORDER BY u.nome",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "autor_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "autor_id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "revisados!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 3,
+        "name": "concordantes!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 4,
+        "name": "pendentes!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "22980e61a53524111976affa9d2922785282c28d4e593a24006b96bd91db84ef"
+}

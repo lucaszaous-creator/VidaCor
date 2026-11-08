@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT comentario FROM laudos.revisao_parecer WHERE revisao_id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "comentario",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao_parecer",
+            "name": "comentario"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "5e4449f4e67462f408d9e09536955e0f24816701b2053acd2ee2935c454cb070"
+}

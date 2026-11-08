@@ -1,0 +1,149 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT r.id, r.codigo, r.laudo_id, r.laudo_codigo, r.exame, r.revisor_id, u.nome AS revisor, r.modo, r.situacao,\n                  r.criado_em AS designada_em, r.motivo_conflito\n             FROM laudos.revisao r JOIN identidade.usuario u ON u.id = r.revisor_id\n            WHERE r.situacao = $1 AND ($2::uuid[] IS NULL OR r.id = ANY($2))\n              AND (r.situacao <> 'conflito_declarado' OR NOT EXISTS (\n                    SELECT 1 FROM laudos.revisao o WHERE o.laudo_id = r.laudo_id AND o.situacao IN ('designada','concluida')))\n            ORDER BY r.criado_em DESC LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "laudo_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "laudo_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "laudo_codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "laudo_codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "exame",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "exame"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "revisor_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "revisor_id"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "revisor",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "modo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "modo"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "designada_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "motivo_conflito",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "motivo_conflito"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "UuidArray"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "67f0f22395263319ccdcfd5b90f27327ebf07df51c6b4b48d65df759c30bf0b3"
+}

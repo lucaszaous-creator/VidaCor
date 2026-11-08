@@ -1,0 +1,30 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT modelo_id AS \"modelo_id!\", usos AS \"usos!\" FROM laudos.usos_dos_modelos($1)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "modelo_id!",
+        "type_info": "Uuid",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 1,
+        "name": "usos!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "UuidArray"
+      ]
+    },
+    "nullable": [
+      null,
+      null
+    ]
+  },
+  "hash": "a89eae72938cdd73ebde348b280a187f3aaac1cf44299a6295b5208a62c9cc8c"
+}

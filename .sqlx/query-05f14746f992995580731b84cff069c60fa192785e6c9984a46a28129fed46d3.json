@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE laudos.revisao SET pendencia = $3, pendencia_motivo = $4, pendencia_resolvida_em = now(), versao = versao + 1\n          WHERE id = $1 AND autor_id = $2 AND pendencia = 'aguarda_autor'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "05f14746f992995580731b84cff069c60fa192785e6c9984a46a28129fed46d3"
+}

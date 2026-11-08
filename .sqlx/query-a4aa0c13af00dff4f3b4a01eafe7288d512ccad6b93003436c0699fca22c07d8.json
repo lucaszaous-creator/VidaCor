@@ -1,0 +1,197 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT r.id, r.codigo, r.laudo_id, r.laudo_codigo, r.exame, r.laudo_versao, r.classe AS \"classe!\", r.concluida_em AS \"concluida_em!\",\n                  r.pendencia, r.pendencia_motivo, r.pendencia_resolvida_em, c.comentario AS \"comentario?\",\n                  p.id AS paciente_id, p.nome, p.nascimento\n             FROM laudos.revisao r\n             JOIN identidade.paciente p ON p.id = r.paciente_id\n             LEFT JOIN laudos.revisao_parecer c ON c.revisao_id = r.id\n            WHERE r.autor_id = $1 AND r.situacao = 'concluida' AND ($2::uuid IS NULL OR r.id = $2)\n            ORDER BY (r.pendencia = 'aguarda_autor') DESC NULLS LAST, r.concluida_em DESC LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "laudo_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "laudo_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "laudo_codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "laudo_codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "exame",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "exame"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "laudo_versao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "laudo_versao"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "classe!",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "classe"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "concluida_em!",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "concluida_em"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "pendencia",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "pendencia"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "pendencia_motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "pendencia_motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "pendencia_resolvida_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "pendencia_resolvida_em"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "comentario?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao_parecer",
+            "name": "comentario"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "paciente_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "a4aa0c13af00dff4f3b4a01eafe7288d512ccad6b93003436c0699fca22c07d8"
+}

@@ -31,12 +31,14 @@ pub mod externo;
 pub mod faturamento;
 pub mod financeiro;
 pub mod fluxo_laudos;
+pub mod frases_laudo;
 pub mod indicadores;
 pub mod inicio;
 pub mod lastro_explorador;
 pub mod laudos;
 pub mod lista_espera;
 pub mod menu;
+pub mod modelos_laudo;
 pub mod nfse;
 pub mod ofertas;
 pub mod orcamentos;
@@ -47,6 +49,8 @@ pub mod portal;
 pub mod portal_acesso;
 pub mod repasse;
 pub mod respostas;
+pub mod revisao_coordenacao;
+pub mod revisao_pares;
 pub mod sala;
 pub mod saude;
 pub mod sessao;
@@ -179,6 +183,62 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/inicio", get(inicio::inicio))
         .route("/v1/busca", get(busca::buscar))
         .route("/v1/laudos/fluxo", get(fluxo_laudos::fluxo))
+        .route(
+            "/v1/modelos-de-laudo",
+            get(modelos_laudo::listar).post(modelos_laudo::criar),
+        )
+        .route("/v1/modelos-de-laudo/{id}", get(modelos_laudo::obter))
+        .route(
+            "/v1/modelos-de-laudo/{id}/versoes",
+            post(modelos_laudo::nova_versao),
+        )
+        .route(
+            "/v1/modelos-de-laudo/{id}/versoes/{numero}/decisao",
+            post(modelos_laudo::decidir),
+        )
+        .route(
+            "/v1/modelos-de-laudo/{id}/desativacao",
+            post(modelos_laudo::desativar),
+        )
+        .route("/v1/laudos/{id}/usos-de-modelo", post(modelos_laudo::usar))
+        .route(
+            "/v1/frases-de-laudo",
+            get(frases_laudo::listar).post(frases_laudo::criar),
+        )
+        .route(
+            "/v1/frases-de-laudo/{id}/desativacao",
+            post(frases_laudo::desativar),
+        )
+        .route(
+            "/v1/revisoes-por-pares",
+            post(revisao_coordenacao::designar),
+        )
+        .route(
+            "/v1/revisoes-por-pares/sorteio",
+            post(revisao_coordenacao::sortear),
+        )
+        .route(
+            "/v1/revisoes-por-pares/painel",
+            get(revisao_coordenacao::painel),
+        )
+        .route("/v1/revisoes-por-pares/fila", get(revisao_pares::fila))
+        .route(
+            "/v1/revisoes-por-pares/meus-laudos",
+            get(revisao_pares::meus_laudos),
+        )
+        .route("/v1/revisoes-por-pares/{id}", get(revisao_pares::obter))
+        .route(
+            "/v1/revisoes-por-pares/{id}/parecer",
+            post(revisao_pares::parecer),
+        )
+        .route(
+            "/v1/revisoes-por-pares/{id}/conflito",
+            post(revisao_pares::conflito),
+        )
+        .route(
+            "/v1/revisoes-por-pares/{id}/pendencia",
+            post(revisao_pares::decidir_pendencia),
+        )
         .route(
             "/v1/configuracoes/integracoes",
             get(configuracoes::integracoes),

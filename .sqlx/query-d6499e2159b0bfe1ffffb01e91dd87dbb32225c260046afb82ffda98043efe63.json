@@ -1,0 +1,24 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT EXISTS (SELECT 1 FROM laudos.revisao WHERE laudo_id = $1 AND revisor_id = $2 AND situacao = 'conflito_declarado') AS \"d!\"",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "d!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "d6499e2159b0bfe1ffffb01e91dd87dbb32225c260046afb82ffda98043efe63"
+}

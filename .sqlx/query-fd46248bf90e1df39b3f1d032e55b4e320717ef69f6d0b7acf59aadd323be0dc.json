@@ -1,0 +1,136 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT m.id, m.codigo, m.tipo, m.nome, m.exame, m.modalidade, m.ativo, m.motivo_desativacao, m.dono_id, d.nome AS \"dono_nome?\"\n             FROM laudos.modelo m LEFT JOIN identidade.usuario d ON d.id = m.dono_id\n            WHERE ($1::uuid IS NULL OR m.id = $1)\n            ORDER BY m.modalidade, lower(m.nome) LIMIT 300",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "tipo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "exame",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo",
+            "name": "exame"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "modalidade",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo",
+            "name": "modalidade"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "ativo",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo",
+            "name": "ativo"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "motivo_desativacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo",
+            "name": "motivo_desativacao"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "dono_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo",
+            "name": "dono_id"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "dono_nome?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "fd46248bf90e1df39b3f1d032e55b4e320717ef69f6d0b7acf59aadd323be0dc"
+}

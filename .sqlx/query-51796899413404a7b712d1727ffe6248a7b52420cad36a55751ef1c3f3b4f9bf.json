@@ -1,0 +1,18 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE laudos.modelo_versao SET situacao = $3, decidido_por = $4, decidido_em = now(), motivo_decisao = $5, versao = versao + 1\n          WHERE modelo_id = $1 AND numero = $2 AND situacao = 'proposta' AND proposta_por <> $4",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4",
+        "Text",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "51796899413404a7b712d1727ffe6248a7b52420cad36a55751ef1c3f3b4f9bf"
+}

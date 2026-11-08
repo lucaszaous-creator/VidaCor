@@ -1,0 +1,112 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, codigo, laudo_codigo, exame, situacao, classe, criado_em AS designada_em, concluida_em\n             FROM laudos.revisao WHERE revisor_id = $1\n            ORDER BY (situacao = 'designada') DESC, criado_em DESC LIMIT 100",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "laudo_codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "laudo_codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "exame",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "exame"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "classe",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "classe"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "designada_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "concluida_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "laudos.revisao",
+            "name": "concluida_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true
+    ]
+  },
+  "hash": "e1844780fd301a21cc0bdb3a2c6e4febcf5d96178a120f628ea8c7da08622fe0"
+}
