@@ -1,6 +1,7 @@
 # 30 · Contrato da Fase 1: os 10 fluxos críticos (docs/27)
 
-- **Status:** em construção (08/11/2026). Frases aprovadas pelo dono do produto (DEC-2026-11-08-49).
+- **Status:** núcleo construído e testado (08/11/2026): os 10 fluxos, 138 testes de integração. Frases aprovadas pelo dono do produto (DEC-2026-11-08-49).
+- **Diferenças da implementação em relação à primeira versão deste documento:** ver § 7.
 - Complementa o contrato do M0 (`docs/29` § 6.2). O `openapi.json` gerado do núcleo é a fonte da
   verdade; este documento existe para núcleo e telas trabalharem em paralelo e é corrigido quando o
   gerado divergir.
@@ -142,3 +143,17 @@ mesmo nome e outro nascimento) e `requer_contraste: boolean`, `laudo_situacao: s
 - `POST /v1/contingencias/{id}/recibos` `{ formulario: "F-REC", numero, paciente_id, tuss, valor_papel_centavos, ocorrido_em }`:
   grava o valor recalculado e abre divergência de preço quando difere.
 - `POST /v1/contingencias/{id}/encerramento`: `409` `pendencias` com a lista do que falta.
+
+## 7. Ajustes feitos na implementação (valem sobre o texto acima)
+
+| Onde | Ajuste |
+|---|---|
+| Recepção | `confirmacao.nome`, `nascimento` e `documento_com_foto` são opcionais no corpo para o servidor dizer qual falta (`identificacao-incompleta`, com o item no `detail`). |
+| Sala | `POST /v1/salas/{sala_id}/bipes` exige `Idempotency-Key`; `409 paciente-de-outra-sala` traz `sala_correta` e `divergencia`. Técnico fora da sala: `403 fora-da-sala`. Sala sem aparelho: `409 sala-sem-aparelho`. |
+| Triagem | `triagem-ausente` é 422 no bipe; conduta de médico sem vínculo: `403 sem-vinculo-de-cuidado`. Triagem também exige o sexo no cadastro (`422 cadastro-sem-sexo`). |
+| Agendamento | `situacao` do item da agenda inclui `reserva_provisoria` e `expirada` (expirada não aparece na agenda); o item traz `expira_em`. Procedimentos vêm do catálogo (`procedimento-desconhecido`). |
+| Laudo | `POST /v1/laudos/{id}/publicacao` (manual, 409 para rascunho); `POST /v1/laudos/{id}/links` `{ horas }` devolve o token uma única vez. Sem serviço de assinatura configurado: `503 assinatura-indisponivel`. PIN recusado: `422 pin-recusado`. Laudo de outro médico: `403 laudo-de-outro-medico`. |
+| Estudos | `GET /v1/estudos/pendentes` e `POST /v1/estudos/{id}/conciliacao` `{ atendimento_id, nome, nascimento }` (médico; conciliação manual com dois identificadores). |
+| Caixa | O `pix` do recebimento vem `null` até o PSP devolver a cobrança pelo outbox: a tela consulta `GET /v1/recebimentos/{id}` até aparecer o copia-e-cola. Sem tabela de preços vigente: `409 sem-tabela-de-precos`. |
+| Contingência | A ficha F-ATD leva `agendamento_id` (a agenda impressa no kit traz o código). Novas rotas: `POST /v1/contingencias/{id}/numeros` `{ formulario, de, ate, situacao: "devolvido" \| "anulado" }` e `POST /v1/divergencias/{id}/resolucao` `{ resolucao }` (gerência). A lista do `409 pendencias` vem em `pendencias: string[]`. |
+| Geral | Erros podem trazer campos extras ao lado do Problem Details (`sugestoes`, `tuss`, `validade`, `atendimento_codigo`, `limite_pontos_base`). O `openapi.json` gerado está em `packages/api-client/openapi.json` (54 rotas). |
