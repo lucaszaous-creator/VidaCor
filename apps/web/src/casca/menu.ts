@@ -31,6 +31,7 @@ const SECOES: { id: string; titulo: string; itens: ItemComPerfis[] }[] = [
       { id: 'recepcao', rotulo: 'Recepção e pulseiras', href: '/recepcao', icone: 'recepcao', cor: 'teal', perfis: RECEPCAO },
       // A conta da TV só tem este item, e `/` a leva direto ao painel.
       { id: 'painel', rotulo: 'TV de chamada', href: '/telao', icone: 'recepcao', cor: 'teal', perfis: ['tv', ...RECEPCAO, 'gerente'] },
+      { id: 'autorizacoes', rotulo: 'Autorizações', href: '/autorizacoes', icone: 'autorizacao', cor: 'blue', perfis: [...RECEPCAO, 'faturista', 'gerente'] },
     ],
   },
   {

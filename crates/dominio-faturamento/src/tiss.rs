@@ -15,13 +15,13 @@ use sha2::Sha256;
 pub const VERSAO_TISS: &str = "4.03.00";
 /// Limite do XSD (`guiaSP-SADT maxOccurs="100"`).
 pub const MAX_GUIAS_POR_LOTE: usize = 100;
-const NAMESPACE: &str = "http://www.ans.gov.br/padroes/tiss/schemas";
+pub(crate) const NAMESPACE: &str = "http://www.ans.gov.br/padroes/tiss/schemas";
 
 /// Códigos fixos desta entrega (a confirmar com o analista TISS):
 /// tabela 22 (TUSS procedimentos), atendimento eletivo (1), tipo de atendimento 23 (exame, que
 /// substituiu o 05 na 4.00.00), sem acidente (9), regime ambulatorial (01), redução/acréscimo 1,00.
-const TABELA_TUSS: &str = "22";
-const CARATER_ELETIVO: &str = "1";
+pub(crate) const TABELA_TUSS: &str = "22";
+pub(crate) const CARATER_ELETIVO: &str = "1";
 const TIPO_ATENDIMENTO_EXAME: &str = "23";
 const SEM_ACIDENTE: &str = "9";
 const REGIME_AMBULATORIAL: &str = "01";
@@ -63,18 +63,18 @@ pub struct ArquivoTiss {
 }
 
 /// Nó do documento: elemento com filhos ou elemento só com texto.
-enum No {
+pub(crate) enum No {
     El(&'static str, Vec<No>),
     Tx(&'static str, String),
 }
 
-fn el(nome: &'static str, filhos: Vec<No>) -> No {
+pub(crate) fn el(nome: &'static str, filhos: Vec<No>) -> No {
     No::El(nome, filhos)
 }
 
 /// Texto limpo para o padrão: sem caracteres de controle, só ISO-8859-1 (o resto vira `?`), cortado
 /// no tamanho do campo.
-fn tx(nome: &'static str, valor: &str, max: usize) -> No {
+pub(crate) fn tx(nome: &'static str, valor: &str, max: usize) -> No {
     let limpo: String = valor
         .chars()
         .filter(|c| !c.is_control())
@@ -97,7 +97,7 @@ fn escapar(s: &str, saida: &mut String) {
     }
 }
 
-fn escrever(no: &No, saida: &mut String) {
+pub(crate) fn escrever(no: &No, saida: &mut String) {
     match no {
         No::El(nome, filhos) => {
             saida.push_str("<ans:");
@@ -122,21 +122,21 @@ fn escrever(no: &No, saida: &mut String) {
     }
 }
 
-fn conteudo(no: &No, saida: &mut String) {
+pub(crate) fn conteudo(no: &No, saida: &mut String) {
     match no {
         No::El(_, filhos) => filhos.iter().for_each(|f| conteudo(f, saida)),
         No::Tx(_, valor) => saida.push_str(valor),
     }
 }
 
-fn latin1(s: &str) -> Vec<u8> {
+pub(crate) fn latin1(s: &str) -> Vec<u8> {
     // Todos os textos passaram por `tx`; marcações e escapes são ASCII.
     s.chars()
         .map(|c| u8::try_from(u32::from(c)).unwrap_or(b'?'))
         .collect()
 }
 
-fn hex(bytes: &[u8]) -> String {
+pub(crate) fn hex(bytes: &[u8]) -> String {
     bytes.iter().map(|b| format!("{b:02x}")).collect()
 }
 

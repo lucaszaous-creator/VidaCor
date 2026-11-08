@@ -8,6 +8,7 @@
 //! O núcleo (crate `api`) lê o banco, chama estas funções e grava o resultado com a versão da regra.
 
 pub mod auditoria;
+pub mod autorizacao;
 pub mod guia;
 pub mod tiss;
 

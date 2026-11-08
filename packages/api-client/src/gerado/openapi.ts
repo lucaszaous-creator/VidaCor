@@ -177,6 +177,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/autorizacoes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Pedidos de autorização da unidade: negados, parciais e pendentes primeiro. */
+        get: operations["listar_autorizacoes"];
+        put?: never;
+        /** Pede a autorização do agendamento (recepção ou faturista). */
+        post: operations["pedir_autorizacao"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/autorizacoes-desconto": {
         parameters: {
             query?: never;
@@ -188,6 +206,77 @@ export interface paths {
         put?: never;
         /** Gerência autoriza desconto acima do limite (reautenticação; quem pede não autoriza). */
         post: operations["autorizar_desconto"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/autorizacoes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Pedido com andamento, respostas recebidas (com hash) e a guia preenchida. */
+        get: operations["obter_autorizacao"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/autorizacoes/{id}/consulta": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** "Consultar operadora agora": antecipa a consulta automática do pedido em análise. */
+        post: operations["consultar_autorizacao_agora"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/autorizacoes/{id}/protocolo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Pedido feito no portal da operadora: registra o protocolo (canal portal). */
+        post: operations["registrar_protocolo_autorizacao"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/autorizacoes/{id}/resposta": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Registra a resposta copiada do portal da operadora (canal portal): fica gravada como recebida e
+         *     preenche a guia como a do webservice.
+         */
+        post: operations["registrar_resposta_do_portal"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2116,6 +2205,45 @@ export interface components {
             /** Format: date-time */
             valida_ate: string;
         };
+        AutorizacaoDetalhe: {
+            carteirinha: string;
+            /** Format: date-time */
+            enviada_em?: string | null;
+            guia?: null | components["schemas"]["GuiaPreenchida"];
+            indicacao_clinica?: string | null;
+            itens: components["schemas"]["ProcedimentoDoPedido"][];
+            pendente_no_outbox?: null | components["schemas"]["ConsultaPendente"];
+            /** Format: date-time */
+            respondida_em?: string | null;
+            respostas: components["schemas"]["RespostaRecebida"][];
+            resumo: components["schemas"]["AutorizacaoResumo"];
+            /** @description Situação atual do agendamento (reserva_provisoria, confirmado...). */
+            situacao_do_agendamento: string;
+            solicitante: string;
+        };
+        AutorizacaoResumo: {
+            /** Format: uuid */
+            agendamento_id: string;
+            /** @description webservice ou portal. */
+            canal: string;
+            codigo: string;
+            /** Format: date-time */
+            criado_em: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            inicio_do_exame: string;
+            motivo?: string | null;
+            operadora: string;
+            paciente: components["schemas"]["PacienteDoPedido"];
+            procedimentos: string[];
+            protocolo?: string | null;
+            /**
+             * @description aguardando_envio, aguardando_portal, enviada, em_analise, pendente_documento, autorizada,
+             *     parcial, negada, cancelada ou recusada.
+             */
+            situacao: string;
+        };
         CabecalhoDoMenu: {
             subtitulo: string;
             titulo: string;
@@ -2187,6 +2315,14 @@ export interface components {
             operadoras: string[];
             regras: components["schemas"]["RegraDoConjunto"][];
             versao: string;
+        };
+        /** @description Consulta automática da operadora pendente no outbox (espera crescente; R7). */
+        ConsultaPendente: {
+            /** Format: date-time */
+            proxima_em: string;
+            /** Format: int32 */
+            tentativas: number;
+            ultimo_erro?: string | null;
         };
         ContaBancaria: {
             codigo: string;
@@ -2563,6 +2699,17 @@ export interface components {
             /** Format: date */
             validade: string;
         };
+        GuiaPreenchida: {
+            codigo: string;
+            /** Format: uuid */
+            id: string;
+            numero: string;
+            senha: string;
+            /** @description disponivel ou consumida (consumida quando confirmou a reserva). */
+            situacao: string;
+            /** Format: date */
+            validade: string;
+        };
         ImportacaoDeExtrato: {
             /** Format: uuid */
             conta_id: string;
@@ -2927,6 +3074,18 @@ export interface components {
             /** @description F ou M. */
             sexo: string;
         };
+        /**
+         * @description Pedido de autorização a partir do agendamento (ou da reserva provisória). Os procedimentos vêm do
+         *     agendamento; o canal (webservice ou portal) vem do contrato da operadora.
+         */
+        NovoPedidoAutorizacao: {
+            /** Format: uuid */
+            agendamento_id: string;
+            carteirinha: string;
+            indicacao_clinica?: string | null;
+            operadora: string;
+            solicitante: components["schemas"]["SolicitanteDoPedido"];
+        };
         NovoPedidoDesconto: {
             motivo: string;
             /** Format: uuid */
@@ -2989,6 +3148,11 @@ export interface components {
             paciente: components["schemas"]["PacienteResumo"];
             /** Format: int32 */
             quantidade: number;
+        };
+        PacienteDoPedido: {
+            /** Format: date */
+            nascimento: string;
+            nome: string;
         };
         PacienteResumo: {
             /** Format: uuid */
@@ -3225,6 +3389,9 @@ export interface components {
             perfil?: string | null;
             tipo: string;
         };
+        PedidoProtocolo: {
+            protocolo: string;
+        };
         PedidoRascunho: {
             texto: string;
             /** Format: int32 */
@@ -3333,9 +3500,25 @@ export interface components {
              */
             valor_centavos?: number | null;
         };
+        ProcedimentoDoPedido: {
+            /**
+             * Format: int32
+             * @description Nulo até a resposta.
+             */
+            autorizado?: number | null;
+            descricao: string;
+            /** Format: int32 */
+            solicitado: number;
+            tuss: string;
+        };
         ProcedimentoGuia: {
             /** Format: int32 */
             quantidade: number;
+            tuss: string;
+        };
+        ProcedimentoRespondido: {
+            /** Format: int32 */
+            autorizado: number;
             tuss: string;
         };
         ProducaoPorExame: {
@@ -3447,6 +3630,31 @@ export interface components {
             /** Format: int64 */
             titulos_criados: number;
         };
+        /** @description Resposta copiada do portal da operadora (canal portal): fica gravada como recebida, com hash. */
+        RespostaDoPortal: {
+            /** Format: date */
+            data_autorizacao?: string | null;
+            motivo?: string | null;
+            numero_guia_operadora?: string | null;
+            procedimentos?: components["schemas"]["ProcedimentoRespondido"][];
+            senha?: string | null;
+            /** @description autorizada, parcial, negada, em_analise ou pendente_documento. */
+            situacao: string;
+            /** Format: date */
+            validade?: string | null;
+        };
+        RespostaRecebida: {
+            /** @description A resposta mudou o pedido (respostas depois da final só ficam registradas). */
+            aplicada: boolean;
+            erro_leitura?: string | null;
+            hash_confere?: boolean | null;
+            /** @description webservice ou portal. */
+            origem: string;
+            /** Format: date-time */
+            recebida_em: string;
+            sha256: string;
+            situacao_lida?: string | null;
+        };
         ResultadoBipe: {
             aparelho: components["schemas"]["Aparelho"];
             atendimento: components["schemas"]["Atendimento"];
@@ -3554,6 +3762,16 @@ export interface components {
             cbos: string;
             conselho: string;
             numero: string;
+            uf: string;
+        };
+        SolicitanteDoPedido: {
+            /** @description CBO-S de 6 dígitos. */
+            cbos: string;
+            /** @description Código do conselho no TISS (06 = CRM). */
+            conselho: string;
+            nome: string;
+            numero: string;
+            /** @description Código IBGE da UF (33 = RJ). */
             uf: string;
         };
         Titulo: {
@@ -4149,6 +4367,92 @@ export interface operations {
             };
         };
     };
+    listar_autorizacoes: {
+        parameters: {
+            query?: {
+                situacao?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutorizacaoResumo"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    pedir_autorizacao: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoPedidoAutorizacao"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutorizacaoDetalhe"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     autorizar_desconto: {
         parameters: {
             query?: never;
@@ -4179,6 +4483,156 @@ export interface operations {
                 };
             };
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    obter_autorizacao: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutorizacaoDetalhe"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    consultar_autorizacao_agora: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutorizacaoDetalhe"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    registrar_protocolo_autorizacao: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoProtocolo"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutorizacaoDetalhe"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    registrar_resposta_do_portal: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RespostaDoPortal"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutorizacaoDetalhe"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };

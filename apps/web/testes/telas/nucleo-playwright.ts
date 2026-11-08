@@ -25,6 +25,7 @@ import {
   TRIAGEM_PRECISA_APROVACAO,
 } from '../dados/fase1.ts';
 import { agendaDoDia, atendimentoDe, itensDaAgenda, SALAS } from '../dados/ficticios.ts';
+import { autorizacoesIniciais } from '../dados/autorizacao.ts';
 import { CONTRATO_UNIMED, faturamentoInicial, painelDe } from '../dados/faturamento.ts';
 import { achadosDoLaudoAntonio } from '../dados/laudo-estruturado.ts';
 import { estornoDaSonia, pedidoDaSonia } from '../dados/pendencias.ts';
@@ -163,6 +164,16 @@ export async function simularNucleo(page: Page, estado: EstadoDaSimulacao): Prom
       if (c === '/v1/faturamento/lotes') return json(route, f.lotes);
       if (c.startsWith('/v1/faturamento/lotes/')) return json(route, { lote: f.lotes[0], contas: [f.contas[2]?.resumo] });
       if (c === '/v1/faturamento/glosas') return json(route, f.glosas);
+    }
+    if (c.startsWith('/v1/autorizacoes')) {
+      // Lista longa de propósito: rola dentro do painel, nunca a página.
+      const lista = autorizacoesIniciais();
+      const base = lista[0];
+      if (base !== undefined) {
+        for (let i = 0; i < 20; i += 1) lista.push({ ...base, resumo: { ...base.resumo, id: `${base.resumo.id.slice(0, -2)}${String(10 + i)}` } });
+      }
+      if (c === '/v1/autorizacoes') return json(route, lista.map((a) => a.resumo));
+      return json(route, lista.find((a) => c.endsWith(a.resumo.id)) ?? lista[0]);
     }
     if (c === '/v1/estoque/itens') {
       return json(route, [{ id: 'i1', codigo: 'ITM-CTR', nome: 'Contraste iodado não iônico 350, 100 ml', medida: 'frasco', minimo: 20, local: 'Tomografia', contraste: true, saldo_valido: 8, abaixo_do_minimo: true, lotes: [{ id: 'l1', numero: 'L2408-77', validade: '2027-03-31', saldo: 3, vencido: false }, { id: 'l2', numero: 'L2501-12', validade: '2027-09-30', saldo: 5, vencido: false }] }]);

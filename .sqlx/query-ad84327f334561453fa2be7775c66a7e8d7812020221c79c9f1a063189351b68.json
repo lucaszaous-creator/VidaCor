@@ -1,0 +1,25 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO convenio.autorizacao_resposta (id, autorizacao_id, origem_resposta, bruta, sha256, situacao_lida, erro_leitura,\n                hash_confere, aplicada, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'integracao', $11, $12)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Bytea",
+        "Text",
+        "Text",
+        "Text",
+        "Bool",
+        "Bool",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "ad84327f334561453fa2be7775c66a7e8d7812020221c79c9f1a063189351b68"
+}

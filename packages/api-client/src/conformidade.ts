@@ -5,6 +5,7 @@
  * Valem os tipos da Fase 1, que são os usados pelas telas.
  */
 import type { components } from './gerado/openapi';
+import type { AutorizacaoDetalhe, AutorizacaoResumo, NovoPedidoAutorizacao, PedidoProtocolo, RespostaDoPortal } from './contrato-autorizacao';
 import type { MenuDoObjeto } from './contrato-menu';
 import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
@@ -145,3 +146,11 @@ export type ConfereImportacaoExterna = Cabe<ImportacaoExterna, S['ImportacaoExte
 export type ConfereChamadaNoPainel = Cabe<ChamadaNoPainel, S['ChamadaNoPainel']>;
 export type ConferePainel = Cabe<Painel, S['Painel']>;
 export type ConferePedidoDeChamada = Cabe<PedidoDeChamada, S['PedidoDeChamada']>;
+
+// Autorização pedida pelo sistema (E4).
+export type ConfereAutorizacaoResumo = Cabe<AutorizacaoResumo, S['AutorizacaoResumo']>;
+export type ConfereAutorizacaoDetalhe = Cabe<AutorizacaoDetalhe, S['AutorizacaoDetalhe']>;
+export type ConfereNovoPedidoAutorizacao = Cabe<NovoPedidoAutorizacao, S['NovoPedidoAutorizacao']>;
+export type ConfereNovoPedidoAutorizacaoVolta = Cabe<S['NovoPedidoAutorizacao'], NovoPedidoAutorizacao>;
+export type ConferePedidoProtocolo = Cabe<PedidoProtocolo, S['PedidoProtocolo']>;
+export type ConfereRespostaDoPortal = Cabe<RespostaDoPortal, S['RespostaDoPortal']>;

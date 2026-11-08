@@ -1,0 +1,100 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT origem_resposta AS origem, sha256, situacao_lida, erro_leitura, hash_confere, aplicada, recebida_em\n             FROM convenio.autorizacao_resposta WHERE autorizacao_id = $1 ORDER BY recebida_em DESC LIMIT 50",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "origem",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao_resposta",
+            "name": "origem_resposta"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "sha256",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao_resposta",
+            "name": "sha256"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "situacao_lida",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao_resposta",
+            "name": "situacao_lida"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "erro_leitura",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao_resposta",
+            "name": "erro_leitura"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "hash_confere",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao_resposta",
+            "name": "hash_confere"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "aplicada",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao_resposta",
+            "name": "aplicada"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "recebida_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao_resposta",
+            "name": "recebida_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "5e191c60b39672d6c2c98f4f710436d66e97942405a7692b8401e363bc11da8d"
+}

@@ -47,6 +47,8 @@ pub enum Ato {
     GlosaRecorrer,
     ChamadaFazer,
     PainelVer,
+    AutorizacaoPedir,
+    AutorizacaoVer,
 }
 
 impl Ato {
@@ -105,6 +107,9 @@ impl Ato {
             // do dispositivo TV; recepção e gerência podem abri-lo para conferir.
             A::ChamadaFazer => &["recepcao", "tecnico"],
             A::PainelVer => &["tv", "recepcao", "gerente"],
+            // Autorização pedida pelo sistema (docs/22 E4): recepção e faturista pedem; gerente acompanha.
+            A::AutorizacaoPedir => &["recepcao", "faturista"],
+            A::AutorizacaoVer => &["recepcao", "faturista", "gerente"],
         };
         perfis.contains(&perfil)
     }
@@ -114,7 +119,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 43] = [
+    const TODOS: [Ato; 45] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -158,6 +163,8 @@ mod testes {
         Ato::GlosaRecorrer,
         Ato::ChamadaFazer,
         Ato::PainelVer,
+        Ato::AutorizacaoPedir,
+        Ato::AutorizacaoVer,
     ];
 
     #[test]

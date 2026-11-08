@@ -1,0 +1,137 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT g.id, g.codigo, g.situacao, g.expira_em, g.guia_id, g.exame_tuss, g.unidade_id, p.id AS paciente_id, p.nome, p.nascimento\n           FROM agenda.agendamento g JOIN identidade.paciente p ON p.id = g.paciente_id\n          WHERE g.id = $1 AND g.unidade_id = $2 FOR UPDATE OF g",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "expira_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "expira_em"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "guia_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "guia_id"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "exame_tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "exame_tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "unidade_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "unidade_id"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "paciente_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "61f719333e6b5a62a5f3abf5d1587f17913ca908517f50a19412395293032fa4"
+}

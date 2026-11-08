@@ -779,6 +779,133 @@
         }
       }
     },
+    "/v1/autorizacoes": {
+      "get": {
+        "tags": [
+          "autorizacoes"
+        ],
+        "summary": "Pedidos de autorização da unidade: negados, parciais e pendentes primeiro.",
+        "operationId": "listar_autorizacoes",
+        "parameters": [
+          {
+            "name": "situacao",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AutorizacaoResumo"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "autorizacoes"
+        ],
+        "summary": "Pede a autorização do agendamento (recepção ou faturista).",
+        "operationId": "pedir_autorizacao",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovoPedidoAutorizacao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutorizacaoDetalhe"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/autorizacoes-desconto": {
       "post": {
         "tags": [
@@ -818,6 +945,233 @@
             }
           },
           "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/autorizacoes/{id}": {
+      "get": {
+        "tags": [
+          "autorizacoes"
+        ],
+        "summary": "Pedido com andamento, respostas recebidas (com hash) e a guia preenchida.",
+        "operationId": "obter_autorizacao",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutorizacaoDetalhe"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/autorizacoes/{id}/consulta": {
+      "post": {
+        "tags": [
+          "autorizacoes"
+        ],
+        "summary": "\"Consultar operadora agora\": antecipa a consulta automática do pedido em análise.",
+        "operationId": "consultar_autorizacao_agora",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutorizacaoDetalhe"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/autorizacoes/{id}/protocolo": {
+      "post": {
+        "tags": [
+          "autorizacoes"
+        ],
+        "summary": "Pedido feito no portal da operadora: registra o protocolo (canal portal).",
+        "operationId": "registrar_protocolo_autorizacao",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoProtocolo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutorizacaoDetalhe"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/autorizacoes/{id}/resposta": {
+      "post": {
+        "tags": [
+          "autorizacoes"
+        ],
+        "summary": "Registra a resposta copiada do portal da operadora (canal portal): fica gravada como recebida e\npreenche a guia como a do webservice.",
+        "operationId": "registrar_resposta_do_portal",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RespostaDoPortal"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutorizacaoDetalhe"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
             "description": "",
             "content": {
               "application/json": {
@@ -6917,6 +7271,153 @@
           }
         }
       },
+      "AutorizacaoDetalhe": {
+        "type": "object",
+        "required": [
+          "resumo",
+          "carteirinha",
+          "solicitante",
+          "itens",
+          "respostas",
+          "situacao_do_agendamento"
+        ],
+        "properties": {
+          "carteirinha": {
+            "type": "string"
+          },
+          "enviada_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "guia": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuiaPreenchida"
+              }
+            ]
+          },
+          "indicacao_clinica": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProcedimentoDoPedido"
+            }
+          },
+          "pendente_no_outbox": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ConsultaPendente",
+                "description": "Envio ou consulta à operadora ainda pendente no outbox."
+              }
+            ]
+          },
+          "respondida_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "respostas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RespostaRecebida"
+            }
+          },
+          "resumo": {
+            "$ref": "#/components/schemas/AutorizacaoResumo"
+          },
+          "situacao_do_agendamento": {
+            "type": "string",
+            "description": "Situação atual do agendamento (reserva_provisoria, confirmado...)."
+          },
+          "solicitante": {
+            "type": "string"
+          }
+        }
+      },
+      "AutorizacaoResumo": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "paciente",
+          "operadora",
+          "canal",
+          "situacao",
+          "procedimentos",
+          "agendamento_id",
+          "inicio_do_exame",
+          "criado_em"
+        ],
+        "properties": {
+          "agendamento_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "canal": {
+            "type": "string",
+            "description": "webservice ou portal."
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "inicio_do_exame": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "operadora": {
+            "type": "string"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteDoPedido"
+          },
+          "procedimentos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "protocolo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "situacao": {
+            "type": "string",
+            "description": "aguardando_envio, aguardando_portal, enviada, em_analise, pendente_documento, autorizada,\nparcial, negada, cancelada ou recusada."
+          }
+        }
+      },
       "CabecalhoDoMenu": {
         "type": "object",
         "required": [
@@ -7172,6 +7673,30 @@
           },
           "versao": {
             "type": "string"
+          }
+        }
+      },
+      "ConsultaPendente": {
+        "type": "object",
+        "description": "Consulta automática da operadora pendente no outbox (espera crescente; R7).",
+        "required": [
+          "tentativas",
+          "proxima_em"
+        ],
+        "properties": {
+          "proxima_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tentativas": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ultimo_erro": {
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -8431,6 +8956,40 @@
           }
         }
       },
+      "GuiaPreenchida": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "numero",
+          "senha",
+          "validade",
+          "situacao"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "numero": {
+            "type": "string"
+          },
+          "senha": {
+            "type": "string"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "disponivel ou consumida (consumida quando confirmou a reserva)."
+          },
+          "validade": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
       "ImportacaoDeExtrato": {
         "type": "object",
         "required": [
@@ -9601,6 +10160,37 @@
           }
         }
       },
+      "NovoPedidoAutorizacao": {
+        "type": "object",
+        "description": "Pedido de autorização a partir do agendamento (ou da reserva provisória). Os procedimentos vêm do\nagendamento; o canal (webservice ou portal) vem do contrato da operadora.",
+        "required": [
+          "agendamento_id",
+          "operadora",
+          "carteirinha",
+          "solicitante"
+        ],
+        "properties": {
+          "agendamento_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "carteirinha": {
+            "type": "string"
+          },
+          "indicacao_clinica": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "operadora": {
+            "type": "string"
+          },
+          "solicitante": {
+            "$ref": "#/components/schemas/SolicitanteDoPedido"
+          }
+        }
+      },
       "NovoPedidoDesconto": {
         "type": "object",
         "required": [
@@ -9789,6 +10379,22 @@
           "quantidade": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "PacienteDoPedido": {
+        "type": "object",
+        "required": [
+          "nome",
+          "nascimento"
+        ],
+        "properties": {
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string"
           }
         }
       },
@@ -10508,6 +11114,17 @@
           }
         }
       },
+      "PedidoProtocolo": {
+        "type": "object",
+        "required": [
+          "protocolo"
+        ],
+        "properties": {
+          "protocolo": {
+            "type": "string"
+          }
+        }
+      },
       "PedidoRascunho": {
         "type": "object",
         "required": [
@@ -10866,6 +11483,34 @@
           }
         }
       },
+      "ProcedimentoDoPedido": {
+        "type": "object",
+        "required": [
+          "tuss",
+          "descricao",
+          "solicitado"
+        ],
+        "properties": {
+          "autorizado": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "Nulo até a resposta."
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "solicitado": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tuss": {
+            "type": "string"
+          }
+        }
+      },
       "ProcedimentoGuia": {
         "type": "object",
         "required": [
@@ -10874,6 +11519,22 @@
         ],
         "properties": {
           "quantidade": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tuss": {
+            "type": "string"
+          }
+        }
+      },
+      "ProcedimentoRespondido": {
+        "type": "object",
+        "required": [
+          "tuss",
+          "autorizado"
+        ],
+        "properties": {
+          "autorizado": {
             "type": "integer",
             "format": "int32"
           },
@@ -11218,6 +11879,101 @@
           }
         }
       },
+      "RespostaDoPortal": {
+        "type": "object",
+        "description": "Resposta copiada do portal da operadora (canal portal): fica gravada como recebida, com hash.",
+        "required": [
+          "situacao"
+        ],
+        "properties": {
+          "data_autorizacao": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "numero_guia_operadora": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "procedimentos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProcedimentoRespondido"
+            }
+          },
+          "senha": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "situacao": {
+            "type": "string",
+            "description": "autorizada, parcial, negada, em_analise ou pendente_documento."
+          },
+          "validade": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          }
+        }
+      },
+      "RespostaRecebida": {
+        "type": "object",
+        "required": [
+          "origem",
+          "sha256",
+          "aplicada",
+          "recebida_em"
+        ],
+        "properties": {
+          "aplicada": {
+            "type": "boolean",
+            "description": "A resposta mudou o pedido (respostas depois da final só ficam registradas)."
+          },
+          "erro_leitura": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "hash_confere": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "origem": {
+            "type": "string",
+            "description": "webservice ou portal."
+          },
+          "recebida_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "situacao_lida": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
       "ResultadoBipe": {
         "type": "object",
         "required": [
@@ -11538,6 +12294,36 @@
           },
           "uf": {
             "type": "string"
+          }
+        }
+      },
+      "SolicitanteDoPedido": {
+        "type": "object",
+        "required": [
+          "nome",
+          "conselho",
+          "numero",
+          "uf",
+          "cbos"
+        ],
+        "properties": {
+          "cbos": {
+            "type": "string",
+            "description": "CBO-S de 6 dígitos."
+          },
+          "conselho": {
+            "type": "string",
+            "description": "Código do conselho no TISS (06 = CRM)."
+          },
+          "nome": {
+            "type": "string"
+          },
+          "numero": {
+            "type": "string"
+          },
+          "uf": {
+            "type": "string",
+            "description": "Código IBGE da UF (33 = RJ)."
           }
         }
       },

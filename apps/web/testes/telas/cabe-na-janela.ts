@@ -268,6 +268,14 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await esperar(page, 'region', 'Guias com esta pendência');
   await ok('34-auditoria-faturamento');
   estado.sessao = SESSOES.recepcao;
+  await ir('/autorizacoes');
+  await page.getByRole('button', { name: /^Sônia Maria Castro/ }).click();
+  await esperar(page, 'form', 'Protocolo do portal');
+  await ok('35-autorizacoes-portal');
+  await page.getByRole('button', { name: /^Antônio Carlos Ribeiro/ }).click();
+  await esperar(page, 'region', 'Andamento');
+  await ok('36-autorizacoes-autorizada');
+  estado.sessao = SESSOES.recepcao;
   await ir('/contingencia');
   await page.getByText('Nenhuma contingência aberta').waitFor();
   await ok('26-contingencia');

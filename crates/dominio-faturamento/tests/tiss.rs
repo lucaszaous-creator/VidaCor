@@ -6,9 +6,7 @@
 mod comum;
 
 use chrono::NaiveDate;
-use comum::guia_ok;
-use std::path::PathBuf;
-use std::process::Command;
+use comum::{guia_ok, validar_no_xsd};
 use vidacor_dominio_faturamento::{montar_lote, Centavos, ErroTiss, GuiaFaturavel, LoteTiss};
 
 fn gerado_em() -> chrono::NaiveDateTime {
@@ -26,28 +24,6 @@ fn lote(guias: &[GuiaFaturavel]) -> LoteTiss<'_> {
         nome_prestador: "VidaCor Imagem Unidade Centro",
         gerado_em: gerado_em(),
         guias,
-    }
-}
-
-/// Valida no XSD oficial (sem rede: `--nonet`). Devolve a saída do xmllint se reprovar.
-fn validar_no_xsd(xml: &[u8], nome: &str) -> Result<(), String> {
-    let raiz = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    let xsd = raiz.join("xsd/tiss-4.03.00/tissV4_03_00.xsd");
-    let dir = std::env::temp_dir().join(format!("vidacor-tiss-{}", std::process::id()));
-    std::fs::create_dir_all(&dir).unwrap();
-    let arquivo = dir.join(format!("{nome}.xml"));
-    std::fs::write(&arquivo, xml).unwrap();
-    let saida = Command::new("xmllint")
-        .args(["--noout", "--nonet", "--schema"])
-        .arg(&xsd)
-        .arg(&arquivo)
-        .output()
-        .expect("xmllint não encontrado: instale libxml2-utils para validar o TISS no XSD da ANS");
-    let _ = std::fs::remove_file(&arquivo);
-    if saida.status.success() {
-        Ok(())
-    } else {
-        Err(String::from_utf8_lossy(&saida.stderr).into_owned())
     }
 }
 

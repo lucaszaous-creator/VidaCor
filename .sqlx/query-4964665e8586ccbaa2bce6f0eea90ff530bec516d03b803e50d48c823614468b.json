@@ -1,0 +1,168 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT a.id, a.codigo, a.paciente_nome, a.paciente_nascimento, a.operadora, a.canal, a.situacao, a.protocolo, a.motivo,\n                  a.agendamento_id, a.criado_em, g.inicio,\n                  (SELECT coalesce(array_agg(p.tuss || ' ' || p.descricao ORDER BY p.tuss), '{}') FROM convenio.autorizacao_procedimento p\n                    WHERE p.autorizacao_id = a.id) AS \"procedimentos!\"\n             FROM convenio.autorizacao a\n             JOIN LATERAL (SELECT inicio FROM agenda.agendamento WHERE id = a.agendamento_id) g ON true\n            WHERE ($1::text IS NULL OR a.situacao = $1) AND ($2::uuid IS NULL OR a.id = $2)\n            ORDER BY CASE WHEN a.situacao IN ('negada','parcial','recusada','pendente_documento','aguardando_portal') THEN 0\n                          WHEN a.situacao IN ('aguardando_envio','enviada','em_analise') THEN 1 ELSE 2 END, a.criado_em DESC\n            LIMIT 300",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "paciente_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "paciente_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "paciente_nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "paciente_nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "operadora",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "operadora"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "canal",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "canal"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "protocolo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "protocolo"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "agendamento_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "agendamento_id"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "inicio",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "inicio"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "procedimentos!",
+        "type_info": "TextArray",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      null
+    ]
+  },
+  "hash": "4964665e8586ccbaa2bce6f0eea90ff530bec516d03b803e50d48c823614468b"
+}

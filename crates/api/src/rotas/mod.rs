@@ -6,6 +6,10 @@ pub mod achados_contrato;
 pub mod agenda;
 pub mod agendamentos;
 pub mod atendimentos;
+pub mod autorizacoes;
+pub mod autorizacoes_contrato;
+pub mod autorizacoes_portal;
+pub mod autorizacoes_resposta;
 pub mod cadastro;
 pub mod caixa;
 pub mod chamada;
@@ -277,6 +281,23 @@ pub fn rotas() -> Router<Estado> {
         .route(
             "/v1/faturamento/glosas/{id}/recurso",
             post(faturamento::glosas::recorrer),
+        )
+        .route(
+            "/v1/autorizacoes",
+            get(autorizacoes::listar).post(autorizacoes::pedir),
+        )
+        .route("/v1/autorizacoes/{id}", get(autorizacoes::obter))
+        .route(
+            "/v1/autorizacoes/{id}/protocolo",
+            post(autorizacoes_portal::protocolo),
+        )
+        .route(
+            "/v1/autorizacoes/{id}/resposta",
+            post(autorizacoes_portal::resposta_do_portal),
+        )
+        .route(
+            "/v1/autorizacoes/{id}/consulta",
+            post(autorizacoes::consultar),
         )
         .route("/v1/equipe", get(equipe::listar))
         .route("/v1/eventos", get(eventos::fluxo))

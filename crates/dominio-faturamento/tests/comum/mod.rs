@@ -2,6 +2,8 @@
 
 use chrono::NaiveDate;
 use std::collections::BTreeMap;
+use std::path::PathBuf;
+use std::process::Command;
 use vidacor_dominio_faturamento::{
     Centavos, ContextoAuditoria, GuiaFaturavel, ItemAutorizado, ItemExecutado, Profissional,
 };
@@ -51,5 +53,27 @@ pub fn ctx() -> ContextoAuditoria {
         hoje: dia(6, 11),
         prazo_envio_dias: Some(30),
         precos_vigentes: BTreeMap::from([("40901114".to_owned(), Centavos(24_860))]),
+    }
+}
+
+/// Valida no XSD oficial (sem rede: `--nonet`). Devolve a saída do xmllint se reprovar.
+pub fn validar_no_xsd(xml: &[u8], nome: &str) -> Result<(), String> {
+    let raiz = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    let xsd = raiz.join("xsd/tiss-4.03.00/tissV4_03_00.xsd");
+    let dir = std::env::temp_dir().join(format!("vidacor-tiss-{}", std::process::id()));
+    std::fs::create_dir_all(&dir).unwrap();
+    let arquivo = dir.join(format!("{nome}.xml"));
+    std::fs::write(&arquivo, xml).unwrap();
+    let saida = Command::new("xmllint")
+        .args(["--noout", "--nonet", "--schema"])
+        .arg(&xsd)
+        .arg(&arquivo)
+        .output()
+        .expect("xmllint não encontrado: instale libxml2-utils para validar o TISS no XSD da ANS");
+    let _ = std::fs::remove_file(&arquivo);
+    if saida.status.success() {
+        Ok(())
+    } else {
+        Err(String::from_utf8_lossy(&saida.stderr).into_owned())
     }
 }
