@@ -1,0 +1,5 @@
+# Exceções do verificador "a tela cabe na janela" (tools/verificacao/verifica.js, DEC-2026-11-08-42).
+# Só para recorte ou rolagem de propósito. Cada linha precisa de motivo e decisão; nunca usar para esconder tela que não cabe.
+# Colunas separadas por TAB: arquivo	tipo (cortado|ladoalado)	início do item no relatório (classe do elemento; inclua o tamanho quando a classe for genérica)	motivo	decisão
+App-Bebe.dc.html	cortado	dimg	Moldura da galeria corta de propósito a imagem ampliada (zoom com overflow hidden)	DEC-2026-11-08-42
+App-Paciente.dc.html	cortado	DIV 188>112	Figura "Meu corpo" recortada de propósito na moldura de 80x112	DEC-2026-11-08-42
