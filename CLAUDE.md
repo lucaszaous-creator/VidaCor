@@ -106,6 +106,15 @@ Baseado na skill **Cloudflare security-audit** (instalada em `.claude/skills/sec
 - Qualquer código leva à cadeia completa (explorador de lastro e dossiê assinado).
 - Roteiro aprovado em [docs/22](docs/22-lacunas-e-roadmap.md): triagem de segurança bloqueante, laudo estruturado com versão da classificação, exame externo nunca vira laudo da VidaCor, autorização pedida pelo sistema e auditoria antes do faturamento com regras versionadas por operadora.
 
+## Testes ponta a ponta das telas (obrigatório) — [docs/28](docs/28-testes-ponta-a-ponta-e2e.md)
+Skill **e2e** (TesterArmy, Apache-2.0) instalada em `.claude/skills/e2e/`; regras `E2E-*`, entre elas:
+- E2E é a camada de fumaça das **jornadas aprovadas** (frase `FC-*`); **não substitui** a integração da G4, e regra de negócio nunca é provada só pela tela.
+- Resultado que importa com **`expect` exato**; `agent.assert` sozinho não prova regra clínica, financeira ou de permissão; dois identificadores conferidos em ato clínico.
+- Acesso indevido pela tela em cada jornada; telas verificadas em 1440×900 e 1280×800 sem rolar a página.
+- **Só dado fictício**, nunca produção; passo de agente envia a tela ao modelo (preferir modelo local, SEC-IA-5); segredos só em `credentials`/`secrets` vindos da CI; `.e2e/` fora do commit.
+- Sem espera fixa (`sleep`); nada pulado ou afrouxado; cache de gravações em modo estrito na CI; `npx e2e feedback` só com aprovação do dono.
+- Pacotes `e2e` e `@e2e-dev/*` com versão exata; skill atualizada só por commit de origem registrado e revisado.
+
 ## Playbooks
 Os roteiros de auditoria e correção ficam em [docs/playbooks/](docs/playbooks/) e
 também como comandos do Claude Code em `.claude/commands/`:

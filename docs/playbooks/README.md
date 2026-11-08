@@ -11,6 +11,7 @@ Roteiros padronizados para auditar e corrigir o VidaCor. Cada um também existe 
 | 5 | [Condições de corrida](condicao-de-corrida.md) | `/condicao-de-corrida` | G2 |
 | 6 | [Refatoração segura em camadas](refatoracao-segura.md) | `/refatoracao-segura` | G5 |
 | — | Auditoria completa de segurança (Cloudflare) | `/security-audit` | G1 + docs/17 |
+| — | Testes ponta a ponta das telas (TesterArmy) | skill `e2e` | G4 + docs/28 |
 
 Fluxo recomendado: **auditoria** (só leitura) → AUDITORIA.md aponta o primeiro playbook de correção → plano → OK do dono → correção em passos → `just test`.
 
