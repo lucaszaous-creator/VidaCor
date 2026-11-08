@@ -372,3 +372,23 @@ export const manipuladoresBusca = [
     );
   }),
 ];
+
+/** Ouvidoria simulada (regras reais em `crates/api/tests/ouvidoria.rs`). */
+export const manipuladoresOuvidoria = [
+  http.get('*/v1/ouvidoria', () =>
+    temPerfil('gerente')
+      ? HttpResponse.json({
+          abertas: 1, vencem_hoje: 0, no_prazo_percentual: 94,
+          manifestacoes: [{ id: 'm1', codigo: 'OUV-2026-000001', tipo: 'reclamacao', canal: 'presencial', quem: 'Maria Helena Duarte', nascimento: '1968-03-12', anonima: false, relato: 'Esperou 50 minutos na recepção sem aviso.', recebida_em: '2026-11-06', prazo_em: '2026-11-13', situacao: 'aberta', vencida: false, resposta: null, respondida_em: null }],
+        })
+      : semPermissao('ver a ouvidoria'),
+  ),
+  http.post('*/v1/ouvidoria/:id/resposta', async ({ request }) => {
+    const c = (await registrar('responder-manifestacao', request)) as { resposta: string };
+    return HttpResponse.json({ id: 'm1', codigo: 'OUV-2026-000001', tipo: 'reclamacao', canal: 'presencial', quem: 'Maria Helena Duarte', nascimento: '1968-03-12', anonima: false, relato: 'Esperou 50 minutos na recepção sem aviso.', recebida_em: '2026-11-06', prazo_em: '2026-11-13', situacao: 'respondida', vencida: false, resposta: c.resposta, respondida_em: '2026-11-06T15:00:00Z' });
+  }),
+  http.post('*/v1/ouvidoria', async ({ request }) => {
+    await registrar('registrar-manifestacao', request);
+    return HttpResponse.json({ id: 'm2', codigo: 'OUV-2026-000002', prazo_em: '2026-11-13' }, { status: 201 });
+  }),
+];

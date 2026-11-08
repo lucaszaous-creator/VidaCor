@@ -282,6 +282,10 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await ir('/fluxo-de-laudos');
   await esperar(page, 'region', 'Quadro por etapa');
   await ok('42-fluxo-de-laudos');
+  await ir('/ouvidoria');
+  await page.getByRole('button', { name: /Maria Helena Duarte de Albuquerque/ }).click();
+  await esperar(page, 'region', 'Detalhe da manifestação');
+  await ok('43-ouvidoria');
   estado.sessao = SESSOES.tv;
   await ir('/telao');
   await esperar(page, 'region', 'Chamada atual');

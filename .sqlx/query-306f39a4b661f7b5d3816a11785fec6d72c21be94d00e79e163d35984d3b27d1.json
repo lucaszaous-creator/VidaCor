@@ -1,0 +1,26 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO ouvidoria.manifestacao (id, codigo, tipo, canal, paciente_id, nome_informado, anonima, relato, recebida_em, prazo_em, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'ouvidoria', $12, $13)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Text",
+        "Uuid",
+        "Text",
+        "Bool",
+        "Text",
+        "Date",
+        "Date",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "306f39a4b661f7b5d3816a11785fec6d72c21be94d00e79e163d35984d3b27d1"
+}

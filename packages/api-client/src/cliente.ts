@@ -58,6 +58,7 @@ import type { VisaoDoPaciente } from './contrato-paciente';
 import type { InicioDoDia } from './contrato-inicio';
 import type { FluxoDeLaudos } from './contrato-fluxo';
 import type { ResultadoDaBusca } from './contrato-busca';
+import type { Manifestacao, NovaManifestacao, PainelDaOuvidoria, ProtocoloDaManifestacao } from './contrato-ouvidoria';
 import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
 import type { DecisaoDePerfil, ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
@@ -357,6 +358,14 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
 
     /** Painel da TV de chamada (dispositivo TV, recepção e gerência). */
     painelDeChamada: (): Promise<Painel> => ler<Painel>('/v1/painel-de-chamada'),
+
+    /** Ouvidoria: registrar (recepção e gerência), painel e resposta (gerência). */
+    ouvidoria: {
+      registrar: (corpo: NovaManifestacao, o: OpcoesDeEscrita): Promise<ProtocoloDaManifestacao> => criar<ProtocoloDaManifestacao>('POST', '/v1/ouvidoria', corpo, o),
+      painel: (): Promise<PainelDaOuvidoria> => ler<PainelDaOuvidoria>('/v1/ouvidoria'),
+      responder: (id: string, resposta: string, o: OpcoesDeEscrita): Promise<Manifestacao> =>
+        criar<Manifestacao>('POST', `/v1/ouvidoria/${seg(id)}/resposta`, { resposta }, o),
+    },
 
     /** Busca global: só o que o perfil pode ver. */
     buscar: (q: string): Promise<ResultadoDaBusca[]> => ler<ResultadoDaBusca[]>(`/v1/busca?q=${encodeURIComponent(q)}`),

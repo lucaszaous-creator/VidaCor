@@ -1801,6 +1801,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/ouvidoria": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Manifestações abertas e respondidas nos últimos 30 dias, com indicadores (gerência). */
+        get: operations["painel_da_ouvidoria"];
+        put?: never;
+        /** Registra a manifestação e devolve o protocolo e o prazo (recepção e gerência; Idempotency-Key). */
+        post: operations["registrar_manifestacao"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ouvidoria/{id}/resposta": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Responde a manifestação aberta (gerência). Atômico: duas respostas ao mesmo tempo, só uma vale. */
+        post: operations["responder_manifestacao"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/pacientes": {
         parameters: {
             query?: never;
@@ -3567,6 +3602,28 @@ export interface components {
             validade: string;
             vencido: boolean;
         };
+        Manifestacao: {
+            anonima: boolean;
+            canal: string;
+            codigo: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date */
+            nascimento?: string | null;
+            /** Format: date */
+            prazo_em: string;
+            /** @description Nome do paciente do cadastro ou o nome informado; nulo se anônima. */
+            quem?: string | null;
+            /** Format: date */
+            recebida_em: string;
+            relato: string;
+            /** Format: date-time */
+            respondida_em?: string | null;
+            resposta?: string | null;
+            situacao: string;
+            tipo: string;
+            vencida: boolean;
+        };
         /** @enum {string} */
         MargemBirads: "circunscrita" | "indistinta" | "angular" | "microlobulada" | "espiculada";
         /** @enum {string} */
@@ -3638,6 +3695,18 @@ export interface components {
             situacao: string;
             /** Format: int64 */
             valor_centavos: number;
+        };
+        NovaManifestacao: {
+            /** @description Só para denúncia. */
+            anonima?: boolean;
+            /** @description telefone, presencial, email ou portal. */
+            canal: string;
+            nome_informado?: string | null;
+            /** Format: uuid */
+            paciente_id?: string | null;
+            relato: string;
+            /** @description reclamacao, elogio, sugestao, denuncia ou lgpd. */
+            tipo: string;
         };
         NovaRegraRepasse: {
             /** Format: uuid */
@@ -3884,6 +3953,18 @@ export interface components {
             conjuntos: components["schemas"]["ConjuntoDeRegras"][];
             grupos: components["schemas"]["GrupoDePendencias"][];
             resumo: components["schemas"]["ResumoAuditoria"];
+        };
+        PainelDaOuvidoria: {
+            /** Format: int64 */
+            abertas: number;
+            manifestacoes: components["schemas"]["Manifestacao"][];
+            /**
+             * Format: int64
+             * @description Das respondidas nos últimos 30 dias, quantas dentro do prazo (%).
+             */
+            no_prazo_percentual?: number | null;
+            /** Format: int64 */
+            vencem_hoje: number;
         };
         PainelDosAparelhos: {
             aparelhos: components["schemas"]["AparelhoCadastrado"][];
@@ -4341,6 +4422,13 @@ export interface components {
             atendimentos: number;
             exame: string;
         };
+        ProtocoloDaManifestacao: {
+            codigo: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date */
+            prazo_em: string;
+        };
         ProximoPaciente: {
             /** Format: uuid */
             agendamento_id: string;
@@ -4456,6 +4544,9 @@ export interface components {
             sem_regra: string[];
             /** Format: int64 */
             titulos_criados: number;
+        };
+        RespostaDaManifestacao: {
+            resposta: string;
         };
         /** @description Resposta copiada do portal da operadora (canal portal): fica gravada como recebida, com hash. */
         RespostaDoPortal: {
@@ -9108,6 +9199,115 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Orcamento"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    painel_da_ouvidoria: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PainelDaOuvidoria"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    registrar_manifestacao: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovaManifestacao"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProtocoloDaManifestacao"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    responder_manifestacao: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RespostaDaManifestacao"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Manifestacao"];
                 };
             };
             404: {

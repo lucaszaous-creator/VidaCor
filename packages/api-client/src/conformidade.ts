@@ -14,6 +14,7 @@ import type { VisaoDoPaciente } from './contrato-paciente';
 import type { InicioDoDia } from './contrato-inicio';
 import type { FluxoDeLaudos } from './contrato-fluxo';
 import type { ResultadoDaBusca } from './contrato-busca';
+import type { Manifestacao, NovaManifestacao, PainelDaOuvidoria, ProtocoloDaManifestacao } from './contrato-ouvidoria';
 import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
 import type { CadeiaDoAtendimento, PedidoDossie } from './contrato-lastro';
@@ -180,3 +181,7 @@ export type ConfereVisaoDoPaciente = Cabe<VisaoDoPaciente, S['VisaoDoPaciente']>
 export type ConfereInicioDoDia = Cabe<InicioDoDia, S['InicioDoDia']>;
 export type ConfereFluxoDeLaudos = Cabe<FluxoDeLaudos, S['FluxoDeLaudos']>;
 export type ConfereResultadoDaBusca = Cabe<ResultadoDaBusca, S['ResultadoDaBusca']>;
+export type ConfereNovaManifestacao = Cabe<NovaManifestacao, S['NovaManifestacao']>;
+export type ConfereProtocoloDaManifestacao = Cabe<ProtocoloDaManifestacao, S['ProtocoloDaManifestacao']>;
+export type ConfereManifestacao = Cabe<Manifestacao, S['Manifestacao']>;
+export type ConferePainelDaOuvidoria = Cabe<PainelDaOuvidoria, S['PainelDaOuvidoria']>;

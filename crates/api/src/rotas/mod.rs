@@ -40,6 +40,7 @@ pub mod menu;
 pub mod nfse;
 pub mod ofertas;
 pub mod orcamentos;
+pub mod ouvidoria;
 pub mod paciente_visao;
 pub mod pacientes;
 pub mod pendencias;
@@ -178,6 +179,11 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/painel-de-chamada", get(chamada::painel))
         .route("/v1/inicio", get(inicio::inicio))
         .route("/v1/busca", get(busca::buscar))
+        .route(
+            "/v1/ouvidoria",
+            get(ouvidoria::painel).post(ouvidoria::registrar),
+        )
+        .route("/v1/ouvidoria/{id}/resposta", post(ouvidoria::responder))
         .route("/v1/laudos/fluxo", get(fluxo_laudos::fluxo))
         .route(
             "/v1/configuracoes/integracoes",

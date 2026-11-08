@@ -11,6 +11,7 @@ export * from './contrato-paciente';
 export * from './contrato-inicio';
 export * from './contrato-fluxo';
 export * from './contrato-busca';
+export * from './contrato-ouvidoria';
 export * from './contrato-portal';
 export * from './contrato-estoque';
 export * from './contrato-faturamento';

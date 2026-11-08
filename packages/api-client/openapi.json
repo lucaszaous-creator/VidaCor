@@ -6326,6 +6326,159 @@
         }
       }
     },
+    "/v1/ouvidoria": {
+      "get": {
+        "tags": [
+          "ouvidoria"
+        ],
+        "summary": "Manifestações abertas e respondidas nos últimos 30 dias, com indicadores (gerência).",
+        "operationId": "painel_da_ouvidoria",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PainelDaOuvidoria"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "ouvidoria"
+        ],
+        "summary": "Registra a manifestação e devolve o protocolo e o prazo (recepção e gerência; Idempotency-Key).",
+        "operationId": "registrar_manifestacao",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovaManifestacao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProtocoloDaManifestacao"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ouvidoria/{id}/resposta": {
+      "post": {
+        "tags": [
+          "ouvidoria"
+        ],
+        "summary": "Responde a manifestação aberta (gerência). Atômico: duas respostas ao mesmo tempo, só uma vale.",
+        "operationId": "responder_manifestacao",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RespostaDaManifestacao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Manifestacao"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/pacientes": {
       "get": {
         "tags": [
@@ -12059,6 +12212,83 @@
           }
         }
       },
+      "Manifestacao": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "tipo",
+          "canal",
+          "anonima",
+          "relato",
+          "recebida_em",
+          "prazo_em",
+          "situacao",
+          "vencida"
+        ],
+        "properties": {
+          "anonima": {
+            "type": "boolean"
+          },
+          "canal": {
+            "type": "string"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nascimento": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "prazo_em": {
+            "type": "string",
+            "format": "date"
+          },
+          "quem": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Nome do paciente do cadastro ou o nome informado; nulo se anônima."
+          },
+          "recebida_em": {
+            "type": "string",
+            "format": "date"
+          },
+          "relato": {
+            "type": "string"
+          },
+          "respondida_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "resposta": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "situacao": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "vencida": {
+            "type": "boolean"
+          }
+        }
+      },
       "MargemBirads": {
         "type": "string",
         "enum": [
@@ -12311,6 +12541,44 @@
           "valor_centavos": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "NovaManifestacao": {
+        "type": "object",
+        "required": [
+          "tipo",
+          "canal",
+          "relato"
+        ],
+        "properties": {
+          "anonima": {
+            "type": "boolean",
+            "description": "Só para denúncia."
+          },
+          "canal": {
+            "type": "string",
+            "description": "telefone, presencial, email ou portal."
+          },
+          "nome_informado": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "paciente_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "relato": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string",
+            "description": "reclamacao, elogio, sugestao, denuncia ou lgpd."
           }
         }
       },
@@ -13107,6 +13375,38 @@
           },
           "resumo": {
             "$ref": "#/components/schemas/ResumoAuditoria"
+          }
+        }
+      },
+      "PainelDaOuvidoria": {
+        "type": "object",
+        "required": [
+          "abertas",
+          "vencem_hoje",
+          "manifestacoes"
+        ],
+        "properties": {
+          "abertas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "manifestacoes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Manifestacao"
+            }
+          },
+          "no_prazo_percentual": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "description": "Das respondidas nos últimos 30 dias, quantas dentro do prazo (%)."
+          },
+          "vencem_hoje": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -14502,6 +14802,27 @@
           }
         }
       },
+      "ProtocoloDaManifestacao": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "prazo_em"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "prazo_em": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
       "ProximoPaciente": {
         "type": "object",
         "required": [
@@ -14857,6 +15178,17 @@
           "titulos_criados": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "RespostaDaManifestacao": {
+        "type": "object",
+        "required": [
+          "resposta"
+        ],
+        "properties": {
+          "resposta": {
+            "type": "string"
           }
         }
       },
