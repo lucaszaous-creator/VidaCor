@@ -222,7 +222,7 @@ pub fn rotas() -> Router<Estado> {
         )
         .route(
             "/v1/faturamento/lotes/{id}/demonstrativo",
-            post(faturamento::lotes::demonstrativo),
+            post(faturamento::demonstrativo::demonstrativo),
         )
         .route("/v1/faturamento/glosas", get(faturamento::glosas::listar))
         .route(

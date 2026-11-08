@@ -4,7 +4,7 @@
 //!   operadora e corrige com versão;
 //! - `consultas`: listas e painéis (guias, auditoria, contratos);
 //! - `lotes`: lote com número atômico por contrato, arquivo TISS, envio pela porta `Operadora` e
-//!   demonstrativo de retorno;
+//!   demonstrativo de retorno (`demonstrativo`);
 //! - `glosas`: glosas recebidas e recurso com justificativa.
 //!
 //! As regras e o XML ficam no domínio (`vidacor_dominio_faturamento`); aqui só se lê e grava.
@@ -12,6 +12,7 @@
 pub mod conferencia;
 pub mod consultas;
 pub mod contrato;
+pub mod demonstrativo;
 pub mod glosas;
 pub mod lotes;
 

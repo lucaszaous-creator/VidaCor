@@ -121,7 +121,7 @@ pub struct ProblemaDoc {
         crate::rotas::faturamento::lotes::arquivo,
         crate::rotas::faturamento::lotes::gerar,
         crate::rotas::faturamento::lotes::enviar,
-        crate::rotas::faturamento::lotes::demonstrativo,
+        crate::rotas::faturamento::demonstrativo::demonstrativo,
         crate::rotas::faturamento::glosas::listar,
         crate::rotas::faturamento::glosas::recorrer,
     ),
