@@ -1,0 +1,156 @@
+import type { Estorno, Recebimento } from '@vidacor/api-client';
+import { AreaDeTexto, Aviso, Botao, BotaoDeIcone, Chip, DialogoDeFormulario, formatarDinheiro, type CorDoChip } from '@vidacor/design-system';
+import { useState } from 'react';
+import { ErroDoAto } from '../../componentes/ErroDoAto';
+import { useDependencias } from '../../contexto';
+import { useOperacao } from '../../operacao';
+
+const SITUACAO: Record<string, { texto: string; cor: CorDoChip }> = {
+  aguardando_pagamento: { texto: 'Aguardando pagamento', cor: 'ambar' },
+  pago: { texto: 'Pago', cor: 'verde' },
+  estornado: { texto: 'Estornado', cor: 'cinza' },
+};
+
+function CopiaECola({ codigo }: { codigo: string }) {
+  const [copiado, setCopiado] = useState<'sim' | 'falhou' | null>(null);
+  return (
+    <div className="col" style={{ gap: 6 }}>
+      <span className="t13 b mute">PIX copia e cola</span>
+      <div className="row" style={{ gap: 8 }}>
+        <code className="t13 num" style={{ flex: 1, minWidth: 0, overflowWrap: 'anywhere', background: 'var(--gray-bg)', padding: '8px 10px', borderRadius: 10 }}>
+          {codigo}
+        </code>
+        <BotaoDeIcone
+          icone="copiar"
+          rotulo="Copiar o código PIX"
+          onPress={() => {
+            navigator.clipboard.writeText(codigo).then(
+              () => {
+                setCopiado('sim');
+              },
+              () => {
+                setCopiado('falhou');
+              },
+            );
+          }}
+        />
+      </div>
+      <span className="t13" role="status">
+        {copiado === 'sim' ? 'Código copiado.' : copiado === 'falhou' ? 'Não foi possível copiar: selecione o código e copie à mão.' : ''}
+      </span>
+    </div>
+  );
+}
+
+function PedidoDeEstorno({ recebimento }: { recebimento: Recebimento }) {
+  const { api } = useDependencias();
+  const [aberto, setAberto] = useState(false);
+  const [motivo, setMotivo] = useState('');
+  const [tentou, setTentou] = useState(false);
+  const op = useOperacao((m: string, chave: string) => api.recebimentos.pedirEstorno(recebimento.id, { motivo: m }, { idempotencyKey: chave }), {
+    aoConcluir: () => {
+      setAberto(false);
+    },
+  });
+  const estorno: Estorno | null = op.resultado;
+  if (estorno !== null) {
+    return (
+      <Aviso nivel="feito" titulo="Estorno pedido.">
+        Pedido <b className="num">{estorno.id}</b>. Quem aprova é a gerência ou o financeiro; quem pediu não aprova o próprio pedido. Envie o
+        endereço <span className="num">/caixa/estornos?estorno={estorno.id}</span> a quem vai aprovar.
+      </Aviso>
+    );
+  }
+  return (
+    <>
+      <div>
+        <Botao
+          pequeno
+          onPress={() => {
+            setAberto(true);
+          }}
+        >
+          Pedir estorno
+        </Botao>
+      </div>
+      <DialogoDeFormulario
+        aberto={aberto}
+        titulo={`Pedir o estorno do recebimento ${recebimento.codigo}?`}
+        rotuloConfirmar="Pedir estorno"
+        ocupado={op.enviando}
+        aoFechar={() => {
+          setAberto(false);
+        }}
+        aoConfirmar={() => {
+          setTentou(true);
+          if (motivo.trim() !== '') op.enviar(motivo.trim());
+        }}
+      >
+        <p className="t14" style={{ margin: 0 }}>
+          Total {formatarDinheiro(recebimento.total_centavos)}. O estorno só acontece depois da aprovação de outra pessoa.
+        </p>
+        <AreaDeTexto rotulo="Motivo do estorno" value={motivo} onChange={setMotivo} linhas={2} erro={tentou && motivo.trim() === '' ? 'Escreva o motivo.' : null} />
+        {op.erro !== null && <ErroDoAto erro={op.erro} ato="pedir o estorno" aoTentarDeNovo={() => { op.enviar(motivo.trim()); }} />}
+      </DialogoDeFormulario>
+    </>
+  );
+}
+
+/** Recebimento como o servidor calculou: itens, subtotal, desconto, total e versão da tabela (FC-CXA-01). */
+export function ResultadoDoRecebimento({ r }: { r: Recebimento }) {
+  const s = SITUACAO[r.situacao] ?? { texto: 'Situação não reconhecida', cor: 'cinza' as const };
+  return (
+    <div className="col" style={{ gap: 12 }}>
+      <div className="row" style={{ gap: 10 }}>
+        <h3 className="t15 b">
+          Recebimento <span className="num">{r.codigo}</span>
+        </h3>
+        <Chip cor={s.cor} texto={s.texto} />
+      </div>
+      <table className="tb" aria-label="Itens calculados pelo servidor">
+        <thead>
+          <tr>
+            <th>Procedimento</th>
+            <th className="r nw">Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          {r.itens.map((i) => (
+            <tr key={i.tuss}>
+              <td>
+                {i.descricao} <span className="mute num">TUSS {i.tuss}</span>
+              </td>
+              <td className="r nw num">{formatarDinheiro(i.valor_centavos)}</td>
+            </tr>
+          ))}
+          <tr>
+            <td>Subtotal</td>
+            <td className="r nw num">{formatarDinheiro(r.subtotal_centavos)}</td>
+          </tr>
+          <tr>
+            <td>Desconto</td>
+            <td className="r nw num">{formatarDinheiro(r.desconto_centavos)}</td>
+          </tr>
+          <tr>
+            <td>
+              <b>Total</b>
+            </td>
+            <td className="r nw num">
+              <b>{formatarDinheiro(r.total_centavos)}</b>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <span className="t13 mute">
+        Valores calculados pelo servidor pela tabela <span className="num">{r.tabela_versao}</span>.
+      </span>
+      {r.pix !== null && (
+        <>
+          <CopiaECola codigo={r.pix.copia_e_cola} />
+          <span className="t13 mute num">txid {r.pix.txid}. A situação acima é a do momento do registro; a baixa acontece no servidor quando o banco confirmar.</span>
+        </>
+      )}
+      <PedidoDeEstorno recebimento={r} />
+    </div>
+  );
+}
