@@ -14,7 +14,7 @@ function totp(b32) {
   return String(((h.readUInt32BE(o) & 0x7fffffff) % 1e6)).padStart(6,'0');
 }
 const USUARIO = process.argv[2] || 'ana.souza';
-const BASE = process.env.VIDACOR_URL || BASE + '';
+const BASE = process.env.VIDACOR_URL || 'http://127.0.0.1:5173';
 (async () => {
   const b = await chromium.launch(); const page = await b.newPage();
   await page.goto(BASE + '/v1/sessao/entrar');
