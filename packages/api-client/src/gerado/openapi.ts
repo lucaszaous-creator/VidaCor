@@ -1299,6 +1299,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/lastro/dossie": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Dossiê do lastro em PDF (gerência e auditor): a cadeia do atendimento com os hashes completos e a
+         *     conferência de cada evento. A emissão entra no lastro do atendimento com o SHA-256 do PDF.
+         */
+        post: operations["emitir_dossie_do_lastro"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/laudos/fila": {
         parameters: {
             query?: never;
@@ -1462,6 +1482,27 @@ export interface paths {
         put?: never;
         /** Cria um link de leitura do laudo publicado para médico externo, com validade curta (SEC-DAD-6). */
         post: operations["criar_link"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/laudos/{id}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * PDF da versão assinada vigente (médico com vínculo de cuidado ou acesso de emergência). A leitura
+         *     é auditada como a do laudo; rascunho não imprime (409); retificação imprime a vigente e diz qual
+         *     versão ela substitui.
+         */
+        get: operations["baixar_pdf_do_laudo"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1997,6 +2038,26 @@ export interface paths {
         };
         /** Um laudo do próprio paciente. De outro paciente ou inexistente: a mesma resposta 404, auditada. */
         get: operations["meu_laudo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/portal/laudos/{id}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * PDF do laudo publicado do próprio paciente. De outro paciente ou inexistente: a mesma resposta 404
+         *     da leitura no portal, auditada (o RLS por paciente decide antes de qualquer outra leitura).
+         */
+        get: operations["baixar_pdf_do_laudo_no_portal"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3929,6 +3990,10 @@ export interface components {
             /** @description pedido, autorizado, recusado ou cancelado. */
             situacao: string;
             solicitante: components["schemas"]["Pessoa"];
+        };
+        PedidoDossie: {
+            /** @description Qualquer código do atendimento (o mesmo da busca no explorador). */
+            codigo: string;
         };
         PedidoEmergencia: {
             justificativa: string;
@@ -7629,6 +7694,54 @@ export interface operations {
             };
         };
     };
+    emitir_dossie_do_lastro: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoDossie"];
+            };
+        };
+        responses: {
+            /** @description PDF/A-2b do dossiê; SHA-256 em X-Documento-Sha256 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     fila_de_laudos: {
         parameters: {
             query?: never;
@@ -8026,6 +8139,52 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LinkCriado"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    baixar_pdf_do_laudo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description PDF/A-2b da versão assinada vigente; SHA-256 em X-Documento-Sha256 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
                 };
             };
             409: {
@@ -9521,6 +9680,36 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LaudoDoPortal"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    baixar_pdf_do_laudo_no_portal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description PDF/A-2b da versão publicada; SHA-256 em X-Documento-Sha256 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": unknown;
                 };
             };
             404: {

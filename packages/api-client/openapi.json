@@ -4434,6 +4434,63 @@
         }
       }
     },
+    "/v1/lastro/dossie": {
+      "post": {
+        "tags": [
+          "lastro"
+        ],
+        "summary": "Dossiê do lastro em PDF (gerência e auditor): a cadeia do atendimento com os hashes completos e a\nconferência de cada evento. A emissão entra no lastro do atendimento com o SHA-256 do PDF.",
+        "operationId": "emitir_dossie_do_lastro",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoDossie"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "PDF/A-2b do dossiê; SHA-256 em X-Documento-Sha256",
+            "content": {
+              "application/pdf": {}
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/laudos/fila": {
       "get": {
         "tags": [
@@ -5024,6 +5081,64 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LinkCriado"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/laudos/{id}/pdf": {
+      "get": {
+        "tags": [
+          "laudos"
+        ],
+        "summary": "PDF da versão assinada vigente (médico com vínculo de cuidado ou acesso de emergência). A leitura\né auditada como a do laudo; rascunho não imprime (409); retificação imprime a vigente e diz qual\nversão ela substitui.",
+        "operationId": "baixar_pdf_do_laudo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PDF/A-2b da versão assinada vigente; SHA-256 em X-Documento-Sha256",
+            "content": {
+              "application/pdf": {}
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
                 }
               }
             }
@@ -7196,6 +7311,44 @@
                   "$ref": "#/components/schemas/LaudoDoPortal"
                 }
               }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/portal/laudos/{id}/pdf": {
+      "get": {
+        "tags": [
+          "portal"
+        ],
+        "summary": "PDF do laudo publicado do próprio paciente. De outro paciente ou inexistente: a mesma resposta 404\nda leitura no portal, auditada (o RLS por paciente decide antes de qualquer outra leitura).",
+        "operationId": "baixar_pdf_do_laudo_no_portal",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PDF/A-2b da versão publicada; SHA-256 em X-Documento-Sha256",
+            "content": {
+              "application/pdf": {}
             }
           },
           "404": {
@@ -13283,6 +13436,18 @@
           },
           "solicitante": {
             "$ref": "#/components/schemas/Pessoa"
+          }
+        }
+      },
+      "PedidoDossie": {
+        "type": "object",
+        "required": [
+          "codigo"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "description": "Qualquer código do atendimento (o mesmo da busca no explorador)."
           }
         }
       },

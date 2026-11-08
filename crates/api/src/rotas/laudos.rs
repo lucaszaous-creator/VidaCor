@@ -67,6 +67,15 @@ fn nao_encontrado() -> ErroApi {
     )
 }
 
+/// Erro de leitura negada pelo RLS: falta de vínculo (403) ou laudo inexistente nesta unidade (404).
+pub(crate) fn negacao(laudo_existe: bool) -> ErroApi {
+    if laudo_existe {
+        sem_vinculo()
+    } else {
+        nao_encontrado()
+    }
+}
+
 pub(crate) async fn auditar(
     conexao: &mut PgConnection,
     quem: Uuid,

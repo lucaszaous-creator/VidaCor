@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT laudo_id, versao_numero, unidade_id FROM portal.publicacao WHERE laudo_id = $1 AND vigente",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "laudo_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "portal.publicacao",
+            "name": "laudo_id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "versao_numero",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "portal.publicacao",
+            "name": "versao_numero"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "unidade_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "portal.publicacao",
+            "name": "unidade_id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "01928b2ec8b686f48eea5570d89d3a0f8878cf09af4daed406671d78512e9a55"
+}

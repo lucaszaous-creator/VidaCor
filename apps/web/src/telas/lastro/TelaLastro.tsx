@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Aviso, Botao, Busca, Chip, formatarData, formatarDataHora, Vazio } from '@vidacor/design-system';
 import { useState } from 'react';
+import { BaixarDocumento } from '../../componentes/BaixarDocumento';
 import { CabecalhoDaTela, EstadoDaConsulta } from '../../componentes/Bloco';
 import { useDependencias } from '../../contexto';
 import { FUSO_DA_CLINICA } from '../agenda/grade';
@@ -78,6 +79,12 @@ export function TelaLastro() {
                       Um registro pode ter sido alterado por fora do sistema. Nada foi corrigido aqui. Avise a TI e o encarregado de dados.
                     </Aviso>
                   )}
+                  <BaixarDocumento
+                    key={codigo}
+                    rotulo="Dossiê em PDF"
+                    ato="emitir o dossiê em PDF"
+                    baixar={() => api.lastro.dossie({ codigo })}
+                  />
                   {c.nos.map((n) => (
                     <div key={n.id} className="li" style={{ padding: '8px 0' }}>
                       <div style={{ flex: 1, minWidth: 0 }}>

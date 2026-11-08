@@ -17,6 +17,7 @@ vidacor-dominio-recepcao = { path = "../dominio-recepcao" }
 vidacor-dominio-triagem = { path = "../dominio-triagem" }
 vidacor-dominio-laudo = { path = "../dominio-laudo" }
 vidacor-dominio-faturamento = { path = "../dominio-faturamento" }
+vidacor-documentos = { path = "../documentos" }
 anyhow = "1.0.100"
 axum = { version = "0.8.9", features = ["macros"] }
 base64 = "0.22.1"

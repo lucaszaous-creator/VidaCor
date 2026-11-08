@@ -49,7 +49,7 @@ import type {
 } from './contrato-fase1';
 import type { ConsultaAgenda, PacienteResumo, SalaDaUnidade, Saude, Sessao } from './contrato-m0';
 import type { MenuDoObjeto, ObjetoDoMenu } from './contrato-menu';
-import type { CadeiaDoAtendimento } from './contrato-lastro';
+import type { CadeiaDoAtendimento, DocumentoBaixado, PedidoDossie } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
 import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel';
 import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-orcamento';
@@ -259,6 +259,41 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
     return pedir<T>({ metodo: 'GET', caminho });
   }
 
+  /**
+   * Baixa um documento binário (PDF). O SHA-256 dos bytes vem do servidor no cabeçalho
+   * `X-Documento-Sha256` e a emissão fica registrada lá; nada é guardado no navegador.
+   * Erro do servidor chega como `ErroDaApi`, igual às outras rotas.
+   */
+  async function baixar(pedido: Pedido): Promise<DocumentoBaixado> {
+    const cabecalhos: Record<string, string> = { Accept: 'application/pdf, application/problem+json' };
+    if (estacao !== null) {
+      cabecalhos['X-Estacao'] = estacao;
+    }
+    if (pedido.corpo !== undefined) {
+      cabecalhos['Content-Type'] = 'application/json';
+    }
+    if (pedido.escrita === true) {
+      if (csrf === null) {
+        await obterSessao();
+      }
+      if (csrf !== null) {
+        cabecalhos['X-CSRF-Token'] = csrf;
+      }
+    }
+    const resposta = await enviarUmaVez(pedido, cabecalhos);
+    if (!resposta.ok) {
+      await lerRespostaComSituacao(resposta);
+    }
+    const disposicao = resposta.headers.get('Content-Disposition') ?? '';
+    const nome = /filename="([^"]+)"/.exec(disposicao)?.[1] ?? 'documento.pdf';
+    return {
+      conteudo: await resposta.blob(),
+      nomeDoArquivo: nome,
+      sha256: resposta.headers.get('X-Documento-Sha256') ?? '',
+      codigoDaEmissao: resposta.headers.get('X-Documento-Codigo') ?? '',
+    };
+  }
+
   return {
     saude: (): Promise<Saude> => ler<Saude>('/v1/saude'),
 
@@ -413,6 +448,8 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
     laudos: {
       fila: (): Promise<ItemDaFilaDeLaudos[]> => ler<ItemDaFilaDeLaudos[]>('/v1/laudos/fila'),
       obter: (id: string): Promise<Laudo> => ler<Laudo>(`/v1/laudos/${seg(id)}`),
+      /** PDF da versão assinada vigente (409 se ainda não assinado); a leitura é auditada. */
+      baixarPdf: (id: string): Promise<DocumentoBaixado> => baixar({ metodo: 'GET', caminho: `/v1/laudos/${seg(id)}/pdf` }),
       /** Salvamento automático do rascunho (R6). Repetir grava o mesmo texto. */
       salvarRascunho: (id: string, corpo: PedidoRascunho): Promise<Laudo> =>
         escrever<Laudo>('PUT', `/v1/laudos/${seg(id)}/rascunho`, corpo),
@@ -455,6 +492,8 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
     portal: {
       laudos: (): Promise<ItemDoPortal[]> => ler<ItemDoPortal[]>('/v1/portal/laudos'),
       laudo: (id: string): Promise<LaudoDoPortal> => ler<LaudoDoPortal>(`/v1/portal/laudos/${seg(id)}`),
+      /** PDF do laudo publicado do próprio paciente (sessão do portal). */
+      baixarPdf: (id: string): Promise<DocumentoBaixado> => baixar({ metodo: 'GET', caminho: `/v1/portal/laudos/${seg(id)}/pdf` }),
       /** Laudo compartilhado por link; `410 link-expirado` quando venceu. */
       link: (token: string): Promise<LaudoDoPortal> => ler<LaudoDoPortal>(`/v1/links/${seg(token)}`),
       /** Sessão do paciente (401 sem sessão). */
@@ -552,6 +591,8 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
     lastro: {
       /** Cadeia completa a partir de qualquer código (gerência e auditor); a leitura fica no lastro. */
       cadeia: (codigo: string): Promise<CadeiaDoAtendimento> => ler<CadeiaDoAtendimento>(`/v1/lastro/cadeia?${new URLSearchParams({ codigo }).toString()}`),
+      /** Dossiê em PDF da mesma cadeia; a emissão e o SHA-256 entram no lastro do atendimento. */
+      dossie: (corpo: PedidoDossie): Promise<DocumentoBaixado> => baixar({ metodo: 'POST', caminho: '/v1/lastro/dossie', corpo, escrita: true }),
     },
 
     estoque: {

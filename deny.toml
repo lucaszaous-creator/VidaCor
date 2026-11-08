@@ -15,6 +15,19 @@ ignore = [
   # astral-tokio-tar sem manutenção: entra só como dependência de TESTE (testcontainers) e não vai
   # para o binário. DEC-2026-11-08-47.
   { id = "RUSTSEC-2026-0440", reason = "dependência só de teste (testcontainers)" },
+  # Dependências internas do Typst (PDF do laudo e do dossiê). Aceitas pelo dono do produto em
+  # 08/11/2026 (DEC-2026-11-08-87). Rever até 06/02/2027 ou a cada atualização do Typst.
+  # quick-xml: só é usado pelo Typst para ler XML/bibliografia; o modelo é fixo e o mundo é fechado
+  # (só /dados.json gerado pelo núcleo), então nenhum XML externo é lido.
+  { id = "RUSTSEC-2026-0194", reason = "Typst: quick-xml não lê XML externo (mundo fechado); rever até 2027-02-06" },
+  { id = "RUSTSEC-2026-0195", reason = "Typst: quick-xml não lê XML externo (mundo fechado); rever até 2027-02-06" },
+  # Sem manutenção (informativo), dentro do Typst; fontes embutidas e fixas, sem YAML de fora.
+  { id = "RUSTSEC-2026-0206", reason = "Typst: rustybuzz sem manutenção; fontes embutidas; rever até 2027-02-06" },
+  { id = "RUSTSEC-2026-0192", reason = "Typst: ttf-parser sem manutenção; fontes embutidas; rever até 2027-02-06" },
+  { id = "RUSTSEC-2025-0141", reason = "Typst: bincode sem manutenção; uso interno; rever até 2027-02-06" },
+  { id = "RUSTSEC-2024-0320", reason = "Typst: yaml-rust sem manutenção; não lemos YAML; rever até 2027-02-06" },
+  { id = "RUSTSEC-2024-0449", reason = "Typst: unsafe-libyaml sem manutenção; não lemos YAML; rever até 2027-02-06" },
+  { id = "RUSTSEC-2024-0436", reason = "Typst: paste sem manutenção (macro de compilação); rever até 2027-02-06" },
 ]
 
 [licenses]
@@ -52,3 +65,6 @@ allow-wildcard-paths = true
 unknown-registry = "deny"
 unknown-git = "deny"
 allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+[[licenses.exceptions]]
+allow = ["LicenseRef-VidaCor-Proprietario"]
+crate = "vidacor-documentos"

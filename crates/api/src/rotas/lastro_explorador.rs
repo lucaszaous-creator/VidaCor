@@ -16,6 +16,7 @@ use axum::Json;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
+use sqlx::PgConnection;
 use utoipa::{IntoParams, ToSchema};
 use uuid::Uuid;
 
@@ -59,31 +60,42 @@ pub struct CadeiaDoAtendimento {
     pub integra: bool,
 }
 
-/// Cadeia completa a partir de qualquer código (gerência e auditor).
-#[utoipa::path(get, path = "/v1/lastro/cadeia", tag = "lastro", params(BuscaDeLastro),
-    responses((status = 200, body = CadeiaDoAtendimento), (status = 403, body = crate::openapi::ProblemaDoc), (status = 404, body = crate::openapi::ProblemaDoc)))]
-pub async fn cadeia(
-    State(estado): State<Estado>,
-    usuario: Usuario,
-    Query(b): Query<BuscaDeLastro>,
-) -> Result<Json<CadeiaDoAtendimento>, ErroApi> {
-    usuario.exigir(Ato::LastroExplorar)?;
-    let codigo = b.codigo.trim();
+/// Código digitado na busca: completo e de tamanho razoável.
+pub(crate) fn validar_codigo(codigo: &str) -> Result<&str, ErroApi> {
+    let codigo = codigo.trim();
     if codigo.len() < 3 || codigo.len() > 80 {
         return Err(ErroApi::invalido(
             "codigo-invalido",
             "Digite um código completo (mínimo 3 caracteres). Nada foi buscado.",
         ));
     }
-    let correlacao = crate::trace::atual().unwrap_or_default();
-    // A cadeia cruza domínios que o perfil não lê um a um (estudo, laudo, caixa): o servidor monta em
-    // contexto de sistema da MESMA unidade e devolve só código, situação e tipo de evento.
-    let sistema = ContextoBanco {
+    Ok(codigo)
+}
+
+/// Contexto em que a cadeia é montada: a cadeia cruza domínios que o perfil não lê um a um
+/// (estudo, laudo, caixa), então o servidor monta em contexto de sistema da MESMA unidade e devolve
+/// só código, situação e tipo de evento.
+pub(crate) fn contexto_da_cadeia(usuario: &Usuario) -> ContextoBanco {
+    ContextoBanco {
         usuario_id: Some(usuario.id),
         unidade_id: usuario.unidade_id,
         perfis: vec!["sistema".into()],
-    };
-    let mut tx = banco::transacao(&estado.banco, &sistema).await?;
+    }
+}
+
+/// A cadeia montada, com o hash completo de cada evento (o JSON da tela leva só o começo).
+pub(crate) struct CadeiaMontada {
+    pub atendimento_id: Uuid,
+    pub cadeia: CadeiaDoAtendimento,
+    pub hashes: Vec<String>,
+}
+
+/// Monta a cadeia do atendimento achado pelo código, só da unidade do contexto.
+pub(crate) async fn montar(
+    conexao: &mut PgConnection,
+    unidade_id: Uuid,
+    codigo: &str,
+) -> Result<CadeiaMontada, ErroApi> {
     let atendimento = sqlx::query_scalar!(
         r#"SELECT a.id AS "id!" FROM recepcao.atendimento a WHERE a.unidade_id = $2 AND (a.codigo = $1 OR a.accession = $1)
            UNION SELECT a.id FROM recepcao.atendimento a JOIN agenda.agendamento g ON g.id = a.agendamento_id WHERE a.unidade_id = $2 AND g.codigo = $1
@@ -96,9 +108,9 @@ pub async fn cadeia(
            UNION SELECT r.atendimento_id FROM caixa.estorno x JOIN caixa.recebimento r ON r.id = x.recebimento_id WHERE x.unidade_id = $2 AND r.atendimento_id IS NOT NULL AND x.codigo = $1
            LIMIT 2"#,
         codigo,
-        usuario.unidade_id
+        unidade_id
     )
-    .fetch_all(&mut *tx)
+    .fetch_all(&mut *conexao)
     .await?;
     // Código desconhecido ou de outra unidade: a mesma resposta (sem oráculo de enumeração).
     let [atendimento] = atendimento.as_slice() else {
@@ -114,7 +126,7 @@ pub async fn cadeia(
           WHERE a.id = $1",
         atendimento
     )
-    .fetch_one(&mut *tx)
+    .fetch_one(&mut *conexao)
     .await?;
     let mut nos = vec![
         NoDaCadeia {
@@ -145,7 +157,7 @@ pub async fn cadeia(
         atendimento,
         a.agendamento_id
     )
-    .fetch_all(&mut *tx)
+    .fetch_all(&mut *conexao)
     .await?;
     nos.extend(ligados.into_iter().map(|l| NoDaCadeia {
         tipo: l.tipo,
@@ -166,8 +178,9 @@ pub async fn cadeia(
            FROM lastro.evento e WHERE e.registro_id = ANY($1) ORDER BY e.sequencia LIMIT 500"#,
         &ids
     )
-    .fetch_all(&mut *tx)
+    .fetch_all(&mut *conexao)
     .await?;
+    let hashes: Vec<String> = eventos.iter().map(|e| e.hash.clone()).collect();
     let eventos: Vec<EventoDaCadeia> = eventos
         .into_iter()
         .map(|e| EventoDaCadeia {
@@ -182,14 +195,44 @@ pub async fn cadeia(
         })
         .collect();
     let integra = eventos.iter().all(|e| e.integro);
+    Ok(CadeiaMontada {
+        atendimento_id: *atendimento,
+        cadeia: CadeiaDoAtendimento {
+            paciente: PacienteResumo {
+                id: a.paciente_id,
+                nome: a.nome,
+                nascimento: a.nascimento,
+            },
+            atendimento_codigo: a.codigo,
+            nos,
+            eventos,
+            integra,
+        },
+        hashes,
+    })
+}
+
+/// Cadeia completa a partir de qualquer código (gerência e auditor).
+#[utoipa::path(get, path = "/v1/lastro/cadeia", tag = "lastro", params(BuscaDeLastro),
+    responses((status = 200, body = CadeiaDoAtendimento), (status = 403, body = crate::openapi::ProblemaDoc), (status = 404, body = crate::openapi::ProblemaDoc)))]
+pub async fn cadeia(
+    State(estado): State<Estado>,
+    usuario: Usuario,
+    Query(b): Query<BuscaDeLastro>,
+) -> Result<Json<CadeiaDoAtendimento>, ErroApi> {
+    usuario.exigir(Ato::LastroExplorar)?;
+    let codigo = validar_codigo(&b.codigo)?;
+    let correlacao = crate::trace::atual().unwrap_or_default();
+    let mut tx = banco::transacao(&estado.banco, &contexto_da_cadeia(&usuario)).await?;
+    let montada = montar(&mut tx, usuario.unidade_id, codigo).await?;
     // Quem abriu a cadeia, de quem e por qual código (docs/21: leituras ficam registradas).
     lastro::registrar(
         &mut tx,
         NovoEvento {
             dominio: "lastro",
             tipo: "cadeia_lida",
-            registro_id: *atendimento,
-            registro_codigo: Some(&a.codigo),
+            registro_id: montada.atendimento_id,
+            registro_codigo: Some(&montada.cadeia.atendimento_codigo),
             dados: json!({ "por": usuario.id, "perfis": usuario.perfis }),
             criado_por: Some(usuario.id),
             origem: "lastro",
@@ -199,15 +242,5 @@ pub async fn cadeia(
     )
     .await?;
     tx.commit().await?;
-    Ok(Json(CadeiaDoAtendimento {
-        paciente: PacienteResumo {
-            id: a.paciente_id,
-            nome: a.nome,
-            nascimento: a.nascimento,
-        },
-        atendimento_codigo: a.codigo,
-        nos,
-        eventos,
-        integra,
-    }))
+    Ok(Json(montada.cadeia))
 }
