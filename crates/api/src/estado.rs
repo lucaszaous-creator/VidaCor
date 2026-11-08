@@ -22,6 +22,8 @@ pub struct Estado {
     pub psp: Option<Arc<dyn crate::pix::Psp>>,
     /// E-mail (convite do portal). Sem configuração, o envio fica pendente no outbox (R7).
     pub correio: Option<Arc<dyn crate::correio::Correio>>,
+    /// WhatsApp. Sem configuração, os avisos ficam pendentes no outbox (R7).
+    pub mensageiro: Option<Arc<dyn crate::mensageiro::Mensageiro>>,
 }
 
 impl Estado {
@@ -37,6 +39,7 @@ impl Estado {
             assinador: None,
             psp: None,
             correio: None,
+            mensageiro: None,
         }
     }
 }

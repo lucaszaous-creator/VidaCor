@@ -51,6 +51,7 @@ import type { ConsultaAgenda, PacienteResumo, SalaDaUnidade, Saude, Sessao } fro
 import type { MenuDoObjeto, ObjetoDoMenu } from './contrato-menu';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
+import type { ComunicacaoDoPaciente, LembretesEnfileirados, PreferenciaWhatsapp } from './contrato-comunicacao';
 import type { ContrasteAplicado, EntradaDeEstoque, ItemDeEstoque, MovimentoFeito, RastreioDoLote } from './contrato-estoque';
 import type { AceiteDoConvite, ConviteEmitido, EntradaNoPortal, NovoPaciente, PacienteCadastrado, PossivelDuplicado, SessaoDoPortal, SituacaoDoConvite } from './contrato-portal';
 import type { AchadoEstruturado, AchadosDoLaudo, NovoAchado } from './contrato-laudo-estruturado';
@@ -410,6 +411,15 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
     menu: {
       /** Ações do objeto para o perfil e o estado atual; a tela só mostra (docs/19 § 8). */
       de: (objeto: ObjetoDoMenu, id: string): Promise<MenuDoObjeto> => ler<MenuDoObjeto>(`/v1/menu/${objeto}/${seg(id)}`),
+    },
+
+    comunicacao: {
+      doPaciente: (id: string): Promise<ComunicacaoDoPaciente> => ler<ComunicacaoDoPaciente>(`/v1/pacientes/${seg(id)}/comunicacao`),
+      /** Liga ou desliga o WhatsApp do paciente, com motivo. */
+      preferir: (id: string, corpo: PreferenciaWhatsapp): Promise<ComunicacaoDoPaciente> =>
+        escrever<ComunicacaoDoPaciente>('POST', `/v1/pacientes/${seg(id)}/comunicacao`, corpo),
+      /** Confirmação por WhatsApp dos agendamentos do dia (repetir não manda de novo). */
+      lembretes: (data: string): Promise<LembretesEnfileirados> => escrever<LembretesEnfileirados>('POST', '/v1/comunicacao/lembretes', { data }),
     },
 
     indicadores: {

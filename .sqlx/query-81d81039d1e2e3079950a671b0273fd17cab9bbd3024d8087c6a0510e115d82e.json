@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO comunicacao.preferencia (paciente_id, whatsapp, motivo, origem, unidade_id, correlacao)\n                 VALUES ($1, false, 'resposta SAIR pelo WhatsApp', 'whatsapp', $2, $3)\n                 ON CONFLICT (paciente_id) DO UPDATE SET whatsapp = false, motivo = EXCLUDED.motivo, alterado_em = now(),\n                        versao = comunicacao.preferencia.versao + 1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "81d81039d1e2e3079950a671b0273fd17cab9bbd3024d8087c6a0510e115d82e"
+}

@@ -245,6 +245,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/comunicacao/lembretes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Enfileira a confirmação por WhatsApp dos agendamentos do dia (repetir não manda de novo). */
+        post: operations["lembretes"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/contingencias": {
         parameters: {
             query?: never;
@@ -959,6 +976,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/pacientes/{id}/comunicacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Preferência e histórico de mensagens do paciente (recepção e gerência). */
+        get: operations["do_paciente"];
+        put?: never;
+        /** Liga ou desliga o WhatsApp do paciente, com motivo (cada mudança sobe a versão e vai ao lastro). */
+        post: operations["preferir"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/pacientes/{id}/convites-portal": {
         parameters: {
             query?: never;
@@ -1406,6 +1441,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/webhooks/whatsapp": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Webhook do WhatsApp (respostas dos pacientes). Assinatura `X-Hub-Signature-256` conferida no corpo
+         *     bruto antes de qualquer coisa; cada mensagem é gravada pelo ID antes de agir; o efeito (opt-out,
+         *     confirmação) acontece pelo outbox (G3).
+         */
+        post: operations["whatsapp"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1576,6 +1632,11 @@ export interface components {
         CategoriaBirads: "0" | "1" | "2" | "3" | "4A" | "4B" | "4C" | "5" | "6";
         /** @enum {string} */
         ComposicaoTirads: "cistica_ou_quase_cistica" | "espongiforme" | "mista_cistica_e_solida" | "solida_ou_quase_solida" | "indeterminada_por_calcificacao";
+        ComunicacaoDoPaciente: {
+            mensagens: components["schemas"]["MensagemAoPaciente"][];
+            motivo?: string | null;
+            whatsapp: boolean;
+        };
         Conduta: {
             /** Format: uuid */
             medico_id: string;
@@ -1972,6 +2033,10 @@ export interface components {
             laudos: number;
             medico: string;
         };
+        LembretesEnfileirados: {
+            /** Format: int64 */
+            enfileirados: number;
+        };
         LinkCriado: {
             /** Format: date-time */
             expira_em: string;
@@ -2004,6 +2069,13 @@ export interface components {
             id: string;
             nome: string;
             perfis: string[];
+        };
+        MensagemAoPaciente: {
+            /** Format: date-time */
+            criado_em: string;
+            modelo: string;
+            resposta?: string | null;
+            situacao: string;
         };
         MenuDoObjeto: {
             acoes: components["schemas"]["AcaoDoMenu"][];
@@ -2254,6 +2326,13 @@ export interface components {
             /** Format: uuid */
             guia_id: string;
         };
+        PedidoLembretes: {
+            /**
+             * Format: date
+             * @description Dia dos agendamentos a confirmar (AAAA-MM-DD).
+             */
+            data: string;
+        };
         PedidoLink: {
             /**
              * Format: int64
@@ -2340,6 +2419,10 @@ export interface components {
         };
         /** @enum {string} */
         PosteriorBirads: "nenhum" | "reforco" | "sombra" | "combinado";
+        PreferenciaWhatsapp: {
+            motivo: string;
+            whatsapp: boolean;
+        };
         /** @description Erro em Problem Details (RFC 9457). */
         ProblemaDoc: {
             /** @description Código estável (ex.: `identificacao-nao-confere`). */
@@ -3116,6 +3199,37 @@ export interface operations {
                 };
             };
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    lembretes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoLembretes"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LembretesEnfileirados"];
+                };
+            };
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -4740,6 +4854,84 @@ export interface operations {
             };
         };
     };
+    do_paciente: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ComunicacaoDoPaciente"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    preferir: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PreferenciaWhatsapp"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ComunicacaoDoPaciente"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     convidar_para_o_portal: {
         parameters: {
             query?: never;
@@ -5634,6 +5826,40 @@ export interface operations {
             cookie?: never;
         };
         /** @description Evento do PSP: id e txid */
+        requestBody: {
+            content: {
+                "application/json": string;
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookAceito"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    whatsapp: {
+        parameters: {
+            query?: never;
+            header: {
+                "X-Hub-Signature-256": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Notificação do WhatsApp Cloud API */
         requestBody: {
             content: {
                 "application/json": string;

@@ -34,6 +34,7 @@ pub enum Ato {
     LoteRastrear,
     LastroExplorar,
     IndicadoresVer,
+    ComunicacaoEnviar,
 }
 
 impl Ato {
@@ -73,6 +74,8 @@ impl Ato {
             A::LastroExplorar => &["gerente", "auditor"],
             // Indicadores agregados, sem paciente (docs/25 MVP).
             A::IndicadoresVer => &["gerente", "financeiro"],
+            // Lembretes, preferência e histórico de mensagens do paciente (N0/N1).
+            A::ComunicacaoEnviar => &["recepcao", "gerente"],
         };
         perfis.contains(&perfil)
     }
@@ -82,7 +85,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 30] = [
+    const TODOS: [Ato; 31] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -113,6 +116,7 @@ mod testes {
         Ato::LoteRastrear,
         Ato::LastroExplorar,
         Ato::IndicadoresVer,
+        Ato::ComunicacaoEnviar,
     ];
 
     #[test]

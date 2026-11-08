@@ -161,6 +161,14 @@ pub async fn publicar(estado: &Estado, laudo_id: Uuid, unidade_id: Uuid) -> Resu
         sqlx::query!("INSERT INTO portal.aviso (id, publicacao_id, canal) VALUES ($1, $2, 'whatsapp') ON CONFLICT (publicacao_id) DO NOTHING", novo_id(), pid)
             .execute(&mut *tx)
             .await?;
+        // Aviso de laudo pronto por WhatsApp, pelo outbox (sem nome do exame na mensagem).
+        sqlx::query!(
+            "INSERT INTO integracao.outbox (id, tipo, chave_idempotencia, carga, unidade_id, correlacao, referencia)
+             VALUES ($1, 'aviso.laudo_pronto', $2, $3, $4, 'publicacao', $5) ON CONFLICT (tipo, referencia) WHERE referencia IS NOT NULL DO NOTHING",
+            novo_id(), novo_id(), json!({ "publicacao_id": pid }), unidade_id, pid
+        )
+        .execute(&mut *tx)
+        .await?;
         lastro::registrar(
             &mut tx,
             NovoEvento {

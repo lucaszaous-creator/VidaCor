@@ -77,15 +77,65 @@ pub async fn processar_um(estado: &Estado, orthanc: &Orthanc) -> Result<bool> {
             (Some(psp), Some(txid)) => psp.estornar(item.chave_idempotencia, txid).await,
             _ => Err(anyhow::anyhow!("PSP não configurado ou carga sem txid")),
         },
-        // Avisos por WhatsApp e oferta à lista de espera: o provedor entra numa próxima entrega.
-        // Ficam pendentes no outbox, visíveis, sem se perder (R7).
-        "aviso.reserva_expirada"
-        | "lista_espera.oferecer_vaga"
-        | "aviso.acesso_emergencia"
-        | "nfse.emitir" => Err(anyhow::anyhow!(
-            "provedor de {} ainda não configurado",
-            item.tipo
-        )),
+        "aviso.reserva_expirada" | "aviso.confirmacao" => match item.carga["agendamento_id"]
+            .as_str()
+            .and_then(|v| v.parse().ok())
+        {
+            Some(g) => {
+                let modelo = if item.tipo == "aviso.confirmacao" {
+                    "confirmacao"
+                } else {
+                    "reserva_expirada"
+                };
+                crate::rotas::comunicacao::enviar_aviso(
+                    estado,
+                    item.unidade_id,
+                    modelo,
+                    g,
+                    item.chave_idempotencia,
+                )
+                .await
+            }
+            None => Err(anyhow::anyhow!("carga sem agendamento_id")),
+        },
+        "aviso.laudo_pronto" => match item.carga["publicacao_id"]
+            .as_str()
+            .and_then(|v| v.parse().ok())
+        {
+            Some(p) => {
+                crate::rotas::comunicacao::enviar_aviso(
+                    estado,
+                    item.unidade_id,
+                    "laudo_pronto",
+                    p,
+                    item.chave_idempotencia,
+                )
+                .await
+            }
+            None => Err(anyhow::anyhow!("carga sem publicacao_id")),
+        },
+        "whatsapp.resposta" => match (
+            item.carga["de"].as_str(),
+            item.carga["texto"].as_str(),
+            item.carga["evento"].as_str(),
+        ) {
+            (Some(de), Some(texto), Some(ev)) => {
+                crate::rotas::comunicacao::processar_resposta(
+                    estado,
+                    item.unidade_id,
+                    de,
+                    texto,
+                    ev,
+                )
+                .await
+            }
+            _ => Err(anyhow::anyhow!("carga de resposta incompleta")),
+        },
+        // Oferta à lista de espera, aviso interno de emergência e NFS-e: o provedor entra numa próxima
+        // entrega. Ficam pendentes no outbox, visíveis, sem se perder (R7).
+        "lista_espera.oferecer_vaga" | "aviso.acesso_emergencia" | "nfse.emitir" => Err(
+            anyhow::anyhow!("provedor de {} ainda não configurado", item.tipo),
+        ),
         outro => Err(anyhow::anyhow!("tipo de outbox desconhecido: {outro}")),
     };
 

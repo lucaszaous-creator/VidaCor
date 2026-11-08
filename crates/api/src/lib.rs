@@ -14,6 +14,7 @@ pub mod extratores;
 pub mod idempotencia;
 pub mod lastro;
 pub mod laudos;
+pub mod mensageiro;
 pub mod oidc;
 pub mod openapi;
 pub mod orthanc;

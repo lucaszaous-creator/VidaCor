@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT modelo, situacao, resposta, criado_em FROM comunicacao.mensagem WHERE paciente_id = $1 ORDER BY criado_em DESC LIMIT 50",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "modelo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "comunicacao.mensagem",
+            "name": "modelo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "comunicacao.mensagem",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "resposta",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "comunicacao.mensagem",
+            "name": "resposta"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "comunicacao.mensagem",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "21aa8b6ce6c1f7b396c3a364d4e1a922588c934775d544e77ab33bc0a8a48b3c"
+}

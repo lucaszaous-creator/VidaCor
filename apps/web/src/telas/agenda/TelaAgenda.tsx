@@ -14,10 +14,11 @@ import {
   Vazio,
 } from '@vidacor/design-system';
 import { useId, useState } from 'react';
-import { consultaAgenda, consultaSalas } from '../../consultas';
+import { consultaAgenda, consultaSalas, consultaSessao } from '../../consultas';
 import { useDependencias } from '../../contexto';
 import { erroParaTela } from '../../erros';
 import { useEventosAoVivo } from '../../eventos/EventosAoVivo';
+import { ConfirmarPorWhatsapp } from './ConfirmarPorWhatsapp';
 import { GavetaDoAgendamento } from './GavetaDoAgendamento';
 import { hojeNaClinica, montarGrade, somarDias } from './grade';
 import { GradeDaAgenda } from './GradeDaAgenda';
@@ -60,6 +61,8 @@ export function TelaAgenda() {
   const [selecionado, setSelecionado] = useState<string | null>(null);
 
   const salas = useQuery(consultaSalas(api));
+  const sessao = useQuery(consultaSessao(api));
+  const podeConfirmar = sessao.data?.usuario.perfis.some((p) => p === 'recepcao' || p === 'gerente') ?? false;
   const agenda = useQuery(consultaAgenda(api, data, busca.sala));
 
   function irPara(novaData: string): void {
@@ -143,6 +146,7 @@ export function TelaAgenda() {
           {formatarDiaPorExtenso(data)}
         </h1>
         <div className="grow" />
+        {podeConfirmar && <ConfirmarPorWhatsapp data={data} />}
         <label className="sr" htmlFor={idSala}>
           Salas
         </label>

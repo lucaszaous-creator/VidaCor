@@ -1,0 +1,40 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT m.id, m.referencia FROM comunicacao.mensagem m JOIN agenda.agendamento g ON g.id = m.referencia\n              WHERE m.paciente_id = ANY($1) AND m.modelo = 'confirmacao' AND m.situacao = 'enviada' AND m.respondida_em IS NULL\n                AND g.inicio > now() AND g.situacao = 'agendado'\n              ORDER BY g.inicio LIMIT 1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "comunicacao.mensagem",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "referencia",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "comunicacao.mensagem",
+            "name": "referencia"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "UuidArray"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "5cba859ad38a4b15cec29e0097ccd74c98ea70289b5931c8641bc66980066293"
+}

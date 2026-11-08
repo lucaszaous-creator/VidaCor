@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO integracao.outbox (id, tipo, chave_idempotencia, carga, unidade_id, correlacao, referencia)\n         SELECT gen_random_uuid(), 'aviso.confirmacao', gen_random_uuid(), jsonb_build_object('agendamento_id', g.id), g.unidade_id, $3, g.id\n           FROM agenda.agendamento g WHERE g.inicio >= $1 AND g.inicio < $2 AND g.inicio > now() AND g.situacao = 'agendado'\n         ON CONFLICT (tipo, referencia) WHERE referencia IS NOT NULL DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Timestamptz",
+        "Timestamptz",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "7e5c7ef1db4a11f1d768194524628fd6a8b8fd0dab54a4b2f965b91f64cf8272"
+}

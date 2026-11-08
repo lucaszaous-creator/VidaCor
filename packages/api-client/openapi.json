@@ -919,6 +919,47 @@
         }
       }
     },
+    "/v1/comunicacao/lembretes": {
+      "post": {
+        "tags": [
+          "comunicacao"
+        ],
+        "summary": "Enfileira a confirmação por WhatsApp dos agendamentos do dia (repetir não manda de novo).",
+        "operationId": "lembretes",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoLembretes"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LembretesEnfileirados"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/contingencias": {
       "post": {
         "tags": [
@@ -3274,6 +3315,118 @@
         }
       }
     },
+    "/v1/pacientes/{id}/comunicacao": {
+      "get": {
+        "tags": [
+          "comunicacao"
+        ],
+        "summary": "Preferência e histórico de mensagens do paciente (recepção e gerência).",
+        "operationId": "do_paciente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComunicacaoDoPaciente"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "comunicacao"
+        ],
+        "summary": "Liga ou desliga o WhatsApp do paciente, com motivo (cada mudança sobe a versão e vai ao lastro).",
+        "operationId": "preferir",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreferenciaWhatsapp"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComunicacaoDoPaciente"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/pacientes/{id}/convites-portal": {
       "post": {
         "tags": [
@@ -4540,6 +4693,58 @@
           }
         }
       }
+    },
+    "/v1/webhooks/whatsapp": {
+      "post": {
+        "tags": [
+          "integracoes"
+        ],
+        "summary": "Webhook do WhatsApp (respostas dos pacientes). Assinatura `X-Hub-Signature-256` conferida no corpo\nbruto antes de qualquer coisa; cada mensagem é gravada pelo ID antes de agir; o efeito (opt-out,\nconfirmação) acontece pelo outbox (G3).",
+        "operationId": "whatsapp",
+        "parameters": [
+          {
+            "name": "X-Hub-Signature-256",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Notificação do WhatsApp Cloud API",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookAceito"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -5083,6 +5288,30 @@
           "solida_ou_quase_solida",
           "indeterminada_por_calcificacao"
         ]
+      },
+      "ComunicacaoDoPaciente": {
+        "type": "object",
+        "required": [
+          "whatsapp",
+          "mensagens"
+        ],
+        "properties": {
+          "mensagens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MensagemAoPaciente"
+            }
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "whatsapp": {
+            "type": "boolean"
+          }
+        }
       },
       "Conduta": {
         "type": "object",
@@ -6374,6 +6603,18 @@
           }
         }
       },
+      "LembretesEnfileirados": {
+        "type": "object",
+        "required": [
+          "enfileirados"
+        ],
+        "properties": {
+          "enfileirados": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "LinkCriado": {
         "type": "object",
         "required": [
@@ -6491,6 +6732,32 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "MensagemAoPaciente": {
+        "type": "object",
+        "required": [
+          "modelo",
+          "situacao",
+          "criado_em"
+        ],
+        "properties": {
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modelo": {
+            "type": "string"
+          },
+          "resposta": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "situacao": {
+            "type": "string"
           }
         }
       },
@@ -7254,6 +7521,19 @@
           }
         }
       },
+      "PedidoLembretes": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "string",
+            "format": "date",
+            "description": "Dia dos agendamentos a confirmar (AAAA-MM-DD)."
+          }
+        }
+      },
       "PedidoLink": {
         "type": "object",
         "required": [
@@ -7535,6 +7815,21 @@
           "sombra",
           "combinado"
         ]
+      },
+      "PreferenciaWhatsapp": {
+        "type": "object",
+        "required": [
+          "whatsapp",
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string"
+          },
+          "whatsapp": {
+            "type": "boolean"
+          }
+        }
       },
       "ProblemaDoc": {
         "type": "object",

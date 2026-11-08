@@ -97,3 +97,22 @@ export const manipuladoresIndicadores = [
     });
   }),
 ];
+
+/** Comunicação simulada (regras reais em `crates/api/tests/comunicacao.rs`). */
+export const comunicacaoSimulada = { whatsapp: true };
+export const manipuladoresComunicacao = [
+  http.get('*/v1/pacientes/:id/comunicacao', () =>
+    temPerfil('recepcao', 'gerente')
+      ? HttpResponse.json({ whatsapp: comunicacaoSimulada.whatsapp, motivo: comunicacaoSimulada.whatsapp ? null : 'pedido no balcão', mensagens: [{ modelo: 'confirmacao', situacao: 'enviada', resposta: 'confirmou', criado_em: '2026-11-05T12:00:00Z' }] })
+      : semPermissao('ver os avisos do paciente'),
+  ),
+  http.post('*/v1/pacientes/:id/comunicacao', async ({ request }) => {
+    const c = (await registrar('preferencia-whatsapp', request)) as { whatsapp: boolean; motivo: string };
+    comunicacaoSimulada.whatsapp = c.whatsapp;
+    return HttpResponse.json({ whatsapp: c.whatsapp, motivo: c.motivo, mensagens: [] });
+  }),
+  http.post('*/v1/comunicacao/lembretes', async ({ request }) => {
+    await registrar('lembretes', request);
+    return HttpResponse.json({ enfileirados: 7 });
+  }),
+];

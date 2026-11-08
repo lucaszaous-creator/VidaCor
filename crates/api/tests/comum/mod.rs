@@ -67,6 +67,7 @@ fn servidor() -> &'static Servidor {
 /// Segredo do webhook do PSP de teste.
 pub const SEGREDO_PIX: &str = "segredo-de-teste-do-webhook";
 
+pub const SEGREDO_WHATSAPP: &str = "segredo-de-teste-do-app-whatsapp";
 pub const UNIDADE_A: Uuid = Uuid::from_u128(0x0000_0000_0000_7000_8000_0000_0000_00a1);
 pub const UNIDADE_B: Uuid = Uuid::from_u128(0x0000_0000_0000_7000_8000_0000_0000_00b1);
 
@@ -84,6 +85,7 @@ pub struct Ambiente {
     pub s: Semente,
     pub psp: std::sync::Arc<vidacor_api::pix::PspDesenvolvimento>,
     pub correio: std::sync::Arc<vidacor_api::correio::CorreioEmMemoria>,
+    pub mensageiro: std::sync::Arc<vidacor_api::mensageiro::MensageiroEmMemoria>,
 }
 
 pub struct Sessao {
@@ -142,6 +144,7 @@ impl Ambiente {
             oidc: None,
             pix_webhook_segredo: Some(SEGREDO_PIX.to_owned()),
             convite_segredo: Some("segredo-de-teste-do-convite-do-portal-0001".to_owned()),
+            whatsapp_segredo: Some(SEGREDO_WHATSAPP.to_owned()),
         };
         let mut estado = Estado::novo(app_pool.clone(), config, None);
         // Provedor externo de assinatura: único ponto simulado (G4); sem valor legal.
@@ -153,6 +156,9 @@ impl Ambiente {
         // E-mail: provedor externo simulado em memória (G4).
         let correio = std::sync::Arc::new(vidacor_api::correio::CorreioEmMemoria::default());
         estado.correio = Some(correio.clone());
+        let mensageiro =
+            std::sync::Arc::new(vidacor_api::mensageiro::MensageiroEmMemoria::default());
+        estado.mensageiro = Some(mensageiro.clone());
         Self {
             app: aplicacao(estado.clone()),
             admin,
@@ -167,6 +173,7 @@ impl Ambiente {
             s: ids,
             psp,
             correio,
+            mensageiro,
         }
     }
 

@@ -8,6 +8,7 @@ pub mod agendamentos;
 pub mod atendimentos;
 pub mod cadastro;
 pub mod caixa;
+pub mod comunicacao;
 pub mod contingencia;
 pub mod equipe;
 pub mod estoque;
@@ -155,6 +156,12 @@ pub fn rotas() -> Router<Estado> {
             post(pendencias::cancelar_desconto),
         )
         .route("/v1/webhooks/pix", post(webhooks::pix))
+        .route("/v1/webhooks/whatsapp", post(webhooks::whatsapp))
+        .route("/v1/comunicacao/lembretes", post(comunicacao::lembretes))
+        .route(
+            "/v1/pacientes/{id}/comunicacao",
+            get(comunicacao::do_paciente).post(comunicacao::preferir),
+        )
         .route("/v1/contingencias", post(contingencia::declarar))
         .route("/v1/contingencias/aberta", get(contingencia::aberta))
         .route("/v1/contingencias/kits", post(contingencia::kit))

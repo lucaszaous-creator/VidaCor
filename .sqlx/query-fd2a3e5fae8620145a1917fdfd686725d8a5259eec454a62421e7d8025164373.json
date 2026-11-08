@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO comunicacao.mensagem (id, paciente_id, canal, modelo, referencia, situacao, chave_idempotencia, provedor_id, origem, unidade_id, correlacao)\n         VALUES ($1, $2, 'whatsapp', $3, $4, $5, $6, $7, 'sistema', $8, $9) ON CONFLICT (modelo, referencia) DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "fd2a3e5fae8620145a1917fdfd686725d8a5259eec454a62421e7d8025164373"
+}

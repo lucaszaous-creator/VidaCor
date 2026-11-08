@@ -127,6 +127,7 @@ export async function simularNucleo(page: Page, estado: EstadoDaSimulacao): Prom
           .map((i) => ({ atendimento_id: i.atendimento_id, codigo: i.codigo, paciente: i.paciente, inicio: i.inicio, procedimentos: [{ tuss: i.exame.codigo_tuss, descricao: i.exame.nome, valor_centavos: 38000 }], recebido: false })),
       );
     }
+    if (c.endsWith('/comunicacao')) return json(route, { whatsapp: true, motivo: null, mensagens: [{ modelo: 'confirmacao', situacao: 'enviada', resposta: 'confirmou', criado_em: '2026-11-05T12:00:00Z' }] });
     if (c === '/v1/indicadores') {
       return json(route, { de: '2026-10-08', ate: '2026-11-06', agendamentos: 120, atendimentos: 104, faltas: 9, taxa_de_faltas: 0.08, receita_centavos: 4480000, recebimentos: 118, ticket_medio_centavos: 37966, tempo_medio_de_laudo_horas: 6.4,
         producao: Array.from({ length: 25 }, (_, k) => ({ exame: `Exame número ${String(k)} com nome comprido para quebrar`, atendimentos: 50 - k })),

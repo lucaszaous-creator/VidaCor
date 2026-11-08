@@ -35,6 +35,8 @@ pub struct Config {
     /// Segredo do convite do portal: o token é HMAC(segredo, id do convite) e não fica guardado.
     /// Sem ele, convidar responde 503 (falha fechada).
     pub convite_segredo: Option<String>,
+    /// Segredo do app do WhatsApp para conferir o webhook (X-Hub-Signature-256). Sem ele, recusa.
+    pub whatsapp_segredo: Option<String>,
 }
 
 fn var(nome: &str) -> Option<String> {
@@ -76,6 +78,7 @@ impl Config {
             oidc,
             pix_webhook_segredo: var("VIDACOR_PIX_WEBHOOK_SEGREDO"),
             convite_segredo: var("VIDACOR_CONVITE_SEGREDO").filter(|s| s.len() >= 32),
+            whatsapp_segredo: var("VIDACOR_WHATSAPP_SEGREDO"),
         })
     }
 }
