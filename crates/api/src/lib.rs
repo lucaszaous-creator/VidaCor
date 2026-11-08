@@ -16,6 +16,7 @@ pub mod lastro;
 pub mod laudos;
 pub mod oidc;
 pub mod openapi;
+pub mod operadora;
 pub mod orthanc;
 pub mod outbox;
 pub mod pix;

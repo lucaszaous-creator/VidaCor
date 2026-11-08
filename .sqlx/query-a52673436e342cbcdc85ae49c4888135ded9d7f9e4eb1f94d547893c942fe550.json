@@ -1,0 +1,105 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT k.id, k.codigo, k.operadora, k.registro_ans, k.regra_versao, k.prazo_envio_dias, k.prazo_recurso_dias,\n                  (SELECT count(*) FROM faturamento.conta c WHERE c.contrato_id = k.id AND c.situacao = 'pronta') AS \"contas_prontas!\"\n             FROM faturamento.contrato k WHERE k.ativo ORDER BY k.operadora",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "operadora",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "operadora"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "registro_ans",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "registro_ans"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "regra_versao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "regra_versao"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "prazo_envio_dias",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "prazo_envio_dias"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "prazo_recurso_dias",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "prazo_recurso_dias"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "contas_prontas!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      null
+    ]
+  },
+  "hash": "a52673436e342cbcdc85ae49c4888135ded9d7f9e4eb1f94d547893c942fe550"
+}

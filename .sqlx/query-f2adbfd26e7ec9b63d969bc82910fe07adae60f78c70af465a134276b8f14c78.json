@@ -1,0 +1,280 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, codigo, atendimento_id, guia_id, contrato_id, operadora, unidade_id, data_execucao,\n                numero_guia_operadora, senha, data_autorizacao, validade_senha, carteirinha,\n                solicitante_nome, solicitante_conselho, solicitante_numero, solicitante_uf, solicitante_cbos,\n                cid, assinatura_beneficiario, situacao, lote_id\n           FROM faturamento.conta WHERE id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "atendimento_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "atendimento_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "guia_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "guia_id"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "contrato_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "contrato_id"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "operadora",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "operadora"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "unidade_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "unidade_id"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "data_execucao",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "data_execucao"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "numero_guia_operadora",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "numero_guia_operadora"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "senha",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "senha"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "data_autorizacao",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "data_autorizacao"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "validade_senha",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "validade_senha"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "carteirinha",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "carteirinha"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "solicitante_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "solicitante_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "solicitante_conselho",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "solicitante_conselho"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "solicitante_numero",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "solicitante_numero"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "solicitante_uf",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "solicitante_uf"
+          }
+        }
+      },
+      {
+        "ordinal": 17,
+        "name": "solicitante_cbos",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "solicitante_cbos"
+          }
+        }
+      },
+      {
+        "ordinal": 18,
+        "name": "cid",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "cid"
+          }
+        }
+      },
+      {
+        "ordinal": 19,
+        "name": "assinatura_beneficiario",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "assinatura_beneficiario"
+          }
+        }
+      },
+      {
+        "ordinal": 20,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 21,
+        "name": "lote_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "lote_id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "f2adbfd26e7ec9b63d969bc82910fe07adae60f78c70af465a134276b8f14c78"
+}

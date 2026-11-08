@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO faturamento.lote_item (lote_id, conta_id, sequencial, unidade_id) VALUES ($1, $2, $3, $4)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Int4",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "7484a4b8fc934ef9257ad1145e5e95d3b003f891d6bdfcd7b981ec267cdb8d7f"
+}

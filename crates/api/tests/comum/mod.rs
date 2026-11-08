@@ -353,6 +353,13 @@ async fn semear(admin: &PgPool) -> Semente {
         ("financeiro.a", "Equipe Financeiro", "financeiro", UNIDADE_A),
         ("ti.a", "Equipe TI", "ti", UNIDADE_A),
         ("recepcao.b", "Recepção Norte", "recepcao", UNIDADE_B),
+        (
+            "rita.faturamento",
+            "Rita Faturamento",
+            "faturista",
+            UNIDADE_A,
+        ),
+        ("faturista.b", "Faturamento Norte", "faturista", UNIDADE_B),
     ] {
         let id = Uuid::now_v7();
         sqlx::query("INSERT INTO identidade.usuario (id, codigo, login, nome, perfis, origem, unidade_id, correlacao) VALUES ($1,$2,$3,$4,ARRAY[$5],'seed',$6,'seed')")

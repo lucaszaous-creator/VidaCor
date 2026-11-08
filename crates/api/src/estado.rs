@@ -22,6 +22,8 @@ pub struct Estado {
     pub psp: Option<Arc<dyn crate::pix::Psp>>,
     /// E-mail (convite do portal). Sem configuração, o envio fica pendente no outbox (R7).
     pub correio: Option<Arc<dyn crate::correio::Correio>>,
+    /// Webservice TISS das operadoras. Sem configuração, o envio do lote fica pendente no outbox (R7).
+    pub operadora: Option<Arc<dyn crate::operadora::Operadora>>,
 }
 
 impl Estado {
@@ -37,6 +39,7 @@ impl Estado {
             assinador: None,
             psp: None,
             correio: None,
+            operadora: None,
         }
     }
 }

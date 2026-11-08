@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT sequencial, tuss, quantidade FROM faturamento.conta_item WHERE conta_id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "sequencial",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta_item",
+            "name": "sequencial"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta_item",
+            "name": "tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "quantidade",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta_item",
+            "name": "quantidade"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "f0e5164cacf9955d9f90fcaef5b0d440617fd4dd239ca20d7d39a678b1e304d2"
+}

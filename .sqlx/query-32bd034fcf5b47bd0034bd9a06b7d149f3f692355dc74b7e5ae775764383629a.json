@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE faturamento.conta_item SET valor_unitario_centavos = $3 WHERE conta_id = $1 AND sequencial = $2",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4",
+        "Int8"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "32bd034fcf5b47bd0034bd9a06b7d149f3f692355dc74b7e5ae775764383629a"
+}

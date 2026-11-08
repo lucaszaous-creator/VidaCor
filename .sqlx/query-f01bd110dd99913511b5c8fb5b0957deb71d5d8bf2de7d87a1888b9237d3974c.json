@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE faturamento.conta SET valor_total_centavos = $2 WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int8"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "f01bd110dd99913511b5c8fb5b0957deb71d5d8bf2de7d87a1888b9237d3974c"
+}

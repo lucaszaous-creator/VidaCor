@@ -1,0 +1,100 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT regra, regra_versao, efeito, origem_regra AS origem, titulo, detalhe, o_que_fazer\n             FROM faturamento.pendencia WHERE conta_id = $1 AND situacao = 'aberta'\n            ORDER BY CASE efeito WHEN 'bloqueia' THEN 0 WHEN 'corrigir_antes' THEN 1 ELSE 2 END, criado_em",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "regra",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.pendencia",
+            "name": "regra"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "regra_versao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.pendencia",
+            "name": "regra_versao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "efeito",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.pendencia",
+            "name": "efeito"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "origem",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.pendencia",
+            "name": "origem_regra"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "titulo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.pendencia",
+            "name": "titulo"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "detalhe",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.pendencia",
+            "name": "detalhe"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "o_que_fazer",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.pendencia",
+            "name": "o_que_fazer"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "40adc02ebd8c25f8a756f0e573c00b3958c96ce63a3f24060012d2798c88824c"
+}

@@ -1,0 +1,19 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO faturamento.conta_item (conta_id, sequencial, tuss, descricao, quantidade, valor_unitario_centavos, unidade_id)\n                 VALUES ($1, $2, $3, $4, 1, $5, $6)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4",
+        "Text",
+        "Text",
+        "Int8",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "231a890a81c00d25b12848e3aede250d83d56c2202815a1e34ff43939774d6a3"
+}

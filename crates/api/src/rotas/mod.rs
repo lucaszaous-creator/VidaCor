@@ -15,6 +15,7 @@ pub mod estornos;
 pub mod estudos;
 pub mod etiquetas;
 pub mod eventos;
+pub mod faturamento;
 pub mod lastro_explorador;
 pub mod laudos;
 pub mod menu;
@@ -181,6 +182,52 @@ pub fn rotas() -> Router<Estado> {
         .route(
             "/v1/atendimentos/{id}/pulseira",
             post(etiquetas::nova_pulseira),
+        )
+        .route(
+            "/v1/faturamento/conferencias",
+            post(faturamento::conferencia::conferir),
+        )
+        .route(
+            "/v1/faturamento/contas",
+            get(faturamento::consultas::listar),
+        )
+        .route(
+            "/v1/faturamento/contas/{id}",
+            get(faturamento::consultas::obter),
+        )
+        .route(
+            "/v1/faturamento/contas/{id}/correcao",
+            post(faturamento::conferencia::corrigir),
+        )
+        .route(
+            "/v1/faturamento/auditoria",
+            get(faturamento::consultas::auditoria),
+        )
+        .route(
+            "/v1/faturamento/contratos",
+            get(faturamento::consultas::contratos),
+        )
+        .route(
+            "/v1/faturamento/lotes",
+            get(faturamento::lotes::listar).post(faturamento::lotes::gerar),
+        )
+        .route("/v1/faturamento/lotes/{id}", get(faturamento::lotes::obter))
+        .route(
+            "/v1/faturamento/lotes/{id}/arquivo",
+            get(faturamento::lotes::arquivo),
+        )
+        .route(
+            "/v1/faturamento/lotes/{id}/envio",
+            post(faturamento::lotes::enviar),
+        )
+        .route(
+            "/v1/faturamento/lotes/{id}/demonstrativo",
+            post(faturamento::lotes::demonstrativo),
+        )
+        .route("/v1/faturamento/glosas", get(faturamento::glosas::listar))
+        .route(
+            "/v1/faturamento/glosas/{id}/recurso",
+            post(faturamento::glosas::recorrer),
         )
         .route("/v1/equipe", get(equipe::listar))
         .route("/v1/eventos", get(eventos::fluxo))

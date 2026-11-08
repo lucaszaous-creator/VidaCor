@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT codigo, situacao, prazo_recurso FROM faturamento.glosa WHERE id = $1 FOR UPDATE",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.glosa",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.glosa",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "prazo_recurso",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "faturamento.glosa",
+            "name": "prazo_recurso"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "db0d955b0f5a72ac8be993ba1845d108fb324d36104264b85cb05ec696342ed4"
+}
