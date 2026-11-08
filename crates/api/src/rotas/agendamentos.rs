@@ -546,7 +546,7 @@ pub async fn agendar(
     Ok((StatusCode::CREATED, Json(corpo)).into_response())
 }
 
-async fn carregar_item(
+pub(crate) async fn carregar_item(
     conexao: &mut PgConnection,
     id: Uuid,
 ) -> Result<crate::rotas::agenda::ItemAgenda, ErroApi> {

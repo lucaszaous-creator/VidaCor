@@ -11,8 +11,10 @@ pub mod autorizacoes;
 pub mod autorizacoes_contrato;
 pub mod autorizacoes_portal;
 pub mod autorizacoes_resposta;
+pub mod bloqueios;
 pub mod cadastro;
 pub mod caixa;
+pub mod cancelamento;
 pub mod chamada;
 pub mod comunicacao;
 pub mod contingencia;
@@ -28,8 +30,10 @@ pub mod financeiro;
 pub mod indicadores;
 pub mod lastro_explorador;
 pub mod laudos;
+pub mod lista_espera;
 pub mod menu;
 pub mod nfse;
+pub mod ofertas;
 pub mod orcamentos;
 pub mod pacientes;
 pub mod pendencias;
@@ -42,6 +46,7 @@ pub mod saude;
 pub mod sessao;
 pub mod triagem;
 pub mod usuarios;
+pub mod vagas;
 pub mod webhooks;
 
 use crate::estado::Estado;
@@ -157,6 +162,23 @@ pub fn rotas() -> Router<Estado> {
         )
         .route("/v1/atendimentos/{id}/chamadas", post(chamada::chamar))
         .route("/v1/painel-de-chamada", get(chamada::painel))
+        .route(
+            "/v1/agendamentos/{id}/cancelamento",
+            post(cancelamento::cancelar),
+        )
+        .route(
+            "/v1/bloqueios",
+            get(bloqueios::listar).post(bloqueios::criar),
+        )
+        .route("/v1/bloqueios/{id}/retirada", post(bloqueios::retirar))
+        .route(
+            "/v1/lista-espera",
+            get(lista_espera::listar).post(lista_espera::incluir),
+        )
+        .route("/v1/lista-espera/{id}/saida", post(lista_espera::sair))
+        .route("/v1/ofertas", get(ofertas::listar).post(ofertas::oferecer))
+        .route("/v1/ofertas/{id}/aceite", post(ofertas::aceitar))
+        .route("/v1/ofertas/{id}/recusa", post(ofertas::recusar))
         .route(
             "/v1/aparelhos",
             get(aparelhos::listar).post(aparelhos::cadastrar),

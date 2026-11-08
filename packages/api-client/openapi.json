@@ -157,6 +157,78 @@
         }
       }
     },
+    "/v1/agendamentos/{id}/cancelamento": {
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Cancela o agendamento (recepção e gerência) e oferece a vaga à lista de espera.",
+        "operationId": "cancelar_agendamento",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelamentoDeAgendamento"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemAgenda"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/agendamentos/{id}/guia": {
       "post": {
         "tags": [
@@ -1326,6 +1398,237 @@
           },
           "422": {
             "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/bloqueios": {
+      "get": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Bloqueios (ativos e retirados) que tocam o período.",
+        "operationId": "listar_bloqueios",
+        "parameters": [
+          {
+            "name": "de",
+            "in": "query",
+            "description": "Primeiro dia (AAAA-MM-DD, horário de Brasília).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "ate",
+            "in": "query",
+            "description": "Último dia, incluído (até 62 dias depois de `de`).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Bloqueio"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "periodo-invalido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Bloqueia salas num período (feriado, manutenção ou outro), com motivo.",
+        "operationId": "criar_bloqueios",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoBloqueio"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Bloqueio"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "sala-nao-encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "periodo-com-agendamentos (com agendamentos), bloqueio-sobreposto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "bloqueio-invalido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/bloqueios/{id}/retirada": {
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Retira um bloqueio (com motivo): o período volta à agenda e os horários vão à lista de espera.",
+        "operationId": "retirar_bloqueio",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoRetirada"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bloqueio"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "bloqueio-ja-retirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "motivo-invalido",
             "content": {
               "application/json": {
                 "schema": {
@@ -4828,6 +5131,202 @@
         }
       }
     },
+    "/v1/lista-espera": {
+      "get": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Lista de espera da unidade, na ordem da fila.",
+        "operationId": "listar_espera",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PedidoDeEspera"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Inclui o paciente na lista de espera de um exame.",
+        "operationId": "incluir_na_espera",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoInclusao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoDeEspera"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "paciente-nao-encontrado, guia-nao-encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "ja-na-espera",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "urgente-sem-justificativa, procedimento-desconhecido, guia-de-outro-paciente, pedido-invalido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/lista-espera/{id}/saida": {
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Tira o pedido da lista de espera, com motivo (o paciente desistiu, agendou por fora).",
+        "operationId": "tirar_da_espera",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoSaida"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SaidaDaEspera"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "oferta-em-andamento, pedido-fora-da-fila",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "motivo-invalido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/menu/agendamento/{id}": {
       "get": {
         "tags": [
@@ -4973,6 +5472,330 @@
           },
           "404": {
             "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ofertas": {
+      "get": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Ofertas da unidade (por padrão, as que aguardam resposta), pelo prazo.",
+        "operationId": "listar_ofertas",
+        "parameters": [
+          {
+            "name": "situacao",
+            "in": "query",
+            "description": "aguardando (padrão), aceita, recusada, expirada ou cancelada.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "data",
+            "in": "query",
+            "description": "Dia do horário oferecido (AAAA-MM-DD); sem dia, as próximas.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Oferta"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "filtro-invalido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Oferece um horário livre a um pedido escolhido da lista (encaixe pela recepção).",
+        "operationId": "oferecer_vaga",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoOferta"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Oferta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "espera-nao-encontrada, sala-nao-encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "pedido-indisponivel, vaga-ja-ofertada, horario-ocupado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "prazo-invalido, vaga-perto-demais, exame-incompativel-com-a-sala",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ofertas/{id}/aceite": {
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Registra o aceite do paciente (dois identificadores) e cria o agendamento no horário oferecido.",
+        "operationId": "aceitar_oferta",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoAceite"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Oferta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "oferta-indisponivel, horario-ocupado, guia-em-uso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "identificacao-nao-confere, senha-vencida, saldo-esgotado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ofertas/{id}/recusa": {
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Registra a recusa do paciente (com motivo): ele volta à fila e o horário vai ao próximo.",
+        "operationId": "recusar_oferta",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoRecusa"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Oferta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "oferta-indisponivel",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "motivo-invalido",
             "content": {
               "application/json": {
                 "schema": {
@@ -7863,6 +8686,63 @@
           }
         }
       },
+      "Bloqueio": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "sala",
+          "tipo",
+          "inicio",
+          "fim",
+          "motivo",
+          "situacao"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "fim": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "motivo_retirada": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "retirado_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "sala": {
+            "$ref": "#/components/schemas/Sala"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "ativo ou retirado."
+          },
+          "tipo": {
+            "type": "string",
+            "description": "feriado, manutencao ou outro."
+          }
+        }
+      },
       "CabecalhoDoMenu": {
         "type": "object",
         "required": [
@@ -7963,6 +8843,17 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "CancelamentoDeAgendamento": {
+        "type": "object",
+        "required": [
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string"
           }
         }
       },
@@ -8131,6 +9022,23 @@
               "null"
             ],
             "description": "Nome completo dito pelo paciente, como no documento."
+          }
+        }
+      },
+      "ConfirmacaoDoAceite": {
+        "type": "object",
+        "required": [
+          "nome",
+          "nascimento"
+        ],
+        "properties": {
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string",
+            "description": "Nome completo dito pelo paciente."
           }
         }
       },
@@ -10939,6 +11847,111 @@
           }
         }
       },
+      "Oferta": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "espera_id",
+          "espera_codigo",
+          "paciente",
+          "exame",
+          "sala",
+          "inicio",
+          "fim",
+          "expira_em",
+          "situacao",
+          "origem_vaga"
+        ],
+        "properties": {
+          "agendamento_codigo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Agendamento criado pelo aceite."
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "espera_codigo": {
+            "type": "string"
+          },
+          "espera_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "exame": {
+            "$ref": "#/components/schemas/Exame"
+          },
+          "expira_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fim": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "origem_vaga": {
+            "type": "string",
+            "description": "cancelamento, bloqueio_retirado, reserva_expirada, oferta_sem_aceite ou manual."
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "sala": {
+            "$ref": "#/components/schemas/Sala"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "aguardando, aceita, recusada, expirada ou cancelada."
+          }
+        }
+      },
+      "OfertaDoPedido": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "sala_nome",
+          "inicio",
+          "expira_em"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "expira_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sala_nome": {
+            "type": "string"
+          }
+        }
+      },
       "Orcamento": {
         "type": "object",
         "required": [
@@ -11292,6 +12305,17 @@
           }
         }
       },
+      "PedidoAceite": {
+        "type": "object",
+        "required": [
+          "confirmacao"
+        ],
+        "properties": {
+          "confirmacao": {
+            "$ref": "#/components/schemas/ConfirmacaoDoAceite"
+          }
+        }
+      },
       "PedidoAgendamento": {
         "type": "object",
         "required": [
@@ -11416,6 +12440,40 @@
         "properties": {
           "codigo_etiqueta": {
             "type": "string"
+          }
+        }
+      },
+      "PedidoBloqueio": {
+        "type": "object",
+        "required": [
+          "sala_ids",
+          "tipo",
+          "inicio",
+          "fim",
+          "motivo"
+        ],
+        "properties": {
+          "fim": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "sala_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Salas bloqueadas (uma a vinte). Todas no mesmo período e com o mesmo motivo."
+          },
+          "tipo": {
+            "$ref": "#/components/schemas/TipoBloqueio"
           }
         }
       },
@@ -11550,6 +12608,93 @@
             ],
             "format": "int32",
             "description": "Número do guichê (1 a 20), só para a recepção."
+          }
+        }
+      },
+      "PedidoDeEspera": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "paciente",
+          "exame",
+          "prioridade",
+          "preferencia",
+          "situacao",
+          "desde"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "desde": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "exame": {
+            "$ref": "#/components/schemas/Exame"
+          },
+          "guia_codigo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "justificativa": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "medico_solicitante": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "oferta": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/OfertaDoPedido",
+                "description": "Oferta aguardando resposta, quando há."
+              }
+            ]
+          },
+          "operadora": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "posicao": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "Posição na fila (1 é o próximo), calculada pelo servidor; nula fora da fila."
+          },
+          "preferencia": {
+            "type": "string",
+            "description": "qualquer, manha ou tarde."
+          },
+          "prioridade": {
+            "type": "string",
+            "description": "urgente, oncologico, gestante ou rotina."
+          },
+          "situacao": {
+            "type": "string",
+            "description": "aguardando, ofertado, encaixado ou saiu."
           }
         }
       },
@@ -11809,6 +12954,61 @@
           }
         }
       },
+      "PedidoInclusao": {
+        "type": "object",
+        "required": [
+          "paciente_id",
+          "exame_tuss",
+          "prioridade",
+          "preferencia"
+        ],
+        "properties": {
+          "exame_tuss": {
+            "type": "string"
+          },
+          "guia_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "Guia já autorizada, consumida quando a oferta for aceita."
+          },
+          "justificativa": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Obrigatória para urgente."
+          },
+          "medico_solicitante": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Obrigatório para urgente."
+          },
+          "operadora": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Convênio do paciente (nulo para particular)."
+          },
+          "paciente_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "preferencia": {
+            "type": "string",
+            "description": "qualquer, manha ou tarde."
+          },
+          "prioridade": {
+            "type": "string",
+            "description": "urgente, oncologico, gestante ou rotina."
+          }
+        }
+      },
       "PedidoLembretes": {
         "type": "object",
         "required": [
@@ -11881,6 +13081,34 @@
           "situacao": {
             "type": "string",
             "description": "devolvido ou anulado."
+          }
+        }
+      },
+      "PedidoOferta": {
+        "type": "object",
+        "required": [
+          "espera_id",
+          "sala_id",
+          "inicio",
+          "prazo_min"
+        ],
+        "properties": {
+          "espera_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "prazo_min": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Prazo de resposta em minutos: 15, 20, 30, 60 ou 120 (nunca passa de 30 minutos antes do exame)."
+          },
+          "sala_id": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },
@@ -12024,6 +13252,17 @@
           }
         }
       },
+      "PedidoRecusa": {
+        "type": "object",
+        "required": [
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string"
+          }
+        }
+      },
       "PedidoReimpressao": {
         "type": "object",
         "properties": {
@@ -12059,6 +13298,28 @@
             ]
           },
           "texto": {
+            "type": "string"
+          }
+        }
+      },
+      "PedidoRetirada": {
+        "type": "object",
+        "required": [
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string"
+          }
+        }
+      },
+      "PedidoSaida": {
+        "type": "object",
+        "required": [
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
             "type": "string"
           }
         }
@@ -12914,6 +14175,30 @@
           }
         }
       },
+      "SaidaDaEspera": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "situacao",
+          "motivo_saida"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "motivo_saida": {
+            "type": "string"
+          },
+          "situacao": {
+            "type": "string"
+          }
+        }
+      },
       "Sala": {
         "type": "object",
         "required": [
@@ -13126,6 +14411,14 @@
             "description": "Código IBGE da UF (33 = RJ)."
           }
         }
+      },
+      "TipoBloqueio": {
+        "type": "string",
+        "enum": [
+          "feriado",
+          "manutencao",
+          "outro"
+        ]
       },
       "Titulo": {
         "type": "object",

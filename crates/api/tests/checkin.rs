@@ -413,7 +413,7 @@ async fn checkin_ja_feito_e_recusado_depois() {
 #[tokio::test]
 async fn agendamento_cancelado_nao_permite_checkin() {
     let amb = Ambiente::novo().await;
-    sqlx::query("UPDATE agenda.agendamento SET situacao = 'cancelado' WHERE id = $1")
+    sqlx::query("UPDATE agenda.agendamento SET situacao = 'cancelado', motivo = 'paciente desistiu' WHERE id = $1")
         .bind(amb.agendamento_antonio)
         .execute(&amb.admin)
         .await

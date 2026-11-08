@@ -1,0 +1,30 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id FROM agenda.bloqueio WHERE unidade_id = $1 AND tstzrange(inicio, fim) && tstzrange($2, $3)\n          ORDER BY inicio, codigo LIMIT 500",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.bloqueio",
+            "name": "id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "86d6c0cbf729d3b833849d11e4606743543915270a344d5ea34fbc5a1c948512"
+}

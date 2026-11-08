@@ -1,0 +1,268 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT e.id, e.codigo, e.prioridade, e.preferencia, e.justificativa, e.medico_solicitante, e.operadora,\n                  e.situacao, e.criado_em, g.codigo AS \"guia_codigo?\", p.id AS paciente_id, p.nome, p.nascimento,\n                  c.tuss, c.nome AS exame_nome, c.modalidade,\n                  o.id AS \"oferta_id?\", o.codigo AS \"oferta_codigo?\", s.nome AS \"sala_nome?\",\n                  o.inicio AS \"oferta_inicio?\", o.expira_em AS \"oferta_expira?\"\n             FROM agenda.espera e\n             JOIN identidade.paciente p ON p.id = e.paciente_id\n             JOIN agenda.procedimento c ON c.tuss = e.exame_tuss\n             LEFT JOIN convenio.guia g ON g.id = e.guia_id\n             LEFT JOIN agenda.oferta o ON o.espera_id = e.id AND o.situacao = 'aguardando'\n             LEFT JOIN agenda.sala s ON s.id = o.sala_id\n            WHERE e.unidade_id = $1 AND e.situacao IN ('aguardando','ofertado')\n            LIMIT 1000",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "prioridade",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "prioridade"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "preferencia",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "preferencia"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "justificativa",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "justificativa"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "medico_solicitante",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "medico_solicitante"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "operadora",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "operadora"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "guia_codigo?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.guia",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "paciente_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "exame_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "modalidade",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "modalidade"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "oferta_id?",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.oferta",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 17,
+        "name": "oferta_codigo?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.oferta",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 18,
+        "name": "sala_nome?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 19,
+        "name": "oferta_inicio?",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.oferta",
+            "name": "inicio"
+          }
+        }
+      },
+      {
+        "ordinal": 20,
+        "name": "oferta_expira?",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.oferta",
+            "name": "expira_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "c8b774222046bfd5b2684384718f40df0a69eed596e2e7442648bb8dd6d4ede1"
+}

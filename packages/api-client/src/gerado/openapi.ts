@@ -38,6 +38,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/agendamentos/{id}/cancelamento": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancela o agendamento (recepção e gerência) e oferece a vaga à lista de espera. */
+        post: operations["cancelar_agendamento"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/agendamentos/{id}/guia": {
         parameters: {
             query?: never;
@@ -315,6 +332,41 @@ export interface paths {
          *     preenche a guia como a do webservice.
          */
         post: operations["registrar_resposta_do_portal"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/bloqueios": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bloqueios (ativos e retirados) que tocam o período. */
+        get: operations["listar_bloqueios"];
+        put?: never;
+        /** Bloqueia salas num período (feriado, manutenção ou outro), com motivo. */
+        post: operations["criar_bloqueios"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/bloqueios/{id}/retirada": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Retira um bloqueio (com motivo): o período volta à agenda e os horários vão à lista de espera. */
+        post: operations["retirar_bloqueio"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1433,6 +1485,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/lista-espera": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lista de espera da unidade, na ordem da fila. */
+        get: operations["listar_espera"];
+        put?: never;
+        /** Inclui o paciente na lista de espera de um exame. */
+        post: operations["incluir_na_espera"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/lista-espera/{id}/saida": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Tira o pedido da lista de espera, com motivo (o paciente desistiu, agendou por fora). */
+        post: operations["tirar_da_espera"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/menu/agendamento/{id}": {
         parameters: {
             query?: never;
@@ -1478,6 +1565,58 @@ export interface paths {
         get: operations["laudo"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ofertas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ofertas da unidade (por padrão, as que aguardam resposta), pelo prazo. */
+        get: operations["listar_ofertas"];
+        put?: never;
+        /** Oferece um horário livre a um pedido escolhido da lista (encaixe pela recepção). */
+        post: operations["oferecer_vaga"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ofertas/{id}/aceite": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Registra o aceite do paciente (dois identificadores) e cria o agendamento no horário oferecido. */
+        post: operations["aceitar_oferta"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ofertas/{id}/recusa": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Registra a recusa do paciente (com motivo): ele volta à fila e o horário vai ao próximo. */
+        post: operations["recusar_oferta"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2363,6 +2502,24 @@ export interface components {
              */
             situacao: string;
         };
+        Bloqueio: {
+            codigo: string;
+            /** Format: date-time */
+            fim: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            inicio: string;
+            motivo: string;
+            motivo_retirada?: string | null;
+            /** Format: date-time */
+            retirado_em?: string | null;
+            sala: components["schemas"]["Sala"];
+            /** @description ativo ou retirado. */
+            situacao: string;
+            /** @description feriado, manutencao ou outro. */
+            tipo: string;
+        };
         CabecalhoDoMenu: {
             subtitulo: string;
             titulo: string;
@@ -2391,6 +2548,9 @@ export interface components {
             fundo_centavos: number;
             /** Format: uuid */
             id: string;
+        };
+        CancelamentoDeAgendamento: {
+            motivo: string;
         };
         CancelamentoDeOrcamento: {
             motivo: string;
@@ -2441,6 +2601,12 @@ export interface components {
             nascimento?: string | null;
             /** @description Nome completo dito pelo paciente, como no documento. */
             nome?: string | null;
+        };
+        ConfirmacaoDoAceite: {
+            /** Format: date */
+            nascimento: string;
+            /** @description Nome completo dito pelo paciente. */
+            nome: string;
         };
         ConjuntoDeRegras: {
             nome: string;
@@ -3300,6 +3466,40 @@ export interface components {
             /** Format: int32 */
             hora: number;
         };
+        Oferta: {
+            /** @description Agendamento criado pelo aceite. */
+            agendamento_codigo?: string | null;
+            codigo: string;
+            espera_codigo: string;
+            /** Format: uuid */
+            espera_id: string;
+            exame: components["schemas"]["Exame"];
+            /** Format: date-time */
+            expira_em: string;
+            /** Format: date-time */
+            fim: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            inicio: string;
+            motivo?: string | null;
+            /** @description cancelamento, bloqueio_retirado, reserva_expirada, oferta_sem_aceite ou manual. */
+            origem_vaga: string;
+            paciente: components["schemas"]["PacienteResumo"];
+            sala: components["schemas"]["Sala"];
+            /** @description aguardando, aceita, recusada, expirada ou cancelada. */
+            situacao: string;
+        };
+        OfertaDoPedido: {
+            codigo: string;
+            /** Format: date-time */
+            expira_em: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            inicio: string;
+            sala_nome: string;
+        };
         Orcamento: {
             codigo: string;
             /** Format: date-time */
@@ -3403,6 +3603,9 @@ export interface components {
             /** Format: int64 */
             fundo_centavos: number;
         };
+        PedidoAceite: {
+            confirmacao: components["schemas"]["ConfirmacaoDoAceite"];
+        };
         PedidoAgendamento: {
             /** Format: uuid */
             guia_id?: string | null;
@@ -3448,6 +3651,16 @@ export interface components {
         PedidoBipe: {
             codigo_etiqueta: string;
         };
+        PedidoBloqueio: {
+            /** Format: date-time */
+            fim: string;
+            /** Format: date-time */
+            inicio: string;
+            motivo: string;
+            /** @description Salas bloqueadas (uma a vinte). Todas no mesmo período e com o mesmo motivo. */
+            sala_ids: string[];
+            tipo: components["schemas"]["TipoBloqueio"];
+        };
         PedidoCheckin: {
             /** Format: uuid */
             agendamento_id: string;
@@ -3489,6 +3702,31 @@ export interface components {
              * @description Número do guichê (1 a 20), só para a recepção.
              */
             guiche?: number | null;
+        };
+        PedidoDeEspera: {
+            codigo: string;
+            /** Format: date-time */
+            desde: string;
+            exame: components["schemas"]["Exame"];
+            guia_codigo?: string | null;
+            /** Format: uuid */
+            id: string;
+            justificativa?: string | null;
+            medico_solicitante?: string | null;
+            oferta?: null | components["schemas"]["OfertaDoPedido"];
+            operadora?: string | null;
+            paciente: components["schemas"]["PacienteResumo"];
+            /**
+             * Format: int32
+             * @description Posição na fila (1 é o próximo), calculada pelo servidor; nula fora da fila.
+             */
+            posicao?: number | null;
+            /** @description qualquer, manha ou tarde. */
+            preferencia: string;
+            /** @description urgente, oncologico, gestante ou rotina. */
+            prioridade: string;
+            /** @description aguardando, ofertado, encaixado ou saiu. */
+            situacao: string;
         };
         PedidoDeclaracao: {
             /**
@@ -3577,6 +3815,26 @@ export interface components {
             /** Format: uuid */
             guia_id: string;
         };
+        PedidoInclusao: {
+            exame_tuss: string;
+            /**
+             * Format: uuid
+             * @description Guia já autorizada, consumida quando a oferta for aceita.
+             */
+            guia_id?: string | null;
+            /** @description Obrigatória para urgente. */
+            justificativa?: string | null;
+            /** @description Obrigatório para urgente. */
+            medico_solicitante?: string | null;
+            /** @description Convênio do paciente (nulo para particular). */
+            operadora?: string | null;
+            /** Format: uuid */
+            paciente_id: string;
+            /** @description qualquer, manha ou tarde. */
+            preferencia: string;
+            /** @description urgente, oncologico, gestante ou rotina. */
+            prioridade: string;
+        };
         PedidoLembretes: {
             /**
              * Format: date
@@ -3606,6 +3864,19 @@ export interface components {
             formulario: string;
             /** @description devolvido ou anulado. */
             situacao: string;
+        };
+        PedidoOferta: {
+            /** Format: uuid */
+            espera_id: string;
+            /** Format: date-time */
+            inicio: string;
+            /**
+             * Format: int64
+             * @description Prazo de resposta em minutos: 15, 20, 30, 60 ou 120 (nunca passa de 30 minutos antes do exame).
+             */
+            prazo_min: number;
+            /** Format: uuid */
+            sala_id: string;
         };
         PedidoPendente: {
             /** Format: uuid */
@@ -3647,6 +3918,9 @@ export interface components {
         PedidoRecurso: {
             justificativa: string;
         };
+        PedidoRecusa: {
+            motivo: string;
+        };
         PedidoReimpressao: {
             motivo?: string | null;
         };
@@ -3656,6 +3930,12 @@ export interface components {
         PedidoRetificacao: {
             motivo?: string | null;
             texto: string;
+        };
+        PedidoRetirada: {
+            motivo: string;
+        };
+        PedidoSaida: {
+            motivo: string;
         };
         PedidoTriagem: {
             amamentando: boolean;
@@ -3931,6 +4211,13 @@ export interface components {
             /** Format: int64 */
             valor_pago_centavos: number;
         };
+        SaidaDaEspera: {
+            codigo: string;
+            /** Format: uuid */
+            id: string;
+            motivo_saida: string;
+            situacao: string;
+        };
         Sala: {
             /** Format: uuid */
             id: string;
@@ -4000,6 +4287,8 @@ export interface components {
             /** @description Código IBGE da UF (33 = RJ). */
             uf: string;
         };
+        /** @enum {string} */
+        TipoBloqueio: "feriado" | "manutencao" | "outro";
         Titulo: {
             /** Format: int64 */
             aprovacoes: number;
@@ -4175,6 +4464,55 @@ export interface operations {
                 };
             };
             /** @description procedimento-nao-autorizado, senha-vencida, saldo-esgotado */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    cancelar_agendamento: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CancelamentoDeAgendamento"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemAgenda"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -4967,6 +5305,166 @@ export interface operations {
                     "application/json": components["schemas"]["ProblemaDoc"];
                 };
             };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_bloqueios: {
+        parameters: {
+            query: {
+                /** @description Primeiro dia (AAAA-MM-DD, horário de Brasília). */
+                de: string;
+                /** @description Último dia, incluído (até 62 dias depois de `de`). */
+                ate: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Bloqueio"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description periodo-invalido */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    criar_bloqueios: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoBloqueio"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Bloqueio"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description sala-nao-encontrada */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description periodo-com-agendamentos (com agendamentos), bloqueio-sobreposto */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description bloqueio-invalido */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    retirar_bloqueio: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoRetirada"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Bloqueio"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description bloqueio-ja-retirado */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description motivo-invalido */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -7393,6 +7891,152 @@ export interface operations {
             };
         };
     };
+    listar_espera: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PedidoDeEspera"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    incluir_na_espera: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoInclusao"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PedidoDeEspera"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description paciente-nao-encontrado, guia-nao-encontrada */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description ja-na-espera */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description urgente-sem-justificativa, procedimento-desconhecido, guia-de-outro-paciente, pedido-invalido */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    tirar_da_espera: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoSaida"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SaidaDaEspera"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description oferta-em-andamento, pedido-fora-da-fila */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description motivo-invalido */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     agendamento: {
         parameters: {
             query?: never;
@@ -7495,6 +8139,227 @@ export interface operations {
                 };
             };
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_ofertas: {
+        parameters: {
+            query?: {
+                /** @description aguardando (padrão), aceita, recusada, expirada ou cancelada. */
+                situacao?: string | null;
+                /** @description Dia do horário oferecido (AAAA-MM-DD); sem dia, as próximas. */
+                data?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Oferta"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description filtro-invalido */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    oferecer_vaga: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoOferta"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Oferta"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description espera-nao-encontrada, sala-nao-encontrada */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description pedido-indisponivel, vaga-ja-ofertada, horario-ocupado */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description prazo-invalido, vaga-perto-demais, exame-incompativel-com-a-sala */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    aceitar_oferta: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoAceite"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Oferta"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description oferta-indisponivel, horario-ocupado, guia-em-uso */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description identificacao-nao-confere, senha-vencida, saldo-esgotado */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    recusar_oferta: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoRecusa"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Oferta"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description oferta-indisponivel */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description motivo-invalido */
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };

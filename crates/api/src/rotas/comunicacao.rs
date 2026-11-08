@@ -82,6 +82,15 @@ pub async fn enviar_aviso(
         .fetch_optional(&mut *tx)
         .await?
         .map(|l| (l.id, l.nome, l.celular, l.inicio)),
+        // Oferta da lista de espera: só primeiro nome, dia e hora (nada de exame).
+        "oferta_vaga" => sqlx::query!(
+            r#"SELECT p.id, p.nome, p.celular, o.inicio AS "inicio?" FROM agenda.oferta o JOIN agenda.espera e ON e.id = o.espera_id
+                 JOIN identidade.paciente p ON p.id = e.paciente_id WHERE o.id = $1"#,
+            referencia
+        )
+        .fetch_optional(&mut *tx)
+        .await?
+        .map(|l| (l.id, l.nome, l.celular, l.inicio)),
         outro => anyhow::bail!("modelo desconhecido: {outro}"),
     };
     let Some((paciente_id, nome, celular, inicio)) = alvo else {

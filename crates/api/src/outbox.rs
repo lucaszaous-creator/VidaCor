@@ -191,9 +191,29 @@ pub async fn processar_um(estado: &Estado, orthanc: &Orthanc) -> Result<bool> {
             }
             _ => Err(anyhow::anyhow!("carga de resposta incompleta")),
         },
-        // Oferta à lista de espera, aviso interno de emergência e NFS-e: o provedor entra numa próxima
-        // entrega. Ficam pendentes no outbox, visíveis, sem se perder (R7).
-        "lista_espera.oferecer_vaga" | "aviso.acesso_emergencia" => Err(anyhow::anyhow!(
+        // Vaga aberta: oferece cada horário ao primeiro da lista de espera (DEC-2026-11-08-83).
+        "lista_espera.oferecer_vaga" => {
+            crate::rotas::vagas::oferecer_vaga(estado, item.unidade_id, &item.carga).await
+        }
+        "aviso.oferta_vaga" => match item.carga["oferta_id"]
+            .as_str()
+            .and_then(|v| v.parse().ok())
+        {
+            Some(o) => {
+                crate::rotas::comunicacao::enviar_aviso(
+                    estado,
+                    item.unidade_id,
+                    "oferta_vaga",
+                    o,
+                    item.chave_idempotencia,
+                )
+                .await
+            }
+            None => Err(anyhow::anyhow!("carga sem oferta_id")),
+        },
+        // Aviso interno de emergência: o provedor entra numa próxima entrega. Fica pendente no outbox,
+        // visível, sem se perder (R7).
+        "aviso.acesso_emergencia" => Err(anyhow::anyhow!(
             "provedor de {} ainda não configurado",
             item.tipo
         )),
@@ -444,6 +464,9 @@ pub async fn rodar(estado: Estado, orthanc: Orthanc) {
             }
             if let Err(e) = crate::rotas::agendamentos::expirar_reservas(&estado, u).await {
                 tracing::warn!(erro = ?e, "expiração de reservas provisórias");
+            }
+            if let Err(e) = crate::rotas::vagas::expirar_ofertas(&estado, u).await {
+                tracing::warn!(erro = ?e, "vencimento de ofertas da lista de espera");
             }
             if let Err(e) = conciliar(&estado, &orthanc, u).await {
                 tracing::warn!(erro = %e, "conciliação com o Orthanc");

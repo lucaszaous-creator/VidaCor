@@ -1,0 +1,25 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT (EXISTS (SELECT 1 FROM agenda.agendamento WHERE sala_id = $1 AND situacao NOT IN ('cancelado','faltou','expirada')\n                             AND tstzrange(inicio, fim) && tstzrange($2, $3))\n                OR EXISTS (SELECT 1 FROM agenda.bloqueio WHERE sala_id = $1 AND situacao = 'ativo'\n                             AND tstzrange(inicio, fim) && tstzrange($2, $3))\n                OR EXISTS (SELECT 1 FROM agenda.oferta WHERE sala_id = $1 AND situacao = 'aguardando'\n                             AND tstzrange(inicio, fim) && tstzrange($2, $3))) AS \"ocupado!\"",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "ocupado!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "e9a8aab229e150dcf73660e608824cb84a514c616f4cb6493d37fb0b7e983a0f"
+}

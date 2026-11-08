@@ -1,0 +1,78 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE agenda.oferta SET situacao = 'recusada', motivo = $2, respondida_em = now(), respondida_por = $3,\n                versao = versao + 1\n          WHERE id = $1 AND situacao = 'aguardando' RETURNING codigo, espera_id, sala_id, inicio, fim",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.oferta",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "espera_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.oferta",
+            "name": "espera_id"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "sala_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.oferta",
+            "name": "sala_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "inicio",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.oferta",
+            "name": "inicio"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "fim",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.oferta",
+            "name": "fim"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "162ea582ad410bf757cc4918156fedda215a8b40a4c5cedcd2a50af14b165945"
+}

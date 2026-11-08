@@ -1,0 +1,29 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE agenda.espera SET situacao = 'saiu', motivo_saida = $2, versao = versao + 1\n          WHERE id = $1 AND situacao = 'aguardando' RETURNING codigo",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "codigo"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "74b1e5655e08a9ebf750d4cfc61e90ab563f1482532835cf54150c14565a2e32"
+}

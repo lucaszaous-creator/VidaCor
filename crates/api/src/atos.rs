@@ -51,6 +51,8 @@ pub enum Ato {
     AparelhoAdministrar,
     AutorizacaoPedir,
     AutorizacaoVer,
+    BloqueioGerir,
+    EsperaGerir,
 }
 
 impl Ato {
@@ -113,6 +115,9 @@ impl Ato {
             A::OrcamentoEmitir => &["recepcao", "gerente"],
             // Aparelhos e integrações (docs/18 § 3: TI administra aparelhos, sem dado clínico).
             A::AparelhoAdministrar => &["ti", "gerente"],
+            // Bloqueio de sala e horário, lista de espera e oferta de vaga (docs/04 Agenda e
+            // Lista-Espera): recepção e gerência (DEC-2026-11-08-82).
+            A::BloqueioGerir | A::EsperaGerir => &["recepcao", "gerente"],
             // Autorização pedida pelo sistema (docs/22 E4): recepção e faturista pedem; gerente acompanha.
             A::AutorizacaoPedir => &["recepcao", "faturista"],
             A::AutorizacaoVer => &["recepcao", "faturista", "gerente"],
@@ -125,7 +130,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 47] = [
+    const TODOS: [Ato; 49] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -173,6 +178,8 @@ mod testes {
         Ato::AparelhoAdministrar,
         Ato::AutorizacaoPedir,
         Ato::AutorizacaoVer,
+        Ato::BloqueioGerir,
+        Ato::EsperaGerir,
     ];
 
     #[test]
