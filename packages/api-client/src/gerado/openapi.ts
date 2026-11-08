@@ -588,6 +588,50 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/laudos/{id}/achados": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Achados estruturados do laudo (médico com vínculo de cuidado ou acesso de emergência). Toda
+         *     leitura é auditada, como a do laudo.
+         */
+        get: operations["listar_achados_do_laudo"];
+        put?: never;
+        /**
+         * Registra um achado no rascunho (só o médico atribuído). O servidor calcula pontos, categoria,
+         *     conduta e texto e grava a versão da regra; categoria vinda da tela é ignorada (G1).
+         */
+        post: operations["criar_achado_do_laudo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/laudos/{id}/achados/{achado_id}/remocao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Remove um achado do rascunho (só o médico atribuído). Nada é apagado: o achado fica marcado como
+         *     removido, com quem e quando. Repetir não muda nada e devolve a mesma lista.
+         */
+        post: operations["remover_achado_do_laudo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/laudos/{id}/assinatura": {
         parameters: {
             query?: never;
@@ -1290,6 +1334,59 @@ export interface components {
             /** Format: date-time */
             valido_ate: string;
         };
+        /** @description Achado estruturado com o resultado calculado pelo servidor e a versão da regra aplicada. */
+        Achado: {
+            birads?: null | components["schemas"]["DescritoresBirads"];
+            /** @description TR1 a TR5 ou 0 a 6 (com 4A, 4B, 4C). */
+            categoria: string;
+            categoria_nome: string;
+            codigo: string;
+            conduta: string;
+            /** Format: date-time */
+            criado_em: string;
+            /** Format: uuid */
+            id: string;
+            localizacao: string;
+            /** Format: double */
+            maior_diametro_mm?: number | null;
+            /**
+             * Format: int32
+             * @description Ordem no laudo (N1, N2...).
+             */
+            numero: number;
+            /**
+             * Format: int32
+             * @description Pontos do TI-RADS (ausente no BI-RADS).
+             */
+            pontos?: number | null;
+            /** @description Ex.: TIRADS-ACR-2017.1. Gravada no achado; mudança de versão não altera achados antigos. */
+            regra_versao: string;
+            rotulo: string;
+            sistema: components["schemas"]["SistemaClassificacao"];
+            /** @description Frase sugerida para o texto do laudo (o médico revisa e edita). */
+            texto_achado: string;
+            texto_conclusao: string;
+            tirads?: null | components["schemas"]["DescritoresTirads"];
+            /**
+             * Format: int32
+             * @description Versão do laudo a que o achado pertence.
+             */
+            versao_numero: number;
+        };
+        /** @description Achados da versão em edição do laudo (ou da vigente, se assinado). */
+        AchadosDoLaudo: {
+            achados: components["schemas"]["Achado"][];
+            /** @description Verdadeiro só para o médico atribuído com versão em rascunho. */
+            editavel: boolean;
+            /** Format: uuid */
+            laudo_id: string;
+            regras_vigentes: components["schemas"]["RegraVigente"][];
+            /** @description Frases dos achados, uma por linha, para o médico revisar e levar ao texto do laudo. */
+            texto_achados: string;
+            texto_conclusao: string;
+            /** Format: int32 */
+            versao_numero: number;
+        };
         AgendaDoDia: {
             /** Format: date */
             data: string;
@@ -1359,6 +1456,13 @@ export interface components {
             /** Format: uuid */
             id: string;
         };
+        /**
+         * @description Categoria BI-RADS atribuída pelo médico (códigos do atlas).
+         * @enum {string}
+         */
+        CategoriaBirads: "0" | "1" | "2" | "3" | "4A" | "4B" | "4C" | "5" | "6";
+        /** @enum {string} */
+        ComposicaoTirads: "cistica_ou_quase_cistica" | "espongiforme" | "mista_cistica_e_solida" | "solida_ou_quase_solida" | "indeterminada_por_calcificacao";
         Conduta: {
             /** Format: uuid */
             medico_id: string;
@@ -1419,6 +1523,21 @@ export interface components {
             /** Format: int32 */
             pontos_base: number;
         };
+        DescritoresBirads: {
+            biopsia_maligna_confirmada: boolean;
+            /** @description Categoria final escolhida pelo médico; o servidor confere a coerência com a massa. */
+            categoria_atribuida: components["schemas"]["CategoriaBirads"];
+            lado: components["schemas"]["LadoBirads"];
+            massa?: null | components["schemas"]["MassaBirads"];
+        };
+        DescritoresTirads: {
+            composicao: components["schemas"]["ComposicaoTirads"];
+            ecogenicidade: components["schemas"]["EcogenicidadeTirads"];
+            /** @description Pode ter mais de um (os pontos somam); vazio vale "nenhum". */
+            focos: components["schemas"]["FocoTirads"][];
+            forma: components["schemas"]["FormaTirads"];
+            margem: components["schemas"]["MargemTirads"];
+        };
         DivergenciaAberta: {
             /** @description divergencia-aberta. */
             codigo: string;
@@ -1431,6 +1550,8 @@ export interface components {
             /** @description resolvida. */
             situacao: string;
         };
+        /** @enum {string} */
+        EcogenicidadeTirads: "anecoica" | "hiper_ou_isoecoica" | "hipoecoica" | "muito_hipoecoica" | "indeterminada";
         Entrada: {
             login: string;
             senha: string;
@@ -1531,6 +1652,12 @@ export interface components {
             itens: components["schemas"]["ItemFila"][];
             sala: components["schemas"]["Sala"];
         };
+        /** @enum {string} */
+        FocoTirads: "nenhum_ou_cauda_de_cometa" | "macrocalcificacoes" | "calcificacoes_perifericas" | "focos_puntiformes";
+        /** @enum {string} */
+        FormaBirads: "oval" | "redonda" | "irregular";
+        /** @enum {string} */
+        FormaTirads: "mais_largo_que_alto" | "mais_alto_que_largo";
         Guia: {
             codigo: string;
             /** @description Atendimento ou agendamento que consumiu a guia. */
@@ -1617,6 +1744,8 @@ export interface components {
             hash: string;
             modelo_versao: string;
         };
+        /** @enum {string} */
+        LadoBirads: "direita" | "esquerda";
         Laudo: {
             codigo: string;
             conversar_antes: boolean;
@@ -1650,6 +1779,17 @@ export interface components {
             /** @description Mostrado uma única vez; o banco guarda só o hash. */
             token: string;
         };
+        /** @enum {string} */
+        MargemBirads: "circunscrita" | "indistinta" | "angular" | "microlobulada" | "espiculada";
+        /** @enum {string} */
+        MargemTirads: "lisa" | "mal_definida" | "lobulada_ou_irregular" | "extensao_extratireoidiana" | "indeterminada";
+        MassaBirads: {
+            forma: components["schemas"]["FormaBirads"];
+            margens: components["schemas"]["MargemBirads"][];
+            orientacao: components["schemas"]["OrientacaoBirads"];
+            padrao_ecogenico: components["schemas"]["PadraoEcogenicoBirads"];
+            posterior: components["schemas"]["PosteriorBirads"];
+        };
         Membro: {
             /** Format: uuid */
             id: string;
@@ -1659,6 +1799,22 @@ export interface components {
         MenuDoObjeto: {
             acoes: components["schemas"]["AcaoDoMenu"][];
             cabecalho: components["schemas"]["CabecalhoDoMenu"];
+        };
+        /**
+         * @description Novo achado. Só os descritores do sistema escolhido são lidos; pontos, categoria e conduta
+         *     enviados pela tela são ignorados (o servidor calcula, G1).
+         */
+        NovoAchado: {
+            birads?: null | components["schemas"]["DescritoresBirads"];
+            /** @description Ex.: "Lobo direito, terço médio" ou "Quadrante superolateral, 2 horas" (até 120 caracteres). */
+            localizacao: string;
+            /**
+             * Format: double
+             * @description Maior diâmetro em milímetros (uma casa decimal). Obrigatório no TI-RADS e quando há massa.
+             */
+            maior_diametro_mm?: number | null;
+            sistema: components["schemas"]["SistemaClassificacao"];
+            tirads?: null | components["schemas"]["DescritoresTirads"];
         };
         NovoPaciente: {
             alergias?: string[];
@@ -1688,6 +1844,8 @@ export interface components {
             /** Format: int64 */
             numeros_situados: number;
         };
+        /** @enum {string} */
+        OrientacaoBirads: "paralela" | "nao_paralela";
         PacienteCadastrado: {
             codigo: string;
             /** Format: uuid */
@@ -1703,6 +1861,8 @@ export interface components {
             nascimento: string;
             nome: string;
         };
+        /** @enum {string} */
+        PadraoEcogenicoBirads: "anecoico" | "hiperecoico" | "complexo_cistico_e_solido" | "hipoecoico" | "isoecoico" | "heterogeneo";
         PedidoAbertura: {
             /** Format: int64 */
             fundo_centavos: number;
@@ -1929,6 +2089,8 @@ export interface components {
             motivo: string;
             paciente: components["schemas"]["PacienteResumo"];
         };
+        /** @enum {string} */
+        PosteriorBirads: "nenhum" | "reforco" | "sombra" | "combinado";
         /** @description Erro em Problem Details (RFC 9457). */
         ProblemaDoc: {
             /** @description Código estável (ex.: `identificacao-nao-confere`). */
@@ -1988,6 +2150,11 @@ export interface components {
             /** Format: int64 */
             valor_recalculado_centavos: number;
         };
+        /** @description Regra vigente de um sistema de classificação. */
+        RegraVigente: {
+            sistema: components["schemas"]["SistemaClassificacao"];
+            versao: string;
+        };
         Reimpressao: {
             invalidada: components["schemas"]["Etiqueta"];
             nova: components["schemas"]["Etiqueta"];
@@ -2035,6 +2202,8 @@ export interface components {
             /** @description Primeiro nome, para a saudação. */
             primeiro_nome: string;
         };
+        /** @enum {string} */
+        SistemaClassificacao: "tirads" | "birads";
         SituacaoDoConvite: {
             /** @description valido ou indisponivel (vencido, usado, revogado ou inexistente: a mesma resposta). */
             situacao: string;
@@ -3402,6 +3571,148 @@ export interface operations {
                 };
             };
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_achados_do_laudo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AchadosDoLaudo"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    criar_achado_do_laudo: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoAchado"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Achado"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    remover_achado_do_laudo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                achado_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AchadosDoLaudo"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
