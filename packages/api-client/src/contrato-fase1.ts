@@ -435,6 +435,8 @@ export interface PedidoAutorizacaoDesconto {
   pontos_base: number;
   motivo: string;
   solicitante_id: string;
+  /** Pedido da fila que esta autorização atende. */
+  pedido_id?: string | null;
 }
 
 export interface AutorizacaoDeDesconto {

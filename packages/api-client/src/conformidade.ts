@@ -5,6 +5,7 @@
  * Valem os tipos da Fase 1, que são os usados pelas telas.
  */
 import type { components } from './gerado/openapi';
+import type { EstornoDetalhado, NovoPedidoDesconto, PedidoDesconto } from './contrato-pendencias';
 import type { NovoAtendimento, PacienteResumo, Sala, SalaDaUnidade, Sessao } from './contrato-m0';
 import type {
   AgendaFase1,
@@ -59,3 +60,8 @@ export type ConfereEstudoPendente = Cabe<EstudoPendente, S['EstudoPendente']>;
 export type ConfereCaixa = Cabe<Caixa, S['Caixa']>;
 export type ConfereRecebimento = Cabe<Recebimento, S['Recebimento']>;
 export type ConferePedidoRecebimento = Cabe<PedidoRecebimento, S['PedidoRecebimento']>;
+
+// Pendências da gerência no caixa.
+export type ConferePedidoDesconto = Cabe<PedidoDesconto, S['PedidoDesconto']>;
+export type ConfereNovoPedidoDesconto = Cabe<NovoPedidoDesconto, S['NovoPedidoDesconto']>;
+export type ConfereEstornoDetalhado = Cabe<EstornoDetalhado, S['EstornoDetalhado']>;

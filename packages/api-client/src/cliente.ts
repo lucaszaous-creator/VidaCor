@@ -48,6 +48,7 @@ import type {
   PedidoNumeros,
 } from './contrato-fase1';
 import type { ConsultaAgenda, PacienteResumo, SalaDaUnidade, Saude, Sessao } from './contrato-m0';
+import type { Decisao, EstornoDetalhado, NovoPedidoDesconto, PedidoDesconto, SituacaoDoEstorno, SituacaoDoPedidoDeDesconto } from './contrato-pendencias';
 import { ErroDaApi, ErroSemConexao, ehProblemaHttp, problemaInesperado } from './erros';
 
 export interface OpcoesDoCliente {
@@ -354,9 +355,30 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
     },
 
     estornos: {
+      /** Por situação (padrão no servidor: os pedidos que aguardam decisão). */
+      listar: (situacao: SituacaoDoEstorno = 'pedido'): Promise<EstornoDetalhado[]> =>
+        ler<EstornoDetalhado[]>(`/v1/estornos?${new URLSearchParams({ situacao }).toString()}`),
+      obter: (id: string): Promise<EstornoDetalhado> => ler<EstornoDetalhado>(`/v1/estornos/${seg(id)}`),
+      /** Recusa com motivo (quem pediu não recusa). */
+      recusar: (id: string, corpo: Decisao, o: OpcoesDeEscrita): Promise<EstornoDetalhado> =>
+        criar<EstornoDetalhado>('POST', `/v1/estornos/${seg(id)}/recusa`, corpo, o),
       /** Aprovação (reautenticação; quem pediu não aprova: `403 separacao-de-funcoes`). */
       aprovar: (id: string, o: OpcoesDeEscrita): Promise<Estorno> =>
         criar<Estorno>('POST', `/v1/estornos/${seg(id)}/aprovacao`, {}, o),
+    },
+
+    pedidosDeDesconto: {
+      /** O caixa pede à gerência um desconto acima do limite; o total só muda depois da autorização. */
+      pedir: (corpo: NovoPedidoDesconto, o: OpcoesDeEscrita): Promise<PedidoDesconto> =>
+        criar<PedidoDesconto>('POST', '/v1/pedidos-desconto', corpo, o),
+      /** Gerência: os da unidade; caixa: só os próprios. */
+      listar: (situacao: SituacaoDoPedidoDeDesconto = 'pedido'): Promise<PedidoDesconto[]> =>
+        ler<PedidoDesconto[]>(`/v1/pedidos-desconto?${new URLSearchParams({ situacao }).toString()}`),
+      obter: (id: string): Promise<PedidoDesconto> => ler<PedidoDesconto>(`/v1/pedidos-desconto/${seg(id)}`),
+      recusar: (id: string, corpo: Decisao, o: OpcoesDeEscrita): Promise<PedidoDesconto> =>
+        criar<PedidoDesconto>('POST', `/v1/pedidos-desconto/${seg(id)}/recusa`, corpo, o),
+      cancelar: (id: string, o: OpcoesDeEscrita): Promise<PedidoDesconto> =>
+        criar<PedidoDesconto>('POST', `/v1/pedidos-desconto/${seg(id)}/cancelamento`, {}, o),
     },
 
     autorizacoesDeDesconto: {

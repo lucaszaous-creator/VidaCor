@@ -21,7 +21,7 @@ const PERFIS = [
   ['bruno.sales', ['/sala']],
   ['paulo.mendes', ['/laudos', '/estudos']],
   ['carla.caixa', ['/caixa']],
-  ['patricia.lemos', ['/caixa/autorizacao-desconto', '/caixa/estornos', '/contingencia']],
+  ['patricia.lemos', ['/caixa/pendencias', '/caixa/pendencias?aba=estornos', '/contingencia']],
 ];
 async function entrar(page, usuario) {
   await page.goto(BASE + '/v1/sessao/entrar');

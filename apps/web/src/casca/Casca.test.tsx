@@ -17,7 +17,7 @@ describe('Menu lateral por perfil (conforto; o servidor decide)', () => {
     ['técnico', SESSOES.tecnico, ['Agenda e check-in', 'Sala de exame']],
     ['médico', SESSOES.medico, ['Agenda e check-in', 'Sala de exame', 'Laudar', 'Conciliar estudos']],
     ['caixa', SESSOES.caixa, ['Caixa (particular)']],
-    ['gerência', SESSOES.gerente, ['Agenda e check-in', 'Novo agendamento', 'Recepção e pulseiras', 'Autorizar desconto', 'Aprovar estorno', 'Contingência']],
+    ['gerência', SESSOES.gerente, ['Agenda e check-in', 'Novo agendamento', 'Recepção e pulseiras', 'Pendências do caixa', 'Contingência']],
     ['TI', SESSOES.ti, []],
   ])('%s vê só os módulos do perfil', (_nome, sessao, esperados) => {
     expect(secoesDoMenu(sessao.usuario.perfis).flatMap((s) => s.itens.map((i) => i.rotulo))).toEqual(esperados);
@@ -45,7 +45,7 @@ describe('Menu lateral por perfil (conforto; o servidor decide)', () => {
   it('o item ativo segue a rota, inclusive a triagem dentro da sala', () => {
     const secoes = secoesDoMenu(['tecnico', 'medico', 'caixa', 'gerente']);
     expect(itemAtivo('/laudos/abc', secoes)).toBe('laudos');
-    expect(itemAtivo('/caixa/estornos', secoes)).toBe('estornos');
+    expect(itemAtivo('/caixa/pendencias', secoes)).toBe('pendencias');
     expect(itemAtivo('/caixa', secoes)).toBe('caixa');
     expect(itemAtivo('/triagem/abc', secoes)).toBe('sala');
   });

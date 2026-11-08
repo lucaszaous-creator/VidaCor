@@ -14,9 +14,8 @@ import { chaves, consultaSessao } from './consultas';
 import type { Dependencias } from './contexto';
 import { TelaNovoAgendamento } from './telas/agendamento/TelaNovoAgendamento';
 import { TelaAgenda } from './telas/agenda/TelaAgenda';
-import { TelaAutorizacaoDesconto } from './telas/caixa/TelaAutorizacaoDesconto';
+import { TelaPendencias } from './telas/pendencias/TelaPendencias';
 import { TelaCaixa } from './telas/caixa/TelaCaixa';
-import { TelaEstornos } from './telas/caixa/TelaEstornos';
 import { TelaContingencia } from './telas/contingencia/TelaContingencia';
 import { TelaEstudos } from './telas/estudos/TelaEstudos';
 import { TelaFilaDeLaudos } from './telas/laudos/TelaFilaDeLaudos';
@@ -70,21 +69,17 @@ export function lerBuscaDaSala(busca: Record<string, unknown>): BuscaDaSala {
   return typeof busca.sala === 'string' && busca.sala !== '' ? { sala: busca.sala } : {};
 }
 
-export interface BuscaDaAutorizacao {
-  paciente?: string;
-  solicitante?: string;
-  pontos?: number;
+
+export interface BuscaDasPendencias {
+  aba?: 'descontos' | 'estornos';
+  id?: string;
 }
 
-export function lerBuscaDaAutorizacao(busca: Record<string, unknown>): BuscaDaAutorizacao {
-  const r: BuscaDaAutorizacao = {};
-  const paciente = lerUuid(busca.paciente);
-  const solicitante = lerUuid(busca.solicitante);
-  if (paciente !== undefined) r.paciente = paciente;
-  if (solicitante !== undefined) r.solicitante = solicitante;
-  if (typeof busca.pontos === 'number' && Number.isInteger(busca.pontos) && busca.pontos > 0 && busca.pontos <= 10_000) {
-    r.pontos = busca.pontos;
-  }
+export function lerBuscaDasPendencias(busca: Record<string, unknown>): BuscaDasPendencias {
+  const r: BuscaDasPendencias = {};
+  if (busca.aba === 'descontos' || busca.aba === 'estornos') r.aba = busca.aba;
+  const id = lerUuid(busca.id);
+  if (id !== undefined) r.id = id;
   return r;
 }
 
@@ -143,13 +138,25 @@ const rotaTriagem = createRoute({ getParentRoute: () => rotaApp, path: '/triagem
 const rotaFilaDeLaudos = createRoute({ getParentRoute: () => rotaApp, path: '/laudos', component: TelaFilaDeLaudos });
 const rotaLaudo = createRoute({ getParentRoute: () => rotaApp, path: '/laudos/$laudoId', component: TelaLaudo });
 const rotaCaixa = createRoute({ getParentRoute: () => rotaApp, path: '/caixa', validateSearch: lerBuscaDaAgenda, component: TelaCaixa });
+const rotaPendencias = createRoute({ getParentRoute: () => rotaApp, path: '/caixa/pendencias', validateSearch: lerBuscaDasPendencias, component: TelaPendencias });
+// Endereços antigos (link do chat) levam às pendências: o pedido agora vem da fila do servidor.
 const rotaAutorizacao = createRoute({
   getParentRoute: () => rotaApp,
   path: '/caixa/autorizacao-desconto',
-  validateSearch: lerBuscaDaAutorizacao,
-  component: TelaAutorizacaoDesconto,
+  beforeLoad: () => {
+    // eslint-disable-next-line @typescript-eslint/only-throw-error -- padrão do TanStack Router
+    throw redirect({ to: '/caixa/pendencias', search: { aba: 'descontos' } });
+  },
 });
-const rotaEstornos = createRoute({ getParentRoute: () => rotaApp, path: '/caixa/estornos', validateSearch: lerBuscaDoEstorno, component: TelaEstornos });
+const rotaEstornos = createRoute({
+  getParentRoute: () => rotaApp,
+  path: '/caixa/estornos',
+  validateSearch: lerBuscaDoEstorno,
+  beforeLoad: ({ search }) => {
+    // eslint-disable-next-line @typescript-eslint/only-throw-error -- padrão do TanStack Router
+    throw redirect({ to: '/caixa/pendencias', search: { aba: 'estornos', ...(search.estorno === undefined ? {} : { id: search.estorno }) } });
+  },
+});
 const rotaEstudos = createRoute({ getParentRoute: () => rotaApp, path: '/estudos', validateSearch: lerBuscaDaAgenda, component: TelaEstudos });
 const rotaContingencia = createRoute({ getParentRoute: () => rotaApp, path: '/contingencia', component: TelaContingencia });
 
@@ -173,6 +180,7 @@ const arvore = raiz.addChildren([
     rotaFilaDeLaudos,
     rotaLaudo,
     rotaCaixa,
+    rotaPendencias,
     rotaAutorizacao,
     rotaEstornos,
     rotaContingencia,

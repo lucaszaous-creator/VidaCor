@@ -1253,6 +1253,96 @@
         }
       }
     },
+    "/v1/estornos": {
+      "get": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "Estornos por situação (padrão: os pedidos que aguardam aprovação).",
+        "operationId": "listar_estornos",
+        "parameters": [
+          {
+            "name": "situacao",
+            "in": "query",
+            "description": "Situação (padrão: pedido, as pendentes).",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EstornoDetalhado"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/estornos/{id}": {
+      "get": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "Um pedido de estorno, com o recebimento e o paciente (dois identificadores).",
+        "operationId": "obter_estorno",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EstornoDetalhado"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/estornos/{id}/aprovacao": {
       "post": {
         "tags": [
@@ -1293,6 +1383,68 @@
             }
           },
           "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/estornos/{id}/recusa": {
+      "post": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "Recusa o estorno com motivo (quem pediu não recusa). Atômico: só uma decisão vale (G2).",
+        "operationId": "recusar_estorno",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decisao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EstornoDetalhado"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
             "description": "",
             "content": {
               "application/json": {
@@ -2319,6 +2471,270 @@
         }
       }
     },
+    "/v1/pedidos-desconto": {
+      "get": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "Pedidos de desconto: a gerência vê os da unidade; o caixa, só os próprios (RLS).",
+        "operationId": "listar_pedidos",
+        "parameters": [
+          {
+            "name": "situacao",
+            "in": "query",
+            "description": "Situação (padrão: pedido, as pendentes).",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PedidoDesconto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "O caixa pede à gerência um desconto acima do seu limite. O total só muda depois da autorização.",
+        "operationId": "pedir_desconto",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovoPedidoDesconto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoDesconto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pedidos-desconto/{id}": {
+      "get": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "Um pedido de desconto (o caixa acompanha; a gerência abre para decidir).",
+        "operationId": "obter_pedido",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoDesconto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pedidos-desconto/{id}/cancelamento": {
+      "post": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "Quem pediu cancela (vai cobrar o valor cheio ou mudar o percentual).",
+        "operationId": "cancelar_desconto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoDesconto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pedidos-desconto/{id}/recusa": {
+      "post": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "A gerência recusa o pedido de desconto, com motivo que o caixa lê.",
+        "operationId": "recusar_desconto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decisao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoDesconto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/portal/laudos": {
       "get": {
         "tags": [
@@ -3316,6 +3732,17 @@
           }
         }
       },
+      "Decisao": {
+        "type": "object",
+        "required": [
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string"
+          }
+        }
+      },
       "DescontoPedido": {
         "type": "object",
         "required": [
@@ -3390,6 +3817,86 @@
           "situacao": {
             "type": "string",
             "description": "aprovado."
+          }
+        }
+      },
+      "EstornoDetalhado": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "situacao",
+          "motivo",
+          "recebimento_id",
+          "recebimento_codigo",
+          "paciente",
+          "total_centavos",
+          "forma",
+          "pedido_por",
+          "pedido_em"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "decidido_por": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Pessoa"
+              }
+            ]
+          },
+          "forma": {
+            "type": "string",
+            "description": "pix, dinheiro ou cartao."
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "motivo_recusa": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "pago_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "pedido_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "pedido_por": {
+            "$ref": "#/components/schemas/Pessoa"
+          },
+          "recebimento_codigo": {
+            "type": "string"
+          },
+          "recebimento_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "pedido, aprovado ou recusado."
+          },
+          "total_centavos": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -4037,6 +4544,27 @@
           }
         }
       },
+      "NovoPedidoDesconto": {
+        "type": "object",
+        "required": [
+          "paciente_id",
+          "pontos_base",
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string"
+          },
+          "paciente_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "pontos_base": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "NumerosSituados": {
         "type": "object",
         "required": [
@@ -4155,6 +4683,14 @@
           "paciente_id": {
             "type": "string",
             "format": "uuid"
+          },
+          "pedido_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "Pedido da fila de pendências que esta autorização atende (fecha o pedido junto)."
           },
           "pontos_base": {
             "type": "integer",
@@ -4282,6 +4818,73 @@
           "responsavel_id": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "PedidoDesconto": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "paciente",
+          "pontos_base",
+          "motivo",
+          "solicitante",
+          "situacao",
+          "criado_em"
+        ],
+        "properties": {
+          "autorizacao_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "Código da autorização (quando autorizado); o caixa a usa no recebimento."
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "decidido_por": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Pessoa"
+              }
+            ]
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "motivo_decisao": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "pontos_base": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "pedido, autorizado, recusado ou cancelado."
+          },
+          "solicitante": {
+            "$ref": "#/components/schemas/Pessoa"
           }
         }
       },
@@ -4635,6 +5238,22 @@
           },
           "usa_metformina": {
             "type": "boolean"
+          }
+        }
+      },
+      "Pessoa": {
+        "type": "object",
+        "required": [
+          "id",
+          "nome"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nome": {
+            "type": "string"
           }
         }
       },

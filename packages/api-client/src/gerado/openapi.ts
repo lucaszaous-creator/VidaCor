@@ -364,6 +364,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/estornos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Estornos por situação (padrão: os pedidos que aguardam aprovação). */
+        get: operations["listar_estornos"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/estornos/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Um pedido de estorno, com o recebimento e o paciente (dois identificadores). */
+        get: operations["obter_estorno"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/estornos/{id}/aprovacao": {
         parameters: {
             query?: never;
@@ -375,6 +409,23 @@ export interface paths {
         put?: never;
         /** Aprova o estorno (financeiro ou gerência, reautenticação; quem pediu não aprova, FC-CXA-09). */
         post: operations["aprovar_estorno"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/estornos/{id}/recusa": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Recusa o estorno com motivo (quem pediu não recusa). Atômico: só uma decisão vale (G2). */
+        post: operations["recusar_estorno"];
         delete?: never;
         options?: never;
         head?: never;
@@ -687,6 +738,75 @@ export interface paths {
         put?: never;
         /** Corrige a data de nascimento com motivo: guarda a versão anterior e invalida as etiquetas válidas. */
         post: operations["corrigir"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/pedidos-desconto": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Pedidos de desconto: a gerência vê os da unidade; o caixa, só os próprios (RLS). */
+        get: operations["listar_pedidos"];
+        put?: never;
+        /** O caixa pede à gerência um desconto acima do seu limite. O total só muda depois da autorização. */
+        post: operations["pedir_desconto"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/pedidos-desconto/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Um pedido de desconto (o caixa acompanha; a gerência abre para decidir). */
+        get: operations["obter_pedido"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/pedidos-desconto/{id}/cancelamento": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Quem pediu cancela (vai cobrar o valor cheio ou mudar o percentual). */
+        post: operations["cancelar_desconto"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/pedidos-desconto/{id}/recusa": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** A gerência recusa o pedido de desconto, com motivo que o caixa lê. */
+        post: operations["recusar_desconto"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1066,6 +1186,9 @@ export interface components {
             /** Format: int32 */
             versao: number;
         };
+        Decisao: {
+            motivo: string;
+        };
         DescontoPedido: {
             /** Format: uuid */
             autorizacao_id?: string | null;
@@ -1090,6 +1213,29 @@ export interface components {
             id: string;
             /** @description aprovado. */
             situacao: string;
+        };
+        EstornoDetalhado: {
+            codigo: string;
+            decidido_por?: null | components["schemas"]["Pessoa"];
+            /** @description pix, dinheiro ou cartao. */
+            forma: string;
+            /** Format: uuid */
+            id: string;
+            motivo: string;
+            motivo_recusa?: string | null;
+            paciente: components["schemas"]["PacienteResumo"];
+            /** Format: date-time */
+            pago_em?: string | null;
+            /** Format: date-time */
+            pedido_em: string;
+            pedido_por: components["schemas"]["Pessoa"];
+            recebimento_codigo: string;
+            /** Format: uuid */
+            recebimento_id: string;
+            /** @description pedido, aprovado ou recusado. */
+            situacao: string;
+            /** Format: int64 */
+            total_centavos: number;
         };
         EstornoPedido: {
             codigo: string;
@@ -1283,6 +1429,13 @@ export interface components {
             nome: string;
             perfis: string[];
         };
+        NovoPedidoDesconto: {
+            motivo: string;
+            /** Format: uuid */
+            paciente_id: string;
+            /** Format: int32 */
+            pontos_base: number;
+        };
         NumerosSituados: {
             /** Format: int64 */
             numeros_situados: number;
@@ -1319,6 +1472,11 @@ export interface components {
             motivo: string;
             /** Format: uuid */
             paciente_id: string;
+            /**
+             * Format: uuid
+             * @description Pedido da fila de pendências que esta autorização atende (fecha o pedido junto).
+             */
+            pedido_id?: string | null;
             /** Format: int32 */
             pontos_base: number;
             /** Format: uuid */
@@ -1366,6 +1524,27 @@ export interface components {
             nivel: string;
             /** Format: uuid */
             responsavel_id: string;
+        };
+        PedidoDesconto: {
+            /**
+             * Format: uuid
+             * @description Código da autorização (quando autorizado); o caixa a usa no recebimento.
+             */
+            autorizacao_id?: string | null;
+            codigo: string;
+            /** Format: date-time */
+            criado_em: string;
+            decidido_por?: null | components["schemas"]["Pessoa"];
+            /** Format: uuid */
+            id: string;
+            motivo: string;
+            motivo_decisao?: string | null;
+            paciente: components["schemas"]["PacienteResumo"];
+            /** Format: int32 */
+            pontos_base: number;
+            /** @description pedido, autorizado, recusado ou cancelado. */
+            situacao: string;
+            solicitante: components["schemas"]["Pessoa"];
         };
         PedidoEmergencia: {
             justificativa: string;
@@ -1476,6 +1655,11 @@ export interface components {
             /** @description Ignorado: o servidor calcula a TFG (FC-TRI-07). */
             tfg?: unknown;
             usa_metformina: boolean;
+        };
+        Pessoa: {
+            /** Format: uuid */
+            id: string;
+            nome: string;
         };
         Pix: {
             copia_e_cola: string;
@@ -2478,6 +2662,65 @@ export interface operations {
             };
         };
     };
+    listar_estornos: {
+        parameters: {
+            query?: {
+                /** @description Situação (padrão: pedido, as pendentes). */
+                situacao?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EstornoDetalhado"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    obter_estorno: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EstornoDetalhado"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     aprovar_estorno: {
         parameters: {
             query?: never;
@@ -2506,6 +2749,47 @@ export interface operations {
                 };
             };
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    recusar_estorno: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Decisao"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EstornoDetalhado"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -3203,6 +3487,184 @@ export interface operations {
                 };
             };
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_pedidos: {
+        parameters: {
+            query?: {
+                /** @description Situação (padrão: pedido, as pendentes). */
+                situacao?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PedidoDesconto"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    pedir_desconto: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoPedidoDesconto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PedidoDesconto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    obter_pedido: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PedidoDesconto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    cancelar_desconto: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PedidoDesconto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    recusar_desconto: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Decisao"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PedidoDesconto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

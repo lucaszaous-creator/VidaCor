@@ -120,7 +120,7 @@ export function pedidosDe(rota: string): PedidoRegistrado[] {
   return fase1.pedidos.filter((p) => p.rota === rota);
 }
 
-async function registrar(rota: string, request: Request): Promise<unknown> {
+export async function registrar(rota: string, request: Request): Promise<unknown> {
   let corpo: unknown;
   try {
     corpo = await request.clone().json();
@@ -137,7 +137,7 @@ async function registrar(rota: string, request: Request): Promise<unknown> {
   return corpo;
 }
 
-function reautenticacao(ato: string) {
+export function reautenticacao(ato: string) {
   if (!fase1.exigirReautenticacao.has(ato)) {
     return null;
   }
@@ -148,13 +148,13 @@ function reautenticacao(ato: string) {
   );
 }
 
-function temPerfil(...perfis: string[]): boolean {
+export function temPerfil(...perfis: string[]): boolean {
   return estado.sessao.usuario.perfis.some((p) => perfis.includes(p));
 }
 
 const sessaoEh = (nome: string): boolean => estado.sessao.usuario.nome === nome;
 
-function semPermissao(oQue: string) {
+export function semPermissao(oQue: string) {
   return problema(403, 'sem-permissao', `Seu perfil não pode ${oQue}. Nada foi feito. Se precisar, peça à coordenação.`);
 }
 

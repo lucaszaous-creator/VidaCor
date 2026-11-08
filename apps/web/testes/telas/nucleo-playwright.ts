@@ -25,6 +25,7 @@ import {
   TRIAGEM_PRECISA_APROVACAO,
 } from '../dados/fase1.ts';
 import { agendaDoDia, atendimentoDe, itensDaAgenda, SALAS } from '../dados/ficticios.ts';
+import { estornoDaSonia, pedidoDaSonia } from '../dados/pendencias.ts';
 
 export interface EstadoDaSimulacao {
   sessao: (typeof SESSOES)[keyof typeof SESSOES];
@@ -114,6 +115,8 @@ export async function simularNucleo(page: Page, estado: EstadoDaSimulacao): Prom
     if (c === '/v1/portal/laudos') return json(route, itensDoPortal());
     if (c.startsWith('/v1/portal/laudos/')) return json(route, PORTAL_LAUDO_ECO);
     if (c.startsWith('/v1/links/')) return problema(route, 410, 'link-expirado', 'Este link expirou.');
+    if (c === '/v1/pedidos-desconto') return json(route, [pedidoDaSonia()]);
+    if (c === '/v1/estornos') return json(route, [estornoDaSonia()]);
     if (c === '/v1/caixas/meu') return json(route, estado.caixaAberto ? caixaAberto() : null);
     if (c === '/v1/recebimentos') return json(route, recebimentoSonia(500, 'pix', false), 201);
     if (c.startsWith('/v1/recebimentos/')) return json(route, recebimentoSonia(500, 'pix'));

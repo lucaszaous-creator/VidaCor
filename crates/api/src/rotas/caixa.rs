@@ -38,7 +38,10 @@ pub struct Caixa {
     pub diferenca_centavos: Option<i64>,
 }
 
-async fn proximo(conexao: &mut PgConnection, prefixo: &str) -> Result<CodigoLegivel, ErroApi> {
+pub(crate) async fn proximo(
+    conexao: &mut PgConnection,
+    prefixo: &str,
+) -> Result<CodigoLegivel, ErroApi> {
     let ano = tempo::ano_local();
     let n = sqlx::query_scalar!("SELECT comum.proximo_numero($1, $2)", prefixo, ano)
         .fetch_one(conexao)
@@ -508,6 +511,8 @@ pub struct PedidoAutorizacao {
     pub pontos_base: i32,
     pub motivo: String,
     pub solicitante_id: Uuid,
+    /// Pedido da fila de pendências que esta autorização atende (fecha o pedido junto).
+    pub pedido_id: Option<Uuid>,
 }
 
 #[derive(Serialize, ToSchema)]
@@ -553,9 +558,21 @@ pub async fn autorizar_desconto(
     )
     .execute(&mut *tx)
     .await?;
+    if let Some(pedido) = p.pedido_id {
+        crate::rotas::pendencias::marcar_autorizado(
+            &mut tx,
+            pedido,
+            id,
+            &usuario,
+            p.paciente_id,
+            p.pontos_base,
+            p.solicitante_id,
+        )
+        .await?;
+    }
     lastro::registrar(&mut tx, NovoEvento {
         dominio: "caixa", tipo: "desconto_autorizado", registro_id: id, registro_codigo: Some(codigo.como_str()),
-        dados: json!({ "pontos_base": p.pontos_base, "motivo": p.motivo.trim(), "solicitante": p.solicitante_id, "autorizado_por": usuario.id, "reautenticado": true }),
+        dados: json!({ "pontos_base": p.pontos_base, "motivo": p.motivo.trim(), "solicitante": p.solicitante_id, "autorizado_por": usuario.id, "reautenticado": true, "pedido": p.pedido_id }),
         criado_por: Some(usuario.id), origem: "gerencia", unidade_id: usuario.unidade_id, correlacao: &correlacao,
     }).await?;
     tx.commit().await?;
@@ -617,7 +634,7 @@ pub async fn pedir_estorno(
     .execute(&mut *tx)
     .await
     .map_err(|e| match &e {
-        sqlx::Error::Database(d) if d.is_unique_violation() => ErroApi::conflito("estorno-ja-pedido", "Já existe pedido de estorno para este recebimento. Nada foi alterado."),
+        sqlx::Error::Database(d) if d.is_unique_violation() => ErroApi::conflito("estorno-ja-pedido", "Já existe pedido de estorno aguardando ou aprovado para este recebimento. Nada foi alterado."),
         _ => ErroApi::from(e),
     })?;
     lastro::registrar(
@@ -668,6 +685,12 @@ pub async fn aprovar_estorno(
             "Você pediu este estorno e não pode aprová-lo. Nada foi alterado. Outra pessoa do financeiro ou da gerência aprova."));
     }
     usuario.exigir_reautenticacao()?;
+    if e.situacao == "recusado" {
+        return Err(ErroApi::conflito(
+            "estorno-recusado",
+            "Este pedido de estorno foi recusado. Nada foi alterado.",
+        ));
+    }
     if e.situacao != "pedido" {
         return Err(ErroApi::conflito(
             "estorno-ja-aprovado",

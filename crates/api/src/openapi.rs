@@ -68,6 +68,14 @@ pub struct ProblemaDoc {
         crate::rotas::caixa::autorizar_desconto,
         crate::rotas::caixa::pedir_estorno,
         crate::rotas::caixa::aprovar_estorno,
+        crate::rotas::pendencias::pedir_desconto,
+        crate::rotas::pendencias::listar_pedidos,
+        crate::rotas::pendencias::obter_pedido,
+        crate::rotas::pendencias::recusar_desconto,
+        crate::rotas::pendencias::cancelar_desconto,
+        crate::rotas::estornos::listar,
+        crate::rotas::estornos::obter,
+        crate::rotas::estornos::recusar,
         crate::rotas::webhooks::pix,
         crate::rotas::contingencia::declarar,
         crate::rotas::contingencia::aberta,
@@ -93,4 +101,25 @@ pub struct Documentacao;
 /// Falha de serialização.
 pub fn json() -> Result<String, serde_json::Error> {
     Documentacao::openapi().to_pretty_json()
+}
+
+#[cfg(test)]
+mod testes {
+    #![allow(clippy::unwrap_used, clippy::expect_used)]
+
+    /// O cliente TypeScript é gerado por operationId: repetido, uma rota some do cliente.
+    #[test]
+    fn operation_ids_sao_unicos() {
+        let doc: serde_json::Value = serde_json::from_str(&super::json().unwrap()).unwrap();
+        let mut vistos = std::collections::BTreeSet::new();
+        for (caminho, metodos) in doc["paths"].as_object().unwrap() {
+            for (metodo, op) in metodos.as_object().unwrap() {
+                let id = op["operationId"].as_str().unwrap_or_default().to_owned();
+                assert!(
+                    vistos.insert(id.clone()),
+                    "operationId repetido: {id} em {metodo} {caminho}"
+                );
+            }
+        }
+    }
 }

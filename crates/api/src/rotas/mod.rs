@@ -6,11 +6,13 @@ pub mod atendimentos;
 pub mod caixa;
 pub mod contingencia;
 pub mod equipe;
+pub mod estornos;
 pub mod estudos;
 pub mod etiquetas;
 pub mod eventos;
 pub mod laudos;
 pub mod pacientes;
+pub mod pendencias;
 pub mod portal;
 pub mod respostas;
 pub mod sala;
@@ -88,6 +90,22 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/recebimentos/{id}/estornos", post(caixa::pedir_estorno))
         .route("/v1/autorizacoes-desconto", post(caixa::autorizar_desconto))
         .route("/v1/estornos/{id}/aprovacao", post(caixa::aprovar_estorno))
+        .route("/v1/estornos", get(estornos::listar))
+        .route("/v1/estornos/{id}", get(estornos::obter))
+        .route("/v1/estornos/{id}/recusa", post(estornos::recusar))
+        .route(
+            "/v1/pedidos-desconto",
+            post(pendencias::pedir_desconto).get(pendencias::listar_pedidos),
+        )
+        .route("/v1/pedidos-desconto/{id}", get(pendencias::obter_pedido))
+        .route(
+            "/v1/pedidos-desconto/{id}/recusa",
+            post(pendencias::recusar_desconto),
+        )
+        .route(
+            "/v1/pedidos-desconto/{id}/cancelamento",
+            post(pendencias::cancelar_desconto),
+        )
         .route("/v1/webhooks/pix", post(webhooks::pix))
         .route("/v1/contingencias", post(contingencia::declarar))
         .route("/v1/contingencias/aberta", get(contingencia::aberta))

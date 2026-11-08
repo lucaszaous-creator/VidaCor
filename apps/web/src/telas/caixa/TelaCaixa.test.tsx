@@ -1,16 +1,17 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
-import { http } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { esperarAlertaDoServidor, UUID, voltarDa } from '../../../testes/ajudantes';
+import { esperarAlertaDoServidor, UUID } from '../../../testes/ajudantes';
 import { violacoesDeAcessibilidade } from '../../../testes/axe';
 import { caixaAberto, SESSOES, SONIA } from '../../../testes/dados/fase1';
 import { fase1, pedidosDe } from '../../../testes/nucleo-fase1';
+import { AUTORIZACAO_DO_PEDIDO, pendencias } from '../../../testes/nucleo-pendencias';
 import { estado, problema, reiniciarNucleo, servidor } from '../../../testes/nucleo-simulado';
 import { renderizar } from '../../../testes/renderizar';
 
 const URL = '/caixa?data=2026-11-06';
-const AUTORIZACAO = '00000021-0000-7000-8000-000000000001';
+const UUID_DO_PEDIDO = '00000025-0000-7000-8000-000000000009';
 
 beforeEach(() => {
   reiniciarNucleo();
@@ -85,8 +86,13 @@ describe('Caixa do particular (FC-CXA, FC-PIX)', () => {
     expect(pedidosDe('recebimento')[0]?.corpo).toMatchObject({ desconto: { pontos_base: 500, motivo: 'Tabela social' } });
   });
 
-  it('desconto acima do limite (403): oferece pedir autorização e reenvia com o código da gerência', async () => {
+  it('desconto acima do limite (403): pede à gerência pela fila e, autorizado, registra com a autorização', async () => {
     fase1.caixa = caixaAberto();
+    servidor.use(
+      http.get('*/v1/pedidos-desconto/:id', () =>
+        HttpResponse.json({ ...pendencias.descontos.values().next().value, id: UUID_DO_PEDIDO, situacao: 'autorizado', autorizacao_id: AUTORIZACAO_DO_PEDIDO, decidido_por: { id: SESSOES.gerente.usuario.id, nome: 'Patrícia Lemos' } }),
+      ),
+    );
     const usuario = userEvent.setup();
     renderizar(URL);
     await preencher(usuario, { percentual: '15' });
@@ -94,14 +100,42 @@ describe('Caixa do particular (FC-CXA, FC-PIX)', () => {
     const alerta = await esperarAlertaDoServidor('O desconto de 15,00% passa do seu limite de 5,00%.', 'desconto-acima-do-limite');
     expect(alerta).toHaveTextContent('Seu limite é 5,00%.');
     await usuario.click(within(alerta).getByRole('button', { name: 'Pedir autorização à gerência' }));
-    const pedido = screen.getByText(/Pedido de autorização\./).closest('[role="status"]');
-    expect(pedido).toHaveTextContent(`/caixa/autorizacao-desconto?paciente=${SONIA.paciente.id}&pontos=1500&solicitante=${SESSOES.caixa.usuario.id}`);
-    await usuario.type(screen.getByRole('textbox', { name: 'Código da autorização da gerência' }), AUTORIZACAO);
+    expect(await screen.findByText(/Desconto de 15,00% autorizado por Patrícia Lemos\./)).toBeInTheDocument();
+    expect(pedidosDe('pedir-desconto')[0]?.corpo).toEqual({ paciente_id: SONIA.paciente.id, pontos_base: 1500, motivo: 'Tabela social' });
+    expect(pedidosDe('pedir-desconto')[0]?.chave).toMatch(UUID);
     await usuario.click(screen.getByRole('button', { name: 'Registrar recebimento' }));
     expect(await screen.findByRole('table')).toHaveTextContent('TotalR$ 323,00');
     const [primeiro, segundo] = pedidosDe('recebimento');
-    expect(segundo?.corpo).toMatchObject({ desconto: { pontos_base: 1500, motivo: 'Tabela social', autorizacao_id: AUTORIZACAO } });
+    expect(segundo?.corpo).toMatchObject({ desconto: { pontos_base: 1500, motivo: 'Tabela social', autorizacao_id: AUTORIZACAO_DO_PEDIDO } });
     expect(segundo?.chave).not.toBe(primeiro?.chave);
+  });
+
+  it('pedido aguardando mostra a fila e pode ser cancelado; recusado mostra o motivo da gerência', async () => {
+    fase1.caixa = caixaAberto();
+    const usuario = userEvent.setup();
+    renderizar(URL);
+    await preencher(usuario, { percentual: '15' });
+    await usuario.click(screen.getByRole('button', { name: 'Registrar recebimento' }));
+    const alerta = await esperarAlertaDoServidor('O desconto de 15,00% passa do seu limite de 5,00%.', 'desconto-acima-do-limite');
+    await usuario.click(within(alerta).getByRole('button', { name: 'Pedir autorização à gerência' }));
+    const aguardando = await screen.findByText(/Desconto de 15,00% aguardando a gerência\./);
+    expect(aguardando.closest('[role="status"]')).toHaveTextContent('Para cobrar o valor cheio, cancele o pedido.');
+    await usuario.click(screen.getByRole('button', { name: 'Cancelar pedido' }));
+    await waitFor(() => {
+      expect(screen.queryByText(/aguardando a gerência/)).not.toBeInTheDocument();
+    });
+    expect(pedidosDe('cancelar-desconto')).toHaveLength(1);
+
+    servidor.use(
+      http.get('*/v1/pedidos-desconto/:id', () =>
+        HttpResponse.json({ ...pendencias.descontos.values().next().value, situacao: 'recusado', motivo_decisao: 'fora da política social', decidido_por: { id: SESSOES.gerente.usuario.id, nome: 'Patrícia Lemos' } }),
+      ),
+    );
+    await usuario.click(screen.getByRole('button', { name: 'Registrar recebimento' }));
+    const outro = await esperarAlertaDoServidor('O desconto de 15,00% passa do seu limite de 5,00%.', 'desconto-acima-do-limite');
+    await usuario.click(within(outro).getByRole('button', { name: 'Pedir autorização à gerência' }));
+    const recusa = await screen.findByText(/Desconto de 15,00% recusado por Patrícia Lemos\./);
+    expect(recusa.closest('[role="status"]')).toHaveTextContent('Motivo: fora da política social.');
   });
 
   it('caixa fechado (409) orienta abrir o caixa', async () => {
@@ -165,92 +199,7 @@ describe('Caixa do particular (FC-CXA, FC-PIX)', () => {
   });
 });
 
-describe('Gerência: autorização de desconto e aprovação de estorno', () => {
-  it('autoriza o desconto conferindo o paciente, com reautenticação e a mesma chave na volta', async () => {
-    estado.sessao = SESSOES.gerente;
-    fase1.exigirReautenticacao.add('autorizacao');
-    const usuario = userEvent.setup();
-    const url = `/caixa/autorizacao-desconto?paciente=${SONIA.paciente.id}&pontos=1500&solicitante=${SESSOES.caixa.usuario.id}`;
-    const primeira = renderizar(url);
-    const percentual = await screen.findByRole('textbox', { name: 'Desconto autorizado (%)' });
-    expect(percentual).toHaveValue('15,00');
-    await usuario.type(screen.getByRole('searchbox', { name: 'Buscar paciente por nome' }), 'Sônia');
-    await usuario.click(await screen.findByRole('button', { name: 'Sônia Maria Castro, nascimento 03/02/1962' }));
-    await usuario.selectOptions(screen.getByRole('combobox', { name: 'Motivo' }), 'Tabela social');
-    await usuario.click(screen.getByRole('button', { name: 'Autorizar desconto' }));
-    await usuario.click(await screen.findByRole('button', { name: 'Confirmar identidade' }));
-    const voltar = voltarDa(String(primeira.irPara.mock.calls[0]?.[0]));
-    const chave = pedidosDe('autorizacao')[0]?.chave ?? '';
-    expect(voltar).toContain(`paciente=${SONIA.paciente.id}`);
-    expect(voltar).toContain(`chave=${chave}`);
-    expect(voltar).not.toContain('Sônia');
-    primeira.unmount();
-
-    fase1.exigirReautenticacao.delete('autorizacao');
-    renderizar(voltar);
-    expect(await screen.findByText(/Identidade confirmada\./)).toBeInTheDocument();
-    await usuario.type(screen.getByRole('searchbox', { name: 'Buscar paciente por nome' }), 'Sônia');
-    await usuario.click(await screen.findByRole('button', { name: 'Sônia Maria Castro, nascimento 03/02/1962' }));
-    await usuario.selectOptions(screen.getByRole('combobox', { name: 'Motivo' }), 'Tabela social');
-    await usuario.click(screen.getByRole('button', { name: 'Autorizar desconto' }));
-    const feito = await screen.findByText(/Desconto autorizado\./);
-    expect(feito.closest('[role="status"]')).toHaveTextContent(AUTORIZACAO);
-    expect(pedidosDe('autorizacao')[1]?.chave).toBe(chave);
-    expect(pedidosDe('autorizacao')[1]?.corpo).toEqual({
-      paciente_id: SONIA.paciente.id,
-      pontos_base: 1500,
-      motivo: 'Tabela social',
-      solicitante_id: SESSOES.caixa.usuario.id,
-    });
-  });
-
-  it('avisa quando o paciente escolhido não é o do pedido do caixa', async () => {
-    estado.sessao = SESSOES.gerente;
-    const usuario = userEvent.setup();
-    renderizar(`/caixa/autorizacao-desconto?paciente=${SONIA.paciente.id}&pontos=1500&solicitante=${SESSOES.caixa.usuario.id}`);
-    await usuario.type(await screen.findByRole('searchbox', { name: 'Buscar paciente por nome' }), 'Vera');
-    await usuario.click(await screen.findByRole('button', { name: 'Vera Lúcia Antunes, nascimento 18/09/1957' }));
-    expect(screen.getByText(/Este não é o paciente do pedido do caixa\./)).toBeInTheDocument();
-  });
-
-  it('gerente aprova o estorno pedido por outra pessoa', async () => {
-    estado.sessao = SESSOES.gerente;
-    const usuario = userEvent.setup();
-    const { container } = renderizar('/caixa/estornos?estorno=00000022-0000-7000-8000-000000000001');
-    await usuario.click(await screen.findByRole('button', { name: 'Revisar e aprovar' }));
-    const dialogo = await screen.findByRole('alertdialog', { name: 'Aprovar este estorno?' });
-    expect(await violacoesDeAcessibilidade(container)).toEqual([]);
-    await usuario.click(within(dialogo).getByRole('button', { name: 'Aprovar estorno' }));
-    expect(await screen.findByText(/Estorno aprovado\./)).toBeInTheDocument();
-  });
-
-  it('quem pediu o estorno recebe 403 separacao-de-funcoes ao tentar aprovar', async () => {
-    estado.sessao = SESSOES.caixa;
-    const usuario = userEvent.setup();
-    renderizar('/caixa/estornos?estorno=00000022-0000-7000-8000-000000000001');
-    await usuario.click(await screen.findByRole('button', { name: 'Revisar e aprovar' }));
-    await usuario.click(within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Aprovar estorno' }));
-    await esperarAlertaDoServidor('Quem pediu o estorno não pode aprovar o próprio pedido.', 'separacao-de-funcoes');
-  });
-
-  it('aprovação pede reautenticação e volta com a mesma chave', async () => {
-    estado.sessao = SESSOES.gerente;
-    fase1.exigirReautenticacao.add('aprovar-estorno');
-    const usuario = userEvent.setup();
-    const primeira = renderizar('/caixa/estornos?estorno=00000022-0000-7000-8000-000000000001');
-    await usuario.click(await screen.findByRole('button', { name: 'Revisar e aprovar' }));
-    await usuario.click(within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Aprovar estorno' }));
-    await usuario.click(await screen.findByRole('button', { name: 'Confirmar identidade' }));
-    const voltar = voltarDa(String(primeira.irPara.mock.calls[0]?.[0]));
-    primeira.unmount();
-    fase1.exigirReautenticacao.delete('aprovar-estorno');
-    renderizar(voltar);
-    await usuario.click(within(await screen.findByRole('alertdialog', { name: 'Aprovar este estorno?' })).getByRole('button', { name: 'Aprovar estorno' }));
-    expect(await screen.findByText(/Estorno aprovado\./)).toBeInTheDocument();
-    const [a, b] = pedidosDe('aprovar-estorno');
-    expect(b?.chave).toBe(a?.chave);
-  });
-
+describe('Caixa: permissão', () => {
   it('caixa sem permissão vê o estado de sem permissão', async () => {
     servidor.use(http.get('*/v1/caixas/meu', () => problema(403, 'sem-permissao', 'Seu perfil não opera caixa.')));
     estado.sessao = SESSOES.ti;

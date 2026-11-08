@@ -205,12 +205,14 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await ok('23-caixa-recebimento');
 
   estado.sessao = SESSOES.gerente;
-  await ir(`/caixa/autorizacao-desconto?paciente=${SONIA.paciente.id}&pontos=1500&solicitante=${SESSOES.caixa.usuario.id}`);
-  await esperar(page, 'textbox', 'Desconto autorizado (%)');
-  await ok('24-autorizacao-desconto');
-  await ir('/caixa/estornos?estorno=00000022-0000-7000-8000-000000000001');
-  await esperar(page, 'textbox', 'Código do pedido de estorno');
-  await ok('25-estornos');
+  await ir('/caixa/pendencias');
+  await page.getByRole('button', { name: /^Sônia Maria Castro, nascimento/ }).click();
+  await esperar(page, 'heading', 'Desconto de 15,00% pedido por Carla Mendes');
+  await ok('24-pendencias-desconto');
+  await ir('/caixa/pendencias?aba=estornos');
+  await page.getByRole('button', { name: /^Sônia Maria Castro, nascimento/ }).click();
+  await esperar(page, 'heading', 'Estorno de R$ 380,00 pedido por Carla Mendes');
+  await ok('25-pendencias-estorno');
 
   estado.sessao = SESSOES.recepcao;
   estado.contingenciaAberta = false;
