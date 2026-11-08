@@ -50,6 +50,21 @@ import type {
 import type { ConsultaAgenda, PacienteResumo, SalaDaUnidade, Saude, Sessao } from './contrato-m0';
 import type { MenuDoObjeto, ObjetoDoMenu } from './contrato-menu';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
+import type {
+  ContaDetalhe,
+  ContaResumo,
+  ContratoDeConvenio,
+  Glosa,
+  LoteDetalhe,
+  LoteTiss,
+  PainelAuditoria,
+  PedidoCorrecaoConta,
+  PedidoDemonstrativo,
+  PedidoLote,
+  PedidoRecurso,
+  ResultadoConferencia,
+  SituacaoDaConta,
+} from './contrato-faturamento';
 import type { ContrasteAplicado, EntradaDeEstoque, ItemDeEstoque, MovimentoFeito, RastreioDoLote } from './contrato-estoque';
 import type { AceiteDoConvite, ConviteEmitido, EntradaNoPortal, NovoPaciente, PacienteCadastrado, PossivelDuplicado, SessaoDoPortal, SituacaoDoConvite } from './contrato-portal';
 import type { AchadoEstruturado, AchadosDoLaudo, NovoAchado } from './contrato-laudo-estruturado';
@@ -424,6 +439,34 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
       /** Contraste aplicado: baixa do lote que vence antes, ligada ao paciente (técnico lotado). */
       registrarContraste: (atendimentoId: string, corpo: ContrasteAplicado, o: OpcoesDeEscrita): Promise<MovimentoFeito> =>
         criar<MovimentoFeito>('POST', `/v1/atendimentos/${seg(atendimentoId)}/contraste`, corpo, o),
+    },
+
+    faturamento: {
+      /** Apura as guias dos atendimentos com guia consumida e confere todas pelas regras da operadora. */
+      conferir: (o: OpcoesDeEscrita): Promise<ResultadoConferencia> =>
+        criar<ResultadoConferencia>('POST', '/v1/faturamento/conferencias', {}, o),
+      contas: (situacao?: SituacaoDaConta): Promise<ContaResumo[]> =>
+        ler<ContaResumo[]>(`/v1/faturamento/contas${situacao === undefined ? '' : `?${new URLSearchParams({ situacao }).toString()}`}`),
+      conta: (id: string): Promise<ContaDetalhe> => ler<ContaDetalhe>(`/v1/faturamento/contas/${seg(id)}`),
+      /** Corrige antes do lote: versão nova com motivo e conferência de novo. */
+      corrigir: (id: string, corpo: PedidoCorrecaoConta, o: OpcoesDeEscrita): Promise<ContaDetalhe> =>
+        criar<ContaDetalhe>('POST', `/v1/faturamento/contas/${seg(id)}/correcao`, corpo, o),
+      auditoria: (): Promise<PainelAuditoria> => ler<PainelAuditoria>('/v1/faturamento/auditoria'),
+      contratos: (): Promise<ContratoDeConvenio[]> => ler<ContratoDeConvenio[]>('/v1/faturamento/contratos'),
+      lotes: (): Promise<LoteTiss[]> => ler<LoteTiss[]>('/v1/faturamento/lotes'),
+      lote: (id: string): Promise<LoteDetalhe> => ler<LoteDetalhe>(`/v1/faturamento/lotes/${seg(id)}`),
+      /** Endereço do XML do lote para baixar (a sessão vai no cookie; a resposta é no-store). */
+      enderecoDoArquivo: (id: string): string => url(`/v1/faturamento/lotes/${seg(id)}/arquivo`),
+      /** Gera o lote com as guias prontas da operadora (o servidor confere cada uma de novo). */
+      gerarLote: (corpo: PedidoLote, o: OpcoesDeEscrita): Promise<LoteDetalhe> =>
+        criar<LoteDetalhe>('POST', '/v1/faturamento/lotes', corpo, o),
+      /** Pede o envio à operadora; repetir não cria outro envio. */
+      enviarLote: (id: string): Promise<LoteDetalhe> => escrever<LoteDetalhe>('POST', `/v1/faturamento/lotes/${seg(id)}/envio`, {}),
+      registrarDemonstrativo: (id: string, corpo: PedidoDemonstrativo, o: OpcoesDeEscrita): Promise<LoteDetalhe> =>
+        criar<LoteDetalhe>('POST', `/v1/faturamento/lotes/${seg(id)}/demonstrativo`, corpo, o),
+      glosas: (): Promise<Glosa[]> => ler<Glosa[]>('/v1/faturamento/glosas'),
+      recorrer: (id: string, corpo: PedidoRecurso, o: OpcoesDeEscrita): Promise<Glosa> =>
+        criar<Glosa>('POST', `/v1/faturamento/glosas/${seg(id)}/recurso`, corpo, o),
     },
 
     pedidosDeDesconto: {

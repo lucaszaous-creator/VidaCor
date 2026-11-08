@@ -4,6 +4,7 @@ export * from './contrato-pendencias';
 export * from './contrato-menu';
 export * from './contrato-portal';
 export * from './contrato-estoque';
+export * from './contrato-faturamento';
 export * from './contrato-lastro';
 export * from './contrato-laudo-estruturado';
 export { ErroDaApi, ErroSemConexao, ehProblemaHttp, ehReautenticacao } from './erros';

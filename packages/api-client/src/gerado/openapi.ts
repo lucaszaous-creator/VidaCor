@@ -585,6 +585,251 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/faturamento/auditoria": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Painel da auditoria: contas fora de lote por situação, pendências agrupadas por regra e os
+         *     conjuntos de regras com as operadoras que os usam.
+         */
+        get: operations["painel_auditoria_faturamento"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/faturamento/conferencias": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Conferir guias: apura as contas novas e confere todas as contas fora de lote pelas regras de
+         *     cada operadora (só o faturista).
+         */
+        post: operations["conferir_guias"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/faturamento/contas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Guias do faturamento com situação, prazo e pendências (faturista e gerente). */
+        get: operations["listar_contas_faturamento"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/faturamento/contas/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Detalhe de uma guia do faturamento. */
+        get: operations["obter_conta_faturamento"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/faturamento/contas/{id}/correcao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Corrige a conta antes do lote (só o faturista): a versão anterior fica no histórico com o motivo,
+         *     a conta ganha versão nova e é conferida de novo. Conta em lote não muda (corrige-se por recurso).
+         */
+        post: operations["corrigir_conta"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/faturamento/contratos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Contratos ativos da unidade, com as guias prontas para lote de cada um. */
+        get: operations["listar_contratos_faturamento"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/faturamento/glosas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Glosas recebidas, das abertas com prazo mais curto para as em recurso. */
+        get: operations["listar_glosas"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/faturamento/glosas/{id}/recurso": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Registra o recurso de uma glosa (só o faturista), dentro do prazo do contrato. Um recurso por
+         *     glosa; o envio à operadora fica no outbox, visível até sair.
+         */
+        post: operations["recorrer_glosa"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/faturamento/lotes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lotes da unidade, do mais recente para o mais antigo. */
+        get: operations["listar_lotes"];
+        put?: never;
+        /**
+         * Gera o lote de uma operadora com as guias prontas (só o faturista). Cada guia é conferida de novo
+         *     na hora; a que ganhou pendência fica de fora. Duas gerações simultâneas dão um lote só: o contrato
+         *     fica travado e cada conta entra em um lote só (G2).
+         */
+        post: operations["gerar_lote"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/faturamento/lotes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lote com as guias e a situação do envio. */
+        get: operations["obter_lote"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/faturamento/lotes/{id}/arquivo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Arquivo XML do lote como foi gerado (para conferência). Nunca vai para cache. */
+        get: operations["baixar_arquivo_do_lote"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/faturamento/lotes/{id}/demonstrativo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Registra o demonstrativo de retorno do lote, conta a conta (só o faturista): valor pago e glosas
+         *     com código e motivo. Pago mais glosado fecha com o apresentado em cada guia (G1: o servidor
+         *     confere a conta).
+         */
+        post: operations["registrar_demonstrativo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/faturamento/lotes/{id}/envio": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Pede o envio do lote à operadora (só o faturista). O envio sai pelo outbox com a chave do lote;
+         *     pedir de novo não cria outro envio.
+         */
+        post: operations["enviar_lote"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/guias": {
         parameters: {
             query?: never;
@@ -1574,6 +1819,71 @@ export interface components {
             /** @description Nome completo dito pelo paciente, como no documento. */
             nome?: string | null;
         };
+        ConjuntoDeRegras: {
+            nome: string;
+            /** @description Operadoras com contrato nesta unidade que usam este conjunto. */
+            operadoras: string[];
+            regras: components["schemas"]["RegraDoConjunto"][];
+            versao: string;
+        };
+        ContaDetalhe: {
+            assinatura_beneficiario: boolean;
+            carteirinha: string;
+            cid?: string | null;
+            glosas: components["schemas"]["Glosa"][];
+            /** @description Versões anteriores, da mais recente para a mais antiga. */
+            historico: components["schemas"]["VersaoDaConta"][];
+            itens: components["schemas"]["ItemDaConta"][];
+            pendencias: components["schemas"]["PendenciaDaConta"][];
+            resumo: components["schemas"]["ContaResumo"];
+            senha: string;
+            solicitante: components["schemas"]["Solicitante"];
+            /** Format: date */
+            validade_senha: string;
+            /** Format: int32 */
+            versao: number;
+        };
+        ContaPendente: {
+            codigo: string;
+            /** Format: uuid */
+            conta_id: string;
+            detalhe: string;
+            numero_guia_operadora: string;
+            operadora: string;
+            paciente: components["schemas"]["PacienteDaConta"];
+        };
+        ContaResumo: {
+            /** @description Número da guia no prestador (ex.: `FAT-2026-000123`). */
+            codigo: string;
+            /** Format: date */
+            data_execucao: string;
+            /**
+             * Format: date
+             * @description Último dia para enviar, pelo contrato (nulo sem contrato).
+             */
+            enviar_ate?: string | null;
+            /** Format: uuid */
+            id: string;
+            lote_codigo?: string | null;
+            numero_guia_operadora: string;
+            operadora: string;
+            paciente: components["schemas"]["PacienteDaConta"];
+            /** Format: int64 */
+            pendencias_de_atencao: number;
+            /**
+             * Format: int64
+             * @description Pendências abertas que deixam a guia fora do lote (bloqueia ou corrigir antes).
+             */
+            pendencias_que_impedem: number;
+            /** @description Código TUSS e descrição de cada procedimento executado. */
+            procedimentos: string[];
+            /** @description Versão da regra da última conferência (ex.: `AUD-UNIMED-2026.1`). */
+            regra_versao?: string | null;
+            /** @description em_conferencia, pronta, com_pendencia, em_lote, enviada, paga, paga_com_glosa ou glosada. */
+            situacao: string;
+            /** Format: int64 */
+            valor_total_centavos: number;
+        };
         Contingencia: {
             codigo: string;
             /** Format: date-time */
@@ -1595,6 +1905,20 @@ export interface components {
             item_id: string;
             /** Format: int32 */
             quantidade: number;
+        };
+        Contrato: {
+            codigo: string;
+            /** Format: int64 */
+            contas_prontas: number;
+            /** Format: uuid */
+            id: string;
+            operadora: string;
+            /** Format: int32 */
+            prazo_envio_dias: number;
+            /** Format: int32 */
+            prazo_recurso_dias: number;
+            registro_ans: string;
+            regra_versao: string;
         };
         ConviteEmitido: {
             codigo: string;
@@ -1663,6 +1987,12 @@ export interface components {
             quantidade: number;
             /** Format: date */
             validade: string;
+        };
+        /** @description Envio à operadora ainda pendente no outbox (R7: visível, não se perde). */
+        EnvioPendente: {
+            /** Format: int32 */
+            tentativas: number;
+            ultimo_erro?: string | null;
         };
         EstornoAprovado: {
             /** Format: uuid */
@@ -1780,6 +2110,41 @@ export interface components {
         FormaBirads: "oval" | "redonda" | "irregular";
         /** @enum {string} */
         FormaTirads: "mais_largo_que_alto" | "mais_alto_que_largo";
+        Glosa: {
+            codigo: string;
+            /** @description Código do motivo de glosa da tabela TISS (4 dígitos). */
+            codigo_glosa: string;
+            conta_codigo: string;
+            /** Format: uuid */
+            conta_id: string;
+            /** Format: uuid */
+            id: string;
+            motivo: string;
+            operadora: string;
+            paciente: components["schemas"]["PacienteDaConta"];
+            /** Format: date */
+            prazo_recurso: string;
+            recurso?: null | components["schemas"]["Recurso"];
+            /** @description aberta ou em_recurso. */
+            situacao: string;
+            /** Format: int64 */
+            valor_centavos: number;
+        };
+        GlosaRecebida: {
+            codigo_glosa: string;
+            motivo: string;
+            /** Format: int64 */
+            valor_centavos: number;
+        };
+        GrupoDePendencias: {
+            contas: components["schemas"]["ContaPendente"][];
+            efeito: string;
+            o_que_fazer: string;
+            origem: string;
+            regra: string;
+            regra_versoes: string[];
+            titulo: string;
+        };
         Guia: {
             codigo: string;
             /** @description Atendimento ou agendamento que consumiu a guia. */
@@ -1819,6 +2184,19 @@ export interface components {
             sala: components["schemas"]["Sala"];
             /** @description agendado, confirmado, em_atendimento, concluido, faltou ou cancelado. */
             situacao: string;
+        };
+        ItemDaConta: {
+            descricao: string;
+            /** Format: int32 */
+            quantidade: number;
+            /** Format: int32 */
+            sequencial: number;
+            tuss: string;
+            /**
+             * Format: int64
+             * @description Nulo quando o código não está na tabela da operadora.
+             */
+            valor_unitario_centavos?: number | null;
         };
         ItemDeEstoque: {
             abaixo_do_minimo: boolean;
@@ -1919,6 +2297,39 @@ export interface components {
             expira_em: string;
             /** @description Mostrado uma única vez; o banco guarda só o hash. */
             token: string;
+        };
+        Lote: {
+            codigo: string;
+            /** Format: uuid */
+            contrato_id: string;
+            /** Format: date-time */
+            criado_em: string;
+            /** Format: date-time */
+            enviado_em?: string | null;
+            envio_pendente?: null | components["schemas"]["EnvioPendente"];
+            hash_tiss: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: int64 */
+            numero: number;
+            operadora: string;
+            protocolo?: string | null;
+            /** Format: int32 */
+            quantidade_guias: number;
+            sha256: string;
+            /** @description gerado, aguardando_envio, enviado ou demonstrativo_recebido. */
+            situacao: string;
+            /** Format: int64 */
+            valor_glosado_centavos?: number | null;
+            /** Format: int64 */
+            valor_pago_centavos?: number | null;
+            /** Format: int64 */
+            valor_total_centavos: number;
+            versao_tiss: string;
+        };
+        LoteDetalhe: {
+            contas: components["schemas"]["ContaResumo"][];
+            lote: components["schemas"]["Lote"];
         };
         LoteDoItem: {
             /** Format: uuid */
@@ -2026,6 +2437,12 @@ export interface components {
             nascimento: string;
             nome: string;
         };
+        /** @description Dois identificadores do paciente (N1), como em todo ato com paciente. */
+        PacienteDaConta: {
+            /** Format: date */
+            nascimento: string;
+            nome: string;
+        };
         PacienteDoLote: {
             /** Format: date-time */
             aplicado_em: string;
@@ -2043,6 +2460,11 @@ export interface components {
         };
         /** @enum {string} */
         PadraoEcogenicoBirads: "anecoico" | "hiperecoico" | "complexo_cistico_e_solido" | "hipoecoico" | "isoecoico" | "heterogeneo";
+        PainelAuditoria: {
+            conjuntos: components["schemas"]["ConjuntoDeRegras"][];
+            grupos: components["schemas"]["GrupoDePendencias"][];
+            resumo: components["schemas"]["ResumoAuditoria"];
+        };
         PedidoAbertura: {
             /** Format: int64 */
             fundo_centavos: number;
@@ -2104,6 +2526,16 @@ export interface components {
             /** Format: date */
             nascimento: string;
         };
+        /** @description Correção da conta antes do lote: gera versão nova com motivo e confere de novo. */
+        PedidoCorrecaoConta: {
+            assinatura_beneficiario?: boolean | null;
+            /** @description CID-10 sem ponto (ex.: `R51`). */
+            cid?: string | null;
+            motivo: string;
+            /** @description Reaplica a tabela de preços vigente na data do exame. */
+            reaplicar_tabela?: boolean;
+            solicitante?: null | components["schemas"]["SolicitanteCorrigido"];
+        };
         PedidoDeclaracao: {
             /**
              * Format: uuid
@@ -2120,6 +2552,12 @@ export interface components {
             nivel: string;
             /** Format: uuid */
             responsavel_id: string;
+        };
+        /** @description Demonstrativo de retorno da operadora, conta a conta. */
+        PedidoDemonstrativo: {
+            contas: components["schemas"]["RetornoDaConta"][];
+            /** Format: date */
+            recebido_em: string;
         };
         PedidoDesconto: {
             /**
@@ -2192,6 +2630,10 @@ export interface components {
              */
             horas: number;
         };
+        PedidoLote: {
+            /** Format: uuid */
+            contrato_id: string;
+        };
         PedidoNovaPulseira: {
             motivo?: string | null;
         };
@@ -2230,6 +2672,9 @@ export interface components {
             /** Format: int64 */
             valor_papel_centavos: number;
         };
+        PedidoRecurso: {
+            justificativa: string;
+        };
         PedidoReimpressao: {
             motivo?: string | null;
         };
@@ -2251,6 +2696,17 @@ export interface components {
             /** @description Ignorado: o servidor calcula a TFG (FC-TRI-07). */
             tfg?: unknown;
             usa_metformina: boolean;
+        };
+        PendenciaDaConta: {
+            detalhe: string;
+            /** @description bloqueia, corrigir_antes ou atencao. */
+            efeito: string;
+            o_que_fazer: string;
+            /** @description De onde veio a regra (padrão TISS, manual do prestador, contrato, regra da clínica). */
+            origem: string;
+            regra: string;
+            regra_versao: string;
+            titulo: string;
         };
         Pessoa: {
             /** Format: uuid */
@@ -2337,6 +2793,22 @@ export interface components {
             /** Format: int64 */
             valor_recalculado_centavos: number;
         };
+        Recurso: {
+            codigo: string;
+            /** Format: date-time */
+            criado_em: string;
+            /** Format: uuid */
+            id: string;
+            justificativa: string;
+            /** @description aguardando_envio ou enviado. */
+            situacao: string;
+        };
+        RegraDoConjunto: {
+            efeito: string;
+            origem: string;
+            regra: string;
+            titulo: string;
+        };
         /** @description Regra vigente de um sistema de classificação. */
         RegraVigente: {
             sistema: components["schemas"]["SistemaClassificacao"];
@@ -2351,6 +2823,34 @@ export interface components {
             atendimento: components["schemas"]["Atendimento"];
             /** @description enviada (primeiro bipe) ou ja_enviada (bipe repetido, sem segundo item de worklist). */
             worklist: string;
+        };
+        /** @description Resultado de "Conferir guias": contas novas apuradas e situação depois da auditoria. */
+        ResultadoConferencia: {
+            /** Format: int64 */
+            com_pendencia: number;
+            /** Format: int64 */
+            conferidas: number;
+            /** Format: int64 */
+            novas: number;
+            /** Format: int64 */
+            prontas: number;
+        };
+        ResumoAuditoria: {
+            /** Format: int64 */
+            bloqueadas: number;
+            /** Format: int64 */
+            conferidas: number;
+            /** Format: int64 */
+            corrigir_antes: number;
+            /** Format: int64 */
+            prontas: number;
+        };
+        RetornoDaConta: {
+            /** Format: uuid */
+            conta_id: string;
+            glosas?: components["schemas"]["GlosaRecebida"][];
+            /** Format: int64 */
+            valor_pago_centavos: number;
         };
         Sala: {
             /** Format: uuid */
@@ -2395,6 +2895,22 @@ export interface components {
             /** @description valido ou indisponivel (vencido, usado, revogado ou inexistente: a mesma resposta). */
             situacao: string;
         };
+        Solicitante: {
+            /** @description CBO-S de 6 dígitos. */
+            cbos?: string | null;
+            /** @description Código do conselho no TISS (06 = CRM). */
+            conselho?: string | null;
+            nome: string;
+            numero?: string | null;
+            /** @description Código IBGE da UF (33 = RJ). */
+            uf?: string | null;
+        };
+        SolicitanteCorrigido: {
+            cbos: string;
+            conselho: string;
+            numero: string;
+            uf: string;
+        };
         Triagem: {
             codigo: string;
             conduta?: null | components["schemas"]["Conduta"];
@@ -2430,6 +2946,13 @@ export interface components {
             /** @description rascunho, assinada ou substituida. */
             situacao: string;
             texto: string;
+        };
+        VersaoDaConta: {
+            /** Format: date-time */
+            criado_em: string;
+            motivo: string;
+            /** Format: int32 */
+            versao: number;
         };
         WebhookAceito: {
             /** @description recebido ou ja_processado. */
@@ -3752,6 +4275,550 @@ export interface operations {
                 };
             };
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    painel_auditoria_faturamento: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PainelAuditoria"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    conferir_guias: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResultadoConferencia"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_contas_faturamento: {
+        parameters: {
+            query?: {
+                /** @description Situação da conta (ex.: `com_pendencia`). */
+                situacao?: string | null;
+                /** @description Contas de um lote. */
+                lote_id?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContaResumo"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    obter_conta_faturamento: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContaDetalhe"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    corrigir_conta: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoCorrecaoConta"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContaDetalhe"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_contratos_faturamento: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Contrato"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_glosas: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Glosa"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    recorrer_glosa: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoRecurso"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Glosa"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_lotes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Lote"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    gerar_lote: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoLote"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoteDetalhe"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    obter_lote: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoteDetalhe"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    baixar_arquivo_do_lote: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description XML TISS em ISO-8859-1 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/xml": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    registrar_demonstrativo: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoDemonstrativo"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoteDetalhe"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    enviar_lote: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoteDetalhe"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
