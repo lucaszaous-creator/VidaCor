@@ -75,10 +75,19 @@ pub async fn sair(State(estado): State<Estado>, usuario: Usuario) -> Result<Resp
 
 /// Inicia o login no provedor de identidade (OIDC com PKCE, state e nonce).
 #[utoipa::path(get, path = "/v1/sessao/entrar", tag = "sessao", responses((status = 303)))]
-pub async fn entrar(State(estado): State<Estado>) -> Result<Redirect, ErroApi> {
+pub async fn entrar(State(estado): State<Estado>) -> Result<Response, ErroApi> {
     let oidc = estado.oidc.clone().ok_or_else(crate::oidc::indisponivel)?;
-    let url = oidc.iniciar(&estado.banco).await?;
-    Ok(Redirect::to(&url))
+    let (url, state) = oidc.iniciar(&estado.banco).await?;
+    // O `state` também fica num cookie curto deste navegador: o retorno só é aceito no mesmo
+    // navegador que pediu o login (contra CSRF de login).
+    Ok((
+        [(
+            header::SET_COOKIE,
+            crate::oidc::cookie_login(&state, estado.config.cookie_seguro),
+        )],
+        Redirect::to(&url),
+    )
+        .into_response())
 }
 
 #[derive(Deserialize)]

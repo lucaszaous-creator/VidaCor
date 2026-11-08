@@ -241,7 +241,7 @@ async fn semear(admin: &PgPool) -> (Uuid, Uuid, Uuid, Uuid, Uuid, NaiveDate) {
             .bind(Uuid::now_v7()).bind(format!("USR-{login}")).bind(login).bind(nome).bind(perfil).bind(unidade)
             .execute(&mut *tx).await.unwrap();
     }
-    sqlx::query("INSERT INTO agenda.sala (id, codigo, nome, ae_title, origem, unidade_id, correlacao) VALUES ($1,'SALA-1','Sala 1','SALA1','seed',$2,'seed')")
+    sqlx::query("INSERT INTO agenda.sala (id, codigo, nome, ae_title, modalidade, origem, unidade_id, correlacao) VALUES ($1,'SALA-1','Sala 1','SALA1','US','seed',$2,'seed')")
         .bind(sala1).bind(UNIDADE_A).execute(&mut *tx).await.unwrap();
     for (id, codigo, nome, nasc) in [
         (

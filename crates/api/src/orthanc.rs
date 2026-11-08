@@ -20,6 +20,8 @@ pub struct ItemWorklist<'a> {
     /// AAAAMMDD.
     pub nascimento: &'a str,
     pub ae_title: &'a str,
+    /// Modalidade DICOM (US, DX, CT...).
+    pub modalidade: &'a str,
     pub data_agendada: &'a str,
 }
 
@@ -89,6 +91,7 @@ impl Orthanc {
             "PatientName": item.paciente_nome_dicom,
             "PatientBirthDate": item.nascimento,
             "ScheduledProcedureStepSequence": [{
+                "Modality": item.modalidade,
                 "ScheduledStationAETitle": item.ae_title,
                 "ScheduledProcedureStepStartDate": item.data_agendada
             }]

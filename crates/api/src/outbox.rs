@@ -81,7 +81,7 @@ async fn criar_worklist(
     let mut tx = banco::transacao(&estado.banco, &ContextoBanco::sistema(unidade_id)).await?;
     let d = sqlx::query!(
         r#"SELECT t.accession, p.codigo AS paciente_codigo, p.nome, p.nascimento,
-                  s.ae_title, a.inicio
+                  s.ae_title, s.modalidade, a.inicio
              FROM recepcao.atendimento t
              JOIN identidade.paciente p ON p.id = t.paciente_id
              JOIN agenda.sala s ON s.id = t.sala_id
@@ -104,6 +104,7 @@ async fn criar_worklist(
             paciente_nome_dicom: &nome,
             nascimento: &nascimento,
             ae_title: d.ae_title.as_deref().unwrap_or("VIDACOR"),
+            modalidade: &d.modalidade,
             data_agendada: &data,
         })
         .await

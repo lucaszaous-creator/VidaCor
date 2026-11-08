@@ -1,0 +1,54 @@
+# Infraestrutura de DESENVOLVIMENTO do VidaCor (docs/11 § 7.3). Só dados fictícios.
+# Imagens fixadas por digest (SEC-SUP-1). Portas ligadas só em 127.0.0.1 (SEC-INF-3).
+# Senhas deste arquivo são de desenvolvimento local e não valem em nenhum outro ambiente.
+name: vidacor-dev
+
+services:
+  postgres:
+    image: postgres:17-alpine@sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac
+    environment:
+      POSTGRES_PASSWORD: dev_admin
+      POSTGRES_DB: vidacor
+      VIDACOR_APP_SENHA: dev_app
+    ports: ["127.0.0.1:5432:5432"]
+    volumes:
+      - ../postgres/00-papel-app.sh:/docker-entrypoint-initdb.d/00-papel-app.sh:ro
+      - pgdados:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d vidacor"]
+      interval: 2s
+      retries: 30
+    security_opt: ["no-new-privileges:true"]
+
+  orthanc:
+    image: orthancteam/orthanc@sha256:06b8baab0c63cd58de5474a74b64096a82ea3f7eab2aa471e217cc48c9ae11bf
+    environment:
+      ORTHANC__NAME: VIDACOR-DEV
+      ORTHANC__DICOM_AET: VIDACOR
+      # Em dev o Orthanc só escuta em 127.0.0.1; em produção fica na VLAN dos servidores com
+      # autenticação ligada e aparelhos cadastrados por AE Title e IP (SEC-MSG-7).
+      ORTHANC__AUTHENTICATION_ENABLED: "false"
+      ORTHANC__DICOM_CHECK_CALLED_AET: "true"
+      WORKLISTS_PLUGIN_ENABLED: "true"
+      ORTHANC__WORKLISTS__ENABLE: "true"
+      ORTHANC__WORKLISTS__SAVE_IN_ORTHANC_DATABASE: "true"
+      ORTHANC__STABLE_AGE: "5"
+    ports: ["127.0.0.1:8042:8042", "127.0.0.1:4242:4242"]
+    volumes: [orthanc:/var/lib/orthanc/db]
+    security_opt: ["no-new-privileges:true"]
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.4@sha256:9409c59bdfb65dbffa20b11e6f18b8abb9281d480c7ca402f51ed3d5977e6007
+    command: ["start-dev", "--import-realm", "--http-port=8081"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: dev_admin
+      KC_HOSTNAME: http://127.0.0.1:8081
+    ports: ["127.0.0.1:8081:8081"]
+    volumes:
+      - ../keycloak/realm-vidacor-dev.json:/opt/keycloak/data/import/realm-vidacor-dev.json:ro
+    security_opt: ["no-new-privileges:true"]
+
+volumes:
+  pgdados:
+  orthanc:

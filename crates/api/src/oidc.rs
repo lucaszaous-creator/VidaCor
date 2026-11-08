@@ -88,7 +88,7 @@ impl Oidc {
     ///
     /// # Errors
     /// Falha de banco.
-    pub async fn iniciar(&self, banco: &PgPool) -> Result<String, ErroApi> {
+    pub async fn iniciar(&self, banco: &PgPool) -> Result<(String, String), ErroApi> {
         let (desafio, verificador) = PkceCodeChallenge::new_random_sha256();
         let (url, state, nonce) = self
             .cliente()
@@ -110,7 +110,7 @@ impl Oidc {
         )
         .execute(banco)
         .await?;
-        Ok(url.to_string())
+        Ok((url.to_string(), state.secret().clone()))
     }
 
     /// Troca o código pelo token, confere assinatura, emissor, audiência, validade e `nonce`, e
@@ -172,4 +172,31 @@ impl Oidc {
         })?;
         Ok((usuario.id, usuario.unidade_id))
     }
+}
+
+const COOKIE_LOGIN: &str = "vc_login";
+
+/// Cookie curto com o `state` do login em andamento (Lax: precisa voltar no redirecionamento do provedor).
+#[must_use]
+pub fn cookie_login(state: &str, seguro: bool) -> String {
+    let seguro = if seguro { "; Secure" } else { "" };
+    format!("{COOKIE_LOGIN}={state}; Path=/v1/sessao; HttpOnly; SameSite=Lax; Max-Age=600{seguro}")
+}
+
+#[must_use]
+pub fn cookie_login_apagado(seguro: bool) -> String {
+    let seguro = if seguro { "; Secure" } else { "" };
+    format!("{COOKIE_LOGIN}=; Path=/v1/sessao; HttpOnly; SameSite=Lax; Max-Age=0{seguro}")
+}
+
+#[must_use]
+pub fn ler_cookie_login(cabecalhos: &axum::http::HeaderMap) -> Option<String> {
+    cabecalhos
+        .get_all(axum::http::header::COOKIE)
+        .iter()
+        .filter_map(|v| v.to_str().ok())
+        .flat_map(|v| v.split(';'))
+        .map(str::trim)
+        .find_map(|par| par.strip_prefix("vc_login=").map(str::to_owned))
+        .filter(|v| !v.is_empty() && v.len() <= 128)
 }
