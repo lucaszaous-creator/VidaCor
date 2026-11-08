@@ -44,6 +44,7 @@ export function renderizar(url: string) {
       dependencias={{
         api: criarCliente({ esperar: () => Promise.resolve() }),
         irPara,
+        atrasoDoAvisoDeEventosMs: 0,
         criarFonteDeEventos: (u) => {
           const f = new FonteFalsa(u);
           fontes.push(f);

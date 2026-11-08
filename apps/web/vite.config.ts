@@ -10,7 +10,10 @@ function politicaDeSeguranca(): Plugin {
   const csp = [
     "default-src 'self'",
     "script-src 'self'",
-    "style-src 'self'",
+    // O React Aria injeta um único <style> (usePress, seleção de texto). Liberado só pelo hash do
+    // conteúdo, sem 'unsafe-inline'. Ao atualizar o react-aria-components, conferir no navegador
+    // se o hash mudou (o console mostra a violação com o hash novo).
+    "style-src 'self' 'sha256-38RhXrc7EdReTKsOm23ZPOCUgniTUUcjky8QOOrQx6o='",
     "img-src 'self' data:",
     "font-src 'self'",
     "connect-src 'self'",
@@ -38,21 +41,8 @@ export default defineConfig({
   },
   build: {
     sourcemap: false,
-    rollupOptions: {
-      output: {
-        manualChunks: (id) => {
-          if (!id.includes('node_modules')) {
-            return undefined;
-          }
-          if (/[\\/](react-aria|@react-aria|@react-stately|@internationalized|@react-types)/.test(id)) {
-            return 'react-aria';
-          }
-          if (id.includes('@tanstack')) {
-            return 'tanstack';
-          }
-          return 'vendor';
-        },
-      },
-    },
+    // Aplicação de rede local, carregada uma vez por turno: um pacote único de ~550 kB (180 kB
+    // comprimido) é aceitável. Dividir à mão quebrou a ordem de inicialização dos módulos.
+    chunkSizeWarningLimit: 700,
   },
 });

@@ -25,11 +25,11 @@ import { GradeDaAgenda } from './GradeDaAgenda';
 const rota = getRouteApi('/app/agenda');
 
 function AvisoDeEstudo({ itens }: { itens: ItemDaAgenda[] }) {
-  const { recebidos, estado } = useEventosAoVivo();
+  const { recebidos, foraDoAr } = useEventosAoVivo();
   const ultimo = recebidos[0];
   return (
     <>
-      {estado === 'reconectando' && (
+      {foraDoAr && (
         <Aviso nivel="atencao" titulo="Avisos em tempo real fora do ar.">
           Tentando reconectar. A agenda continua atualizando a cada minuto.
         </Aviso>

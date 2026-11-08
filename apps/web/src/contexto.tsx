@@ -5,6 +5,8 @@ import type { ClienteVidaCor, FonteDeEventos } from '@vidacor/api-client';
 export interface Dependencias {
   api: ClienteVidaCor;
   criarFonteDeEventos?: (url: string) => FonteDeEventos;
+  /** Quanto esperar o SSE voltar sozinho antes de avisar que caiu (padrão 10 s; testes usam 0). */
+  atrasoDoAvisoDeEventosMs?: number;
   /** Navegação de página inteira (entrada OIDC no servidor). */
   irPara: (url: string) => void;
 }

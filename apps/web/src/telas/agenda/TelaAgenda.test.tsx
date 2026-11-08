@@ -104,6 +104,12 @@ describe('Agenda do dia', () => {
       fontes[0]?.cair();
     });
     expect(await screen.findByText(/Avisos em tempo real fora do ar\./)).toBeInTheDocument();
+    act(() => {
+      fontes[0]?.abrir();
+    });
+    await waitFor(() => {
+      expect(screen.queryByText(/Avisos em tempo real fora do ar\./)).not.toBeInTheDocument();
+    });
   });
 });
 

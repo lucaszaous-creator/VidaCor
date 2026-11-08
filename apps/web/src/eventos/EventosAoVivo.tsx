@@ -6,11 +6,13 @@ import { useDependencias } from '../contexto';
 
 export interface EventosAoVivo {
   estado: EstadoDosEventos;
+  /** O tempo real caiu e não voltou sozinho dentro do prazo: hora de avisar na tela. */
+  foraDoAr: boolean;
   /** Estudos recebidos nesta sessão da tela, o mais recente primeiro (só em memória). */
   recebidos: EventoEstudoRecebido[];
 }
 
-const Contexto = createContext<EventosAoVivo>({ estado: 'conectando', recebidos: [] });
+const Contexto = createContext<EventosAoVivo>({ estado: 'conectando', foraDoAr: false, recebidos: [] });
 
 export function useEventosAoVivo(): EventosAoVivo {
   return useContext(Contexto);
@@ -21,16 +23,36 @@ export function useEventosAoVivo(): EventosAoVivo {
  * atendimento no cache: a tela busca de novo no servidor em vez de montar o dado sozinha.
  */
 export function ProvedorDeEventos({ children }: { children: ReactNode }) {
-  const { api, criarFonteDeEventos } = useDependencias();
+  const { api, criarFonteDeEventos, atrasoDoAvisoDeEventosMs = 10_000 } = useDependencias();
   const queryClient = useQueryClient();
   const [estado, setEstado] = useState<EstadoDosEventos>('conectando');
   const [recebidos, setRecebidos] = useState<EventoEstudoRecebido[]>([]);
+  const [quedaLonga, setQuedaLonga] = useState(false);
+  const foraDoAr = estado === 'reconectando' && quedaLonga;
+
+  // O navegador reconecta o SSE sozinho em segundos; só avisa se a queda durar.
+  useEffect(() => {
+    if (estado !== 'reconectando') {
+      return undefined;
+    }
+    const id = setTimeout(() => {
+      setQuedaLonga(true);
+    }, atrasoDoAvisoDeEventosMs);
+    return () => {
+      clearTimeout(id);
+    };
+  }, [estado, atrasoDoAvisoDeEventosMs]);
 
   useEffect(() => {
     const conexao = abrirEventos({
       url: api.urlDeEventos(),
       ...(criarFonteDeEventos === undefined ? {} : { criarFonte: criarFonteDeEventos }),
-      aoMudarEstado: setEstado,
+      aoMudarEstado: (novo) => {
+        setEstado(novo);
+        if (novo === 'conectado') {
+          setQuedaLonga(false);
+        }
+      },
       aoEstudoRecebido: (evento) => {
         setRecebidos((anteriores) => [evento, ...anteriores].slice(0, 10));
         void queryClient.invalidateQueries({ queryKey: chaves.agendaTodas });
@@ -42,5 +64,5 @@ export function ProvedorDeEventos({ children }: { children: ReactNode }) {
     };
   }, [api, criarFonteDeEventos, queryClient]);
 
-  return <Contexto.Provider value={{ estado, recebidos }}>{children}</Contexto.Provider>;
+  return <Contexto.Provider value={{ estado, foraDoAr, recebidos }}>{children}</Contexto.Provider>;
 }
