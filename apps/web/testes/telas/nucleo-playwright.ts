@@ -130,6 +130,9 @@ export async function simularNucleo(page: Page, estado: EstadoDaSimulacao): Prom
       );
     }
     if (c.endsWith('/comunicacao')) return json(route, { whatsapp: true, motivo: null, mensagens: [{ modelo: 'confirmacao', situacao: 'enviada', resposta: 'confirmou', criado_em: '2026-11-05T12:00:00Z' }] });
+    if (c === '/v1/configuracoes/integracoes') {
+      return json(route, ['email', 'whatsapp', 'nfse', 'pix', 'assinatura', 'visualizador'].map((id, k) => ({ id, nome: `Integração ${id} com nome comprido`, para_que: 'Para que serve esta integração, em uma frase.', situacao: ['em_uso', 'incompleta', 'nao_configurada', 'desenvolvimento', 'aguardando_adaptador', 'em_uso'][k], o_que_falta: k === 1 ? 'Falta preencher: VIDACOR_WHATSAPP_NUMERO_ID.' : null, pendentes_no_outbox: k === 1 ? 3 : 0, variaveis: Array.from({ length: 8 }, (_, j) => ({ nome: `VIDACOR_NFSE_CERTIFICADO_ARQUIVO_${String(j)}`, descricao: 'Caminho do certificado A1 (.pfx) no servidor, legível só pelo núcleo.', obrigatoria: j < 6, segredo: j === 7, preenchida: j % 2 === 0 })) })));
+    }
     if (c === '/v1/lista-espera') {
       return json(route, Array.from({ length: 18 }, (_, k) => ({ id: `e${String(k)}`, codigo: `ESP-${String(k)}`, posicao: k + 1, paciente: { id: `p${String(k)}`, nome: k === 0 ? 'Maria Helena Duarte de Albuquerque Cavalcanti' : `Paciente fictício ${String(k)}`, nascimento: '1968-03-12' }, exame: { codigo_tuss: '40901114', nome: 'Ecocardiograma transtorácico' }, prioridade: ['urgente', 'oncologico', 'gestante', 'rotina'][k % 4], preferencia: 'qualquer', justificativa: k % 4 === 0 ? 'suspeita de valvopatia' : null, medico_solicitante: k % 4 === 0 ? 'Dr. Paulo Medeiros' : null, operadora: null, guia_codigo: null, situacao: k === 0 ? 'ofertado' : 'aguardando', desde: '2026-11-02T12:00:00Z', oferta: k === 0 ? { id: 'of1', codigo: 'OFE-1', sala_nome: 'Sala 1', inicio: '2026-11-09T13:00:00Z', expira_em: '2026-11-09T12:20:00Z' } : null })));
     }

@@ -94,6 +94,7 @@ pub struct ProblemaDoc {
         crate::rotas::usuarios::listar,
         crate::rotas::chamada::chamar,
         crate::rotas::chamada::painel,
+        crate::rotas::configuracoes::integracoes,
         crate::rotas::cancelamento::cancelar,
         crate::rotas::visualizacao::abrir,
         crate::rotas::bloqueios::criar,

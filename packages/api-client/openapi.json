@@ -1851,6 +1851,40 @@
         }
       }
     },
+    "/v1/configuracoes/integracoes": {
+      "get": {
+        "tags": [
+          "configuracoes"
+        ],
+        "summary": "Situação das integrações (e-mail, WhatsApp, NFS-e, PIX, assinatura, visualizador).",
+        "operationId": "situacao_das_integracoes",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntegracaoVista"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/contingencias": {
       "post": {
         "tags": [
@@ -10639,6 +10673,50 @@
           }
         }
       },
+      "IntegracaoVista": {
+        "type": "object",
+        "required": [
+          "id",
+          "nome",
+          "para_que",
+          "situacao",
+          "variaveis",
+          "pendentes_no_outbox"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "o_que_falta": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "O que falta, em frase, para a tela."
+          },
+          "para_que": {
+            "type": "string"
+          },
+          "pendentes_no_outbox": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Itens desta integração parados no outbox (não se perdem; saem quando ela estiver pronta)."
+          },
+          "situacao": {
+            "type": "string",
+            "description": "em_uso, desenvolvimento, incompleta, aguardando_adaptador ou nao_configurada."
+          },
+          "variaveis": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VariavelVista"
+            }
+          }
+        }
+      },
       "ItemAgenda": {
         "type": "object",
         "required": [
@@ -14685,6 +14763,34 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "VariavelVista": {
+        "type": "object",
+        "description": "Variável como a tela vê: nome e se está preenchida. Nunca o valor.",
+        "required": [
+          "nome",
+          "descricao",
+          "obrigatoria",
+          "segredo",
+          "preenchida"
+        ],
+        "properties": {
+          "descricao": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "obrigatoria": {
+            "type": "boolean"
+          },
+          "preenchida": {
+            "type": "boolean"
+          },
+          "segredo": {
+            "type": "boolean"
           }
         }
       },

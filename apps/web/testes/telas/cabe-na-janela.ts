@@ -256,6 +256,10 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await page.getByRole('button', { name: /Maria Helena Duarte de Albuquerque/ }).click();
   await esperar(page, 'region', 'Pedido de espera');
   await ok('38-lista-espera');
+  await ir('/configuracoes');
+  await page.getByRole('button', { name: /Integração whatsapp/ }).click();
+  await esperar(page, 'region', 'Detalhe da integração');
+  await ok('39-configuracoes');
   estado.sessao = SESSOES.tv;
   await ir('/telao');
   await esperar(page, 'region', 'Chamada atual');

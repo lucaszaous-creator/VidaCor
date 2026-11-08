@@ -66,6 +66,25 @@ Verificação completa (lint, tipos e testes com PostgreSQL e Orthanc reais via 
 just test
 ```
 
+## Integrações externas (e-mail, WhatsApp, NFS-e)
+
+Tudo fica pronto no núcleo; falta só a clínica preencher as credenciais no **ambiente do servidor**
+(nunca no código nem em variável `VITE_*`). O modelo comentado está em
+[infra/compose/.env.exemplo](infra/compose/.env.exemplo), seção "Integrações de PRODUÇÃO".
+
+1. Preencha as variáveis da integração no `.env` do servidor e reinicie o núcleo.
+2. Abra **Configurações > Integrações** (TI ou gerência): cada integração mostra se está em uso,
+   incompleta ou aguardando adaptador, e quais variáveis faltam. Valores nunca aparecem na tela.
+3. Enquanto não estiver pronta, nada se perde: os envios ficam no outbox e saem sozinhos depois.
+
+- **E-mail:** `VIDACOR_SMTP_URL` (smtps com usuário e senha do provedor) e `VIDACOR_EMAIL_REMETENTE`.
+- **WhatsApp:** `VIDACOR_WHATSAPP_NUMERO_ID`, `VIDACOR_WHATSAPP_TOKEN` e `VIDACOR_WHATSAPP_SEGREDO`
+  (Cloud API da Meta). Os modelos `confirmacao`, `laudo_pronto`, `reserva_expirada` e `oferta_vaga`
+  precisam estar aprovados na conta comercial.
+- **NFS-e:** provedor, ambiente, município (IBGE), CNPJ, inscrição municipal, item de serviço e
+  certificado A1. O adaptador do provedor escolhido entra quando o município for definido; até lá a
+  tela mostra "Aguardando adaptador" e as notas ficam no outbox.
+
 ## Exames realizados pela clínica
 
 Ecocardiograma · Doppler de carótidas · USGs obstétricas e diversas (mais de 50

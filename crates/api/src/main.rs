@@ -84,6 +84,31 @@ async fn main() -> Result<()> {
             vidacor_api::correio::CorreioSmtp::novo(&url, &de)?,
         ));
     }
+    // WhatsApp: Cloud API da Meta quando o número e o token estiverem no ambiente; simulado em memória
+    // só com escolha explícita (nada sai da máquina). Sem nenhum dos dois, os avisos ficam no outbox.
+    if std::env::var("VIDACOR_MENSAGEIRO").as_deref() == Ok("desenvolvimento") {
+        tracing::warn!("WhatsApp de DESENVOLVIMENTO ligado: nenhuma mensagem sai da máquina");
+        estado.mensageiro = Some(std::sync::Arc::new(
+            vidacor_api::mensageiro::MensageiroEmMemoria::default(),
+        ));
+    } else if let (Ok(numero), Ok(token)) = (
+        std::env::var("VIDACOR_WHATSAPP_NUMERO_ID"),
+        std::env::var("VIDACOR_WHATSAPP_TOKEN"),
+    ) {
+        let api = std::env::var("VIDACOR_WHATSAPP_API_URL")
+            .unwrap_or_else(|_| "https://graph.facebook.com/v21.0".to_owned());
+        estado.mensageiro = Some(std::sync::Arc::new(
+            vidacor_api::mensageiro::MensageiroCloudApi::novo(&api, &numero, &token)?,
+        ));
+    }
+    // NFS-e: simulado sem valor fiscal só com escolha explícita. O adaptador do município entra quando
+    // ele e o certificado forem definidos (a tela de Configurações mostra o que falta).
+    if std::env::var("VIDACOR_NFSE_PROVEDOR").as_deref() == Ok("desenvolvimento") {
+        tracing::warn!("NFS-e de DESENVOLVIMENTO ligada: notas sem valor fiscal");
+        estado.prefeitura = Some(std::sync::Arc::new(
+            vidacor_api::prefeitura::PrefeituraEmMemoria::default(),
+        ));
+    }
     if let Some(url) = orthanc_url {
         let orthanc = Orthanc::novo(&url)?;
         tokio::spawn(outbox::rodar(estado.clone(), orthanc));

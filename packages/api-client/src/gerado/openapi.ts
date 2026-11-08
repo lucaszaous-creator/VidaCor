@@ -458,6 +458,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/configuracoes/integracoes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Situação das integrações (e-mail, WhatsApp, NFS-e, PIX, assinatura, visualizador). */
+        get: operations["situacao_das_integracoes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/contingencias": {
         parameters: {
             query?: never;
@@ -3089,6 +3106,21 @@ export interface components {
             /** Format: int64 */
             ticket_medio_centavos?: number | null;
         };
+        IntegracaoVista: {
+            id: string;
+            nome: string;
+            /** @description O que falta, em frase, para a tela. */
+            o_que_falta?: string | null;
+            para_que: string;
+            /**
+             * Format: int64
+             * @description Itens desta integração parados no outbox (não se perdem; saem quando ela estiver pronta).
+             */
+            pendentes_no_outbox: number;
+            /** @description em_uso, desenvolvimento, incompleta, aguardando_adaptador ou nao_configurada. */
+            situacao: string;
+            variaveis: components["schemas"]["VariavelVista"][];
+        };
         ItemAgenda: {
             /** Format: uuid */
             atendimento_id?: string | null;
@@ -4362,6 +4394,14 @@ export interface components {
             nome: string;
             perfis: string[];
         };
+        /** @description Variável como a tela vê: nome e se está preenchida. Nunca o valor. */
+        VariavelVista: {
+            descricao: string;
+            nome: string;
+            obrigatoria: boolean;
+            preenchida: boolean;
+            segredo: boolean;
+        };
         Versao: {
             /** Format: date-time */
             assinada_em?: string | null;
@@ -5634,6 +5674,33 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LembretesEnfileirados"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    situacao_das_integracoes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegracaoVista"][];
                 };
             };
             403: {

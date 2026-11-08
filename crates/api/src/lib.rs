@@ -12,6 +12,7 @@ pub mod estado;
 pub mod eventos;
 pub mod extratores;
 pub mod idempotencia;
+pub mod integracoes;
 pub mod lastro;
 pub mod laudos;
 pub mod mensageiro;

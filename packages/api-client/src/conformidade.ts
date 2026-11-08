@@ -9,6 +9,7 @@ import type { AutorizacaoDetalhe, AutorizacaoResumo, NovoPedidoAutorizacao, Pedi
 import type { MenuDoObjeto } from './contrato-menu';
 import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel';
 import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-orcamento';
+import type { IntegracaoVista } from './contrato-configuracoes';
 import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
@@ -169,3 +170,4 @@ export type ConferePedidoInclusao = Cabe<PedidoInclusao, S['PedidoInclusao']>;
 export type ConfereOfertaDeVaga = Cabe<OfertaDeVaga, S['Oferta']>;
 export type ConferePedidoBloqueio = Cabe<PedidoBloqueio, S['PedidoBloqueio']>;
 export type ConfereBloqueioDeSala = Cabe<BloqueioDeSala, S['Bloqueio']>;
+export type ConfereIntegracaoVista = Cabe<IntegracaoVista, S['IntegracaoVista']>;

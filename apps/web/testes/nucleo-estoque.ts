@@ -300,3 +300,13 @@ export const manipuladoresVisualizacao = [
       : semPermissao('abrir as imagens'),
   ),
 ];
+
+/** Integrações simuladas (regras reais em `crates/api/tests/configuracoes.rs`). */
+export const integracoesSimuladas = [
+  { id: 'email', nome: 'E-mail (SMTP)', para_que: 'Convite e acesso ao portal do paciente.', situacao: 'em_uso', o_que_falta: null, pendentes_no_outbox: 0, variaveis: [{ nome: 'VIDACOR_SMTP_URL', descricao: 'Servidor SMTP.', obrigatoria: true, segredo: true, preenchida: true }] },
+  { id: 'whatsapp', nome: 'WhatsApp (Cloud API da Meta)', para_que: 'Confirmação de horário e avisos.', situacao: 'incompleta', o_que_falta: 'Falta preencher: VIDACOR_WHATSAPP_NUMERO_ID.', pendentes_no_outbox: 3, variaveis: [{ nome: 'VIDACOR_WHATSAPP_NUMERO_ID', descricao: 'ID do número.', obrigatoria: true, segredo: false, preenchida: false }, { nome: 'VIDACOR_WHATSAPP_TOKEN', descricao: 'Token.', obrigatoria: true, segredo: true, preenchida: true }] },
+  { id: 'nfse', nome: 'NFS-e (prefeitura)', para_que: 'Nota fiscal do particular.', situacao: 'nao_configurada', o_que_falta: 'Preencha no ambiente do servidor: VIDACOR_NFSE_PROVEDOR.', pendentes_no_outbox: 0, variaveis: [{ nome: 'VIDACOR_NFSE_PROVEDOR', descricao: 'Provedor.', obrigatoria: true, segredo: false, preenchida: false }] },
+];
+export const manipuladoresConfiguracoes = [
+  http.get('*/v1/configuracoes/integracoes', () => (temPerfil('ti', 'gerente') ? HttpResponse.json(integracoesSimuladas) : semPermissao('ver as configurações'))),
+];
