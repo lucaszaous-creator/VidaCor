@@ -49,6 +49,8 @@ import type {
 } from './contrato-fase1';
 import type { ConsultaAgenda, PacienteResumo, SalaDaUnidade, Saude, Sessao } from './contrato-m0';
 import type { MenuDoObjeto, ObjetoDoMenu } from './contrato-menu';
+import type { CadeiaDoAtendimento } from './contrato-lastro';
+import type { ContrasteAplicado, EntradaDeEstoque, ItemDeEstoque, MovimentoFeito, RastreioDoLote } from './contrato-estoque';
 import type { AceiteDoConvite, ConviteEmitido, EntradaNoPortal, NovoPaciente, PacienteCadastrado, PossivelDuplicado, SessaoDoPortal, SituacaoDoConvite } from './contrato-portal';
 import type { AtendimentoAReceber, Decisao, EstornoDetalhado, NovoPedidoDesconto, PedidoDesconto, SituacaoDoEstorno, SituacaoDoPedidoDeDesconto } from './contrato-pendencias';
 import { ErroDaApi, ErroSemConexao, ehProblemaHttp, problemaInesperado } from './erros';
@@ -398,6 +400,21 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
     menu: {
       /** Ações do objeto para o perfil e o estado atual; a tela só mostra (docs/19 § 8). */
       de: (objeto: ObjetoDoMenu, id: string): Promise<MenuDoObjeto> => ler<MenuDoObjeto>(`/v1/menu/${objeto}/${seg(id)}`),
+    },
+
+    lastro: {
+      /** Cadeia completa a partir de qualquer código (gerência e auditor); a leitura fica no lastro. */
+      cadeia: (codigo: string): Promise<CadeiaDoAtendimento> => ler<CadeiaDoAtendimento>(`/v1/lastro/cadeia?${new URLSearchParams({ codigo }).toString()}`),
+    },
+
+    estoque: {
+      itens: (): Promise<ItemDeEstoque[]> => ler<ItemDeEstoque[]>('/v1/estoque/itens'),
+      entrada: (corpo: EntradaDeEstoque, o: OpcoesDeEscrita): Promise<MovimentoFeito> => criar<MovimentoFeito>('POST', '/v1/estoque/entradas', corpo, o),
+      /** Pacientes que receberam o lote (gerência); a leitura vai ao lastro. */
+      rastreio: (loteId: string): Promise<RastreioDoLote> => ler<RastreioDoLote>(`/v1/estoque/lotes/${seg(loteId)}/rastreio`),
+      /** Contraste aplicado: baixa do lote que vence antes, ligada ao paciente (técnico lotado). */
+      registrarContraste: (atendimentoId: string, corpo: ContrasteAplicado, o: OpcoesDeEscrita): Promise<MovimentoFeito> =>
+        criar<MovimentoFeito>('POST', `/v1/atendimentos/${seg(atendimentoId)}/contraste`, corpo, o),
     },
 
     pedidosDeDesconto: {

@@ -89,6 +89,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/atendimentos/{id}/contraste": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** O técnico registra o contraste aplicado: baixa do lote que vence antes, ligada ao paciente. */
+        post: operations["contraste"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/atendimentos/{id}/pulseira": {
         parameters: {
             query?: never;
@@ -381,6 +398,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/estoque/entradas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Entrada de mercadoria por lote (o lote existente soma; validade diferente para o mesmo número é recusada). */
+        post: operations["entrada"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/estoque/itens": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Itens com saldo e lotes na ordem de saída. */
+        get: operations["itens"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/estoque/lotes/{id}/rastreio": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Rastreio por lote (alerta da Anvisa): quem recebeu cada lote. A leitura fica no lastro. */
+        get: operations["rastreio"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/estornos": {
         parameters: {
             query?: never;
@@ -528,6 +596,23 @@ export interface paths {
         put?: never;
         /** Registra a guia autorizada pela operadora (carteirinha, número, senha, validade e procedimentos). */
         post: operations["registrar_guia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/lastro/cadeia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Cadeia completa a partir de qualquer código (gerência e auditor). */
+        get: operations["cadeia"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1345,6 +1430,14 @@ export interface components {
             subtitulo: string;
             titulo: string;
         };
+        CadeiaDoAtendimento: {
+            atendimento_codigo: string;
+            eventos: components["schemas"]["EventoDaCadeia"][];
+            /** @description Todos os eventos da cadeia conferem. */
+            integra: boolean;
+            nos: components["schemas"]["NoDaCadeia"][];
+            paciente: components["schemas"]["PacienteResumo"];
+        };
         Caixa: {
             /** Format: date-time */
             aberto_em: string;
@@ -1393,6 +1486,12 @@ export interface components {
             responsavel_id: string;
             situacao: string;
         };
+        ContrasteAplicado: {
+            /** Format: uuid */
+            item_id: string;
+            /** Format: int32 */
+            quantidade: number;
+        };
         ConviteEmitido: {
             codigo: string;
             /** @description E-mail do cadastro, mascarado (o link vai só para lá; a recepção não o vê). */
@@ -1434,6 +1533,15 @@ export interface components {
         Entrada: {
             login: string;
             senha: string;
+        };
+        EntradaDeEstoque: {
+            /** Format: uuid */
+            item_id: string;
+            numero_lote: string;
+            /** Format: int32 */
+            quantidade: number;
+            /** Format: date */
+            validade: string;
         };
         EstornoAprovado: {
             /** Format: uuid */
@@ -1504,6 +1612,20 @@ export interface components {
             /** @description pulseira. */
             tipo: string;
         };
+        EventoDaCadeia: {
+            /** Format: date-time */
+            criado_em: string;
+            dominio: string;
+            /** @description Primeiros 12 caracteres do hash (hex). */
+            hash: string;
+            /** @description O hash confere com o conteúdo e com o evento anterior. */
+            integro: boolean;
+            origem: string;
+            registro_codigo?: string | null;
+            /** Format: int64 */
+            sequencia: number;
+            tipo: string;
+        };
         Exame: {
             codigo_tuss: string;
             nome: string;
@@ -1570,6 +1692,25 @@ export interface components {
             sala: components["schemas"]["Sala"];
             /** @description agendado, confirmado, em_atendimento, concluido, faltou ou cancelado. */
             situacao: string;
+        };
+        ItemDeEstoque: {
+            abaixo_do_minimo: boolean;
+            codigo: string;
+            contraste: boolean;
+            /** Format: uuid */
+            id: string;
+            local: string;
+            /** @description Lotes com saldo, na ordem de saída (vence antes, sai antes). */
+            lotes: components["schemas"]["LoteDoItem"][];
+            medida: string;
+            /** Format: int32 */
+            minimo: number;
+            nome: string;
+            /**
+             * Format: int64
+             * @description Soma dos lotes dentro da validade.
+             */
+            saldo_valido: number;
         };
         ItemFila: {
             /** Format: uuid */
@@ -1650,6 +1791,16 @@ export interface components {
             /** @description Mostrado uma única vez; o banco guarda só o hash. */
             token: string;
         };
+        LoteDoItem: {
+            /** Format: uuid */
+            id: string;
+            numero: string;
+            /** Format: int32 */
+            saldo: number;
+            /** Format: date */
+            validade: string;
+            vencido: boolean;
+        };
         Membro: {
             /** Format: uuid */
             id: string;
@@ -1659,6 +1810,27 @@ export interface components {
         MenuDoObjeto: {
             acoes: components["schemas"]["AcaoDoMenu"][];
             cabecalho: components["schemas"]["CabecalhoDoMenu"];
+        };
+        MovimentoFeito: {
+            /** Format: uuid */
+            lote_id: string;
+            /** Format: uuid */
+            movimento_id: string;
+            numero_lote: string;
+            /** Format: int32 */
+            saldo_do_lote: number;
+            /** Format: date */
+            validade: string;
+        };
+        NoDaCadeia: {
+            codigo: string;
+            /** Format: date-time */
+            criado_em: string;
+            /** Format: uuid */
+            id: string;
+            situacao?: string | null;
+            /** @description agendamento, guia, atendimento, etiqueta, triagem, estudo, laudo, recebimento, estorno, contraste. */
+            tipo: string;
         };
         NovoPaciente: {
             alergias?: string[];
@@ -1695,6 +1867,14 @@ export interface components {
             /** Format: date */
             nascimento: string;
             nome: string;
+        };
+        PacienteDoLote: {
+            /** Format: date-time */
+            aplicado_em: string;
+            atendimento_codigo: string;
+            paciente: components["schemas"]["PacienteResumo"];
+            /** Format: int32 */
+            quantidade: number;
         };
         PacienteResumo: {
             /** Format: uuid */
@@ -1961,6 +2141,13 @@ export interface components {
             /** @description Falso quando a versão já estava publicada (repetir não duplica). */
             nova_publicacao: boolean;
             publicado: boolean;
+        };
+        RastreioDoLote: {
+            item: string;
+            numero: string;
+            pacientes: components["schemas"]["PacienteDoLote"][];
+            /** Format: date */
+            validade: string;
         };
         Recebimento: {
             codigo: string;
@@ -2342,6 +2529,49 @@ export interface operations {
                 };
             };
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    contraste: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ContrasteAplicado"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MovimentoFeito"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -2974,6 +3204,111 @@ export interface operations {
             };
         };
     };
+    entrada: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EntradaDeEstoque"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MovimentoFeito"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    itens: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemDeEstoque"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    rastreio: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RastreioDoLote"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     listar_estornos: {
         parameters: {
             query?: {
@@ -3297,6 +3632,44 @@ export interface operations {
                 };
             };
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    cadeia: {
+        parameters: {
+            query: {
+                /** @description Qualquer código do atendimento (ATD, accession, AGD, ETQ, guia, TRI, LAU, EST, StudyUID, REC, EST de estorno). */
+                codigo: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CadeiaDoAtendimento"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

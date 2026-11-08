@@ -125,6 +125,13 @@ export async function simularNucleo(page: Page, estado: EstadoDaSimulacao): Prom
           .map((i) => ({ atendimento_id: i.atendimento_id, codigo: i.codigo, paciente: i.paciente, inicio: i.inicio, procedimentos: [{ tuss: i.exame.codigo_tuss, descricao: i.exame.nome, valor_centavos: 38000 }], recebido: false })),
       );
     }
+    if (c === '/v1/lastro/cadeia') {
+      const evs = Array.from({ length: 30 }, (_, i) => ({ sequencia: i + 1, dominio: 'recepcao', tipo: 'evento_de_teste', registro_codigo: 'ATD-2026-000031', criado_em: '2026-11-06T11:00:00Z', origem: 'recepcao', hash: '3f9ac21b77e0', integro: true }));
+      return json(route, { paciente: { id: 'p', nome: 'Sônia Maria Castro', nascimento: '1962-02-03' }, atendimento_codigo: 'ATD-2026-000031', nos: Array.from({ length: 12 }, (_, i) => ({ tipo: 'etiqueta', id: `n${String(i)}`, codigo: `ETQ-2026-0000${String(i)}`, situacao: 'valida', criado_em: '2026-11-06T11:00:00Z' })), eventos: evs, integra: true });
+    }
+    if (c === '/v1/estoque/itens') {
+      return json(route, [{ id: 'i1', codigo: 'ITM-CTR', nome: 'Contraste iodado não iônico 350, 100 ml', medida: 'frasco', minimo: 20, local: 'Tomografia', contraste: true, saldo_valido: 8, abaixo_do_minimo: true, lotes: [{ id: 'l1', numero: 'L2408-77', validade: '2027-03-31', saldo: 3, vencido: false }, { id: 'l2', numero: 'L2501-12', validade: '2027-09-30', saldo: 5, vencido: false }] }]);
+    }
     if (c === '/v1/caixas/meu') return json(route, estado.caixaAberto ? caixaAberto() : null);
     if (c === '/v1/recebimentos') return json(route, recebimentoSonia(500, 'pix', false), 201);
     if (c.startsWith('/v1/recebimentos/')) return json(route, recebimentoSonia(500, 'pix'));

@@ -1,0 +1,98 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, codigo, nome, medida, minimo, local, contraste FROM estoque.item WHERE ativo ORDER BY nome",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "estoque.item",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "estoque.item",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "estoque.item",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "medida",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "estoque.item",
+            "name": "medida"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "minimo",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "estoque.item",
+            "name": "minimo"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "local",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "estoque.item",
+            "name": "local"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "contraste",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "estoque.item",
+            "name": "contraste"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "54f0e3af6c1be9595d228167d4b54ad0f5ebc97cc5e422154a97e209112e4398"
+}

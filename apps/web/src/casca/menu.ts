@@ -44,6 +44,7 @@ const SECOES: { id: string; titulo: string; itens: ItemComPerfis[] }[] = [
     titulo: 'Gestão',
     itens: [
       { id: 'caixa', rotulo: 'Caixa (particular)', href: '/caixa', icone: 'caixa', cor: 'green', perfis: ['caixa'] },
+      { id: 'estoque', rotulo: 'Estoque', href: '/estoque', icone: 'etiquetas', cor: 'green', perfis: ['estoque', 'gerente'] },
       { id: 'pendencias', rotulo: 'Pendências do caixa', href: '/caixa/pendencias', icone: 'autorizacao', cor: 'green', perfis: ['gerente', 'financeiro'] },
     ],
   },
@@ -51,6 +52,7 @@ const SECOES: { id: string; titulo: string; itens: ItemComPerfis[] }[] = [
     id: 'qualidade',
     titulo: 'Qualidade',
     itens: [
+      { id: 'lastro', rotulo: 'Lastro', href: '/lastro', icone: 'busca', cor: 'rose', perfis: ['gerente', 'auditor'] },
       { id: 'contingencia', rotulo: 'Contingência', href: '/contingencia', icone: 'contingencia', cor: 'rose', perfis: [...RECEPCAO, 'gerente'] },
     ],
   },

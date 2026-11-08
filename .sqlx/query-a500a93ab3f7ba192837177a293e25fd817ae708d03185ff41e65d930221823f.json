@@ -1,0 +1,19 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO estoque.movimento (id, lote_id, tipo, quantidade, criado_por, origem, unidade_id, correlacao) VALUES ($1, $2, 'entrada', $3, $4, 'estoque', $5, $6)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Int4",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "a500a93ab3f7ba192837177a293e25fd817ae708d03185ff41e65d930221823f"
+}

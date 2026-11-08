@@ -8,10 +8,12 @@ pub mod cadastro;
 pub mod caixa;
 pub mod contingencia;
 pub mod equipe;
+pub mod estoque;
 pub mod estornos;
 pub mod estudos;
 pub mod etiquetas;
 pub mod eventos;
+pub mod lastro_explorador;
 pub mod laudos;
 pub mod menu;
 pub mod pacientes;
@@ -116,6 +118,11 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/recebimentos/{id}/estornos", post(caixa::pedir_estorno))
         .route("/v1/autorizacoes-desconto", post(caixa::autorizar_desconto))
         .route("/v1/estornos/{id}/aprovacao", post(caixa::aprovar_estorno))
+        .route("/v1/estoque/itens", get(estoque::itens))
+        .route("/v1/estoque/entradas", post(estoque::entrada))
+        .route("/v1/estoque/lotes/{id}/rastreio", get(estoque::rastreio))
+        .route("/v1/atendimentos/{id}/contraste", post(estoque::contraste))
+        .route("/v1/lastro/cadeia", get(lastro_explorador::cadeia))
         .route("/v1/estornos", get(estornos::listar))
         .route("/v1/menu/agendamento/{id}", get(menu::agendamento))
         .route("/v1/menu/atendimento/{id}", get(menu::atendimento))

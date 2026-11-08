@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT l.numero, l.validade, i.nome FROM estoque.lote l JOIN estoque.item i ON i.id = l.item_id WHERE l.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "numero",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "estoque.lote",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "validade",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "estoque.lote",
+            "name": "validade"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "estoque.item",
+            "name": "nome"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "a02d3a8fa6731e89ef0bcf6d6bda03c1cd4e98519fce1507a5de4a461ffb7949"
+}

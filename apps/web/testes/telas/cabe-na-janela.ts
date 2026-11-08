@@ -219,6 +219,17 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await ir('/pacientes/novo');
   await esperar(page, 'heading', 'Novo paciente');
   await ok('28-cadastro-paciente');
+  estado.sessao = SESSOES.gerente;
+  await ir('/estoque');
+  await page.getByRole('button', { name: /Contraste iodado/ }).click();
+  await esperar(page, 'region', 'Detalhe do item');
+  await ok('29-estoque');
+  await ir('/lastro');
+  await page.getByRole('searchbox', { name: 'Buscar por qualquer código' }).fill('ATD-2026-000031');
+  await page.getByRole('button', { name: 'Abrir cadeia' }).click();
+  await esperar(page, 'heading', 'Sônia Maria Castro');
+  await ok('30-lastro');
+  estado.sessao = SESSOES.recepcao;
   await ir('/contingencia');
   await page.getByText('Nenhuma contingência aberta').waitFor();
   await ok('26-contingencia');

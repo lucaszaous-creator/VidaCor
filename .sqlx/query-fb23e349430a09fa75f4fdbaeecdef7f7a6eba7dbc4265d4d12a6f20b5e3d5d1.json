@@ -1,0 +1,21 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO estoque.movimento (id, lote_id, tipo, quantidade, atendimento_id, paciente_id, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, 'baixa_exame', $3, $4, $5, $6, 'sala', $7, $8)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Int4",
+        "Uuid",
+        "Uuid",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "fb23e349430a09fa75f4fdbaeecdef7f7a6eba7dbc4265d4d12a6f20b5e3d5d1"
+}

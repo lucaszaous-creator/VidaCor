@@ -402,6 +402,77 @@
         }
       }
     },
+    "/v1/atendimentos/{id}/contraste": {
+      "post": {
+        "tags": [
+          "estoque"
+        ],
+        "summary": "O técnico registra o contraste aplicado: baixa do lote que vence antes, ligada ao paciente.",
+        "operationId": "contraste",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContrasteAplicado"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MovimentoFeito"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/atendimentos/{id}/pulseira": {
       "post": {
         "tags": [
@@ -1302,6 +1373,154 @@
         }
       }
     },
+    "/v1/estoque/entradas": {
+      "post": {
+        "tags": [
+          "estoque"
+        ],
+        "summary": "Entrada de mercadoria por lote (o lote existente soma; validade diferente para o mesmo número é recusada).",
+        "operationId": "entrada",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntradaDeEstoque"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MovimentoFeito"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/estoque/itens": {
+      "get": {
+        "tags": [
+          "estoque"
+        ],
+        "summary": "Itens com saldo e lotes na ordem de saída.",
+        "operationId": "itens",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemDeEstoque"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/estoque/lotes/{id}/rastreio": {
+      "get": {
+        "tags": [
+          "estoque"
+        ],
+        "summary": "Rastreio por lote (alerta da Anvisa): quem recebeu cada lote. A leitura fica no lastro.",
+        "operationId": "rastreio",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RastreioDoLote"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/estornos": {
       "get": {
         "tags": [
@@ -1769,6 +1988,58 @@
             }
           },
           "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/lastro/cadeia": {
+      "get": {
+        "tags": [
+          "lastro"
+        ],
+        "summary": "Cadeia completa a partir de qualquer código (gerência e auditor).",
+        "operationId": "cadeia",
+        "parameters": [
+          {
+            "name": "codigo",
+            "in": "query",
+            "description": "Qualquer código do atendimento (ATD, accession, AGD, ETQ, guia, TRI, LAU, EST, StudyUID, REC, EST de estorno).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CadeiaDoAtendimento"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
             "description": "",
             "content": {
               "application/json": {
@@ -4271,6 +4542,40 @@
           }
         }
       },
+      "CadeiaDoAtendimento": {
+        "type": "object",
+        "required": [
+          "paciente",
+          "atendimento_codigo",
+          "nos",
+          "eventos",
+          "integra"
+        ],
+        "properties": {
+          "atendimento_codigo": {
+            "type": "string"
+          },
+          "eventos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventoDaCadeia"
+            }
+          },
+          "integra": {
+            "type": "boolean",
+            "description": "Todos os eventos da cadeia conferem."
+          },
+          "nos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NoDaCadeia"
+            }
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          }
+        }
+      },
       "Caixa": {
         "type": "object",
         "required": [
@@ -4422,6 +4727,23 @@
           }
         }
       },
+      "ContrasteAplicado": {
+        "type": "object",
+        "required": [
+          "item_id",
+          "quantidade"
+        ],
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "quantidade": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "ConviteEmitido": {
         "type": "object",
         "required": [
@@ -4555,6 +4877,32 @@
           },
           "senha": {
             "type": "string"
+          }
+        }
+      },
+      "EntradaDeEstoque": {
+        "type": "object",
+        "required": [
+          "item_id",
+          "numero_lote",
+          "validade",
+          "quantidade"
+        ],
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "numero_lote": {
+            "type": "string"
+          },
+          "quantidade": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "validade": {
+            "type": "string",
+            "format": "date"
           }
         }
       },
@@ -4788,6 +5136,51 @@
           }
         }
       },
+      "EventoDaCadeia": {
+        "type": "object",
+        "required": [
+          "sequencia",
+          "dominio",
+          "tipo",
+          "criado_em",
+          "origem",
+          "hash",
+          "integro"
+        ],
+        "properties": {
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dominio": {
+            "type": "string"
+          },
+          "hash": {
+            "type": "string",
+            "description": "Primeiros 12 caracteres do hash (hex)."
+          },
+          "integro": {
+            "type": "boolean",
+            "description": "O hash confere com o conteúdo e com o evento anterior."
+          },
+          "origem": {
+            "type": "string"
+          },
+          "registro_codigo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sequencia": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tipo": {
+            "type": "string"
+          }
+        }
+      },
       "Exame": {
         "type": "object",
         "required": [
@@ -5002,6 +5395,61 @@
           "situacao": {
             "type": "string",
             "description": "agendado, confirmado, em_atendimento, concluido, faltou ou cancelado."
+          }
+        }
+      },
+      "ItemDeEstoque": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "nome",
+          "medida",
+          "minimo",
+          "local",
+          "contraste",
+          "saldo_valido",
+          "abaixo_do_minimo",
+          "lotes"
+        ],
+        "properties": {
+          "abaixo_do_minimo": {
+            "type": "boolean"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "contraste": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "local": {
+            "type": "string"
+          },
+          "lotes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LoteDoItem"
+            },
+            "description": "Lotes com saldo, na ordem de saída (vence antes, sai antes)."
+          },
+          "medida": {
+            "type": "string"
+          },
+          "minimo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "saldo_valido": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Soma dos lotes dentro da validade."
           }
         }
       },
@@ -5276,6 +5724,36 @@
           }
         }
       },
+      "LoteDoItem": {
+        "type": "object",
+        "required": [
+          "id",
+          "numero",
+          "validade",
+          "saldo",
+          "vencido"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "numero": {
+            "type": "string"
+          },
+          "saldo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "validade": {
+            "type": "string",
+            "format": "date"
+          },
+          "vencido": {
+            "type": "boolean"
+          }
+        }
+      },
       "Membro": {
         "type": "object",
         "required": [
@@ -5314,6 +5792,69 @@
           },
           "cabecalho": {
             "$ref": "#/components/schemas/CabecalhoDoMenu"
+          }
+        }
+      },
+      "MovimentoFeito": {
+        "type": "object",
+        "required": [
+          "movimento_id",
+          "lote_id",
+          "numero_lote",
+          "validade",
+          "saldo_do_lote"
+        ],
+        "properties": {
+          "lote_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "movimento_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "numero_lote": {
+            "type": "string"
+          },
+          "saldo_do_lote": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "validade": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "NoDaCadeia": {
+        "type": "object",
+        "required": [
+          "tipo",
+          "id",
+          "codigo",
+          "criado_em"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "situacao": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tipo": {
+            "type": "string",
+            "description": "agendamento, guia, atendimento, etiqueta, triagem, estudo, laudo, recebimento, estorno, contraste."
           }
         }
       },
@@ -5436,6 +5977,31 @@
           },
           "nome": {
             "type": "string"
+          }
+        }
+      },
+      "PacienteDoLote": {
+        "type": "object",
+        "required": [
+          "paciente",
+          "atendimento_codigo",
+          "quantidade",
+          "aplicado_em"
+        ],
+        "properties": {
+          "aplicado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "atendimento_codigo": {
+            "type": "string"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "quantidade": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -6250,6 +6816,33 @@
           },
           "publicado": {
             "type": "boolean"
+          }
+        }
+      },
+      "RastreioDoLote": {
+        "type": "object",
+        "required": [
+          "numero",
+          "item",
+          "validade",
+          "pacientes"
+        ],
+        "properties": {
+          "item": {
+            "type": "string"
+          },
+          "numero": {
+            "type": "string"
+          },
+          "pacientes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PacienteDoLote"
+            }
+          },
+          "validade": {
+            "type": "string",
+            "format": "date"
           }
         }
       },

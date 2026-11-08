@@ -6,6 +6,8 @@
  */
 import type { components } from './gerado/openapi';
 import type { MenuDoObjeto } from './contrato-menu';
+import type { CadeiaDoAtendimento } from './contrato-lastro';
+import type { EntradaDeEstoque, ItemDeEstoque, MovimentoFeito, RastreioDoLote } from './contrato-estoque';
 import type { ConviteEmitido, NovoPaciente, PacienteCadastrado, PossivelDuplicado, SessaoDoPortal, SituacaoDoConvite } from './contrato-portal';
 import type { AtendimentoAReceber, EstornoDetalhado, NovoPedidoDesconto, PedidoDesconto } from './contrato-pendencias';
 import type { NovoAtendimento, PacienteResumo, Sala, SalaDaUnidade, Sessao } from './contrato-m0';
@@ -75,3 +77,8 @@ export type ConferePossivelDuplicado = Cabe<PossivelDuplicado, S['PossivelDuplic
 export type ConfereNovoPaciente = Cabe<NovoPaciente, S['NovoPaciente']>;
 export type ConferePacienteCadastrado = Cabe<PacienteCadastrado, S['PacienteCadastrado']>;
 export type ConfereAtendimentoAReceber = Cabe<AtendimentoAReceber, S['AtendimentoAReceber']>;
+export type ConfereItemDeEstoque = Cabe<ItemDeEstoque, S['ItemDeEstoque']>;
+export type ConfereEntradaDeEstoque = Cabe<EntradaDeEstoque, S['EntradaDeEstoque']>;
+export type ConfereMovimentoFeito = Cabe<MovimentoFeito, S['MovimentoFeito']>;
+export type ConfereRastreioDoLote = Cabe<RastreioDoLote, S['RastreioDoLote']>;
+export type ConfereCadeiaDoAtendimento = Cabe<CadeiaDoAtendimento, S['CadeiaDoAtendimento']>;

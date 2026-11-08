@@ -1,0 +1,66 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE estoque.lote SET saldo = saldo - $2, versao = versao + 1\n          WHERE id = (SELECT id FROM estoque.lote WHERE item_id = $1 AND validade >= $3 AND saldo >= $2\n                       ORDER BY validade, numero LIMIT 1 FOR UPDATE SKIP LOCKED)\n            AND saldo >= $2\n          RETURNING id, numero, validade, saldo",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "estoque.lote",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "numero",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "estoque.lote",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "validade",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "estoque.lote",
+            "name": "validade"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "saldo",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "estoque.lote",
+            "name": "saldo"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4",
+        "Date"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "8b93f5cbe80eda8982092c2dcf7d89f535ca4e6b9d5016fc5443c3cbe13dc56b"
+}

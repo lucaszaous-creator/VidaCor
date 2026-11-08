@@ -1,0 +1,74 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, item_id, numero, validade, saldo FROM estoque.lote WHERE saldo > 0 ORDER BY validade, numero",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "estoque.lote",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "item_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "estoque.lote",
+            "name": "item_id"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "numero",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "estoque.lote",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "validade",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "estoque.lote",
+            "name": "validade"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "saldo",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "estoque.lote",
+            "name": "saldo"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "6f5c1e1b5254013abe6ab657b3fdd9fe694c86982dcbe806d85630b344724882"
+}

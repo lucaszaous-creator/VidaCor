@@ -348,6 +348,7 @@ async fn semear(admin: &PgPool) -> Semente {
         ("marcos.freire", "Dr. Marcos Freire", "medico", UNIDADE_A),
         ("carla.caixa", "Carla Mendes", "caixa", UNIDADE_A),
         ("joao.caixa", "João Prado", "caixa", UNIDADE_A),
+        ("estoque.a", "Marcos Almoxarifado", "estoque", UNIDADE_A),
         ("patricia.lemos", "Patrícia Lemos", "gerente", UNIDADE_A),
         ("financeiro.a", "Equipe Financeiro", "financeiro", UNIDADE_A),
         ("ti.a", "Equipe TI", "ti", UNIDADE_A),

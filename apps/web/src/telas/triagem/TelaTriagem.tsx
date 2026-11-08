@@ -22,6 +22,7 @@ import { ErroDoAto } from '../../componentes/ErroDoAto';
 import { chaves, consultaAtendimento, consultaSessao } from '../../consultas';
 import { useDependencias } from '../../contexto';
 import { useOperacao } from '../../operacao';
+import { RegistroDeContraste } from './RegistroDeContraste';
 import { useReautenticar, useRetomada, type Retomada } from '../../reautenticacao';
 import { FUSO_DA_CLINICA } from '../agenda/grade';
 
@@ -315,6 +316,9 @@ export function TelaTriagem() {
                   A aprovação foi pedida à médica com vínculo de cuidado. Ela registra a conduta nesta tela.
                 </Aviso>
               ))}
+            {triagem !== null && (triagem.exame_liberado || condutaRegistrada) && !ehMedico && (
+              <RegistroDeContraste atendimentoId={atendimentoId} paciente={a.paciente.nome} />
+            )}
           </div>
         </section>
       </div>

@@ -103,4 +103,16 @@ ON CONFLICT (prefixo, ano) DO UPDATE SET valor = GREATEST(comum.contador.valor, 
 UPDATE identidade.paciente SET email = lower(translate(split_part(nome, ' ', 1) || '.' || reverse(split_part(reverse(nome), ' ', 1)),
   'áàâãéêíóôõúçÁÉÍÓÚÂÊÔÃÕÇ', 'aaaaeeiooouucAEIOUAEOAOC')) || '@exemplo.invalid'
  WHERE email IS NULL AND origem = 'semente';
+-- Estoque fictício (Estoque.dc.html): contraste e consumíveis, com lotes e validades.
+INSERT INTO estoque.item (id, codigo, nome, medida, minimo, local, contraste, origem, unidade_id, correlacao)
+VALUES ('0194f000-0000-7000-8000-0000000e0001', 'ITM-CTR', 'Contraste iodado não iônico 350, 100 ml', 'frasco', 20, 'Tomografia', true, 'semente', '0194f000-0000-7000-8000-0000000000a1', 'semente-dev'),
+       ('0194f000-0000-7000-8000-0000000e0002', 'ITM-GEL', 'Gel para ultrassom, 5 L', 'galao', 6, 'Salas de USG', false, 'semente', '0194f000-0000-7000-8000-0000000000a1', 'semente-dev'),
+       ('0194f000-0000-7000-8000-0000000e0003', 'ITM-SER', 'Seringa 20 ml com scalp 21G', 'kit', 80, 'Tomografia', false, 'semente', '0194f000-0000-7000-8000-0000000000a1', 'semente-dev')
+ON CONFLICT (codigo) DO NOTHING;
+INSERT INTO estoque.lote (id, item_id, numero, validade, saldo, origem, unidade_id, correlacao)
+VALUES (gen_random_uuid(), '0194f000-0000-7000-8000-0000000e0001', 'L2408-77', DATE '2027-03-31', 8, 'semente', '0194f000-0000-7000-8000-0000000000a1', 'semente-dev'),
+       (gen_random_uuid(), '0194f000-0000-7000-8000-0000000e0002', 'G0911', DATE '2026-12-15', 4, 'semente', '0194f000-0000-7000-8000-0000000000a1', 'semente-dev'),
+       (gen_random_uuid(), '0194f000-0000-7000-8000-0000000e0002', 'G1003', DATE '2027-10-31', 10, 'semente', '0194f000-0000-7000-8000-0000000000a1', 'semente-dev'),
+       (gen_random_uuid(), '0194f000-0000-7000-8000-0000000e0003', 'S8820', DATE '2029-02-28', 240, 'semente', '0194f000-0000-7000-8000-0000000000a1', 'semente-dev')
+ON CONFLICT (item_id, numero) DO NOTHING;
 COMMIT;

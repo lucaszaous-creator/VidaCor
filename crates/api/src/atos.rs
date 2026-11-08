@@ -28,6 +28,11 @@ pub enum Ato {
     EstudoConciliar,
     PortalConvidar,
     PacienteCadastrar,
+    EstoqueVer,
+    EstoqueMovimentar,
+    ContrasteRegistrar,
+    LoteRastrear,
+    LastroExplorar,
 }
 
 impl Ato {
@@ -57,6 +62,14 @@ impl Ato {
             A::PortalConvidar => &["recepcao", "gerente"],
             // Cadastro de paciente (docs/18 § 5: recepção; gerência pela supervisão).
             A::PacienteCadastrar => &["recepcao", "gerente"],
+            // Estoque (docs/18 § 3 e § 5): o perfil estoque vê itens e lotes sem paciente; contraste é
+            // registrado por quem executa o exame; rastrear lote (com pacientes) é da gerência.
+            A::EstoqueVer => &["estoque", "gerente", "tecnico", "enfermagem"],
+            A::EstoqueMovimentar => &["estoque", "gerente"],
+            A::ContrasteRegistrar => &["tecnico", "enfermagem"],
+            A::LoteRastrear => &["gerente"],
+            // Explorador de lastro: gerência e auditor/DPO (docs/18 § 4: metadados de acesso).
+            A::LastroExplorar => &["gerente", "auditor"],
         };
         perfis.contains(&perfil)
     }
@@ -66,7 +79,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 24] = [
+    const TODOS: [Ato; 29] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -91,6 +104,11 @@ mod testes {
         Ato::EstudoConciliar,
         Ato::PortalConvidar,
         Ato::PacienteCadastrar,
+        Ato::EstoqueVer,
+        Ato::EstoqueMovimentar,
+        Ato::ContrasteRegistrar,
+        Ato::LoteRastrear,
+        Ato::LastroExplorar,
     ];
 
     #[test]

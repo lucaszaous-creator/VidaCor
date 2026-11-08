@@ -17,3 +17,11 @@ expect_used = "deny"
 panic = "deny"
 dbg_macro = "deny"
 todo = "deny"
+
+# Build de desenvolvimento e testes: só a linha no backtrace e nada de depuração das dependências.
+# Cada arquivo de teste vira um binário; com depuração completa o disco da estação enche.
+[profile.dev]
+debug = "line-tables-only"
+
+[profile.dev.package."*"]
+debug = false

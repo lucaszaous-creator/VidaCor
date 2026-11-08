@@ -1,0 +1,47 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO estoque.lote (id, item_id, numero, validade, saldo, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, 'estoque', $7, $8)\n         ON CONFLICT (item_id, numero) DO UPDATE SET saldo = estoque.lote.saldo + EXCLUDED.saldo, versao = estoque.lote.versao + 1\n           WHERE estoque.lote.validade = EXCLUDED.validade\n         RETURNING id, saldo",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "estoque.lote",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "saldo",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "estoque.lote",
+            "name": "saldo"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Date",
+        "Int4",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "c8c4bc453b7361163b60708f35bf997f84d5a72bbbdc74fc6956f51d0c5cad32"
+}
