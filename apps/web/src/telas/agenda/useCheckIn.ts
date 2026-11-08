@@ -4,7 +4,7 @@ import {
   ErroDaApi,
   ErroSemConexao,
   novaChaveDeIdempotencia,
-  type Atendimento,
+  type AtendimentoFase1,
   type ItemDaAgenda,
 } from '@vidacor/api-client';
 import { useRef, useState } from 'react';
@@ -15,6 +15,7 @@ import { erroParaTela, type ErroParaTela } from '../../erros';
 export interface ErrosDosCampos {
   nome: string | null;
   nascimento: string | null;
+  documento: string | null;
 }
 
 /**
@@ -28,12 +29,13 @@ export function useCheckIn(item: ItemDaAgenda) {
   const queryClient = useQueryClient();
   const [nome, setNome] = useState('');
   const [nascimento, setNascimento] = useState<CalendarDate | null>(null);
+  const [documento, setDocumento] = useState(false);
   const [tentou, setTentou] = useState(false);
   const [confirmando, setConfirmando] = useState(false);
   const chave = useRef<string>(novaChaveDeIdempotencia());
   const chaveRecusada = useRef(false);
 
-  const envio = useMutation<Atendimento, unknown, { nome: string; nascimento: string }>({
+  const envio = useMutation<AtendimentoFase1, unknown, { nome: string; nascimento: string; documento_com_foto: boolean }>({
     mutationFn: (confirmacao) =>
       api.atendimentos.criar({ agendamento_id: item.id, confirmacao }, { idempotencyKey: chave.current }),
     onSuccess: async () => {
@@ -55,11 +57,12 @@ export function useCheckIn(item: ItemDaAgenda) {
   const errosDosCampos: ErrosDosCampos = {
     nome: tentou && nome.trim() === '' ? 'Digite o nome completo como está no documento.' : null,
     nascimento: tentou && nascimento === null ? 'Digite a data de nascimento completa: dia, mês e ano.' : null,
+    documento: tentou && !documento ? 'Confira o documento com foto do paciente antes do check-in.' : null,
   };
 
   function pedirConfirmacao(): void {
     setTentou(true);
-    if (nome.trim() !== '' && nascimento !== null) {
+    if (nome.trim() !== '' && nascimento !== null && documento) {
       setConfirmando(true);
     }
   }
@@ -72,7 +75,7 @@ export function useCheckIn(item: ItemDaAgenda) {
       chave.current = novaChaveDeIdempotencia();
       chaveRecusada.current = false;
     }
-    envio.mutate({ nome: nome.trim(), nascimento: nascimento.toString() });
+    envio.mutate({ nome: nome.trim(), nascimento: nascimento.toString(), documento_com_foto: documento });
   }
 
   const erro: ErroParaTela | null = envio.isError ? erroParaTela(envio.error) : null;
@@ -82,6 +85,8 @@ export function useCheckIn(item: ItemDaAgenda) {
     setNome,
     nascimento,
     setNascimento,
+    documento,
+    setDocumento,
     errosDosCampos,
     confirmando,
     cancelarConfirmacao: () => {
@@ -92,6 +97,8 @@ export function useCheckIn(item: ItemDaAgenda) {
     enviando: envio.isPending,
     atendimento: envio.data ?? null,
     erro,
+    /** O erro como veio (para o ErroDoAto, que mostra o detail do servidor). */
+    erroBruto: envio.isError ? envio.error : null,
     /** Sem conexão: não se sabe se o servidor gravou; reenviar com a mesma chave não duplica. */
     semConexao: envio.error instanceof ErroSemConexao,
   };

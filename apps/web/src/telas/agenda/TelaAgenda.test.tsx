@@ -27,6 +27,10 @@ async function preencherEConferir(usuario: UserEvent, nome: string, nascimento: 
   const dia = within(gaveta).getAllByRole('spinbutton')[0] as HTMLElement;
   await usuario.click(dia);
   await usuario.keyboard(nascimento);
+  const documento = within(gaveta).getByRole('checkbox', { name: /Documento com foto conferido/ });
+  if (!(documento as HTMLInputElement).checked) {
+    await usuario.click(documento);
+  }
   await usuario.click(within(gaveta).getByRole('button', { name: 'Conferir e fazer check-in' }));
 }
 
@@ -134,7 +138,9 @@ describe('Check-in com dois identificadores', () => {
     await usuario.click(within(dialogo).getByRole('button', { name: 'Fazer check-in' }));
 
     const feito = await screen.findByRole('complementary', { name: 'Check-in feito' });
-    expect(within(feito).getByRole('status')).toHaveTextContent('Check-in feito. Atendimento ATD-2026-118791, accession ACC-2026-052311.');
+    expect(within(feito).getByRole('status')).toHaveTextContent(
+      'Check-in feito. Atendimento ATD-2026-118791, accession ACC-2026-052311, senha A012, pulseira ETQ-2026-018742.',
+    );
     expect(await within(feito).findByText('Ainda não chegaram do aparelho.')).toBeInTheDocument();
 
     expect(estado.pedidosDeCheckin).toHaveLength(1);
@@ -143,7 +149,7 @@ describe('Check-in com dois identificadores', () => {
     expect(pedido?.chave).toMatch(UUID);
     expect(pedido?.corpo).toEqual({
       agendamento_id: ANTONIO.id,
-      confirmacao: { nome: 'Antônio Carlos Ribeiro', nascimento: '1954-06-15' },
+      confirmacao: { nome: 'Antônio Carlos Ribeiro', nascimento: '1954-06-15', documento_com_foto: true },
     });
   });
 
@@ -156,6 +162,7 @@ describe('Check-in com dois identificadores', () => {
     await usuario.click(within(gaveta).getByRole('button', { name: 'Conferir e fazer check-in' }));
     expect(within(gaveta).getByText('Digite o nome completo como está no documento.')).toBeInTheDocument();
     expect(within(gaveta).getByText('Digite a data de nascimento completa: dia, mês e ano.')).toBeInTheDocument();
+    expect(within(gaveta).getByText('Confira o documento com foto do paciente antes do check-in.')).toBeInTheDocument();
     expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
     expect(estado.pedidosDeCheckin).toHaveLength(0);
   });

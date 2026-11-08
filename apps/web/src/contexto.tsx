@@ -7,8 +7,12 @@ export interface Dependencias {
   criarFonteDeEventos?: (url: string) => FonteDeEventos;
   /** Quanto esperar o SSE voltar sozinho antes de avisar que caiu (padrão 10 s; testes usam 0). */
   atrasoDoAvisoDeEventosMs?: number;
-  /** Navegação de página inteira (entrada OIDC no servidor). */
+  /** Navegação de página inteira (entrada OIDC e reautenticação no servidor). */
   irPara: (url: string) => void;
+  /** Impressão da página (pulseira). Padrão: `window.print()`; testes trocam por um espião. */
+  imprimir?: () => void;
+  /** Espera depois da última tecla antes de salvar o rascunho (padrão 1,2 s; testes usam 0). */
+  atrasoDoRascunhoMs?: number;
 }
 
 export const ContextoDeDependencias = createContext<Dependencias | null>(null);

@@ -15,6 +15,8 @@ interface Aparencia {
 
 const AGENDAMENTO: Record<string, Aparencia> = {
   agendado: { texto: 'Agendado', cor: 'azul', classe: '' },
+  reserva_provisoria: { texto: 'Reserva provisória', cor: 'ambar', classe: 'wait' },
+  expirada: { texto: 'Reserva expirada', cor: 'cinza', classe: 'cx' },
   confirmado: { texto: 'Confirmado', cor: 'verdeAgua', classe: '' },
   em_atendimento: { texto: 'Em atendimento', cor: 'violeta', classe: 'now', ponto: '#5B45B5' },
   concluido: { texto: 'Concluído', cor: 'cinza', classe: 'done' },
@@ -23,6 +25,7 @@ const AGENDAMENTO: Record<string, Aparencia> = {
 };
 
 const ATENDIMENTO: Record<string, Aparencia> = {
+  aguardando_sala: { texto: 'Aguardando sala', cor: 'ambar', classe: 'wait' },
   aguardando_exame: { texto: 'Aguardando exame', cor: 'ambar', classe: 'wait' },
   em_exame: { texto: 'Em exame', cor: 'violeta', classe: 'now' },
   exame_concluido: { texto: 'Exame concluído', cor: 'cinza', classe: 'done' },

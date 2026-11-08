@@ -3,11 +3,11 @@
  * design/mockups/Agenda.dc.html (sexta, 06/11/2026). Nenhum dado real de paciente.
  * Só sintaxe apagável de TypeScript: este arquivo também roda direto no Node (teste Playwright).
  */
-import type { Agenda, AtendimentoDetalhado, ItemDaAgenda, Sala, Sessao, SituacaoAgendamento } from '@vidacor/api-client';
+import type { AgendaFase1, AtendimentoDetalhadoFase1, ItemDaAgendaFase1, Sala, Sessao, SituacaoAgendamento } from '@vidacor/api-client';
 
 export const DATA_DOS_TESTES = '2026-11-06';
 
-function uuid(prefixo: string, n: number): string {
+export function uuid(prefixo: string, n: number): string {
   return `${prefixo}-0000-7000-8000-${String(n).padStart(12, '0')}`;
 }
 
@@ -86,7 +86,7 @@ function hora(linha: number): string {
   return `${String(Math.floor(minutos / 60)).padStart(2, '0')}:${String(minutos % 60).padStart(2, '0')}`;
 }
 
-export function itensDaAgenda(): ItemDaAgenda[] {
+export function itensDaAgenda(): ItemDaAgendaFase1[] {
   return E.map(([coluna, linha, meias, estado, nome, nascimento, exame], i) => {
     const sala = SALAS[coluna - 2] as Sala;
     const situacao = SITUACAO[estado] ?? 'agendado';
@@ -101,11 +101,15 @@ export function itensDaAgenda(): ItemDaAgenda[] {
       exame: { codigo_tuss: '40901114', nome: exame },
       situacao,
       atendimento_id: comAtendimento ? uuid('0000000f', i + 1) : null,
+      // FC-CHK-04: outro Antônio Carlos Ribeiro, nascido em 02/01/1980, também tem exame hoje.
+      homonimos: nome === 'Antônio Carlos Ribeiro' ? [{ id: uuid('0000000e', 901), nome, nascimento: '1980-01-02' }] : [],
+      requer_contraste: exame.includes('contraste'),
+      laudo_situacao: estado === 'done' ? 'rascunho' : null,
     };
   });
 }
 
-export function agendaDoDia(data: string, salaId?: string | null): Agenda {
+export function agendaDoDia(data: string, salaId?: string | null): AgendaFase1 {
   if (data !== DATA_DOS_TESTES) {
     return { data, itens: [] };
   }
@@ -113,17 +117,21 @@ export function agendaDoDia(data: string, salaId?: string | null): Agenda {
   return { data, itens };
 }
 
-export const ANTONIO = itensDaAgenda().find((i) => i.paciente.nome === 'Antônio Carlos Ribeiro') as ItemDaAgenda;
+export const ANTONIO = itensDaAgenda().find((i) => i.paciente.nome === 'Antônio Carlos Ribeiro') as ItemDaAgendaFase1;
 
-export function atendimentoDe(item: ItemDaAgenda, sequencia: number, comEstudo = false): AtendimentoDetalhado {
+export function atendimentoDe(item: ItemDaAgendaFase1, sequencia: number, comEstudo = false): AtendimentoDetalhadoFase1 {
   return {
     id: item.atendimento_id ?? uuid('0000000f', 900 + sequencia),
     codigo: `ATD-2026-${String(118790 + sequencia).padStart(6, '0')}`,
     accession: `ACC-2026-${String(52310 + sequencia).padStart(6, '0')}`,
     agendamento_id: item.id,
     paciente: item.paciente,
-    situacao: 'aguardando_exame',
+    situacao: 'aguardando_sala',
+    senha: `A${String(11 + sequencia).padStart(3, '0')}`,
+    pulseira: { codigo: `ETQ-2026-${String(18741 + sequencia).padStart(6, '0')}`, situacao: 'valida' },
     criado_em: `${DATA_DOS_TESTES}T12:01:00Z`,
+    triagem: null,
+    laudo_situacao: null,
     estudo: comEstudo ? { study_uid: '1.2.826.0.1.3680043.8.498.1', imagens: 24, recebido_em: `${DATA_DOS_TESTES}T12:20:00Z` } : null,
   };
 }

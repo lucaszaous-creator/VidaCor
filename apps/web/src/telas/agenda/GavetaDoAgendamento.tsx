@@ -4,6 +4,7 @@ import {
   Aviso,
   Botao,
   BotaoDeIcone,
+  CaixaDeMarcar,
   Campo,
   CampoDeData,
   Chip,
@@ -121,7 +122,8 @@ function CheckIn({ item, aoVoltar, aoFechar }: PropsDoCheckIn) {
       >
         <Aviso nivel="feito" titulo="Check-in feito.">
           Atendimento <b className="num">{c.atendimento.codigo}</b>, accession{' '}
-          <b className="num">{c.atendimento.accession}</b>.
+          <b className="num">{c.atendimento.accession}</b>, senha <b className="num">{c.atendimento.senha}</b>, pulseira{' '}
+          <b className="num">{c.atendimento.pulseira.codigo}</b>. Imprima a pulseira em Recepção e pulseiras.
         </Aviso>
         <ResumoDoAtendimento atendimentoId={c.atendimento.id} />
       </GavetaBase>
@@ -204,6 +206,14 @@ function CheckIn({ item, aoVoltar, aoFechar }: PropsDoCheckIn) {
         valor={c.nascimento}
         aoMudar={c.setNascimento}
         erro={c.errosDosCampos.nascimento}
+        desabilitado={c.enviando}
+      />
+      <CaixaDeMarcar
+        rotulo="Documento com foto conferido"
+        detalhe="O rosto do documento confere com o paciente no balcão."
+        marcado={c.documento}
+        aoMudar={c.setDocumento}
+        erro={c.errosDosCampos.documento}
         desabilitado={c.enviando}
       />
       <Dialogo

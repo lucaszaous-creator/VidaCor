@@ -35,6 +35,7 @@ export class FonteFalsa implements FonteDeEventos {
 export function renderizar(url: string) {
   const fontes: FonteFalsa[] = [];
   const irPara = vi.fn();
+  const imprimir = vi.fn();
   const queryClient = criarQueryClient();
   queryClient.setDefaultOptions({ queries: { retry: false } });
   const tela = render(
@@ -44,7 +45,9 @@ export function renderizar(url: string) {
       dependencias={{
         api: criarCliente({ esperar: () => Promise.resolve() }),
         irPara,
+        imprimir,
         atrasoDoAvisoDeEventosMs: 0,
+        atrasoDoRascunhoMs: 0,
         criarFonteDeEventos: (u) => {
           const f = new FonteFalsa(u);
           fontes.push(f);
@@ -53,5 +56,5 @@ export function renderizar(url: string) {
       }}
     />,
   );
-  return { ...tela, fontes, irPara, queryClient };
+  return { ...tela, fontes, irPara, imprimir, queryClient };
 }
