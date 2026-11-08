@@ -512,3 +512,35 @@ async fn fc_pix_05_dois_webhooks_iguais_ao_mesmo_tempo() {
         1
     );
 }
+
+#[tokio::test]
+async fn caixa_e_financeiro_nao_veem_dado_clinico() {
+    let amb = Ambiente::novo().await;
+    for perfis in ["caixa", "financeiro"] {
+        let mut tx = amb.app_pool.begin().await.unwrap();
+        sqlx::query(
+            "SELECT set_config('app.unidade_id', $1, true), set_config('app.perfis', $2, true)",
+        )
+        .bind(UNIDADE_A.to_string())
+        .bind(perfis)
+        .execute(&mut *tx)
+        .await
+        .unwrap();
+        for tabela in [
+            "triagem.triagem",
+            "laudos.laudo",
+            "laudos.versao",
+            "exames.estudo",
+            "agenda.agendamento",
+        ] {
+            let n: i64 = sqlx::query_scalar(sqlx::AssertSqlSafe(format!(
+                "SELECT count(*) FROM {tabela}"
+            )))
+            .fetch_one(&mut *tx)
+            .await
+            .unwrap();
+            assert_eq!(n, 0, "{perfis} não lê {tabela}");
+        }
+        tx.rollback().await.unwrap();
+    }
+}

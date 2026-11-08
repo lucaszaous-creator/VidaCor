@@ -73,7 +73,16 @@ async fn rls_sem_contexto_nao_entrega_paciente() {
 #[tokio::test]
 async fn rls_com_contexto_autorizado_e_nao_autorizado() {
     let amb = Ambiente::novo().await;
-    for (perfis, esperado) in [("recepcao", 5_i64), ("ti", 0), ("financeiro", 0), ("", 0)] {
+    // docs/18 § 4: recepção vê o cadastro; caixa e financeiro veem o cadastro (N1) para cobrar e
+    // emitir nota; TI e quem não tem perfil não veem paciente nenhum.
+    for (perfis, esperado) in [
+        ("recepcao", 5_i64),
+        ("caixa", 5),
+        ("financeiro", 5),
+        ("ti", 0),
+        ("estoque", 0),
+        ("", 0),
+    ] {
         let mut tx = amb.app_pool.begin().await.unwrap();
         sqlx::query(
             "SELECT set_config('app.unidade_id', $1, true), set_config('app.perfis', $2, true)",
