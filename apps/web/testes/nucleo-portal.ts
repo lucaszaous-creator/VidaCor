@@ -35,7 +35,7 @@ export const manipuladoresPortal = [
     await registrar('convidar-portal', request);
     if (!temPerfil('recepcao', 'gerente')) return semPermissao('convidar para o portal');
     return HttpResponse.json(
-      { id: '00000027-0000-7000-8000-000000000001', codigo: 'CNV-2026-000003', caminho: `/portal/convite/${TOKEN_VALIDO}`, expira_em: '2026-11-09T12:00:00Z' },
+      { id: '00000027-0000-7000-8000-000000000001', codigo: 'CNV-2026-000003', expira_em: '2026-11-09T12:00:00Z', enviado_para: 'an***@exemplo.invalid' },
       { status: 201 },
     );
   }),

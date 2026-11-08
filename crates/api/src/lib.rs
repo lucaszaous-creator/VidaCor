@@ -6,6 +6,7 @@ pub mod assinatura;
 pub mod atos;
 pub mod banco;
 pub mod config;
+pub mod correio;
 pub mod erro;
 pub mod estado;
 pub mod eventos;

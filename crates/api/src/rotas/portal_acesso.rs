@@ -26,7 +26,6 @@ use axum::Json;
 use base64::engine::general_purpose::URL_SAFE_NO_PAD;
 use base64::Engine;
 use chrono::{DateTime, Duration, NaiveDate, Utc};
-use rand::RngCore;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use sha2::{Digest, Sha256};
@@ -56,19 +55,35 @@ fn cookie(segredo: &str, seguro: bool) -> String {
     )
 }
 
+/// Token do convite: HMAC(segredo do servidor, id do convite). Recalculável só pelo servidor; o
+/// banco guarda o hash para a busca e nada guarda o token (DEC-2026-11-08-60).
+fn token_do_convite(segredo: &str, id: Uuid) -> Result<String, ErroApi> {
+    use hmac::{Hmac, Mac};
+    let mut mac = Hmac::<Sha256>::new_from_slice(segredo.as_bytes()).map_err(ErroApi::interno)?;
+    mac.update(id.as_bytes());
+    Ok(URL_SAFE_NO_PAD.encode(mac.finalize().into_bytes()))
+}
+
+fn mascarar(email: &str) -> String {
+    let (nome, dominio) = email.split_once('@').unwrap_or((email, ""));
+    let inicio: String = nome.chars().take(2).collect();
+    format!("{inicio}***@{dominio}")
+}
+
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct ConviteEmitido {
     pub id: Uuid,
     pub codigo: String,
-    /// Caminho do aceite com o token; aparece só na primeira resposta. Na repetição (mesma
-    /// `Idempotency-Key`) vem nulo: o banco guarda só o hash, e o link não é recriado.
-    pub caminho: Option<String>,
     pub expira_em: DateTime<Utc>,
+    /// E-mail do cadastro, mascarado (o link vai só para lá; a recepção não o vê).
+    pub enviado_para: String,
 }
 
-/// A recepção convida o paciente para o portal (convite novo revoga o anterior).
+/// A recepção convida o paciente para o portal: o link vai por e-mail para o endereço do cadastro
+/// (convite novo revoga o anterior; serve também para quem esqueceu a senha).
 #[utoipa::path(post, operation_id = "convidar_para_o_portal", path = "/v1/pacientes/{id}/convites-portal", tag = "portal", params(("id" = Uuid, Path), ("Idempotency-Key" = Uuid, Header)),
-    responses((status = 201, body = ConviteEmitido), (status = 403, body = crate::openapi::ProblemaDoc), (status = 404, body = crate::openapi::ProblemaDoc)))]
+    responses((status = 201, body = ConviteEmitido), (status = 403, body = crate::openapi::ProblemaDoc), (status = 404, body = crate::openapi::ProblemaDoc),
+              (status = 422, body = crate::openapi::ProblemaDoc), (status = 503, body = crate::openapi::ProblemaDoc)))]
 pub async fn convidar(
     State(estado): State<Estado>,
     usuario: Usuario,
@@ -76,6 +91,10 @@ pub async fn convidar(
     ChaveIdempotencia(chave): ChaveIdempotencia,
 ) -> Result<Response, ErroApi> {
     usuario.exigir(Ato::PortalConvidar)?;
+    let segredo = estado.config.convite_segredo.clone().ok_or_else(|| {
+        ErroApi::novo(StatusCode::SERVICE_UNAVAILABLE, "convite-indisponivel-no-servidor", "Convite indisponível",
+            "O servidor ainda não está configurado para convites do portal. Nada foi enviado. Avise a TI.")
+    })?;
     let rota = "POST /v1/pacientes/{id}/convites-portal";
     let correlacao = crate::trace::atual().unwrap_or_default();
     let mut tx = banco::transacao(&estado.banco, &usuario.contexto()).await?;
@@ -89,18 +108,12 @@ pub async fn convidar(
         )
             .into_response());
     }
-    let existe = sqlx::query_scalar!(
-        "SELECT id FROM identidade.paciente WHERE id = $1",
-        paciente_id
-    )
-    .fetch_optional(&mut *tx)
-    .await?;
-    if existe.is_none() {
-        return Err(ErroApi::nao_encontrado(
-            "paciente-nao-encontrado",
-            "Paciente não encontrado. Nenhum convite foi criado.",
-        ));
-    }
+    let email = sqlx::query_scalar!("SELECT email FROM identidade.paciente WHERE id = $1", paciente_id)
+        .fetch_optional(&mut *tx)
+        .await?
+        .ok_or_else(|| ErroApi::nao_encontrado("paciente-nao-encontrado", "Paciente não encontrado. Nenhum convite foi criado."))?
+        .ok_or_else(|| ErroApi::invalido("paciente-sem-email",
+            "O cadastro não tem e-mail. Nada foi enviado. Confira o e-mail com o paciente e corrija o cadastro antes de convidar."))?;
     sqlx::query!(
         "UPDATE portal.convite SET revogado_em = now(), motivo_revogacao = 'convite novo', versao = versao + 1
           WHERE paciente_id = $1 AND usado_em IS NULL AND revogado_em IS NULL",
@@ -108,16 +121,22 @@ pub async fn convidar(
     )
     .execute(&mut *tx)
     .await?;
-    let mut buf = [0_u8; 32];
-    rand::rng().fill_bytes(&mut buf);
-    let token = URL_SAFE_NO_PAD.encode(buf);
     let id = novo_id();
+    let token = token_do_convite(&segredo, id)?;
     let codigo = proximo(&mut tx, "CNV").await?;
     let expira_em = Utc::now() + Duration::hours(VALIDADE_CONVITE_HORAS);
     sqlx::query!(
         "INSERT INTO portal.convite (id, codigo, paciente_id, token_hash, expira_em, criado_por, origem, unidade_id, correlacao)
          VALUES ($1, $2, $3, $4, $5, $6, 'recepcao', $7, $8)",
         id, codigo.como_str(), paciente_id, hash_token(&token), expira_em, usuario.id, usuario.unidade_id, correlacao
+    )
+    .execute(&mut *tx)
+    .await?;
+    // O e-mail sai pelo outbox com chave de idempotência (G3); a carga leva só o ID do convite.
+    sqlx::query!(
+        "INSERT INTO integracao.outbox (id, tipo, chave_idempotencia, carga, unidade_id, correlacao, referencia)
+         VALUES ($1, 'email.convite_portal', $2, $3, $4, $5, $6)",
+        novo_id(), novo_id(), json!({ "convite_id": id }), usuario.unidade_id, correlacao, id
     )
     .execute(&mut *tx)
     .await?;
@@ -128,7 +147,7 @@ pub async fn convidar(
             tipo: "convite_emitido",
             registro_id: id,
             registro_codigo: Some(codigo.como_str()),
-            dados: json!({ "paciente": paciente_id, "expira_em": expira_em }),
+            dados: json!({ "paciente": paciente_id, "expira_em": expira_em, "canal": "email" }),
             criado_por: Some(usuario.id),
             origem: "recepcao",
             unidade_id: usuario.unidade_id,
@@ -136,24 +155,95 @@ pub async fn convidar(
         },
     )
     .await?;
-    // A repetição devolve o mesmo convite (G3), sem o link: o token não fica guardado em lugar nenhum.
-    let guardado = ConviteEmitido {
+    let corpo = serde_json::to_value(ConviteEmitido {
         id,
         codigo: codigo.to_string(),
-        caminho: None,
         expira_em,
-    };
-    let corpo_guardado = serde_json::to_value(&guardado).map_err(ErroApi::interno)?;
-    idempotencia::concluir(&mut tx, usuario.id, rota, chave, 201, &corpo_guardado).await?;
+        enviado_para: mascarar(&email),
+    })
+    .map_err(ErroApi::interno)?;
+    idempotencia::concluir(&mut tx, usuario.id, rota, chave, 201, &corpo).await?;
     tx.commit().await?;
-    Ok((
-        StatusCode::CREATED,
-        Json(ConviteEmitido {
-            caminho: Some(format!("/portal/convite/{token}")),
-            ..guardado
-        }),
+    estado.outbox_aviso.notify_one();
+    Ok((StatusCode::CREATED, Json(corpo)).into_response())
+}
+
+/// Trabalhador do outbox: recalcula o link e envia o e-mail do convite. Convite já usado, revogado ou
+/// vencido não é enviado (conclui sem enviar). A mensagem não tem dado de saúde.
+///
+/// # Errors
+/// Correio ou servidor sem configuração, ou falha de envio (o item volta ao outbox com espera).
+pub async fn enviar_convite(
+    estado: &Estado,
+    unidade_id: Uuid,
+    convite_id: Uuid,
+    chave: Uuid,
+) -> anyhow::Result<()> {
+    let correio = estado
+        .correio
+        .clone()
+        .ok_or_else(|| anyhow::anyhow!("correio não configurado"))?;
+    let segredo = estado
+        .config
+        .convite_segredo
+        .clone()
+        .ok_or_else(|| anyhow::anyhow!("segredo do convite não configurado"))?;
+    let sistema = ContextoBanco {
+        usuario_id: None,
+        unidade_id,
+        perfis: vec!["sistema".into()],
+    };
+    let mut tx = banco::transacao(&estado.banco, &sistema).await?;
+    let c = sqlx::query!(
+        r#"SELECT c.codigo, c.expira_em, c.usado_em, c.revogado_em, p.nome, p.email AS "email?"
+           FROM portal.convite c JOIN identidade.paciente p ON p.id = c.paciente_id WHERE c.id = $1"#,
+        convite_id
     )
-        .into_response())
+    .fetch_one(&mut *tx)
+    .await?;
+    if c.usado_em.is_some() || c.revogado_em.is_some() || c.expira_em <= Utc::now() {
+        tx.commit().await?;
+        return Ok(());
+    }
+    let para = c
+        .email
+        .ok_or_else(|| anyhow::anyhow!("cadastro sem e-mail"))?;
+    let token = token_do_convite(&segredo, convite_id)
+        .map_err(|e| anyhow::anyhow!(e.codigo().to_owned()))?;
+    let link = format!(
+        "{}/portal/convite/{token}",
+        estado.config.url_aplicacao.trim_end_matches('/')
+    );
+    let primeiro = c.nome.split_whitespace().next().unwrap_or_default();
+    let validade = c
+        .expira_em
+        .with_timezone(&crate::tempo::FUSO)
+        .format("%d/%m/%Y às %H:%M");
+    let m = crate::correio::Mensagem {
+        para,
+        assunto: "Seu acesso ao portal VidaCor".into(),
+        texto: format!(
+            "Olá, {primeiro}.\n\nA VidaCor Imagem criou o seu acesso ao portal de resultados. Para começar, abra o link abaixo, confirme a sua data de nascimento e crie a sua senha:\n\n{link}\n\nO link vale até {validade} e pode ser usado uma vez só. Se não foi você quem pediu, ignore este e-mail.\n\nVidaCor Imagem"
+        ),
+    };
+    correio.enviar(chave, &m).await?;
+    lastro::registrar(
+        &mut tx,
+        NovoEvento {
+            dominio: "portal",
+            tipo: "convite_enviado",
+            registro_id: convite_id,
+            registro_codigo: Some(&c.codigo),
+            dados: json!({ "canal": "email" }),
+            criado_por: None,
+            origem: "sistema",
+            unidade_id,
+            correlacao: &chave.to_string(),
+        },
+    )
+    .await?;
+    tx.commit().await?;
+    Ok(())
 }
 
 #[derive(Serialize, Deserialize, ToSchema)]

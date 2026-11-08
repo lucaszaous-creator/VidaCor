@@ -297,7 +297,7 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
         ),
       /** Cadastro; `409 possivel-duplicado` traz `candidatos` quando ainda não conferido. */
       cadastrar: (corpo: NovoPaciente, o: OpcoesDeEscrita): Promise<PacienteCadastrado> => criar<PacienteCadastrado>('POST', '/v1/pacientes', corpo, o),
-      /** Convite do portal: o link aparece só na primeira resposta (repetição: `caminho` nulo). */
+      /** Convite do portal por e-mail (endereço do cadastro); `422 paciente-sem-email` sem e-mail. */
       convidarParaPortal: (id: string, o: OpcoesDeEscrita): Promise<ConviteEmitido> =>
         criar<ConviteEmitido>('POST', `/v1/pacientes/${seg(id)}/convites-portal`, {}, o),
     },

@@ -59,17 +59,17 @@ describe('Acesso ao portal: convite e login (SEC-AUT-6)', () => {
     expect(screen.queryByRole('textbox', { name: 'Login' })).not.toBeInTheDocument();
   });
 
-  it('recepção gera o convite e vê o link uma vez, com validade', async () => {
+  it('recepção convida por e-mail e não vê o link', async () => {
     estado.sessao = SESSOES.recepcao;
     const usuario = userEvent.setup();
     renderizar('/recepcao?data=2026-11-06');
     await usuario.click(await screen.findByRole('button', { name: /^Antônio Carlos Ribeiro, nascimento/ }));
-    await usuario.click(await screen.findByRole('button', { name: 'Convidar para o portal' }));
-    const aviso = await screen.findByText(/Convite do portal para Antônio Carlos Ribeiro\./);
+    await usuario.click(await screen.findByRole('button', { name: 'Convidar para o portal por e-mail' }));
+    const aviso = await screen.findByText(/Convite do portal enviado para Antônio Carlos Ribeiro\./);
     await waitFor(() => {
-      expect(aviso.closest('[role="status"]')).toHaveTextContent(`/portal/convite/${TOKEN_VALIDO}`);
+      expect(aviso.closest('[role="status"]')).toHaveTextContent('an***@exemplo.invalid');
     });
-    expect(aviso.closest('[role="status"]')).toHaveTextContent('uma vez só');
+    expect(aviso.closest('[role="status"]')).not.toHaveTextContent('/portal/convite/');
     expect(pedidosDe('convidar-portal')[0]?.chave).toMatch(/^[0-9a-f-]{36}$/);
   });
 });

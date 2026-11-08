@@ -99,4 +99,8 @@ INSERT INTO comum.contador (prefixo, ano, valor)
 SELECT 'PAC', substring(codigo FROM 5 FOR 4)::int, max(substring(codigo FROM 10)::bigint)
   FROM identidade.paciente WHERE codigo ~ '^PAC-[0-9]{4}-[0-9]{6}$' GROUP BY 2
 ON CONFLICT (prefixo, ano) DO UPDATE SET valor = GREATEST(comum.contador.valor, EXCLUDED.valor);
+-- E-mails fictícios (domínio .invalid não existe) para o convite do portal ir ao Mailpit.
+UPDATE identidade.paciente SET email = lower(translate(split_part(nome, ' ', 1) || '.' || reverse(split_part(reverse(nome), ' ', 1)),
+  'áàâãéêíóôõúçÁÉÍÓÚÂÊÔÃÕÇ', 'aaaaeeiooouucAEIOUAEOAOC')) || '@exemplo.invalid'
+ WHERE email IS NULL AND origem = 'semente';
 COMMIT;

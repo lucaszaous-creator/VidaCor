@@ -3,9 +3,9 @@
 export interface ConviteEmitido {
   id: string;
   codigo: string;
-  /** Link do aceite; só na primeira resposta (na repetição vem nulo). */
-  caminho?: string | null;
   expira_em: string;
+  /** E-mail do cadastro, mascarado: o link vai só para lá (a recepção não o vê). */
+  enviado_para: string;
 }
 
 export interface SituacaoDoConvite {

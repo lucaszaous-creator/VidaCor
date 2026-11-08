@@ -75,6 +75,15 @@ async fn main() -> Result<()> {
         ));
     }
 
+    // E-mail: SMTP configurado (Mailpit em dev, relay com TLS em produção). Sem ele, o convite fica no outbox.
+    if let (Ok(url), Ok(de)) = (
+        std::env::var("VIDACOR_SMTP_URL"),
+        std::env::var("VIDACOR_EMAIL_REMETENTE"),
+    ) {
+        estado.correio = Some(std::sync::Arc::new(
+            vidacor_api::correio::CorreioSmtp::novo(&url, &de)?,
+        ));
+    }
     if let Some(url) = orthanc_url {
         let orthanc = Orthanc::novo(&url)?;
         tokio::spawn(outbox::rodar(estado.clone(), orthanc));

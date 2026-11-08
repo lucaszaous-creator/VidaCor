@@ -83,6 +83,7 @@ pub struct Ambiente {
     pub dia: NaiveDate,
     pub s: Semente,
     pub psp: std::sync::Arc<vidacor_api::pix::PspDesenvolvimento>,
+    pub correio: std::sync::Arc<vidacor_api::correio::CorreioEmMemoria>,
 }
 
 pub struct Sessao {
@@ -140,6 +141,7 @@ impl Ambiente {
             unidade_servidor: Some(UNIDADE_A),
             oidc: None,
             pix_webhook_segredo: Some(SEGREDO_PIX.to_owned()),
+            convite_segredo: Some("segredo-de-teste-do-convite-do-portal-0001".to_owned()),
         };
         let mut estado = Estado::novo(app_pool.clone(), config, None);
         // Provedor externo de assinatura: único ponto simulado (G4); sem valor legal.
@@ -148,6 +150,9 @@ impl Ambiente {
         ));
         let psp = std::sync::Arc::new(vidacor_api::pix::PspDesenvolvimento::default());
         estado.psp = Some(psp.clone());
+        // E-mail: provedor externo simulado em memória (G4).
+        let correio = std::sync::Arc::new(vidacor_api::correio::CorreioEmMemoria::default());
+        estado.correio = Some(correio.clone());
         Self {
             app: aplicacao(estado.clone()),
             admin,
@@ -161,6 +166,7 @@ impl Ambiente {
             dia: ids.dia,
             s: ids,
             psp,
+            correio,
         }
     }
 

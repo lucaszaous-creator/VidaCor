@@ -1,5 +1,5 @@
 // Fumaça do convite do portal contra o NÚCLEO REAL (dev): a recepção (Keycloak com TOTP) convida
-// Antônio; o paciente abre o link em outro navegador, confirma o nascimento, cria a senha e vê os
+// Antônio; o link chega por e-mail (Mailpit do compose, http://127.0.0.1:8025); o paciente abre o link em outro navegador, confirma o nascimento, cria a senha e vê os
 // resultados; depois sai e entra de novo pelo login. Só dados fictícios.
 // Uso: node tools/verificacao/fumaca-portal.cjs   (realm de dev recém-criado: o 2FA é configurado agora)
 const { chromium } = require('playwright');
@@ -28,9 +28,24 @@ const BASE = process.env.VIDACOR_URL || 'http://127.0.0.1:5173';
   const antonio = pacientes.find(p => p.nascimento === '1954-06-15');
   const r = await equipe.request.post(`${BASE}/v1/pacientes/${antonio.id}/convites-portal`, { headers: { 'x-csrf-token': sessao.csrf, 'idempotency-key': crypto.randomUUID() }, data: {} });
   const convite = await r.json();
-  console.log('convite:', r.status(), convite.codigo, convite.caminho ? 'link recebido' : 'SEM LINK');
+  console.log('convite:', r.status(), convite.codigo, 'enviado para', convite.enviado_para, convite.caminho === undefined ? '(link não exposto à recepção)' : 'LINK EXPOSTO');
+  // O núcleo envia pelo outbox; o link só existe no e-mail.
+  let link = null;
+  for (let i = 0; i < 30 && link === null; i++) {
+    const caixa = await (await fetch('http://127.0.0.1:8025/api/v1/search?query=' + encodeURIComponent('to:antonio.ribeiro@exemplo.invalid'))).json();
+    const ultima = caixa.messages?.[0];
+    if (ultima) {
+      const m = await (await fetch('http://127.0.0.1:8025/api/v1/message/' + ultima.ID)).json();
+      const achado = m.Text.match(/https?:\/\/\S+\/portal\/convite\/[A-Za-z0-9_-]+/);
+      if (achado && m.Text.includes(convite.codigo) === false) link = achado[0];
+    }
+    if (link === null) await new Promise((ok) => setTimeout(ok, 1000));
+  }
+  if (link === null) throw new Error('e-mail do convite não chegou ao Mailpit');
+  console.log('e-mail: recebido no Mailpit');
+  const caminho = new URL(link).pathname;
   const paciente = await (await b.newContext({ viewport: { width: 1280, height: 800 } })).newPage();
-  await paciente.goto(BASE + convite.caminho);
+  await paciente.goto(BASE + caminho);
   await paciente.getByRole('heading', { name: 'Primeiro acesso' }).waitFor();
   await paciente.getByRole('spinbutton').first().click(); await paciente.keyboard.type('15061954');
   const login = 'antonio.' + Date.now().toString(36);
@@ -44,7 +59,7 @@ const BASE = process.env.VIDACOR_URL || 'http://127.0.0.1:5173';
   console.log('cookie do portal:', cookie ? `httpOnly=${cookie.httpOnly} sameSite=${cookie.sameSite}` : 'AUSENTE');
   await paciente.getByRole('button', { name: 'Sair' }).click();
   await paciente.getByRole('heading', { name: 'Entrar' }).waitFor();
-  await paciente.goto(BASE + convite.caminho);
+  await paciente.goto(BASE + caminho);
   await paciente.getByText('Este convite não vale mais.').waitFor();
   console.log('uso único: ok');
   await paciente.goto(BASE + '/portal/entrar');

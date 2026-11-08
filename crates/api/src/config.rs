@@ -32,6 +32,9 @@ pub struct Config {
     pub oidc: Option<ConfigOidc>,
     /// Segredo HMAC do webhook do PSP (G3). Sem ele, todo webhook é recusado (falha fechada).
     pub pix_webhook_segredo: Option<String>,
+    /// Segredo do convite do portal: o token é HMAC(segredo, id do convite) e não fica guardado.
+    /// Sem ele, convidar responde 503 (falha fechada).
+    pub convite_segredo: Option<String>,
 }
 
 fn var(nome: &str) -> Option<String> {
@@ -72,6 +75,7 @@ impl Config {
             unidade_servidor,
             oidc,
             pix_webhook_segredo: var("VIDACOR_PIX_WEBHOOK_SEGREDO"),
+            convite_segredo: var("VIDACOR_CONVITE_SEGREDO").filter(|s| s.len() >= 32),
         })
     }
 }

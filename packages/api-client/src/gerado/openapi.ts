@@ -822,7 +822,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** A recepção convida o paciente para o portal (convite novo revoga o anterior). */
+        /**
+         * A recepção convida o paciente para o portal: o link vai por e-mail para o endereço do cadastro
+         *     (convite novo revoga o anterior; serve também para quem esqueceu a senha).
+         */
         post: operations["convidar_para_o_portal"];
         delete?: never;
         options?: never;
@@ -1391,12 +1394,9 @@ export interface components {
             situacao: string;
         };
         ConviteEmitido: {
-            /**
-             * @description Caminho do aceite com o token; aparece só na primeira resposta. Na repetição (mesma
-             *     `Idempotency-Key`) vem nulo: o banco guarda só o hash, e o link não é recriado.
-             */
-            caminho?: string | null;
             codigo: string;
+            /** @description E-mail do cadastro, mascarado (o link vai só para lá; a recepção não o vê). */
+            enviado_para: string;
             /** Format: date-time */
             expira_em: string;
             /** Format: uuid */
@@ -3972,6 +3972,22 @@ export interface operations {
                 };
             };
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };

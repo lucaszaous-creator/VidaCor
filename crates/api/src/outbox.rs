@@ -58,6 +58,21 @@ pub async fn processar_um(estado: &Estado, orthanc: &Orthanc) -> Result<bool> {
             }
             None => Err(anyhow::anyhow!("carga sem txid")),
         },
+        "email.convite_portal" => match item.carga["convite_id"]
+            .as_str()
+            .and_then(|v| v.parse().ok())
+        {
+            Some(c) => {
+                crate::rotas::portal_acesso::enviar_convite(
+                    estado,
+                    item.unidade_id,
+                    c,
+                    item.chave_idempotencia,
+                )
+                .await
+            }
+            None => Err(anyhow::anyhow!("carga sem convite_id")),
+        },
         "pix.estornar" => match (estado.psp.clone(), item.carga["txid"].as_str()) {
             (Some(psp), Some(txid)) => psp.estornar(item.chave_idempotencia, txid).await,
             _ => Err(anyhow::anyhow!("PSP não configurado ou carga sem txid")),

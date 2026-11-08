@@ -2733,7 +2733,7 @@
         "tags": [
           "portal"
         ],
-        "summary": "A recepção convida o paciente para o portal (convite novo revoga o anterior).",
+        "summary": "A recepção convida o paciente para o portal: o link vai por e-mail para o endereço do cadastro\n(convite novo revoga o anterior; serve também para quem esqueceu a senha).",
         "operationId": "convidar_para_o_portal",
         "parameters": [
           {
@@ -2777,6 +2777,26 @@
             }
           },
           "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "503": {
             "description": "",
             "content": {
               "application/json": {
@@ -4407,18 +4427,16 @@
         "required": [
           "id",
           "codigo",
-          "expira_em"
+          "expira_em",
+          "enviado_para"
         ],
         "properties": {
-          "caminho": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "Caminho do aceite com o token; aparece só na primeira resposta. Na repetição (mesma\n`Idempotency-Key`) vem nulo: o banco guarda só o hash, e o link não é recriado."
-          },
           "codigo": {
             "type": "string"
+          },
+          "enviado_para": {
+            "type": "string",
+            "description": "E-mail do cadastro, mascarado (o link vai só para lá; a recepção não o vê)."
           },
           "expira_em": {
             "type": "string",

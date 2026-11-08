@@ -37,6 +37,13 @@ services:
     volumes: [orthanc:/var/lib/orthanc/db]
     security_opt: ["no-new-privileges:true"]
 
+  # E-mail de DESENVOLVIMENTO: recebe tudo e não entrega a ninguém (convite do portal). Caixa de
+  # entrada em http://127.0.0.1:8025. Em produção entra o relay SMTP da clínica com TLS.
+  mailpit:
+    image: axllent/mailpit@sha256:b1f1be18af530d939a11ee8820b379e0c88eeec204d904bfad68862adced3a5a
+    ports: ["127.0.0.1:1025:1025", "127.0.0.1:8025:8025"]
+    security_opt: ["no-new-privileges:true"]
+
   keycloak:
     image: quay.io/keycloak/keycloak:26.4@sha256:9409c59bdfb65dbffa20b11e6f18b8abb9281d480c7ca402f51ed3d5977e6007
     command: ["start-dev", "--import-realm", "--http-port=8081"]

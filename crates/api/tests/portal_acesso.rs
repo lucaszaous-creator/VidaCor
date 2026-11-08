@@ -31,23 +31,44 @@ fn sem_sessao(
         .unwrap()
 }
 
+async fn com_email(amb: &Ambiente) {
+    sqlx::query(
+        "UPDATE identidade.paciente SET email = 'antonio.ribeiro@exemplo.invalid' WHERE id = $1",
+    )
+    .bind(amb.s.pacientes[ANTONIO])
+    .execute(&amb.admin)
+    .await
+    .unwrap();
+}
+
+/// Processa o outbox e devolve o token do último e-mail enviado ao paciente.
+async fn token_do_email(amb: &Ambiente) -> String {
+    let orthanc = vidacor_api::orthanc::Orthanc::novo("http://127.0.0.1:9").unwrap();
+    while vidacor_api::outbox::processar_um(&amb.estado, &orthanc)
+        .await
+        .unwrap()
+    {}
+    let enviadas = amb.correio.enviadas.lock().unwrap();
+    let (_, m) = enviadas.last().expect("e-mail do convite enviado");
+    assert_eq!(m.para, "antonio.ribeiro@exemplo.invalid");
+    m.texto
+        .split("/portal/convite/")
+        .nth(1)
+        .unwrap()
+        .split_whitespace()
+        .next()
+        .unwrap()
+        .to_owned()
+}
+
 async fn convidar(amb: &Ambiente, chave: Uuid) -> (StatusCode, Value) {
+    com_email(amb).await;
     let ana = amb.entrar("ana.souza").await;
     let uri = format!("/v1/pacientes/{}/convites-portal", amb.s.pacientes[ANTONIO]);
     let (st, _, v) = amb
         .pedir(amb.json(Method::POST, &uri, &ana, Some(chave), json!({})))
         .await;
     (st, v)
-}
-
-fn token(convite: &Value) -> String {
-    convite["caminho"]
-        .as_str()
-        .unwrap()
-        .rsplit('/')
-        .next()
-        .unwrap()
-        .to_owned()
 }
 
 async fn aceitar(
@@ -84,42 +105,71 @@ async fn situacao(amb: &Ambiente, token: &str) -> String {
 }
 
 #[tokio::test]
-async fn recepcao_convida_e_repetir_devolve_o_mesmo_convite() {
+async fn recepcao_convida_o_link_vai_por_email_e_nao_fica_guardado() {
     let amb = Ambiente::novo().await;
     let chave = Uuid::now_v7();
     let (st, c) = convidar(&amb, chave).await;
     assert_eq!(st, StatusCode::CREATED, "{c}");
-    assert!(c["caminho"]
-        .as_str()
-        .unwrap()
-        .starts_with("/portal/convite/"));
+    assert_eq!(
+        c["enviado_para"], "an***@exemplo.invalid",
+        "a recepção vê o e-mail mascarado, não o link"
+    );
+    assert!(c.get("caminho").is_none());
     let (st2, c2) = convidar(&amb, chave).await;
     assert_eq!((st2, &c2["id"]), (StatusCode::CREATED, &c["id"]));
-    assert_eq!(c2["caminho"], Value::Null, "a repetição não recria o link");
-    let guardado: String = sqlx::query_scalar(
-        "SELECT resposta::text FROM integracao.idempotencia WHERE rota LIKE '%convites-portal'",
-    )
-    .fetch_one(&amb.admin)
-    .await
-    .unwrap();
-    assert!(
-        !guardado.contains(&token(&c)),
-        "o token não fica guardado na idempotência"
-    );
     assert_eq!(amb.contar("SELECT count(*) FROM portal.convite").await, 1);
-    assert_eq!(situacao(&amb, &token(&c)).await, "valido");
-    let guardado: Vec<u8> = sqlx::query_scalar("SELECT token_hash FROM portal.convite")
-        .fetch_one(&amb.admin)
-        .await
-        .unwrap();
-    assert_ne!(guardado, token(&c).into_bytes(), "o banco guarda só o hash");
+    let t = token_do_email(&amb).await;
+    assert_eq!(situacao(&amb, &t).await, "valido");
+    let mensagem = amb
+        .correio
+        .enviadas
+        .lock()
+        .unwrap()
+        .last()
+        .unwrap()
+        .1
+        .clone();
+    assert!(mensagem.texto.contains("Olá, Antônio.") && mensagem.texto.contains("uma vez só"));
+    assert!(
+        !mensagem.texto.contains("1954") && !mensagem.texto.contains("Eco"),
+        "sem nascimento nem exame no e-mail"
+    );
+    // Nada guarda o token: nem o convite, nem o outbox, nem a idempotência.
+    for sql in [
+        "SELECT carga::text FROM integracao.outbox",
+        "SELECT resposta::text FROM integracao.idempotencia",
+    ] {
+        let textos: Vec<String> = sqlx::query_scalar(sqlx::AssertSqlSafe(sql))
+            .fetch_all(&amb.admin)
+            .await
+            .unwrap();
+        assert!(textos.iter().all(|x| !x.contains(&t)), "{sql}");
+    }
+    // Reprocessar o outbox não manda outro e-mail (mesma chave).
+    token_do_email(&amb).await;
+    assert_eq!(amb.correio.enviadas.lock().unwrap().len(), 1);
+}
+
+#[tokio::test]
+async fn sem_email_no_cadastro_nao_convida() {
+    let amb = Ambiente::novo().await;
+    let ana = amb.entrar("ana.souza").await;
+    let uri = format!("/v1/pacientes/{}/convites-portal", amb.s.pacientes[ANTONIO]);
+    let (st, _, e) = amb
+        .pedir(amb.json(Method::POST, &uri, &ana, Some(Uuid::now_v7()), json!({})))
+        .await;
+    assert_eq!(
+        (st, e["codigo"].as_str()),
+        (StatusCode::UNPROCESSABLE_ENTITY, Some("paciente-sem-email"))
+    );
+    assert_eq!(amb.contar("SELECT count(*) FROM portal.convite").await, 0);
 }
 
 #[tokio::test]
 async fn aceite_confere_o_nascimento_entra_e_o_convite_nao_serve_de_novo() {
     let amb = Ambiente::novo().await;
-    let (_, c) = convidar(&amb, Uuid::now_v7()).await;
-    let t = token(&c);
+    convidar(&amb, Uuid::now_v7()).await;
+    let t = token_do_email(&amb).await;
     let (s1, _, e1) = aceitar(&amb, &t, "1954-06-16", "antonio.ribeiro").await;
     assert_eq!(s1, StatusCode::UNPROCESSABLE_ENTITY);
     assert!(
@@ -162,8 +212,8 @@ async fn aceite_confere_o_nascimento_entra_e_o_convite_nao_serve_de_novo() {
 #[tokio::test]
 async fn dois_aceites_ao_mesmo_tempo_so_um_entra() {
     let amb = Ambiente::novo().await;
-    let (_, c) = convidar(&amb, Uuid::now_v7()).await;
-    let t = token(&c);
+    convidar(&amb, Uuid::now_v7()).await;
+    let t = token_do_email(&amb).await;
     let (a, b) = tokio::join!(
         aceitar(&amb, &t, NASC, "antonio.um"),
         aceitar(&amb, &t, NASC, "antonio.dois")
@@ -177,8 +227,8 @@ async fn dois_aceites_ao_mesmo_tempo_so_um_entra() {
 #[tokio::test]
 async fn cinco_nascimentos_errados_revogam_e_convite_novo_troca_o_anterior() {
     let amb = Ambiente::novo().await;
-    let (_, c) = convidar(&amb, Uuid::now_v7()).await;
-    let t = token(&c);
+    convidar(&amb, Uuid::now_v7()).await;
+    let t = token_do_email(&amb).await;
     for _ in 0..4 {
         assert_eq!(
             aceitar(&amb, &t, "2000-01-01", "antonio.r").await.0,
@@ -194,15 +244,17 @@ async fn cinco_nascimentos_errados_revogam_e_convite_novo_troca_o_anterior() {
         StatusCode::GONE,
         "nem com o nascimento certo"
     );
-    let (_, c2) = convidar(&amb, Uuid::now_v7()).await;
-    let (_, c3) = convidar(&amb, Uuid::now_v7()).await;
+    convidar(&amb, Uuid::now_v7()).await;
+    let t2 = token_do_email(&amb).await;
+    convidar(&amb, Uuid::now_v7()).await;
+    let t3 = token_do_email(&amb).await;
     assert_eq!(
-        situacao(&amb, &token(&c2)).await,
+        situacao(&amb, &t2).await,
         "indisponivel",
         "o convite novo revoga o anterior"
     );
     assert_eq!(
-        aceitar(&amb, &token(&c3), NASC, "antonio.r").await.0,
+        aceitar(&amb, &t3, NASC, "antonio.r").await.0,
         StatusCode::NO_CONTENT
     );
     assert_eq!(
@@ -226,8 +278,9 @@ async fn entrar(amb: &Ambiente, login: &str, senha: &str) -> (StatusCode, Value)
 #[tokio::test]
 async fn login_tem_mensagem_unica_e_espera_depois_de_cinco_erros() {
     let amb = Ambiente::novo().await;
-    let (_, c) = convidar(&amb, Uuid::now_v7()).await;
-    let (_, cookie, _) = aceitar(&amb, &token(&c), NASC, "Antonio.Ribeiro").await;
+    convidar(&amb, Uuid::now_v7()).await;
+    let t = token_do_email(&amb).await;
+    let (_, cookie, _) = aceitar(&amb, &t, NASC, "Antonio.Ribeiro").await;
     assert_eq!(
         entrar(&amb, "antonio.ribeiro", "uma senha longa 2026")
             .await
@@ -291,8 +344,9 @@ async fn caixa_nao_convida_e_outra_unidade_nao_acha_o_paciente() {
 #[tokio::test]
 async fn com_a_sessao_do_portal_o_paciente_so_le_o_proprio_cadastro() {
     let amb = Ambiente::novo().await;
-    let (_, c) = convidar(&amb, Uuid::now_v7()).await;
-    aceitar(&amb, &token(&c), NASC, "antonio.ribeiro").await;
+    convidar(&amb, Uuid::now_v7()).await;
+    let t = token_do_email(&amb).await;
+    aceitar(&amb, &t, NASC, "antonio.ribeiro").await;
     let antonio = amb.s.pacientes[ANTONIO];
     let mut tx = vidacor_api::portal::transacao(&amb.app_pool, antonio)
         .await
