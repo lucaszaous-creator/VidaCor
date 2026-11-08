@@ -22,6 +22,7 @@ para DICOM) e incluir o **estacionamento com leitura de placa**.
 | Padrão de qualidade (seis garantias + playbooks) | Proposta — [CLAUDE.md](CLAUDE.md) · [docs/15](docs/15-padrao-de-qualidade.md) · [playbooks](docs/playbooks/) |
 | Proteção do usuário (processo + interface) | Regra — [docs/16](docs/16-protecao-do-usuario.md) · [modelos](docs/modelos/) |
 | Segurança por classe de ataque (Cloudflare) | Regra — [docs/17](docs/17-seguranca-por-classe-de-ataque.md) · `/security-audit` |
+| Testes ponta a ponta das telas (skill e2e) | Regra — [docs/28](docs/28-testes-ponta-a-ponta-e2e.md) · skill `e2e` |
 | Perfis, permissões e RLS | Proposta para validar — [docs/18](docs/18-perfis-permissoes-e-rls.md) |
 | Lastro e rastreabilidade | Regra — [docs/21](docs/21-lastro-e-rastreabilidade.md) |
 | Lacunas e roteiro (essencial, importante, futuro) | Aprovado — [docs/22](docs/22-lacunas-e-roadmap.md) |
@@ -43,6 +44,7 @@ README.md                    este arquivo
 CLAUDE.md / AGENTS.md        regras obrigatórias (as seis garantias) para pessoas e IA
 .claude/commands/            playbooks como comandos (/auditoria, /idempotencia…)
 .claude/skills/security-audit/  skill de auditoria da Cloudflare (MIT)
+.claude/skills/e2e/          skill de testes ponta a ponta da TesterArmy (Apache-2.0)
 THIRD_PARTY_NOTICES.md       licenças de terceiros
 docs/
   01-historico-da-conversa.md   tudo o que foi discutido e decidido até agora
@@ -72,6 +74,7 @@ docs/
   25-plano-do-projeto.md        MVP, fases, equipe, cronograma, orçamento, contrato e governança (premissas a confirmar)
   26-teste-de-usabilidade.md    roteiro do teste com a equipe, tarefas críticas por perfil, métricas
   27-frases-de-comportamento.md frases Dado/Quando/Então dos fluxos críticos, para aprovação antes dos testes
+  28-testes-ponta-a-ponta-e2e.md  regras E2E-* para testes de tela com a skill e2e
   modelos/                      design, riscos clínicos, rastreabilidade, prontidão, pós-incidente, pacote do responsável clínico
   playbooks/                    auditoria, testes, refatoração, segurança, idempotência, corrida
   bugs.md                       bugs encontrados por testes

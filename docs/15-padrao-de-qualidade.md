@@ -128,7 +128,7 @@ describe "Caixa · recebimento particular"
 ### Ambiente
 - Rust: `cargo nextest` + **Testcontainers** (PostgreSQL, Orthanc, NATS); servidor axum subido em porta aleatória; cliente HTTP real.
 - Provedores externos simulados por servidor fake (`wiremock`) com eventos assinados.
-- Comando único: **`just test`**. E2E de fumaça (Playwright) só nas jornadas aprovadas.
+- Comando único: **`just test`**. E2E de fumaça só nas jornadas aprovadas, com a skill e2e (Playwright por baixo) e as regras `E2E-*` do [docs/28](28-testes-ponta-a-ponta-e2e.md).
 - Teste instável é bug. Teste falhando por bug real fica falhando e vai para [bugs.md](bugs.md).
 
 ---
@@ -167,6 +167,7 @@ apps/web (tela)  →  crates/api (rotas, autenticação, serialização)
 - [ ] Todo "ler, decidir, gravar" protegido por constraint, operação atômica ou `FOR UPDATE`, com teste simultâneo (G2)
 - [ ] Webhook verifica corpo bruto e grava ID único antes de agir; chamadas externas com chave de idempotência; rota de escrita aceita `Idempotency-Key` (G3)
 - [ ] Testes de integração na rota real cobrindo feliz, erro, repetição, limite e acesso indevido; nenhum teste pulado ou afrouxado (G4)
+- [ ] Teste de tela segue as regras `E2E-*` (frase aprovada, `expect` exato, só dado fictício) quando houver ([docs/28](28-testes-ponta-a-ponta-e2e.md))
 - [ ] Tela sem regra, domínio sem I/O, arquivos dentro do limite (G5)
 - [ ] Migration revisada; nada apagado; plano aprovado quando exigido (G6)
 - [ ] `just test` verde (ou falhas de bug real listadas em `docs/bugs.md`)
