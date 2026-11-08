@@ -32,7 +32,11 @@ fn versoes_sao_unicas_e_no_formato() {
     for c in &CONJUNTOS {
         assert!(vistas.insert(c.versao), "versão repetida {}", c.versao);
         let (nome, numero) = c.versao.rsplit_once('.').unwrap();
-        assert!(nome.starts_with("AUD-") && nome.ends_with("-2026"), "{}", c.versao);
+        assert!(
+            nome.starts_with("AUD-") && nome.ends_with("-2026"),
+            "{}",
+            c.versao
+        );
         assert!(numero.parse::<u32>().is_ok(), "{}", c.versao);
     }
     assert_eq!(conjunto_padrao().versao, "AUD-TISS-2026.1");
@@ -47,7 +51,10 @@ fn quando_a_senha_vence_antes_do_exame_entao_bloqueia() {
     assert_eq!(p.len(), 1);
     assert_eq!(p[0].regra, CodigoRegra::SenhaVencida);
     assert_eq!(p[0].efeito, Efeito::Bloqueia);
-    assert_eq!(p[0].detalhe, "Senha venceu em 04/11/2026, exame em 05/11/2026.");
+    assert_eq!(
+        p[0].detalhe,
+        "Senha venceu em 04/11/2026, exame em 05/11/2026."
+    );
     assert!(!pronta(&p));
     // Vencer no próprio dia do exame ainda vale.
     g.validade_senha = dia(5, 11);
@@ -162,7 +169,10 @@ fn prazo_de_envio_avisa_perto_e_bloqueia_vencido() {
     assert_eq!(p[0].efeito, Efeito::Atencao);
     assert!(pronta(&p), "atenção não impede o lote");
     c.hoje = dia(5, 12);
-    assert_eq!(auditar(&g, &c, conj)[0].regra, CodigoRegra::PrazoDeEnvioProximo);
+    assert_eq!(
+        auditar(&g, &c, conj)[0].regra,
+        CodigoRegra::PrazoDeEnvioProximo
+    );
     c.hoje = dia(6, 12);
     let p = auditar(&g, &c, conj);
     assert_eq!(p[0].regra, CodigoRegra::PrazoDeEnvioVencido);

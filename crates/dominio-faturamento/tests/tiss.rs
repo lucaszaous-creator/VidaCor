@@ -83,18 +83,25 @@ fn lote_com_duas_guias_passa_no_xsd_oficial() {
 #[test]
 fn texto_hostil_e_escapado_e_o_arquivo_continua_valido() {
     let mut g = guia_ok();
-    g.solicitante.nome = "Dr. Júlio <!ENTITY x SYSTEM \"file:///etc/passwd\"> & Cia \u{1F600}\u{0007}".into();
+    g.solicitante.nome =
+        "Dr. Júlio <!ENTITY x SYSTEM \"file:///etc/passwd\"> & Cia \u{1F600}\u{0007}".into();
     g.executados[0].descricao = "USG ]]> <ans:valorTotal>0</ans:valorTotal>".into();
     let guias = [g];
     let a = montar_lote(&lote(&guias)).unwrap();
     validar_no_xsd(&a.xml, "texto-hostil").unwrap();
     let t = texto(&a.xml);
-    assert!(!t.contains("<!ENTITY"), "entidade não pode chegar ao arquivo");
+    assert!(
+        !t.contains("<!ENTITY"),
+        "entidade não pode chegar ao arquivo"
+    );
     assert!(!t.contains("<!DOCTYPE"));
     assert!(t.contains("&lt;!ENTITY x SYSTEM &quot;file:///etc/passwd&quot;&gt; &amp; Cia ?"));
     assert!(t.contains("USG ]]&gt; &lt;ans:valorTotal&gt;0&lt;/ans:valorTotal&gt;"));
     // Acento sai em ISO-8859-1 (um byte), como o padrão.
-    assert!(a.xml.windows(2).any(|w| w == [b'J', 0xFA]), "Júlio em ISO-8859-1");
+    assert!(
+        a.xml.windows(2).any(|w| w == [b'J', 0xFA]),
+        "Júlio em ISO-8859-1"
+    );
 }
 
 #[test]
@@ -106,9 +113,18 @@ fn guia_que_o_xsd_recusaria_nao_entra_no_arquivo() {
     let mut outra = guia_ok();
     outra.registro_ans = Some("654321".into());
     for (g, esperado) in [
-        (sem_preco, ErroTiss::GuiaIncompleta("FAT-2026-000001".into(), "preço da tabela")),
-        (sem_crm, ErroTiss::GuiaIncompleta("FAT-2026-000001".into(), "dados do solicitante")),
-        (outra, ErroTiss::OperadoraDiferente("FAT-2026-000001".into())),
+        (
+            sem_preco,
+            ErroTiss::GuiaIncompleta("FAT-2026-000001".into(), "preço da tabela"),
+        ),
+        (
+            sem_crm,
+            ErroTiss::GuiaIncompleta("FAT-2026-000001".into(), "dados do solicitante"),
+        ),
+        (
+            outra,
+            ErroTiss::OperadoraDiferente("FAT-2026-000001".into()),
+        ),
     ] {
         assert_eq!(montar_lote(&lote(&[g])), Err(esperado));
     }

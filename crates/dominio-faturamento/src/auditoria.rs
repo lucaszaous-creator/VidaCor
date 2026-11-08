@@ -279,8 +279,12 @@ fn conferir(regra: CodigoRegra, g: &GuiaFaturavel, ctx: &ContextoAuditoria) -> O
                 .collect();
             (!fora.is_empty()).then(|| format!("Executado sem autorização: {}.", fora.join(", ")))
         }
-        C::SolicitanteIncompleto => (!g.solicitante.completo())
-            .then(|| format!("Solicitante {} sem conselho, número, UF ou CBO.", g.solicitante.nome)),
+        C::SolicitanteIncompleto => (!g.solicitante.completo()).then(|| {
+            format!(
+                "Solicitante {} sem conselho, número, UF ou CBO.",
+                g.solicitante.nome
+            )
+        }),
         C::ProcedimentoSemPreco => {
             let sem: Vec<&str> = g
                 .executados

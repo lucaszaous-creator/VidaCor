@@ -143,7 +143,9 @@ fn hex(bytes: &[u8]) -> String {
 fn guia_sp_sadt(g: &GuiaFaturavel, lote: &LoteTiss<'_>) -> Result<No, ErroTiss> {
     let falta = |o: &'static str| ErroTiss::GuiaIncompleta(g.numero_guia_prestador.clone(), o);
     if g.registro_ans.as_deref() != Some(lote.registro_ans) {
-        return Err(ErroTiss::OperadoraDiferente(g.numero_guia_prestador.clone()));
+        return Err(ErroTiss::OperadoraDiferente(
+            g.numero_guia_prestador.clone(),
+        ));
     }
     let cnes = g.cnes.as_deref().ok_or_else(|| falta("CNES"))?;
     let s = &g.solicitante;
