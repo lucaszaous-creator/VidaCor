@@ -12,7 +12,8 @@ FROM (VALUES
   ('carla.mendes', 'Carla Mendes', ARRAY['recepcao']),
   ('bruno.sales', 'Bruno Sales', ARRAY['tecnico']),
   ('paulo.mendes', 'Dr. Paulo Mendes', ARRAY['medico']),
-  ('ti.vidacor', 'Equipe TI', ARRAY['ti'])
+  ('ti.vidacor', 'Equipe TI', ARRAY['ti']),
+  ('tv.recepcao', 'TV da recepção', ARRAY['tv'])
 ) AS u(login, nome, perfis)
 ON CONFLICT (login) DO NOTHING;
 

@@ -2,6 +2,7 @@ export * from './contrato-m0';
 export * from './contrato-fase1';
 export * from './contrato-pendencias';
 export * from './contrato-menu';
+export * from './contrato-painel';
 export * from './contrato-portal';
 export * from './contrato-estoque';
 export * from './contrato-faturamento';

@@ -8,6 +8,7 @@ pub mod agendamentos;
 pub mod atendimentos;
 pub mod cadastro;
 pub mod caixa;
+pub mod chamada;
 pub mod comunicacao;
 pub mod contingencia;
 pub mod equipe;
@@ -148,6 +149,8 @@ pub fn rotas() -> Router<Estado> {
             "/v1/pacientes/{id}/exames-externos",
             get(externo::listar).post(externo::importar),
         )
+        .route("/v1/atendimentos/{id}/chamadas", post(chamada::chamar))
+        .route("/v1/painel-de-chamada", get(chamada::painel))
         .route("/v1/usuarios/{id}/mudancas", post(usuarios::mudar))
         .route("/v1/usuarios/pedidos/{id}/decisao", post(usuarios::decidir))
         .route(

@@ -6,6 +6,7 @@
  */
 import type { components } from './gerado/openapi';
 import type { MenuDoObjeto } from './contrato-menu';
+import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
 import type { ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
@@ -141,3 +142,6 @@ export type ConferePedidoCorrecaoContaVolta = Cabe<S['PedidoCorrecaoConta'], Ped
 export type ConferePedidoDemonstrativoVolta = Cabe<S['PedidoDemonstrativo'], PedidoDemonstrativo>;
 export type ConfereExameExterno = Cabe<ExameExterno, S['ExameExterno']>;
 export type ConfereImportacaoExterna = Cabe<ImportacaoExterna, S['ImportacaoExterna']>;
+export type ConfereChamadaNoPainel = Cabe<ChamadaNoPainel, S['ChamadaNoPainel']>;
+export type ConferePainel = Cabe<Painel, S['Painel']>;
+export type ConferePedidoDeChamada = Cabe<PedidoDeChamada, S['PedidoDeChamada']>;

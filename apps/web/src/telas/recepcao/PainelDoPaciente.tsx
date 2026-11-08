@@ -17,6 +17,7 @@ import {
 } from '@vidacor/design-system';
 import { useState, type ReactNode } from 'react';
 import { EstadoDaConsulta } from '../../componentes/Bloco';
+import { ChamarSenha } from '../../componentes/ChamarSenha';
 import { ErroDoAto } from '../../componentes/ErroDoAto';
 import { consultaAtendimento } from '../../consultas';
 import { useDependencias } from '../../contexto';
@@ -194,6 +195,9 @@ function AtendimentoDoPaciente({ item, atendimentoId, retomada }: PropsDoAtendim
         </Aviso>
       )}
       {pulseira}
+      {a.senha !== null && a.senha !== undefined && a.situacao === 'aguardando_sala' && (
+        <ChamarSenha atendimentoId={atendimentoId} destino="guiche" nome={item.paciente.nome} />
+      )}
       <div className="row wrap" style={{ gap: 8 }}>
         <BotaoImprimir />
         <Botao

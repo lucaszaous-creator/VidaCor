@@ -402,6 +402,87 @@
         }
       }
     },
+    "/v1/atendimentos/{id}/chamadas": {
+      "post": {
+        "tags": [
+          "recepcao"
+        ],
+        "summary": "Chama (ou rechama) a senha do atendimento (recepção para o guichê, técnico para a sala).",
+        "operationId": "chamar_senha",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoDeChamada"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChamadaNoPainel"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/atendimentos/{id}/contraste": {
       "post": {
         "tags": [
@@ -4964,6 +5045,37 @@
         }
       }
     },
+    "/v1/painel-de-chamada": {
+      "get": {
+        "tags": [
+          "recepcao"
+        ],
+        "summary": "Painel da TV: a chamada atual e as quatro anteriores do dia (dispositivo TV, recepção, gerência).",
+        "operationId": "painel_de_chamada",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Painel"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/pedidos-desconto": {
       "get": {
         "tags": [
@@ -6922,6 +7034,35 @@
           "5",
           "6"
         ]
+      },
+      "ChamadaNoPainel": {
+        "type": "object",
+        "description": "O que a TV mostra. Sem exame, sem nascimento, sem identificador do paciente.",
+        "required": [
+          "senha",
+          "nome_abreviado",
+          "destino",
+          "rechamada",
+          "chamada_em"
+        ],
+        "properties": {
+          "chamada_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "destino": {
+            "type": "string"
+          },
+          "nome_abreviado": {
+            "type": "string"
+          },
+          "rechamada": {
+            "type": "boolean"
+          },
+          "senha": {
+            "type": "string"
+          }
+        }
       },
       "ComposicaoTirads": {
         "type": "string",
@@ -9683,6 +9824,31 @@
           "heterogeneo"
         ]
       },
+      "Painel": {
+        "type": "object",
+        "required": [
+          "ultimas"
+        ],
+        "properties": {
+          "agora": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ChamadaNoPainel"
+              }
+            ]
+          },
+          "ultimas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChamadaNoPainel"
+            },
+            "description": "Até quatro chamadas anteriores do dia, da mais recente para a mais antiga."
+          }
+        }
+      },
       "PainelAuditoria": {
         "type": "object",
         "required": [
@@ -9958,6 +10124,26 @@
                 "$ref": "#/components/schemas/SolicitanteCorrigido"
               }
             ]
+          }
+        }
+      },
+      "PedidoDeChamada": {
+        "type": "object",
+        "required": [
+          "destino"
+        ],
+        "properties": {
+          "destino": {
+            "type": "string",
+            "description": "`guiche` (recepção) ou `sala` (técnico lotado na sala do atendimento)."
+          },
+          "guiche": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "Número do guichê (1 a 20), só para a recepção."
           }
         }
       },

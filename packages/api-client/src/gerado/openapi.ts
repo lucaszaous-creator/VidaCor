@@ -89,6 +89,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/atendimentos/{id}/chamadas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Chama (ou rechama) a senha do atendimento (recepção para o guichê, técnico para a sala). */
+        post: operations["chamar_senha"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/atendimentos/{id}/contraste": {
         parameters: {
             query?: never;
@@ -1448,6 +1465,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/painel-de-chamada": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Painel da TV: a chamada atual e as quatro anteriores do dia (dispositivo TV, recepção, gerência). */
+        get: operations["painel_de_chamada"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/pedidos-desconto": {
         parameters: {
             query?: never;
@@ -2116,6 +2150,15 @@ export interface components {
          * @enum {string}
          */
         CategoriaBirads: "0" | "1" | "2" | "3" | "4A" | "4B" | "4C" | "5" | "6";
+        /** @description O que a TV mostra. Sem exame, sem nascimento, sem identificador do paciente. */
+        ChamadaNoPainel: {
+            /** Format: date-time */
+            chamada_em: string;
+            destino: string;
+            nome_abreviado: string;
+            rechamada: boolean;
+            senha: string;
+        };
         /** @enum {string} */
         ComposicaoTirads: "cistica_ou_quase_cistica" | "espongiforme" | "mista_cistica_e_solida" | "solida_ou_quase_solida" | "indeterminada_por_calcificacao";
         ComunicacaoDoPaciente: {
@@ -2956,6 +2999,11 @@ export interface components {
         };
         /** @enum {string} */
         PadraoEcogenicoBirads: "anecoico" | "hiperecoico" | "complexo_cistico_e_solido" | "hipoecoico" | "isoecoico" | "heterogeneo";
+        Painel: {
+            agora?: null | components["schemas"]["ChamadaNoPainel"];
+            /** @description Até quatro chamadas anteriores do dia, da mais recente para a mais antiga. */
+            ultimas: components["schemas"]["ChamadaNoPainel"][];
+        };
         PainelAuditoria: {
             conjuntos: components["schemas"]["ConjuntoDeRegras"][];
             grupos: components["schemas"]["GrupoDePendencias"][];
@@ -3042,6 +3090,15 @@ export interface components {
             /** @description Reaplica a tabela de preços vigente na data do exame. */
             reaplicar_tabela?: boolean;
             solicitante?: null | components["schemas"]["SolicitanteCorrigido"];
+        };
+        PedidoDeChamada: {
+            /** @description `guiche` (recepção) ou `sala` (técnico lotado na sala do atendimento). */
+            destino: string;
+            /**
+             * Format: int32
+             * @description Número do guichê (1 a 20), só para a recepção.
+             */
+            guiche?: number | null;
         };
         PedidoDeclaracao: {
             /**
@@ -3840,6 +3897,57 @@ export interface operations {
                 };
             };
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    chamar_senha: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoDeChamada"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChamadaNoPainel"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -6970,6 +7078,33 @@ export interface operations {
                 };
             };
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    painel_de_chamada: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Painel"];
+                };
+            };
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };

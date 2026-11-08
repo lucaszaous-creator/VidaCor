@@ -51,6 +51,7 @@ import type { ConsultaAgenda, PacienteResumo, SalaDaUnidade, Saude, Sessao } fro
 import type { MenuDoObjeto, ObjetoDoMenu } from './contrato-menu';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
+import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel';
 import type { DecisaoDePerfil, ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
 import type { ContaBancaria, NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
 import type { ComunicacaoDoPaciente, LembretesEnfileirados, PreferenciaWhatsapp } from './contrato-comunicacao';
@@ -298,7 +299,13 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
       /** Conduta médica (reautenticação). */
       registrarConduta: (id: string, corpo: PedidoConduta, o: OpcoesDeEscrita): Promise<Triagem> =>
         criar<Triagem>('POST', `/v1/atendimentos/${seg(id)}/triagem/conduta`, corpo, o),
+      /** Chama (ou rechama) a senha: recepção ao guichê, técnico à sala (o servidor decide o texto). */
+      chamar: (id: string, corpo: PedidoDeChamada, o: OpcoesDeEscrita): Promise<ChamadaNoPainel> =>
+        criar<ChamadaNoPainel>('POST', `/v1/atendimentos/${seg(id)}/chamadas`, corpo, o),
     },
+
+    /** Painel da TV de chamada (dispositivo TV, recepção e gerência). */
+    painelDeChamada: (): Promise<Painel> => ler<Painel>('/v1/painel-de-chamada'),
 
     etiquetas: {
       reimprimir: (codigo: string, corpo: PedidoReimpressao, o: OpcoesDeEscrita): Promise<Reimpressao> =>

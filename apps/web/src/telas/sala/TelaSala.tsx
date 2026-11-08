@@ -6,7 +6,8 @@ import { useId, useRef, useState, type FormEvent } from 'react';
 import { CabecalhoDaTela, EstadoDaConsulta } from '../../componentes/Bloco';
 import { ErroDoAto } from '../../componentes/ErroDoAto';
 import { LinhaDoPaciente } from '../../componentes/LinhaDoPaciente';
-import { chaves, consultaFilaDaSala, consultaSalas } from '../../consultas';
+import { ChamarSenha } from '../../componentes/ChamarSenha';
+import { chaves, consultaFilaDaSala, consultaSalas, consultaSessao } from '../../consultas';
 import { useDependencias } from '../../contexto';
 import { useOperacao } from '../../operacao';
 import { FUSO_DA_CLINICA } from '../agenda/grade';
@@ -67,6 +68,9 @@ export function TelaSala() {
   const salaId = busca.sala ?? (salas.data?.find((s) => s.lotado) ?? salas.data?.[0])?.id;
   const sala = salas.data?.find((s) => s.id === salaId);
   const fila = useQuery({ ...consultaFilaDaSala(api, salaId ?? ''), enabled: salaId !== undefined });
+  // Chamar na TV é do técnico (o servidor confere a lotação); para os demais o botão não aparece.
+  const sessao = useQuery(consultaSessao(api));
+  const podeChamar = sessao.data?.usuario.perfis.includes('tecnico') ?? false;
 
   const bipe = useOperacao((c: string, chave: string) => api.salas.bipar(salaId ?? '', { codigo_etiqueta: c }, { idempotencyKey: chave }), {
     aoConcluir: async (r) => {
@@ -230,6 +234,7 @@ export function TelaSala() {
                       }}
                     />
                   </div>
+                  {podeChamar && i.situacao === 'aguardando_sala' && <ChamarSenha atendimentoId={i.atendimento_id} destino="sala" nome={i.paciente.nome} compacto />}
                   {i.requer_contraste && (
                     <Link
                       to="/triagem/$atendimentoId"

@@ -2,13 +2,13 @@
 export interface Titulo {
   id: string;
   codigo: string;
-  tipo: 'pagar' | 'receber' | string;
+  tipo: 'pagar' | 'receber';
   descricao: string;
   contraparte: string;
   categoria: string;
   valor_centavos: number;
   vencimento: string;
-  situacao: 'aberto' | 'pago' | 'cancelado' | string;
+  situacao: 'aberto' | 'pago' | 'cancelado';
   aprovacoes_exigidas: number;
   aprovacoes: number;
   vencido: boolean;
@@ -54,7 +54,7 @@ export interface NotaFiscal {
   numero: string;
   codigo_verificacao: string;
   valor_centavos: number;
-  situacao: 'emitida' | 'cancelada' | string;
+  situacao: 'emitida' | 'cancelada';
   emitida_em: string;
   cancelada_em?: string | null;
 }

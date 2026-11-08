@@ -183,3 +183,26 @@ export const manipuladoresExterno = [
     return HttpResponse.json({ id: 'x1', codigo: 'EXT-2026-000001', instituicao: 'Hospital São Lucas', origem: 'link', nome_na_origem: c.nome_na_origem, id_na_origem: null, criado_em: '2026-11-06T12:00:00Z', estudos: c.estudos, somente_leitura: true }, { status: 201 });
   }),
 ];
+
+/** TV de chamada simulada (regras reais em `crates/api/tests/painel_de_chamada.rs`). */
+export const chamadasSimuladas: { senha: string; nome_abreviado: string; destino: string; rechamada: boolean; chamada_em: string }[] = [];
+export const manipuladoresPainel = [
+  http.get('*/v1/painel-de-chamada', () => {
+    if (!temPerfil('tv', 'recepcao', 'gerente')) return semPermissao('ver o painel de chamada');
+    const [agora, ...ultimas] = [...chamadasSimuladas].reverse();
+    return HttpResponse.json({ agora: agora ?? null, ultimas: ultimas.slice(0, 4) });
+  }),
+  http.post('*/v1/atendimentos/:id/chamadas', async ({ request }) => {
+    const c = (await registrar('chamar', request)) as { destino: string; guiche?: number };
+    if (!temPerfil('recepcao', 'tecnico')) return semPermissao('chamar a senha');
+    const nova = {
+      senha: 'A001',
+      nome_abreviado: 'Antônio C. R.',
+      destino: c.destino === 'guiche' ? `Guichê ${String(c.guiche)}` : 'Sala 1',
+      rechamada: chamadasSimuladas.length > 0,
+      chamada_em: '2026-11-06T11:40:00Z',
+    };
+    chamadasSimuladas.push(nova);
+    return HttpResponse.json(nova, { status: 201 });
+  }),
+];

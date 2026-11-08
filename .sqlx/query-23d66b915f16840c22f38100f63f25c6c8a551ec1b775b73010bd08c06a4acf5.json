@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT EXISTS (SELECT 1 FROM recepcao.chamada WHERE atendimento_id = $1) AS \"x!\"",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "x!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "23d66b915f16840c22f38100f63f25c6c8a551ec1b775b73010bd08c06a4acf5"
+}

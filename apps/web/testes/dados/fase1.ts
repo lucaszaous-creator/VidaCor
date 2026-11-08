@@ -36,6 +36,7 @@ export const SESSOES = {
   ti: sessao(9, 'Marcos Teixeira', ['ti']),
   estoque: sessao(10, 'Marcos Almoxarifado', ['estoque']),
   faturista: sessao(11, 'Rita Faturamento', ['faturista']),
+  tv: sessao(12, 'TV da recepção', ['tv']),
 };
 
 const SALA_1 = SALAS[0] as (typeof SALAS)[number];

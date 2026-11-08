@@ -24,6 +24,10 @@ pub async fn listar(
     State(estado): State<Estado>,
     usuario: Usuario,
 ) -> Result<Json<Vec<Membro>>, ErroApi> {
+    // O dispositivo TV fica em área pública e só vê o painel de chamada (docs/18 § 3).
+    if usuario.tem_perfil("tv") {
+        return Err(ErroApi::proibido());
+    }
     let mut tx = banco::transacao(&estado.banco, &usuario.contexto()).await?;
     let membros = sqlx::query_as!(
         Membro,

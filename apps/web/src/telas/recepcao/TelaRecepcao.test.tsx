@@ -219,4 +219,19 @@ describe('Recepção: reimpressão e correção (FC-ETQ)', () => {
     expect(pedidosDe('correcao')[1]?.corpo).toEqual({ nascimento: '1955-06-15', motivo: 'documento mostra 1955' });
     expect(within(corrigido.closest('[role="status"]') as HTMLElement).getByRole('button', { name: 'Reimprimir pulseira' })).toBeInTheDocument();
   });
+
+  it('recepção chama a senha ao guichê escolhido; o texto da TV vem do servidor', async () => {
+    const item = estado.itens.find((i) => i.id === ANTONIO.id);
+    if (item !== undefined) {
+      item.atendimento_id = ATENDIMENTO_ANTONIO.id;
+    }
+    const usuario = userEvent.setup();
+    renderizar(URL);
+    const painel = await abrirAntonio(usuario);
+    await usuario.selectOptions(await within(painel).findByRole('combobox', { name: 'Meu guichê' }), '3');
+    await usuario.click(within(painel).getByRole('button', { name: 'Chamar Antônio Carlos Ribeiro ao guichê 3' }));
+    expect(await within(painel).findByText('Senha A001 chamada para Guichê 3 às 08:40.')).toBeInTheDocument();
+    expect(pedidosDe('chamar')[0]?.corpo).toEqual({ destino: 'guiche', guiche: 3 });
+  });
 });
+

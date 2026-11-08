@@ -22,6 +22,7 @@ import { TelaLastro } from './telas/lastro/TelaLastro';
 import { TelaIndicadores } from './telas/indicadores/TelaIndicadores';
 import { TelaFinanceiro } from './telas/financeiro/TelaFinanceiro';
 import { TelaUsuarios } from './telas/usuarios/TelaUsuarios';
+import { TelaPainelDeChamada } from './telas/painel/TelaPainelDeChamada';
 import { TelaExameExterno } from './telas/externo/TelaExameExterno';
 import { TelaConvite } from './telas/portal/TelaConvite';
 import { TelaEntrarNoPortal } from './telas/portal/TelaEntrarNoPortal';
@@ -121,20 +122,25 @@ const raiz = createRootRouteWithContext<ContextoDoRoteador>()({ component: Outle
 const rotaEntrar = createRoute({ getParentRoute: () => raiz, path: '/entrar', component: TelaEntrar });
 const rotaReautenticado = createRoute({ getParentRoute: () => raiz, path: '/reautenticado', component: TelaReautenticado });
 
+async function exigirSessao({ context }: { context: ContextoDoRoteador }) {
+  try {
+    await context.queryClient.query(consultaSessao(context.dependencias.api));
+  } catch (erro) {
+    // Sem sessão vai para a entrada. Outros erros (servidor fora) a tela mostra no lugar.
+    if (erro instanceof ErroDaApi && erro.status === 401) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error -- padrão do TanStack Router
+      throw redirect({ to: '/entrar' });
+    }
+  }
+}
+
+/** TV de chamada em tela cheia, sem menu (Telao.dc.html; conta do dispositivo TV, docs/18). */
+const rotaPainel = createRoute({ getParentRoute: () => raiz, path: '/telao', beforeLoad: exigirSessao, component: TelaPainelDeChamada });
+
 const rotaApp = createRoute({
   getParentRoute: () => raiz,
   id: 'app',
-  beforeLoad: async ({ context }) => {
-    try {
-      await context.queryClient.query(consultaSessao(context.dependencias.api));
-    } catch (erro) {
-      // Sem sessão vai para a entrada. Outros erros (servidor fora) a casca mostra no lugar.
-      if (erro instanceof ErroDaApi && erro.status === 401) {
-        // eslint-disable-next-line @typescript-eslint/only-throw-error -- padrão do TanStack Router
-        throw redirect({ to: '/entrar' });
-      }
-    }
-  },
+  beforeLoad: exigirSessao,
   component: Casca,
 });
 
@@ -204,6 +210,7 @@ const rotaPortalConvite = createRoute({ getParentRoute: () => rotaPortal, path: 
 const arvore = raiz.addChildren([
   rotaEntrar,
   rotaReautenticado,
+  rotaPainel,
   rotaPortal.addChildren([rotaPortalInicio, rotaPortalLaudo, rotaPortalLink, rotaPortalEntrar, rotaPortalConvite]),
   rotaApp.addChildren([
     rotaInicio,

@@ -25,7 +25,7 @@ use uuid::Uuid;
 use vidacor_comum::novo_id;
 
 /// Perfis conhecidos (docs/18 § 3). Perfil desconhecido é recusado (negar por padrão).
-pub const PERFIS: [&str; 11] = [
+pub const PERFIS: [&str; 12] = [
     "recepcao",
     "caixa",
     "tecnico",
@@ -37,6 +37,7 @@ pub const PERFIS: [&str; 11] = [
     "estoque",
     "auditor",
     "ti",
+    "tv",
 ];
 /// Perfis com dado clínico: conceder exige segunda pessoa.
 pub const CLINICOS: [&str; 4] = ["medico", "tecnico", "enfermagem", "auditor"];
@@ -47,6 +48,9 @@ pub fn conflito(perfis: &[String]) -> Option<&'static str> {
     let tem = |p: &str| perfis.iter().any(|x| x == p);
     if tem("ti") && CLINICOS.iter().any(|c| tem(c)) {
         return Some("A TI não acumula perfil com dado clínico.");
+    }
+    if tem("tv") && perfis.len() > 1 {
+        return Some("A conta da TV de chamada tem só o perfil da TV.");
     }
     if tem("caixa") && tem("financeiro") {
         return Some("Quem recebe no caixa não concilia no financeiro.");

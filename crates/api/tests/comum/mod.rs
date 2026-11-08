@@ -365,6 +365,8 @@ async fn semear(admin: &PgPool) -> Semente {
         ("financeiro.a", "Equipe Financeiro", "financeiro", UNIDADE_A),
         ("ti.a", "Equipe TI", "ti", UNIDADE_A),
         ("recepcao.b", "Recepção Norte", "recepcao", UNIDADE_B),
+        ("tv.a", "TV da recepção Centro", "tv", UNIDADE_A),
+        ("tv.b", "TV da recepção Norte", "tv", UNIDADE_B),
         (
             "rita.faturamento",
             "Rita Faturamento",

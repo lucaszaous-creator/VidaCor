@@ -245,6 +245,11 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await ir('/exames-externos');
   await esperar(page, 'region', 'Exames externos do paciente');
   await ok('34-exame-externo');
+  estado.sessao = SESSOES.tv;
+  await ir('/telao');
+  await esperar(page, 'region', 'Chamada atual');
+  await ok('35-tv-de-chamada');
+  estado.sessao = SESSOES.gerente;
   estado.sessao = SESSOES.faturista;
   await ir('/faturamento');
   await page.getByRole('button', { name: /^Maria Helena Duarte, nascimento 12\/03\/1968/ }).first().click();

@@ -45,7 +45,7 @@ fazer, como conforto (G1).
 | **TI/administrador** | Usuários, aparelhos, integrações, backup |
 | **Paciente** (portal/app) | O próprio paciente ou responsável legal |
 | **Médico solicitante externo** (portal) | Médico que pediu o exame, por link compartilhado |
-| **Dispositivo TV** | Só o painel de chamada |
+| **Dispositivo TV** (`tv`) | Só o painel de chamada; conta sem outro perfil (DEC-2026-11-08-73) |
 
 ## 4. O que cada perfil **vê**
 

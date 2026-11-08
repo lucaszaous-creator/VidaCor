@@ -45,6 +45,8 @@ pub enum Ato {
     LoteGerar,
     DemonstrativoRegistrar,
     GlosaRecorrer,
+    ChamadaFazer,
+    PainelVer,
 }
 
 impl Ato {
@@ -99,6 +101,10 @@ impl Ato {
             A::FaturamentoAuditar | A::LoteGerar | A::DemonstrativoRegistrar | A::GlosaRecorrer => {
                 &["faturista"]
             }
+            // TV de chamada (docs/18 § 3): a recepção chama ao guichê; o técnico, à sala. O painel é
+            // do dispositivo TV; recepção e gerência podem abri-lo para conferir.
+            A::ChamadaFazer => &["recepcao", "tecnico"],
+            A::PainelVer => &["tv", "recepcao", "gerente"],
         };
         perfis.contains(&perfil)
     }
@@ -108,7 +114,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 41] = [
+    const TODOS: [Ato; 43] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -150,6 +156,8 @@ mod testes {
         Ato::LoteGerar,
         Ato::DemonstrativoRegistrar,
         Ato::GlosaRecorrer,
+        Ato::ChamadaFazer,
+        Ato::PainelVer,
     ];
 
     #[test]
@@ -164,6 +172,13 @@ mod testes {
             );
             assert!(!ato.concedido_a("sistema"), "{ato:?}");
             assert!(!ato.concedido_a(""), "{ato:?}");
+        }
+    }
+
+    #[test]
+    fn tv_so_ve_o_painel() {
+        for ato in TODOS {
+            assert_eq!(ato.concedido_a("tv"), ato == Ato::PainelVer, "{ato:?}");
         }
     }
 

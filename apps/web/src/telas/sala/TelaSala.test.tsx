@@ -122,4 +122,26 @@ describe('Sala de exame: bipe da pulseira (FC-PUL)', () => {
       await esperarAlertaDoServidor('A fila não pôde ser lida agora.', 'erro-interno');
     });
   });
+
+  it('técnico chama o paciente da fila para a sala na TV; repetir é chamar de novo', async () => {
+    const usuario = userEvent.setup();
+    renderizar(`/sala?sala=${SALA_1.id}`);
+    await usuario.click(await screen.findByRole('button', { name: 'Chamar Antônio Carlos Ribeiro para a sala' }));
+    expect(await screen.findByText('Senha A001 chamada para Sala 1 às 08:40.')).toBeInTheDocument();
+    expect(pedidosDe('chamar')[0]?.corpo).toEqual({ destino: 'sala' });
+    await usuario.click(screen.getByRole('button', { name: 'Chamar de novo Antônio Carlos Ribeiro para a sala' }));
+    await waitFor(() => {
+      expect(pedidosDe('chamar')).toHaveLength(2);
+    });
+    expect(pedidosDe('chamar')[0]?.chave).not.toBe(pedidosDe('chamar')[1]?.chave);
+  });
+
+  it('médico na sala não vê o botão de chamar (ato do técnico)', async () => {
+    estado.sessao = SESSOES.medico;
+    renderizar(`/sala?sala=${SALA_1.id}`);
+    expect(await screen.findByRole('region', { name: 'Fila da sala' })).toBeInTheDocument();
+    await screen.findAllByText(/Antônio Carlos Ribeiro/);
+    expect(screen.queryByRole('button', { name: /^Chamar / })).not.toBeInTheDocument();
+  });
 });
+
