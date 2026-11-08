@@ -1,0 +1,144 @@
+# 30 · Contrato da Fase 1: os 10 fluxos críticos (docs/27)
+
+- **Status:** em construção (08/11/2026). Frases aprovadas pelo dono do produto (DEC-2026-11-08-49).
+- Complementa o contrato do M0 (`docs/29` § 6.2). O `openapi.json` gerado do núcleo é a fonte da
+  verdade; este documento existe para núcleo e telas trabalharem em paralelo e é corrigido quando o
+  gerado divergir.
+
+## 0. Convenções (valem para todas as rotas)
+
+- Erros: `application/problem+json` com `codigo` estável, `detail` no formato R8 e `trace_id`.
+- Escrita: cabeçalho `X-CSRF-Token`; rotas que criam registro exigem `Idempotency-Key` (UUID).
+- Estação: cabeçalho opcional `X-Estacao` (ex.: `GUICHE-1`, `SALA-1`), só letras, números e hífen,
+  até 32 caracteres; gravado no lastro.
+- **Reautenticação (SEC-AUT-5):** atos sensíveis respondem `401` com `codigo` `reautenticacao-necessaria`
+  quando o último login com senha e 2FA tem mais de 5 minutos. A tela leva a
+  `GET /v1/sessao/reautenticar?voltar=<caminho>` (o provedor pede senha e 2FA de novo) e repete o ato
+  ao voltar, com a mesma `Idempotency-Key`. Atos: assinar laudo, retificar laudo, conduta da triagem,
+  autorizar desconto, aprovar estorno, acesso de emergência, corrigir cadastro.
+- Datas `AAAA-MM-DD`; instantes RFC 3339; dinheiro em **centavos** (inteiro); percentuais em pontos
+  base (`500` = 5,00%).
+- Situações e motivos sempre por palavra (não por cor).
+
+## 1. Recepção, etiquetas e sala (FC-CHK, FC-ETQ, FC-PUL)
+
+### Check-in (substitui o corpo do M0)
+`POST /v1/atendimentos` (ato `recepcao.checkin`)
+```json
+{ "agendamento_id": "uuid",
+  "confirmacao": { "nome": "texto", "nascimento": "AAAA-MM-DD", "documento_com_foto": true } }
+```
+- `201` `Atendimento` com `situacao: "aguardando_sala"`, `senha` (ex.: `"A012"`) e `pulseira`
+  (`{ "codigo": "ETQ-2026-000001", "situacao": "valida" }`).
+- `422` `identificacao-incompleta` (falta nome, nascimento ou documento com foto; a tela diz qual),
+  `422` `identificacao-nao-confere`, `409` `checkin-ja-realizado`, `409` `situacao-nao-permite-checkin`,
+  `403` `sem-permissao`.
+- A worklist **não** é mais enviada no check-in: sai no bipe da pulseira na sala (FC-PUL-01).
+
+### Agenda: alerta de homônimo
+`GET /v1/agenda` ganha em cada item `homonimos: PacienteResumo[]` (outros pacientes do dia com o
+mesmo nome e outro nascimento) e `requer_contraste: boolean`, `laudo_situacao: string | null`.
+
+### Etiquetas
+- `GET /v1/atendimentos/{id}` inclui `pulseira`, `senha`, `triagem` (ver § 2) e `laudo_situacao`.
+- `POST /v1/etiquetas/{codigo}/reimpressao` (ato `etiqueta.reimprimir`, `Idempotency-Key`)
+  `{ "motivo": "rasgou" }` responde `201` `{ "nova": Etiqueta, "invalidada": Etiqueta }`.
+  `422` `motivo-obrigatorio`, `409` `etiqueta-ja-invalidada`, `403`.
+- `Etiqueta`: `{ codigo, tipo: "pulseira", situacao: "valida" | "invalidada", motivo_invalidacao, substituida_por }`.
+
+### Correção de cadastro (FC-ETQ-04)
+`POST /v1/pacientes/{id}/correcao` (ato `paciente.corrigir`, reautenticação)
+`{ "nascimento": "AAAA-MM-DD", "motivo": "texto" }` responde `200`
+`{ paciente: PacienteResumo, versao, etiquetas_invalidadas: string[] }`. A tela pede a reimpressão.
+
+### Sala: bipe da pulseira
+`POST /v1/salas/{sala_id}/bipes` (ato `sala.bipar`, técnico lotado na sala; `Idempotency-Key`)
+`{ "codigo_etiqueta": "ETQ-2026-000001" }`
+- `200` `{ atendimento: Atendimento, aparelho: { nome, ae_title }, worklist: "enviada" | "ja_enviada" }`.
+- `409` `etiqueta-substituida`, `409` `paciente-de-outra-sala` (com `sala_correta: { id, nome }` no
+  corpo e divergência aberta), `422` `triagem-ausente` (exame com contraste sem triagem),
+  `409` `conduta-medica-pendente`, `404` `etiqueta-nao-encontrada`, `403` (técnico de outra sala).
+- `GET /v1/salas/{sala_id}/fila` (ato `sala.ver`): atendimentos do dia da sala com situação.
+
+## 2. Triagem com contraste (FC-TRI)
+
+`POST /v1/atendimentos/{id}/triagem` (ato `triagem.registrar`, técnico lotado na sala)
+```json
+{ "reacao_previa_contraste": false, "gestante": false, "amamentando": false,
+  "usa_metformina": false, "creatinina_mg_dl": "1.4", "creatinina_data": "2026-10-28",
+  "tfg": 90 }
+```
+- O servidor **ignora** `tfg` e calcula pela CKD-EPI 2021 com idade e sexo do cadastro (FC-TRI-07).
+- `201` `Triagem`: `{ resultado: "liberado" | "liberado_com_ressalvas" | "precisa_aprovacao_medica",
+  tfg_calculada, motivos: string[], regra_versao: "TRI-2026.1", conduta: null | Conduta }`.
+- `POST /v1/atendimentos/{id}/triagem/conduta` (ato `triagem.conduta`: médico com vínculo de cuidado;
+  reautenticação) `{ "conduta": "prosseguir com hidratação" }` responde `200` `Triagem` liberada.
+  Técnico: `403`.
+
+## 3. Agendamento de convênio com guia (FC-AGD)
+
+- `POST /v1/guias` (ato `guia.registrar`, `Idempotency-Key`)
+  `{ operadora, numero, carteirinha, senha, validade, paciente_id, solicitante, procedimentos: [{ tuss, quantidade }] }`
+  responde `201` `Guia` `{ id, numero, operadora, validade, situacao: "disponivel" | "consumida", procedimentos: [{ tuss, saldo }], atendimento_codigo }`.
+- `POST /v1/agendamentos` (ato `agenda.agendar`, `Idempotency-Key`)
+  `{ paciente_id, sala_id, inicio, procedimentos: [tuss], guia_id | null, reserva_provisoria: boolean }`
+  - `201` `ItemAgenda` (`situacao` `confirmado` ou `reserva_provisoria` com `expira_em`).
+  - `409` `guia-em-uso` (com `atendimento_codigo`), `422` `procedimento-nao-autorizado` (com `tuss`),
+    `422` `senha-vencida` (com `validade`), `422` `saldo-esgotado`, `409` `horario-ocupado` com
+    `sugestoes: [inicio]` (próximos três horários livres da sala), `403`.
+- `POST /v1/agendamentos/{id}/guia` `{ guia_id }`: confirma a reserva provisória (FC-AGD-09).
+- Reserva provisória vence pelo trabalhador do núcleo: `situacao` `expirada`, motivo
+  `guia não entregue no prazo`, horário volta a ficar livre, aviso ao paciente pelo outbox.
+- `GET /v1/pacientes?busca=texto` (ato `agenda.ver`): até 20 pacientes, com nome e nascimento.
+- `GET /v1/salas/{id}/horarios-livres?data=` : horários livres de 30 minutos.
+
+## 4. Laudo, portal e acesso (FC-LAU, FC-ACE)
+
+- `GET /v1/laudos/fila` (ato `laudo.escrever`): laudos atribuídos a mim; só estudo conciliado.
+- `GET /v1/laudos/{id}` (ato `laudo.ler` + vínculo de cuidado ou acesso de emergência ativo):
+  `Laudo` `{ id, codigo, paciente: PacienteResumo, exame, situacao: "rascunho" | "assinado" | "retificacao_em_rascunho",
+  conversar_antes, publicado_no_portal, versao_vigente, versoes: [Versao], estudo }`;
+  `Versao` `{ numero, texto, situacao: "rascunho" | "assinada" | "substituida", motivo, assinada_por, assinada_em, hash_documento }`.
+  - Médico sem vínculo: `403` `sem-vinculo-de-cuidado` (a tela oferece o acesso de emergência).
+  - Recepção e TI: `403` `sem-permissao`. A recepção vê só `laudo_situacao` no atendimento.
+- `PUT /v1/laudos/{id}/rascunho` (só o médico atribuído) `{ texto, versao_numero }`: `409` `laudo-assinado`.
+- `POST /v1/laudos/{id}/assinatura` (médico atribuído, reautenticação, `Idempotency-Key`)
+  `{ "pin": "texto" }`: `200` `Laudo`; `403` sem atribuição; `409` `assinatura-concorrente`.
+  A tela mostra antes: "Assinar o laudo de {nome} ({nascimento})?".
+- `POST /v1/laudos/{id}/retificacao` `{ texto, motivo }`: `422` `motivo-obrigatorio`.
+- `POST /v1/laudos/{id}/conversar-antes` `{ marcado: boolean }`; `POST /v1/laudos/{id}/liberacao` (depois da conversa).
+- `POST /v1/laudos/{id}/acesso-emergencia` (reautenticação) `{ justificativa }` (mínimo 20 caracteres): vale 1 hora.
+- Publicação no portal: `409` `laudo-nao-assinado` para rascunho (FC-LAU-02).
+
+### Portal do paciente (`/v1/portal/*`, sessão de paciente separada da equipe)
+- `GET /v1/portal/laudos`: laudos publicados do próprio paciente (versão vigente, marca de retificação).
+- `GET /v1/portal/laudos/{id}`: `404` `nao-encontrado` igual para "de outro paciente" e "não existe" (FC-ACE-02).
+- `GET /v1/links/{token}`: laudo compartilhado; `410` `link-expirado`.
+
+## 5. Caixa e PIX (FC-CXA, FC-PIX)
+
+- `POST /v1/caixas` (ato `caixa.operar`) `{ fundo_centavos }`; `POST /v1/caixas/{id}/fechamento` `{ contado_centavos }`
+  responde `{ esperado_centavos, contado_centavos, diferenca_centavos }`.
+- `GET /v1/caixas/meu`: caixa aberto do usuário ou `null`.
+- `POST /v1/recebimentos` (ato `caixa.receber`, `Idempotency-Key`)
+  `{ paciente_id, atendimento_id, itens: [{ tuss, valor_centavos? }], desconto: { pontos_base, motivo, autorizacao_id? } | null, forma: "pix" | "dinheiro" | "cartao" }`
+  - O servidor calcula o total pela tabela vigente e grava a versão (FC-CXA-01, 02).
+  - `201` `Recebimento` `{ id, codigo, itens: [{ tuss, descricao, valor_centavos }], subtotal_centavos, desconto_centavos, total_centavos, tabela_versao, situacao: "aguardando_pagamento" | "pago" | "estornado", pix: { txid, copia_e_cola } | null }`.
+  - `403` `desconto-acima-do-limite` (com `limite_pontos_base`), `422` `valor-invalido`, `409` `caixa-fechado`.
+- `POST /v1/autorizacoes-desconto` (ato `desconto.autorizar`, reautenticação) `{ paciente_id, pontos_base, motivo, solicitante_id }`: `201` `{ id, valida_ate }`.
+- `POST /v1/recebimentos/{id}/estornos` `{ motivo }` (pedido); `POST /v1/estornos/{id}/aprovacao` (ato `estorno.aprovar`, reautenticação; quem pediu não aprova: `403` `separacao-de-funcoes`).
+- `POST /v1/webhooks/pix` (público; assinatura HMAC-SHA256 do corpo bruto no cabeçalho `X-Assinatura`):
+  `401` `assinatura-invalida`; `200` sempre que o evento é aceito ou já foi processado.
+
+## 6. Contingência (FC-CTG)
+
+- `POST /v1/contingencias` (ato `contingencia.declarar`) `{ nivel: "externo" | "setor" | "total", motivo, responsavel_id, declarada_em, chave }`
+  (`chave` UUID gerada na estação; repetir não cria outra): `201` `Contingencia`.
+- `GET /v1/contingencias/aberta`.
+- `POST /v1/contingencias/kits` (ato `contingencia.kit`): reserva a faixa do dia e gera o kit com hash.
+- `POST /v1/contingencias/{id}/fichas` `{ formulario: "F-ATD", numero, paciente_id, nome, nascimento, ocorrido_em, atendido_por, anexo_sha256 }`:
+  `201` atendimento com `origem: "contingencia"`; `409` `ficha-ja-lancada`; `422` `numero-fora-da-faixa`;
+  `202` `divergencia-aberta` quando o nascimento do papel difere do cadastro.
+- `POST /v1/contingencias/{id}/recibos` `{ formulario: "F-REC", numero, paciente_id, tuss, valor_papel_centavos, ocorrido_em }`:
+  grava o valor recalculado e abre divergência de preço quando difere.
+- `POST /v1/contingencias/{id}/encerramento`: `409` `pendencias` com a lista do que falta.
