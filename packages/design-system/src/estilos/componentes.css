@@ -109,6 +109,60 @@
 /* Alvo de 44 px (R10, docs/05): o botão de mais opções do vc10 tem 36 px. */
 .more { width: 44px; height: 44px; }
 
+/* Caixa de marcar (Checkbox) */
+.ck { display: flex; align-items: flex-start; gap: 10px; min-height: 44px; padding: 8px 0; cursor: pointer; }
+.ck-caixa {
+  width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid var(--line2); background: #fff; flex: none;
+  display: inline-flex; align-items: center; justify-content: center; color: transparent; margin-top: 1px;
+}
+.ck[data-selected] .ck-caixa { background: var(--navy); border-color: var(--navy); color: #fff; }
+.ck[data-focus-visible] .ck-caixa { outline: 2px solid var(--foco); outline-offset: 2px; }
+.ck[data-invalid] .ck-caixa { border: 2px solid var(--rose); }
+.ck[data-disabled] { opacity: .55; cursor: not-allowed; }
+
+/* Pergunta de sim ou não (RadioGroup com o visual .seg) */
+.sn { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.sn:last-child { border-bottom: 0; }
+.sn-opcoes { flex: none; }
+.sn-op {
+  height: 40px; min-width: 64px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line2); background: #fff;
+  color: var(--ink2); font-size: 14px; font-weight: 550; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+}
+.sn-op[data-selected] { background: var(--navy); border-color: var(--navy); color: #fff; }
+.sn-op[data-focus-visible] { outline: 2px solid var(--foco); outline-offset: 2px; }
+.sn[data-invalid] .sn-op { border-color: var(--rose); }
+
+/* Pré-visualização da pulseira (Etiquetas.dc.html, .et-prev) */
+.etq-faixa {
+  border: 1px solid #CBD2DC; border-radius: 10px; background: #fff; padding: 12px 14px;
+  display: flex; gap: 12px; align-items: center; justify-content: space-between;
+}
+.etq-nome { font-size: 15px; font-weight: 700; letter-spacing: .02em; color: #111827; overflow-wrap: anywhere; }
+.etq-nasc { font-size: 14px; color: #111827; margin-top: 2px; }
+.etq-cods { font-size: 13px; font-weight: 600; color: #111827; text-align: right; white-space: nowrap; }
+.etq-inv .etq-faixa { border-style: dashed; background: #FAFAFB; }
+.etq-inv .etq-nome, .etq-inv .etq-nasc, .etq-inv .etq-cods { color: var(--faint); text-decoration: line-through; }
+
+/* Lista em painel (fila da sala, fila de laudos): linha clicável com seleção */
+.lp { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 12px; border: 0; border-bottom: 1px solid var(--line);
+  background: transparent; text-align: left; font: inherit; color: inherit; cursor: pointer; border-radius: 0; }
+.lp:hover { background: #F8FAFC; }
+.lp[aria-current="true"] { background: #EEF4FB; box-shadow: inset 3px 0 0 var(--navy); }
+.lp .t { font-size: 15px; font-weight: 600; }
+.lp .s { font-size: 13px; color: var(--mute); }
+
+/* Texto de laudo e de documento: sempre texto puro, quebras preservadas */
+.texto-laudo { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 15px; line-height: 1.6; color: var(--ink); margin: 0; font-family: inherit; }
+
+/* Faixa de contingência aberta, no topo de toda tela (R7) */
+.faixa-ctg { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 14px; background: #FDEEF1; color: #7A1E30; }
+
+@media print {
+  body * { visibility: hidden; }
+  .etq-impressao, .etq-impressao * { visibility: visible; }
+  .etq-impressao { position: absolute; left: 0; top: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .drw, .dlg, .cm { transition: none; animation: none; }
 }

@@ -39,4 +39,26 @@ export { MenuLateral } from './componentes/MenuLateral';
 export type { CorDoModulo, ItemDoMenu, PropsDoLink, PropsDoMenuLateral, SecaoDoMenu } from './componentes/MenuLateral';
 export { Tabela } from './componentes/Tabela';
 export type { ColunaDaTabela, PropsDaTabela } from './componentes/Tabela';
-export { formatarData, formatarDiaPorExtenso, formatarHora } from './formatos';
+export { DialogoDeFormulario } from './componentes/DialogoDeFormulario';
+export type { PropsDoDialogoDeFormulario } from './componentes/DialogoDeFormulario';
+export { EtiquetaPulseira } from './componentes/EtiquetaPulseira';
+export type { PropsDaEtiquetaPulseira } from './componentes/EtiquetaPulseira';
+export { AreaDeTexto, CaixaDeMarcar, Escolha, ListaDeDados, SimOuNao } from './componentes/Formulario';
+export type {
+  OpcaoDaEscolha,
+  PropsDaAreaDeTexto,
+  PropsDaCaixaDeMarcar,
+  PropsDaEscolha,
+  PropsDaListaDeDados,
+  PropsDoSimOuNao,
+} from './componentes/Formulario';
+export {
+  formatarData,
+  formatarDataHora,
+  formatarDiaPorExtenso,
+  formatarDinheiro,
+  formatarHora,
+  formatarPontosBase,
+  lerPercentual,
+  lerReais,
+} from './formatos';
