@@ -1,0 +1,28 @@
+/* Grade da agenda, copiada do <helmet> de design/mockups/Agenda.dc.html. As colunas e linhas
+   são definidas na tela (salas e horário do dia vêm do servidor). */
+.gd { display: grid; position: relative; padding-right: 8px; }
+.gh {
+  grid-column: 1 / -1; grid-row: 1; position: sticky; top: 0; z-index: 6; background: #fff;
+  border-bottom: 1px solid var(--line); display: grid; align-items: center;
+}
+.gh > div { padding: 0 8px; min-width: 0; }
+.ev {
+  margin: 2px 3px; border-radius: 9px; padding: 4px 9px; background: #fff; border: 1px solid #DDE2EA;
+  display: flex; flex-direction: column; justify-content: center; gap: 1px; min-width: 0; overflow: hidden;
+  z-index: 2; text-align: left; font: inherit; color: inherit; cursor: pointer;
+}
+.ev:hover { border-color: #9AA6B8; }
+.ev .n { font-size: 13px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; }
+.ev .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.ev .s { font-size: 12px; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ev.done { background: #F7F8FA; border-color: #EEF0F3; }
+.ev.done .n { color: var(--mute); font-weight: 500; }
+.ev.now { border-color: #B9A9E6; background: #F7F4FE; }
+.ev.wait { border-color: #F3C98B; background: #FFFAF1; }
+.ev.cx { background: #fff; border-style: dashed; border-color: var(--line2); }
+.ev.cx .n { color: var(--faint); text-decoration: line-through; font-weight: 500; }
+.ev.sel { box-shadow: 0 0 0 2px var(--navy); border-color: var(--navy); }
+.dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 6px; flex: none; }
+.hr { font-size: 12px; color: var(--mute); padding: 2px 10px 0 0; text-align: right; }
+.ag-legenda { display: inline-flex; align-items: center; font-size: 13px; }
+.ag-sala { width: auto; min-height: 40px; border-radius: 999px; font-size: 14px; font-weight: 550; }

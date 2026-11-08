@@ -1,0 +1,5 @@
+/* Folha única do design system: importar uma vez na aplicação. A fonte Inter é carregada pela
+   aplicação a partir de @fontsource/inter (nada de fonte externa em tempo de execução). */
+@import './tokens.css';
+@import './vc10.css';
+@import './componentes.css';

@@ -1,0 +1,25 @@
+{
+  "name": "@vidacor/api-client",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cliente HTTP do núcleo VidaCor. Tipos à mão do contrato v1 (docs/29 § 6.2) até existir o openapi.json gerado.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "gerar": "openapi-typescript openapi.json -o src/gerado/openapi.ts",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.14.0",
+    "openapi-typescript": "7.13.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1",
+    "vitest": "4.1.12"
+  }
+}

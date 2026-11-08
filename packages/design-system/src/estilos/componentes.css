@@ -1,0 +1,114 @@
+/* Estilos dos componentes que os mockups definem fora do vc10.css (no <helmet> de cada tela):
+   gaveta (Agenda, Recepção), menu de contexto (Menus-Contexto), diálogo (Estados), estados de tela.
+   Valores copiados dos mockups; cores só por token ou pelos valores já usados neles. */
+
+/* Foco visível em todo controle (WCAG 2.2, foco não obscurecido). */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible,
+[data-focus-visible] {
+  outline: 2px solid var(--foco);
+  outline-offset: 2px;
+}
+.in[data-focused],
+.in:focus-within {
+  outline: 3px solid #BBDDF5;
+  border-color: var(--blue);
+}
+
+/* Botão de React Aria com as classes do vc10 */
+.btn[data-disabled] { opacity: .5; cursor: not-allowed; }
+.btn[data-pending] { cursor: progress; }
+
+/* Campo com erro (Estados.dc.html, "campo com erro") */
+.in[data-invalid], .in[aria-invalid="true"] { border: 2px solid var(--rose); }
+.campo-erro { font-size: 13px; font-weight: 400; color: var(--rose); }
+.campo-ajuda { font-size: 13px; font-weight: 400; color: var(--mute); }
+
+/* Campo de data (DateField): o .in vira linha de segmentos */
+.in.data { display: flex; align-items: center; gap: 2px; font-variant-numeric: tabular-nums; }
+.data .seg-d { padding: 2px 1px; border-radius: 4px; outline: none; }
+.data .seg-d[data-placeholder] { color: var(--faint); }
+.data .seg-d[data-focused] { background: var(--navy); color: #fff; }
+.data .seg-d[data-type="literal"] { color: var(--mute); }
+
+/* Busca (SearchField) */
+.search[data-focus-within] { border-color: var(--blue); }
+.search input::-webkit-search-cancel-button { display: none; }
+
+/* Abas (Tabs) com o visual .seg */
+.seg [role="tab"] {
+  height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--line2); background: #fff;
+  color: var(--ink2); font-size: 14px; font-weight: 550; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+}
+.seg [role="tab"][data-selected] { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+/* Tabela (Table) */
+.tb [role="row"][data-focus-visible] { outline: 2px solid var(--foco); outline-offset: -2px; }
+
+/* Gaveta (Agenda.dc.html e Recepcao.dc.html) */
+.drw {
+  position: absolute; top: 0; right: 0; bottom: 0; width: 380px; max-width: 100%; background: #fff; border-radius: 22px;
+  box-shadow: 0 18px 48px rgba(15, 23, 42, .16), 0 2px 6px rgba(15, 23, 42, .06);
+  display: flex; flex-direction: column; z-index: 20; overflow: hidden;
+}
+.drw-h { display: flex; align-items: flex-start; gap: 8px; padding: 16px 12px 12px 20px; border-bottom: 1px solid var(--line); }
+.drw-c { padding: 14px 20px; display: flex; flex-direction: column; gap: 14px; flex: 1 1 auto; }
+.drw-r { display: flex; flex-direction: column; gap: 8px; padding: 14px 20px 18px; border-top: 1px solid var(--line); }
+.xb {
+  width: 44px; height: 44px; border: 0; border-radius: 10px; background: transparent; color: var(--mute);
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex: none;
+}
+.xb:hover { background: var(--gray-bg); color: var(--ink); }
+
+/* Diálogo de confirmação (Estados.dc.html, "ato irreversível") */
+.dlg-fundo {
+  position: fixed; inset: 0; z-index: 80; background: rgba(15, 23, 42, .32);
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+}
+.dlg {
+  width: 100%; max-width: 460px; background: #fff; border-radius: 18px; padding: 22px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, .12); outline: none;
+}
+.dlg [role="alertdialog"], .dlg [role="dialog"] { outline: none; display: flex; flex-direction: column; gap: 10px; }
+.dlg h2 { font-size: 18px; font-weight: 650; }
+.dlg-pac { font-size: 15px; color: var(--ink); line-height: 1.5; }
+.dlg-r { display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+
+/* Menu de contexto (Menus-Contexto.dc.html) */
+.cm {
+  background: #fff; border-radius: 12px; border: 1px solid #E3E7ED; padding: 6px; font-size: 14px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, .16), 0 2px 6px rgba(15, 23, 42, .08);
+  min-width: 260px; max-width: 340px; outline: none;
+}
+.cm-t { font-size: 12px; font-weight: 600; color: var(--mute); padding: 8px 10px 6px; border-bottom: 1px solid var(--gray-bg); margin-bottom: 4px; }
+.cm-t b { display: block; font-size: 14px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cm [role="menu"] { outline: none; }
+.cm-i {
+  display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 6px 10px; border-radius: 8px;
+  color: var(--ink); cursor: pointer; outline: none;
+}
+.cm-i[data-focused] { background: #EEF3FA; }
+.cm-l { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.cm-why { font-size: 12px; color: var(--mute); margin-top: 1px; }
+.cm-k { font-size: 12px; color: var(--mute); white-space: nowrap; }
+.cm-i[data-disabled] { color: var(--faint); cursor: default; }
+.cm-i.danger { color: #B4233C; }
+.cm-sep { height: 1px; background: #EEF0F3; margin: 5px 4px; }
+
+/* Estados de tela */
+.state-box { border: 1px dashed var(--line2); border-radius: 16px; }
+.sk-linha { display: flex; gap: 10px; align-items: center; }
+.suporte { font-size: 12px; color: var(--mute); font-variant-numeric: tabular-nums; }
+.banner > svg { flex: none; margin-top: 2px; }
+.banner .t14 { line-height: 1.5; }
+
+/* Menu lateral: marca sem fundo branco do recorte do logo */
+.sb-logo { mix-blend-mode: multiply; }
+.sb-marca { flex: 1; min-width: 0; display: flex; border-radius: 12px; color: inherit; }
+.sb-sair { width: 40px; height: 40px; border: 0; background: transparent; }
+
+/* Alvo de 44 px (R10, docs/05): o botão de mais opções do vc10 tem 36 px. */
+.more { width: 44px; height: 44px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .drw, .dlg, .cm { transition: none; animation: none; }
+}

@@ -1,0 +1,35 @@
+/* Tokens do design system VidaCor, copiados de design/vc10.css (mesmos nomes e valores; ADR-0021).
+   Cor nova entra aqui, com contraste conferido, nunca solta numa tela. */
+:root {
+  --bg: #F2F3F6;
+  --card: #FFFFFF;
+  --line: #E8EAEF;
+  --line2: #D9DDE5;
+  --ink: #0F172A;
+  --ink2: #334155;
+  --mute: #5B6474;
+  --faint: #8A93A3;
+  --navy: #0A1A4A;
+  --navy2: #13285F;
+  --blue: #0C72B0;
+  --blue2: #3E9BDB;
+  --sky: #E8F2FB;
+  --rose: #C2334D;
+  --rose-bg: #FDEEF1;
+  --amber: #9A5B00;
+  --amber-bg: #FFF3DF;
+  --green: #1F7A4D;
+  --green-bg: #E5F5EC;
+  --violet: #5B45B5;
+  --violet-bg: #EFEBFC;
+  --teal: #0F6E6A;
+  --teal-bg: #E2F4F3;
+  --gray-bg: #F1F3F6;
+  --r: 22px;
+  --r2: 16px;
+  --r3: 12px;
+  --sh: 0 1px 2px rgba(15, 23, 42, .04), 0 1px 1px rgba(15, 23, 42, .02);
+  --sh2: 0 8px 24px rgba(15, 23, 42, .08), 0 2px 6px rgba(15, 23, 42, .04);
+  /* Foco visível (WCAG 2.2): mesmo azul usado no menu lateral do mockup. */
+  --foco: #0C72B0;
+}
