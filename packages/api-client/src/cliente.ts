@@ -55,6 +55,14 @@ import type { DecisaoDePerfil, MudancaDePerfil, NovoUsuario, UsuarioAdministrado
 import type { ContaBancaria, NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
 import type { ComunicacaoDoPaciente, LembretesEnfileirados, PreferenciaWhatsapp } from './contrato-comunicacao';
 import type {
+  AutorizacaoDetalhe,
+  AutorizacaoResumo,
+  NovoPedidoAutorizacao,
+  PedidoProtocolo,
+  RespostaDoPortal,
+  SituacaoDaAutorizacao,
+} from './contrato-autorizacao';
+import type {
   ContaDetalhe,
   ContaResumo,
   ContratoDeConvenio,
@@ -485,6 +493,22 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
       /** Contraste aplicado: baixa do lote que vence antes, ligada ao paciente (técnico lotado). */
       registrarContraste: (atendimentoId: string, corpo: ContrasteAplicado, o: OpcoesDeEscrita): Promise<MovimentoFeito> =>
         criar<MovimentoFeito>('POST', `/v1/atendimentos/${seg(atendimentoId)}/contraste`, corpo, o),
+    },
+
+    autorizacoes: {
+      /** Pede a autorização do agendamento; o servidor monta a solicitação e escolhe o canal. */
+      pedir: (corpo: NovoPedidoAutorizacao, o: OpcoesDeEscrita): Promise<AutorizacaoDetalhe> =>
+        criar<AutorizacaoDetalhe>('POST', '/v1/autorizacoes', corpo, o),
+      listar: (situacao?: SituacaoDaAutorizacao): Promise<AutorizacaoResumo[]> =>
+        ler<AutorizacaoResumo[]>(`/v1/autorizacoes${situacao === undefined ? '' : `?${new URLSearchParams({ situacao }).toString()}`}`),
+      obter: (id: string): Promise<AutorizacaoDetalhe> => ler<AutorizacaoDetalhe>(`/v1/autorizacoes/${seg(id)}`),
+      /** Pedido feito no portal da operadora: protocolo. */
+      registrarProtocolo: (id: string, corpo: PedidoProtocolo): Promise<AutorizacaoDetalhe> =>
+        escrever<AutorizacaoDetalhe>('POST', `/v1/autorizacoes/${seg(id)}/protocolo`, corpo),
+      /** Resposta copiada do portal (gravada como recebida, com hash). */
+      registrarResposta: (id: string, corpo: RespostaDoPortal, o: OpcoesDeEscrita): Promise<AutorizacaoDetalhe> =>
+        criar<AutorizacaoDetalhe>('POST', `/v1/autorizacoes/${seg(id)}/resposta`, corpo, o),
+      consultarAgora: (id: string): Promise<AutorizacaoDetalhe> => escrever<AutorizacaoDetalhe>('POST', `/v1/autorizacoes/${seg(id)}/consulta`, {}),
     },
 
     faturamento: {

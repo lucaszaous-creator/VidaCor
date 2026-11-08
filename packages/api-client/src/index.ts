@@ -5,6 +5,7 @@ export * from './contrato-menu';
 export * from './contrato-portal';
 export * from './contrato-estoque';
 export * from './contrato-faturamento';
+export * from './contrato-autorizacao';
 export * from './contrato-lastro';
 export * from './contrato-indicadores';
 export * from './contrato-comunicacao';
