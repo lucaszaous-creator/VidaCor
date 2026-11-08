@@ -19,8 +19,9 @@ export class ErroDaApi extends Error {
     return this.problema.codigo;
   }
 
+  /** Código de suporte, ou cadeia vazia quando o servidor não mandou. */
   get traceId(): string {
-    return this.problema.trace_id;
+    return this.problema.trace_id ?? '';
   }
 }
 
@@ -48,7 +49,7 @@ export function ehProblemaHttp(valor: unknown): valor is ProblemaHttp {
   return (
     ehTexto(v.detail) &&
     ehTexto(v.codigo) &&
-    ehTexto(v.trace_id) &&
+    (v.trace_id === undefined || v.trace_id === null || ehTexto(v.trace_id)) &&
     typeof v.status === 'number'
   );
 }
@@ -66,6 +67,6 @@ export function problemaInesperado(status: number): ProblemaHttp {
       `O servidor respondeu de um jeito inesperado (HTTP ${String(status)}). ` +
       'Nada foi confirmado por esta tela. Tente de novo; se continuar, avise a TI.',
     codigo: 'resposta-inesperada',
-    trace_id: '',
+    trace_id: null,
   };
 }

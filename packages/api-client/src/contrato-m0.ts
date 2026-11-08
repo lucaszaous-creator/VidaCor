@@ -6,9 +6,10 @@
  * gerado existir, os tipos abaixo passam a ser apelidos dos gerados e qualquer diferença é bug do
  * contrato, resolvido no núcleo (o servidor é a fonte da verdade).
  *
- * Formatos assumidos e marcados "a confirmar com o núcleo" (o docs/29 não fixa):
- * - datas de calendário (`data`, `nascimento`) em `AAAA-MM-DD`;
- * - instantes (`inicio`, `fim`, `criado_em`, `recebido_em`) em RFC 3339 com fuso (UTC no servidor).
+ * Formatos conferidos com o `openapi.json` gerado pelo núcleo no commit 9b9e411 (branch do núcleo):
+ * - datas de calendário (`data`, `nascimento`) em `AAAA-MM-DD` (`format: date`);
+ * - instantes (`inicio`, `fim`, `criado_em`, `recebido_em`) em RFC 3339 (`format: date-time`);
+ * - `trace_id` pode vir `null`; `atendimento_id` do item da agenda pode faltar ou vir `null`.
  */
 
 /** `GET /v1/saude` (público). */
@@ -44,7 +45,7 @@ export interface Sala {
 export interface PacienteResumo {
   id: string;
   nome: string;
-  /** `AAAA-MM-DD` (a confirmar com o núcleo). */
+  /** `AAAA-MM-DD`. */
   nascimento: string;
 }
 
@@ -68,15 +69,16 @@ export type SituacaoAgendamento = (typeof SITUACOES_AGENDAMENTO)[number];
 export interface ItemDaAgenda {
   id: string;
   codigo: string;
-  /** RFC 3339 (a confirmar com o núcleo). */
+  /** RFC 3339. */
   inicio: string;
-  /** RFC 3339 (a confirmar com o núcleo). */
+  /** RFC 3339. */
   fim: string;
   sala: Sala;
   paciente: PacienteResumo;
   exame: ExameDoAgendamento;
   situacao: SituacaoAgendamento;
-  atendimento_id: string | null;
+  /** Fora da lista `required` do openapi.json: pode faltar. */
+  atendimento_id?: string | null;
 }
 
 /** `GET /v1/agenda?data=AAAA-MM-DD&sala_id=` (ato `agenda.ver`). */
@@ -102,6 +104,11 @@ export interface NovoAtendimento {
   };
 }
 
+/** Situações do atendimento, como descritas no openapi.json do núcleo. */
+export const SITUACOES_ATENDIMENTO = ['aguardando_exame', 'em_exame', 'exame_concluido', 'cancelado'] as const;
+
+export type SituacaoAtendimento = (typeof SITUACOES_ATENDIMENTO)[number];
+
 /** Resposta 201 de `POST /v1/atendimentos`. */
 export interface Atendimento {
   id: string;
@@ -111,8 +118,8 @@ export interface Atendimento {
   accession: string;
   agendamento_id: string;
   paciente: PacienteResumo;
-  /** O docs/29 não lista as situações do atendimento: a tela mostra o texto como veio. */
-  situacao: string;
+  /** `aguardando_exame`, `em_exame`, `exame_concluido` ou `cancelado` (openapi.json). */
+  situacao: SituacaoAtendimento;
   criado_em: string;
 }
 
@@ -154,6 +161,6 @@ export interface ProblemaHttp {
   detail: string;
   /** Código estável (ex.: `identificacao-nao-confere`). */
   codigo: string;
-  /** Código de suporte mostrado discretamente na tela. */
-  trace_id: string;
+  /** Código de suporte mostrado discretamente na tela (pode vir `null`). */
+  trace_id?: string | null;
 }

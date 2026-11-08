@@ -215,3 +215,14 @@ describe('cliente da API', () => {
     expect(api.urlDeEventos()).toBe(`${BASE}/v1/eventos`);
   });
 });
+
+describe('Problem Details sem trace_id', () => {
+  it('aceita trace_id nulo ou ausente e mostra código de suporte vazio', async () => {
+    const problema = { type: 'about:blank', title: 'x', status: 409, detail: 'Check-in já feito.', codigo: 'checkin-ja-realizado', trace_id: null };
+    const { fn } = fetchFalso([() => json(problema, 409, 'application/problem+json')]);
+    const api = criarCliente({ base: BASE, fetch: fn });
+    const erro = (await api.salas.listar().catch((e: unknown) => e)) as ErroDaApi;
+    expect(erro.codigo).toBe('checkin-ja-realizado');
+    expect(erro.traceId).toBe('');
+  });
+});
