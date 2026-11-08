@@ -51,6 +51,14 @@ Recortes do logo a partir da imagem enviada pelo time
 Modelos de UI enviados pelo cliente (`ui-*`) e prints de feedback da rodada 2
 (`feedback-*`). São de uso interno, como referência visual.
 
+## Esquemas do padrão TISS (`crates/dominio-faturamento/xsd/`)
+
+XSD oficiais da ANS, versão 4.03.00 (componente de comunicação de novembro de 2025,
+`PadroTISSComunicao_202511.zip`, baixado de gov.br/ans em 08/11/2026, SHA-256 do zip
+`db8640e1c3b87085892f54f838bfcea9934439ff365798c8428559f88c13d62d`). Copiados sem
+alteração, só para validar o lote nos testes (DEC-2026-11-08-66). Padrão público da ANS
+para os prestadores; termos de uso a confirmar.
+
 ## Descartado
 
 O primeiro mapa 3D (manequim Xbot do repositório de exemplos do three.js) foi
