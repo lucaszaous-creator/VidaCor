@@ -1,6 +1,6 @@
 # ADR-0014 · As seis garantias: servidor decide, banco protege, repetição não duplica
 
-- **Status:** proposto
+- **Status:** aceito (aprovado pelo dono do produto em 2026-11-08)
 - **Data:** 2026-11-07
 
 ## Contexto

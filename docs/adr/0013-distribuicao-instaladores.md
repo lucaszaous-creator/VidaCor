@@ -1,6 +1,6 @@
 # ADR-0013 · Distribuição por instaladores e atualização pelo servidor local
 
-- **Status:** proposto
+- **Status:** aceito (aprovado pelo dono do produto em 2026-11-08)
 - **Data:** 2026-11-07
 
 ## Contexto

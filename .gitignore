@@ -6,3 +6,10 @@ tools/render-anatomia/bp/
 tools/verificacao/render/
 tools/verificacao/shots/
 .e2e/
+target/
+dist/
+coverage/
+*.tsbuildinfo
+.env
+.env.*
+!.env.exemplo
