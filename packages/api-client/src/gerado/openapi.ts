@@ -21,6 +21,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/agendamentos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Agenda um exame (com guia, reserva provisória ou particular). */
+        post: operations["agendar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/agendamentos/{id}/guia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Registra a guia de uma reserva provisória dentro do prazo e confirma o agendamento (FC-AGD-09). */
+        post: operations["confirmar_com_guia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/atendimentos": {
         parameters: {
             query?: never;
@@ -30,7 +64,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Faz o check-in de um agendamento, conferindo nome completo e data de nascimento. */
+        /** Faz o check-in de um agendamento conferindo nome completo, nascimento e documento com foto. */
         post: operations["checkin"];
         delete?: never;
         options?: never;
@@ -45,10 +79,353 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Um atendimento da unidade, com o estudo recebido, se houver. */
-        get: operations["obter"];
+        /** Um atendimento da unidade, com pulseira, triagem, situação do laudo e estudo recebido. */
+        get: operations["obter_atendimento"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/atendimentos/{id}/pulseira": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Emite pulseira nova quando o atendimento ficou sem pulseira válida (ex.: correção de cadastro
+         *     invalidou as etiquetas, FC-ETQ-04). Com pulseira válida, use a reimpressão.
+         */
+        post: operations["nova_pulseira"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/atendimentos/{id}/triagem": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Registra a triagem de segurança (técnico lotado na sala do atendimento). */
+        post: operations["registrar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/atendimentos/{id}/triagem/conduta": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Registra a conduta médica que libera a triagem (médico com vínculo; reautenticação). */
+        post: operations["conduta"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/autorizacoes-desconto": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Gerência autoriza desconto acima do limite (reautenticação; quem pede não autoriza). */
+        post: operations["autorizar_desconto"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/caixas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Abre o caixa do operador (um aberto por vez). */
+        post: operations["abrir"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/caixas/meu": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Caixa aberto do usuário, se houver. */
+        get: operations["meu"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/caixas/{id}/fechamento": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Fecha o caixa com o valor contado: grava esperado, contado e diferença, sem esconder (docs/27 T-CXA-05). */
+        post: operations["fechar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/contingencias": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Declara a contingência. A mesma chave sobe uma vez só, com a hora original. */
+        post: operations["declarar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/contingencias/aberta": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Contingência aberta na unidade, se houver. */
+        get: operations["aberta"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/contingencias/kits": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Gera (ou devolve) o kit de contingência de hoje. */
+        post: operations["kit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/contingencias/{id}/encerramento": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Encerra a contingência só sem pendência: ficha pendente, divergência aberta ou número sem situação (FC-CTG-09). */
+        post: operations["encerrar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/contingencias/{id}/fichas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Lança a ficha de atendimento feita em papel (FC-CTG-03 a 06). */
+        post: operations["lancar_ficha"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/contingencias/{id}/numeros": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Dá situação aos números não usados da faixa (devolvidos ou anulados), para o encerramento. */
+        post: operations["situar_numeros"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/contingencias/{id}/recibos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Lança o recibo manual: grava o valor recalculado pela tabela da data e abre divergência se diferir (FC-CTG-07). */
+        post: operations["lancar_recibo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/divergencias/{id}/resolucao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Resolve uma divergência (coordenação), com o que foi decidido. */
+        post: operations["resolver_divergencia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/equipe": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Membros ativos da equipe da unidade do usuário. */
+        get: operations["listar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/estornos/{id}/aprovacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Aprova o estorno (financeiro ou gerência, reautenticação; quem pediu não aprova, FC-CXA-09). */
+        post: operations["aprovar_estorno"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/estudos/pendentes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Estudos recebidos que ainda não têm paciente conciliado. */
+        get: operations["pendentes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/estudos/{id}/conciliacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Concilia o estudo com o atendimento depois de conferir nome e nascimento; só então entra no laudo. */
+        post: operations["conciliar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/etiquetas/{codigo}/reimpressao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reimprime a pulseira com motivo: cria código novo e invalida a anterior. */
+        post: operations["reimprimir"];
         delete?: never;
         options?: never;
         head?: never;
@@ -72,6 +449,335 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/guias": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Registra a guia autorizada pela operadora (carteirinha, número, senha, validade e procedimentos). */
+        post: operations["registrar_guia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/laudos/fila": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fila de laudos do médico: só estudos conciliados atribuídos a ele (FC-LAU-09). */
+        get: operations["fila_de_laudos"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/laudos/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lê o laudo (médico com vínculo de cuidado ou acesso de emergência ativo). Toda leitura é auditada. */
+        get: operations["obter_laudo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/laudos/{id}/acesso-emergencia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Acesso de emergência (break-glass) com justificativa: vale 1 hora, é auditado em destaque, avisa o
+         *     responsável clínico e entra na fila de revisão de 48 horas (FC-ACE-04).
+         */
+        post: operations["acesso_emergencia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/laudos/{id}/assinatura": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Assina a versão em rascunho com o certificado do médico (reautenticação e PIN). A versão anterior,
+         *     se houver, passa a "substituída". Publica no portal, salvo "conversar antes".
+         */
+        post: operations["assinar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/laudos/{id}/conversar-antes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Marca ou desmarca "conversar antes de liberar" (resultado delicado, docs/16 R11). */
+        post: operations["conversar_antes"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/laudos/{id}/liberacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Libera no portal depois da conversa com o paciente (FC-LAU-08). */
+        post: operations["liberar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/laudos/{id}/links": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cria um link de leitura do laudo publicado para médico externo, com validade curta (SEC-DAD-6). */
+        post: operations["criar_link"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/laudos/{id}/publicacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Publicação manual no portal: rascunho nunca é publicado (FC-LAU-02). */
+        post: operations["publicar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/laudos/{id}/rascunho": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Salva o rascunho (só o médico atribuído; versão assinada não muda: 409). */
+        put: operations["salvar_rascunho"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/laudos/{id}/retificacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Abre a retificação de um laudo assinado: nova versão em rascunho com motivo (FC-LAU-05, 06). */
+        post: operations["retificar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/links/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Abre o laudo por link compartilhado. Expirado: 410, sem exibir nada (FC-ACE-08). */
+        get: operations["abrir_link"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/pacientes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Busca pacientes da unidade pelo nome (até 20), com os dois identificadores. */
+        get: operations["buscar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/pacientes/{id}/correcao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Corrige a data de nascimento com motivo: guarda a versão anterior e invalida as etiquetas válidas. */
+        post: operations["corrigir"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/portal/laudos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Laudos publicados do próprio paciente (versão vigente). */
+        get: operations["meus_laudos"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/portal/laudos/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Um laudo do próprio paciente. De outro paciente ou inexistente: a mesma resposta 404, auditada. */
+        get: operations["meu_laudo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/recebimentos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Registra um recebimento: total pela tabela vigente, desconto dentro do limite ou autorizado. */
+        post: operations["receber"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/recebimentos/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Um recebimento (para acompanhar a cobrança PIX). */
+        get: operations["obter_recebimento"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/recebimentos/{id}/estornos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Pede o estorno de um recebimento (o aprovador será outra pessoa). */
+        post: operations["pedir_estorno"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/salas": {
         parameters: {
             query?: never;
@@ -81,6 +787,57 @@ export interface paths {
         };
         /** Salas da unidade do usuário. */
         get: operations["salas"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/salas/{sala_id}/bipes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Bipe da pulseira na sala: confere etiqueta, sala, triagem e envia a worklist ao aparelho. */
+        post: operations["bipe"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/salas/{sala_id}/fila": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fila do dia da sala (técnico lotado, médico, gerente). */
+        get: operations["fila_da_sala"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/salas/{sala_id}/horarios-livres": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Horários livres de 30 minutos da sala no dia. */
+        get: operations["horarios_livres"];
         put?: never;
         post?: never;
         delete?: never;
@@ -140,6 +897,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/sessao/reautenticar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Pede ao provedor senha e 2FA de novo para atos sensíveis (SEC-AUT-5). */
+        get: operations["reautenticar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/sessao/retorno": {
         parameters: {
             query?: never;
@@ -174,14 +948,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/webhooks/pix": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Recebe o webhook do PSP. Responde 2xx rápido; o efeito acontece pelo outbox. */
+        post: operations["pix"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AcessoEmergencia: {
+            codigo: string;
+            /** Format: date-time */
+            valido_ate: string;
+        };
         AgendaDoDia: {
             /** Format: date */
             data: string;
             itens: components["schemas"]["ItemAgenda"][];
+        };
+        Aparelho: {
+            ae_title: string;
+            nome: string;
         };
         Atendimento: {
             accession: string;
@@ -193,15 +993,127 @@ export interface components {
             estudo?: null | components["schemas"]["EstudoResumo"];
             /** Format: uuid */
             id: string;
+            /** @description Situação do laudo, sem conteúdo (a recepção vê só isto, FC-ACE-06). */
+            laudo_situacao?: string | null;
             paciente: components["schemas"]["PacienteResumo"];
-            /** @description aguardando_exame, em_exame, exame_concluido ou cancelado. */
+            pulseira?: null | components["schemas"]["Etiqueta"];
+            requer_contraste: boolean;
+            sala: components["schemas"]["Sala"];
+            senha?: string | null;
+            /** @description aguardando_sala, em_exame, exame_concluido ou cancelado. */
             situacao: string;
+            triagem?: null | components["schemas"]["Triagem"];
+        };
+        AutorizacaoDesconto: {
+            codigo: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            valida_ate: string;
+        };
+        Caixa: {
+            /** Format: date-time */
+            aberto_em: string;
+            codigo: string;
+            /** Format: int64 */
+            contado_centavos?: number | null;
+            /** Format: int64 */
+            diferenca_centavos?: number | null;
+            /** Format: int64 */
+            esperado_centavos?: number | null;
+            /** Format: date-time */
+            fechado_em?: string | null;
+            /** Format: int64 */
+            fundo_centavos: number;
+            /** Format: uuid */
+            id: string;
+        };
+        Conduta: {
+            /** Format: uuid */
+            medico_id: string;
+            /** Format: date-time */
+            registrada_em: string;
+            texto: string;
         };
         Confirmacao: {
+            /** @description A recepção conferiu o documento com foto. */
+            documento_com_foto?: boolean | null;
             /** Format: date */
-            nascimento: string;
-            /** @description Nome completo como no documento do paciente. */
-            nome: string;
+            nascimento?: string | null;
+            /** @description Nome completo dito pelo paciente, como no documento. */
+            nome?: string | null;
+        };
+        Contingencia: {
+            codigo: string;
+            /** Format: date-time */
+            declarada_em: string;
+            /** Format: uuid */
+            declarada_por: string;
+            /** Format: date-time */
+            encerrada_em?: string | null;
+            /** Format: uuid */
+            id: string;
+            motivo: string;
+            nivel: string;
+            /** Format: uuid */
+            responsavel_id: string;
+            situacao: string;
+        };
+        Correcao: {
+            /** @description Etiquetas que foram invalidadas e precisam ser reimpressas. */
+            etiquetas_invalidadas: string[];
+            paciente: components["schemas"]["PacienteResumo"];
+            /** Format: int32 */
+            versao: number;
+        };
+        DescontoPedido: {
+            /** Format: uuid */
+            autorizacao_id?: string | null;
+            motivo: string;
+            /** Format: int32 */
+            pontos_base: number;
+        };
+        DivergenciaAberta: {
+            /** @description divergencia-aberta. */
+            codigo: string;
+            detail: string;
+            /** @description Código da divergência (DIV-AAAA-NNNNNN). */
+            divergencia: string;
+        };
+        DivergenciaResolvida: {
+            codigo: string;
+            /** @description resolvida. */
+            situacao: string;
+        };
+        EstornoAprovado: {
+            /** Format: uuid */
+            id: string;
+            /** @description aprovado. */
+            situacao: string;
+        };
+        EstornoPedido: {
+            codigo: string;
+            /** Format: uuid */
+            id: string;
+            /** @description pedido. */
+            situacao: string;
+        };
+        EstudoConciliado: {
+            atendimento: string;
+            conciliado: boolean;
+            estudo: string;
+        };
+        EstudoPendente: {
+            accession?: string | null;
+            codigo: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: int32 */
+            imagens: number;
+            /** @description conciliacao ou conciliacao_contingencia. */
+            pendencia?: string | null;
+            /** Format: date-time */
+            recebido_em: string;
         };
         EstudoResumo: {
             /** Format: int32 */
@@ -210,25 +1122,170 @@ export interface components {
             recebido_em: string;
             study_uid: string;
         };
+        Etiqueta: {
+            codigo: string;
+            motivo_invalidacao?: string | null;
+            /** @description valida ou invalidada. */
+            situacao: string;
+            substituida_por?: string | null;
+            /** @description pulseira. */
+            tipo: string;
+        };
         Exame: {
             codigo_tuss: string;
             nome: string;
+        };
+        Faixa: {
+            /** Format: int32 */
+            fim: number;
+            formulario: string;
+            /** Format: int32 */
+            inicio: number;
+        };
+        FichaLancada: {
+            codigo: string;
+            contingencia: string;
+            formulario: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            ocorrido_em: string;
+            /** @description contingencia. */
+            origem: string;
+            registrado_em_contingencia: boolean;
+        };
+        FilaDaSala: {
+            itens: components["schemas"]["ItemFila"][];
+            sala: components["schemas"]["Sala"];
+        };
+        Guia: {
+            codigo: string;
+            /** @description Atendimento ou agendamento que consumiu a guia. */
+            em_uso_por?: string | null;
+            /** Format: uuid */
+            id: string;
+            numero: string;
+            operadora: string;
+            procedimentos: components["schemas"]["SaldoProcedimento"][];
+            /** @description disponivel ou consumida. */
+            situacao: string;
+            /** Format: date */
+            validade: string;
         };
         ItemAgenda: {
             /** Format: uuid */
             atendimento_id?: string | null;
             codigo: string;
             exame: components["schemas"]["Exame"];
+            /**
+             * Format: date-time
+             * @description Fim da reserva provisória, quando houver.
+             */
+            expira_em?: string | null;
             /** Format: date-time */
             fim: string;
+            /** @description Outros pacientes do dia com o mesmo nome e outro nascimento (alerta de atenção, FC-CHK-04). */
+            homonimos: components["schemas"]["PacienteResumo"][];
             /** Format: uuid */
             id: string;
             /** Format: date-time */
             inicio: string;
+            /** @description Situação do laudo, sem conteúdo. */
+            laudo_situacao?: string | null;
             paciente: components["schemas"]["PacienteResumo"];
+            requer_contraste: boolean;
             sala: components["schemas"]["Sala"];
             /** @description agendado, confirmado, em_atendimento, concluido, faltou ou cancelado. */
             situacao: string;
+        };
+        ItemFila: {
+            /** Format: uuid */
+            atendimento_id: string;
+            codigo: string;
+            exame: string;
+            /** Format: date-time */
+            inicio: string;
+            paciente: components["schemas"]["PacienteResumo"];
+            requer_contraste: boolean;
+            senha?: string | null;
+            situacao: string;
+            triagem_resultado?: string | null;
+        };
+        ItemFilaLaudo: {
+            codigo: string;
+            conversar_antes: boolean;
+            exame: string;
+            /** Format: uuid */
+            id: string;
+            paciente: components["schemas"]["PacienteResumo"];
+            /** Format: date-time */
+            recebido_em: string;
+            situacao: string;
+        };
+        ItemPedido: {
+            tuss: string;
+            /**
+             * Format: int64
+             * @description Ignorado no cálculo (o servidor usa a tabela vigente); zero ou negativo é recusado (FC-CXA-07).
+             */
+            valor_centavos?: number | null;
+        };
+        ItemRecebimento: {
+            descricao: string;
+            tuss: string;
+            /** Format: int64 */
+            valor_centavos: number;
+        };
+        Kit: {
+            codigo: string;
+            /** Format: date */
+            dia: string;
+            faixas: components["schemas"]["Faixa"][];
+            hash: string;
+            modelo_versao: string;
+        };
+        Laudo: {
+            codigo: string;
+            conversar_antes: boolean;
+            estudo?: null | components["schemas"]["EstudoResumo"];
+            exame: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            medico_atribuido_id?: string | null;
+            paciente: components["schemas"]["PacienteResumo"];
+            publicado_no_portal: boolean;
+            /** @description rascunho, assinado ou retificacao_em_rascunho. */
+            situacao: string;
+            /** Format: int32 */
+            versao_vigente?: number | null;
+            versoes: components["schemas"]["Versao"][];
+        };
+        LaudoDoPortal: {
+            exame: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            publicado_em: string;
+            /** @description A versão vigente substituiu uma anterior (retificação). */
+            retificado: boolean;
+            texto: string;
+        };
+        LinkCriado: {
+            /** Format: date-time */
+            expira_em: string;
+            /** @description Mostrado uma única vez; o banco guarda só o hash. */
+            token: string;
+        };
+        Membro: {
+            /** Format: uuid */
+            id: string;
+            nome: string;
+            perfis: string[];
+        };
+        NumerosSituados: {
+            /** Format: int64 */
+            numeros_situados: number;
         };
         PacienteResumo: {
             /** Format: uuid */
@@ -237,10 +1294,192 @@ export interface components {
             nascimento: string;
             nome: string;
         };
+        PedidoAbertura: {
+            /** Format: int64 */
+            fundo_centavos: number;
+        };
+        PedidoAgendamento: {
+            /** Format: uuid */
+            guia_id?: string | null;
+            /** Format: date-time */
+            inicio: string;
+            /** Format: uuid */
+            medico_id?: string | null;
+            /** Format: uuid */
+            paciente_id: string;
+            procedimentos: string[];
+            reserva_provisoria?: boolean;
+            /** Format: uuid */
+            sala_id: string;
+        };
+        PedidoAssinatura: {
+            pin: string;
+        };
+        PedidoAutorizacao: {
+            motivo: string;
+            /** Format: uuid */
+            paciente_id: string;
+            /** Format: int32 */
+            pontos_base: number;
+            /** Format: uuid */
+            solicitante_id: string;
+        };
+        PedidoBipe: {
+            codigo_etiqueta: string;
+        };
         PedidoCheckin: {
             /** Format: uuid */
             agendamento_id: string;
             confirmacao: components["schemas"]["Confirmacao"];
+        };
+        PedidoConciliacao: {
+            /** Format: uuid */
+            atendimento_id: string;
+            /** Format: date */
+            nascimento: string;
+            nome: string;
+        };
+        PedidoConduta: {
+            conduta: string;
+        };
+        PedidoConversar: {
+            marcado: boolean;
+        };
+        PedidoCorrecao: {
+            motivo: string;
+            /** Format: date */
+            nascimento: string;
+        };
+        PedidoDeclaracao: {
+            /**
+             * Format: uuid
+             * @description UUID gerado na estação; repetir não cria outra (FC-CTG-02).
+             */
+            chave: string;
+            /**
+             * Format: date-time
+             * @description Hora em que a contingência foi declarada (pode ter sido sem servidor).
+             */
+            declarada_em: string;
+            motivo: string;
+            /** @description externo, setor ou total. */
+            nivel: string;
+            /** Format: uuid */
+            responsavel_id: string;
+        };
+        PedidoEmergencia: {
+            justificativa: string;
+        };
+        PedidoEstorno: {
+            motivo: string;
+        };
+        PedidoFechamento: {
+            /** Format: int64 */
+            contado_centavos: number;
+        };
+        PedidoFicha: {
+            /** Format: uuid */
+            agendamento_id: string;
+            /** @description SHA-256 do PDF digitalizado da ficha. */
+            anexo_sha256: string;
+            /** Format: uuid */
+            atendido_por: string;
+            /** @description F-ATD. */
+            formulario: string;
+            /** Format: date */
+            nascimento: string;
+            nome: string;
+            /** Format: int32 */
+            numero: number;
+            /** Format: date-time */
+            ocorrido_em: string;
+        };
+        PedidoGuia: {
+            carteirinha: string;
+            numero: string;
+            operadora: string;
+            /** Format: uuid */
+            paciente_id: string;
+            procedimentos: components["schemas"]["ProcedimentoGuia"][];
+            senha: string;
+            solicitante: string;
+            /** Format: date */
+            validade: string;
+        };
+        PedidoGuiaDaReserva: {
+            /** Format: uuid */
+            guia_id: string;
+        };
+        PedidoLink: {
+            /**
+             * Format: int64
+             * @description Validade em horas (1 a 72).
+             */
+            horas: number;
+        };
+        PedidoNovaPulseira: {
+            motivo?: string | null;
+        };
+        PedidoNumeros: {
+            /** Format: int32 */
+            ate: number;
+            /** Format: int32 */
+            de: number;
+            formulario: string;
+            /** @description devolvido ou anulado. */
+            situacao: string;
+        };
+        PedidoRascunho: {
+            texto: string;
+            /** Format: int32 */
+            versao_numero: number;
+        };
+        PedidoRecebimento: {
+            /** Format: uuid */
+            atendimento_id?: string | null;
+            desconto?: null | components["schemas"]["DescontoPedido"];
+            /** @description pix, dinheiro ou cartao. */
+            forma: string;
+            itens: components["schemas"]["ItemPedido"][];
+            /** Format: uuid */
+            paciente_id: string;
+        };
+        PedidoRecibo: {
+            /** Format: int32 */
+            numero: number;
+            /** Format: date-time */
+            ocorrido_em: string;
+            /** Format: uuid */
+            paciente_id: string;
+            tuss: string;
+            /** Format: int64 */
+            valor_papel_centavos: number;
+        };
+        PedidoReimpressao: {
+            motivo?: string | null;
+        };
+        PedidoResolucao: {
+            resolucao: string;
+        };
+        PedidoRetificacao: {
+            motivo?: string | null;
+            texto: string;
+        };
+        PedidoTriagem: {
+            amamentando: boolean;
+            /** Format: date */
+            creatinina_data?: string | null;
+            /** @description Texto decimal com ponto (ex.: "1.4"). */
+            creatinina_mg_dl?: string | null;
+            gestante: boolean;
+            reacao_previa_contraste: boolean;
+            /** @description Ignorado: o servidor calcula a TFG (FC-TRI-07). */
+            tfg?: unknown;
+            usa_metformina: boolean;
+        };
+        Pix: {
+            copia_e_cola: string;
+            txid: string;
         };
         /** @description Erro em Problem Details (RFC 9457). */
         ProblemaDoc: {
@@ -255,10 +1494,63 @@ export interface components {
             trace_id?: string | null;
             type: string;
         };
+        ProcedimentoGuia: {
+            /** Format: int32 */
+            quantidade: number;
+            tuss: string;
+        };
+        Publicacao: {
+            /** @description Falso quando a versão já estava publicada (repetir não duplica). */
+            nova_publicacao: boolean;
+            publicado: boolean;
+        };
+        Recebimento: {
+            codigo: string;
+            /** Format: int64 */
+            desconto_centavos: number;
+            forma: string;
+            /** Format: uuid */
+            id: string;
+            itens: components["schemas"]["ItemRecebimento"][];
+            pix?: null | components["schemas"]["Pix"];
+            /** @description aguardando_pagamento, pago ou estornado. */
+            situacao: string;
+            /** Format: int64 */
+            subtotal_centavos: number;
+            /** Format: int32 */
+            tabela_versao: number;
+            /** Format: int64 */
+            total_centavos: number;
+        };
+        ReciboLancado: {
+            /** @description Código da divergência de preço, quando o papel difere do recalculado. */
+            divergencia?: string | null;
+            /** Format: int32 */
+            tabela_versao: number;
+            /** Format: int64 */
+            valor_recalculado_centavos: number;
+        };
+        Reimpressao: {
+            invalidada: components["schemas"]["Etiqueta"];
+            nova: components["schemas"]["Etiqueta"];
+        };
+        ResultadoBipe: {
+            aparelho: components["schemas"]["Aparelho"];
+            atendimento: components["schemas"]["Atendimento"];
+            /** @description enviada (primeiro bipe) ou ja_enviada (bipe repetido, sem segundo item de worklist). */
+            worklist: string;
+        };
         Sala: {
             /** Format: uuid */
             id: string;
             nome: string;
+        };
+        SaldoProcedimento: {
+            /** Format: int32 */
+            autorizado: number;
+            /** Format: int32 */
+            saldo: number;
+            tuss: string;
         };
         Saude: {
             /** @description `ok` quando o núcleo responde e o banco aceita consultas. */
@@ -270,6 +1562,18 @@ export interface components {
             unidade: components["schemas"]["UnidadeSessao"];
             usuario: components["schemas"]["UsuarioSessao"];
         };
+        Triagem: {
+            codigo: string;
+            conduta?: null | components["schemas"]["Conduta"];
+            /** @description Exame pode iniciar: liberado, com ressalvas, ou com conduta médica registrada. */
+            exame_liberado: boolean;
+            motivos: string[];
+            regra_versao: string;
+            /** @description liberado, liberado_com_ressalvas ou precisa_aprovacao_medica. */
+            resultado: string;
+            /** Format: int32 */
+            tfg_calculada?: number | null;
+        };
         UnidadeSessao: {
             /** Format: uuid */
             id: string;
@@ -280,6 +1584,23 @@ export interface components {
             id: string;
             nome: string;
             perfis: string[];
+        };
+        Versao: {
+            /** Format: date-time */
+            assinada_em?: string | null;
+            /** Format: uuid */
+            assinada_por?: string | null;
+            hash_documento?: string | null;
+            motivo?: string | null;
+            /** Format: int32 */
+            numero: number;
+            /** @description rascunho, assinada ou substituida. */
+            situacao: string;
+            texto: string;
+        };
+        WebhookAceito: {
+            /** @description recebido ou ja_processado. */
+            situacao: string;
         };
     };
     responses: never;
@@ -337,12 +1658,105 @@ export interface operations {
             };
         };
     };
+    agendar: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoAgendamento"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemAgenda"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description guia-em-uso, horario-ocupado (com sugestoes) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description procedimento-nao-autorizado, senha-vencida, saldo-esgotado */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    confirmar_com_guia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoGuiaDaReserva"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemAgenda"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     checkin: {
         parameters: {
             query?: never;
             header: {
                 "Idempotency-Key": string;
                 "X-CSRF-Token": string;
+                "X-Estacao"?: string | null;
             };
             path?: never;
             cookie?: never;
@@ -404,7 +1818,7 @@ export interface operations {
                     "application/json": components["schemas"]["ProblemaDoc"];
                 };
             };
-            /** @description identificacao-nao-confere */
+            /** @description identificacao-incompleta ou identificacao-nao-confere */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -415,7 +1829,7 @@ export interface operations {
             };
         };
     };
-    obter: {
+    obter_atendimento: {
         parameters: {
             query?: never;
             header?: never;
@@ -460,6 +1874,755 @@ export interface operations {
             };
         };
     };
+    nova_pulseira: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoNovaPulseira"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Etiqueta"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    registrar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoTriagem"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Triagem"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    conduta: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoConduta"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Triagem"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    autorizar_desconto: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoAutorizacao"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutorizacaoDesconto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    abrir: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoAbertura"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Caixa"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    meu: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": null | components["schemas"]["Caixa"];
+                };
+            };
+        };
+    };
+    fechar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoFechamento"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Caixa"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    declarar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoDeclaracao"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Contingencia"];
+                };
+            };
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Contingencia"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    aberta: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": null | components["schemas"]["Contingencia"];
+                };
+            };
+        };
+    };
+    kit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Kit"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    encerrar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Contingencia"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    lancar_ficha: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoFicha"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FichaLancada"];
+                };
+            };
+            /** @description divergencia-aberta */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DivergenciaAberta"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    situar_numeros: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoNumeros"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NumerosSituados"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    lancar_recibo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoRecibo"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReciboLancado"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    resolver_divergencia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoResolucao"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DivergenciaResolvida"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membro"][];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    aprovar_estorno: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EstornoAprovado"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    pendentes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EstudoPendente"][];
+                };
+            };
+        };
+    };
+    conciliar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoConciliacao"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EstudoConciliado"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    reimprimir: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                codigo: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoReimpressao"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Reimpressao"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     fluxo: {
         parameters: {
             query?: never;
@@ -478,6 +2641,719 @@ export interface operations {
                 };
             };
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    registrar_guia: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoGuia"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Guia"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    fila_de_laudos: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemFilaLaudo"][];
+                };
+            };
+        };
+    };
+    obter_laudo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Laudo"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    acesso_emergencia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoEmergencia"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AcessoEmergencia"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    assinar: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoAssinatura"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Laudo"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    conversar_antes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoConversar"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Laudo"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    liberar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Laudo"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    criar_link: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoLink"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LinkCriado"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    publicar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Publicacao"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    salvar_rascunho: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoRascunho"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Laudo"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    retificar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoRetificacao"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Laudo"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    abrir_link: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LaudoDoPortal"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    buscar: {
+        parameters: {
+            query: {
+                /** @description Parte do nome (mínimo 3 letras). */
+                busca: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PacienteResumo"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    corrigir: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoCorrecao"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Correcao"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    meus_laudos: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LaudoDoPortal"][];
+                };
+            };
+        };
+    };
+    meu_laudo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LaudoDoPortal"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    receber: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoRecebimento"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Recebimento"];
+                };
+            };
+            /** @description desconto-acima-do-limite */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description caixa-fechado */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description valor-invalido */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    obter_recebimento: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Recebimento"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    pedir_estorno: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoEstorno"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EstornoPedido"];
+                };
+            };
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -518,6 +3394,119 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    bipe: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                sala_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoBipe"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResultadoBipe"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description etiqueta-substituida, paciente-de-outra-sala, conduta-medica-pendente, sala-sem-aparelho */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            /** @description triagem-ausente */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    fila_da_sala: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sala_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FilaDaSala"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    horarios_livres: {
+        parameters: {
+            query: {
+                data: string;
+            };
+            header?: never;
+            path: {
+                sala_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string[];
                 };
             };
         };
@@ -585,6 +3574,34 @@ export interface operations {
             };
         };
     };
+    reautenticar: {
+        parameters: {
+            query?: {
+                /** @description Caminho da tela para onde voltar (relativo, começando com `/`). */
+                voltar?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            303: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     retorno: {
         parameters: {
             query?: never;
@@ -618,6 +3635,40 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    pix: {
+        parameters: {
+            query?: never;
+            header: {
+                "X-Assinatura": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Evento do PSP: id e txid */
+        requestBody: {
+            content: {
+                "application/json": string;
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookAceito"];
+                };
             };
             401: {
                 headers: {

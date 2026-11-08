@@ -377,3 +377,76 @@ async fn fila_da_sala_mostra_os_atendimentos_com_dois_identificadores() {
         .await;
     assert_eq!(st2, StatusCode::FORBIDDEN);
 }
+
+#[tokio::test]
+async fn depois_da_correcao_de_cadastro_a_recepcao_emite_pulseira_nova() {
+    let amb = Ambiente::novo().await;
+    let c = amb.fazer_checkin(ANTONIO, NASC).await;
+    let ana = amb.entrar("ana.souza").await;
+    let uri = format!("/v1/atendimentos/{}/pulseira", c["id"].as_str().unwrap());
+    let (ja, _, j) = amb
+        .pedir(amb.json(
+            Method::POST,
+            &uri,
+            &ana,
+            Some(Uuid::now_v7()),
+            json!({ "motivo": "teste" }),
+        ))
+        .await;
+    assert_eq!(ja, StatusCode::CONFLICT, "{j}");
+    amb.pedir(amb.json(
+        Method::POST,
+        &format!("/v1/pacientes/{}/correcao", amb.antonio),
+        &ana,
+        None,
+        json!({ "nascimento": "1955-06-15", "motivo": "documento conferido mostra 1955" }),
+    ))
+    .await;
+    let chave = Uuid::now_v7();
+    let (st, _, nova) = amb
+        .pedir(amb.json(
+            Method::POST,
+            &uri,
+            &ana,
+            Some(chave),
+            json!({ "motivo": "cadastro corrigido" }),
+        ))
+        .await;
+    assert_eq!(st, StatusCode::CREATED, "{nova}");
+    assert_eq!(nova["situacao"], "valida");
+    let (st2, _, repetida) = amb
+        .pedir(amb.json(
+            Method::POST,
+            &uri,
+            &ana,
+            Some(chave),
+            json!({ "motivo": "cadastro corrigido" }),
+        ))
+        .await;
+    assert_eq!(st2, StatusCode::CREATED);
+    assert_eq!(nova, repetida);
+    assert_eq!(
+        amb.contar("SELECT count(*) FROM recepcao.etiqueta WHERE situacao = 'valida'")
+            .await,
+        1
+    );
+}
+
+#[tokio::test]
+async fn equipe_lista_nome_e_perfis_da_propria_unidade() {
+    let amb = Ambiente::novo().await;
+    let ana = amb.entrar("ana.souza").await;
+    let (st, _, e) = amb.pedir(amb.get("/v1/equipe", Some(&ana))).await;
+    assert_eq!(st, StatusCode::OK);
+    let nomes: Vec<&str> = e
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|m| m["nome"].as_str().unwrap())
+        .collect();
+    assert!(nomes.contains(&"Patrícia Lemos"));
+    assert!(
+        !nomes.contains(&"Recepção Norte"),
+        "outra unidade não aparece"
+    );
+}

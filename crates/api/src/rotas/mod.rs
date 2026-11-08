@@ -5,12 +5,14 @@ pub mod agendamentos;
 pub mod atendimentos;
 pub mod caixa;
 pub mod contingencia;
+pub mod equipe;
 pub mod estudos;
 pub mod etiquetas;
 pub mod eventos;
 pub mod laudos;
 pub mod pacientes;
 pub mod portal;
+pub mod respostas;
 pub mod sala;
 pub mod saude;
 pub mod sessao;
@@ -112,6 +114,11 @@ pub fn rotas() -> Router<Estado> {
         )
         .route("/v1/estudos/pendentes", get(estudos::pendentes))
         .route("/v1/estudos/{id}/conciliacao", post(estudos::conciliar))
+        .route(
+            "/v1/atendimentos/{id}/pulseira",
+            post(etiquetas::nova_pulseira),
+        )
+        .route("/v1/equipe", get(equipe::listar))
         .route("/v1/eventos", get(eventos::fluxo))
         .fallback(nao_existe)
 }

@@ -144,3 +144,91 @@ pub async fn reimprimir(
     tx.commit().await?;
     Ok((StatusCode::CREATED, Json(corpo)).into_response())
 }
+
+#[derive(Deserialize, ToSchema)]
+pub struct PedidoNovaPulseira {
+    pub motivo: Option<String>,
+}
+
+/// Emite pulseira nova quando o atendimento ficou sem pulseira válida (ex.: correção de cadastro
+/// invalidou as etiquetas, FC-ETQ-04). Com pulseira válida, use a reimpressão.
+#[utoipa::path(post, path = "/v1/atendimentos/{id}/pulseira", tag = "recepcao",
+    params(("id" = uuid::Uuid, Path), ("Idempotency-Key" = uuid::Uuid, Header)),
+    request_body = PedidoNovaPulseira,
+    responses((status = 201, body = Etiqueta), (status = 403, body = crate::openapi::ProblemaDoc),
+              (status = 409, body = crate::openapi::ProblemaDoc), (status = 422, body = crate::openapi::ProblemaDoc)))]
+pub async fn nova_pulseira(
+    State(estado): State<Estado>,
+    usuario: Usuario,
+    Estacao(estacao): Estacao,
+    ChaveIdempotencia(chave): ChaveIdempotencia,
+    Path(id): Path<uuid::Uuid>,
+    Corpo(p): Corpo<PedidoNovaPulseira>,
+) -> Result<Response, ErroApi> {
+    usuario.exigir(Ato::EtiquetaReimprimir)?;
+    let motivo = p
+        .motivo
+        .map(|m| m.trim().to_owned())
+        .filter(|m| m.chars().count() >= 3)
+        .ok_or_else(|| {
+            ErroApi::invalido(
+                "motivo-obrigatorio",
+                "Informe o motivo da nova pulseira. Nada foi impresso.",
+            )
+        })?;
+    let rota = format!("POST /v1/atendimentos/{id}/pulseira");
+    let correlacao = crate::trace::atual().unwrap_or_default();
+    let mut tx = banco::transacao(&estado.banco, &usuario.contexto()).await?;
+    if let Reserva::Repetida { status, corpo } =
+        idempotencia::reservar(&mut tx, usuario.id, &rota, chave).await?
+    {
+        tx.commit().await?;
+        return Ok((
+            StatusCode::from_u16(status).unwrap_or(StatusCode::OK),
+            Json(corpo),
+        )
+            .into_response());
+    }
+    let a = sqlx::query!("SELECT id, codigo, paciente_id, unidade_id FROM recepcao.atendimento WHERE id = $1 FOR UPDATE", id)
+        .fetch_optional(&mut *tx)
+        .await?
+        .ok_or_else(|| ErroApi::nao_encontrado("atendimento-nao-encontrado", "Atendimento não encontrado nesta unidade. Nada foi impresso."))?;
+    let valida = sqlx::query_scalar!(
+        "SELECT codigo FROM recepcao.etiqueta WHERE atendimento_id = $1 AND situacao = 'valida'",
+        a.id
+    )
+    .fetch_optional(&mut *tx)
+    .await?;
+    if let Some(c) = valida {
+        return Err(ErroApi::conflito("pulseira-valida-existente", &format!("O atendimento já tem a pulseira válida {c}. Nada foi impresso. Para trocar, use a reimpressão com motivo.")));
+    }
+    let nova = emitir_pulseira(
+        &mut tx,
+        a.id,
+        a.paciente_id,
+        a.unidade_id,
+        usuario.id,
+        estacao.as_deref(),
+        &correlacao,
+    )
+    .await?;
+    lastro::registrar(
+        &mut tx,
+        NovoEvento {
+            dominio: "recepcao",
+            tipo: "pulseira_nova",
+            registro_id: a.id,
+            registro_codigo: Some(&a.codigo),
+            dados: json!({ "motivo": motivo, "nova": nova.codigo, "estacao": estacao }),
+            criado_por: Some(usuario.id),
+            origem: "balcao",
+            unidade_id: a.unidade_id,
+            correlacao: &correlacao,
+        },
+    )
+    .await?;
+    let corpo: Value = serde_json::to_value(&nova).map_err(ErroApi::interno)?;
+    idempotencia::concluir(&mut tx, usuario.id, &rota, chave, 201, &corpo).await?;
+    tx.commit().await?;
+    Ok((StatusCode::CREATED, Json(corpo)).into_response())
+}

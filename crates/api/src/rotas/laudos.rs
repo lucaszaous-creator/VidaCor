@@ -177,7 +177,7 @@ pub struct ItemFilaLaudo {
 }
 
 /// Fila de laudos do médico: só estudos conciliados atribuídos a ele (FC-LAU-09).
-#[utoipa::path(get, path = "/v1/laudos/fila", tag = "laudos", responses((status = 200, body = Vec<ItemFilaLaudo>)))]
+#[utoipa::path(get, operation_id = "fila_de_laudos", path = "/v1/laudos/fila", tag = "laudos", responses((status = 200, body = Vec<ItemFilaLaudo>)))]
 pub async fn fila(
     State(estado): State<Estado>,
     usuario: Usuario,
@@ -219,7 +219,7 @@ pub async fn fila(
 }
 
 /// Lê o laudo (médico com vínculo de cuidado ou acesso de emergência ativo). Toda leitura é auditada.
-#[utoipa::path(get, path = "/v1/laudos/{id}", tag = "laudos", params(("id" = Uuid, Path)),
+#[utoipa::path(get, operation_id = "obter_laudo", path = "/v1/laudos/{id}", tag = "laudos", params(("id" = Uuid, Path)),
     responses((status = 200, body = Laudo), (status = 403, body = crate::openapi::ProblemaDoc), (status = 404, body = crate::openapi::ProblemaDoc)))]
 pub async fn obter(
     State(estado): State<Estado>,
@@ -607,7 +607,7 @@ pub async fn liberar(
 
 /// Publicação manual no portal: rascunho nunca é publicado (FC-LAU-02).
 #[utoipa::path(post, path = "/v1/laudos/{id}/publicacao", tag = "laudos", params(("id" = Uuid, Path)),
-    responses((status = 200), (status = 409, body = crate::openapi::ProblemaDoc)))]
+    responses((status = 200, body = crate::rotas::respostas::Publicacao), (status = 409, body = crate::openapi::ProblemaDoc)))]
 pub async fn publicar(
     State(estado): State<Estado>,
     usuario: Usuario,
@@ -618,7 +618,12 @@ pub async fn publicar(
     do_medico_atribuido(&mut tx, &usuario, id).await?;
     tx.commit().await?;
     let nova = crate::laudos::publicar(&estado, id, usuario.unidade_id).await?;
-    Ok(Json(json!({ "publicado": true, "nova_publicacao": nova })))
+    Ok(Json(crate::rotas::respostas::valor(
+        &crate::rotas::respostas::Publicacao {
+            publicado: true,
+            nova_publicacao: nova,
+        },
+    )?))
 }
 
 #[derive(Deserialize, ToSchema)]
@@ -629,7 +634,7 @@ pub struct PedidoEmergencia {
 /// Acesso de emergência (break-glass) com justificativa: vale 1 hora, é auditado em destaque, avisa o
 /// responsável clínico e entra na fila de revisão de 48 horas (FC-ACE-04).
 #[utoipa::path(post, path = "/v1/laudos/{id}/acesso-emergencia", tag = "laudos", params(("id" = Uuid, Path)), request_body = PedidoEmergencia,
-    responses((status = 201), (status = 401, body = crate::openapi::ProblemaDoc), (status = 404, body = crate::openapi::ProblemaDoc), (status = 422, body = crate::openapi::ProblemaDoc)))]
+    responses((status = 201, body = crate::rotas::respostas::AcessoEmergencia), (status = 401, body = crate::openapi::ProblemaDoc), (status = 404, body = crate::openapi::ProblemaDoc), (status = 422, body = crate::openapi::ProblemaDoc)))]
 pub async fn acesso_emergencia(
     State(estado): State<Estado>,
     usuario: Usuario,
@@ -692,6 +697,11 @@ pub async fn acesso_emergencia(
     tx.commit().await?;
     Ok((
         StatusCode::CREATED,
-        Json(json!({ "codigo": codigo.como_str(), "valido_ate": valido_ate })),
+        Json(crate::rotas::respostas::valor(
+            &crate::rotas::respostas::AcessoEmergencia {
+                codigo: codigo.to_string(),
+                valido_ate,
+            },
+        )?),
     ))
 }

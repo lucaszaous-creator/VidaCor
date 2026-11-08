@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT codigo FROM recepcao.etiqueta WHERE atendimento_id = $1 AND situacao = 'valida'",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.etiqueta",
+            "name": "codigo"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "d76451de8dff909ca811b644bc803e985ea2ef9c9c1d9377b5abd3c2966343a0"
+}

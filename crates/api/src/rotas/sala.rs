@@ -223,7 +223,7 @@ pub struct FilaDaSala {
 }
 
 /// Fila do dia da sala (técnico lotado, médico, gerente).
-#[utoipa::path(get, path = "/v1/salas/{sala_id}/fila", tag = "sala", params(("sala_id" = Uuid, Path)),
+#[utoipa::path(get, operation_id = "fila_da_sala", path = "/v1/salas/{sala_id}/fila", tag = "sala", params(("sala_id" = Uuid, Path)),
     responses((status = 200, body = FilaDaSala), (status = 403, body = crate::openapi::ProblemaDoc)))]
 pub async fn fila(
     State(estado): State<Estado>,

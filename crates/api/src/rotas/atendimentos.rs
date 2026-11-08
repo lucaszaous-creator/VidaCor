@@ -457,7 +457,7 @@ pub async fn carregar(
 }
 
 /// Um atendimento da unidade, com pulseira, triagem, situação do laudo e estudo recebido.
-#[utoipa::path(get, path = "/v1/atendimentos/{id}", tag = "recepcao", params(("id" = Uuid, Path)),
+#[utoipa::path(get, operation_id = "obter_atendimento", path = "/v1/atendimentos/{id}", tag = "recepcao", params(("id" = Uuid, Path)),
     responses((status = 200, body = Atendimento), (status = 401, body = crate::openapi::ProblemaDoc),
               (status = 403, body = crate::openapi::ProblemaDoc), (status = 404, body = crate::openapi::ProblemaDoc)))]
 pub async fn obter(

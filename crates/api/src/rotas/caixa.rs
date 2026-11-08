@@ -576,7 +576,7 @@ pub struct PedidoEstorno {
 
 /// Pede o estorno de um recebimento (o aprovador será outra pessoa).
 #[utoipa::path(post, path = "/v1/recebimentos/{id}/estornos", tag = "caixa", params(("id" = Uuid, Path)), request_body = PedidoEstorno,
-    responses((status = 201), (status = 409, body = crate::openapi::ProblemaDoc)))]
+    responses((status = 201, body = crate::rotas::respostas::EstornoPedido), (status = 409, body = crate::openapi::ProblemaDoc)))]
 pub async fn pedir_estorno(
     State(estado): State<Estado>,
     usuario: Usuario,
@@ -638,13 +638,19 @@ pub async fn pedir_estorno(
     tx.commit().await?;
     Ok((
         StatusCode::CREATED,
-        Json(json!({ "id": estorno, "codigo": codigo.como_str(), "situacao": "pedido" })),
+        Json(crate::rotas::respostas::valor(
+            &crate::rotas::respostas::EstornoPedido {
+                id: estorno,
+                codigo: codigo.to_string(),
+                situacao: "pedido".into(),
+            },
+        )?),
     ))
 }
 
 /// Aprova o estorno (financeiro ou gerência, reautenticação; quem pediu não aprova, FC-CXA-09).
 #[utoipa::path(post, path = "/v1/estornos/{id}/aprovacao", tag = "caixa", params(("id" = Uuid, Path)),
-    responses((status = 200), (status = 401, body = crate::openapi::ProblemaDoc), (status = 403, body = crate::openapi::ProblemaDoc)))]
+    responses((status = 200, body = crate::rotas::respostas::EstornoAprovado), (status = 401, body = crate::openapi::ProblemaDoc), (status = 403, body = crate::openapi::ProblemaDoc)))]
 pub async fn aprovar_estorno(
     State(estado): State<Estado>,
     usuario: Usuario,
@@ -690,7 +696,12 @@ pub async fn aprovar_estorno(
         unidade_id: e.unidade_id, correlacao: &correlacao,
     }).await?;
     tx.commit().await?;
-    Ok(Json(json!({ "id": e.id, "situacao": "aprovado" })))
+    Ok(Json(crate::rotas::respostas::valor(
+        &crate::rotas::respostas::EstornoAprovado {
+            id: e.id,
+            situacao: "aprovado".into(),
+        },
+    )?))
 }
 
 /// Trabalhador: cria a cobrança no PSP com a chave do recebimento e grava txid e copia-e-cola.

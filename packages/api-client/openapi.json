@@ -346,7 +346,7 @@
           "recepcao"
         ],
         "summary": "Um atendimento da unidade, com pulseira, triagem, situação do laudo e estudo recebido.",
-        "operationId": "obter",
+        "operationId": "obter_atendimento",
         "parameters": [
           {
             "name": "id",
@@ -390,6 +390,87 @@
             }
           },
           "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/atendimentos/{id}/pulseira": {
+      "post": {
+        "tags": [
+          "recepcao"
+        ],
+        "summary": "Emite pulseira nova quando o atendimento ficou sem pulseira válida (ex.: correção de cadastro\ninvalidou as etiquetas, FC-ETQ-04). Com pulseira válida, use a reimpressão.",
+        "operationId": "nova_pulseira",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoNovaPulseira"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Etiqueta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
             "description": "",
             "content": {
               "application/json": {
@@ -930,10 +1011,24 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FichaLancada"
+                }
+              }
+            }
           },
           "202": {
-            "description": "divergencia-aberta"
+            "description": "divergencia-aberta",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DivergenciaAberta"
+                }
+              }
+            }
           },
           "409": {
             "description": "",
@@ -988,7 +1083,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NumerosSituados"
+                }
+              }
+            }
           },
           "422": {
             "description": "",
@@ -1033,7 +1135,14 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReciboLancado"
+                }
+              }
+            }
           },
           "409": {
             "description": "",
@@ -1088,9 +1197,50 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DivergenciaResolvida"
+                }
+              }
+            }
           },
           "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/equipe": {
+      "get": {
+        "tags": [
+          "sessao"
+        ],
+        "summary": "Membros ativos da equipe da unidade do usuário.",
+        "operationId": "listar",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Membro"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
             "description": "",
             "content": {
               "application/json": {
@@ -1123,7 +1273,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EstornoAprovado"
+                }
+              }
+            }
           },
           "401": {
             "description": "",
@@ -1202,7 +1359,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EstudoConciliado"
+                }
+              }
+            }
           },
           "409": {
             "description": "",
@@ -1422,7 +1586,7 @@
           "laudos"
         ],
         "summary": "Fila de laudos do médico: só estudos conciliados atribuídos a ele (FC-LAU-09).",
-        "operationId": "fila",
+        "operationId": "fila_de_laudos",
         "responses": {
           "200": {
             "description": "",
@@ -1446,7 +1610,7 @@
           "laudos"
         ],
         "summary": "Lê o laudo (médico com vínculo de cuidado ou acesso de emergência ativo). Toda leitura é auditada.",
-        "operationId": "obter",
+        "operationId": "obter_laudo",
         "parameters": [
           {
             "name": "id",
@@ -1522,7 +1686,14 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcessoEmergencia"
+                }
+              }
+            }
           },
           "401": {
             "description": "",
@@ -1824,7 +1995,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Publicacao"
+                }
+              }
+            }
           },
           "409": {
             "description": "",
@@ -2351,7 +2529,14 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EstornoPedido"
+                }
+              }
+            }
           },
           "409": {
             "description": "",
@@ -2507,7 +2692,7 @@
           "sala"
         ],
         "summary": "Fila do dia da sala (técnico lotado, médico, gerente).",
-        "operationId": "fila",
+        "operationId": "fila_da_sala",
         "parameters": [
           {
             "name": "sala_id",
@@ -2770,7 +2955,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookAceito"
+                }
+              }
+            }
           },
           "401": {
             "description": "",
@@ -2788,6 +2980,22 @@
   },
   "components": {
     "schemas": {
+      "AcessoEmergencia": {
+        "type": "object",
+        "required": [
+          "codigo",
+          "valido_ate"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "valido_ate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "AgendaDoDia": {
         "type": "object",
         "required": [
@@ -3131,6 +3339,100 @@
           }
         }
       },
+      "DivergenciaAberta": {
+        "type": "object",
+        "required": [
+          "codigo",
+          "divergencia",
+          "detail"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "description": "divergencia-aberta."
+          },
+          "detail": {
+            "type": "string"
+          },
+          "divergencia": {
+            "type": "string",
+            "description": "Código da divergência (DIV-AAAA-NNNNNN)."
+          }
+        }
+      },
+      "DivergenciaResolvida": {
+        "type": "object",
+        "required": [
+          "codigo",
+          "situacao"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "resolvida."
+          }
+        }
+      },
+      "EstornoAprovado": {
+        "type": "object",
+        "required": [
+          "id",
+          "situacao"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "aprovado."
+          }
+        }
+      },
+      "EstornoPedido": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "situacao"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "pedido."
+          }
+        }
+      },
+      "EstudoConciliado": {
+        "type": "object",
+        "required": [
+          "estudo",
+          "atendimento",
+          "conciliado"
+        ],
+        "properties": {
+          "atendimento": {
+            "type": "string"
+          },
+          "conciliado": {
+            "type": "boolean"
+          },
+          "estudo": {
+            "type": "string"
+          }
+        }
+      },
       "EstudoPendente": {
         "type": "object",
         "required": [
@@ -3257,6 +3559,44 @@
           "inicio": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "FichaLancada": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "origem",
+          "contingencia",
+          "formulario",
+          "ocorrido_em",
+          "registrado_em_contingencia"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "contingencia": {
+            "type": "string"
+          },
+          "formulario": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ocorrido_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "origem": {
+            "type": "string",
+            "description": "contingencia."
+          },
+          "registrado_em_contingencia": {
+            "type": "boolean"
           }
         }
       },
@@ -3674,6 +4014,42 @@
           }
         }
       },
+      "Membro": {
+        "type": "object",
+        "required": [
+          "id",
+          "nome",
+          "perfis"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "perfis": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "NumerosSituados": {
+        "type": "object",
+        "required": [
+          "numeros_situados"
+        ],
+        "properties": {
+          "numeros_situados": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          }
+        }
+      },
       "PacienteResumo": {
         "type": "object",
         "required": [
@@ -4058,6 +4434,17 @@
           }
         }
       },
+      "PedidoNovaPulseira": {
+        "type": "object",
+        "properties": {
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
       "PedidoNumeros": {
         "type": "object",
         "required": [
@@ -4321,6 +4708,22 @@
           }
         }
       },
+      "Publicacao": {
+        "type": "object",
+        "required": [
+          "publicado",
+          "nova_publicacao"
+        ],
+        "properties": {
+          "nova_publicacao": {
+            "type": "boolean",
+            "description": "Falso quando a versão já estava publicada (repetir não duplica)."
+          },
+          "publicado": {
+            "type": "boolean"
+          }
+        }
+      },
       "Recebimento": {
         "type": "object",
         "required": [
@@ -4379,6 +4782,30 @@
             "format": "int32"
           },
           "total_centavos": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ReciboLancado": {
+        "type": "object",
+        "required": [
+          "valor_recalculado_centavos",
+          "tabela_versao"
+        ],
+        "properties": {
+          "divergencia": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Código da divergência de preço, quando o papel difere do recalculado."
+          },
+          "tabela_versao": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "valor_recalculado_centavos": {
             "type": "integer",
             "format": "int64"
           }
@@ -4620,6 +5047,18 @@
           },
           "texto": {
             "type": "string"
+          }
+        }
+      },
+      "WebhookAceito": {
+        "type": "object",
+        "required": [
+          "situacao"
+        ],
+        "properties": {
+          "situacao": {
+            "type": "string",
+            "description": "recebido ou ja_processado."
           }
         }
       }

@@ -383,7 +383,7 @@ pub struct PedidoFicha {
 
 /// Lança a ficha de atendimento feita em papel (FC-CTG-03 a 06).
 #[utoipa::path(post, path = "/v1/contingencias/{id}/fichas", tag = "contingencia", params(("id" = Uuid, Path)), request_body = PedidoFicha,
-    responses((status = 201), (status = 202, description = "divergencia-aberta"), (status = 409, body = crate::openapi::ProblemaDoc), (status = 422, body = crate::openapi::ProblemaDoc)))]
+    responses((status = 201, body = crate::rotas::respostas::FichaLancada), (status = 202, description = "divergencia-aberta", body = crate::rotas::respostas::DivergenciaAberta), (status = 409, body = crate::openapi::ProblemaDoc), (status = 422, body = crate::openapi::ProblemaDoc)))]
 pub async fn lancar_ficha(
     State(estado): State<Estado>,
     usuario: Usuario,
@@ -472,10 +472,7 @@ pub async fn lancar_ficha(
         tx.commit().await?;
         return Ok((
             StatusCode::ACCEPTED,
-            Json(json!({
-                "codigo": "divergencia-aberta", "divergencia": div,
-                "detail": "O nome ou o nascimento do papel não conferem com o cadastro. Nenhum cadastro foi alterado e a ficha ficou pendente. A divergência foi aberta para a coordenação resolver."
-            })),
+            Json(crate::rotas::respostas::valor(&crate::rotas::respostas::DivergenciaAberta { codigo: "divergencia-aberta".into(), divergencia: div, detail: "O nome ou o nascimento do papel não conferem com o cadastro. Nenhum cadastro foi alterado e a ficha ficou pendente. A divergência foi aberta para a coordenação resolver.".into() })?),
         ));
     }
     let ano = tempo::ano_local();
@@ -518,10 +515,17 @@ pub async fn lancar_ficha(
     tx.commit().await?;
     Ok((
         StatusCode::CREATED,
-        Json(json!({
-            "id": atd, "codigo": codigo.como_str(), "origem": "contingencia", "contingencia": c.codigo, "formulario": ficha,
-            "ocorrido_em": p.ocorrido_em, "registrado_em_contingencia": true
-        })),
+        Json(crate::rotas::respostas::valor(
+            &crate::rotas::respostas::FichaLancada {
+                id: atd,
+                codigo: codigo.to_string(),
+                origem: "contingencia".into(),
+                contingencia: c.codigo,
+                formulario: ficha,
+                ocorrido_em: p.ocorrido_em,
+                registrado_em_contingencia: true,
+            },
+        )?),
     ))
 }
 
@@ -536,7 +540,7 @@ pub struct PedidoRecibo {
 
 /// Lança o recibo manual: grava o valor recalculado pela tabela da data e abre divergência se diferir (FC-CTG-07).
 #[utoipa::path(post, path = "/v1/contingencias/{id}/recibos", tag = "contingencia", params(("id" = Uuid, Path)), request_body = PedidoRecibo,
-    responses((status = 201), (status = 409, body = crate::openapi::ProblemaDoc), (status = 422, body = crate::openapi::ProblemaDoc)))]
+    responses((status = 201, body = crate::rotas::respostas::ReciboLancado), (status = 409, body = crate::openapi::ProblemaDoc), (status = 422, body = crate::openapi::ProblemaDoc)))]
 pub async fn lancar_recibo(
     State(estado): State<Estado>,
     usuario: Usuario,
@@ -607,9 +611,13 @@ pub async fn lancar_recibo(
     tx.commit().await?;
     Ok((
         StatusCode::CREATED,
-        Json(
-            json!({ "valor_recalculado_centavos": preco.valor_centavos, "tabela_versao": preco.versao, "divergencia": divergencia }),
-        ),
+        Json(crate::rotas::respostas::valor(
+            &crate::rotas::respostas::ReciboLancado {
+                valor_recalculado_centavos: preco.valor_centavos,
+                tabela_versao: preco.versao,
+                divergencia,
+            },
+        )?),
     ))
 }
 
@@ -624,7 +632,7 @@ pub struct PedidoNumeros {
 
 /// Dá situação aos números não usados da faixa (devolvidos ou anulados), para o encerramento.
 #[utoipa::path(post, path = "/v1/contingencias/{id}/numeros", tag = "contingencia", params(("id" = Uuid, Path)), request_body = PedidoNumeros,
-    responses((status = 200), (status = 422, body = crate::openapi::ProblemaDoc)))]
+    responses((status = 200, body = crate::rotas::respostas::NumerosSituados), (status = 422, body = crate::openapi::ProblemaDoc)))]
 pub async fn situar_numeros(
     State(estado): State<Estado>,
     usuario: Usuario,
@@ -656,7 +664,11 @@ pub async fn situar_numeros(
     .await?
     .rows_affected();
     tx.commit().await?;
-    Ok(Json(json!({ "numeros_situados": n })))
+    Ok(Json(crate::rotas::respostas::valor(
+        &crate::rotas::respostas::NumerosSituados {
+            numeros_situados: n,
+        },
+    )?))
 }
 
 #[derive(Deserialize, ToSchema)]
@@ -666,7 +678,7 @@ pub struct PedidoResolucao {
 
 /// Resolve uma divergência (coordenação), com o que foi decidido.
 #[utoipa::path(post, path = "/v1/divergencias/{id}/resolucao", tag = "contingencia", params(("id" = Uuid, Path)), request_body = PedidoResolucao,
-    responses((status = 200), (status = 403, body = crate::openapi::ProblemaDoc)))]
+    responses((status = 200, body = crate::rotas::respostas::DivergenciaResolvida), (status = 403, body = crate::openapi::ProblemaDoc)))]
 pub async fn resolver_divergencia(
     State(estado): State<Estado>,
     usuario: Usuario,
@@ -717,7 +729,12 @@ pub async fn resolver_divergencia(
     )
     .await?;
     tx.commit().await?;
-    Ok(Json(json!({ "codigo": d.codigo, "situacao": "resolvida" })))
+    Ok(Json(crate::rotas::respostas::valor(
+        &crate::rotas::respostas::DivergenciaResolvida {
+            codigo: d.codigo,
+            situacao: "resolvida".into(),
+        },
+    )?))
 }
 
 /// Encerra a contingência só sem pendência: ficha pendente, divergência aberta ou número sem situação (FC-CTG-09).

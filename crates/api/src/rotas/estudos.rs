@@ -55,7 +55,7 @@ pub struct PedidoConciliacao {
 
 /// Concilia o estudo com o atendimento depois de conferir nome e nascimento; só então entra no laudo.
 #[utoipa::path(post, path = "/v1/estudos/{id}/conciliacao", tag = "exames", params(("id" = Uuid, Path)), request_body = PedidoConciliacao,
-    responses((status = 200), (status = 409, body = crate::openapi::ProblemaDoc), (status = 422, body = crate::openapi::ProblemaDoc)))]
+    responses((status = 200, body = crate::rotas::respostas::EstudoConciliado), (status = 409, body = crate::openapi::ProblemaDoc), (status = 422, body = crate::openapi::ProblemaDoc)))]
 pub async fn conciliar(
     State(estado): State<Estado>,
     usuario: Usuario,
@@ -136,7 +136,11 @@ pub async fn conciliar(
     )
     .await?;
     tx.commit().await?;
-    Ok(Json(
-        json!({ "estudo": e.codigo, "atendimento": a.codigo, "conciliado": true }),
-    ))
+    Ok(Json(crate::rotas::respostas::valor(
+        &crate::rotas::respostas::EstudoConciliado {
+            estudo: e.codigo,
+            atendimento: a.codigo,
+            conciliado: true,
+        },
+    )?))
 }

@@ -32,7 +32,7 @@ fn recusado() -> ErroApi {
 /// Recebe o webhook do PSP. Responde 2xx rápido; o efeito acontece pelo outbox.
 #[utoipa::path(post, path = "/v1/webhooks/pix", tag = "integracoes", params(("X-Assinatura" = String, Header)),
     request_body(content = String, content_type = "application/json", description = "Evento do PSP: id e txid"),
-    responses((status = 200), (status = 401, body = crate::openapi::ProblemaDoc)))]
+    responses((status = 200, body = crate::rotas::respostas::WebhookAceito), (status = 401, body = crate::openapi::ProblemaDoc)))]
 pub async fn pix(
     State(estado): State<Estado>,
     cabecalhos: HeaderMap,
@@ -91,7 +91,14 @@ pub async fn pix(
     .is_some();
     if !novo {
         tx.commit().await?;
-        return Ok((StatusCode::OK, Json(json!({ "situacao": "ja_processado" }))));
+        return Ok((
+            StatusCode::OK,
+            Json(crate::rotas::respostas::valor(
+                &crate::rotas::respostas::WebhookAceito {
+                    situacao: "ja_processado".into(),
+                },
+            )?),
+        ));
     }
     sqlx::query!(
         "INSERT INTO integracao.outbox (id, tipo, chave_idempotencia, carga, unidade_id, correlacao)
@@ -102,5 +109,12 @@ pub async fn pix(
     .await?;
     tx.commit().await?;
     estado.outbox_aviso.notify_one();
-    Ok((StatusCode::OK, Json(json!({ "situacao": "recebido" }))))
+    Ok((
+        StatusCode::OK,
+        Json(crate::rotas::respostas::valor(
+            &crate::rotas::respostas::WebhookAceito {
+                situacao: "recebido".into(),
+            },
+        )?),
+    ))
 }

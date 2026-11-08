@@ -79,6 +79,8 @@ pub struct ProblemaDoc {
         crate::rotas::contingencia::resolver_divergencia,
         crate::rotas::estudos::pendentes,
         crate::rotas::estudos::conciliar,
+        crate::rotas::etiquetas::nova_pulseira,
+        crate::rotas::equipe::listar,
         crate::rotas::eventos::fluxo,
     ),
     components(schemas(ProblemaDoc))
