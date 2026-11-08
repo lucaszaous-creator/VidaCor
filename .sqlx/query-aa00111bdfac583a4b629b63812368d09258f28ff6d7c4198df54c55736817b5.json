@@ -1,0 +1,29 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE laudos.laudo SET liberado_apos_conversa_por = $2, liberado_apos_conversa_em = now(), versao = versao + 1\n          WHERE id = $1 AND liberado_apos_conversa_em IS NULL RETURNING unidade_id",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "unidade_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.laudo",
+            "name": "unidade_id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "aa00111bdfac583a4b629b63812368d09258f28ff6d7c4198df54c55736817b5"
+}

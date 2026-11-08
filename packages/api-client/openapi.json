@@ -735,6 +735,604 @@
         }
       }
     },
+    "/v1/laudos/fila": {
+      "get": {
+        "tags": [
+          "laudos"
+        ],
+        "summary": "Fila de laudos do médico: só estudos conciliados atribuídos a ele (FC-LAU-09).",
+        "operationId": "fila",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemFilaLaudo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/laudos/{id}": {
+      "get": {
+        "tags": [
+          "laudos"
+        ],
+        "summary": "Lê o laudo (médico com vínculo de cuidado ou acesso de emergência ativo). Toda leitura é auditada.",
+        "operationId": "obter",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Laudo"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/laudos/{id}/acesso-emergencia": {
+      "post": {
+        "tags": [
+          "laudos"
+        ],
+        "summary": "Acesso de emergência (break-glass) com justificativa: vale 1 hora, é auditado em destaque, avisa o\nresponsável clínico e entra na fila de revisão de 48 horas (FC-ACE-04).",
+        "operationId": "acesso_emergencia",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoEmergencia"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/laudos/{id}/assinatura": {
+      "post": {
+        "tags": [
+          "laudos"
+        ],
+        "summary": "Assina a versão em rascunho com o certificado do médico (reautenticação e PIN). A versão anterior,\nse houver, passa a \"substituída\". Publica no portal, salvo \"conversar antes\".",
+        "operationId": "assinar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoAssinatura"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Laudo"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/laudos/{id}/conversar-antes": {
+      "post": {
+        "tags": [
+          "laudos"
+        ],
+        "summary": "Marca ou desmarca \"conversar antes de liberar\" (resultado delicado, docs/16 R11).",
+        "operationId": "conversar_antes",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoConversar"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Laudo"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/laudos/{id}/liberacao": {
+      "post": {
+        "tags": [
+          "laudos"
+        ],
+        "summary": "Libera no portal depois da conversa com o paciente (FC-LAU-08).",
+        "operationId": "liberar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Laudo"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/laudos/{id}/links": {
+      "post": {
+        "tags": [
+          "laudos"
+        ],
+        "summary": "Cria um link de leitura do laudo publicado para médico externo, com validade curta (SEC-DAD-6).",
+        "operationId": "criar_link",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoLink"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinkCriado"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/laudos/{id}/publicacao": {
+      "post": {
+        "tags": [
+          "laudos"
+        ],
+        "summary": "Publicação manual no portal: rascunho nunca é publicado (FC-LAU-02).",
+        "operationId": "publicar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/laudos/{id}/rascunho": {
+      "put": {
+        "tags": [
+          "laudos"
+        ],
+        "summary": "Salva o rascunho (só o médico atribuído; versão assinada não muda: 409).",
+        "operationId": "salvar_rascunho",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoRascunho"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Laudo"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/laudos/{id}/retificacao": {
+      "post": {
+        "tags": [
+          "laudos"
+        ],
+        "summary": "Abre a retificação de um laudo assinado: nova versão em rascunho com motivo (FC-LAU-05, 06).",
+        "operationId": "retificar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoRetificacao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Laudo"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/links/{token}": {
+      "get": {
+        "tags": [
+          "portal"
+        ],
+        "summary": "Abre o laudo por link compartilhado. Expirado: 410, sem exibir nada (FC-ACE-08).",
+        "operationId": "abrir_link",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LaudoDoPortal"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/pacientes": {
       "get": {
         "tags": [
@@ -850,6 +1448,72 @@
             }
           },
           "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/portal/laudos": {
+      "get": {
+        "tags": [
+          "portal"
+        ],
+        "summary": "Laudos publicados do próprio paciente (versão vigente).",
+        "operationId": "meus_laudos",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LaudoDoPortal"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/portal/laudos/{id}": {
+      "get": {
+        "tags": [
+          "portal"
+        ],
+        "summary": "Um laudo do próprio paciente. De outro paciente ou inexistente: a mesma resposta 404, auditada.",
+        "operationId": "meu_laudo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LaudoDoPortal"
+                }
+              }
+            }
+          },
+          "404": {
             "description": "",
             "content": {
               "application/json": {
@@ -1695,6 +2359,158 @@
           }
         }
       },
+      "ItemFilaLaudo": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "paciente",
+          "exame",
+          "situacao",
+          "conversar_antes",
+          "recebido_em"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "conversar_antes": {
+            "type": "boolean"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "recebido_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "situacao": {
+            "type": "string"
+          }
+        }
+      },
+      "Laudo": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "paciente",
+          "exame",
+          "situacao",
+          "conversar_antes",
+          "publicado_no_portal",
+          "versoes"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "conversar_antes": {
+            "type": "boolean"
+          },
+          "estudo": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/EstudoResumo"
+              }
+            ]
+          },
+          "exame": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "medico_atribuido_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "publicado_no_portal": {
+            "type": "boolean"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "rascunho, assinado ou retificacao_em_rascunho."
+          },
+          "versao_vigente": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
+          },
+          "versoes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Versao"
+            }
+          }
+        }
+      },
+      "LaudoDoPortal": {
+        "type": "object",
+        "required": [
+          "id",
+          "exame",
+          "texto",
+          "retificado",
+          "publicado_em"
+        ],
+        "properties": {
+          "exame": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "publicado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "retificado": {
+            "type": "boolean",
+            "description": "A versão vigente substituiu uma anterior (retificação)."
+          },
+          "texto": {
+            "type": "string"
+          }
+        }
+      },
+      "LinkCriado": {
+        "type": "object",
+        "required": [
+          "token",
+          "expira_em"
+        ],
+        "properties": {
+          "expira_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "token": {
+            "type": "string",
+            "description": "Mostrado uma única vez; o banco guarda só o hash."
+          }
+        }
+      },
       "PacienteResumo": {
         "type": "object",
         "required": [
@@ -1762,6 +2578,17 @@
           }
         }
       },
+      "PedidoAssinatura": {
+        "type": "object",
+        "required": [
+          "pin"
+        ],
+        "properties": {
+          "pin": {
+            "type": "string"
+          }
+        }
+      },
       "PedidoBipe": {
         "type": "object",
         "required": [
@@ -1800,6 +2627,17 @@
           }
         }
       },
+      "PedidoConversar": {
+        "type": "object",
+        "required": [
+          "marcado"
+        ],
+        "properties": {
+          "marcado": {
+            "type": "boolean"
+          }
+        }
+      },
       "PedidoCorrecao": {
         "type": "object",
         "required": [
@@ -1813,6 +2651,17 @@
           "nascimento": {
             "type": "string",
             "format": "date"
+          }
+        }
+      },
+      "PedidoEmergencia": {
+        "type": "object",
+        "required": [
+          "justificativa"
+        ],
+        "properties": {
+          "justificativa": {
+            "type": "string"
           }
         }
       },
@@ -1872,6 +2721,35 @@
           }
         }
       },
+      "PedidoLink": {
+        "type": "object",
+        "required": [
+          "horas"
+        ],
+        "properties": {
+          "horas": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Validade em horas (1 a 72)."
+          }
+        }
+      },
+      "PedidoRascunho": {
+        "type": "object",
+        "required": [
+          "texto",
+          "versao_numero"
+        ],
+        "properties": {
+          "texto": {
+            "type": "string"
+          },
+          "versao_numero": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "PedidoReimpressao": {
         "type": "object",
         "properties": {
@@ -1880,6 +2758,23 @@
               "string",
               "null"
             ]
+          }
+        }
+      },
+      "PedidoRetificacao": {
+        "type": "object",
+        "required": [
+          "texto"
+        ],
+        "properties": {
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "texto": {
+            "type": "string"
           }
         }
       },
@@ -2167,6 +3062,53 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "Versao": {
+        "type": "object",
+        "required": [
+          "numero",
+          "texto",
+          "situacao"
+        ],
+        "properties": {
+          "assinada_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "assinada_por": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "hash_documento": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "numero": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "rascunho, assinada ou substituida."
+          },
+          "texto": {
+            "type": "string"
           }
         }
       }

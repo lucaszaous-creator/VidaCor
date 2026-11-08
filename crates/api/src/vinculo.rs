@@ -48,3 +48,20 @@ pub async fn pode_ler(conexao: &mut PgConnection, paciente_id: Uuid) -> Result<b
             .unwrap_or(false),
     )
 }
+
+/// Vínculo de cuidado ativo (sem contar o acesso de emergência).
+///
+/// # Errors
+/// Falha de banco.
+pub async fn tem_vinculo(
+    conexao: &mut PgConnection,
+    paciente_id: Uuid,
+) -> Result<bool, sqlx::Error> {
+    sqlx::query_scalar!(
+        "SELECT EXISTS (SELECT 1 FROM cuidado.vinculo WHERE paciente_id = $1
+            AND medico_id = NULLIF(current_setting('app.usuario_id', true), '')::uuid AND expira_em > now()) AS \"tem!\"",
+        paciente_id
+    )
+    .fetch_one(conexao)
+    .await
+}

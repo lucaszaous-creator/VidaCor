@@ -1,0 +1,112 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT l.id, l.codigo, l.situacao, l.versao_vigente, l.paciente_id, l.conversar_antes,\n                  l.liberado_apos_conversa_em, ag.exame_nome\n             FROM laudos.laudo l JOIN recepcao.atendimento t ON t.id = l.atendimento_id\n             JOIN agenda.agendamento ag ON ag.id = t.agendamento_id\n            WHERE l.id = $1 FOR UPDATE OF l",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.laudo",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.laudo",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.laudo",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "versao_vigente",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "laudos.laudo",
+            "name": "versao_vigente"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "paciente_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.laudo",
+            "name": "paciente_id"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "conversar_antes",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "laudos.laudo",
+            "name": "conversar_antes"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "liberado_apos_conversa_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "laudos.laudo",
+            "name": "liberado_apos_conversa_em"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "exame_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "exame_nome"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "4503f4117be575bff9f98ca7b468ef1d444cd143d8593dbef3e4e5e3f626b19c"
+}

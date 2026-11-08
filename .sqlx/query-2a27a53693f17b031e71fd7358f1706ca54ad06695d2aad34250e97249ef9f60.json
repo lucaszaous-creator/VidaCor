@@ -1,0 +1,21 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO cuidado.acesso_emergencia (id, codigo, medico_id, paciente_id, justificativa, valido_ate, revisar_ate, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, now() + interval '48 hours', $3, 'consultorio', $7, $8)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Timestamptz",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "2a27a53693f17b031e71fd7358f1706ca54ad06695d2aad34250e97249ef9f60"
+}

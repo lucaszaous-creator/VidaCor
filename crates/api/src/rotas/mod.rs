@@ -5,7 +5,9 @@ pub mod agendamentos;
 pub mod atendimentos;
 pub mod etiquetas;
 pub mod eventos;
+pub mod laudos;
 pub mod pacientes;
+pub mod portal;
 pub mod sala;
 pub mod saude;
 pub mod sessao;
@@ -50,6 +52,28 @@ pub fn rotas() -> Router<Estado> {
             "/v1/salas/{sala_id}/horarios-livres",
             get(agendamentos::horarios_livres),
         )
+        .route("/v1/laudos/fila", get(laudos::fila))
+        .route("/v1/laudos/{id}", get(laudos::obter))
+        .route(
+            "/v1/laudos/{id}/rascunho",
+            axum::routing::put(laudos::salvar_rascunho),
+        )
+        .route("/v1/laudos/{id}/assinatura", post(laudos::assinar))
+        .route("/v1/laudos/{id}/retificacao", post(laudos::retificar))
+        .route(
+            "/v1/laudos/{id}/conversar-antes",
+            post(laudos::conversar_antes),
+        )
+        .route("/v1/laudos/{id}/liberacao", post(laudos::liberar))
+        .route("/v1/laudos/{id}/publicacao", post(laudos::publicar))
+        .route(
+            "/v1/laudos/{id}/acesso-emergencia",
+            post(laudos::acesso_emergencia),
+        )
+        .route("/v1/laudos/{id}/links", post(portal::criar_link))
+        .route("/v1/portal/laudos", get(portal::meus_laudos))
+        .route("/v1/portal/laudos/{id}", get(portal::meu_laudo))
+        .route("/v1/links/{token}", get(portal::abrir_link))
         .route("/v1/eventos", get(eventos::fluxo))
         .fallback(nao_existe)
 }

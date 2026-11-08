@@ -16,6 +16,8 @@ pub struct Estado {
     /// Acorda o trabalhador do outbox logo depois de um commit.
     pub outbox_aviso: Arc<Notify>,
     pub oidc: Option<Arc<Oidc>>,
+    /// Serviço de assinatura ICP-Brasil. Sem configuração, assinar responde 503 (falha fechada).
+    pub assinador: Option<Arc<dyn crate::assinatura::Assinador>>,
 }
 
 impl Estado {
@@ -28,6 +30,7 @@ impl Estado {
             eventos,
             outbox_aviso: Arc::new(Notify::new()),
             oidc: oidc.map(Arc::new),
+            assinador: None,
         }
     }
 }

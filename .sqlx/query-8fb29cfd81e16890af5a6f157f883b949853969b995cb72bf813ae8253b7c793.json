@@ -1,0 +1,20 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO portal.link (id, token_hash, publicacao_id, expira_em, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, 'consultorio', $6, $7)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Bytea",
+        "Uuid",
+        "Timestamptz",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "8fb29cfd81e16890af5a6f157f883b949853969b995cb72bf813ae8253b7c793"
+}

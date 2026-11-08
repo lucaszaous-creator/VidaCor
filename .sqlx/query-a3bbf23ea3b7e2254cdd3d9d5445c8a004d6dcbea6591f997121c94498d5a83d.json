@@ -1,0 +1,100 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT numero, texto, situacao, motivo, assinada_por, assinada_em, hash_documento\n           FROM laudos.versao WHERE laudo_id = $1 ORDER BY numero",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "numero",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "texto",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "texto"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "assinada_por",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "assinada_por"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "assinada_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "assinada_em"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "hash_documento",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "hash_documento"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "a3bbf23ea3b7e2254cdd3d9d5445c8a004d6dcbea6591f997121c94498d5a83d"
+}

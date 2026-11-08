@@ -1,0 +1,29 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE laudos.laudo SET conversar_antes = $2, versao = versao + 1 WHERE id = $1 RETURNING unidade_id",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "unidade_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.laudo",
+            "name": "unidade_id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Bool"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "8b3b550698b9b020e3746254414b55f0c4bafc51a307db5daceaf0c15f15e9ac"
+}

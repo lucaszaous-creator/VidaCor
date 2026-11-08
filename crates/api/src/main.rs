@@ -58,7 +58,15 @@ async fn main() -> Result<()> {
 
     let endereco = config.endereco;
     let orthanc_url = config.orthanc_url.clone();
-    let estado = Estado::novo(banco, config, oidc);
+    let mut estado = Estado::novo(banco, config, oidc);
+    // Assinador de desenvolvimento só com escolha explícita (sem valor legal). Em produção entra o
+    // serviço ICP-Brasil (ADR-0008); sem ele, assinar responde 503.
+    if std::env::var("VIDACOR_ASSINADOR").as_deref() == Ok("desenvolvimento") {
+        tracing::warn!("assinador de DESENVOLVIMENTO ligado: assinaturas sem valor legal");
+        estado.assinador = Some(std::sync::Arc::new(
+            vidacor_api::assinatura::AssinadorDesenvolvimento,
+        ));
+    }
 
     if let Some(url) = orthanc_url {
         let orthanc = Orthanc::novo(&url)?;

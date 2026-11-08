@@ -136,7 +136,11 @@ impl Ambiente {
             unidade_servidor: Some(UNIDADE_A),
             oidc: None,
         };
-        let estado = Estado::novo(app_pool.clone(), config, None);
+        let mut estado = Estado::novo(app_pool.clone(), config, None);
+        // Provedor externo de assinatura: único ponto simulado (G4); sem valor legal.
+        estado.assinador = Some(std::sync::Arc::new(
+            vidacor_api::assinatura::AssinadorDesenvolvimento,
+        ));
         Self {
             app: aplicacao(estado.clone()),
             admin,
@@ -255,6 +259,44 @@ impl Ambiente {
         .execute(&self.admin)
         .await
         .unwrap();
+    }
+
+    /// Leva um paciente do check-in ao estudo conciliado (o laudo nasce em rascunho, atribuído ao médico).
+    pub async fn ate_o_laudo(&self, paciente: &str, nasc: &str) -> (Value, Uuid) {
+        let atd = self.fazer_checkin(paciente, nasc).await;
+        let accession = atd["accession"].as_str().unwrap().to_owned();
+        let estudo = vidacor_api::orthanc::EstudoOrthanc {
+            orthanc_id: format!("{}-0000", &Uuid::now_v7().simple().to_string()[..8]),
+            study_uid: format!(
+                "1.2.826.0.1.{}",
+                Uuid::now_v7().as_u128() % 1_000_000_000_000
+            ),
+            accession: Some(accession),
+            imagens: 12,
+        };
+        vidacor_api::outbox::registrar_estudo(&self.estado, UNIDADE_A, &estudo)
+            .await
+            .unwrap();
+        let laudo: Uuid =
+            sqlx::query_scalar("SELECT id FROM laudos.laudo WHERE atendimento_id = $1")
+                .bind(Uuid::parse_str(atd["id"].as_str().unwrap()).unwrap())
+                .fetch_one(&self.admin)
+                .await
+                .unwrap();
+        (atd, laudo)
+    }
+
+    /// Sessão do portal para um paciente (cria a conta se não existir).
+    pub async fn entrar_no_portal(&self, paciente: &str) -> String {
+        let pid = self.s.pacientes[paciente];
+        let conta: Uuid = sqlx::query_scalar(
+            "INSERT INTO portal.conta (id, paciente_id, login, origem, unidade_id, correlacao) VALUES ($1, $2, $3, 'seed', $4, 'seed')
+             ON CONFLICT (paciente_id) DO UPDATE SET ativa = true RETURNING id")
+            .bind(Uuid::now_v7()).bind(pid).bind(format!("p-{pid}")).bind(UNIDADE_A).fetch_one(&self.admin).await.unwrap();
+        let segredo = vidacor_api::portal::criar_sessao(&self.app_pool, conta)
+            .await
+            .unwrap();
+        format!("vc_portal={segredo}")
     }
 
     pub async fn contar(&self, sql: &'static str) -> i64 {

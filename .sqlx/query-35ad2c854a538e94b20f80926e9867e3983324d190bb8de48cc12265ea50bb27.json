@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT EXISTS (SELECT 1 FROM cuidado.vinculo WHERE paciente_id = $1\n            AND medico_id = NULLIF(current_setting('app.usuario_id', true), '')::uuid AND expira_em > now()) AS \"tem!\"",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tem!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "35ad2c854a538e94b20f80926e9867e3983324d190bb8de48cc12265ea50bb27"
+}

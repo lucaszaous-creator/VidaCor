@@ -38,6 +38,22 @@ pub async fn processar_um(estado: &Estado, orthanc: &Orthanc) -> Result<bool> {
 
     let resultado = match item.tipo.as_str() {
         "worklist.criar" => criar_worklist(estado, orthanc, item.unidade_id, &item.carga).await,
+        "portal.publicar" => match item.carga["laudo_id"].as_str().and_then(|v| v.parse().ok()) {
+            Some(laudo) => crate::laudos::publicar(estado, laudo, item.unidade_id)
+                .await
+                .map(|_| ())
+                .map_err(|e| anyhow::anyhow!("publicação no portal: {}", e.codigo())),
+            None => Err(anyhow::anyhow!("carga sem laudo_id")),
+        },
+        // Avisos por WhatsApp e oferta à lista de espera: o provedor entra numa próxima entrega.
+        // Ficam pendentes no outbox, visíveis, sem se perder (R7).
+        "aviso.reserva_expirada"
+        | "lista_espera.oferecer_vaga"
+        | "aviso.acesso_emergencia"
+        | "nfse.emitir" => Err(anyhow::anyhow!(
+            "provedor de {} ainda não configurado",
+            item.tipo
+        )),
         outro => Err(anyhow::anyhow!("tipo de outbox desconhecido: {outro}")),
     };
 
@@ -201,6 +217,11 @@ pub async fn registrar_estudo(
     .await?;
 
     if gravado.novo {
+        if let Some(a) = &atendimento {
+            // Estudo conciliado entra na fila de laudo do médico do agendamento (FC-LAU-09).
+            crate::laudos::criar_para_estudo(&mut tx, gravado.id, a.id, unidade_id, &correlacao)
+                .await?;
+        }
         lastro::registrar(
             &mut tx,
             NovoEvento {

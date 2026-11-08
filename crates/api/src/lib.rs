@@ -2,6 +2,7 @@
 
 #![cfg_attr(test, allow(clippy::panic, clippy::unwrap_used, clippy::expect_used))]
 
+pub mod assinatura;
 pub mod atos;
 pub mod banco;
 pub mod config;
@@ -11,10 +12,12 @@ pub mod eventos;
 pub mod extratores;
 pub mod idempotencia;
 pub mod lastro;
+pub mod laudos;
 pub mod oidc;
 pub mod openapi;
 pub mod orthanc;
 pub mod outbox;
+pub mod portal;
 pub mod rotas;
 pub mod sessao;
 pub mod tempo;

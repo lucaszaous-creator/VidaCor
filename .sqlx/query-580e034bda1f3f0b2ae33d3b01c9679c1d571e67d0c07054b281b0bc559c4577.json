@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT comum.proximo_numero('EMG', $1)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "proximo_numero",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "580e034bda1f3f0b2ae33d3b01c9679c1d571e67d0c07054b281b0bc559c4577"
+}

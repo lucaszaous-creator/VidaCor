@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO portal.sessao (id, conta_id, segredo_hash, csrf, expira_em) VALUES ($1, $2, $3, $4, now() + interval '30 minutes')",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Bytea",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "8f1b381b7626a8aa1a7804cc32aacf522c827529e109dde57a3484db3103f307"
+}

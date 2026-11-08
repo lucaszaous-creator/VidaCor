@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE laudos.laudo SET situacao = 'assinado', versao_vigente = $2, versao = versao + 1 WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "f1b4210e1616f1d1b074668d37a5b5b15c11def59afadf168d67933f2abe1ffd"
+}
