@@ -9,6 +9,7 @@ import { setupServer } from 'msw/node';
 import { agendaDoDia, atendimentoDe, itensDaAgenda, SALAS, SESSAO } from './dados/ficticios';
 import { manipuladoresFase1, reiniciarFase1 } from './nucleo-fase1';
 import { comunicacaoSimulada, lastroSimulado, manipuladoresComunicacao, manipuladoresEstoque, manipuladoresFinanceiro, manipuladoresIndicadores, manipuladoresNfse, manipuladoresUsuarios, usuariosCriados, manipuladoresLastro } from './nucleo-estoque';
+import { manipuladoresAutorizacao, reiniciarAutorizacoes } from './nucleo-autorizacao';
 import { manipuladoresFaturamento, reiniciarFaturamento } from './nucleo-faturamento';
 import { manipuladoresLaudoEstruturado, reiniciarLaudoEstruturado } from './nucleo-laudo-estruturado';
 import { manipuladoresMenu } from './nucleo-menu';
@@ -37,6 +38,7 @@ export function reiniciarNucleo(): void {
   reiniciarPendencias();
   reiniciarLaudoEstruturado();
   reiniciarFaturamento();
+  reiniciarAutorizacoes();
   portalSimulado.logado = false;
   lastroSimulado.integra = true;
   comunicacaoSimulada.whatsapp = true;
@@ -115,4 +117,4 @@ export const manipuladores = [
   }),
 ];
 
-export const servidor = setupServer(...manipuladoresFaturamento, ...manipuladoresNfse, ...manipuladoresUsuarios, ...manipuladoresFinanceiro, ...manipuladoresComunicacao, ...manipuladoresIndicadores, ...manipuladoresLaudoEstruturado, ...manipuladoresLastro, ...manipuladoresEstoque, ...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores);
+export const servidor = setupServer(...manipuladoresAutorizacao, ...manipuladoresFaturamento, ...manipuladoresNfse, ...manipuladoresUsuarios, ...manipuladoresFinanceiro, ...manipuladoresComunicacao, ...manipuladoresIndicadores, ...manipuladoresLaudoEstruturado, ...manipuladoresLastro, ...manipuladoresEstoque, ...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores);

@@ -15,6 +15,7 @@ import type { Dependencias } from './contexto';
 import { TelaNovoAgendamento } from './telas/agendamento/TelaNovoAgendamento';
 import { TelaAgenda } from './telas/agenda/TelaAgenda';
 import { TelaCadastroPaciente } from './telas/cadastro/TelaCadastroPaciente';
+import { TelaAutorizacoes } from './telas/autorizacoes/TelaAutorizacoes';
 import { TelaEstoque } from './telas/estoque/TelaEstoque';
 import { TelaAuditoriaFaturamento } from './telas/faturamento/TelaAuditoriaFaturamento';
 import { TelaFaturamento, type AbaDoFaturamento } from './telas/faturamento/TelaFaturamento';
@@ -115,6 +116,11 @@ export function lerBuscaDoFaturamento(busca: Record<string, unknown>): BuscaDoFa
   return r;
 }
 
+export function lerBuscaDasAutorizacoes(busca: Record<string, unknown>): { id?: string } {
+  const id = lerUuid(busca.id);
+  return id === undefined ? {} : { id };
+}
+
 const raiz = createRootRouteWithContext<ContextoDoRoteador>()({ component: Outlet });
 
 const rotaEntrar = createRoute({ getParentRoute: () => raiz, path: '/entrar', component: TelaEntrar });
@@ -159,6 +165,7 @@ const rotaNovoAgendamento = createRoute({ getParentRoute: () => rotaApp, path: '
 const rotaNovoPaciente = createRoute({ getParentRoute: () => rotaApp, path: '/pacientes/novo', component: TelaCadastroPaciente });
 const rotaEstoque = createRoute({ getParentRoute: () => rotaApp, path: '/estoque', component: TelaEstoque });
 const rotaLastro = createRoute({ getParentRoute: () => rotaApp, path: '/lastro', component: TelaLastro });
+const rotaAutorizacoes = createRoute({ getParentRoute: () => rotaApp, path: '/autorizacoes', validateSearch: lerBuscaDasAutorizacoes, component: TelaAutorizacoes });
 const rotaIndicadores = createRoute({ getParentRoute: () => rotaApp, path: '/indicadores', component: TelaIndicadores });
 const rotaFinanceiro = createRoute({ getParentRoute: () => rotaApp, path: '/financeiro', component: TelaFinanceiro });
 const rotaUsuarios = createRoute({ getParentRoute: () => rotaApp, path: '/usuarios', component: TelaUsuarios });
@@ -217,6 +224,7 @@ const arvore = raiz.addChildren([
     rotaNovoPaciente,
     rotaEstoque,
     rotaLastro,
+    rotaAutorizacoes,
     rotaIndicadores,
     rotaFinanceiro,
     rotaUsuarios,

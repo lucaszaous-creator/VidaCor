@@ -20,6 +20,7 @@ import { chaves, consultaHorariosLivres, consultaPacientes, consultaSalas } from
 import { useDependencias } from '../../contexto';
 import { useOperacao } from '../../operacao';
 import { FUSO_DA_CLINICA } from '../agenda/grade';
+import { PedidoDeAutorizacao } from '../autorizacoes/PedidoDeAutorizacao';
 import { GuiaRegistrada, ProcedimentosDoPedido, RegistroDaGuia, tussValidos, type LinhaDeProcedimento } from './SecaoDaGuia';
 
 function textoDoCampo(erro: unknown, campo: string): string | null {
@@ -256,6 +257,7 @@ export function TelaNovoAgendamento() {
 
             <div aria-live="polite" className="col" style={{ gap: 10 }}>
               {criado !== null && <Sucesso a={criado} aoNovo={novo} />}
+              {criado?.situacao === 'reserva_provisoria' && confirmar.resultado === null && guia === null && <PedidoDeAutorizacao agendamentoId={criado.id} />}
               {erro !== null && (
                 <ErroDoAto
                   erro={erro}

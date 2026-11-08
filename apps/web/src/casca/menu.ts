@@ -28,6 +28,7 @@ const SECOES: { id: string; titulo: string; itens: ItemComPerfis[] }[] = [
       { id: 'agendar', rotulo: 'Novo agendamento', href: '/agendamentos/novo', icone: 'agendar', cor: 'blue', perfis: [...RECEPCAO, 'gerente'] },
       { id: 'novo-paciente', rotulo: 'Novo paciente', href: '/pacientes/novo', icone: 'recepcao', cor: 'blue', perfis: [...RECEPCAO, 'gerente'] },
       { id: 'recepcao', rotulo: 'Recepção e pulseiras', href: '/recepcao', icone: 'recepcao', cor: 'teal', perfis: RECEPCAO },
+      { id: 'autorizacoes', rotulo: 'Autorizações', href: '/autorizacoes', icone: 'autorizacao', cor: 'blue', perfis: [...RECEPCAO, 'faturista', 'gerente'] },
     ],
   },
   {
