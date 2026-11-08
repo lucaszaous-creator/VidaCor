@@ -100,18 +100,27 @@ pub struct Retorno {
 #[utoipa::path(get, path = "/v1/sessao/retorno", tag = "sessao", responses((status = 303)))]
 pub async fn retorno(
     State(estado): State<Estado>,
+    cabecalhos: axum::http::HeaderMap,
     Query(q): Query<Retorno>,
 ) -> Result<Response, ErroApi> {
     let oidc = estado.oidc.clone().ok_or_else(crate::oidc::indisponivel)?;
     let (code, state) = q.code.zip(q.state).ok_or_else(crate::oidc::falhou)?;
+    // O retorno só vale no mesmo navegador que pediu o login (contra CSRF de login).
+    if crate::oidc::ler_cookie_login(&cabecalhos).as_deref() != Some(state.as_str()) {
+        return Err(crate::oidc::falhou());
+    }
     let usuario = oidc.concluir(&estado.banco, &code, &state).await?;
     let correlacao = crate::trace::atual().unwrap_or_default();
     let nova = sessao::criar(&estado.banco, usuario.0, usuario.1, &correlacao).await?;
+    let seguro = estado.config.cookie_seguro;
     Ok((
-        [(
-            header::SET_COOKIE,
-            sessao::cookie(&nova.segredo, estado.config.cookie_seguro),
-        )],
+        axum::response::AppendHeaders([
+            (header::SET_COOKIE, sessao::cookie(&nova.segredo, seguro)),
+            (
+                header::SET_COOKIE,
+                crate::oidc::cookie_login_apagado(seguro),
+            ),
+        ]),
         Redirect::to(&estado.config.url_aplicacao),
     )
         .into_response())
