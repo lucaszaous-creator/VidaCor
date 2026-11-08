@@ -44,6 +44,8 @@ pub enum Ato {
     LoteGerar,
     DemonstrativoRegistrar,
     GlosaRecorrer,
+    AutorizacaoPedir,
+    AutorizacaoVer,
 }
 
 impl Ato {
@@ -96,6 +98,9 @@ impl Ato {
             A::FaturamentoAuditar | A::LoteGerar | A::DemonstrativoRegistrar | A::GlosaRecorrer => {
                 &["faturista"]
             }
+            // Autorização pedida pelo sistema (docs/22 E4): recepção e faturista pedem; gerente acompanha.
+            A::AutorizacaoPedir => &["recepcao", "faturista"],
+            A::AutorizacaoVer => &["recepcao", "faturista", "gerente"],
         };
         perfis.contains(&perfil)
     }
@@ -105,7 +110,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 40] = [
+    const TODOS: [Ato; 42] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -146,6 +151,8 @@ mod testes {
         Ato::LoteGerar,
         Ato::DemonstrativoRegistrar,
         Ato::GlosaRecorrer,
+        Ato::AutorizacaoPedir,
+        Ato::AutorizacaoVer,
     ];
 
     #[test]

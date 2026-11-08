@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE convenio.autorizacao SET situacao = 'enviada', enviada_em = now(), versao = versao + 1\n          WHERE id = $1 AND situacao = 'aguardando_envio'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "85a6cadc920c56687739afd945c12afdf8ecca3cb4f5e6761bd71b48bd5c338e"
+}

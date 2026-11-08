@@ -1,0 +1,124 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT codigo, situacao, agendamento_id, paciente_id, operadora, carteirinha, solicitante_nome, protocolo, unidade_id\n           FROM convenio.autorizacao WHERE id = $1 FOR UPDATE",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "agendamento_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "agendamento_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "paciente_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "paciente_id"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "operadora",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "operadora"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "carteirinha",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "carteirinha"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "solicitante_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "solicitante_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "protocolo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "protocolo"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "unidade_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "unidade_id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "0904887a8a590f834dfdeb7359c976671d6d776ad62b522f8077b2c03da1696e"
+}

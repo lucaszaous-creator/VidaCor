@@ -212,7 +212,7 @@ async fn carregar_guia(conexao: &mut PgConnection, id: Uuid) -> Result<Guia, Err
 }
 
 /// Confere e consome a guia para os procedimentos do agendamento, de forma atômica (G2).
-async fn consumir_guia(
+pub(crate) async fn consumir_guia(
     conexao: &mut PgConnection,
     guia_id: Uuid,
     paciente_id: Uuid,

@@ -101,6 +101,35 @@ pub async fn processar_um(estado: &Estado, orthanc: &Orthanc) -> Result<bool> {
         },
         // Recurso de glosa por webservice (tissRecursoGlosa) entra numa próxima entrega: fica
         // pendente no outbox, visível, sem se perder (R7).
+        "tiss.solicitar_autorizacao" => match item.carga["autorizacao_id"]
+            .as_str()
+            .and_then(|v| v.parse().ok())
+        {
+            Some(a) => {
+                crate::rotas::autorizacoes_resposta::enviar_pelo_outbox(
+                    estado,
+                    item.unidade_id,
+                    a,
+                    item.chave_idempotencia,
+                )
+                .await
+            }
+            None => Err(anyhow::anyhow!("carga sem autorizacao_id")),
+        },
+        "tiss.consultar_autorizacao" => match item.carga["autorizacao_id"]
+            .as_str()
+            .and_then(|v| v.parse().ok())
+        {
+            Some(a) => {
+                crate::rotas::autorizacoes_resposta::consultar_pelo_outbox(
+                    estado,
+                    item.unidade_id,
+                    a,
+                )
+                .await
+            }
+            None => Err(anyhow::anyhow!("carga sem autorizacao_id")),
+        },
         "tiss.recurso_glosa" => Err(anyhow::anyhow!(
             "envio de recurso de glosa por webservice ainda não configurado"
         )),

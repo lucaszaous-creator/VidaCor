@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT a.codigo, a.situacao, a.solicitacao AS \"solicitacao!\", k.registro_ans\n             FROM convenio.autorizacao a JOIN faturamento.contrato k ON k.id = a.contrato_id WHERE a.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "solicitacao!",
+        "type_info": "Bytea",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "solicitacao"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "registro_ans",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "registro_ans"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "6bdebe79b52a6c0e50d0ffd843fa54ad54476a81076440ea88fc23ffc1914ae9"
+}

@@ -1,0 +1,19 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO integracao.outbox (id, tipo, chave_idempotencia, carga, unidade_id, correlacao, referencia)\n         VALUES ($1, 'tiss.consultar_autorizacao', $2, $3, $4, $5, $6)\n         ON CONFLICT (tipo, referencia) WHERE referencia IS NOT NULL\n         DO UPDATE SET proximo_em = now(), tentativas = 0, concluido_em = NULL",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Jsonb",
+        "Uuid",
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "a56eb501202d0e36ce03559b15acb42f875475d64248d7aacebd674db91d9581"
+}
