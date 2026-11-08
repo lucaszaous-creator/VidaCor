@@ -130,6 +130,9 @@ export async function simularNucleo(page: Page, estado: EstadoDaSimulacao): Prom
       );
     }
     if (c.endsWith('/comunicacao')) return json(route, { whatsapp: true, motivo: null, mensagens: [{ modelo: 'confirmacao', situacao: 'enviada', resposta: 'confirmou', criado_em: '2026-11-05T12:00:00Z' }] });
+    if (c === '/v1/aparelhos') {
+      return json(route, { estudos_recebidos_hoje: 1284, estudos_sem_paciente: 1, aparelhos: Array.from({ length: 14 }, (_, k) => ({ id: `a${String(k)}`, codigo: `APA-${String(k)}`, nome: k === 0 ? 'Vivid E95 com nome de aparelho bem comprido' : `Aparelho ${String(k)}`, ae_title: `SALA${String(k)}`, modalidade: 'US', sala_id: 's', sala_nome: `Sala ${String(k)}`, ativo: k !== 3, versao: 1, situacao: k === 3 ? 'desativado' : k === 2 ? 'atencao' : 'conectado', hoje: { listas_enviadas: 12, listas_pendentes: k === 2 ? 2 : 0, listas_com_erro: k === 2 ? 2 : 0, ultimo_envio: '2026-11-06T11:30:00Z', ultimo_erro: k === 2 ? 'conexão recusada pelo aparelho' : null } })) });
+    }
     if (c === '/v1/orcamentos/catalogo') {
       return json(route, { tabela_versao: 12, limite_desconto_pontos_base: 1000, exames: [{ tuss: '40901114', nome: 'Ecocardiograma transtorácico', valor_centavos: 30000 }], pacotes: [] });
     }

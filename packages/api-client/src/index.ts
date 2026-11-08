@@ -4,6 +4,7 @@ export * from './contrato-pendencias';
 export * from './contrato-menu';
 export * from './contrato-painel';
 export * from './contrato-orcamento';
+export * from './contrato-aparelhos';
 export * from './contrato-portal';
 export * from './contrato-estoque';
 export * from './contrato-faturamento';

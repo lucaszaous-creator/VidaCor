@@ -1,0 +1,30 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE agenda.aparelho SET ativo = $2, versao = versao + 1 WHERE id = $1 AND unidade_id = $3 AND ativo <> $2 RETURNING versao",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "versao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "agenda.aparelho",
+            "name": "versao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Bool",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "81b20581c5ade15e0a9f20ed8e97ac2e4bd08cfda336a481619447ffea067f42"
+}

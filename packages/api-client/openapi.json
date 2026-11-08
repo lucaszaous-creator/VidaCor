@@ -219,6 +219,159 @@
         }
       }
     },
+    "/v1/aparelhos": {
+      "get": {
+        "tags": [
+          "aparelhos"
+        ],
+        "summary": "Aparelhos da unidade com a atividade do dia, só em números (TI e gerência).",
+        "operationId": "listar_aparelhos",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PainelDosAparelhos"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "aparelhos"
+        ],
+        "summary": "Cadastra o aparelho na sala (TI e gerência; Idempotency-Key). AE Title é único.",
+        "operationId": "cadastrar_aparelho",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovoAparelho"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AparelhoCadastrado"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/aparelhos/{id}/mudancas": {
+      "post": {
+        "tags": [
+          "aparelhos"
+        ],
+        "summary": "Desativa ou reativa o aparelho, com motivo (TI e gerência). Atômico: só muda se estiver no estado\nesperado. Desativado não recebe lista de trabalho; nada é apagado.",
+        "operationId": "mudar_aparelho",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MudancaDeAparelho"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AparelhoCadastrado"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/atendimentos": {
       "post": {
         "tags": [
@@ -7324,6 +7477,61 @@
           }
         }
       },
+      "AparelhoCadastrado": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "nome",
+          "ae_title",
+          "modalidade",
+          "sala_id",
+          "sala_nome",
+          "ativo",
+          "versao",
+          "situacao",
+          "hoje"
+        ],
+        "properties": {
+          "ae_title": {
+            "type": "string"
+          },
+          "ativo": {
+            "type": "boolean"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "hoje": {
+            "$ref": "#/components/schemas/AtividadeDoDia"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "modalidade": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "sala_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sala_nome": {
+            "type": "string"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "conectado, atencao (pendentes há mais de 5 min ou erro) ou desativado."
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "Atendimento": {
         "type": "object",
         "required": [
@@ -7448,6 +7656,42 @@
           "recebido": {
             "type": "boolean",
             "description": "Já há recebimento pago ou aguardando para este atendimento."
+          }
+        }
+      },
+      "AtividadeDoDia": {
+        "type": "object",
+        "required": [
+          "listas_enviadas",
+          "listas_pendentes",
+          "listas_com_erro"
+        ],
+        "properties": {
+          "listas_com_erro": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "listas_enviadas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "listas_pendentes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ultimo_envio": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "ultimo_erro": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Último erro técnico do envio, sem dado de paciente."
           }
         }
       },
@@ -10240,6 +10484,22 @@
           }
         }
       },
+      "MudancaDeAparelho": {
+        "type": "object",
+        "required": [
+          "tipo",
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string",
+            "description": "desativar ou reativar."
+          }
+        }
+      },
       "MudancaDePerfil": {
         "type": "object",
         "required": [
@@ -10395,6 +10655,34 @@
                 "$ref": "#/components/schemas/DescritoresTirads"
               }
             ]
+          }
+        }
+      },
+      "NovoAparelho": {
+        "type": "object",
+        "required": [
+          "nome",
+          "ae_title",
+          "modalidade",
+          "sala_id",
+          "motivo"
+        ],
+        "properties": {
+          "ae_title": {
+            "type": "string"
+          },
+          "modalidade": {
+            "type": "string"
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "sala_id": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },
@@ -10965,6 +11253,30 @@
           },
           "resumo": {
             "$ref": "#/components/schemas/ResumoAuditoria"
+          }
+        }
+      },
+      "PainelDosAparelhos": {
+        "type": "object",
+        "required": [
+          "aparelhos",
+          "estudos_recebidos_hoje",
+          "estudos_sem_paciente"
+        ],
+        "properties": {
+          "aparelhos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AparelhoCadastrado"
+            }
+          },
+          "estudos_recebidos_hoje": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "estudos_sem_paciente": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },

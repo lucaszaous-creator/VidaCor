@@ -239,3 +239,26 @@ export const manipuladoresOrcamento = [
     );
   }),
 ];
+
+/** Aparelhos simulados (regras reais em `crates/api/tests/aparelhos.rs`). */
+const aparelhoSimulado = (id: string, nome: string, sala: string, ae: string, extra: Partial<{ ativo: boolean; situacao: string; erro: number }> = {}) => ({
+  id, codigo: `APA-${id}`, nome, ae_title: ae, modalidade: 'US', sala_id: `s-${id}`, sala_nome: sala, ativo: extra.ativo ?? true, versao: 1,
+  situacao: extra.situacao ?? 'conectado',
+  hoje: { listas_enviadas: 12, listas_pendentes: extra.erro ?? 0, listas_com_erro: extra.erro ?? 0, ultimo_envio: '2026-11-06T11:30:00Z', ultimo_erro: (extra.erro ?? 0) > 0 ? 'conexão recusada pelo aparelho' : null },
+});
+export const manipuladoresAparelhos = [
+  http.get('*/v1/aparelhos', () =>
+    temPerfil('ti', 'gerente')
+      ? HttpResponse.json({ estudos_recebidos_hoje: 41, estudos_sem_paciente: 1, aparelhos: [aparelhoSimulado('1', 'Vivid E95', 'Sala 1', 'SALA1'), aparelhoSimulado('6', 'Revolution CT', 'Sala 6', 'SALA6', { situacao: 'atencao', erro: 2 })] })
+      : semPermissao('ver os aparelhos'),
+  ),
+  http.post('*/v1/aparelhos/:id/mudancas', async ({ request, params }) => {
+    const c = (await registrar('mudar-aparelho', request)) as { tipo: string };
+    return HttpResponse.json({ ...aparelhoSimulado(String(params.id), 'Vivid E95', 'Sala 1', 'SALA1', { ativo: c.tipo === 'reativar', situacao: c.tipo === 'reativar' ? 'conectado' : 'desativado' }), versao: 2 });
+  }),
+  http.post('*/v1/aparelhos', async ({ request }) => {
+    const c = (await registrar('cadastrar-aparelho', request)) as { nome: string; ae_title: string };
+    if (c.ae_title === 'SALA1') return problema(409, 'ae-title-em-uso', 'Este AE Title já é de outro aparelho. Nada foi cadastrado.');
+    return HttpResponse.json(aparelhoSimulado('9', c.nome, 'Sala 2', c.ae_title), { status: 201 });
+  }),
+];

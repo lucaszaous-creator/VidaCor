@@ -5,6 +5,7 @@ pub mod achados;
 pub mod achados_contrato;
 pub mod agenda;
 pub mod agendamentos;
+pub mod aparelhos;
 pub mod atendimentos;
 pub mod autorizacoes;
 pub mod autorizacoes_contrato;
@@ -156,6 +157,11 @@ pub fn rotas() -> Router<Estado> {
         )
         .route("/v1/atendimentos/{id}/chamadas", post(chamada::chamar))
         .route("/v1/painel-de-chamada", get(chamada::painel))
+        .route(
+            "/v1/aparelhos",
+            get(aparelhos::listar).post(aparelhos::cadastrar),
+        )
+        .route("/v1/aparelhos/{id}/mudancas", post(aparelhos::mudar))
         .route("/v1/orcamentos/catalogo", get(orcamentos::catalogo))
         .route(
             "/v1/orcamentos",

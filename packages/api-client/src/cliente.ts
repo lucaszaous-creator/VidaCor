@@ -53,6 +53,7 @@ import type { CadeiaDoAtendimento } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
 import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel';
 import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-orcamento';
+import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
 import type { DecisaoDePerfil, ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
 import type { ContaBancaria, NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
 import type { ComunicacaoDoPaciente, LembretesEnfileirados, PreferenciaWhatsapp } from './contrato-comunicacao';
@@ -315,6 +316,14 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
 
     /** Painel da TV de chamada (dispositivo TV, recepção e gerência). */
     painelDeChamada: (): Promise<Painel> => ler<Painel>('/v1/painel-de-chamada'),
+
+    /** Aparelhos e integração DICOM (TI e gerência). */
+    aparelhos: {
+      painel: (): Promise<PainelDosAparelhos> => ler<PainelDosAparelhos>('/v1/aparelhos'),
+      cadastrar: (corpo: NovoAparelho, o: OpcoesDeEscrita): Promise<AparelhoCadastrado> => criar<AparelhoCadastrado>('POST', '/v1/aparelhos', corpo, o),
+      mudar: (id: string, corpo: MudancaDeAparelho, o: OpcoesDeEscrita): Promise<AparelhoCadastrado> =>
+        criar<AparelhoCadastrado>('POST', `/v1/aparelhos/${seg(id)}/mudancas`, corpo, o),
+    },
 
     /** Orçamento do particular: o servidor calcula preço, pacote e desconto (G1). */
     orcamentos: {

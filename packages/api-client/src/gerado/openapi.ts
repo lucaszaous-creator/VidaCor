@@ -55,6 +55,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/aparelhos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Aparelhos da unidade com a atividade do dia, só em números (TI e gerência). */
+        get: operations["listar_aparelhos"];
+        put?: never;
+        /** Cadastra o aparelho na sala (TI e gerência; Idempotency-Key). AE Title é único. */
+        post: operations["cadastrar_aparelho"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/aparelhos/{id}/mudancas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Desativa ou reativa o aparelho, com motivo (TI e gerência). Atômico: só muda se estiver no estado
+         *     esperado. Desativado não recebe lista de trabalho; nada é apagado.
+         */
+        post: operations["mudar_aparelho"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/atendimentos": {
         parameters: {
             query?: never;
@@ -2218,6 +2256,23 @@ export interface components {
             ae_title: string;
             nome: string;
         };
+        AparelhoCadastrado: {
+            ae_title: string;
+            ativo: boolean;
+            codigo: string;
+            hoje: components["schemas"]["AtividadeDoDia"];
+            /** Format: uuid */
+            id: string;
+            modalidade: string;
+            nome: string;
+            /** Format: uuid */
+            sala_id: string;
+            sala_nome: string;
+            /** @description conectado, atencao (pendentes há mais de 5 min ou erro) ou desativado. */
+            situacao: string;
+            /** Format: int32 */
+            versao: number;
+        };
         Atendimento: {
             accession: string;
             /** Format: uuid */
@@ -2249,6 +2304,18 @@ export interface components {
             procedimentos: components["schemas"]["ProcedimentoACobrar"][];
             /** @description Já há recebimento pago ou aguardando para este atendimento. */
             recebido: boolean;
+        };
+        AtividadeDoDia: {
+            /** Format: int64 */
+            listas_com_erro: number;
+            /** Format: int64 */
+            listas_enviadas: number;
+            /** Format: int64 */
+            listas_pendentes: number;
+            /** Format: date-time */
+            ultimo_envio?: string | null;
+            /** @description Último erro técnico do envio, sem dado de paciente. */
+            ultimo_erro?: string | null;
         };
         AutorizacaoDesconto: {
             codigo: string;
@@ -3089,6 +3156,11 @@ export interface components {
             /** Format: date */
             validade: string;
         };
+        MudancaDeAparelho: {
+            motivo: string;
+            /** @description desativar ou reativar. */
+            tipo: string;
+        };
         MudancaDePerfil: {
             motivo: string;
             perfil?: string | null;
@@ -3140,6 +3212,14 @@ export interface components {
             maior_diametro_mm?: number | null;
             sistema: components["schemas"]["SistemaClassificacao"];
             tirads?: null | components["schemas"]["DescritoresTirads"];
+        };
+        NovoAparelho: {
+            ae_title: string;
+            modalidade: string;
+            motivo: string;
+            nome: string;
+            /** Format: uuid */
+            sala_id: string;
         };
         NovoOrcamento: {
             desconto?: null | components["schemas"]["DescontoDoOrcamento"];
@@ -3311,6 +3391,13 @@ export interface components {
             conjuntos: components["schemas"]["ConjuntoDeRegras"][];
             grupos: components["schemas"]["GrupoDePendencias"][];
             resumo: components["schemas"]["ResumoAuditoria"];
+        };
+        PainelDosAparelhos: {
+            aparelhos: components["schemas"]["AparelhoCadastrado"][];
+            /** Format: int64 */
+            estudos_recebidos_hoje: number;
+            /** Format: int64 */
+            estudos_sem_paciente: number;
         };
         PedidoAbertura: {
             /** Format: int64 */
@@ -4130,6 +4217,115 @@ export interface operations {
                 };
             };
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_aparelhos: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PainelDosAparelhos"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    cadastrar_aparelho: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoAparelho"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AparelhoCadastrado"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    mudar_aparelho: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MudancaDeAparelho"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AparelhoCadastrado"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

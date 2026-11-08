@@ -23,6 +23,7 @@ import { TelaLastro } from './telas/lastro/TelaLastro';
 import { TelaIndicadores } from './telas/indicadores/TelaIndicadores';
 import { TelaFinanceiro } from './telas/financeiro/TelaFinanceiro';
 import { TelaUsuarios } from './telas/usuarios/TelaUsuarios';
+import { TelaAparelhos } from './telas/aparelhos/TelaAparelhos';
 import { TelaOrcamento } from './telas/orcamento/TelaOrcamento';
 import { TelaPainelDeChamada } from './telas/painel/TelaPainelDeChamada';
 import { TelaExameExterno } from './telas/externo/TelaExameExterno';
@@ -151,6 +152,7 @@ const rotaApp = createRoute({
   component: Casca,
 });
 
+const rotaAparelhos = createRoute({ getParentRoute: () => rotaApp, path: '/aparelhos', component: TelaAparelhos });
 const rotaOrcamento = createRoute({ getParentRoute: () => rotaApp, path: '/orcamentos', component: TelaOrcamento });
 
 const rotaInicio = createRoute({
@@ -225,6 +227,7 @@ const arvore = raiz.addChildren([
   rotaApp.addChildren([
     rotaInicio,
     rotaOrcamento,
+    rotaAparelhos,
     rotaAgenda,
     rotaRecepcao,
     rotaNovoAgendamento,

@@ -248,6 +248,10 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await ir('/orcamentos');
   await esperar(page, 'region', 'Orçamentos recentes');
   await ok('36-orcamento');
+  await ir('/aparelhos');
+  await page.getByRole('button', { name: /Aparelho 2/ }).click();
+  await esperar(page, 'region', 'Detalhe do aparelho');
+  await ok('37-aparelhos');
   estado.sessao = SESSOES.tv;
   await ir('/telao');
   await esperar(page, 'region', 'Chamada atual');

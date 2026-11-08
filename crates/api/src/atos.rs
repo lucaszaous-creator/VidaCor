@@ -48,6 +48,7 @@ pub enum Ato {
     ChamadaFazer,
     PainelVer,
     OrcamentoEmitir,
+    AparelhoAdministrar,
     AutorizacaoPedir,
     AutorizacaoVer,
 }
@@ -110,6 +111,8 @@ impl Ato {
             A::PainelVer => &["tv", "recepcao", "gerente"],
             // Orçamento do particular (docs/04 Agenda): recepção emite; gerência acompanha.
             A::OrcamentoEmitir => &["recepcao", "gerente"],
+            // Aparelhos e integrações (docs/18 § 3: TI administra aparelhos, sem dado clínico).
+            A::AparelhoAdministrar => &["ti", "gerente"],
             // Autorização pedida pelo sistema (docs/22 E4): recepção e faturista pedem; gerente acompanha.
             A::AutorizacaoPedir => &["recepcao", "faturista"],
             A::AutorizacaoVer => &["recepcao", "faturista", "gerente"],
@@ -122,7 +125,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 46] = [
+    const TODOS: [Ato; 47] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -167,6 +170,7 @@ mod testes {
         Ato::ChamadaFazer,
         Ato::PainelVer,
         Ato::OrcamentoEmitir,
+        Ato::AparelhoAdministrar,
         Ato::AutorizacaoPedir,
         Ato::AutorizacaoVer,
     ];
@@ -174,11 +178,11 @@ mod testes {
     #[test]
     fn ti_so_administra_contas_e_sistema_nao_tem_ato_de_tela() {
         // docs/18: TI administra usuários, aparelhos e integrações, sem dado clínico nem financeiro.
-        // O único ato de tela da TI é administrar contas (DEC-2026-11-08-69).
+        // Os atos de tela da TI são administrar contas e aparelhos (DEC-2026-11-08-69 e 75).
         for ato in TODOS {
             assert_eq!(
                 ato.concedido_a("ti"),
-                ato == Ato::UsuarioAdministrar,
+                matches!(ato, Ato::UsuarioAdministrar | Ato::AparelhoAdministrar),
                 "{ato:?}"
             );
             assert!(!ato.concedido_a("sistema"), "{ato:?}");

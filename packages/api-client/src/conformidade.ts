@@ -9,6 +9,7 @@ import type { AutorizacaoDetalhe, AutorizacaoResumo, NovoPedidoAutorizacao, Pedi
 import type { MenuDoObjeto } from './contrato-menu';
 import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel';
 import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-orcamento';
+import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
 import type { ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
@@ -158,3 +159,7 @@ export type ConfereRespostaDoPortal = Cabe<RespostaDoPortal, S['RespostaDoPortal
 export type ConfereCatalogoDoOrcamento = Cabe<CatalogoDoOrcamento, S['CatalogoDoOrcamento']>;
 export type ConfereOrcamento = Cabe<Orcamento, S['Orcamento']>;
 export type ConfereNovoOrcamento = Cabe<NovoOrcamento, S['NovoOrcamento']>;
+export type ConfereAparelhoCadastrado = Cabe<AparelhoCadastrado, S['AparelhoCadastrado']>;
+export type ConferePainelDosAparelhos = Cabe<PainelDosAparelhos, S['PainelDosAparelhos']>;
+export type ConfereNovoAparelho = Cabe<NovoAparelho, S['NovoAparelho']>;
+export type ConfereMudancaDeAparelho = Cabe<MudancaDeAparelho, S['MudancaDeAparelho']>;

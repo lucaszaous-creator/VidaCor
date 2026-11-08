@@ -1,0 +1,168 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT a.id, a.codigo, a.nome, a.ae_title, a.modalidade, a.sala_id, s.nome AS sala_nome, a.ativo, a.versao,\n                  count(o.id) FILTER (WHERE o.concluido_em IS NOT NULL) AS \"enviadas!\",\n                  count(o.id) FILTER (WHERE o.concluido_em IS NULL) AS \"pendentes!\",\n                  count(o.id) FILTER (WHERE o.concluido_em IS NULL AND o.ultimo_erro IS NOT NULL) AS \"com_erro!\",\n                  count(o.id) FILTER (WHERE o.concluido_em IS NULL AND o.criado_em < now() - interval '5 minutes') AS \"atrasadas!\",\n                  max(o.concluido_em) AS ultimo_envio,\n                  (array_agg(left(o.ultimo_erro, 200) ORDER BY o.criado_em DESC) FILTER (WHERE o.concluido_em IS NULL AND o.ultimo_erro IS NOT NULL))[1] AS ultimo_erro\n             FROM agenda.aparelho a\n             JOIN agenda.sala s ON s.id = a.sala_id\n             LEFT JOIN integracao.outbox o ON o.tipo = 'worklist.criar' AND o.carga->>'aparelho_id' = a.id::text\n                  AND o.criado_em >= $2 AND o.criado_em < $3\n            WHERE a.unidade_id = comum.ctx_unidade() AND ($1::uuid IS NULL OR a.id = $1)\n            GROUP BY a.id, s.nome\n            ORDER BY s.nome, a.nome",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.aparelho",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.aparelho",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.aparelho",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "ae_title",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.aparelho",
+            "name": "ae_title"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "modalidade",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.aparelho",
+            "name": "modalidade"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "sala_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.aparelho",
+            "name": "sala_id"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "sala_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "ativo",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "agenda.aparelho",
+            "name": "ativo"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "versao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "agenda.aparelho",
+            "name": "versao"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "enviadas!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 10,
+        "name": "pendentes!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 11,
+        "name": "com_erro!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 12,
+        "name": "atrasadas!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 13,
+        "name": "ultimo_envio",
+        "type_info": "Timestamptz",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 14,
+        "name": "ultimo_erro",
+        "type_info": "Text",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "a4ceff98d60d2a34d51f89c7e917e7aa068a16fb5588871c494ef8d6f2ddd2ef"
+}
