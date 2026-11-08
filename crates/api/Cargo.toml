@@ -40,7 +40,7 @@ openidconnect = { version = "4", default-features = false, features = ["reqwest"
 
 [dev-dependencies]
 http-body-util = "0.1.3"
-testcontainers-modules = { version = "0.13.0", features = ["postgres", "blocking"] }
+testcontainers-modules = { version = "0.15.0", features = ["postgres", "blocking"] }
 
 [lints]
 workspace = true

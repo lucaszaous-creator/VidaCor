@@ -13,7 +13,10 @@ use sqlx::PgPool;
 use uuid::Uuid;
 
 pub struct Oidc {
-    metadados: CoreProviderMetadata,
+    // Chaves e endpoints do provedor. Trocam quando o Keycloak gira as chaves de assinatura.
+    metadados: std::sync::RwLock<CoreProviderMetadata>,
+    emissor: IssuerUrl,
+    ultima_descoberta: std::sync::Mutex<std::time::Instant>,
     cliente_id: ClientId,
     cliente_segredo: Option<ClientSecret>,
     retorno: RedirectUrl,
@@ -51,11 +54,12 @@ impl Oidc {
             .redirect(openidconnect::reqwest::redirect::Policy::none())
             .timeout(std::time::Duration::from_secs(10))
             .build()?;
-        let metadados =
-            CoreProviderMetadata::discover_async(IssuerUrl::new(cfg.emissor.clone())?, &http)
-                .await?;
+        let emissor = IssuerUrl::new(cfg.emissor.clone())?;
+        let metadados = CoreProviderMetadata::discover_async(emissor.clone(), &http).await?;
         Ok(Self {
-            metadados,
+            metadados: std::sync::RwLock::new(metadados),
+            emissor,
+            ultima_descoberta: std::sync::Mutex::new(std::time::Instant::now()),
             cliente_id: ClientId::new(cfg.cliente_id.clone()),
             cliente_segredo: cfg.cliente_segredo.clone().map(ClientSecret::new),
             retorno: RedirectUrl::new(format!(
@@ -76,8 +80,12 @@ impl Oidc {
         openidconnect::EndpointMaybeSet,
         openidconnect::EndpointMaybeSet,
     > {
+        let metadados = match self.metadados.read() {
+            Ok(m) => m.clone(),
+            Err(envenenado) => envenenado.into_inner().clone(),
+        };
         CoreClient::from_provider_metadata(
-            self.metadados.clone(),
+            metadados,
             self.cliente_id.clone(),
             self.cliente_segredo.clone(),
         )
@@ -149,12 +157,27 @@ impl Oidc {
                 falhou()
             })?;
         let id_token = resposta.id_token().ok_or_else(falhou)?;
-        let declaracoes = id_token
-            .claims(&cliente.id_token_verifier(), &Nonce::new(pendente.nonce))
-            .map_err(|e| {
+        let nonce = Nonce::new(pendente.nonce);
+        let declaracoes = match id_token.claims(&cliente.id_token_verifier(), &nonce) {
+            Ok(d) => d.clone(),
+            // Assinatura com chave desconhecida: o provedor pode ter girado as chaves. Busca as
+            // chaves de novo (no máximo a cada 30 s) e confere uma única vez mais. Falha fechada.
+            Err(openidconnect::ClaimsVerificationError::SignatureVerification(_))
+                if self.redescobrir().await =>
+            {
+                let novo = self.cliente();
+                let verificador = novo.id_token_verifier();
+                let conferido = id_token.claims(&verificador, &nonce).cloned();
+                conferido.map_err(|e| {
+                    tracing::warn!(erro = %e, "ID token recusado após renovar as chaves");
+                    falhou()
+                })?
+            }
+            Err(e) => {
                 tracing::warn!(erro = %e, "ID token recusado");
-                falhou()
-            })?;
+                return Err(falhou());
+            }
+        };
         let login = declaracoes
             .preferred_username()
             .map(|u| u.as_str().to_owned())
@@ -171,6 +194,35 @@ impl Oidc {
             falhou()
         })?;
         Ok((usuario.id, usuario.unidade_id))
+    }
+}
+
+impl Oidc {
+    /// Busca de novo a configuração e as chaves do provedor. Devolve `true` se renovou.
+    async fn redescobrir(&self) -> bool {
+        {
+            let Ok(mut ultima) = self.ultima_descoberta.lock() else {
+                return false;
+            };
+            if ultima.elapsed() < std::time::Duration::from_secs(30) {
+                return false;
+            }
+            *ultima = std::time::Instant::now();
+        }
+        match CoreProviderMetadata::discover_async(self.emissor.clone(), &self.http).await {
+            Ok(novos) => {
+                if let Ok(mut m) = self.metadados.write() {
+                    *m = novos;
+                    tracing::info!("chaves do provedor de identidade renovadas");
+                    return true;
+                }
+                false
+            }
+            Err(e) => {
+                tracing::warn!(erro = %e, "não foi possível renovar as chaves do provedor");
+                false
+            }
+        }
     }
 }
 

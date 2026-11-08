@@ -6,7 +6,16 @@ all-features = false
 
 [advisories]
 # Alertas do RustSec. Exceção só com motivo, data e responsável, registrada em docs/decisoes.md.
-ignore = []
+ignore = [
+  # rsa (Marvin): afeta operações com chave PRIVADA RSA (decifrar/assinar) por canal de tempo. O núcleo
+  # só VERIFICA assinatura do ID token com a chave pública do Keycloak (openidconnect); não há chave
+  # privada RSA no processo. Sem versão corrigida publicada. Revisar a cada atualização do
+  # openidconnect. DEC-2026-11-08-47.
+  { id = "RUSTSEC-2023-0071", reason = "só verificação com chave pública; sem correção publicada" },
+  # astral-tokio-tar sem manutenção: entra só como dependência de TESTE (testcontainers) e não vai
+  # para o binário. DEC-2026-11-08-47.
+  { id = "RUSTSEC-2026-0440", reason = "dependência só de teste (testcontainers)" },
+]
 
 [licenses]
 allow = [

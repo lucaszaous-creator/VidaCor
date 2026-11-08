@@ -35,6 +35,10 @@ jobs:
         run: cargo clippy --workspace --all-targets -- -D warnings
       - name: Testes (unidade e integração com Testcontainers)
         run: cargo test --workspace
+      - name: Cadeia de suprimentos (cargo-deny, SEC-SUP-1)
+        run: |
+          cargo install cargo-deny --locked --version 0.18.9
+          cargo deny check
       - name: Contrato OpenAPI atualizado
         run: |
           cargo run -q -p vidacor-api -- --openapi > /tmp/openapi.json
@@ -59,3 +63,7 @@ jobs:
       - run: pnpm -r --if-present typecheck
       - run: pnpm -r --if-present test
       - run: pnpm -r --if-present build
+      - name: A tela cabe na janela (1440x900 e 1280x800, docs/05)
+        run: |
+          pnpm --filter @vidacor/web exec playwright install --with-deps chromium
+          pnpm --filter @vidacor/web test:telas
