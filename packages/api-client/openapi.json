@@ -1969,6 +1969,483 @@
         }
       }
     },
+    "/v1/financeiro/contas": {
+      "get": {
+        "tags": [
+          "financeiro"
+        ],
+        "summary": "Contas bancárias da unidade (para a baixa).",
+        "operationId": "contas",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ContaBancaria"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/financeiro/extratos": {
+      "post": {
+        "tags": [
+          "financeiro"
+        ],
+        "summary": "Importa linhas do extrato (o mesmo ID do banco não entra duas vezes).",
+        "operationId": "importar_extrato",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportacaoDeExtrato"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtratoImportado"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/financeiro/regras-repasse": {
+      "post": {
+        "tags": [
+          "financeiro"
+        ],
+        "summary": "Nova versão da regra de repasse do médico (a anterior fica no histórico; reautenticação).",
+        "operationId": "nova_regra",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovaRegraRepasse"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegraRepasse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/financeiro/repasse": {
+      "get": {
+        "tags": [
+          "financeiro"
+        ],
+        "summary": "Prévia do repasse da competência (financeiro e gerência).",
+        "operationId": "previa",
+        "parameters": [
+          {
+            "name": "competencia",
+            "in": "query",
+            "description": "AAAA-MM.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RepasseDoMedico"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/financeiro/repasse/{competencia}/titulos": {
+      "post": {
+        "tags": [
+          "financeiro"
+        ],
+        "summary": "Gera os títulos a pagar do repasse (um por médico e competência; repetir não duplica).",
+        "operationId": "gerar",
+        "parameters": [
+          {
+            "name": "competencia",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RepasseGerado"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/financeiro/resumo": {
+      "get": {
+        "tags": [
+          "financeiro"
+        ],
+        "summary": "Resumo do mês (extrato e títulos em aberto).",
+        "operationId": "resumo",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResumoFinanceiro"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/financeiro/titulos": {
+      "get": {
+        "tags": [
+          "financeiro"
+        ],
+        "summary": "Títulos por tipo e situação (financeiro e gerência).",
+        "operationId": "titulos",
+        "parameters": [
+          {
+            "name": "tipo",
+            "in": "query",
+            "description": "pagar ou receber.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "situacao",
+            "in": "query",
+            "description": "aberto, pago ou cancelado.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Titulo"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "financeiro"
+        ],
+        "summary": "Lança um título. A pagar sempre precisa de aprovação de outra pessoa (duas acima de R$ 10 mil).",
+        "operationId": "lancar",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovoTitulo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Titulo"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/financeiro/titulos/{id}/aprovacoes": {
+      "post": {
+        "tags": [
+          "financeiro"
+        ],
+        "summary": "Aprova um título a pagar (reautenticação; quem lançou não aprova; cada pessoa aprova uma vez).",
+        "operationId": "aprovar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Titulo"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/financeiro/titulos/{id}/baixa": {
+      "post": {
+        "tags": [
+          "financeiro"
+        ],
+        "summary": "Baixa (pagamento ou recebimento) do título: uma só (G2); a pagar só com as aprovações completas.",
+        "operationId": "baixar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoBaixa"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Titulo"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/guias": {
       "post": {
         "tags": [
@@ -5360,6 +5837,26 @@
           }
         }
       },
+      "ContaBancaria": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "nome"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
       "Contingencia": {
         "type": "object",
         "required": [
@@ -5951,6 +6448,23 @@
           }
         }
       },
+      "ExtratoImportado": {
+        "type": "object",
+        "required": [
+          "novas",
+          "repetidas"
+        ],
+        "properties": {
+          "novas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "repetidas": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "Faixa": {
         "type": "object",
         "required": [
@@ -6097,6 +6611,25 @@
           "validade": {
             "type": "string",
             "format": "date"
+          }
+        }
+      },
+      "ImportacaoDeExtrato": {
+        "type": "object",
+        "required": [
+          "conta_id",
+          "linhas"
+        ],
+        "properties": {
+          "conta_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "linhas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinhaDoExtrato"
+            }
           }
         }
       },
@@ -6615,6 +7148,32 @@
           }
         }
       },
+      "LinhaDoExtrato": {
+        "type": "object",
+        "required": [
+          "id_banco",
+          "data",
+          "valor_centavos",
+          "descricao"
+        ],
+        "properties": {
+          "data": {
+            "type": "string",
+            "format": "date"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "id_banco": {
+            "type": "string"
+          },
+          "valor_centavos": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Positivo entra, negativo sai."
+          }
+        }
+      },
       "LinkCriado": {
         "type": "object",
         "required": [
@@ -6842,6 +7401,28 @@
           }
         }
       },
+      "NovaRegraRepasse": {
+        "type": "object",
+        "required": [
+          "medico_id",
+          "percentual_pb",
+          "vigente_desde"
+        ],
+        "properties": {
+          "medico_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "percentual_pb": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "vigente_desde": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
       "NovoAchado": {
         "type": "object",
         "description": "Novo achado. Só os descritores do sistema escolhido são lidos; pontos, categoria e conduta\nenviados pela tela são ignorados (o servidor calcula, G1).",
@@ -6968,6 +7549,39 @@
           "pontos_base": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "NovoTitulo": {
+        "type": "object",
+        "required": [
+          "tipo",
+          "descricao",
+          "contraparte",
+          "categoria",
+          "valor_centavos",
+          "vencimento"
+        ],
+        "properties": {
+          "categoria": {
+            "type": "string"
+          },
+          "contraparte": {
+            "type": "string"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "valor_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "vencimento": {
+            "type": "string",
+            "format": "date"
           }
         }
       },
@@ -7196,6 +7810,31 @@
           "solicitante_id": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "PedidoBaixa": {
+        "type": "object",
+        "required": [
+          "conta_id",
+          "data"
+        ],
+        "properties": {
+          "conta_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "type": "string",
+            "format": "date"
+          },
+          "extrato_linha_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "Linha do extrato que comprova (conciliação na mesma operação). Valor e sinal precisam bater."
           }
         }
       },
@@ -8056,6 +8695,33 @@
           }
         }
       },
+      "RegraRepasse": {
+        "type": "object",
+        "required": [
+          "id",
+          "versao",
+          "percentual_pb",
+          "vigente_desde"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "percentual_pb": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "vigente_desde": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
       "RegraVigente": {
         "type": "object",
         "description": "Regra vigente de um sistema de classificação.",
@@ -8087,6 +8753,85 @@
           }
         }
       },
+      "RepasseDoMedico": {
+        "type": "object",
+        "required": [
+          "medico_id",
+          "medico",
+          "laudos",
+          "base_centavos",
+          "sem_preco"
+        ],
+        "properties": {
+          "base_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "laudos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "medico": {
+            "type": "string"
+          },
+          "medico_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "percentual_pb": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "Nulo quando o médico não tem regra vigente (nada é calculado por suposição)."
+          },
+          "regra_versao": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
+          },
+          "sem_preco": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Laudos cujo procedimento não está na tabela de preços (não entram na base)."
+          },
+          "valor_centavos": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
+          }
+        }
+      },
+      "RepasseGerado": {
+        "type": "object",
+        "required": [
+          "titulos_criados",
+          "ja_existiam",
+          "sem_regra"
+        ],
+        "properties": {
+          "ja_existiam": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sem_regra": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Médicos sem regra vigente: nada foi gerado para eles."
+          },
+          "titulos_criados": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "ResultadoBipe": {
         "type": "object",
         "required": [
@@ -8104,6 +8849,48 @@
           "worklist": {
             "type": "string",
             "description": "enviada (primeiro bipe) ou ja_enviada (bipe repetido, sem segundo item de worklist)."
+          }
+        }
+      },
+      "ResumoFinanceiro": {
+        "type": "object",
+        "required": [
+          "entradas_do_mes_centavos",
+          "saidas_do_mes_centavos",
+          "saldo_em_contas_centavos",
+          "a_pagar_aberto_centavos",
+          "a_receber_aberto_centavos",
+          "aguardando_aprovacao",
+          "extrato_sem_conciliacao"
+        ],
+        "properties": {
+          "a_pagar_aberto_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "a_receber_aberto_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "aguardando_aprovacao": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "entradas_do_mes_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "extrato_sem_conciliacao": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "saidas_do_mes_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "saldo_em_contas_centavos": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -8226,6 +9013,66 @@
           "situacao": {
             "type": "string",
             "description": "valido ou indisponivel (vencido, usado, revogado ou inexistente: a mesma resposta)."
+          }
+        }
+      },
+      "Titulo": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "tipo",
+          "descricao",
+          "contraparte",
+          "categoria",
+          "valor_centavos",
+          "vencimento",
+          "situacao",
+          "aprovacoes_exigidas",
+          "aprovacoes",
+          "vencido"
+        ],
+        "properties": {
+          "aprovacoes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "aprovacoes_exigidas": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "categoria": {
+            "type": "string"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "contraparte": {
+            "type": "string"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "situacao": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "valor_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "vencido": {
+            "type": "boolean"
+          },
+          "vencimento": {
+            "type": "string",
+            "format": "date"
           }
         }
       },

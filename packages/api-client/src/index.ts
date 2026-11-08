@@ -7,6 +7,7 @@ export * from './contrato-estoque';
 export * from './contrato-lastro';
 export * from './contrato-indicadores';
 export * from './contrato-comunicacao';
+export * from './contrato-financeiro';
 export * from './contrato-laudo-estruturado';
 export { ErroDaApi, ErroSemConexao, ehProblemaHttp, ehReautenticacao } from './erros';
 export { criarCliente, novaChaveDeIdempotencia } from './cliente';

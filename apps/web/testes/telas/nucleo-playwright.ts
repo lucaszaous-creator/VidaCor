@@ -128,6 +128,9 @@ export async function simularNucleo(page: Page, estado: EstadoDaSimulacao): Prom
       );
     }
     if (c.endsWith('/comunicacao')) return json(route, { whatsapp: true, motivo: null, mensagens: [{ modelo: 'confirmacao', situacao: 'enviada', resposta: 'confirmou', criado_em: '2026-11-05T12:00:00Z' }] });
+    if (c === '/v1/financeiro/resumo') return json(route, { entradas_do_mes_centavos: 41270000, saidas_do_mes_centavos: 28730000, saldo_em_contas_centavos: 53890000, a_pagar_aberto_centavos: 1500000, a_receber_aberto_centavos: 31280000, aguardando_aprovacao: 1, extrato_sem_conciliacao: 3 });
+    if (c === '/v1/financeiro/titulos') return json(route, Array.from({ length: 20 }, (_, k) => ({ id: `t${String(k)}`, codigo: `TIT-2026-0000${String(k)}`, tipo: 'pagar', descricao: 'Material de consumo, nota fiscal número 1203', contraparte: 'Distribuidora de produtos hospitalares fictícia', categoria: 'fornecedor', valor_centavos: 1500000 + k, vencimento: '2026-11-20', situacao: 'aberto', aprovacoes_exigidas: 2, aprovacoes: 1, vencido: k % 3 === 0 })));
+    if (c === '/v1/financeiro/contas') return json(route, []);
     if (c === '/v1/indicadores') {
       return json(route, { de: '2026-10-08', ate: '2026-11-06', agendamentos: 120, atendimentos: 104, faltas: 9, taxa_de_faltas: 0.08, receita_centavos: 4480000, recebimentos: 118, ticket_medio_centavos: 37966, tempo_medio_de_laudo_horas: 6.4,
         producao: Array.from({ length: 25 }, (_, k) => ({ exame: `Exame número ${String(k)} com nome comprido para quebrar`, atendimentos: 50 - k })),

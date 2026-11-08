@@ -16,6 +16,7 @@ pub mod estornos;
 pub mod estudos;
 pub mod etiquetas;
 pub mod eventos;
+pub mod financeiro;
 pub mod indicadores;
 pub mod lastro_explorador;
 pub mod laudos;
@@ -24,6 +25,7 @@ pub mod pacientes;
 pub mod pendencias;
 pub mod portal;
 pub mod portal_acesso;
+pub mod repasse;
 pub mod respostas;
 pub mod sala;
 pub mod saude;
@@ -136,6 +138,30 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/atendimentos/{id}/contraste", post(estoque::contraste))
         .route("/v1/lastro/cadeia", get(lastro_explorador::cadeia))
         .route("/v1/indicadores", get(indicadores::indicadores))
+        .route(
+            "/v1/financeiro/titulos",
+            get(financeiro::titulos).post(financeiro::lancar),
+        )
+        .route(
+            "/v1/financeiro/titulos/{id}/aprovacoes",
+            post(financeiro::aprovar),
+        )
+        .route(
+            "/v1/financeiro/titulos/{id}/baixa",
+            post(financeiro::baixar),
+        )
+        .route(
+            "/v1/financeiro/extratos",
+            post(financeiro::importar_extrato),
+        )
+        .route("/v1/financeiro/resumo", get(financeiro::resumo))
+        .route("/v1/financeiro/contas", get(financeiro::contas))
+        .route("/v1/financeiro/repasse", get(repasse::previa))
+        .route(
+            "/v1/financeiro/repasse/{competencia}/titulos",
+            post(repasse::gerar),
+        )
+        .route("/v1/financeiro/regras-repasse", post(repasse::nova_regra))
         .route("/v1/estornos", get(estornos::listar))
         .route("/v1/menu/agendamento/{id}", get(menu::agendamento))
         .route("/v1/menu/atendimento/{id}", get(menu::atendimento))

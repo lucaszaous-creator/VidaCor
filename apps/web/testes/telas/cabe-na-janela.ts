@@ -235,6 +235,9 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await ir('/indicadores');
   await esperar(page, 'region', 'Resumo');
   await ok('31-indicadores');
+  await ir('/financeiro');
+  await esperar(page, 'region', 'Resumo do mês');
+  await ok('32-financeiro');
   estado.sessao = SESSOES.recepcao;
   await ir('/contingencia');
   await page.getByText('Nenhuma contingência aberta').waitFor();

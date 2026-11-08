@@ -1,0 +1,40 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT valor_centavos, conta_id FROM financeiro.extrato_linha WHERE id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "valor_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "financeiro.extrato_linha",
+            "name": "valor_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "conta_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "financeiro.extrato_linha",
+            "name": "conta_id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "b1707e8f24513491ddf281a8bf4e155211430375e950ceea0ef79eda8393a4d5"
+}

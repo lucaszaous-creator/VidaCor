@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO financeiro.aprovacao (titulo_id, aprovado_por, unidade_id, correlacao) VALUES ($1, $2, $3, $4)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "18fb8a704e20a26e3ad59d16b21010c76d8358b021a35be7eeb4b7f3c63a8cf0"
+}

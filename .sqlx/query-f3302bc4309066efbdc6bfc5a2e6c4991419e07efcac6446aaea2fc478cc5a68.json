@@ -1,0 +1,65 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT\n             coalesce((SELECT sum(valor_centavos) FROM financeiro.extrato_linha WHERE valor_centavos > 0 AND data >= $1), 0)::bigint AS \"entradas!\",\n             coalesce((SELECT -sum(valor_centavos) FROM financeiro.extrato_linha WHERE valor_centavos < 0 AND data >= $1), 0)::bigint AS \"saidas!\",\n             (coalesce((SELECT sum(saldo_inicial_centavos) FROM financeiro.conta_bancaria), 0) + coalesce((SELECT sum(valor_centavos) FROM financeiro.extrato_linha), 0))::bigint AS \"saldo!\",\n             coalesce((SELECT sum(valor_centavos) FROM financeiro.titulo WHERE tipo = 'pagar' AND situacao = 'aberto'), 0)::bigint AS \"pagar!\",\n             coalesce((SELECT sum(valor_centavos) FROM financeiro.titulo WHERE tipo = 'receber' AND situacao = 'aberto'), 0)::bigint AS \"receber!\",\n             (SELECT count(*) FROM financeiro.titulo t WHERE t.situacao = 'aberto' AND (SELECT count(*) FROM financeiro.aprovacao a WHERE a.titulo_id = t.id) < t.aprovacoes_exigidas) AS \"aguardando!\",\n             (SELECT count(*) FROM financeiro.extrato_linha e WHERE NOT EXISTS (SELECT 1 FROM financeiro.baixa b WHERE b.extrato_linha_id = e.id)) AS \"sem_conciliacao!\"",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "entradas!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 1,
+        "name": "saidas!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "saldo!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 3,
+        "name": "pagar!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 4,
+        "name": "receber!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 5,
+        "name": "aguardando!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 6,
+        "name": "sem_conciliacao!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Date"
+      ]
+    },
+    "nullable": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "f3302bc4309066efbdc6bfc5a2e6c4991419e07efcac6446aaea2fc478cc5a68"
+}

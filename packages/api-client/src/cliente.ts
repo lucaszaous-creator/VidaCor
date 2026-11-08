@@ -51,6 +51,7 @@ import type { ConsultaAgenda, PacienteResumo, SalaDaUnidade, Saude, Sessao } fro
 import type { MenuDoObjeto, ObjetoDoMenu } from './contrato-menu';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
+import type { ContaBancaria, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
 import type { ComunicacaoDoPaciente, LembretesEnfileirados, PreferenciaWhatsapp } from './contrato-comunicacao';
 import type { ContrasteAplicado, EntradaDeEstoque, ItemDeEstoque, MovimentoFeito, RastreioDoLote } from './contrato-estoque';
 import type { AceiteDoConvite, ConviteEmitido, EntradaNoPortal, NovoPaciente, PacienteCadastrado, PossivelDuplicado, SessaoDoPortal, SituacaoDoConvite } from './contrato-portal';
@@ -411,6 +412,22 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
     menu: {
       /** Ações do objeto para o perfil e o estado atual; a tela só mostra (docs/19 § 8). */
       de: (objeto: ObjetoDoMenu, id: string): Promise<MenuDoObjeto> => ler<MenuDoObjeto>(`/v1/menu/${objeto}/${seg(id)}`),
+    },
+
+    financeiro: {
+      resumo: (): Promise<ResumoFinanceiro> => ler<ResumoFinanceiro>('/v1/financeiro/resumo'),
+      contas: (): Promise<ContaBancaria[]> => ler<ContaBancaria[]>('/v1/financeiro/contas'),
+      titulos: (tipo: 'pagar' | 'receber', situacao = 'aberto'): Promise<Titulo[]> =>
+        ler<Titulo[]>(`/v1/financeiro/titulos?${new URLSearchParams({ tipo, situacao }).toString()}`),
+      lancar: (corpo: NovoTitulo, o: OpcoesDeEscrita): Promise<Titulo> => criar<Titulo>('POST', '/v1/financeiro/titulos', corpo, o),
+      /** Reautenticação; quem lançou não aprova. */
+      aprovar: (id: string, o: OpcoesDeEscrita): Promise<Titulo> => criar<Titulo>('POST', `/v1/financeiro/titulos/${seg(id)}/aprovacoes`, {}, o),
+      baixar: (id: string, corpo: { conta_id: string; data: string; extrato_linha_id?: string | null }, o: OpcoesDeEscrita): Promise<Titulo> =>
+        criar<Titulo>('POST', `/v1/financeiro/titulos/${seg(id)}/baixa`, corpo, o),
+      repasse: (competencia: string): Promise<RepasseDoMedico[]> =>
+        ler<RepasseDoMedico[]>(`/v1/financeiro/repasse?${new URLSearchParams({ competencia }).toString()}`),
+      gerarRepasse: (competencia: string, o: OpcoesDeEscrita): Promise<RepasseGerado> =>
+        criar<RepasseGerado>('POST', `/v1/financeiro/repasse/${seg(competencia)}/titulos`, {}, o),
     },
 
     comunicacao: {

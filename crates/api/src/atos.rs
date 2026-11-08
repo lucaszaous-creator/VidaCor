@@ -35,6 +35,8 @@ pub enum Ato {
     LastroExplorar,
     IndicadoresVer,
     ComunicacaoEnviar,
+    FinanceiroOperar,
+    FinanceiroAprovar,
 }
 
 impl Ato {
@@ -76,6 +78,8 @@ impl Ato {
             A::IndicadoresVer => &["gerente", "financeiro"],
             // Lembretes, preferência e histórico de mensagens do paciente (N0/N1).
             A::ComunicacaoEnviar => &["recepcao", "gerente"],
+            // Financeiro (docs/18 § 5: contas, conciliação, repasse): financeiro e gerência.
+            A::FinanceiroOperar | A::FinanceiroAprovar => &["financeiro", "gerente"],
         };
         perfis.contains(&perfil)
     }
@@ -85,7 +89,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 31] = [
+    const TODOS: [Ato; 33] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -117,6 +121,8 @@ mod testes {
         Ato::LastroExplorar,
         Ato::IndicadoresVer,
         Ato::ComunicacaoEnviar,
+        Ato::FinanceiroOperar,
+        Ato::FinanceiroAprovar,
     ];
 
     #[test]

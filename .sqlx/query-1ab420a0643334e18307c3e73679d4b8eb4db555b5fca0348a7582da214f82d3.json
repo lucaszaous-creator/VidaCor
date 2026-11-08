@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT codigo, tipo, situacao, criado_por FROM financeiro.titulo WHERE id = $1 FOR UPDATE",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.titulo",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "tipo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.titulo",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.titulo",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "criado_por",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "financeiro.titulo",
+            "name": "criado_por"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "1ab420a0643334e18307c3e73679d4b8eb4db555b5fca0348a7582da214f82d3"
+}

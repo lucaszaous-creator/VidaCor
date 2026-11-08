@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE financeiro.titulo SET situacao = 'pago', versao = versao + 1 WHERE id = $1 AND situacao = 'aberto'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "9d4da0124224dbaa314c776f4bc2e1772925c8255eb2bf3bb0a86f0e39bb919f"
+}

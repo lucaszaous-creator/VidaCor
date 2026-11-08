@@ -116,3 +116,31 @@ export const manipuladoresComunicacao = [
     return HttpResponse.json({ enfileirados: 7 });
   }),
 ];
+
+/** Financeiro simulado (regras reais em `crates/api/tests/financeiro.rs`). */
+const tituloBase = { tipo: 'pagar', descricao: 'Contraste iodado, NF 1203', contraparte: 'Distribuidora Fictícia', categoria: 'fornecedor', valor_centavos: 1500000, vencimento: '2026-11-20', situacao: 'aberto', aprovacoes_exigidas: 2, aprovacoes: 1, vencido: false };
+export const manipuladoresFinanceiro = [
+  http.get('*/v1/financeiro/resumo', () =>
+    temPerfil('financeiro', 'gerente')
+      ? HttpResponse.json({ entradas_do_mes_centavos: 41270000, saidas_do_mes_centavos: 28730000, saldo_em_contas_centavos: 53890000, a_pagar_aberto_centavos: 1500000, a_receber_aberto_centavos: 31280000, aguardando_aprovacao: 1, extrato_sem_conciliacao: 3 })
+      : semPermissao('acessar o financeiro'),
+  ),
+  http.get('*/v1/financeiro/contas', () => HttpResponse.json([{ id: 'c1', codigo: 'CTA-1', nome: 'Conta movimento' }])),
+  http.get('*/v1/financeiro/titulos', ({ request }) => {
+    const tipo = new URL(request.url).searchParams.get('tipo');
+    return HttpResponse.json(tipo === 'pagar' ? [{ ...tituloBase, id: 't1', codigo: 'TIT-2026-000010' }] : []);
+  }),
+  http.post('*/v1/financeiro/titulos', async ({ request }) => {
+    const c = (await registrar('lancar-titulo', request)) as { valor_centavos: number; tipo: string };
+    return HttpResponse.json({ ...tituloBase, ...c, id: 't2', codigo: 'TIT-2026-000011', aprovacoes: 0, aprovacoes_exigidas: c.tipo === 'pagar' ? (c.valor_centavos > 1000000 ? 2 : 1) : 0 }, { status: 201 });
+  }),
+  http.post('*/v1/financeiro/titulos/:id/aprovacoes', async ({ request }) => {
+    await registrar('aprovar-titulo', request);
+    return HttpResponse.json({ ...tituloBase, id: 't1', codigo: 'TIT-2026-000010', aprovacoes: 2 });
+  }),
+  http.get('*/v1/financeiro/repasse', () => HttpResponse.json([{ medico_id: 'm1', medico: 'Dr. Paulo Medeiros', laudos: 60, base_centavos: 2400000, percentual_pb: 3000, regra_versao: 2, valor_centavos: 720000, sem_preco: 0 }, { medico_id: 'm2', medico: 'Dr. Marcos Freire', laudos: 4, base_centavos: 160000, percentual_pb: null, regra_versao: null, valor_centavos: null, sem_preco: 0 }])),
+  http.post('*/v1/financeiro/repasse/:comp/titulos', async ({ request }) => {
+    await registrar('gerar-repasse', request);
+    return HttpResponse.json({ titulos_criados: 1, ja_existiam: 0, sem_regra: ['Dr. Marcos Freire'] });
+  }),
+];

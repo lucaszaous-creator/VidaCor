@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO financeiro.extrato_linha (id, conta_id, id_banco, data, valor_centavos, descricao, criado_por, origem, unidade_id, correlacao)\n             VALUES ($1, $2, $3, $4, $5, $6, $7, 'extrato', $8, $9) ON CONFLICT (conta_id, id_banco) DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Date",
+        "Int8",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "e55724e21471442bb776bd3357d071cc6800018bfde2aa666785a0678114653e"
+}

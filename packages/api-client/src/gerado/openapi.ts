@@ -602,6 +602,160 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/financeiro/contas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Contas bancárias da unidade (para a baixa). */
+        get: operations["contas"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/financeiro/extratos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Importa linhas do extrato (o mesmo ID do banco não entra duas vezes). */
+        post: operations["importar_extrato"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/financeiro/regras-repasse": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Nova versão da regra de repasse do médico (a anterior fica no histórico; reautenticação). */
+        post: operations["nova_regra"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/financeiro/repasse": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Prévia do repasse da competência (financeiro e gerência). */
+        get: operations["previa"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/financeiro/repasse/{competencia}/titulos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Gera os títulos a pagar do repasse (um por médico e competência; repetir não duplica). */
+        post: operations["gerar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/financeiro/resumo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Resumo do mês (extrato e títulos em aberto). */
+        get: operations["resumo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/financeiro/titulos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Títulos por tipo e situação (financeiro e gerência). */
+        get: operations["titulos"];
+        put?: never;
+        /** Lança um título. A pagar sempre precisa de aprovação de outra pessoa (duas acima de R$ 10 mil). */
+        post: operations["lancar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/financeiro/titulos/{id}/aprovacoes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Aprova um título a pagar (reautenticação; quem lançou não aprova; cada pessoa aprova uma vez). */
+        post: operations["aprovar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/financeiro/titulos/{id}/baixa": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Baixa (pagamento ou recebimento) do título: uma só (G2); a pagar só com as aprovações completas. */
+        post: operations["baixar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/guias": {
         parameters: {
             query?: never;
@@ -1652,6 +1806,12 @@ export interface components {
             /** @description Nome completo dito pelo paciente, como no documento. */
             nome?: string | null;
         };
+        ContaBancaria: {
+            codigo: string;
+            /** Format: uuid */
+            id: string;
+            nome: string;
+        };
         Contingencia: {
             codigo: string;
             /** Format: date-time */
@@ -1829,6 +1989,12 @@ export interface components {
             codigo_tuss: string;
             nome: string;
         };
+        ExtratoImportado: {
+            /** Format: int64 */
+            novas: number;
+            /** Format: int64 */
+            repetidas: number;
+        };
         Faixa: {
             /** Format: int32 */
             fim: number;
@@ -1871,6 +2037,11 @@ export interface components {
             situacao: string;
             /** Format: date */
             validade: string;
+        };
+        ImportacaoDeExtrato: {
+            /** Format: uuid */
+            conta_id: string;
+            linhas: components["schemas"]["LinhaDoExtrato"][];
         };
         Indicadores: {
             /** Format: int64 */
@@ -2037,6 +2208,17 @@ export interface components {
             /** Format: int64 */
             enfileirados: number;
         };
+        LinhaDoExtrato: {
+            /** Format: date */
+            data: string;
+            descricao: string;
+            id_banco: string;
+            /**
+             * Format: int64
+             * @description Positivo entra, negativo sai.
+             */
+            valor_centavos: number;
+        };
         LinkCriado: {
             /** Format: date-time */
             expira_em: string;
@@ -2102,6 +2284,14 @@ export interface components {
             /** @description agendamento, guia, atendimento, etiqueta, triagem, estudo, laudo, recebimento, estorno, contraste. */
             tipo: string;
         };
+        NovaRegraRepasse: {
+            /** Format: uuid */
+            medico_id: string;
+            /** Format: int32 */
+            percentual_pb: number;
+            /** Format: date */
+            vigente_desde: string;
+        };
         /**
          * @description Novo achado. Só os descritores do sistema escolhido são lidos; pontos, categoria e conduta
          *     enviados pela tela são ignorados (o servidor calcula, G1).
@@ -2141,6 +2331,16 @@ export interface components {
             paciente_id: string;
             /** Format: int32 */
             pontos_base: number;
+        };
+        NovoTitulo: {
+            categoria: string;
+            contraparte: string;
+            descricao: string;
+            tipo: string;
+            /** Format: int64 */
+            valor_centavos: number;
+            /** Format: date */
+            vencimento: string;
         };
         NumerosSituados: {
             /** Format: int64 */
@@ -2218,6 +2418,17 @@ export interface components {
             pontos_base: number;
             /** Format: uuid */
             solicitante_id: string;
+        };
+        PedidoBaixa: {
+            /** Format: uuid */
+            conta_id: string;
+            /** Format: date */
+            data: string;
+            /**
+             * Format: uuid
+             * @description Linha do extrato que comprova (conciliação na mesma operação). Valor e sinal precisam bater.
+             */
+            extrato_linha_id?: string | null;
         };
         PedidoBipe: {
             codigo_etiqueta: string;
@@ -2494,6 +2705,16 @@ export interface components {
             /** Format: int64 */
             valor_recalculado_centavos: number;
         };
+        RegraRepasse: {
+            /** Format: uuid */
+            id: string;
+            /** Format: int32 */
+            percentual_pb: number;
+            /** Format: int32 */
+            versao: number;
+            /** Format: date */
+            vigente_desde: string;
+        };
         /** @description Regra vigente de um sistema de classificação. */
         RegraVigente: {
             sistema: components["schemas"]["SistemaClassificacao"];
@@ -2503,11 +2724,58 @@ export interface components {
             invalidada: components["schemas"]["Etiqueta"];
             nova: components["schemas"]["Etiqueta"];
         };
+        RepasseDoMedico: {
+            /** Format: int64 */
+            base_centavos: number;
+            /** Format: int64 */
+            laudos: number;
+            medico: string;
+            /** Format: uuid */
+            medico_id: string;
+            /**
+             * Format: int32
+             * @description Nulo quando o médico não tem regra vigente (nada é calculado por suposição).
+             */
+            percentual_pb?: number | null;
+            /** Format: int32 */
+            regra_versao?: number | null;
+            /**
+             * Format: int64
+             * @description Laudos cujo procedimento não está na tabela de preços (não entram na base).
+             */
+            sem_preco: number;
+            /** Format: int64 */
+            valor_centavos?: number | null;
+        };
+        RepasseGerado: {
+            /** Format: int64 */
+            ja_existiam: number;
+            /** @description Médicos sem regra vigente: nada foi gerado para eles. */
+            sem_regra: string[];
+            /** Format: int64 */
+            titulos_criados: number;
+        };
         ResultadoBipe: {
             aparelho: components["schemas"]["Aparelho"];
             atendimento: components["schemas"]["Atendimento"];
             /** @description enviada (primeiro bipe) ou ja_enviada (bipe repetido, sem segundo item de worklist). */
             worklist: string;
+        };
+        ResumoFinanceiro: {
+            /** Format: int64 */
+            a_pagar_aberto_centavos: number;
+            /** Format: int64 */
+            a_receber_aberto_centavos: number;
+            /** Format: int64 */
+            aguardando_aprovacao: number;
+            /** Format: int64 */
+            entradas_do_mes_centavos: number;
+            /** Format: int64 */
+            extrato_sem_conciliacao: number;
+            /** Format: int64 */
+            saidas_do_mes_centavos: number;
+            /** Format: int64 */
+            saldo_em_contas_centavos: number;
         };
         Sala: {
             /** Format: uuid */
@@ -2551,6 +2819,25 @@ export interface components {
         SituacaoDoConvite: {
             /** @description valido ou indisponivel (vencido, usado, revogado ou inexistente: a mesma resposta). */
             situacao: string;
+        };
+        Titulo: {
+            /** Format: int64 */
+            aprovacoes: number;
+            /** Format: int32 */
+            aprovacoes_exigidas: number;
+            categoria: string;
+            codigo: string;
+            contraparte: string;
+            descricao: string;
+            /** Format: uuid */
+            id: string;
+            situacao: string;
+            tipo: string;
+            /** Format: int64 */
+            valor_centavos: number;
+            vencido: boolean;
+            /** Format: date */
+            vencimento: string;
         };
         Triagem: {
             codigo: string;
@@ -3940,6 +4227,340 @@ export interface operations {
                 };
             };
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    contas: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContaBancaria"][];
+                };
+            };
+        };
+    };
+    importar_extrato: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ImportacaoDeExtrato"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExtratoImportado"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    nova_regra: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovaRegraRepasse"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegraRepasse"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    previa: {
+        parameters: {
+            query: {
+                /** @description AAAA-MM. */
+                competencia: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RepasseDoMedico"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    gerar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competencia: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RepasseGerado"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    resumo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResumoFinanceiro"];
+                };
+            };
+        };
+    };
+    titulos: {
+        parameters: {
+            query?: {
+                /** @description pagar ou receber. */
+                tipo?: string | null;
+                /** @description aberto, pago ou cancelado. */
+                situacao?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Titulo"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    lancar: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoTitulo"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Titulo"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    aprovar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Titulo"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    baixar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoBaixa"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Titulo"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
