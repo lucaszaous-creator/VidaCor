@@ -130,6 +130,12 @@ export async function simularNucleo(page: Page, estado: EstadoDaSimulacao): Prom
       );
     }
     if (c.endsWith('/comunicacao')) return json(route, { whatsapp: true, motivo: null, mensagens: [{ modelo: 'confirmacao', situacao: 'enviada', resposta: 'confirmou', criado_em: '2026-11-05T12:00:00Z' }] });
+    if (c === '/v1/orcamentos/catalogo') {
+      return json(route, { tabela_versao: 12, limite_desconto_pontos_base: 1000, exames: [{ tuss: '40901114', nome: 'Ecocardiograma transtorácico', valor_centavos: 30000 }], pacotes: [] });
+    }
+    if (c === '/v1/orcamentos') {
+      return json(route, Array.from({ length: 20 }, (_, k) => ({ id: `o${String(k)}`, codigo: `ORC-2026-0000${String(10 + k)}`, paciente_id: 'p', paciente_nome: 'Maria Helena Duarte de Albuquerque', paciente_nascimento: '1968-03-12', itens: [], tabela_versao: 12, pacote: null, pacote_regra_versao: null, subtotal_centavos: 60000, pacote_centavos: 0, desconto_centavos: 0, desconto_pontos_base: null, desconto_motivo: null, total_centavos: 60000, pagamento_previsto: 'pix', valido_ate: '2026-11-20', situacao: k % 3 === 0 ? 'cancelado' : 'emitido', motivo_cancelamento: null, criado_em: '2026-11-06T12:00:00Z' })));
+    }
     if (c === '/v1/painel-de-chamada') {
       const ch = (senha: string, destino: string, min: number) => ({ senha, nome_abreviado: 'Maria Helena D.', destino, rechamada: false, chamada_em: `2026-11-06T11:${String(min)}:00Z` });
       return json(route, { agora: { ...ch('A012', 'Sala 3 USG e Doppler com nome longo', 40), nome_abreviado: 'Antônio C. R.' }, ultimas: [ch('A011', 'Guichê 1', 36), ch('A010', 'Sala 1', 33), ch('A009', 'Sala 2', 29), ch('A008', 'Sala 6', 25)] });

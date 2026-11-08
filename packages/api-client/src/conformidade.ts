@@ -8,6 +8,7 @@ import type { components } from './gerado/openapi';
 import type { AutorizacaoDetalhe, AutorizacaoResumo, NovoPedidoAutorizacao, PedidoProtocolo, RespostaDoPortal } from './contrato-autorizacao';
 import type { MenuDoObjeto } from './contrato-menu';
 import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel';
+import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-orcamento';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
 import type { ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
@@ -154,3 +155,6 @@ export type ConfereNovoPedidoAutorizacao = Cabe<NovoPedidoAutorizacao, S['NovoPe
 export type ConfereNovoPedidoAutorizacaoVolta = Cabe<S['NovoPedidoAutorizacao'], NovoPedidoAutorizacao>;
 export type ConferePedidoProtocolo = Cabe<PedidoProtocolo, S['PedidoProtocolo']>;
 export type ConfereRespostaDoPortal = Cabe<RespostaDoPortal, S['RespostaDoPortal']>;
+export type ConfereCatalogoDoOrcamento = Cabe<CatalogoDoOrcamento, S['CatalogoDoOrcamento']>;
+export type ConfereOrcamento = Cabe<Orcamento, S['Orcamento']>;
+export type ConfereNovoOrcamento = Cabe<NovoOrcamento, S['NovoOrcamento']>;

@@ -90,6 +90,11 @@ SELECT '0194f000-0000-7000-8000-00000000c012', tuss, valor FROM (VALUES ('409011
   ('40901122', 18000), ('40801012', 9000), ('41001109', 95000)) AS p(tuss, valor)
 ON CONFLICT DO NOTHING;
 
+-- Pacote Cardio (regra de combinação v3, Orcamento.dc.html)
+INSERT INTO financeiro.pacote (id, codigo, nome, regra_versao, tuss, valor_centavos, vigente_desde, origem, unidade_id, correlacao)
+VALUES ('0194f000-0000-7000-8000-00000000d003', 'PAC-CARDIO', 'Pacote Cardio', 3, ARRAY['40901114','40901300'], 72000, DATE '2026-01-01', 'semente', '0194f000-0000-7000-8000-0000000000a1', 'semente-dev')
+ON CONFLICT DO NOTHING;
+
 -- Caixa e gerência para a demonstração
 INSERT INTO identidade.usuario (id, codigo, login, nome, perfis, origem, unidade_id, correlacao)
 SELECT gen_random_uuid(), 'USR-' || login, login, nome, perfis, 'semente', '0194f000-0000-7000-8000-0000000000a1', 'semente-dev'

@@ -1,0 +1,77 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT DISTINCT ON (codigo) codigo, nome, regra_versao, tuss, valor_centavos FROM financeiro.pacote\n          WHERE unidade_id = $1 AND vigente_desde <= $2 AND (vigente_ate IS NULL OR vigente_ate >= $2)\n          ORDER BY codigo, regra_versao DESC",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.pacote",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.pacote",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "regra_versao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "financeiro.pacote",
+            "name": "regra_versao"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "tuss",
+        "type_info": "TextArray",
+        "origin": {
+          "Table": {
+            "table": "financeiro.pacote",
+            "name": "tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "valor_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "financeiro.pacote",
+            "name": "valor_centavos"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Date"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "918ccf4f5962af2e497fc2fce038c226fc150606b1c99d09bb04a254b0563ee9"
+}

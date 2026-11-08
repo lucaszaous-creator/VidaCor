@@ -206,3 +206,36 @@ export const manipuladoresPainel = [
     return HttpResponse.json(nova, { status: 201 });
   }),
 ];
+
+/** Orçamento simulado (regras reais em `crates/api/tests/orcamento.rs`). */
+export const manipuladoresOrcamento = [
+  http.get('*/v1/orcamentos/catalogo', () =>
+    HttpResponse.json({
+      tabela_versao: 12,
+      limite_desconto_pontos_base: 1000,
+      exames: [
+        { tuss: '40901300', nome: 'Ecodoppler de carótidas', valor_centavos: 30000 },
+        { tuss: '40901114', nome: 'Ecocardiograma transtorácico', valor_centavos: 30000 },
+        { tuss: '40901122', nome: 'USG de tireoide', valor_centavos: 18000 },
+      ],
+      pacotes: [{ codigo: 'PAC-CARDIO', nome: 'Pacote Cardio', regra_versao: 3, tuss: ['40901114', '40901300'], valor_centavos: 54000 }],
+    }),
+  ),
+  http.get('*/v1/orcamentos', () => HttpResponse.json([])),
+  http.post('*/v1/orcamentos', async ({ request }) => {
+    const c = (await registrar('emitir-orcamento', request)) as { itens: string[]; pacote?: string | null; desconto?: { pontos_base: number } | null };
+    if ((c.desconto?.pontos_base ?? 0) > 1000) return problema(403, 'desconto-acima-do-limite', 'Este desconto passa do limite de 10% do orçamento. Nenhum orçamento foi emitido.');
+    const pacote = c.pacote === 'PAC-CARDIO' ? 6000 : 0;
+    const subtotal = c.itens.length * 30000;
+    const desconto = Math.floor(((subtotal - pacote) * (c.desconto?.pontos_base ?? 0)) / 10000);
+    return HttpResponse.json(
+      {
+        id: 'o1', codigo: 'ORC-2026-000001', paciente_id: 'p', paciente_nome: 'Vera Lúcia Antunes', paciente_nascimento: '1957-09-18', itens: [], tabela_versao: 12,
+        pacote: c.pacote ?? null, pacote_regra_versao: c.pacote === 'PAC-CARDIO' ? 3 : null, subtotal_centavos: subtotal, pacote_centavos: pacote, desconto_centavos: desconto,
+        desconto_pontos_base: c.desconto?.pontos_base ?? null, desconto_motivo: null, total_centavos: subtotal - pacote - desconto, pagamento_previsto: 'pix',
+        valido_ate: '2026-11-20', situacao: 'emitido', motivo_cancelamento: null, criado_em: '2026-11-06T12:00:00Z',
+      },
+      { status: 201 },
+    );
+  }),
+];

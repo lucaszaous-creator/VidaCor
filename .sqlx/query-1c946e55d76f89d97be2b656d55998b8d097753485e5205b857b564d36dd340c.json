@@ -1,0 +1,30 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE financeiro.orcamento SET situacao = 'cancelado', cancelado_por = $2, cancelado_em = now(), motivo_cancelamento = $3, versao = versao + 1\n          WHERE id = $1 AND situacao = 'emitido' RETURNING codigo",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento",
+            "name": "codigo"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "1c946e55d76f89d97be2b656d55998b8d097753485e5205b857b564d36dd340c"
+}

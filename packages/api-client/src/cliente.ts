@@ -52,6 +52,7 @@ import type { MenuDoObjeto, ObjetoDoMenu } from './contrato-menu';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
 import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel';
+import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-orcamento';
 import type { DecisaoDePerfil, ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
 import type { ContaBancaria, NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
 import type { ComunicacaoDoPaciente, LembretesEnfileirados, PreferenciaWhatsapp } from './contrato-comunicacao';
@@ -314,6 +315,16 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
 
     /** Painel da TV de chamada (dispositivo TV, recepção e gerência). */
     painelDeChamada: (): Promise<Painel> => ler<Painel>('/v1/painel-de-chamada'),
+
+    /** Orçamento do particular: o servidor calcula preço, pacote e desconto (G1). */
+    orcamentos: {
+      catalogo: (): Promise<CatalogoDoOrcamento> => ler<CatalogoDoOrcamento>('/v1/orcamentos/catalogo'),
+      listar: (pacienteId?: string): Promise<Orcamento[]> =>
+        ler<Orcamento[]>(pacienteId === undefined ? '/v1/orcamentos' : `/v1/orcamentos?paciente_id=${encodeURIComponent(pacienteId)}`),
+      emitir: (corpo: NovoOrcamento, o: OpcoesDeEscrita): Promise<Orcamento> => criar<Orcamento>('POST', '/v1/orcamentos', corpo, o),
+      cancelar: (id: string, motivo: string, o: OpcoesDeEscrita): Promise<Orcamento> =>
+        criar<Orcamento>('POST', `/v1/orcamentos/${seg(id)}/cancelamento`, { motivo }, o),
+    },
 
     etiquetas: {
       reimprimir: (codigo: string, corpo: PedidoReimpressao, o: OpcoesDeEscrita): Promise<Reimpressao> =>

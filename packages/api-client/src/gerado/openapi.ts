@@ -1446,6 +1446,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/orcamentos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Orçamentos dos últimos 30 dias da unidade, ou de um paciente (recepção e gerência). */
+        get: operations["listar_orcamentos"];
+        put?: never;
+        /** Emite o orçamento calculado pelo servidor (recepção e gerência; Idempotency-Key). */
+        post: operations["emitir_orcamento"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orcamentos/catalogo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Exames com o preço da tabela vigente e os pacotes vigentes (recepção e gerência). */
+        get: operations["catalogo_do_orcamento"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orcamentos/{id}/cancelamento": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancela o orçamento emitido, com motivo (recepção e gerência). Nada é apagado. */
+        post: operations["cancelar_orcamento"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/pacientes": {
         parameters: {
             query?: never;
@@ -2273,6 +2325,20 @@ export interface components {
             /** Format: uuid */
             id: string;
         };
+        CancelamentoDeOrcamento: {
+            motivo: string;
+        };
+        CatalogoDoOrcamento: {
+            exames: components["schemas"]["ExameComPreco"][];
+            /**
+             * Format: int32
+             * @description Limite de desconto da recepção, em pontos base (1000 = 10%).
+             */
+            limite_desconto_pontos_base: number;
+            pacotes: components["schemas"]["PacoteDoCatalogo"][];
+            /** Format: int32 */
+            tabela_versao: number;
+        };
         /**
          * @description Categoria BI-RADS atribuída pelo médico (códigos do atlas).
          * @enum {string}
@@ -2447,6 +2513,12 @@ export interface components {
             aprovar: boolean;
             motivo: string;
         };
+        DescontoDoOrcamento: {
+            /** @description paciente_frequente, funcionario_ou_familiar, condicao_social ou cobrir_outra_clinica. */
+            motivo: string;
+            /** Format: int32 */
+            pontos_base: number;
+        };
         DescontoPedido: {
             /** Format: uuid */
             autorizacao_id?: string | null;
@@ -2599,6 +2671,12 @@ export interface components {
         Exame: {
             codigo_tuss: string;
             nome: string;
+        };
+        ExameComPreco: {
+            nome: string;
+            tuss: string;
+            /** Format: int64 */
+            valor_centavos: number;
         };
         ExameExterno: {
             codigo: string;
@@ -2816,6 +2894,12 @@ export interface components {
              * @description Soma dos lotes dentro da validade.
              */
             saldo_valido: number;
+        };
+        ItemDoOrcamento: {
+            descricao: string;
+            tuss: string;
+            /** Format: int64 */
+            valor_centavos: number;
         };
         ItemFila: {
             /** Format: uuid */
@@ -3057,6 +3141,17 @@ export interface components {
             sistema: components["schemas"]["SistemaClassificacao"];
             tirads?: null | components["schemas"]["DescritoresTirads"];
         };
+        NovoOrcamento: {
+            desconto?: null | components["schemas"]["DescontoDoOrcamento"];
+            /** @description Códigos TUSS dos exames (o preço é do servidor). */
+            itens: string[];
+            /** Format: uuid */
+            paciente_id: string;
+            /** @description Código do pacote a aplicar, se a tela ofereceu. */
+            pacote?: string | null;
+            /** @description pix, dinheiro ou cartao. */
+            pagamento_previsto: string;
+        };
         NovoPaciente: {
             alergias?: string[];
             /** @description Só dígitos, com DDD (10 ou 11). */
@@ -3125,6 +3220,41 @@ export interface components {
             /** Format: int32 */
             hora: number;
         };
+        Orcamento: {
+            codigo: string;
+            /** Format: date-time */
+            criado_em: string;
+            /** Format: int64 */
+            desconto_centavos: number;
+            desconto_motivo?: string | null;
+            /** Format: int32 */
+            desconto_pontos_base?: number | null;
+            /** Format: uuid */
+            id: string;
+            itens: components["schemas"]["ItemDoOrcamento"][];
+            motivo_cancelamento?: string | null;
+            /** Format: uuid */
+            paciente_id: string;
+            /** Format: date */
+            paciente_nascimento: string;
+            paciente_nome: string;
+            pacote?: string | null;
+            /** Format: int64 */
+            pacote_centavos: number;
+            /** Format: int32 */
+            pacote_regra_versao?: number | null;
+            pagamento_previsto: string;
+            /** @description emitido, vencido ou cancelado (vencido é calculado pela data). */
+            situacao: string;
+            /** Format: int64 */
+            subtotal_centavos: number;
+            /** Format: int32 */
+            tabela_versao: number;
+            /** Format: int64 */
+            total_centavos: number;
+            /** Format: date */
+            valido_ate: string;
+        };
         /** @enum {string} */
         OrientacaoBirads: "paralela" | "nao_paralela";
         PacienteCadastrado: {
@@ -3160,6 +3290,15 @@ export interface components {
             /** Format: date */
             nascimento: string;
             nome: string;
+        };
+        PacoteDoCatalogo: {
+            codigo: string;
+            nome: string;
+            /** Format: int32 */
+            regra_versao: number;
+            tuss: string[];
+            /** Format: int64 */
+            valor_centavos: number;
         };
         /** @enum {string} */
         PadraoEcogenicoBirads: "anecoico" | "hiperecoico" | "complexo_cistico_e_solido" | "hipoecoico" | "isoecoico" | "heterogeneo";
@@ -7160,6 +7299,145 @@ export interface operations {
                 };
             };
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_orcamentos: {
+        parameters: {
+            query?: {
+                paciente_id?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Orcamento"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    emitir_orcamento: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoOrcamento"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Orcamento"];
+                };
+            };
+            /** @description desconto-acima-do-limite */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    catalogo_do_orcamento: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogoDoOrcamento"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    cancelar_orcamento: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CancelamentoDeOrcamento"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Orcamento"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

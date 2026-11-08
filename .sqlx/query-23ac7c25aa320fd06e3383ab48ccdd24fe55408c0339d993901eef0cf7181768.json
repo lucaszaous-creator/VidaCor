@@ -1,0 +1,29 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO financeiro.orcamento (id, codigo, paciente_id, tabela_versao, pacote_id, subtotal_centavos, pacote_centavos, desconto_centavos,\n                desconto_pontos_base, desconto_motivo, total_centavos, pagamento_previsto, valido_ate, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'recepcao', $15, $16)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Int4",
+        "Uuid",
+        "Int8",
+        "Int8",
+        "Int8",
+        "Int4",
+        "Text",
+        "Int8",
+        "Text",
+        "Date",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "23ac7c25aa320fd06e3383ab48ccdd24fe55408c0339d993901eef0cf7181768"
+}

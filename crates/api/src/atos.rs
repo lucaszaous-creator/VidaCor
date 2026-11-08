@@ -47,6 +47,7 @@ pub enum Ato {
     GlosaRecorrer,
     ChamadaFazer,
     PainelVer,
+    OrcamentoEmitir,
     AutorizacaoPedir,
     AutorizacaoVer,
 }
@@ -107,6 +108,8 @@ impl Ato {
             // do dispositivo TV; recepção e gerência podem abri-lo para conferir.
             A::ChamadaFazer => &["recepcao", "tecnico"],
             A::PainelVer => &["tv", "recepcao", "gerente"],
+            // Orçamento do particular (docs/04 Agenda): recepção emite; gerência acompanha.
+            A::OrcamentoEmitir => &["recepcao", "gerente"],
             // Autorização pedida pelo sistema (docs/22 E4): recepção e faturista pedem; gerente acompanha.
             A::AutorizacaoPedir => &["recepcao", "faturista"],
             A::AutorizacaoVer => &["recepcao", "faturista", "gerente"],
@@ -119,7 +122,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 45] = [
+    const TODOS: [Ato; 46] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -163,6 +166,7 @@ mod testes {
         Ato::GlosaRecorrer,
         Ato::ChamadaFazer,
         Ato::PainelVer,
+        Ato::OrcamentoEmitir,
         Ato::AutorizacaoPedir,
         Ato::AutorizacaoVer,
     ];

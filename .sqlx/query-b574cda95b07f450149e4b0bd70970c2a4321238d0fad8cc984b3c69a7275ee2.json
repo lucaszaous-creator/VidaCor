@@ -1,0 +1,41 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT pr.valor_centavos, pc.nome FROM financeiro.preco pr JOIN agenda.procedimento pc ON pc.tuss = pr.tuss WHERE pr.tabela_id = $1 AND pr.tuss = $2 AND pc.ativo",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "valor_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "financeiro.preco",
+            "name": "valor_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "nome"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "b574cda95b07f450149e4b0bd70970c2a4321238d0fad8cc984b3c69a7275ee2"
+}

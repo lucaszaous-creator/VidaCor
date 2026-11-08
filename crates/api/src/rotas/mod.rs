@@ -29,6 +29,7 @@ pub mod lastro_explorador;
 pub mod laudos;
 pub mod menu;
 pub mod nfse;
+pub mod orcamentos;
 pub mod pacientes;
 pub mod pendencias;
 pub mod portal;
@@ -155,6 +156,15 @@ pub fn rotas() -> Router<Estado> {
         )
         .route("/v1/atendimentos/{id}/chamadas", post(chamada::chamar))
         .route("/v1/painel-de-chamada", get(chamada::painel))
+        .route("/v1/orcamentos/catalogo", get(orcamentos::catalogo))
+        .route(
+            "/v1/orcamentos",
+            get(orcamentos::listar).post(orcamentos::emitir),
+        )
+        .route(
+            "/v1/orcamentos/{id}/cancelamento",
+            post(orcamentos::cancelar),
+        )
         .route("/v1/usuarios/{id}/mudancas", post(usuarios::mudar))
         .route("/v1/usuarios/pedidos/{id}/decisao", post(usuarios::decidir))
         .route(

@@ -4831,6 +4831,207 @@
         }
       }
     },
+    "/v1/orcamentos": {
+      "get": {
+        "tags": [
+          "orcamento"
+        ],
+        "summary": "Orçamentos dos últimos 30 dias da unidade, ou de um paciente (recepção e gerência).",
+        "operationId": "listar_orcamentos",
+        "parameters": [
+          {
+            "name": "paciente_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Orcamento"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "orcamento"
+        ],
+        "summary": "Emite o orçamento calculado pelo servidor (recepção e gerência; Idempotency-Key).",
+        "operationId": "emitir_orcamento",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovoOrcamento"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Orcamento"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "desconto-acima-do-limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orcamentos/catalogo": {
+      "get": {
+        "tags": [
+          "orcamento"
+        ],
+        "summary": "Exames com o preço da tabela vigente e os pacotes vigentes (recepção e gerência).",
+        "operationId": "catalogo_do_orcamento",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogoDoOrcamento"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orcamentos/{id}/cancelamento": {
+      "post": {
+        "tags": [
+          "orcamento"
+        ],
+        "summary": "Cancela o orçamento emitido, com motivo (recepção e gerência). Nada é apagado.",
+        "operationId": "cancelar_orcamento",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelamentoDeOrcamento"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Orcamento"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/pacientes": {
       "get": {
         "tags": [
@@ -7521,6 +7722,49 @@
           }
         }
       },
+      "CancelamentoDeOrcamento": {
+        "type": "object",
+        "required": [
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string"
+          }
+        }
+      },
+      "CatalogoDoOrcamento": {
+        "type": "object",
+        "required": [
+          "tabela_versao",
+          "exames",
+          "pacotes",
+          "limite_desconto_pontos_base"
+        ],
+        "properties": {
+          "exames": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExameComPreco"
+            }
+          },
+          "limite_desconto_pontos_base": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Limite de desconto da recepção, em pontos base (1000 = 10%)."
+          },
+          "pacotes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PacoteDoCatalogo"
+            }
+          },
+          "tabela_versao": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "CategoriaBirads": {
         "type": "string",
         "description": "Categoria BI-RADS atribuída pelo médico (códigos do atlas).",
@@ -8094,6 +8338,23 @@
           }
         }
       },
+      "DescontoDoOrcamento": {
+        "type": "object",
+        "required": [
+          "pontos_base",
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string",
+            "description": "paciente_frequente, funcionario_ou_familiar, condicao_social ou cobrir_outra_clinica."
+          },
+          "pontos_base": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "DescontoPedido": {
         "type": "object",
         "required": [
@@ -8607,6 +8868,26 @@
           },
           "nome": {
             "type": "string"
+          }
+        }
+      },
+      "ExameComPreco": {
+        "type": "object",
+        "required": [
+          "tuss",
+          "nome",
+          "valor_centavos"
+        ],
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "tuss": {
+            "type": "string"
+          },
+          "valor_centavos": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -9301,6 +9582,26 @@
             "type": "integer",
             "format": "int64",
             "description": "Soma dos lotes dentro da validade."
+          }
+        }
+      },
+      "ItemDoOrcamento": {
+        "type": "object",
+        "required": [
+          "tuss",
+          "descricao",
+          "valor_centavos"
+        ],
+        "properties": {
+          "descricao": {
+            "type": "string"
+          },
+          "tuss": {
+            "type": "string"
+          },
+          "valor_centavos": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -10097,6 +10398,48 @@
           }
         }
       },
+      "NovoOrcamento": {
+        "type": "object",
+        "required": [
+          "paciente_id",
+          "itens",
+          "pagamento_previsto"
+        ],
+        "properties": {
+          "desconto": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/DescontoDoOrcamento"
+              }
+            ]
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Códigos TUSS dos exames (o preço é do servidor)."
+          },
+          "paciente_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "pacote": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Código do pacote a aplicar, se a tela ofereceu."
+          },
+          "pagamento_previsto": {
+            "type": "string",
+            "description": "pix, dinheiro ou cartao."
+          }
+        }
+      },
       "NovoPaciente": {
         "type": "object",
         "required": [
@@ -10308,6 +10651,119 @@
           }
         }
       },
+      "Orcamento": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "paciente_id",
+          "paciente_nome",
+          "paciente_nascimento",
+          "itens",
+          "tabela_versao",
+          "subtotal_centavos",
+          "pacote_centavos",
+          "desconto_centavos",
+          "total_centavos",
+          "pagamento_previsto",
+          "valido_ate",
+          "situacao",
+          "criado_em"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "desconto_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "desconto_motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "desconto_pontos_base": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemDoOrcamento"
+            }
+          },
+          "motivo_cancelamento": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "paciente_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "paciente_nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "paciente_nome": {
+            "type": "string"
+          },
+          "pacote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pacote_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pacote_regra_versao": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
+          },
+          "pagamento_previsto": {
+            "type": "string"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "emitido, vencido ou cancelado (vencido é calculado pela data)."
+          },
+          "subtotal_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tabela_versao": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "valido_ate": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
       "OrientacaoBirads": {
         "type": "string",
         "enum": [
@@ -10416,6 +10872,38 @@
           },
           "nome": {
             "type": "string"
+          }
+        }
+      },
+      "PacoteDoCatalogo": {
+        "type": "object",
+        "required": [
+          "codigo",
+          "nome",
+          "regra_versao",
+          "tuss",
+          "valor_centavos"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "regra_versao": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tuss": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "valor_centavos": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },

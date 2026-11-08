@@ -245,6 +245,9 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await ir('/exames-externos');
   await esperar(page, 'region', 'Exames externos do paciente');
   await ok('34-exame-externo');
+  await ir('/orcamentos');
+  await esperar(page, 'region', 'Orçamentos recentes');
+  await ok('36-orcamento');
   estado.sessao = SESSOES.tv;
   await ir('/telao');
   await esperar(page, 'region', 'Chamada atual');

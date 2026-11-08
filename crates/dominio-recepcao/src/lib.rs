@@ -5,6 +5,7 @@
 
 pub mod cadastro;
 pub mod chamada;
+pub mod orcamento;
 
 use serde::{Deserialize, Serialize};
 use vidacor_comum::{DataNascimento, NomeCompleto};
