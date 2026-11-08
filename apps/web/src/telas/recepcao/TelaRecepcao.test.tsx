@@ -191,7 +191,7 @@ describe('Recepção: reimpressão e correção (FC-ETQ)', () => {
     await usuario.click(within(dialogo).getByRole('button', { name: 'Corrigir cadastro' }));
 
     const aviso = await within(dialogo).findByText(/Confirme sua senha e o segundo fator para corrigir o cadastro\./);
-    expect(aviso.closest('[role="status"]')).toHaveTextContent('Por segurança, o nascimento e o motivo digitados não fica guardado fora desta tela');
+    expect(aviso.closest('[role="status"]')).toHaveTextContent('Se o navegador bloquear a janela, a tela sai para confirmar e será preciso digitar de novo o nascimento e o motivo digitados');
     await usuario.click(within(dialogo).getByRole('button', { name: 'Confirmar identidade' }));
     expect(primeira.irPara).toHaveBeenCalledTimes(1);
     const voltar = voltarDa(String(primeira.irPara.mock.calls[0]?.[0]));

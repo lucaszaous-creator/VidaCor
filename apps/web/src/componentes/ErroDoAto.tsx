@@ -39,8 +39,10 @@ export function ErroDoAto({ erro, ato, aoReautenticar, naoPreservado, aoTentarDe
           </Botao>
         }
       >
-        {erro.problema.detail} Ao voltar, a tela repete o pedido com a mesma chave, sem duplicar.
-        {naoPreservado !== undefined && ` Por segurança, ${naoPreservado} não fica guardado fora desta tela: digite de novo ao voltar.`}
+        {erro.problema.detail} A confirmação abre numa janela à parte; o que você digitou continua aqui e,
+        confirmada a identidade, a tela repete o pedido com a mesma chave, sem duplicar.
+        {naoPreservado !== undefined &&
+          ` Se o navegador bloquear a janela, a tela sai para confirmar e será preciso digitar de novo ${naoPreservado}.`}
       </Aviso>
     );
   }

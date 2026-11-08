@@ -67,7 +67,9 @@ export function TelaEstornos() {
                   erro={op.erro}
                   ato="aprovar o estorno"
                   aoReautenticar={() => {
-                    reautenticar('aprovar-estorno', op.chave(), { estorno: codigo.trim() });
+                    reautenticar('aprovar-estorno', op.chave(), { estorno: codigo.trim() }, () => {
+                      op.enviar(codigo.trim());
+                    });
                   }}
                   aoTentarDeNovo={() => {
                     op.enviar(codigo.trim());

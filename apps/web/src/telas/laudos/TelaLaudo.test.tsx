@@ -78,7 +78,7 @@ describe('Laudo: rascunho, assinatura e versões (FC-LAU)', () => {
     const primeira = renderizar(URL);
     const dialogo = await assinar(usuario);
     expect(await within(dialogo).findByText(/Confirme sua senha e o segundo fator para assinar o laudo\./)).toBeInTheDocument();
-    expect(dialogo).toHaveTextContent('Por segurança, o PIN do certificado não fica guardado fora desta tela');
+    expect(dialogo).toHaveTextContent('Se o navegador bloquear a janela, a tela sai para confirmar e será preciso digitar de novo o PIN do certificado');
     await usuario.click(within(dialogo).getByRole('button', { name: 'Confirmar identidade' }));
     const voltar = voltarDa(String(primeira.irPara.mock.calls[0]?.[0]));
     const chave = pedidosDe('assinatura')[0]?.chave ?? '';

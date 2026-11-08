@@ -137,7 +137,9 @@ function Conduta({ atendimentoId, retomada, aoRegistrar }: { atendimentoId: stri
           ato="registrar a conduta"
           naoPreservado="a conduta digitada"
           aoReautenticar={() => {
-            reautenticar('conduta', op.chave());
+            reautenticar('conduta', op.chave(), {}, () => {
+              op.enviar(texto.trim());
+            });
           }}
           aoTentarDeNovo={() => {
             op.enviar(texto.trim());

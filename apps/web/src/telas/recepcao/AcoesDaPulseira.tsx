@@ -184,7 +184,9 @@ export function DialogoDeCorrecao({ atendimento, aberto, retomada, agendamentoId
           ato="corrigir o cadastro"
           naoPreservado="o nascimento e o motivo digitados"
           aoReautenticar={() => {
-            reautenticar('corrigir', op.chave(), { agendamento: agendamentoId });
+            reautenticar('corrigir', op.chave(), { agendamento: agendamentoId }, () => {
+              if (nascimento !== null) op.enviar({ nascimento: nascimento.toString(), motivo: motivo.trim() });
+            });
           }}
           aoTentarDeNovo={() => {
             if (nascimento !== null) op.enviar({ nascimento: nascimento.toString(), motivo: motivo.trim() });

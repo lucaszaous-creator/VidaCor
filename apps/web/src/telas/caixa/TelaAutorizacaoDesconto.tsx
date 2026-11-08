@@ -129,7 +129,7 @@ export function TelaAutorizacaoDesconto() {
                   ato="autorizar o desconto"
                   naoPreservado="o paciente escolhido e o motivo"
                   aoReautenticar={() => {
-                    reautenticar('autorizar', op.chave());
+                    reautenticar('autorizar', op.chave(), {}, autorizar);
                   }}
                   aoTentarDeNovo={autorizar}
                 />

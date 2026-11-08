@@ -28,6 +28,7 @@ import { TelaPortal } from './telas/portal/TelaPortal';
 import { TelaRecepcao } from './telas/recepcao/TelaRecepcao';
 import { TelaSala } from './telas/sala/TelaSala';
 import { TelaEntrar } from './telas/TelaEntrar';
+import { TelaReautenticado } from './telas/TelaReautenticado';
 import { TelaTriagem } from './telas/triagem/TelaTriagem';
 
 export interface ContextoDoRoteador {
@@ -99,6 +100,7 @@ export function lerBuscaDoEstorno(busca: Record<string, unknown>): BuscaDoEstorn
 const raiz = createRootRouteWithContext<ContextoDoRoteador>()({ component: Outlet });
 
 const rotaEntrar = createRoute({ getParentRoute: () => raiz, path: '/entrar', component: TelaEntrar });
+const rotaReautenticado = createRoute({ getParentRoute: () => raiz, path: '/reautenticado', component: TelaReautenticado });
 
 const rotaApp = createRoute({
   getParentRoute: () => raiz,
@@ -159,6 +161,7 @@ const rotaPortalLink = createRoute({ getParentRoute: () => rotaPortal, path: '/l
 
 const arvore = raiz.addChildren([
   rotaEntrar,
+  rotaReautenticado,
   rotaPortal.addChildren([rotaPortalInicio, rotaPortalLaudo, rotaPortalLink]),
   rotaApp.addChildren([
     rotaInicio,

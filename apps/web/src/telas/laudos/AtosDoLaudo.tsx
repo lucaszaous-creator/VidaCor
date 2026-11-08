@@ -93,7 +93,7 @@ export function DialogoDeAssinatura({ laudo, retomada, antesDeAssinar, aoFechar 
           ato="assinar o laudo"
           naoPreservado="o PIN do certificado"
           aoReautenticar={() => {
-            reautenticar('assinar', op.chave());
+            reautenticar('assinar', op.chave(), {}, () => void assinar());
           }}
           aoTentarDeNovo={() => void assinar()}
         />
@@ -161,7 +161,9 @@ export function DialogoDeRetificacao({ laudo, textoVigente, retomada, aoFechar }
           ato="retificar o laudo"
           naoPreservado="o motivo digitado"
           aoReautenticar={() => {
-            reautenticar('retificar', op.chave());
+            reautenticar('retificar', op.chave(), {}, () => {
+              op.enviar(motivo.trim());
+            });
           }}
           aoTentarDeNovo={() => {
             op.enviar(motivo.trim());
@@ -275,7 +277,9 @@ export function AcessoDeEmergencia({ laudoId, retomada, aoLiberar }: PropsDaEmer
           ato="usar o acesso de emergência"
           naoPreservado="a justificativa digitada"
           aoReautenticar={() => {
-            reautenticar('emergencia', op.chave());
+            reautenticar('emergencia', op.chave(), {}, () => {
+              op.enviar(justificativa.trim());
+            });
           }}
           aoTentarDeNovo={() => {
             op.enviar(justificativa.trim());
