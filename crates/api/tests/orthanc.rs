@@ -40,51 +40,25 @@ fn pacs() -> &'static Pacs {
                 .expect("subir Orthanc");
             let porta = c.get_host_port_ipv4(8042.tcp()).expect("porta");
             let url = format!("http://127.0.0.1:{porta}");
-            let http = reqwest::blocking_cliente();
-            for _ in 0..120 {
-                if http(&format!("{url}/system")) {
-                    return Pacs { _c: c, url };
+            let rt = tokio::runtime::Runtime::new().expect("runtime");
+            let pronto = rt.block_on(async {
+                let http = ::reqwest::Client::new();
+                for _ in 0..120 {
+                    if let Ok(r) = http.get(format!("{url}/system")).send().await {
+                        if r.status().is_success() {
+                            return true;
+                        }
+                    }
+                    tokio::time::sleep(Duration::from_millis(500)).await;
                 }
-                std::thread::sleep(Duration::from_millis(500));
-            }
-            panic!("Orthanc não respondeu");
+                false
+            });
+            assert!(pronto, "Orthanc não respondeu");
+            Pacs { _c: c, url }
         })
         .join()
         .expect("thread do Orthanc")
     })
-}
-
-mod reqwest {
-    /// Verificação simples de que a porta HTTP responde (sem cliente bloqueante extra).
-    pub fn blocking_cliente() -> impl Fn(&str) -> bool {
-        |url: &str| {
-            let endereco = url
-                .trim_start_matches("http://")
-                .split('/')
-                .next()
-                .unwrap_or_default()
-                .to_owned();
-            let caminho = format!(
-                "/{}",
-                url.trim_start_matches("http://")
-                    .splitn(2, '/')
-                    .nth(1)
-                    .unwrap_or_default()
-            );
-            use std::io::{Read, Write};
-            let Ok(mut s) = std::net::TcpStream::connect(&endereco) else {
-                return false;
-            };
-            let _ = s.set_read_timeout(Some(std::time::Duration::from_secs(2)));
-            let pedido = format!("GET {caminho} HTTP/1.0\r\nHost: {endereco}\r\n\r\n");
-            if s.write_all(pedido.as_bytes()).is_err() {
-                return false;
-            }
-            let mut r = String::new();
-            let _ = s.read_to_string(&mut r);
-            r.starts_with("HTTP/1.1 200") || r.starts_with("HTTP/1.0 200")
-        }
-    }
 }
 
 async fn http() -> ::reqwest::Client {
