@@ -1,7 +1,8 @@
 #!/bin/bash
 # Renderiza mockups com o motor do canvas em 1440x900 e 1280x800 e acusa:
 # sh (altura da página: deve ser igual à janela), cortado (painel escondendo conteúdo) e ladoalado (rolagem lateral).
-# Requer: node + playwright e o motor do canvas salvo em tools/verificacao/render/support.js (não versionado).
+# Requer: node + playwright. Motor: tools/verificacao/motor-dc/support.js (aberto, versionado, DEC-2026-11-08-41);
+# se existir tools/verificacao/render/support.js (motor original da ferramenta de design, não versionado), ele tem prioridade.
 # Uso: tools/verificacao/verifica.sh Tela.dc.html [...]
 D="$(cd "$(dirname "$0")" && pwd)"; R="$(cd "$D/../.." && pwd)"
 mkdir -p "$D/shots/1440" "$D/shots/1280"
