@@ -27,10 +27,44 @@ para DICOM) e incluir o **estacionamento com leitura de placa**.
 | Perfis, permissões e RLS | Proposta para validar — [docs/18](docs/18-perfis-permissoes-e-rls.md) |
 | Lastro e rastreabilidade | Regra — [docs/21](docs/21-lastro-e-rastreabilidade.md) |
 | Lacunas e roteiro (essencial, importante, futuro) | Aprovado — [docs/22](docs/22-lacunas-e-roadmap.md) |
-| Desenvolvimento | ⏳ Próximo passo — [docs/09](docs/09-proximos-passos.md) |
+| Desenvolvimento | Em andamento: esqueleto M0 — [docs/29](docs/29-esqueleto-m0.md) |
 
 **Mockup ao vivo:** https://claude.ai/artifact/NT2bm1UnVPJe9NGGs3HTii
 (privado; compartilhe pelo menu *Share* da página para outras pessoas abrirem).
+
+## Como rodar
+
+Pré-requisitos: Docker, Rust (versão do `rust-toolchain.toml`), Node 22 e pnpm, `just`.
+
+```bash
+cp infra/compose/.env.exemplo .env
+```
+
+```bash
+docker compose -f infra/compose/dev.yml up -d
+```
+
+```bash
+set -a; . ./.env; set +a; SQLX_OFFLINE=true cargo run -p vidacor-api
+```
+
+```bash
+PGPASSWORD=dev_admin psql -h 127.0.0.1 -U postgres -d vidacor -f infra/postgres/semente-dev.sql
+```
+
+```bash
+pnpm install && pnpm --filter @vidacor/web dev
+```
+
+A tela abre em http://127.0.0.1:5173 (usuários fictícios do realm de dev, como `ana.souza`, senha
+`VidaCor-dev-2026`; o 2FA é configurado no primeiro acesso). Tudo é de desenvolvimento e com dados
+fictícios; nada disso vale para homologação ou produção.
+
+Verificação completa (lint, tipos e testes com PostgreSQL e Orthanc reais via Testcontainers):
+
+```bash
+just test
+```
 
 ## Exames realizados pela clínica
 

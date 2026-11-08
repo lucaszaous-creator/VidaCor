@@ -1,7 +1,7 @@
 # 29 · Documento de design do esqueleto (marco M0)
 
 - **Autor:** Claude (papéis desenvolvimento e devops-seguranca), a pedido do dono do produto
-- **Data:** 08/11/2026 · **Status:** em construção
+- **Data:** 08/11/2026 · **Status:** núcleo construído e testado; telas em construção
 - **Aprovações:** dono do produto [x] início da construção (DEC-2026-11-08-43) · responsável clínico de segurança [ ] (check-in é ato clínico: frases FC-CHK do docs/27 aguardam aprovação) · dono técnico [ ]
 
 ## 1. Comunicado (de trás para frente)
@@ -54,7 +54,7 @@ e tempo), elevação (ato por rota, negar por padrão).
 | `crates/comum` | Erros (Problem Details RFC 9457), ids (UUIDv7 e código legível), tempo, tipos de valor (`NomeCompleto`, `DataNascimento`) |
 | `crates/dominio-recepcao` | Regra do check-in, sem I/O (G5) |
 | `crates/api` | Binário axum: rotas, sessão, permissão, adaptadores PostgreSQL e Orthanc, outbox, SSE, OpenAPI (utoipa) |
-| `infra/compose/dev.yml` | PostgreSQL 17, Orthanc com worklist, NATS, Keycloak |
+| `infra/compose/dev.yml` | PostgreSQL 17, Orthanc com worklist, Keycloak (NATS entra com o primeiro consumidor fora do núcleo; ADR-0007) |
 | `packages/design-system` | Tokens e componentes do `design/vc10.css` (ADR-0021) |
 | `packages/api-client` | `openapi.json` gerado do código e cliente TypeScript gerado |
 | `apps/web` | Telas React |
