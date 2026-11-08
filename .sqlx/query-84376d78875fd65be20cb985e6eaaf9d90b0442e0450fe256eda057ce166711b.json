@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO integracao.evento_recebido (provedor, evento_id) VALUES ('pix', $1) ON CONFLICT DO NOTHING RETURNING 1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "?column?",
+        "type_info": "Int4",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "84376d78875fd65be20cb985e6eaaf9d90b0442e0450fe256eda057ce166711b"
+}

@@ -17,6 +17,7 @@ pub mod oidc;
 pub mod openapi;
 pub mod orthanc;
 pub mod outbox;
+pub mod pix;
 pub mod portal;
 pub mod rotas;
 pub mod sessao;

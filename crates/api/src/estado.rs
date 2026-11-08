@@ -18,6 +18,8 @@ pub struct Estado {
     pub oidc: Option<Arc<Oidc>>,
     /// Serviço de assinatura ICP-Brasil. Sem configuração, assinar responde 503 (falha fechada).
     pub assinador: Option<Arc<dyn crate::assinatura::Assinador>>,
+    /// PSP do PIX. Sem configuração, cobrança PIX fica pendente no outbox (o caixa segue, R7).
+    pub psp: Option<Arc<dyn crate::pix::Psp>>,
 }
 
 impl Estado {
@@ -31,6 +33,7 @@ impl Estado {
             outbox_aviso: Arc::new(Notify::new()),
             oidc: oidc.map(Arc::new),
             assinador: None,
+            psp: None,
         }
     }
 }

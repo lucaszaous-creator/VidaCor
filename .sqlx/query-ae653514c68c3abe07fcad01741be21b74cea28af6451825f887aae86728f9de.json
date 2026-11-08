@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE caixa.recebimento SET pix_txid = $2, pix_copia_e_cola = $3, versao = versao + 1 WHERE id = $1 AND pix_txid IS NULL",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "ae653514c68c3abe07fcad01741be21b74cea28af6451825f887aae86728f9de"
+}

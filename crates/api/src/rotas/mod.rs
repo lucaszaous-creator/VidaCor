@@ -3,6 +3,7 @@
 pub mod agenda;
 pub mod agendamentos;
 pub mod atendimentos;
+pub mod caixa;
 pub mod etiquetas;
 pub mod eventos;
 pub mod laudos;
@@ -12,6 +13,7 @@ pub mod sala;
 pub mod saude;
 pub mod sessao;
 pub mod triagem;
+pub mod webhooks;
 
 use crate::estado::Estado;
 use axum::routing::{get, post};
@@ -74,6 +76,15 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/portal/laudos", get(portal::meus_laudos))
         .route("/v1/portal/laudos/{id}", get(portal::meu_laudo))
         .route("/v1/links/{token}", get(portal::abrir_link))
+        .route("/v1/caixas", post(caixa::abrir))
+        .route("/v1/caixas/meu", get(caixa::meu))
+        .route("/v1/caixas/{id}/fechamento", post(caixa::fechar))
+        .route("/v1/recebimentos", post(caixa::receber))
+        .route("/v1/recebimentos/{id}", get(caixa::obter_recebimento))
+        .route("/v1/recebimentos/{id}/estornos", post(caixa::pedir_estorno))
+        .route("/v1/autorizacoes-desconto", post(caixa::autorizar_desconto))
+        .route("/v1/estornos/{id}/aprovacao", post(caixa::aprovar_estorno))
+        .route("/v1/webhooks/pix", post(webhooks::pix))
         .route("/v1/eventos", get(eventos::fluxo))
         .fallback(nao_existe)
 }

@@ -1,0 +1,21 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO caixa.recebimento_item (recebimento_id, tuss, descricao, valor_centavos, criado_por, estacao, unidade_id, correlacao)\n             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Int8",
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "9b0a99df580462ab2b597e355817ea46d43df3387fb984014f28c53031aa80ea"
+}

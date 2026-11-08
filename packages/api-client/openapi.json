@@ -546,6 +546,223 @@
         }
       }
     },
+    "/v1/autorizacoes-desconto": {
+      "post": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "Gerência autoriza desconto acima do limite (reautenticação; quem pede não autoriza).",
+        "operationId": "autorizar_desconto",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoAutorizacao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutorizacaoDesconto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/caixas": {
+      "post": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "Abre o caixa do operador (um aberto por vez).",
+        "operationId": "abrir",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoAbertura"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Caixa"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/caixas/meu": {
+      "get": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "Caixa aberto do usuário, se houver.",
+        "operationId": "meu",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Caixa"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/caixas/{id}/fechamento": {
+      "post": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "Fecha o caixa com o valor contado: grava esperado, contado e diferença, sem esconder (docs/27 T-CXA-05).",
+        "operationId": "fechar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoFechamento"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Caixa"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/estornos/{id}/aprovacao": {
+      "post": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "Aprova o estorno (financeiro ou gerência, reautenticação; quem pediu não aprova, FC-CXA-09).",
+        "operationId": "aprovar_estorno",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/etiquetas/{codigo}/reimpressao": {
       "post": {
         "tags": [
@@ -1526,6 +1743,165 @@
         }
       }
     },
+    "/v1/recebimentos": {
+      "post": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "Registra um recebimento: total pela tabela vigente, desconto dentro do limite ou autorizado.",
+        "operationId": "receber",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoRecebimento"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Recebimento"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "desconto-acima-do-limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "caixa-fechado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "valor-invalido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/recebimentos/{id}": {
+      "get": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "Um recebimento (para acompanhar a cobrança PIX).",
+        "operationId": "obter_recebimento",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Recebimento"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/recebimentos/{id}/estornos": {
+      "post": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "Pede o estorno de um recebimento (o aprovador será outra pessoa).",
+        "operationId": "pedir_estorno",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoEstorno"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/salas": {
       "get": {
         "tags": [
@@ -1899,6 +2275,51 @@
           }
         }
       }
+    },
+    "/v1/webhooks/pix": {
+      "post": {
+        "tags": [
+          "integracoes"
+        ],
+        "summary": "Recebe o webhook do PSP. Responde 2xx rápido; o efeito acontece pelo outbox.",
+        "operationId": "pix",
+        "parameters": [
+          {
+            "name": "X-Assinatura",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Evento do PSP: id e txid",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2027,6 +2448,81 @@
           }
         }
       },
+      "AutorizacaoDesconto": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "valida_ate"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "valida_ate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Caixa": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "fundo_centavos",
+          "aberto_em"
+        ],
+        "properties": {
+          "aberto_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "contado_centavos": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
+          },
+          "diferenca_centavos": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
+          },
+          "esperado_centavos": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
+          },
+          "fechado_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "fundo_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
       "Conduta": {
         "type": "object",
         "required": [
@@ -2093,6 +2589,29 @@
             "$ref": "#/components/schemas/PacienteResumo"
           },
           "versao": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "DescontoPedido": {
+        "type": "object",
+        "required": [
+          "pontos_base",
+          "motivo"
+        ],
+        "properties": {
+          "autorizacao_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "pontos_base": {
             "type": "integer",
             "format": "int32"
           }
@@ -2396,6 +2915,45 @@
           }
         }
       },
+      "ItemPedido": {
+        "type": "object",
+        "required": [
+          "tuss"
+        ],
+        "properties": {
+          "tuss": {
+            "type": "string"
+          },
+          "valor_centavos": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "description": "Ignorado no cálculo (o servidor usa a tabela vigente); zero ou negativo é recusado (FC-CXA-07)."
+          }
+        }
+      },
+      "ItemRecebimento": {
+        "type": "object",
+        "required": [
+          "tuss",
+          "descricao",
+          "valor_centavos"
+        ],
+        "properties": {
+          "descricao": {
+            "type": "string"
+          },
+          "tuss": {
+            "type": "string"
+          },
+          "valor_centavos": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "Laudo": {
         "type": "object",
         "required": [
@@ -2532,6 +3090,18 @@
           }
         }
       },
+      "PedidoAbertura": {
+        "type": "object",
+        "required": [
+          "fundo_centavos"
+        ],
+        "properties": {
+          "fundo_centavos": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "PedidoAgendamento": {
         "type": "object",
         "required": [
@@ -2586,6 +3156,32 @@
         "properties": {
           "pin": {
             "type": "string"
+          }
+        }
+      },
+      "PedidoAutorizacao": {
+        "type": "object",
+        "required": [
+          "paciente_id",
+          "pontos_base",
+          "motivo",
+          "solicitante_id"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string"
+          },
+          "paciente_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "pontos_base": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "solicitante_id": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },
@@ -2662,6 +3258,29 @@
         "properties": {
           "justificativa": {
             "type": "string"
+          }
+        }
+      },
+      "PedidoEstorno": {
+        "type": "object",
+        "required": [
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string"
+          }
+        }
+      },
+      "PedidoFechamento": {
+        "type": "object",
+        "required": [
+          "contado_centavos"
+        ],
+        "properties": {
+          "contado_centavos": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -2750,6 +3369,47 @@
           }
         }
       },
+      "PedidoRecebimento": {
+        "type": "object",
+        "required": [
+          "paciente_id",
+          "itens",
+          "forma"
+        ],
+        "properties": {
+          "atendimento_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "desconto": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/DescontoPedido"
+              }
+            ]
+          },
+          "forma": {
+            "type": "string",
+            "description": "pix, dinheiro ou cartao."
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemPedido"
+            }
+          },
+          "paciente_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
       "PedidoReimpressao": {
         "type": "object",
         "properties": {
@@ -2818,6 +3478,21 @@
           }
         }
       },
+      "Pix": {
+        "type": "object",
+        "required": [
+          "txid",
+          "copia_e_cola"
+        ],
+        "properties": {
+          "copia_e_cola": {
+            "type": "string"
+          },
+          "txid": {
+            "type": "string"
+          }
+        }
+      },
       "ProblemaDoc": {
         "type": "object",
         "description": "Erro em Problem Details (RFC 9457).",
@@ -2870,6 +3545,69 @@
           },
           "tuss": {
             "type": "string"
+          }
+        }
+      },
+      "Recebimento": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "itens",
+          "subtotal_centavos",
+          "desconto_centavos",
+          "total_centavos",
+          "tabela_versao",
+          "forma",
+          "situacao"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "desconto_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "forma": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemRecebimento"
+            }
+          },
+          "pix": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Pix",
+                "description": "Fica nulo até o PSP devolver a cobrança (pelo outbox)."
+              }
+            ]
+          },
+          "situacao": {
+            "type": "string",
+            "description": "aguardando_pagamento, pago ou estornado."
+          },
+          "subtotal_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tabela_versao": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total_centavos": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },

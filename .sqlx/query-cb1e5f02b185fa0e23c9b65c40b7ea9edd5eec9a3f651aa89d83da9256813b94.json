@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT tuss, descricao, valor_centavos FROM caixa.recebimento_item WHERE recebimento_id = $1 ORDER BY tuss",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento_item",
+            "name": "tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "descricao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento_item",
+            "name": "descricao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "valor_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento_item",
+            "name": "valor_centavos"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "cb1e5f02b185fa0e23c9b65c40b7ea9edd5eec9a3f651aa89d83da9256813b94"
+}

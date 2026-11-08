@@ -1,0 +1,40 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE caixa.recebimento SET situacao = 'estornado', versao = versao + 1 WHERE id = $1 AND situacao = 'pago' RETURNING forma, pix_txid",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "forma",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "forma"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "pix_txid",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "pix_txid"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      true
+    ]
+  },
+  "hash": "6771c77d39dc556be8a86faef927434dd44a2ac13b327d8eb437eb826be37c04"
+}

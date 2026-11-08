@@ -1,0 +1,30 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id FROM caixa.autorizacao_desconto WHERE id = $1 AND paciente_id = $2 AND usada_em IS NULL\n                            AND valida_ate > now() AND pontos_base >= $3 FOR UPDATE",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "caixa.autorizacao_desconto",
+            "name": "id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "94c0a6c6b74df8c32f62a55a5782cabd8b673de6c609c6f2896f8f830ec92721"
+}

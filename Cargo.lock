@@ -3633,6 +3633,7 @@ dependencies = [
  "chrono",
  "chrono-tz",
  "futures-util",
+ "hmac 0.12.1",
  "http-body-util",
  "openidconnect",
  "rand 0.9.5",

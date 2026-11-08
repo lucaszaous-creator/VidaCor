@@ -1,0 +1,41 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT codigo, fundo_centavos FROM caixa.caixa WHERE id = $1 AND operador_id = $2 AND fechado_em IS NULL FOR UPDATE",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.caixa",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "fundo_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "caixa.caixa",
+            "name": "fundo_centavos"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "84f7d768dfee246c3430500787a431cd4fd48459df800a33fb04a1640e3b64ec"
+}

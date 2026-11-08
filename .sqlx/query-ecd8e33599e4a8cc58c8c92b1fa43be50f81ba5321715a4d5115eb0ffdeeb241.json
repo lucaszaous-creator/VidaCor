@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT codigo, total_centavos, chave_psp, pix_txid FROM caixa.recebimento WHERE id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "total_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "total_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "chave_psp",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "chave_psp"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "pix_txid",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "pix_txid"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "ecd8e33599e4a8cc58c8c92b1fa43be50f81ba5321715a4d5115eb0ffdeeb241"
+}

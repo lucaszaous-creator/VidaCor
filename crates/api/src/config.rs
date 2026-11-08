@@ -30,6 +30,8 @@ pub struct Config {
     /// Unidade a que o servidor local pertence (estudos recebidos do PACS).
     pub unidade_servidor: Option<Uuid>,
     pub oidc: Option<ConfigOidc>,
+    /// Segredo HMAC do webhook do PSP (G3). Sem ele, todo webhook é recusado (falha fechada).
+    pub pix_webhook_segredo: Option<String>,
 }
 
 fn var(nome: &str) -> Option<String> {
@@ -69,6 +71,7 @@ impl Config {
             orthanc_url: var("VIDACOR_ORTHANC_URL"),
             unidade_servidor,
             oidc,
+            pix_webhook_segredo: var("VIDACOR_PIX_WEBHOOK_SEGREDO"),
         })
     }
 }

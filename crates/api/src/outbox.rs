@@ -27,7 +27,7 @@ pub async fn processar_um(estado: &Estado, orthanc: &Orthanc) -> Result<bool> {
           WHERE o.id = (SELECT id FROM integracao.outbox
                          WHERE concluido_em IS NULL AND proximo_em <= now() AND tentativas < $1
                          ORDER BY criado_em LIMIT 1 FOR UPDATE SKIP LOCKED)
-          RETURNING o.id, o.tipo, o.carga, o.unidade_id, o.tentativas",
+          RETURNING o.id, o.tipo, o.carga, o.unidade_id, o.tentativas, o.chave_idempotencia",
         MAX_TENTATIVAS
     )
     .fetch_optional(&estado.banco)
@@ -44,6 +44,23 @@ pub async fn processar_um(estado: &Estado, orthanc: &Orthanc) -> Result<bool> {
                 .map(|_| ())
                 .map_err(|e| anyhow::anyhow!("publicação no portal: {}", e.codigo())),
             None => Err(anyhow::anyhow!("carga sem laudo_id")),
+        },
+        "pix.criar_cobranca" => match item.carga["recebimento_id"]
+            .as_str()
+            .and_then(|v| v.parse().ok())
+        {
+            Some(r) => crate::rotas::caixa::criar_cobranca(estado, item.unidade_id, r).await,
+            None => Err(anyhow::anyhow!("carga sem recebimento_id")),
+        },
+        "pix.processar_evento" => match item.carga["txid"].as_str() {
+            Some(txid) => {
+                crate::rotas::caixa::processar_evento_pix(estado, item.unidade_id, txid).await
+            }
+            None => Err(anyhow::anyhow!("carga sem txid")),
+        },
+        "pix.estornar" => match (estado.psp.clone(), item.carga["txid"].as_str()) {
+            (Some(psp), Some(txid)) => psp.estornar(item.chave_idempotencia, txid).await,
+            _ => Err(anyhow::anyhow!("PSP não configurado ou carga sem txid")),
         },
         // Avisos por WhatsApp e oferta à lista de espera: o provedor entra numa próxima entrega.
         // Ficam pendentes no outbox, visíveis, sem se perder (R7).
