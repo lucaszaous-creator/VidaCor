@@ -1,0 +1,101 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, codigo, instituicao, origem, nome_na_origem, id_na_origem, criado_em FROM exames.externo\n          WHERE paciente_id = $1 AND ($2::uuid IS NULL OR id = $2) ORDER BY criado_em DESC LIMIT 100",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "exames.externo",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.externo",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "instituicao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.externo",
+            "name": "instituicao"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "origem",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.externo",
+            "name": "origem"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "nome_na_origem",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.externo",
+            "name": "nome_na_origem"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "id_na_origem",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.externo",
+            "name": "id_na_origem"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "exames.externo",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "f2e0dfde80fd44bf0162c64579faaa8f9754f41b7724a2301aa1ee57bfdee044"
+}

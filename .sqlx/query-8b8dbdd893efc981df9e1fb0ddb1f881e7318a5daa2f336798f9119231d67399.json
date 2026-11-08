@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE laudos.achado SET situacao = 'removido', removido_em = now(), removido_por = $2, versao = versao + 1\n          WHERE id = $1 AND situacao = 'ativo'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "8b8dbdd893efc981df9e1fb0ddb1f881e7318a5daa2f336798f9119231d67399"
+}

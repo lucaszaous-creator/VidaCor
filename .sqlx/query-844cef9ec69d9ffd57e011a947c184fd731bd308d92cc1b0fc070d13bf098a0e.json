@@ -1,0 +1,76 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT laudo_id AS id, exame, texto, retificado, publicado_em FROM portal.publicacao WHERE laudo_id = $1 AND vigente",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "portal.publicacao",
+            "name": "laudo_id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "exame",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "portal.publicacao",
+            "name": "exame"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "texto",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "portal.publicacao",
+            "name": "texto"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "retificado",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "portal.publicacao",
+            "name": "retificado"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "publicado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "portal.publicacao",
+            "name": "publicado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "844cef9ec69d9ffd57e011a947c184fd731bd308d92cc1b0fc070d13bf098a0e"
+}

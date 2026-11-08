@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE integracao.cursor_orthanc SET ultima_mudanca = GREATEST(ultima_mudanca, $2), atualizado_em = now()\n          WHERE unidade_id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int8"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "33112d94396b8decde460008c1d8d27a3523041217cc425cdfa1f7ac99c34e73"
+}

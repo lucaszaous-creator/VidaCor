@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT tuss, descricao, quantidade, valor_unitario_centavos FROM faturamento.conta_item\n          WHERE conta_id = $1 ORDER BY sequencial",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta_item",
+            "name": "tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "descricao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta_item",
+            "name": "descricao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "quantidade",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta_item",
+            "name": "quantidade"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "valor_unitario_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta_item",
+            "name": "valor_unitario_centavos"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "3a63a8a64d281b79a2a63b8c4f61ab77edf1f6a67fd21947ab4c201d7a3d38c4"
+}

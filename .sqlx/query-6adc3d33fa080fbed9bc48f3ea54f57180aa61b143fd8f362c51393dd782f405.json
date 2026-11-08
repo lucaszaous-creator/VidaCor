@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO portal.aviso (id, publicacao_id, canal) VALUES ($1, $2, 'whatsapp') ON CONFLICT (publicacao_id) DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "6adc3d33fa080fbed9bc48f3ea54f57180aa61b143fd8f362c51393dd782f405"
+}

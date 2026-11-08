@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO integracao.evento_recebido (provedor, evento_id) VALUES ('whatsapp', $1) ON CONFLICT DO NOTHING RETURNING 1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "?column?",
+        "type_info": "Int4",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "6524af711d7562d7e43a45321928b45c6f1325297b537e8f56339b05355a73ff"
+}

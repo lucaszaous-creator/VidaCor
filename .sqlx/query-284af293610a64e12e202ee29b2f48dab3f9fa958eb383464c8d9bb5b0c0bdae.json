@@ -1,0 +1,24 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO faturamento.pendencia (id, conta_id, regra, regra_versao, efeito, origem_regra, titulo, detalhe,\n                    o_que_fazer, criado_por, origem, unidade_id, correlacao)\n             SELECT $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'faturamento', unidade_id, $11\n               FROM faturamento.conta WHERE id = $2",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "284af293610a64e12e202ee29b2f48dab3f9fa958eb383464c8d9bb5b0c0bdae"
+}

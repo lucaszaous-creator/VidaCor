@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE portal.publicacao SET vigente = false WHERE laudo_id = $1 AND versao_numero <> $2 AND vigente",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "12a1d223cdf284422bc3b06f45968ecae46c419c4f16d443b6897000aa53799d"
+}

@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT 'guia' AS \"tipo!\", id AS \"id!\", numero AS \"codigo!\", situacao, criado_em AS \"criado_em!\" FROM convenio.guia WHERE agendamento_id = $2\n           UNION ALL SELECT 'etiqueta', id, codigo, situacao, criado_em FROM recepcao.etiqueta WHERE atendimento_id = $1\n           UNION ALL SELECT 'triagem', id, codigo, resultado, criado_em FROM triagem.triagem WHERE atendimento_id = $1\n           UNION ALL SELECT 'estudo', id, codigo, NULL, criado_em FROM exames.estudo WHERE atendimento_id = $1\n           UNION ALL SELECT 'laudo', id, codigo, situacao, criado_em FROM laudos.laudo WHERE atendimento_id = $1\n           UNION ALL SELECT 'recebimento', id, codigo, situacao, criado_em FROM caixa.recebimento WHERE atendimento_id = $1\n           UNION ALL SELECT 'estorno', x.id, x.codigo, x.situacao, x.criado_em FROM caixa.estorno x JOIN caixa.recebimento r ON r.id = x.recebimento_id WHERE r.atendimento_id = $1\n           UNION ALL SELECT 'contraste', m.id, l.numero, NULL, m.criado_em FROM estoque.movimento m JOIN estoque.lote l ON l.id = m.lote_id WHERE m.atendimento_id = $1\n           ORDER BY 5",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tipo!",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 1,
+        "name": "id!",
+        "type_info": "Uuid",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "codigo!",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 3,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 4,
+        "name": "criado_em!",
+        "type_info": "Timestamptz",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "ae111f8703e396d0f83e6514dee5bad94fd2c6026217798fe0db0fb38533d6f9"
+}

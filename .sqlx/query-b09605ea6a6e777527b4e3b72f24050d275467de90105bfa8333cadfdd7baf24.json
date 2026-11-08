@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE agenda.espera SET situacao = 'aguardando', versao = versao + 1 WHERE id = $1 AND situacao = 'ofertado'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "b09605ea6a6e777527b4e3b72f24050d275467de90105bfa8333cadfdd7baf24"
+}

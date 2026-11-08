@@ -1,0 +1,21 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO laudos.versao (id, laudo_id, numero, texto, situacao, motivo, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, 'rascunho', $5, $6, 'consultorio', $7, $8)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Int4",
+        "Text",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "a9cc200b6554a73d26cf6d8d5e6bc9172d9758186d1d0194708e49b108423b4e"
+}

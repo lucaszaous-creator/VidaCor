@@ -1,0 +1,22 @@
+[package]
+name = "vidacor-documentos"
+version = "0.1.0"
+edition.workspace = true
+# O Typst 0.15 exige Rust 1.92 (o toolchain fixado é 1.97). DEC-2026-11-08-86.
+rust-version = "1.92"
+license.workspace = true
+publish.workspace = true
+description = "Documentos do VidaCor em PDF com Typst embutido (laudo impresso, dossiê do lastro): modelos versionados, fontes embutidas e dado sempre como dado"
+
+[dependencies]
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
+sha2 = "0.10.9"
+thiserror = "2.0.17"
+typst = "=0.15.1"
+typst-layout = "=0.15.1"
+typst-pdf = "=0.15.1"
+typst-assets = { version = "=0.15.1", features = ["fonts"] }
+
+[lints]
+workspace = true

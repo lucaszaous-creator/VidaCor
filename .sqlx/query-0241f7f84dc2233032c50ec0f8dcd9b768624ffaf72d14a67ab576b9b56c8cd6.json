@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE convenio.guia_procedimento SET saldo = saldo - 1 WHERE guia_id = $1 AND tuss = $2 AND saldo > 0",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "0241f7f84dc2233032c50ec0f8dcd9b768624ffaf72d14a67ab576b9b56c8cd6"
+}

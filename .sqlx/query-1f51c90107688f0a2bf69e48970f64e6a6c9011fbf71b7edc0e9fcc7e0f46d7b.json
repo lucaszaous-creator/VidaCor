@@ -1,0 +1,233 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT l.codigo, p.nome, p.nascimento, ag.exame_nome, t.codigo AS protocolo, e.recebido_em,\n                  v.numero, v.texto, v.situacao, v.motivo, v.assinada_em AS \"assinada_em!\", v.certificado,\n                  v.hash_documento AS \"hash_documento!\", u.nome AS medico,\n                  r.conselho AS \"conselho?\", r.uf AS \"uf?\", r.numero AS \"registro?\", r.rqe AS \"rqe?\"\n             FROM laudos.versao v\n             JOIN laudos.laudo l ON l.id = v.laudo_id\n             JOIN identidade.paciente p ON p.id = l.paciente_id\n             JOIN recepcao.atendimento t ON t.id = l.atendimento_id\n             JOIN agenda.agendamento ag ON ag.id = t.agendamento_id\n             JOIN exames.estudo e ON e.id = l.estudo_id\n             JOIN identidade.usuario u ON u.id = v.assinada_por\n             LEFT JOIN documentos.registro_profissional r ON r.usuario_id = v.assinada_por AND r.conselho = 'CRM' AND r.vigente\n            WHERE v.laudo_id = $1 AND v.numero = $2 AND v.situacao IN ('assinada', 'substituida')",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.laudo",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "exame_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "exame_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "protocolo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "recebido_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "exames.estudo",
+            "name": "recebido_em"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "numero",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "texto",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "texto"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "assinada_em!",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "assinada_em"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "certificado",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "certificado"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "hash_documento!",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "hash_documento"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "medico",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "conselho?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.registro_profissional",
+            "name": "conselho"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "uf?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.registro_profissional",
+            "name": "uf"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "registro?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.registro_profissional",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 17,
+        "name": "rqe?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "documentos.registro_profissional",
+            "name": "rqe"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "1f51c90107688f0a2bf69e48970f64e6a6c9011fbf71b7edc0e9fcc7e0f46d7b"
+}

@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE portal.conta SET falhas = 0, bloqueada_ate = NULL WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "86f009a3c08c1ec9a3fd2618863af9a4ce7b65959ede12f9af9de2af0110aca8"
+}

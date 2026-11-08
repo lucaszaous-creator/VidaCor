@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE faturamento.lote SET situacao = 'enviado', protocolo = $2, enviado_em = now(), versao = versao + 1\n          WHERE id = $1 AND situacao = 'aguardando_envio'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "ade69eb36f1800d3231bbdee9256f505258a628a8df32d64428cbae87e2126ac"
+}

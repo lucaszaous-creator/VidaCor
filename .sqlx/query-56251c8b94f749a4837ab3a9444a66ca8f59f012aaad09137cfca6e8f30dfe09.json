@@ -1,0 +1,30 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE caixa.estorno SET situacao = 'recusado', recusado_por = $2, recusado_em = now(), motivo_recusa = $3, versao = versao + 1\n         WHERE id = $1 AND situacao = 'pedido' RETURNING id",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "caixa.estorno",
+            "name": "id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "56251c8b94f749a4837ab3a9444a66ca8f59f012aaad09137cfca6e8f30dfe09"
+}

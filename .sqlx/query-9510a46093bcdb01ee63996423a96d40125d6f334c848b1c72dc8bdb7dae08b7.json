@@ -1,0 +1,32 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE faturamento.conta SET situacao = $2, regra_versao = $3, auditada_em = now(), auditada_por = $4,\n                contrato_id = coalesce(contrato_id, $5), versao = versao + 1\n          WHERE id = $1 RETURNING unidade_id",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "unidade_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "unidade_id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "9510a46093bcdb01ee63996423a96d40125d6f334c848b1c72dc8bdb7dae08b7"
+}

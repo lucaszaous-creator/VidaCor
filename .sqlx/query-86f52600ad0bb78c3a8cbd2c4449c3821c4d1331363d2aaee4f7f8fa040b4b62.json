@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO integracao.cursor_orthanc (unidade_id) VALUES ($1)\n         ON CONFLICT (unidade_id) DO UPDATE SET unidade_id = EXCLUDED.unidade_id\n         RETURNING ultima_mudanca",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "ultima_mudanca",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "integracao.cursor_orthanc",
+            "name": "ultima_mudanca"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "86f52600ad0bb78c3a8cbd2c4449c3821c4d1331363d2aaee4f7f8fa040b4b62"
+}

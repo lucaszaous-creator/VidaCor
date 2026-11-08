@@ -1,0 +1,189 @@
+{
+  "realm": "vidacor",
+  "enabled": true,
+  "displayName": "VidaCor (desenvolvimento)",
+  "sslRequired": "external",
+  "loginWithEmailAllowed": false,
+  "registrationAllowed": false,
+  "resetPasswordAllowed": false,
+  "bruteForceProtected": true,
+  "failureFactor": 5,
+  "accessTokenLifespan": 300,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "otpPolicyType": "totp",
+  "otpPolicyAlgorithm": "HmacSHA1",
+  "otpPolicyDigits": 6,
+  "otpPolicyPeriod": 30,
+  "passwordPolicy": "length(12) and notUsername",
+  "clients": [
+    {
+      "clientId": "vidacor-web",
+      "name": "VidaCor",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "dev-segredo-somente-local",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "redirectUris": [
+        "http://127.0.0.1:5173/v1/sessao/retorno"
+      ],
+      "webOrigins": [
+        "http://127.0.0.1:5173"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://127.0.0.1:5173/*"
+      }
+    }
+  ],
+  "users": [
+    {
+      "username": "ana.souza",
+      "enabled": true,
+      "firstName": "Ana",
+      "lastName": "Souza",
+      "email": "ana.souza@vidacor.invalid",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "VidaCor-dev-2026",
+          "temporary": false
+        }
+      ],
+      "requiredActions": [
+        "CONFIGURE_TOTP"
+      ]
+    },
+    {
+      "username": "carla.mendes",
+      "enabled": true,
+      "firstName": "Carla",
+      "lastName": "Mendes",
+      "email": "carla.mendes@vidacor.invalid",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "VidaCor-dev-2026",
+          "temporary": false
+        }
+      ],
+      "requiredActions": [
+        "CONFIGURE_TOTP"
+      ]
+    },
+    {
+      "username": "bruno.sales",
+      "enabled": true,
+      "firstName": "Bruno",
+      "lastName": "Sales",
+      "email": "bruno.sales@vidacor.invalid",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "VidaCor-dev-2026",
+          "temporary": false
+        }
+      ],
+      "requiredActions": [
+        "CONFIGURE_TOTP"
+      ]
+    },
+    {
+      "username": "paulo.mendes",
+      "enabled": true,
+      "firstName": "Paulo",
+      "lastName": "Mendes",
+      "email": "paulo.mendes@vidacor.invalid",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "VidaCor-dev-2026",
+          "temporary": false
+        }
+      ],
+      "requiredActions": [
+        "CONFIGURE_TOTP"
+      ]
+    },
+    {
+      "username": "ti.vidacor",
+      "enabled": true,
+      "firstName": "Equipe",
+      "lastName": "TI",
+      "email": "ti.vidacor@vidacor.invalid",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "VidaCor-dev-2026",
+          "temporary": false
+        }
+      ],
+      "requiredActions": [
+        "CONFIGURE_TOTP"
+      ]
+    },
+    {
+      "username": "carla.caixa",
+      "enabled": true,
+      "firstName": "Carla",
+      "lastName": "Mendes",
+      "email": "carla.caixa@vidacor.invalid",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "VidaCor-dev-2026",
+          "temporary": false
+        }
+      ],
+      "requiredActions": [
+        "CONFIGURE_TOTP"
+      ]
+    },
+    {
+      "username": "patricia.lemos",
+      "enabled": true,
+      "firstName": "Patrícia",
+      "lastName": "Lemos",
+      "email": "patricia.lemos@vidacor.invalid",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "VidaCor-dev-2026",
+          "temporary": false
+        }
+      ],
+      "requiredActions": [
+        "CONFIGURE_TOTP"
+      ]
+    },
+    {
+      "username": "tv.recepcao",
+      "enabled": true,
+      "firstName": "TV",
+      "lastName": "Recepção",
+      "email": "tv.recepcao@vidacor.invalid",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "VidaCor-dev-2026",
+          "temporary": false
+        }
+      ],
+      "requiredActions": [
+        "CONFIGURE_TOTP"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT a.carteirinha, a.solicitante_nome, a.solicitante_conselho, a.solicitante_numero, a.solicitante_uf, a.indicacao_clinica,\n                  a.enviada_em, a.respondida_em, a.guia_id, laudos_ag.situacao AS \"situacao_ag!\"\n             FROM convenio.autorizacao a\n             JOIN LATERAL (SELECT situacao FROM agenda.agendamento WHERE id = a.agendamento_id) laudos_ag ON true\n            WHERE a.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "carteirinha",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "carteirinha"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "solicitante_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "solicitante_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "solicitante_conselho",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "solicitante_conselho"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "solicitante_numero",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "solicitante_numero"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "solicitante_uf",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "solicitante_uf"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "indicacao_clinica",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "indicacao_clinica"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "enviada_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "enviada_em"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "respondida_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "respondida_em"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "guia_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao",
+            "name": "guia_id"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "situacao_ag!",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "situacao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "b96a6c11279df0c7fc620ddedc938193255717b45b15f29d9a65ecf93be1aeef"
+}

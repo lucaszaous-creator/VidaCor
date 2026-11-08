@@ -1,0 +1,148 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT o.codigo, o.sala_id, o.inicio, o.fim, e.id AS espera_id, e.codigo AS espera_codigo, e.paciente_id,\n                e.exame_tuss, e.guia_id, p.nome, p.nascimento\n           FROM agenda.oferta o JOIN agenda.espera e ON e.id = o.espera_id JOIN identidade.paciente p ON p.id = e.paciente_id\n          WHERE o.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.oferta",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "sala_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.oferta",
+            "name": "sala_id"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "inicio",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.oferta",
+            "name": "inicio"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "fim",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.oferta",
+            "name": "fim"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "espera_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "espera_codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "paciente_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "paciente_id"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "exame_tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "exame_tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "guia_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "guia_id"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "0f5d0c14458acd1650f8486df7b23b0293da2dd518559ac36db51422cba2f6bf"
+}

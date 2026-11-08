@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE integracao.outbox SET concluido_em = now(), ultimo_erro = NULL WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "64e7fe4438b22992ff53bb7bff6ce89faac0eac33656a67a921bff6b7a50154e"
+}

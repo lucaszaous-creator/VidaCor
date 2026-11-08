@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT l.codigo, l.situacao, l.valor_total_centavos, k.prazo_recurso_dias FROM faturamento.lote l\n           JOIN faturamento.contrato k ON k.id = l.contrato_id WHERE l.id = $1 FOR UPDATE OF l",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "valor_total_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "valor_total_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "prazo_recurso_dias",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "prazo_recurso_dias"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "55b406448b836fecf8eeec77ce0ca4ac1eecd7131700a95f2cd93f4f6b607a0a"
+}

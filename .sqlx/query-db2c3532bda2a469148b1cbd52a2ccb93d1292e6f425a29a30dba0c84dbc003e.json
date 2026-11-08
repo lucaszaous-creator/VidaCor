@@ -1,0 +1,100 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT t.id, t.codigo, t.sala_id, t.situacao, t.unidade_id, s.nome AS sala_nome, ag.requer_contraste\n             FROM recepcao.atendimento t\n             JOIN agenda.sala s ON s.id = t.sala_id\n             JOIN agenda.agendamento ag ON ag.id = t.agendamento_id\n            WHERE t.id = $1 FOR UPDATE OF t",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "sala_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "sala_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "unidade_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "unidade_id"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "sala_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "requer_contraste",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "requer_contraste"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "db2c3532bda2a469148b1cbd52a2ccb93d1292e6f425a29a30dba0c84dbc003e"
+}

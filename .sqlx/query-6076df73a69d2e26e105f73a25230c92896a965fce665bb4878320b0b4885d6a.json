@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT autorizacao_por_webservice FROM faturamento.contrato WHERE id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "autorizacao_por_webservice",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "autorizacao_por_webservice"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "6076df73a69d2e26e105f73a25230c92896a965fce665bb4878320b0b4885d6a"
+}

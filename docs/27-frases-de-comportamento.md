@@ -1,6 +1,7 @@
 # 27 · Frases de comportamento dos fluxos críticos
 
-> **Status:** todas **aguardando aprovação** do dono do produto (v0.1, 08/11/2026).
+> **Status:** todas **aprovadas pelo dono do produto** em 08/11/2026 (DEC-2026-11-08-49). As frases clínicas
+> (CHK, PUL, TRI, LAU, CTG) aguardam o parecer do responsável clínico de segurança antes de qualquer lançamento.
 > Regra G4 ([docs/15](15-padrao-de-qualidade.md)): as frases são aprovadas **antes** de
 > escrever os testes. Cada frase vira pelo menos um teste de integração na rota HTTP real,
 > com PostgreSQL real (Testcontainers) e Orthanc/NATS reais quando o fluxo usar; mock só
@@ -25,17 +26,17 @@ Cada fluxo cobre caminho feliz, erro esperado, repetição, limite e acesso inde
 
 | ID | Cenário | Status | Aprovador | Data | Observações |
 |---|---|---|---|---|---|
-| FC-AGD-01 | Guia válida é conferida e consumida no agendamento | Aguardando aprovação | | | |
-| FC-AGD-02 | Guia já usada por outro atendimento é recusada | Aguardando aprovação | | | |
-| FC-AGD-03 | Dois agendamentos simultâneos com a mesma guia | Aguardando aprovação | | | |
-| FC-AGD-04 | Clique duplo no agendar não duplica | Aguardando aprovação | | | |
-| FC-AGD-05 | Procedimento fora do autorizado é recusado | Aguardando aprovação | | | |
-| FC-AGD-06 | Senha vencida na data do exame é recusada | Aguardando aprovação | | | |
-| FC-AGD-07 | Saldo zero de procedimento é recusado | Aguardando aprovação | | | |
-| FC-AGD-08 | Reserva provisória sem guia expira e devolve a vaga | Aguardando aprovação | | | |
-| FC-AGD-09 | Guia entregue dentro do prazo confirma a reserva | Aguardando aprovação | | | |
-| FC-AGD-10 | Perfil sem permissão não agenda | Aguardando aprovação | | | |
-| FC-AGD-11 | Dois agendamentos simultâneos no mesmo horário da sala | Aguardando aprovação | | | |
+| FC-AGD-01 | Guia válida é conferida e consumida no agendamento | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-AGD-02 | Guia já usada por outro atendimento é recusada | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-AGD-03 | Dois agendamentos simultâneos com a mesma guia | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-AGD-04 | Clique duplo no agendar não duplica | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-AGD-05 | Procedimento fora do autorizado é recusado | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-AGD-06 | Senha vencida na data do exame é recusada | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-AGD-07 | Saldo zero de procedimento é recusado | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-AGD-08 | Reserva provisória sem guia expira e devolve a vaga | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-AGD-09 | Guia entregue dentro do prazo confirma a reserva | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-AGD-10 | Perfil sem permissão não agenda | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-AGD-11 | Dois agendamentos simultâneos no mesmo horário da sala | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
 
 ```gherkin
 # language: pt
@@ -116,13 +117,13 @@ Funcionalidade: Agendamento de convênio com guia
 
 | ID | Cenário | Status | Aprovador | Data | Observações |
 |---|---|---|---|---|---|
-| FC-CHK-01 | Check-in com nome e nascimento conferidos | Aguardando aprovação | | | |
-| FC-CHK-02 | Check-in sem os dois identificadores é bloqueado | Aguardando aprovação | | | |
-| FC-CHK-03 | Nascimento diferente do cadastro bloqueia | Aguardando aprovação | | | |
-| FC-CHK-04 | Homônimo no mesmo dia gera alerta | Aguardando aprovação | | | |
-| FC-CHK-05 | Check-in repetido não gera duas senhas nem duas pulseiras | Aguardando aprovação | | | |
-| FC-CHK-06 | Check-in de agendamento cancelado é recusado | Aguardando aprovação | | | |
-| FC-CHK-07 | Perfil Caixa não faz check-in | Aguardando aprovação | | | |
+| FC-CHK-01 | Check-in com nome e nascimento conferidos | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-CHK-02 | Check-in sem os dois identificadores é bloqueado | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-CHK-03 | Nascimento diferente do cadastro bloqueia | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-CHK-04 | Homônimo no mesmo dia gera alerta | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-CHK-05 | Check-in repetido não gera duas senhas nem duas pulseiras | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-CHK-06 | Check-in de agendamento cancelado é recusado | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-CHK-07 | Perfil Caixa não faz check-in | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
 
 ```gherkin
 # language: pt
@@ -175,11 +176,11 @@ Funcionalidade: Check-in com dois identificadores
 
 | ID | Cenário | Status | Aprovador | Data | Observações |
 |---|---|---|---|---|---|
-| FC-PUL-01 | Pulseira certa libera a worklist | Aguardando aprovação | | | |
-| FC-PUL-02 | Pulseira de outro paciente bloqueia o exame | Aguardando aprovação | | | |
-| FC-PUL-03 | Pulseira invalidada bloqueia | Aguardando aprovação | | | |
-| FC-PUL-04 | Bipe repetido não envia a worklist duas vezes | Aguardando aprovação | | | |
-| FC-PUL-05 | Técnico de outra sala não libera o exame | Aguardando aprovação | | | |
+| FC-PUL-01 | Pulseira certa libera a worklist | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-PUL-02 | Pulseira de outro paciente bloqueia o exame | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-PUL-03 | Pulseira invalidada bloqueia | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-PUL-04 | Bipe repetido não envia a worklist duas vezes | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-PUL-05 | Técnico de outra sala não libera o exame | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
 
 ```gherkin
 # language: pt
@@ -223,13 +224,13 @@ Funcionalidade: Bipe da pulseira na sala
 
 | ID | Cenário | Status | Aprovador | Data | Observações |
 |---|---|---|---|---|---|
-| FC-TRI-01 | Triagem sem risco libera o exame | Aguardando aprovação | | | |
-| FC-TRI-02 | Reação prévia ou TFG baixa exige aprovação médica | Aguardando aprovação | | | |
-| FC-TRI-03 | Exame bloqueado não recebe worklist | Aguardando aprovação | | | |
-| FC-TRI-04 | Médico registra a conduta e libera | Aguardando aprovação | | | |
-| FC-TRI-05 | Técnico não aprova a própria triagem | Aguardando aprovação | | | |
-| FC-TRI-06 | Exame com contraste sem triagem não inicia | Aguardando aprovação | | | |
-| FC-TRI-07 | TFG é calculada pelo servidor | Aguardando aprovação | | | |
+| FC-TRI-01 | Triagem sem risco libera o exame | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-TRI-02 | Reação prévia ou TFG baixa exige aprovação médica | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-TRI-03 | Exame bloqueado não recebe worklist | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-TRI-04 | Médico registra a conduta e libera | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-TRI-05 | Técnico não aprova a própria triagem | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-TRI-06 | Exame com contraste sem triagem não inicia | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-TRI-07 | TFG é calculada pelo servidor | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
 
 ```gherkin
 # language: pt
@@ -281,16 +282,16 @@ Funcionalidade: Triagem de segurança com contraste
 
 | ID | Cenário | Status | Aprovador | Data | Observações |
 |---|---|---|---|---|---|
-| FC-LAU-01 | Assinar laudo com confirmação nominal e reautenticação | Aguardando aprovação | | | |
-| FC-LAU-02 | Laudo em rascunho não vai ao portal | Aguardando aprovação | | | |
-| FC-LAU-03 | Laudo assinado vai ao portal e o paciente é avisado uma vez | Aguardando aprovação | | | |
-| FC-LAU-04 | Laudo assinado não pode ser alterado | Aguardando aprovação | | | |
-| FC-LAU-05 | Correção cria versão 2 com motivo | Aguardando aprovação | | | |
-| FC-LAU-06 | Correção sem motivo é recusada | Aguardando aprovação | | | |
-| FC-LAU-07 | Duas assinaturas simultâneas geram uma versão vigente | Aguardando aprovação | | | |
-| FC-LAU-08 | Marcação "conversar antes" segura a publicação | Aguardando aprovação | | | |
-| FC-LAU-09 | Estudo sem conciliação não entra na fila de laudo | Aguardando aprovação | | | |
-| FC-LAU-10 | Médico sem atribuição não assina | Aguardando aprovação | | | |
+| FC-LAU-01 | Assinar laudo com confirmação nominal e reautenticação | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-LAU-02 | Laudo em rascunho não vai ao portal | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-LAU-03 | Laudo assinado vai ao portal e o paciente é avisado uma vez | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-LAU-04 | Laudo assinado não pode ser alterado | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-LAU-05 | Correção cria versão 2 com motivo | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-LAU-06 | Correção sem motivo é recusada | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-LAU-07 | Duas assinaturas simultâneas geram uma versão vigente | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-LAU-08 | Marcação "conversar antes" segura a publicação | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-LAU-09 | Estudo sem conciliação não entra na fila de laudo | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-LAU-10 | Médico sem atribuição não assina | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
 
 ```gherkin
 # language: pt
@@ -360,15 +361,15 @@ Funcionalidade: Laudo assinado, publicação no portal e correção
 
 | ID | Cenário | Status | Aprovador | Data | Observações |
 |---|---|---|---|---|---|
-| FC-CXA-01 | Total calculado pelo servidor | Aguardando aprovação | | | |
-| FC-CXA-02 | Total enviado pela tela é ignorado | Aguardando aprovação | | | |
-| FC-CXA-03 | Desconto dentro do limite do perfil | Aguardando aprovação | | | |
-| FC-CXA-04 | Desconto acima do limite sem autorização é recusado | Aguardando aprovação | | | |
-| FC-CXA-05 | Gerente autoriza desconto com reautenticação | Aguardando aprovação | | | |
-| FC-CXA-06 | Recebimento repetido não duplica | Aguardando aprovação | | | |
-| FC-CXA-07 | Valor zero ou negativo é recusado | Aguardando aprovação | | | |
-| FC-CXA-08 | Recebimento sem caixa aberto é recusado | Aguardando aprovação | | | |
-| FC-CXA-09 | Quem pede o estorno não aprova | Aguardando aprovação | | | |
+| FC-CXA-01 | Total calculado pelo servidor | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-CXA-02 | Total enviado pela tela é ignorado | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-CXA-03 | Desconto dentro do limite do perfil | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-CXA-04 | Desconto acima do limite sem autorização é recusado | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-CXA-05 | Gerente autoriza desconto com reautenticação | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-CXA-06 | Recebimento repetido não duplica | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-CXA-07 | Valor zero ou negativo é recusado | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-CXA-08 | Recebimento sem caixa aberto é recusado | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-CXA-09 | Quem pede o estorno não aprova | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
 
 ```gherkin
 # language: pt
@@ -425,11 +426,11 @@ Funcionalidade: Caixa do particular
 
 | ID | Cenário | Status | Aprovador | Data | Observações |
 |---|---|---|---|---|---|
-| FC-PIX-01 | Pagamento confirmado pelo PSP baixa o recebimento | Aguardando aprovação | | | |
-| FC-PIX-02 | Webhook duplicado não gera segundo efeito | Aguardando aprovação | | | |
-| FC-PIX-03 | Assinatura inválida é recusada antes de processar | Aguardando aprovação | | | |
-| FC-PIX-04 | Eventos fora de ordem não regridem a situação | Aguardando aprovação | | | |
-| FC-PIX-05 | Dois webhooks iguais ao mesmo tempo | Aguardando aprovação | | | |
+| FC-PIX-01 | Pagamento confirmado pelo PSP baixa o recebimento | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-PIX-02 | Webhook duplicado não gera segundo efeito | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-PIX-03 | Assinatura inválida é recusada antes de processar | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-PIX-04 | Eventos fora de ordem não regridem a situação | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-PIX-05 | Dois webhooks iguais ao mesmo tempo | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
 
 ```gherkin
 # language: pt
@@ -473,11 +474,11 @@ Funcionalidade: Webhook do PIX
 
 | ID | Cenário | Status | Aprovador | Data | Observações |
 |---|---|---|---|---|---|
-| FC-ETQ-01 | Reimpressão com motivo invalida a anterior | Aguardando aprovação | | | |
-| FC-ETQ-02 | Reimpressão sem motivo é recusada | Aguardando aprovação | | | |
-| FC-ETQ-03 | Impressão duplicada gera uma etiqueta | Aguardando aprovação | | | |
-| FC-ETQ-04 | Correção de nascimento invalida as etiquetas | Aguardando aprovação | | | |
-| FC-ETQ-05 | Perfil sem permissão não reimprime | Aguardando aprovação | | | |
+| FC-ETQ-01 | Reimpressão com motivo invalida a anterior | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-ETQ-02 | Reimpressão sem motivo é recusada | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-ETQ-03 | Impressão duplicada gera uma etiqueta | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-ETQ-04 | Correção de nascimento invalida as etiquetas | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-ETQ-05 | Perfil sem permissão não reimprime | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
 
 ```gherkin
 # language: pt
@@ -517,14 +518,14 @@ Funcionalidade: Reimpressão de etiqueta
 
 | ID | Cenário | Status | Aprovador | Data | Observações |
 |---|---|---|---|---|---|
-| FC-ACE-01 | Paciente A não vê laudo de B pelo portal | Aguardando aprovação | | | |
-| FC-ACE-02 | Paciente A não descobre se o ID de B existe | Aguardando aprovação | | | |
-| FC-ACE-03 | Médico sem vínculo de cuidado não lê laudo | Aguardando aprovação | | | |
-| FC-ACE-04 | Acesso de emergência com justificativa é auditado | Aguardando aprovação | | | |
-| FC-ACE-05 | RLS barra mesmo se a rota errar | Aguardando aprovação | | | |
-| FC-ACE-06 | Recepção não lê laudo | Aguardando aprovação | | | |
-| FC-ACE-07 | TI não lê dado clínico | Aguardando aprovação | | | |
-| FC-ACE-08 | Link compartilhado expirado não abre | Aguardando aprovação | | | |
+| FC-ACE-01 | Paciente A não vê laudo de B pelo portal | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-ACE-02 | Paciente A não descobre se o ID de B existe | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-ACE-03 | Médico sem vínculo de cuidado não lê laudo | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-ACE-04 | Acesso de emergência com justificativa é auditado | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-ACE-05 | RLS barra mesmo se a rota errar | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-ACE-06 | Recepção não lê laudo | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-ACE-07 | TI não lê dado clínico | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
+| FC-ACE-08 | Link compartilhado expirado não abre | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto |
 
 ```gherkin
 # language: pt
@@ -581,17 +582,17 @@ Funcionalidade: Acesso indevido
 
 | ID | Cenário | Status | Aprovador | Data | Observações |
 |---|---|---|---|---|---|
-| FC-CTG-01 | Declaração de contingência | Aguardando aprovação | | | |
-| FC-CTG-02 | Declaração feita offline sobe uma vez | Aguardando aprovação | | | |
-| FC-CTG-03 | Ficha lançada leva a marca de contingência | Aguardando aprovação | | | |
-| FC-CTG-04 | Mesma ficha lançada duas vezes gera um registro | Aguardando aprovação | | | |
-| FC-CTG-05 | Ficha com número fora da faixa é recusada | Aguardando aprovação | | | |
-| FC-CTG-06 | Nascimento diferente no papel abre divergência | Aguardando aprovação | | | |
-| FC-CTG-07 | Valor do papel diferente do recalculado abre divergência | Aguardando aprovação | | | |
-| FC-CTG-08 | Estudo de contingência não vai direto ao laudo | Aguardando aprovação | | | |
-| FC-CTG-09 | Encerramento bloqueado com pendência | Aguardando aprovação | | | |
-| FC-CTG-10 | Perfil sem permissão não declara nem encerra | Aguardando aprovação | | | |
-| FC-CTG-11 | Kit das 06:00 é gerado com faixa reservada | Aguardando aprovação | | | |
+| FC-CTG-01 | Declaração de contingência | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-CTG-02 | Declaração feita offline sobe uma vez | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-CTG-03 | Ficha lançada leva a marca de contingência | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-CTG-04 | Mesma ficha lançada duas vezes gera um registro | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-CTG-05 | Ficha com número fora da faixa é recusada | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-CTG-06 | Nascimento diferente no papel abre divergência | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-CTG-07 | Valor do papel diferente do recalculado abre divergência | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-CTG-08 | Estudo de contingência não vai direto ao laudo | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-CTG-09 | Encerramento bloqueado com pendência | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-CTG-10 | Perfil sem permissão não declara nem encerra | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
+| FC-CTG-11 | Kit das 06:00 é gerado com faixa reservada | Aprovada | Lucas (dono do produto) | 08/11/2026 | Aprovada pelo dono do produto; aguarda parecer do responsável clínico de segurança antes do lançamento |
 
 ```gherkin
 # language: pt

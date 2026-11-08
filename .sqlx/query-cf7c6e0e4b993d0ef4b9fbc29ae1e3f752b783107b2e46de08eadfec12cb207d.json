@@ -1,0 +1,40 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT codigo, arquivo FROM faturamento.lote WHERE id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "arquivo",
+        "type_info": "Bytea",
+        "origin": {
+          "Table": {
+            "table": "faturamento.lote",
+            "name": "arquivo"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "cf7c6e0e4b993d0ef4b9fbc29ae1e3f752b783107b2e46de08eadfec12cb207d"
+}

@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE convenio.autorizacao_procedimento SET autorizado = $3 WHERE autorizacao_id = $1 AND tuss = $2",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "30c45d4e0f4e97dee3c0e275f542866aeee094877b59610936ce068293619a24"
+}

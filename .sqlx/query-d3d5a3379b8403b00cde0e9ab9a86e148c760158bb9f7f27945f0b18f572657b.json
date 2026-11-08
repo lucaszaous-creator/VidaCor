@@ -1,0 +1,29 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT saldo FROM convenio.guia_procedimento WHERE guia_id = $1 AND tuss = $2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "saldo",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "convenio.guia_procedimento",
+            "name": "saldo"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "d3d5a3379b8403b00cde0e9ab9a86e148c760158bb9f7f27945f0b18f572657b"
+}

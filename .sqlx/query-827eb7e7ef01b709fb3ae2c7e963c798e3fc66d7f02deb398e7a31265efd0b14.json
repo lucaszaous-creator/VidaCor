@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT formulario, inicio, fim FROM contingencia.faixa WHERE kit_id = $1 ORDER BY formulario",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "formulario",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "contingencia.faixa",
+            "name": "formulario"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "inicio",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "contingencia.faixa",
+            "name": "inicio"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "fim",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "contingencia.faixa",
+            "name": "fim"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "827eb7e7ef01b709fb3ae2c7e963c798e3fc66d7f02deb398e7a31265efd0b14"
+}

@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE portal.conta SET falhas = falhas + 1,\n                    bloqueada_ate = CASE WHEN falhas + 1 >= $2 THEN now() + make_interval(mins => $3) ELSE bloqueada_ate END\n              WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "ebc094b65351aa126995494a4e5cb5e4047a3a95a58fa8f2f63978fd9b4a5230"
+}

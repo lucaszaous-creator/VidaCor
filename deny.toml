@@ -1,0 +1,70 @@
+# Cadeia de suprimentos do núcleo (SEC-SUP-1, docs/14 B5): fontes permitidas, licenças compatíveis
+# com uso comercial e alertas de segurança conhecidos.
+
+[graph]
+all-features = false
+
+[advisories]
+# Alertas do RustSec. Exceção só com motivo, data e responsável, registrada em docs/decisoes.md.
+ignore = [
+  # rsa (Marvin): afeta operações com chave PRIVADA RSA (decifrar/assinar) por canal de tempo. O núcleo
+  # só VERIFICA assinatura do ID token com a chave pública do Keycloak (openidconnect); não há chave
+  # privada RSA no processo. Sem versão corrigida publicada. Revisar a cada atualização do
+  # openidconnect. DEC-2026-11-08-47.
+  { id = "RUSTSEC-2023-0071", reason = "só verificação com chave pública; sem correção publicada" },
+  # astral-tokio-tar sem manutenção: entra só como dependência de TESTE (testcontainers) e não vai
+  # para o binário. DEC-2026-11-08-47.
+  { id = "RUSTSEC-2026-0440", reason = "dependência só de teste (testcontainers)" },
+  # Dependências internas do Typst (PDF do laudo e do dossiê). Aceitas pelo dono do produto em
+  # 08/11/2026 (DEC-2026-11-08-87). Rever até 06/02/2027 ou a cada atualização do Typst.
+  # quick-xml: só é usado pelo Typst para ler XML/bibliografia; o modelo é fixo e o mundo é fechado
+  # (só /dados.json gerado pelo núcleo), então nenhum XML externo é lido.
+  { id = "RUSTSEC-2026-0194", reason = "Typst: quick-xml não lê XML externo (mundo fechado); rever até 2027-02-06" },
+  { id = "RUSTSEC-2026-0195", reason = "Typst: quick-xml não lê XML externo (mundo fechado); rever até 2027-02-06" },
+  # Sem manutenção (informativo), dentro do Typst; fontes embutidas e fixas, sem YAML de fora.
+  { id = "RUSTSEC-2026-0206", reason = "Typst: rustybuzz sem manutenção; fontes embutidas; rever até 2027-02-06" },
+  { id = "RUSTSEC-2026-0192", reason = "Typst: ttf-parser sem manutenção; fontes embutidas; rever até 2027-02-06" },
+  { id = "RUSTSEC-2025-0141", reason = "Typst: bincode sem manutenção; uso interno; rever até 2027-02-06" },
+  { id = "RUSTSEC-2024-0320", reason = "Typst: yaml-rust sem manutenção; não lemos YAML; rever até 2027-02-06" },
+  { id = "RUSTSEC-2024-0449", reason = "Typst: unsafe-libyaml sem manutenção; não lemos YAML; rever até 2027-02-06" },
+  { id = "RUSTSEC-2024-0436", reason = "Typst: paste sem manutenção (macro de compilação); rever até 2027-02-06" },
+]
+
+[licenses]
+allow = [
+  "MIT", "Apache-2.0", "Apache-2.0 WITH LLVM-exception", "BSD-2-Clause", "BSD-3-Clause",
+  "ISC", "Unicode-3.0", "Zlib", "CC0-1.0", "MPL-2.0", "CDLA-Permissive-2.0", "0BSD",
+]
+confidence-threshold = 0.9
+# O próprio VidaCor é proprietário (licença do workspace).
+[[licenses.exceptions]]
+allow = ["LicenseRef-VidaCor-Proprietario"]
+crate = "vidacor-api"
+[[licenses.exceptions]]
+allow = ["LicenseRef-VidaCor-Proprietario"]
+crate = "vidacor-comum"
+[[licenses.exceptions]]
+allow = ["LicenseRef-VidaCor-Proprietario"]
+crate = "vidacor-dominio-recepcao"
+[[licenses.exceptions]]
+allow = ["LicenseRef-VidaCor-Proprietario"]
+crate = "vidacor-dominio-triagem"
+[[licenses.exceptions]]
+allow = ["LicenseRef-VidaCor-Proprietario"]
+crate = "vidacor-dominio-laudo"
+[[licenses.exceptions]]
+allow = ["LicenseRef-VidaCor-Proprietario"]
+crate = "vidacor-dominio-faturamento"
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+allow-wildcard-paths = true
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+[[licenses.exceptions]]
+allow = ["LicenseRef-VidaCor-Proprietario"]
+crate = "vidacor-documentos"

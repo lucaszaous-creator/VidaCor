@@ -1,0 +1,30 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE recepcao.etiqueta SET situacao = 'invalidada', motivo_invalidacao = 'cadastro corrigido: ' || $2,\n                invalidada_por = $3, invalidada_em = now(), versao = versao + 1\n          WHERE paciente_id = $1 AND situacao = 'valida' RETURNING codigo",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.etiqueta",
+            "name": "codigo"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "828995ca64ad983364260f63314d44b1679e53253f939b97ecfafa9d7d0f9f30"
+}

@@ -1,0 +1,38 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT count(*) FILTER (WHERE situacao NOT IN ('cancelado','expirada')) AS \"agendados!\",\n                  count(*) FILTER (WHERE situacao = 'concluido') AS \"realizados!\",\n                  count(*) FILTER (WHERE situacao = 'faltou') AS \"faltas!\"\n             FROM agenda.agendamento WHERE inicio >= $1 AND inicio < $2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "agendados!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 1,
+        "name": "realizados!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "faltas!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "f5ff5066e99a9db17374b28473b9784b76c138f2df99980efe25c740d1a82c2b"
+}

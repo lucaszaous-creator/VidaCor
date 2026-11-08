@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE identidade.usuario SET perfis = array_remove(perfis, $2), versao = versao + 1 WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "0f664ee8794632e54c659b1a68f4292d32cfbb2aa123aeee1864a360fb2a0063"
+}

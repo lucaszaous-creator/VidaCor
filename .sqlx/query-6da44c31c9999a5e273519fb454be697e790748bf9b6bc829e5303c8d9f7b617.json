@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT tentativas, proximo_em, ultimo_erro FROM integracao.outbox\n          WHERE referencia = $1 AND tipo IN ('tiss.solicitar_autorizacao','tiss.consultar_autorizacao') AND concluido_em IS NULL\n          ORDER BY criado_em DESC LIMIT 1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tentativas",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "integracao.outbox",
+            "name": "tentativas"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "proximo_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "integracao.outbox",
+            "name": "proximo_em"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "ultimo_erro",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "integracao.outbox",
+            "name": "ultimo_erro"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "6da44c31c9999a5e273519fb454be697e790748bf9b6bc829e5303c8d9f7b617"
+}

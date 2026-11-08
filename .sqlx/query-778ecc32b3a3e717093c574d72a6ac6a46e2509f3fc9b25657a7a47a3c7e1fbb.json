@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE identidade.login_pendente SET usado_em = now()\n              WHERE state = $1 AND usado_em IS NULL AND expira_em > now()\n              RETURNING nonce, verificador_pkce, sessao_id, voltar",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "nonce",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.login_pendente",
+            "name": "nonce"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "verificador_pkce",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.login_pendente",
+            "name": "verificador_pkce"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "sessao_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.login_pendente",
+            "name": "sessao_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "voltar",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.login_pendente",
+            "name": "voltar"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      true
+    ]
+  },
+  "hash": "778ecc32b3a3e717093c574d72a6ac6a46e2509f3fc9b25657a7a47a3c7e1fbb"
+}

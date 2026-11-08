@@ -1,0 +1,42 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT t.versao, pr.valor_centavos FROM financeiro.tabela_preco t JOIN financeiro.preco pr ON pr.tabela_id = t.id\n          WHERE t.unidade_id = $1 AND t.vigente_desde <= $2 AND pr.tuss = $3 ORDER BY t.versao DESC LIMIT 1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "versao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "financeiro.tabela_preco",
+            "name": "versao"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "valor_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "financeiro.preco",
+            "name": "valor_centavos"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Date",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "8178671d10482d2c08c1b5f3487c2b695a8fce11d8ebda8b2491912dcc6dae85"
+}

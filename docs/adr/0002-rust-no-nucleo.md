@@ -1,6 +1,6 @@
 # ADR-0002 · Rust no núcleo do sistema
 
-- **Status:** proposto
+- **Status:** aceito (aprovado pelo dono do produto em 2026-11-08)
 - **Data:** 2026-11-06
 
 ## Contexto

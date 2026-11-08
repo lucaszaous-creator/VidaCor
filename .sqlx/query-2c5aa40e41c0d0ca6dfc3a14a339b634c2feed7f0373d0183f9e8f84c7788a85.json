@@ -1,0 +1,29 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE identidade.paciente SET nascimento = $2, versao = versao + 1 WHERE id = $1 RETURNING versao",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "versao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "versao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Date"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "2c5aa40e41c0d0ca6dfc3a14a339b634c2feed7f0373d0183f9e8f84c7788a85"
+}

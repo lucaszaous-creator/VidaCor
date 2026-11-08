@@ -1,0 +1,148 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT b.id, b.codigo, b.tipo, b.inicio, b.fim, b.motivo, b.situacao, b.retirado_em, b.motivo_retirada,\n                s.id AS sala_id, s.nome AS sala_nome\n           FROM agenda.bloqueio b JOIN agenda.sala s ON s.id = b.sala_id WHERE b.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.bloqueio",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.bloqueio",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "tipo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.bloqueio",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "inicio",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.bloqueio",
+            "name": "inicio"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "fim",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.bloqueio",
+            "name": "fim"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.bloqueio",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.bloqueio",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "retirado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.bloqueio",
+            "name": "retirado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "motivo_retirada",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.bloqueio",
+            "name": "motivo_retirada"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "sala_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "sala_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "nome"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "f009129fc0b4ec2b1a2a1822e8bbf0aebf9d8ce93e64f8d7fe4d19918f991ebb"
+}

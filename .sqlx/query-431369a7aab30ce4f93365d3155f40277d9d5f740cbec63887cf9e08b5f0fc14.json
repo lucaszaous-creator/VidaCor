@@ -1,0 +1,167 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT m.id, m.codigo, m.tipo, m.canal, coalesce(p.nome, m.nome_informado) AS quem, p.nascimento AS \"nascimento?\", m.anonima,\n                  m.relato, m.recebida_em, m.prazo_em, m.situacao, m.resposta, m.respondida_em\n             FROM ouvidoria.manifestacao m LEFT JOIN identidade.paciente p ON p.id = m.paciente_id\n            WHERE ($1::uuid IS NULL OR m.id = $1)\n              AND ($1::uuid IS NOT NULL OR m.situacao = 'aberta' OR m.respondida_em > now() - interval '30 days')\n            ORDER BY m.situacao, m.prazo_em LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "ouvidoria.manifestacao",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "ouvidoria.manifestacao",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "tipo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "ouvidoria.manifestacao",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "canal",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "ouvidoria.manifestacao",
+            "name": "canal"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "quem",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 5,
+        "name": "nascimento?",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "anonima",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "ouvidoria.manifestacao",
+            "name": "anonima"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "relato",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "ouvidoria.manifestacao",
+            "name": "relato"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "recebida_em",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "ouvidoria.manifestacao",
+            "name": "recebida_em"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "prazo_em",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "ouvidoria.manifestacao",
+            "name": "prazo_em"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "ouvidoria.manifestacao",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "resposta",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "ouvidoria.manifestacao",
+            "name": "resposta"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "respondida_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "ouvidoria.manifestacao",
+            "name": "respondida_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      null,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true
+    ]
+  },
+  "hash": "431369a7aab30ce4f93365d3155f40277d9d5f740cbec63887cf9e08b5f0fc14"
+}

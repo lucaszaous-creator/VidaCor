@@ -1,0 +1,29 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE portal.convite SET tentativas = tentativas + 1,\n                    revogado_em = CASE WHEN tentativas + 1 >= $2 THEN now() ELSE revogado_em END,\n                    motivo_revogacao = CASE WHEN tentativas + 1 >= $2 THEN 'tentativas esgotadas' ELSE motivo_revogacao END\n              WHERE id = $1 RETURNING tentativas",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tentativas",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "portal.convite",
+            "name": "tentativas"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "d4cd41dd0481b10581b921966e219f53e2bd54034ee03db9bacbc4a80bccb2ce"
+}

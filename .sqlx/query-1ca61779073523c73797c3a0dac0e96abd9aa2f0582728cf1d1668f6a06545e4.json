@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE comunicacao.mensagem SET respondida_em = now(), resposta = 'confirmou', versao = versao + 1 WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "1ca61779073523c73797c3a0dac0e96abd9aa2f0582728cf1d1668f6a06545e4"
+}

@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE exames.estudo SET conciliado = true, atendimento_id = $2, pendencia = NULL, versao = versao + 1 WHERE id = $1 AND NOT conciliado",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "c2c62850c00cea7c2f6e20e7d7960cb147299e81002e74f397f43dea567f8747"
+}

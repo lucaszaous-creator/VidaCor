@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE contingencia.numero SET registro_id = $4 WHERE unidade_id = $1 AND formulario = $2 AND numero = $3",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Int4",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "8195180bc359c18348d473332394b6e41cae8bf9f6530a63e64b2ac552054af7"
+}

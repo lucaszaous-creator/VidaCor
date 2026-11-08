@@ -1,0 +1,18 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO financeiro.orcamento_item (orcamento_id, tuss, descricao, valor_centavos, unidade_id) VALUES ($1, $2, $3, $4, $5)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Int8",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "30fe5dc7bf828060cd942528ecf5b4b4828dadb48e64edeab2807ddaa9a4a059"
+}

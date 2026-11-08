@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE identidade.sessao SET reautenticado_em = now()\n              WHERE id = $1 AND usuario_id = $2 AND revogada_em IS NULL AND expira_em > now()",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "64fd904e3f1bf9d4eb8624dc99cc77589b96ca98e8a4bce13f5ace8f73ec5b86"
+}

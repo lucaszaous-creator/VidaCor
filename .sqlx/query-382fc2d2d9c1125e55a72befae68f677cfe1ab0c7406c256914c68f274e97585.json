@@ -1,0 +1,88 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT c.codigo, c.expira_em, c.usado_em, c.revogado_em, p.nome, p.email AS \"email?\"\n           FROM portal.convite c JOIN identidade.paciente p ON p.id = c.paciente_id WHERE c.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "portal.convite",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "expira_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "portal.convite",
+            "name": "expira_em"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "usado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "portal.convite",
+            "name": "usado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "revogado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "portal.convite",
+            "name": "revogado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "email?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "email"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      true,
+      false,
+      true
+    ]
+  },
+  "hash": "382fc2d2d9c1125e55a72befae68f677cfe1ab0c7406c256914c68f274e97585"
+}

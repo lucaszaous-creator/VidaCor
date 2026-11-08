@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE agenda.oferta SET situacao = 'aceita', agendamento_id = $2, respondida_em = now(), respondida_por = $3,\n                versao = versao + 1\n          WHERE id = $1 AND situacao = 'aguardando' AND expira_em > now()",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "5e07379e157db89e9ec9bdbd6c1a1221a83a6c99002a18fb854d8a55570a140b"
+}

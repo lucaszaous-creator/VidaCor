@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE integracao.outbox SET ultimo_erro = $2, proximo_em = now() + make_interval(secs => $3)\n                  WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Float8"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "86278e047bcb00812257ce246267345507fd2f68aa4bac62f90ad2e6438d812f"
+}

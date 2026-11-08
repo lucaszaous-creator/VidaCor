@@ -1,0 +1,34 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO financeiro.regra_repasse (id, medico_id, versao, percentual_pb, vigente_desde, criado_por, origem, unidade_id, correlacao)\n         SELECT $1, $2, coalesce(max(versao), 0) + 1, $3, $4, $5, 'financeiro', $6, $7 FROM financeiro.regra_repasse WHERE medico_id = $2\n         RETURNING versao",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "versao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "financeiro.regra_repasse",
+            "name": "versao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Int4",
+        "Date",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "b1a869d6fbb5d8f171a19ad0dc637ac5df6b870aa951f48ea3d44e4869e11923"
+}

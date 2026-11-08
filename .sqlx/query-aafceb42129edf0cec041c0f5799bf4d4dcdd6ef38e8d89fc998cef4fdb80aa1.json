@@ -1,0 +1,40 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT whatsapp, motivo FROM comunicacao.preferencia WHERE paciente_id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "whatsapp",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "comunicacao.preferencia",
+            "name": "whatsapp"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "comunicacao.preferencia",
+            "name": "motivo"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "aafceb42129edf0cec041c0f5799bf4d4dcdd6ef38e8d89fc998cef4fdb80aa1"
+}

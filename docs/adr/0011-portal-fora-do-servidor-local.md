@@ -1,6 +1,6 @@
 # ADR-0011 · Portal do paciente fora do servidor local
 
-- **Status:** proposto
+- **Status:** aceito (aprovado pelo dono do produto em 2026-11-08)
 - **Data:** 2026-11-06
 
 ## Contexto

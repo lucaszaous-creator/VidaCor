@@ -1,0 +1,24 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT a.id AS \"id!\" FROM recepcao.atendimento a WHERE a.unidade_id = $2 AND (a.codigo = $1 OR a.accession = $1)\n           UNION SELECT a.id FROM recepcao.atendimento a JOIN agenda.agendamento g ON g.id = a.agendamento_id WHERE a.unidade_id = $2 AND g.codigo = $1\n           UNION SELECT a.id FROM recepcao.atendimento a JOIN convenio.guia gu ON gu.agendamento_id = a.agendamento_id WHERE a.unidade_id = $2 AND gu.numero = $1\n           UNION SELECT e.atendimento_id FROM recepcao.etiqueta e WHERE e.unidade_id = $2 AND e.codigo = $1\n           UNION SELECT t.atendimento_id FROM triagem.triagem t WHERE t.unidade_id = $2 AND t.codigo = $1\n           UNION SELECT s.atendimento_id FROM exames.estudo s WHERE s.unidade_id = $2 AND s.atendimento_id IS NOT NULL AND (s.codigo = $1 OR s.study_uid = $1)\n           UNION SELECT l.atendimento_id FROM laudos.laudo l WHERE l.unidade_id = $2 AND l.codigo = $1\n           UNION SELECT r.atendimento_id FROM caixa.recebimento r WHERE r.unidade_id = $2 AND r.atendimento_id IS NOT NULL AND r.codigo = $1\n           UNION SELECT r.atendimento_id FROM caixa.estorno x JOIN caixa.recebimento r ON r.id = x.recebimento_id WHERE x.unidade_id = $2 AND r.atendimento_id IS NOT NULL AND x.codigo = $1\n           LIMIT 2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id!",
+        "type_info": "Uuid",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "2429d8c6659364a59d4e200560cb9f9e8aa5838fd6ac2f4a8683f2f4c49223ff"
+}

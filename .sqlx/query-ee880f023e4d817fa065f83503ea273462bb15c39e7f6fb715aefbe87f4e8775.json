@@ -1,0 +1,95 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT g.id, g.codigo, g.operadora, g.numero, g.validade, g.situacao,\n                  COALESCE(t.codigo, a.codigo) AS em_uso_por\n             FROM convenio.guia g\n             LEFT JOIN agenda.agendamento a ON a.id = g.agendamento_id\n             LEFT JOIN recepcao.atendimento t ON t.agendamento_id = a.id\n            WHERE g.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "convenio.guia",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.guia",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "operadora",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.guia",
+            "name": "operadora"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "numero",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.guia",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "validade",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "convenio.guia",
+            "name": "validade"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.guia",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "em_uso_por",
+        "type_info": "Text",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      null
+    ]
+  },
+  "hash": "ee880f023e4d817fa065f83503ea273462bb15c39e7f6fb715aefbe87f4e8775"
+}

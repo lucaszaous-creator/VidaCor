@@ -1,0 +1,76 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT sequencial, tuss, descricao, quantidade, valor_unitario_centavos\n           FROM faturamento.conta_item WHERE conta_id = $1 ORDER BY sequencial",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "sequencial",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta_item",
+            "name": "sequencial"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta_item",
+            "name": "tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "descricao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta_item",
+            "name": "descricao"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "quantidade",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta_item",
+            "name": "quantidade"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "valor_unitario_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta_item",
+            "name": "valor_unitario_centavos"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "3fce21d93eccd18bb48585125a225b264cf782e1b87b209301e8465d30400a75"
+}

@@ -1,0 +1,20 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO caixa.caixa (id, codigo, operador_id, fundo_centavos, criado_por, origem, estacao, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $3, 'caixa', $5, $6, $7)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Int8",
+        "Text",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "475a3941e5ef45d8fca2b600c089e070f8e2ccee4c885d5fcf3210650629a27e"
+}

@@ -1,0 +1,112 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT codigo, resultado, tfg_calculada, motivos, regra_versao, conduta, conduta_por, conduta_em\n           FROM triagem.triagem WHERE atendimento_id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "triagem.triagem",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "resultado",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "triagem.triagem",
+            "name": "resultado"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "tfg_calculada",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "triagem.triagem",
+            "name": "tfg_calculada"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "motivos",
+        "type_info": "TextArray",
+        "origin": {
+          "Table": {
+            "table": "triagem.triagem",
+            "name": "motivos"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "regra_versao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "triagem.triagem",
+            "name": "regra_versao"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "conduta",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "triagem.triagem",
+            "name": "conduta"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "conduta_por",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "triagem.triagem",
+            "name": "conduta_por"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "conduta_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "triagem.triagem",
+            "name": "conduta_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "40c72859d802d3b809bd6a0ff699ceeb51ef9f00ba83552d535bb38e05ecd95d"
+}

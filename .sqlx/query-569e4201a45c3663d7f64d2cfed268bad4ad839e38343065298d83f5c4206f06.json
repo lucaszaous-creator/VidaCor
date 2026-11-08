@@ -1,0 +1,19 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO laudos.achado (id, codigo, laudo_id, versao_numero, numero, sistema, localizacao, maior_diametro_dmm,\n                    descritores, pontos, categoria, categoria_nome, conduta, regra_versao, texto_achado, texto_conclusao,\n                    copiado_de, criado_por, origem, unidade_id, correlacao)\n             SELECT $1, $2, laudo_id, $3, numero, sistema, localizacao, maior_diametro_dmm,\n                    descritores, pontos, categoria, categoria_nome, conduta, regra_versao, texto_achado, texto_conclusao,\n                    id, $4, 'consultorio', unidade_id, $5\n               FROM laudos.achado WHERE id = $6",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Int4",
+        "Uuid",
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "569e4201a45c3663d7f64d2cfed268bad4ad839e38343065298d83f5c4206f06"
+}

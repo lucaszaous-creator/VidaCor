@@ -1,0 +1,77 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT senha, nome_abreviado, destino, rechamada, criado_em FROM recepcao.chamada\n          WHERE criado_em >= $1 AND criado_em < $2 ORDER BY criado_em DESC, id DESC LIMIT 5",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "senha",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.chamada",
+            "name": "senha"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "nome_abreviado",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.chamada",
+            "name": "nome_abreviado"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "destino",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.chamada",
+            "name": "destino"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "rechamada",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "recepcao.chamada",
+            "name": "rechamada"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "recepcao.chamada",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "c93bce928e75a42f3918416be7c970922081e935da53ddef8ebc2cb06a7f848e"
+}

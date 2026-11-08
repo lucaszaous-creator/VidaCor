@@ -1,0 +1,24 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO financeiro.titulo (id, codigo, tipo, descricao, contraparte, categoria, valor_centavos, vencimento, aprovacoes_exigidas, referencia, criado_por, origem, unidade_id, correlacao)\n             VALUES ($1, $2, 'pagar', $3, $4, 'repasse', $5, $6, $7, $8, $9, 'repasse', $10, $11)\n             ON CONFLICT (unidade_id, referencia) WHERE referencia IS NOT NULL DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Text",
+        "Int8",
+        "Date",
+        "Int4",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "dc17c4e697044d7b01d1ad5f2fab1c42742ec86c94825511a704b0d88f1ca1de"
+}

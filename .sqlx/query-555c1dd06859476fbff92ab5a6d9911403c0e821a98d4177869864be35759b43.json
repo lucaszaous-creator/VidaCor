@@ -1,0 +1,112 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, codigo, fundo_centavos, aberto_em, fechado_em, esperado_centavos, contado_centavos, diferenca_centavos FROM caixa.caixa WHERE id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "caixa.caixa",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.caixa",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "fundo_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "caixa.caixa",
+            "name": "fundo_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "aberto_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "caixa.caixa",
+            "name": "aberto_em"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "fechado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "caixa.caixa",
+            "name": "fechado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "esperado_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "caixa.caixa",
+            "name": "esperado_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "contado_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "caixa.caixa",
+            "name": "contado_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "diferenca_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "caixa.caixa",
+            "name": "diferenca_centavos"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "555c1dd06859476fbff92ab5a6d9911403c0e821a98d4177869864be35759b43"
+}

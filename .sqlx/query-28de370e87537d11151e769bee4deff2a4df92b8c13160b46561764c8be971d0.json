@@ -1,0 +1,136 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, codigo, subtotal_centavos, desconto_centavos, total_centavos, tabela_versao, forma, situacao, pix_txid, pix_copia_e_cola\n           FROM caixa.recebimento WHERE id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "subtotal_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "subtotal_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "desconto_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "desconto_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "total_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "total_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "tabela_versao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "tabela_versao"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "forma",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "forma"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "pix_txid",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "pix_txid"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "pix_copia_e_cola",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "pix_copia_e_cola"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true
+    ]
+  },
+  "hash": "28de370e87537d11151e769bee4deff2a4df92b8c13160b46561764c8be971d0"
+}

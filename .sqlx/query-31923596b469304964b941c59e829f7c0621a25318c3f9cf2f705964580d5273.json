@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT pc.tuss, pc.nome, pr.valor_centavos AS \"valor?\" FROM agenda.procedimento pc\n           LEFT JOIN financeiro.preco pr ON pr.tuss = pc.tuss AND pr.tabela_id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "valor?",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "financeiro.preco",
+            "name": "valor_centavos"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "31923596b469304964b941c59e829f7c0621a25318c3f9cf2f705964580d5273"
+}

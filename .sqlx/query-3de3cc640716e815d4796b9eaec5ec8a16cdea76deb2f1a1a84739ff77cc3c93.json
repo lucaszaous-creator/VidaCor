@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE faturamento.conta SET tabela_id = $2, contrato_id = coalesce(contrato_id, $3), valor_total_centavos = $4 WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Uuid",
+        "Int8"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "3de3cc640716e815d4796b9eaec5ec8a16cdea76deb2f1a1a84739ff77cc3c93"
+}

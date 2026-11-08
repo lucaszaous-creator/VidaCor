@@ -1,0 +1,150 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT t.id, t.codigo, t.situacao, t.senha, a.inicio, a.exame_nome, a.requer_contraste,\n                  p.id AS paciente_id, p.nome, p.nascimento, tr.resultado AS \"triagem?\"\n             FROM recepcao.atendimento t\n             JOIN agenda.agendamento a ON a.id = t.agendamento_id\n             JOIN identidade.paciente p ON p.id = t.paciente_id\n             LEFT JOIN triagem.triagem tr ON tr.atendimento_id = t.id\n            WHERE t.sala_id = $1 AND a.inicio >= $2 AND a.inicio < $3\n            ORDER BY a.inicio LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "senha",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "senha"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "inicio",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "inicio"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "exame_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "exame_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "requer_contraste",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "requer_contraste"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "paciente_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "triagem?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "triagem.triagem",
+            "name": "resultado"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "c7fc77f0d14d0b09dab1843f9a138ffb8bb09daef7a43262c08a1e76de04f155"
+}

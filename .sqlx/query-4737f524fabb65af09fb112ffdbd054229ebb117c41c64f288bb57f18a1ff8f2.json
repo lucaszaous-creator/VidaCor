@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT tuss, descricao, solicitado, autorizado FROM convenio.autorizacao_procedimento WHERE autorizacao_id = $1 ORDER BY tuss",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao_procedimento",
+            "name": "tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "descricao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao_procedimento",
+            "name": "descricao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "solicitado",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao_procedimento",
+            "name": "solicitado"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "autorizado",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "convenio.autorizacao_procedimento",
+            "name": "autorizado"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "4737f524fabb65af09fb112ffdbd054229ebb117c41c64f288bb57f18a1ff8f2"
+}

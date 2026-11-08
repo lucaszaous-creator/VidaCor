@@ -1,0 +1,102 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT e.sequencia, e.dominio, e.tipo, e.registro_codigo, e.criado_em, e.origem, encode(e.hash, 'hex') AS \"hash!\",\n                  e.hash = digest(coalesce(encode(e.hash_anterior, 'hex'), '') || '|' || e.id::text || '|' || e.dominio || '|' ||\n                     e.tipo || '|' || e.registro_id::text || '|' || e.dados::text || '|' ||\n                     to_char(e.criado_em AT TIME ZONE 'UTC', 'YYYY-MM-DD\"T\"HH24:MI:SS.US'), 'sha256')\n                  AND (e.hash_anterior IS NOT DISTINCT FROM (SELECT p.hash FROM lastro.evento p WHERE p.sequencia < e.sequencia ORDER BY p.sequencia DESC LIMIT 1))\n                  AS \"integro!\"\n           FROM lastro.evento e WHERE e.registro_id = ANY($1) ORDER BY e.sequencia LIMIT 500",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "sequencia",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "lastro.evento",
+            "name": "sequencia"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "dominio",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "lastro.evento",
+            "name": "dominio"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "tipo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "lastro.evento",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "registro_codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "lastro.evento",
+            "name": "registro_codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "lastro.evento",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "origem",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "lastro.evento",
+            "name": "origem"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "hash!",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 7,
+        "name": "integro!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "UuidArray"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      null,
+      null
+    ]
+  },
+  "hash": "a94534ff81c76e0fe3d73f0d3cdf7598b7323d98a5da37db6cb7b97b308a782c"
+}

@@ -1,0 +1,44 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT m.nome AS \"medico!\", count(*) AS \"laudos!\",\n                  avg(extract(epoch FROM (v.assinada_em - s.recebido_em)) / 3600.0)::float8 AS horas\n           FROM laudos.versao v JOIN laudos.laudo l ON l.id = v.laudo_id JOIN exames.estudo s ON s.id = l.estudo_id\n           JOIN identidade.usuario m ON m.id = v.assinada_por\n           WHERE l.unidade_id = $1 AND v.numero = 1 AND v.assinada_em >= $2 AND v.assinada_em < $3\n           GROUP BY m.nome ORDER BY 2 DESC",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "medico!",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "laudos!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "horas",
+        "type_info": "Float8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      null,
+      null
+    ]
+  },
+  "hash": "e98e3955c4268eb5802be5361c845f2ffc0d7bc549fb3241faba2df738c2f499"
+}

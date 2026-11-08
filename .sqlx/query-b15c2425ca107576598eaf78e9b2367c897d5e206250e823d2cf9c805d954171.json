@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE laudos.laudo SET situacao = 'retificacao_em_rascunho', versao = versao + 1 WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "b15c2425ca107576598eaf78e9b2367c897d5e206250e823d2cf9c805d954171"
+}

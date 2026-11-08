@@ -1,0 +1,40 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT formulario, numero FROM contingencia.numero WHERE contingencia_id = $1 AND situacao = 'pendente' ORDER BY formulario, numero",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "formulario",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "contingencia.numero",
+            "name": "formulario"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "numero",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "contingencia.numero",
+            "name": "numero"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "5514433e8450a09a2bf760fe218005a6c95f242eb4a50a1e60dd888f5ff65739"
+}

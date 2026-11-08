@@ -1,6 +1,6 @@
 # ADR-0012 · Observabilidade com OpenTelemetry, histogramas e SLOs
 
-- **Status:** proposto
+- **Status:** aceito (aprovado pelo dono do produto em 2026-11-08)
 - **Data:** 2026-11-07
 
 ## Contexto

@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE convenio.guia SET situacao = 'consumida', agendamento_id = $2, versao = versao + 1\n          WHERE id = $1 AND situacao = 'disponivel'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "7fe2410c37613db59fb81b01386f807ca44e5a1eb7a2d701e24e4c2b08a9e2a1"
+}

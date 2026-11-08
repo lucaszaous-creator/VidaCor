@@ -13,8 +13,10 @@ TISS, financeiro, estoque, WhatsApp, portal do paciente e estacionamento.
 Servidor **local**. Núcleo em **Rust** (axum, sqlx), banco **PostgreSQL**, telas em
 **TypeScript/React** (web e Tauri). Visão geral: [README](README.md) e [docs/11](docs/11-arquitetura-e-infraestrutura.md).
 
-**Estado atual:** documentação, mockups e arquitetura. Ainda não há código de
-produção. Quando houver, o comando único de verificação será `just test`.
+**Estado atual:** construção iniciada (Fase 0, esqueleto M0 do [docs/29](docs/29-esqueleto-m0.md)):
+núcleo Rust com login OIDC, agenda do dia, check-in com dois identificadores, worklist no Orthanc
+e conciliação de estudo, com testes de integração em PostgreSQL e Orthanc reais. O comando único de
+verificação é `just test`; como rodar está no [README](README.md#como-rodar).
 
 ## Regra de decisão (obrigatória) — [ADR-0019](docs/adr/0019-decisoes-pelo-mais-profissional-com-lastro.md)
 Na dúvida entre caminhos, escolha **o mais profissional e o mais rastreável** e registre em

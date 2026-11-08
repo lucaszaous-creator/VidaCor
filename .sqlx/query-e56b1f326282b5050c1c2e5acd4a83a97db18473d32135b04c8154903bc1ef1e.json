@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT versao, motivo, criado_em FROM faturamento.conta_historico WHERE conta_id = $1 ORDER BY versao DESC",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "versao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta_historico",
+            "name": "versao"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta_historico",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta_historico",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "e56b1f326282b5050c1c2e5acd4a83a97db18473d32135b04c8154903bc1ef1e"
+}

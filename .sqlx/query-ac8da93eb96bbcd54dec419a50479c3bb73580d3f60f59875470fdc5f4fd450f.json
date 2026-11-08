@@ -1,0 +1,34 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO portal.conta (id, paciente_id, login, senha_hash, convite_id, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, 'portal', $6, $7)\n         ON CONFLICT (paciente_id) DO UPDATE SET login = EXCLUDED.login, senha_hash = EXCLUDED.senha_hash, convite_id = EXCLUDED.convite_id,\n                ativa = true, falhas = 0, bloqueada_ate = NULL, versao = portal.conta.versao + 1\n         RETURNING id",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "portal.conta",
+            "name": "id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "ac8da93eb96bbcd54dec419a50479c3bb73580d3f60f59875470fdc5f4fd450f"
+}

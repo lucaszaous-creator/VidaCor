@@ -1,6 +1,6 @@
 # ADR-0005 · Frontend em TypeScript + React, casca desktop em Tauri
 
-- **Status:** proposto
+- **Status:** aceito (aprovado pelo dono do produto em 2026-11-08)
 - **Data:** 2026-11-06
 
 ## Contexto

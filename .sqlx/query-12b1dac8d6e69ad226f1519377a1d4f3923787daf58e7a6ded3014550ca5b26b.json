@@ -1,0 +1,145 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT t.id, t.codigo, t.tipo, t.descricao, t.contraparte, t.categoria, t.valor_centavos, t.vencimento, t.situacao, t.aprovacoes_exigidas,\n                  (SELECT count(*) FROM financeiro.aprovacao a WHERE a.titulo_id = t.id) AS \"aprovacoes!\"\n           FROM financeiro.titulo t\n           WHERE ($1::uuid IS NULL OR t.id = $1) AND ($2::text IS NULL OR t.tipo = $2) AND ($3::text IS NULL OR t.situacao = $3)\n           ORDER BY t.vencimento, t.codigo LIMIT 500",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "financeiro.titulo",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.titulo",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "tipo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.titulo",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "descricao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.titulo",
+            "name": "descricao"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "contraparte",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.titulo",
+            "name": "contraparte"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "categoria",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.titulo",
+            "name": "categoria"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "valor_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "financeiro.titulo",
+            "name": "valor_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "vencimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "financeiro.titulo",
+            "name": "vencimento"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.titulo",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "aprovacoes_exigidas",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "financeiro.titulo",
+            "name": "aprovacoes_exigidas"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "aprovacoes!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      null
+    ]
+  },
+  "hash": "12b1dac8d6e69ad226f1519377a1d4f3923787daf58e7a6ded3014550ca5b26b"
+}

@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE caixa.autorizacao_desconto SET usada_em = now(), versao = versao + 1 WHERE id = $1 AND usada_em IS NULL",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "7fcd462fd8041943f301d69a2c284b7aa230adddf16ffd97b9afb727287cbb9c"
+}

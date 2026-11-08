@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT coalesce(sum(total_centavos) FILTER (WHERE situacao = 'pago'), 0)::bigint AS \"recebido!\",\n                      coalesce(sum(total_centavos) FILTER (WHERE situacao = 'pago' AND forma = 'pix'), 0)::bigint AS \"pix!\",\n                      coalesce(sum(total_centavos) FILTER (WHERE situacao = 'pago' AND forma = 'cartao'), 0)::bigint AS \"cartao!\",\n                      coalesce(sum(total_centavos) FILTER (WHERE situacao = 'pago' AND forma = 'dinheiro'), 0)::bigint AS \"dinheiro!\",\n                      count(*) FILTER (WHERE situacao = 'aguardando_pagamento') AS \"aguardando!\"\n                 FROM caixa.recebimento WHERE criado_em >= $1 AND criado_em < $2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "recebido!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 1,
+        "name": "pix!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "cartao!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 3,
+        "name": "dinheiro!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 4,
+        "name": "aguardando!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "888ef63373a74c789d996af967f4f722c1a9bdd3a05cb390b220b5151c459dbe"
+}

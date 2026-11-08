@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT orcamento_id, tuss, descricao, valor_centavos FROM financeiro.orcamento_item WHERE orcamento_id = ANY($1) ORDER BY descricao",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "orcamento_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento_item",
+            "name": "orcamento_id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento_item",
+            "name": "tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "descricao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento_item",
+            "name": "descricao"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "valor_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento_item",
+            "name": "valor_centavos"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "UuidArray"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "b63907d6bafc3eef4f3454e2fe770e58243556457727a771d6283240779c5838"
+}

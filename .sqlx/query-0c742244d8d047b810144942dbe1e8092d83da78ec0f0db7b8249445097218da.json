@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT laudos.paciente_do_laudo($1)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "paciente_do_laudo",
+        "type_info": "Uuid",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "0c742244d8d047b810144942dbe1e8092d83da78ec0f0db7b8249445097218da"
+}

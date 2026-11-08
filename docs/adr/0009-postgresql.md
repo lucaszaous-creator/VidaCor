@@ -1,6 +1,6 @@
 # ADR-0009 · PostgreSQL como banco principal
 
-- **Status:** proposto
+- **Status:** aceito (aprovado pelo dono do produto em 2026-11-08)
 - **Data:** 2026-11-06
 
 ## Contexto

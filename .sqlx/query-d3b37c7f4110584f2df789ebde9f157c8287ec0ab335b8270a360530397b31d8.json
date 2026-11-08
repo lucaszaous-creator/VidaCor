@@ -1,0 +1,39 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT a.codigo AS \"codigo!\", a.inicio AS \"inicio!\", s.nome AS \"sala!\" FROM agenda.agendamento a JOIN agenda.sala s ON s.id = a.sala_id\n            WHERE a.sala_id = ANY($1) AND a.situacao NOT IN ('cancelado','faltou','expirada')\n              AND tstzrange(a.inicio, a.fim) && tstzrange($2, $3)\n           UNION ALL\n           SELECT o.codigo, o.inicio, s.nome FROM agenda.oferta o JOIN agenda.sala s ON s.id = o.sala_id\n            WHERE o.sala_id = ANY($1) AND o.situacao = 'aguardando' AND o.expira_em > now()\n              AND tstzrange(o.inicio, o.fim) && tstzrange($2, $3)\n           ORDER BY 2 LIMIT 50",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo!",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 1,
+        "name": "inicio!",
+        "type_info": "Timestamptz",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "sala!",
+        "type_info": "Text",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "UuidArray",
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "d3b37c7f4110584f2df789ebde9f157c8287ec0ab335b8270a360530397b31d8"
+}

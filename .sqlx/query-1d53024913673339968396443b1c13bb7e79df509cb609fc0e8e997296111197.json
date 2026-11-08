@@ -1,0 +1,24 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO faturamento.glosa (id, codigo, conta_id, demonstrativo_id, codigo_glosa, motivo, valor_centavos,\n                        prazo_recurso, criado_por, origem, unidade_id, correlacao)\n                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'faturamento', $10, $11)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Text",
+        "Int8",
+        "Date",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "1d53024913673339968396443b1c13bb7e79df509cb609fc0e8e997296111197"
+}

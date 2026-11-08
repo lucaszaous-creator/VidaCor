@@ -1,6 +1,6 @@
 # ADR-0004 · Monólito modular em vez de microserviços
 
-- **Status:** proposto
+- **Status:** aceito (aprovado pelo dono do produto em 2026-11-08)
 - **Data:** 2026-11-06
 
 ## Contexto

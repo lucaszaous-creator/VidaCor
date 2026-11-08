@@ -1,0 +1,39 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO convenio.guia (id, codigo, operadora, numero, carteirinha, senha, validade, paciente_id, solicitante,\n                    criado_por, origem, unidade_id, correlacao)\n             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'autorizacao', $11, $12)\n             ON CONFLICT (operadora, numero) DO NOTHING RETURNING id",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "convenio.guia",
+            "name": "id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Date",
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "e3c003a01240e18408dbcdb72ebaa898befa13885e64ee8a22801352ac94cc25"
+}

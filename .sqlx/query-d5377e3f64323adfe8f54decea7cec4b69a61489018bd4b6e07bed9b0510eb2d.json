@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE faturamento.contrato SET ultimo_lote = ultimo_lote + 1, versao = versao + 1 WHERE id = $1 RETURNING ultimo_lote",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "ultimo_lote",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "ultimo_lote"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "d5377e3f64323adfe8f54decea7cec4b69a61489018bd4b6e07bed9b0510eb2d"
+}

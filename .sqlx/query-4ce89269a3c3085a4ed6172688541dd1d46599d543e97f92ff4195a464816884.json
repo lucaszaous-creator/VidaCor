@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE identidade.pedido_perfil SET situacao = $2, decidido_por = $3, decidido_em = now(), versao = versao + 1 WHERE id = $1 AND situacao = 'aguardando'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "4ce89269a3c3085a4ed6172688541dd1d46599d543e97f92ff4195a464816884"
+}

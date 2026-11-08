@@ -1,0 +1,78 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT e.id, e.prioridade, e.preferencia, p.modalidade, e.criado_em\n           FROM agenda.espera e JOIN agenda.procedimento p ON p.tuss = e.exame_tuss\n          WHERE e.unidade_id = $1 AND e.situacao = 'aguardando'\n            AND NOT EXISTS (SELECT 1 FROM agenda.oferta o WHERE o.espera_id = e.id AND o.sala_id = $2 AND o.inicio = $3)\n          LIMIT 1000",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "prioridade",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "prioridade"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "preferencia",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "preferencia"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "modalidade",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "modalidade"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.espera",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "d0aae082951bf96b8dfe54c64f17df4de301e04cec0d3014d2f12e1afda64f95"
+}

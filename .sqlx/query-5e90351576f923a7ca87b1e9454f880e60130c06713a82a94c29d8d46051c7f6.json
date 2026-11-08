@@ -1,0 +1,42 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT count(*) FILTER (WHERE situacao IN ('pronta','com_pendencia')) AS \"conferidas!\",\n                  count(*) FILTER (WHERE situacao = 'pronta') AS \"prontas!\",\n                  count(*) FILTER (WHERE situacao = 'com_pendencia' AND NOT EXISTS (\n                      SELECT 1 FROM faturamento.pendencia p WHERE p.conta_id = c.id AND p.situacao = 'aberta' AND p.efeito = 'bloqueia'))\n                    AS \"corrigir!\",\n                  count(*) FILTER (WHERE situacao = 'com_pendencia' AND EXISTS (\n                      SELECT 1 FROM faturamento.pendencia p WHERE p.conta_id = c.id AND p.situacao = 'aberta' AND p.efeito = 'bloqueia'))\n                    AS \"bloqueadas!\"\n             FROM faturamento.conta c WHERE c.lote_id IS NULL",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "conferidas!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 1,
+        "name": "prontas!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "corrigir!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 3,
+        "name": "bloqueadas!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "5e90351576f923a7ca87b1e9454f880e60130c06713a82a94c29d8d46051c7f6"
+}

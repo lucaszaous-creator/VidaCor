@@ -1,0 +1,233 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT e.id, e.codigo, e.situacao, e.motivo, e.criado_em, e.motivo_recusa,\n                  r.id AS recebimento_id, r.codigo AS recebimento_codigo, r.total_centavos, r.forma, r.pago_em,\n                  p.id AS paciente_id, p.nome AS paciente_nome, p.nascimento,\n                  u.id AS pedido_por_id, u.nome AS pedido_por_nome,\n                  d.id AS \"decisor_id?\", d.nome AS \"decisor_nome?\"\n           FROM caixa.estorno e\n           JOIN caixa.recebimento r ON r.id = e.recebimento_id\n           JOIN identidade.paciente p ON p.id = r.paciente_id\n           JOIN identidade.usuario u ON u.id = e.pedido_por\n           LEFT JOIN identidade.usuario d ON d.id = coalesce(e.aprovado_por, e.recusado_por)\n           WHERE ($1::uuid IS NULL AND e.situacao = $2) OR e.id = $1\n           ORDER BY e.criado_em LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "caixa.estorno",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.estorno",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.estorno",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.estorno",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "caixa.estorno",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "motivo_recusa",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.estorno",
+            "name": "motivo_recusa"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "recebimento_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "recebimento_codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "total_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "total_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "forma",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "forma"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "pago_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "pago_em"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "paciente_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "paciente_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "pedido_por_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "pedido_por_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "decisor_id?",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 17,
+        "name": "decisor_nome?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "255f0a929fe5833711a238a3f56bf58d9d112ccaeed1a72daf2c04e8a0165fc2"
+}

@@ -1,0 +1,197 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT d.id, d.codigo, d.pontos_base, d.motivo, d.situacao, d.autorizacao_id, d.motivo_decisao, d.criado_em,\n                  p.id AS paciente_id, p.nome AS paciente_nome, p.nascimento,\n                  s.id AS solicitante_id, s.nome AS solicitante_nome,\n                  g.id AS \"decisor_id?\", g.nome AS \"decisor_nome?\"\n           FROM caixa.pedido_desconto d\n           JOIN identidade.paciente p ON p.id = d.paciente_id\n           JOIN identidade.usuario s ON s.id = d.solicitante_id\n           LEFT JOIN identidade.usuario g ON g.id = d.decidido_por\n           WHERE ($1::uuid IS NULL AND d.situacao = $2) OR d.id = $1\n           ORDER BY d.criado_em LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "caixa.pedido_desconto",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.pedido_desconto",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "pontos_base",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "caixa.pedido_desconto",
+            "name": "pontos_base"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.pedido_desconto",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.pedido_desconto",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "autorizacao_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "caixa.pedido_desconto",
+            "name": "autorizacao_id"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "motivo_decisao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.pedido_desconto",
+            "name": "motivo_decisao"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "caixa.pedido_desconto",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "paciente_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "paciente_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "solicitante_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "solicitante_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "decisor_id?",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "decisor_nome?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "82918ef821fb02c63119becb2cc0822fd797f9f78c85c955bf6358417e9af2f5"
+}

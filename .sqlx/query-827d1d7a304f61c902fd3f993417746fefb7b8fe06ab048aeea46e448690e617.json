@@ -1,0 +1,19 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO agenda.agendamento_procedimento (agendamento_id, tuss, criado_por, origem, estacao, unidade_id, correlacao)\n         VALUES ($1, $2, $3, 'lista_espera', $4, $5, $6)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "827d1d7a304f61c902fd3f993417746fefb7b8fe06ab048aeea46e448690e617"
+}

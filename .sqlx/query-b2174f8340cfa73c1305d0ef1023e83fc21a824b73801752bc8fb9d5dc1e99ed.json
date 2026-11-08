@@ -1,0 +1,124 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, codigo, nivel, motivo, declarada_por, responsavel_id, declarada_em, situacao, encerrada_em FROM contingencia.contingencia WHERE id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "contingencia.contingencia",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "contingencia.contingencia",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "nivel",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "contingencia.contingencia",
+            "name": "nivel"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "contingencia.contingencia",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "declarada_por",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "contingencia.contingencia",
+            "name": "declarada_por"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "responsavel_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "contingencia.contingencia",
+            "name": "responsavel_id"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "declarada_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "contingencia.contingencia",
+            "name": "declarada_em"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "contingencia.contingencia",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "encerrada_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "contingencia.contingencia",
+            "name": "encerrada_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "b2174f8340cfa73c1305d0ef1023e83fc21a824b73801752bc8fb9d5dc1e99ed"
+}

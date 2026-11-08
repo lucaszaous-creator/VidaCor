@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE recepcao.etiqueta SET situacao = 'invalidada', motivo_invalidacao = $2, invalidada_por = $3,\n                invalidada_em = now(), versao = versao + 1\n          WHERE id = $1 AND situacao = 'valida'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "8895122f1ec8aee9465bfe65468cb62c7d3b3d88088d469276120fa473cd462f"
+}

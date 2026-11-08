@@ -1,0 +1,18 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO integracao.outbox (id, tipo, chave_idempotencia, carga, unidade_id, correlacao, referencia)\n             VALUES ($1, 'aviso.laudo_pronto', $2, $3, $4, 'publicacao', $5) ON CONFLICT (tipo, referencia) WHERE referencia IS NOT NULL DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Jsonb",
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "d1de67f3e4b808c585e65a0440ddb3c888d660694a5d5ae0fe080ddfc2e9467d"
+}

@@ -1,0 +1,20 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO identidade.sessao\n           (id, usuario_id, segredo_hash, csrf, expira_em, origem, unidade_id, correlacao, criado_por)\n         VALUES ($1, $2, $3, $4, now() + make_interval(hours => $5), 'login', $6, $7, $2)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Bytea",
+        "Text",
+        "Int4",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "2c726015a40a684971b93f3b97892f188c443d46538f8c4e4177b3caebfa5c65"
+}

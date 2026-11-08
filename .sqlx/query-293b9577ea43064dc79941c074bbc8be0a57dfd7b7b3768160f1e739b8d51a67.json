@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO contingencia.numero (unidade_id, formulario, numero, faixa_id, contingencia_id, situacao, criado_por, correlacao)\n         SELECT $1, $2, g, $3, $4, $5, $6, $7 FROM generate_series($8::int, $9::int) g\n         ON CONFLICT DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text",
+        "Int4",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "293b9577ea43064dc79941c074bbc8be0a57dfd7b7b3768160f1e739b8d51a67"
+}

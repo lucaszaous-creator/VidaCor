@@ -1,0 +1,18 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO identidade.login_pendente (state, nonce, verificador_pkce, expira_em, sessao_id, voltar)\n             VALUES ($1, $2, $3, now() + interval '10 minutes', $4, $5)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Text",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "78568c9a1521e6472c3f1d2dce9b5a03ea34b7cd6c0a7d4fd0e46d572c49f94e"
+}

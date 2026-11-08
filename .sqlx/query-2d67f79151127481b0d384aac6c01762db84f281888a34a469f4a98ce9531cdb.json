@@ -1,0 +1,88 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "WITH assinados AS (\n             SELECT v.assinada_por AS medico_id, g.exame_tuss AS tuss, (v.assinada_em AT TIME ZONE 'America/Sao_Paulo')::date AS dia\n               FROM laudos.versao v JOIN laudos.laudo l ON l.id = v.laudo_id JOIN recepcao.atendimento a ON a.id = l.atendimento_id\n               JOIN agenda.agendamento g ON g.id = a.agendamento_id\n              WHERE l.unidade_id = $1 AND v.numero = 1 AND v.assinada_em >= $2 AND v.assinada_em < $3\n           ), precificados AS (\n             SELECT s.medico_id, (SELECT p.valor_centavos FROM financeiro.preco p JOIN financeiro.tabela_preco t ON t.id = p.tabela_id\n                                   WHERE t.unidade_id = $1 AND t.vigente_desde <= s.dia AND p.tuss = s.tuss ORDER BY t.versao DESC LIMIT 1) AS valor\n               FROM assinados s\n           )\n           SELECT u.id AS \"medico_id!\", u.nome AS \"medico!\", count(*) AS \"laudos!\", coalesce(sum(p.valor), 0)::bigint AS \"base!\",\n                  count(*) FILTER (WHERE p.valor IS NULL) AS \"sem_preco!\",\n                  r.percentual_pb AS \"percentual?\", r.versao AS \"versao?\"\n             FROM precificados p JOIN identidade.usuario u ON u.id = p.medico_id\n             LEFT JOIN LATERAL (SELECT percentual_pb, versao FROM financeiro.regra_repasse rr WHERE rr.medico_id = u.id AND rr.vigente_desde <= $4\n                                ORDER BY rr.versao DESC LIMIT 1) r ON true\n            GROUP BY u.id, u.nome, r.percentual_pb, r.versao ORDER BY u.nome",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "medico_id!",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "medico!",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "laudos!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 3,
+        "name": "base!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 4,
+        "name": "sem_preco!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 5,
+        "name": "percentual?",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "financeiro.regra_repasse",
+            "name": "percentual_pb"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "versao?",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "financeiro.regra_repasse",
+            "name": "versao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Timestamptz",
+        "Timestamptz",
+        "Date"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      null,
+      null,
+      null,
+      false,
+      false
+    ]
+  },
+  "hash": "2d67f79151127481b0d384aac6c01762db84f281888a34a469f4a98ce9531cdb"
+}

@@ -1,0 +1,53 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT numero, texto, hash_documento FROM laudos.versao WHERE laudo_id = $1 AND numero = $2 AND situacao = 'assinada'",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "numero",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "texto",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "texto"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "hash_documento",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.versao",
+            "name": "hash_documento"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "23e786cd1371b4ed91288677d5b7da0f58ec8cd1fb5c6c19584a40219dd27526"
+}

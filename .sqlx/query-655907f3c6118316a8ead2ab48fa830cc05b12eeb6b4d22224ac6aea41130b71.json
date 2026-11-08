@@ -1,0 +1,245 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT o.id, o.codigo, o.paciente_id, p.nome AS paciente_nome, p.nascimento AS paciente_nascimento, o.tabela_versao,\n                  k.codigo AS \"pacote?\", k.regra_versao AS \"pacote_regra_versao?\", o.subtotal_centavos, o.pacote_centavos, o.desconto_centavos,\n                  o.desconto_pontos_base, o.desconto_motivo, o.total_centavos, o.pagamento_previsto, o.valido_ate, o.situacao,\n                  o.motivo_cancelamento, o.criado_em\n             FROM financeiro.orcamento o\n             JOIN identidade.paciente p ON p.id = o.paciente_id\n             LEFT JOIN financeiro.pacote k ON k.id = o.pacote_id\n            WHERE ($1::uuid IS NULL OR o.id = $1) AND ($2::uuid IS NULL OR o.paciente_id = $2)\n              AND ($1::uuid IS NOT NULL OR o.criado_em > now() - interval '30 days')\n            ORDER BY o.criado_em DESC LIMIT 100",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "paciente_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento",
+            "name": "paciente_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "paciente_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "paciente_nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "tabela_versao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento",
+            "name": "tabela_versao"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "pacote?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.pacote",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "pacote_regra_versao?",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "financeiro.pacote",
+            "name": "regra_versao"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "subtotal_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento",
+            "name": "subtotal_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "pacote_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento",
+            "name": "pacote_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "desconto_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento",
+            "name": "desconto_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "desconto_pontos_base",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento",
+            "name": "desconto_pontos_base"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "desconto_motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento",
+            "name": "desconto_motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "total_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento",
+            "name": "total_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "pagamento_previsto",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento",
+            "name": "pagamento_previsto"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "valido_ate",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento",
+            "name": "valido_ate"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 17,
+        "name": "motivo_cancelamento",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento",
+            "name": "motivo_cancelamento"
+          }
+        }
+      },
+      {
+        "ordinal": 18,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "financeiro.orcamento",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "655907f3c6118316a8ead2ab48fa830cc05b12eeb6b4d22224ac6aea41130b71"
+}

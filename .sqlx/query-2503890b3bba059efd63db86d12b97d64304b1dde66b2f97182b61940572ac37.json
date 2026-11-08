@@ -1,0 +1,30 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE ouvidoria.manifestacao SET situacao = 'respondida', resposta = $2, respondida_por = $3, respondida_em = now(), versao = versao + 1\n          WHERE id = $1 AND situacao = 'aberta' RETURNING codigo",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "ouvidoria.manifestacao",
+            "name": "codigo"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "2503890b3bba059efd63db86d12b97d64304b1dde66b2f97182b61940572ac37"
+}
