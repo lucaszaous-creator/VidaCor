@@ -106,6 +106,8 @@ Todo objeto tem menu de clique direito (também por teclado e pelo botão ⋯). 
 - Exceções com tamanho próprio: apps (390×844), tablet (1180×820), telão (1280×720) e impressos A4.
 - Verificação: `tools/verificacao/verifica.sh` renderiza com o motor do canvas nas duas resoluções e falha se a
   página rolar, se um painel cortar conteúdo ou se houver rolagem lateral.
+  Motor: `tools/verificacao/motor-dc/support.js` (aberto e versionado, DEC-2026-11-08-39); detalhes em
+  `tools/verificacao/README.md`.
 
 ### Proibido "cara de IA"
 - Emoji e caracteres usados como ícone (✓ ✕ ▶ ● ▼ ★ ⚡ ✨ ‹ › → ← ⋯ •). Ícone é SVG de traço do conjunto do sistema.
