@@ -211,7 +211,13 @@ async fn cancelar_devolve_a_vaga_ao_primeiro_da_fila_e_aceite_duplo_agenda_uma_v
     );
     let mut st = [a1.0, a2.0];
     st.sort();
-    assert_eq!(st, [StatusCode::OK, StatusCode::CONFLICT], "{} {}", a1.2, a2.2);
+    assert_eq!(
+        st,
+        [StatusCode::OK, StatusCode::CONFLICT],
+        "{} {}",
+        a1.2,
+        a2.2
+    );
     assert_eq!(
         amb.contar("SELECT count(*) FROM agenda.oferta WHERE situacao = 'aceita'")
             .await,
