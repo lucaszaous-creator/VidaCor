@@ -15,7 +15,7 @@ describe('Menu lateral por perfil (conforto; o servidor decide)', () => {
   it.each([
     ['recepção', SESSOES.recepcao, ['Início', 'Agenda e check-in', 'Novo agendamento', 'Pacientes', 'Lista de espera', 'Orçamento particular', 'Exame externo', 'Novo paciente', 'Recepção e pulseiras', 'TV de chamada', 'Autorizações', 'Contingência']],
     ['técnico', SESSOES.tecnico, ['Agenda e check-in', 'Pacientes', 'Sala de exame']],
-    ['médico', SESSOES.medico, ['Agenda e check-in', 'Pacientes', 'Sala de exame', 'Laudar', 'Conciliar estudos']],
+    ['médico', SESSOES.medico, ['Agenda e check-in', 'Pacientes', 'Sala de exame', 'Laudar', 'Modelos de laudo', 'Revisão por pares', 'Conciliar estudos']],
     ['caixa', SESSOES.caixa, ['Caixa (particular)']],
     ['gerência', SESSOES.gerente, ['Início', 'Agenda e check-in', 'Novo agendamento', 'Pacientes', 'Lista de espera', 'Orçamento particular', 'Exame externo', 'Novo paciente', 'Recepção e pulseiras', 'TV de chamada', 'Autorizações', 'Fluxo de laudos', 'Financeiro', 'Indicadores', 'Estoque', 'Pendências do caixa', 'Faturamento TISS', 'Auditoria do faturamento', 'Configurações', 'Aparelhos', 'Usuários e perfis', 'Lastro', 'Contingência']],
     ['TI', SESSOES.ti, ['Configurações', 'Aparelhos', 'Usuários e perfis']],

@@ -13,6 +13,23 @@ import type { IntegracaoVista } from './contrato-configuracoes';
 import type { VisaoDoPaciente } from './contrato-paciente';
 import type { InicioDoDia } from './contrato-inicio';
 import type { FluxoDeLaudos } from './contrato-fluxo';
+import type {
+  CasoDeRevisao,
+  DecisaoDePendencia,
+  DecisaoDeVersaoDeModelo,
+  FraseDeLaudo,
+  ItemDaFilaDeRevisao,
+  ModeloDeLaudo,
+  NovaFraseDeLaudo,
+  NovaVersaoDeModelo,
+  NovoModeloDeLaudo,
+  PainelDeRevisao,
+  ParecerDeRevisao,
+  RevisaoDesignada,
+  RevisoesDoAutor,
+  ResultadoDoSorteio,
+  UsoDeModelo,
+} from './contrato-modelos';
 import type { ResultadoDaBusca } from './contrato-busca';
 import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
@@ -180,3 +197,21 @@ export type ConfereVisaoDoPaciente = Cabe<VisaoDoPaciente, S['VisaoDoPaciente']>
 export type ConfereInicioDoDia = Cabe<InicioDoDia, S['InicioDoDia']>;
 export type ConfereFluxoDeLaudos = Cabe<FluxoDeLaudos, S['FluxoDeLaudos']>;
 export type ConfereResultadoDaBusca = Cabe<ResultadoDaBusca, S['ResultadoDaBusca']>;
+export type ConfereModeloDeLaudo = Cabe<ModeloDeLaudo, S['ModeloDeLaudo']>;
+export type ConfereNovoModeloDeLaudo = Cabe<NovoModeloDeLaudo, S['NovoModeloDeLaudo']>;
+export type ConfereNovaVersaoDeModelo = Cabe<NovaVersaoDeModelo, S['NovaVersaoDeModelo']>;
+export type ConfereDecisaoDeVersaoDeModelo = Cabe<DecisaoDeVersaoDeModelo, S['DecisaoDeVersaoDeModelo']>;
+export type ConfereUsoDeModelo = Cabe<UsoDeModelo, S['UsoDeModelo']>;
+export type ConfereFraseDeLaudo = Cabe<FraseDeLaudo, S['FraseDeLaudo']>;
+export type ConfereNovaFraseDeLaudo = Cabe<NovaFraseDeLaudo, S['NovaFraseDeLaudo']>;
+export type ConfereItemDaFilaDeRevisao = Cabe<ItemDaFilaDeRevisao, S['ItemDaFilaDeRevisao']>;
+export type ConfereCasoDeRevisao = Cabe<CasoDeRevisao, S['CasoDeRevisao']>;
+export type ConfereParecerDeRevisao = Cabe<ParecerDeRevisao, S['ParecerDeRevisao']>;
+export type ConfereRevisoesDoAutor = Cabe<RevisoesDoAutor, S['RevisoesDoAutor']>;
+export type ConfereDecisaoDePendencia = Cabe<DecisaoDePendencia, S['DecisaoDePendencia']>;
+export type ConfereRevisaoDesignada = Cabe<RevisaoDesignada, S['RevisaoDesignada']>;
+export type ConfereResultadoDoSorteio = Cabe<ResultadoDoSorteio, S['ResultadoDoSorteio']>;
+export type ConferePainelDeRevisao = Cabe<PainelDeRevisao, S['PainelDeRevisao']>;
+export type ConferePedidoSorteio = Cabe<{ quantidade: number; dias: number }, S['PedidoSorteio']>;
+export type ConferePedidoDesignacao = Cabe<{ laudo_id: string; revisor_id: string }, S['PedidoDesignacao']>;
+export type ConferePedidoUsoDeModelo = Cabe<{ modelo_id: string; numero: number }, S['PedidoUsoDeModelo']>;

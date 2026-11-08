@@ -1248,6 +1248,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/frases-de-laudo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Frases ativas: as da clínica e as do próprio médico. */
+        get: operations["listar_frases_de_laudo"];
+        put?: never;
+        /**
+         * Cria uma frase (ou nova versão de uma frase, que substitui a anterior com motivo). Pessoal: o
+         *     médico; da clínica: a coordenação médica. Idempotency-Key.
+         */
+        post: operations["criar_frase_de_laudo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/frases-de-laudo/{id}/desativacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Desativa a frase com motivo (pessoal: o dono; da clínica: a coordenação médica). Nada é apagado. */
+        post: operations["desativar_frase_de_laudo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/guias": {
         parameters: {
             query?: never;
@@ -1594,6 +1632,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/laudos/{id}/usos-de-modelo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Usa um modelo no rascunho do laudo: devolve o texto da versão publicada e grava qual versão do
+         *     modelo entrou em qual versão do laudo (só o médico atribuído; Idempotency-Key). O texto entra no
+         *     rascunho pelo salvamento normal do laudo.
+         */
+        post: operations["registrar_uso_de_modelo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/links/{token}": {
         parameters: {
             query?: never;
@@ -1691,6 +1750,104 @@ export interface paths {
         get: operations["laudo"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/modelos-de-laudo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Modelos da clínica e os pessoais do médico, com as versões (médico e coordenação médica). */
+        get: operations["listar_modelos_de_laudo"];
+        put?: never;
+        /**
+         * Cria um modelo: pessoal (publicado na hora, versão 1) ou proposta de modelo da clínica (aguarda a
+         *     coordenação médica). Idempotency-Key.
+         */
+        post: operations["criar_modelo_de_laudo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/modelos-de-laudo/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Um modelo com todas as versões. */
+        get: operations["obter_modelo_de_laudo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/modelos-de-laudo/{id}/desativacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Desativa o modelo com motivo (pessoal: o dono; da clínica: a coordenação médica). Nada é apagado;
+         *     laudos que usaram o modelo continuam com a versão gravada.
+         */
+        post: operations["desativar_modelo_de_laudo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/modelos-de-laudo/{id}/versoes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Nova versão: no pessoal publica na hora (a anterior fica substituída); na clínica vira proposta
+         *     para a coordenação médica. Motivo obrigatório. Idempotency-Key.
+         */
+        post: operations["propor_versao_de_modelo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/modelos-de-laudo/{id}/versoes/{numero}/decisao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Aprova ou recusa a proposta de versão de um modelo da clínica (coordenação médica; quem propôs
+         *     não decide). Aprovar publica a versão e substitui a anterior; recusar exige motivo.
+         */
+        post: operations["decidir_versao_de_modelo"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2197,6 +2354,181 @@ export interface paths {
         get: operations["nota"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/revisoes-por-pares": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Designa um laudo assinado a um revisor escolhido (coordenação médica; Idempotency-Key). O banco
+         *     recusa o autor como revisor e um segundo revisor ao mesmo tempo no mesmo laudo.
+         */
+        post: operations["designar_revisao_por_par"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/revisoes-por-pares/fila": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fila do revisor: revisões designadas a ele (sem o nome do autor nem do paciente). */
+        get: operations["fila_de_revisao_por_pares"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/revisoes-por-pares/meus-laudos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Revisões dos laudos do médico (o revisor não é revelado ao autor) e o resultado dele. */
+        get: operations["revisoes_dos_meus_laudos"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/revisoes-por-pares/painel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Painel da coordenação médica: resultado por médico (laudos revisados, concordância e
+         *     discrepâncias), discrepâncias com a situação da pendência, revisões abertas e conflitos a
+         *     redesignar. Sem texto de laudo e sem comentário do revisor.
+         */
+        get: operations["painel_de_revisao_por_pares"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/revisoes-por-pares/sorteio": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sorteia laudos assinados no período e designa a cada um o médico com menos revisões abertas,
+         *     nunca o autor nem quem já declarou conflito naquele laudo (coordenação médica; Idempotency-Key).
+         */
+        post: operations["sortear_revisoes_por_pares"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/revisoes-por-pares/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Abre o caso para o revisor. Revisão aberta: registra o vínculo de revisão com o paciente, lê a
+         *     versão assinada revisada e audita a leitura. Concluída: só o parecer (o laudo não fica aberto).
+         */
+        get: operations["obter_revisao_por_par"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/revisoes-por-pares/{id}/conflito": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * O revisor declara conflito (ex.: atendeu o paciente, parentesco): a revisão é encerrada sem parecer
+         *     e a coordenação médica designa outro revisor.
+         */
+        post: operations["declarar_conflito_de_revisao"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/revisoes-por-pares/{id}/parecer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Registra o parecer (RADPEER). Discrepância exige comentário; as significativas (2b, 3a, 3b) abrem
+         *     pendência para o autor. Uma decisão só: a segunda requisição recebe 409. Idempotency-Key.
+         */
+        post: operations["registrar_parecer_de_revisao"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/revisoes-por-pares/{id}/pendencia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * O autor decide a pendência: "retificado" (o laudo já tem versão nova, aberta pelo fluxo de
+         *     retificação) ou "mantido" (com motivo). Uma decisão só.
+         */
+        post: operations["decidir_pendencia_de_revisao"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2762,6 +3094,34 @@ export interface components {
             /** Format: int32 */
             versao_vigente?: number | null;
         };
+        CasoDeRevisao: {
+            /** Format: date-time */
+            assinada_em?: string | null;
+            /** @description Quem laudou: oculto até o parecer ser enviado. */
+            autor?: string | null;
+            classe?: string | null;
+            codigo: string;
+            comentario?: string | null;
+            /** Format: date-time */
+            concluida_em?: string | null;
+            /** Format: uuid */
+            estudo_id?: string | null;
+            exame: string;
+            /** Format: uuid */
+            id: string;
+            laudo_codigo: string;
+            /** Format: uuid */
+            laudo_id: string;
+            paciente: components["schemas"]["PacienteResumo"];
+            situacao: string;
+            /** @description Texto da versão revisada (só enquanto a revisão está aberta). */
+            texto?: string | null;
+            /**
+             * Format: int32
+             * @description Versão assinada revisada.
+             */
+            versao: number;
+        };
         CatalogoDoOrcamento: {
             exames: components["schemas"]["ExameComPreco"][];
             /**
@@ -2949,9 +3309,18 @@ export interface components {
         Decisao: {
             motivo: string;
         };
+        DecisaoDePendencia: {
+            /** @description retificado (já há versão nova do laudo) ou mantido (com motivo). */
+            decisao: string;
+            motivo?: string | null;
+        };
         DecisaoDePerfil: {
             aprovar: boolean;
             motivo: string;
+        };
+        DecisaoDeVersaoDeModelo: {
+            aprovar: boolean;
+            motivo?: string | null;
         };
         DescontoDoOrcamento: {
             /** @description paciente_frequente, funcionario_ou_familiar, condicao_social ou cobrir_outra_clinica. */
@@ -2980,6 +3349,18 @@ export interface components {
             focos: components["schemas"]["FocoTirads"][];
             forma: components["schemas"]["FormaTirads"];
             margem: components["schemas"]["MargemTirads"];
+        };
+        DiscrepanciaDeRevisao: {
+            autor: string;
+            classe: string;
+            codigo: string;
+            /** Format: date-time */
+            concluida_em: string;
+            exame: string;
+            /** Format: uuid */
+            id: string;
+            laudo_codigo: string;
+            pendencia?: string | null;
         };
         DivergenciaAberta: {
             /** @description divergencia-aberta. */
@@ -3189,6 +3570,22 @@ export interface components {
         FormaBirads: "oval" | "redonda" | "irregular";
         /** @enum {string} */
         FormaTirads: "mais_largo_que_alto" | "mais_alto_que_largo";
+        FraseDeLaudo: {
+            atalho: string;
+            codigo: string;
+            /** Format: date-time */
+            criado_em: string;
+            /** @description "Clínica" ou o nome do médico dono. */
+            dono: string;
+            /** Format: uuid */
+            id: string;
+            motivo?: string | null;
+            pode_editar: boolean;
+            substitui_codigo?: string | null;
+            texto: string;
+            /** @description clinica ou pessoal. */
+            tipo: string;
+        };
         Glosa: {
             codigo: string;
             /** @description Código do motivo de glosa da tabela TISS (4 dígitos). */
@@ -3393,6 +3790,20 @@ export interface components {
              */
             valor_unitario_centavos?: number | null;
         };
+        ItemDaFilaDeRevisao: {
+            classe?: string | null;
+            codigo: string;
+            /** Format: date-time */
+            concluida_em?: string | null;
+            /** Format: date-time */
+            designada_em: string;
+            exame: string;
+            /** Format: uuid */
+            id: string;
+            laudo_codigo: string;
+            /** @description designada, concluida ou conflito_declarado. */
+            situacao: string;
+        };
         ItemDeEstoque: {
             abaixo_do_minimo: boolean;
             codigo: string;
@@ -3578,6 +3989,11 @@ export interface components {
             padrao_ecogenico: components["schemas"]["PadraoEcogenicoBirads"];
             posterior: components["schemas"]["PosteriorBirads"];
         };
+        MedicoDaUnidade: {
+            /** Format: uuid */
+            id: string;
+            nome: string;
+        };
         Membro: {
             /** Format: uuid */
             id: string;
@@ -3594,6 +4010,35 @@ export interface components {
         MenuDoObjeto: {
             acoes: components["schemas"]["AcaoDoMenu"][];
             cabecalho: components["schemas"]["CabecalhoDoMenu"];
+        };
+        ModeloDeLaudo: {
+            ativo: boolean;
+            /** @description Dono do modelo pessoal; "Clínica" no da clínica. */
+            autor: string;
+            codigo: string;
+            exame: string;
+            /** Format: uuid */
+            id: string;
+            modalidade: string;
+            motivo_desativacao?: string | null;
+            nome: string;
+            pode_decidir: boolean;
+            pode_desativar: boolean;
+            /** @description O servidor diz o que esta pessoa pode fazer (a tela só mostra). */
+            pode_editar: boolean;
+            /** Format: int32 */
+            proposta_em_aberto?: number | null;
+            /** @description clinica ou pessoal. */
+            tipo: string;
+            /**
+             * Format: int64
+             * @description Laudos que usaram o modelo (qualquer versão).
+             */
+            usos: number;
+            /** Format: int32 */
+            versao_publicada?: number | null;
+            /** @description Da mais nova para a mais antiga. */
+            versoes: components["schemas"]["VersaoDeModelo"][];
         };
         MovimentoFeito: {
             /** Format: uuid */
@@ -3639,6 +4084,18 @@ export interface components {
             /** Format: int64 */
             valor_centavos: number;
         };
+        NovaFraseDeLaudo: {
+            atalho: string;
+            motivo?: string | null;
+            /**
+             * Format: uuid
+             * @description Frase que esta nova versão substitui (com motivo).
+             */
+            substitui_id?: string | null;
+            texto: string;
+            /** @description clinica ou pessoal. */
+            tipo: string;
+        };
         NovaRegraRepasse: {
             /** Format: uuid */
             medico_id: string;
@@ -3646,6 +4103,15 @@ export interface components {
             percentual_pb: number;
             /** Format: date */
             vigente_desde: string;
+        };
+        NovaVersaoDeModelo: {
+            motivo: string;
+            texto: string;
+            /**
+             * Format: int32
+             * @description Versão publicada que a pessoa estava vendo (nenhuma: nulo). Diferente da atual: 409.
+             */
+            versao_base?: number | null;
         };
         /**
          * @description Novo achado. Só os descritores do sistema escolhido são lidos; pontos, categoria e conduta
@@ -3670,6 +4136,19 @@ export interface components {
             nome: string;
             /** Format: uuid */
             sala_id: string;
+        };
+        NovoModeloDeLaudo: {
+            /**
+             * Format: uuid
+             * @description Modelo da clínica de onde o pessoal foi derivado.
+             */
+            derivado_de?: string | null;
+            exame: string;
+            modalidade: string;
+            nome: string;
+            texto: string;
+            /** @description clinica ou pessoal. */
+            tipo: string;
         };
         NovoOrcamento: {
             desconto?: null | components["schemas"]["DescontoDoOrcamento"];
@@ -3885,12 +4364,26 @@ export interface components {
             grupos: components["schemas"]["GrupoDePendencias"][];
             resumo: components["schemas"]["ResumoAuditoria"];
         };
+        PainelDeRevisao: {
+            abertas: components["schemas"]["RevisaoDesignada"][];
+            conflitos: components["schemas"]["RevisaoDesignada"][];
+            /** Format: int32 */
+            dias: number;
+            discrepancias: components["schemas"]["DiscrepanciaDeRevisao"][];
+            medicos: components["schemas"]["MedicoDaUnidade"][];
+            por_medico: components["schemas"]["ResultadoDoMedico"][];
+        };
         PainelDosAparelhos: {
             aparelhos: components["schemas"]["AparelhoCadastrado"][];
             /** Format: int64 */
             estudos_recebidos_hoje: number;
             /** Format: int64 */
             estudos_sem_paciente: number;
+        };
+        ParecerDeRevisao: {
+            /** @description 1, 2a, 2b, 3a ou 3b (RADPEER). */
+            classe: string;
+            comentario: string;
         };
         PedidoAbertura: {
             /** Format: int64 */
@@ -3969,6 +4462,9 @@ export interface components {
         PedidoConduta: {
             conduta: string;
         };
+        PedidoConflito: {
+            motivo: string;
+        };
         PedidoConversar: {
             marcado: boolean;
         };
@@ -3995,6 +4491,9 @@ export interface components {
              * @description Número do guichê (1 a 20), só para a recepção.
              */
             guiche?: number | null;
+        };
+        PedidoDeDesativacao: {
+            motivo: string;
         };
         PedidoDeEspera: {
             codigo: string;
@@ -4064,6 +4563,12 @@ export interface components {
             /** @description pedido, autorizado, recusado ou cancelado. */
             situacao: string;
             solicitante: components["schemas"]["Pessoa"];
+        };
+        PedidoDesignacao: {
+            /** Format: uuid */
+            laudo_id: string;
+            /** Format: uuid */
+            revisor_id: string;
         };
         PedidoDossie: {
             /** @description Qualquer código do atendimento (o mesmo da busca no explorador). */
@@ -4234,6 +4739,18 @@ export interface components {
         PedidoSaida: {
             motivo: string;
         };
+        PedidoSorteio: {
+            /**
+             * Format: int32
+             * @description Laudos assinados nos últimos N dias (1 a 90).
+             */
+            dias: number;
+            /**
+             * Format: int32
+             * @description Quantos laudos sortear (1 a 50).
+             */
+            quantidade: number;
+        };
         PedidoTriagem: {
             amamentando: boolean;
             /** Format: date */
@@ -4245,6 +4762,12 @@ export interface components {
             /** @description Ignorado: o servidor calcula a TFG (FC-TRI-07). */
             tfg?: unknown;
             usa_metformina: boolean;
+        };
+        PedidoUsoDeModelo: {
+            /** Format: uuid */
+            modelo_id: string;
+            /** Format: int32 */
+            numero: number;
         };
         PendenciaDaConta: {
             detalhe: string;
@@ -4509,6 +5032,31 @@ export interface components {
             tipo: string;
             titulo: string;
         };
+        ResultadoDoMedico: {
+            /** Format: int64 */
+            concordancia_percentual?: number | null;
+            /** Format: int64 */
+            concordantes: number;
+            /** Format: int64 */
+            discrepancias: number;
+            medico: string;
+            /** Format: uuid */
+            medico_id: string;
+            /** Format: int64 */
+            pendentes: number;
+            /** Format: int64 */
+            revisados: number;
+        };
+        ResultadoDoSorteio: {
+            /** Format: int64 */
+            candidatos: number;
+            designadas: components["schemas"]["RevisaoDesignada"][];
+            /**
+             * Format: int64
+             * @description Laudos sorteados sem outro médico disponível para revisar.
+             */
+            sem_revisor: number;
+        };
         ResumoAuditoria: {
             /** Format: int64 */
             bloqueadas: number;
@@ -4554,6 +5102,56 @@ export interface components {
             glosas?: components["schemas"]["GlosaRecebida"][];
             /** Format: int64 */
             valor_pago_centavos: number;
+        };
+        RevisaoDesignada: {
+            codigo: string;
+            /** Format: date-time */
+            designada_em: string;
+            exame: string;
+            /** Format: uuid */
+            id: string;
+            laudo_codigo: string;
+            /** Format: uuid */
+            laudo_id: string;
+            /** @description sorteio ou selecao. */
+            modo: string;
+            motivo_conflito?: string | null;
+            revisor: string;
+            /** Format: uuid */
+            revisor_id: string;
+            situacao: string;
+        };
+        RevisaoDoMeuLaudo: {
+            classe: string;
+            codigo: string;
+            comentario?: string | null;
+            /** Format: date-time */
+            concluida_em: string;
+            exame: string;
+            /** Format: uuid */
+            id: string;
+            laudo_codigo: string;
+            /** Format: uuid */
+            laudo_id: string;
+            paciente: components["schemas"]["PacienteResumo"];
+            /** @description aguarda_autor, retificado ou mantido (só nas discrepâncias significativas). */
+            pendencia?: string | null;
+            pendencia_motivo?: string | null;
+            /** Format: date-time */
+            pendencia_resolvida_em?: string | null;
+            /** Format: int32 */
+            versao: number;
+        };
+        RevisoesDoAutor: {
+            /** Format: int64 */
+            concordancia_percentual?: number | null;
+            /** Format: int64 */
+            concordantes: number;
+            /** Format: int64 */
+            pendentes: number;
+            /** Format: int64 */
+            revisados: number;
+            revisoes: components["schemas"]["RevisaoDoMeuLaudo"][];
         };
         SaidaDaEspera: {
             codigo: string;
@@ -4669,6 +5267,14 @@ export interface components {
             id: string;
             nome: string;
         };
+        UsoDeModelo: {
+            /** Format: int32 */
+            laudo_versao: number;
+            modelo_codigo: string;
+            /** Format: int32 */
+            numero: number;
+            texto: string;
+        };
         UsuarioAdministrado: {
             ativo: boolean;
             codigo: string;
@@ -4714,6 +5320,21 @@ export interface components {
             motivo: string;
             /** Format: int32 */
             versao: number;
+        };
+        VersaoDeModelo: {
+            /** Format: date-time */
+            criado_em: string;
+            /** Format: date-time */
+            decidido_em?: string | null;
+            decidido_por?: string | null;
+            motivo?: string | null;
+            motivo_decisao?: string | null;
+            /** Format: int32 */
+            numero: number;
+            proposta_por: string;
+            /** @description proposta, publicada, substituida ou recusada. */
+            situacao: string;
+            texto: string;
         };
         VisaoDoPaciente: {
             /** Format: int64 */
@@ -7679,6 +8300,139 @@ export interface operations {
             };
         };
     };
+    listar_frases_de_laudo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FraseDeLaudo"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    criar_frase_de_laudo: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovaFraseDeLaudo"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FraseDeLaudo"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    desativar_frase_de_laudo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoDeDesativacao"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FraseDeLaudo"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     registrar_guia: {
         parameters: {
             query?: never;
@@ -8474,6 +9228,57 @@ export interface operations {
             };
         };
     };
+    registrar_uso_de_modelo: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoUsoDeModelo"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UsoDeModelo"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     abrir_link: {
         parameters: {
             query?: never;
@@ -8759,6 +9564,269 @@ export interface operations {
                 };
             };
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_modelos_de_laudo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModeloDeLaudo"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    criar_modelo_de_laudo: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoModeloDeLaudo"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModeloDeLaudo"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    obter_modelo_de_laudo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModeloDeLaudo"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    desativar_modelo_de_laudo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoDeDesativacao"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModeloDeLaudo"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    propor_versao_de_modelo: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovaVersaoDeModelo"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModeloDeLaudo"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    decidir_versao_de_modelo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                numero: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecisaoDeVersaoDeModelo"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModeloDeLaudo"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -10103,6 +11171,395 @@ export interface operations {
                 };
             };
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    designar_revisao_por_par: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoDesignacao"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RevisaoDesignada"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    fila_de_revisao_por_pares: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemDaFilaDeRevisao"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    revisoes_dos_meus_laudos: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RevisoesDoAutor"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    painel_de_revisao_por_pares: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PainelDeRevisao"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    sortear_revisoes_por_pares: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoSorteio"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResultadoDoSorteio"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    obter_revisao_por_par: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CasoDeRevisao"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    declarar_conflito_de_revisao: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoConflito"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemDaFilaDeRevisao"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    registrar_parecer_de_revisao: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ParecerDeRevisao"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CasoDeRevisao"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    decidir_pendencia_de_revisao: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecisaoDePendencia"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RevisaoDoMeuLaudo"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };

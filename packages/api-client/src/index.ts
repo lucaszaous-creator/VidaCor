@@ -10,6 +10,7 @@ export * from './contrato-configuracoes';
 export * from './contrato-paciente';
 export * from './contrato-inicio';
 export * from './contrato-fluxo';
+export * from './contrato-modelos';
 export * from './contrato-busca';
 export * from './contrato-portal';
 export * from './contrato-estoque';
