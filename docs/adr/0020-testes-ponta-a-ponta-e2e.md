@@ -1,6 +1,6 @@
 # ADR-0020 · Testes ponta a ponta das telas com a skill e2e (TesterArmy)
 
-- **Status:** proposto
+- **Status:** aceito (aprovado pelo dono do produto em 2026-11-08)
 - **Data:** 2026-11-08
 
 ## Contexto
