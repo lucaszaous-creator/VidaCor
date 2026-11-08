@@ -33,6 +33,15 @@ crate = "vidacor-comum"
 [[licenses.exceptions]]
 allow = ["LicenseRef-VidaCor-Proprietario"]
 crate = "vidacor-dominio-recepcao"
+[[licenses.exceptions]]
+allow = ["LicenseRef-VidaCor-Proprietario"]
+crate = "vidacor-dominio-triagem"
+[[licenses.exceptions]]
+allow = ["LicenseRef-VidaCor-Proprietario"]
+crate = "vidacor-dominio-laudo"
+[[licenses.exceptions]]
+allow = ["LicenseRef-VidaCor-Proprietario"]
+crate = "vidacor-dominio-faturamento"
 
 [bans]
 multiple-versions = "warn"
