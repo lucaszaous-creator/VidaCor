@@ -51,6 +51,7 @@ import type { ConsultaAgenda, PacienteResumo, SalaDaUnidade, Saude, Sessao } fro
 import type { MenuDoObjeto, ObjetoDoMenu } from './contrato-menu';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
+import type { DecisaoDePerfil, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
 import type { ContaBancaria, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
 import type { ComunicacaoDoPaciente, LembretesEnfileirados, PreferenciaWhatsapp } from './contrato-comunicacao';
 import type { ContrasteAplicado, EntradaDeEstoque, ItemDeEstoque, MovimentoFeito, RastreioDoLote } from './contrato-estoque';
@@ -412,6 +413,16 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
     menu: {
       /** Ações do objeto para o perfil e o estado atual; a tela só mostra (docs/19 § 8). */
       de: (objeto: ObjetoDoMenu, id: string): Promise<MenuDoObjeto> => ler<MenuDoObjeto>(`/v1/menu/${objeto}/${seg(id)}`),
+    },
+
+    usuarios: {
+      listar: (): Promise<UsuarioAdministrado[]> => ler<UsuarioAdministrado[]>('/v1/usuarios'),
+      /** Reautenticação; com perfil clínico, nasce inativo e espera a segunda pessoa. */
+      criar: (corpo: NovoUsuario, o: OpcoesDeEscrita): Promise<UsuarioAdministrado> => criar<UsuarioAdministrado>('POST', '/v1/usuarios', corpo, o),
+      mudar: (id: string, corpo: MudancaDePerfil, o: OpcoesDeEscrita): Promise<UsuarioAdministrado> =>
+        criar<UsuarioAdministrado>('POST', `/v1/usuarios/${seg(id)}/mudancas`, corpo, o),
+      decidir: (pedidoId: string, corpo: DecisaoDePerfil, o: OpcoesDeEscrita): Promise<UsuarioAdministrado> =>
+        criar<UsuarioAdministrado>('POST', `/v1/usuarios/pedidos/${seg(pedidoId)}/decisao`, corpo, o),
     },
 
     financeiro: {

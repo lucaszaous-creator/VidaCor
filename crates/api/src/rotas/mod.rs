@@ -31,6 +31,7 @@ pub mod sala;
 pub mod saude;
 pub mod sessao;
 pub mod triagem;
+pub mod usuarios;
 pub mod webhooks;
 
 use crate::estado::Estado;
@@ -138,6 +139,9 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/atendimentos/{id}/contraste", post(estoque::contraste))
         .route("/v1/lastro/cadeia", get(lastro_explorador::cadeia))
         .route("/v1/indicadores", get(indicadores::indicadores))
+        .route("/v1/usuarios", get(usuarios::listar).post(usuarios::criar))
+        .route("/v1/usuarios/{id}/mudancas", post(usuarios::mudar))
+        .route("/v1/usuarios/pedidos/{id}/decisao", post(usuarios::decidir))
         .route(
             "/v1/financeiro/titulos",
             get(financeiro::titulos).post(financeiro::lancar),

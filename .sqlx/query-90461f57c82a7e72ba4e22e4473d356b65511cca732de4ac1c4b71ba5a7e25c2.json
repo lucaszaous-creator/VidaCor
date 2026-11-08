@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE identidade.usuario SET perfis = array_append(perfis, $2), versao = versao + 1 WHERE id = $1 AND NOT ($2 = ANY(perfis))",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "90461f57c82a7e72ba4e22e4473d356b65511cca732de4ac1c4b71ba5a7e25c2"
+}

@@ -144,3 +144,25 @@ export const manipuladoresFinanceiro = [
     return HttpResponse.json({ titulos_criados: 1, ja_existiam: 0, sem_regra: ['Dr. Marcos Freire'] });
   }),
 ];
+
+/** Usuários simulados (regras reais em `crates/api/tests/usuarios.rs`). */
+const renata = { id: 'u1', codigo: 'USR-renata.alves', login: 'renata.alves', nome: 'Dra. Renata Alves', perfis: ['medico'], ativo: false, ultimo_acesso: null, pendente: { id: 'p1', tipo: 'criar', perfil: null, motivo: 'contratação, ultrassom', pedido_por: 'Marcos Teixeira' } };
+export const usuariosCriados: unknown[] = [];
+export const manipuladoresUsuarios = [
+  http.get('*/v1/usuarios', () => (temPerfil('ti', 'gerente') ? HttpResponse.json([renata, { ...renata, id: 'u2', codigo: 'USR-carla.caixa', login: 'carla.caixa', nome: 'Carla Mendes', perfis: ['caixa'], ativo: true, pendente: null }, ...usuariosCriados]) : semPermissao('administrar usuários'))),
+  http.post('*/v1/usuarios', async ({ request }) => {
+    const c = (await registrar('criar-usuario', request)) as { login: string; nome: string; perfis: string[] };
+    const criado = { ...renata, id: 'u3', ...c, ativo: !c.perfis.includes('medico') };
+    usuariosCriados.push(criado);
+    return HttpResponse.json(criado, { status: 201 });
+  }),
+  http.post('*/v1/usuarios/:id/mudancas', async ({ request }) => {
+    const c = (await registrar('mudar-perfil', request)) as { tipo: string; perfil?: string };
+    if (c.tipo === 'conceder' && c.perfil === 'financeiro') return problema(422, 'separacao-de-funcoes', 'Quem recebe no caixa não concilia no financeiro. Nada foi alterado.');
+    return HttpResponse.json({ ...renata, id: 'u2', nome: 'Carla Mendes', perfis: ['caixa'], ativo: c.tipo !== 'desativar', pendente: null });
+  }),
+  http.post('*/v1/usuarios/pedidos/:id/decisao', async ({ request }) => {
+    await registrar('decidir-perfil', request);
+    return HttpResponse.json({ ...renata, ativo: true, pendente: null });
+  }),
+];

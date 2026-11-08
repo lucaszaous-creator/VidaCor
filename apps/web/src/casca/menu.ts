@@ -54,6 +54,7 @@ const SECOES: { id: string; titulo: string; itens: ItemComPerfis[] }[] = [
     id: 'qualidade',
     titulo: 'Qualidade',
     itens: [
+      { id: 'usuarios', rotulo: 'Usuários e perfis', href: '/usuarios', icone: 'cadeado', cor: 'rose', perfis: ['ti', 'gerente'] },
       { id: 'lastro', rotulo: 'Lastro', href: '/lastro', icone: 'busca', cor: 'rose', perfis: ['gerente', 'auditor'] },
       { id: 'contingencia', rotulo: 'Contingência', href: '/contingencia', icone: 'contingencia', cor: 'rose', perfis: [...RECEPCAO, 'gerente'] },
     ],

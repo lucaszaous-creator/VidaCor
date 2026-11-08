@@ -464,10 +464,18 @@ pub struct ContaBancaria {
 
 /// Contas bancárias da unidade (para a baixa).
 #[utoipa::path(get, path = "/v1/financeiro/contas", tag = "financeiro", responses((status = 200, body = Vec<ContaBancaria>)))]
-pub async fn contas(State(estado): State<Estado>, usuario: Usuario) -> Result<Json<Vec<ContaBancaria>>, ErroApi> {
+pub async fn contas(
+    State(estado): State<Estado>,
+    usuario: Usuario,
+) -> Result<Json<Vec<ContaBancaria>>, ErroApi> {
     usuario.exigir(Ato::FinanceiroOperar)?;
     let mut tx = banco::transacao(&estado.banco, &usuario.contexto()).await?;
-    let r = sqlx::query_as!(ContaBancaria, "SELECT id, codigo, nome FROM financeiro.conta_bancaria ORDER BY codigo").fetch_all(&mut *tx).await?;
+    let r = sqlx::query_as!(
+        ContaBancaria,
+        "SELECT id, codigo, nome FROM financeiro.conta_bancaria ORDER BY codigo"
+    )
+    .fetch_all(&mut *tx)
+    .await?;
     tx.commit().await?;
     Ok(Json(r))
 }

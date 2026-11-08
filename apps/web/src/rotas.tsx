@@ -19,6 +19,7 @@ import { TelaEstoque } from './telas/estoque/TelaEstoque';
 import { TelaLastro } from './telas/lastro/TelaLastro';
 import { TelaIndicadores } from './telas/indicadores/TelaIndicadores';
 import { TelaFinanceiro } from './telas/financeiro/TelaFinanceiro';
+import { TelaUsuarios } from './telas/usuarios/TelaUsuarios';
 import { TelaConvite } from './telas/portal/TelaConvite';
 import { TelaEntrarNoPortal } from './telas/portal/TelaEntrarNoPortal';
 import { TelaPendencias } from './telas/pendencias/TelaPendencias';
@@ -145,6 +146,7 @@ const rotaEstoque = createRoute({ getParentRoute: () => rotaApp, path: '/estoque
 const rotaLastro = createRoute({ getParentRoute: () => rotaApp, path: '/lastro', component: TelaLastro });
 const rotaIndicadores = createRoute({ getParentRoute: () => rotaApp, path: '/indicadores', component: TelaIndicadores });
 const rotaFinanceiro = createRoute({ getParentRoute: () => rotaApp, path: '/financeiro', component: TelaFinanceiro });
+const rotaUsuarios = createRoute({ getParentRoute: () => rotaApp, path: '/usuarios', component: TelaUsuarios });
 const rotaSala = createRoute({ getParentRoute: () => rotaApp, path: '/sala', validateSearch: lerBuscaDaSala, component: TelaSala });
 const rotaTriagem = createRoute({ getParentRoute: () => rotaApp, path: '/triagem/$atendimentoId', component: TelaTriagem });
 const rotaFilaDeLaudos = createRoute({ getParentRoute: () => rotaApp, path: '/laudos', component: TelaFilaDeLaudos });
@@ -200,6 +202,7 @@ const arvore = raiz.addChildren([
     rotaLastro,
     rotaIndicadores,
     rotaFinanceiro,
+    rotaUsuarios,
     rotaAutorizacao,
     rotaEstornos,
     rotaContingencia,

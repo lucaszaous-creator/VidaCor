@@ -5119,6 +5119,234 @@
         }
       }
     },
+    "/v1/usuarios": {
+      "get": {
+        "tags": [
+          "usuarios"
+        ],
+        "summary": "Usuários da unidade com perfis e pedidos aguardando (TI e gerência).",
+        "operationId": "listar_usuarios",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UsuarioAdministrado"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "usuarios"
+        ],
+        "summary": "Cria o usuário. Com perfil clínico, ele nasce inativo e espera a segunda pessoa.",
+        "operationId": "criar_usuario",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovoUsuario"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioAdministrado"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/usuarios/pedidos/{id}/decisao": {
+      "post": {
+        "tags": [
+          "usuarios"
+        ],
+        "summary": "A segunda pessoa confere o pedido (gerência; quem pediu não decide; reautenticação).",
+        "operationId": "decidir_perfil",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisaoDePerfil"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioAdministrado"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/usuarios/{id}/mudancas": {
+      "post": {
+        "tags": [
+          "usuarios"
+        ],
+        "summary": "Pede uma mudança. Conceder perfil clínico e reativar esperam a segunda pessoa; o resto vale já.",
+        "operationId": "mudar_perfil",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MudancaDePerfil"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioAdministrado"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/webhooks/pix": {
       "post": {
         "tags": [
@@ -5980,6 +6208,21 @@
           "motivo"
         ],
         "properties": {
+          "motivo": {
+            "type": "string"
+          }
+        }
+      },
+      "DecisaoDePerfil": {
+        "type": "object",
+        "required": [
+          "aprovar",
+          "motivo"
+        ],
+        "properties": {
+          "aprovar": {
+            "type": "boolean"
+          },
           "motivo": {
             "type": "string"
           }
@@ -7369,6 +7612,28 @@
           }
         }
       },
+      "MudancaDePerfil": {
+        "type": "object",
+        "required": [
+          "tipo",
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string"
+          },
+          "perfil": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tipo": {
+            "type": "string",
+            "description": "conceder, retirar, desativar ou reativar."
+          }
+        }
+      },
       "NoDaCadeia": {
         "type": "object",
         "required": [
@@ -7582,6 +7847,33 @@
           "vencimento": {
             "type": "string",
             "format": "date"
+          }
+        }
+      },
+      "NovoUsuario": {
+        "type": "object",
+        "required": [
+          "login",
+          "nome",
+          "perfis",
+          "motivo"
+        ],
+        "properties": {
+          "login": {
+            "type": "string",
+            "description": "O mesmo login do provedor de identidade (Keycloak)."
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "perfis": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -8220,6 +8512,36 @@
           "situacao": {
             "type": "string",
             "description": "devolvido ou anulado."
+          }
+        }
+      },
+      "PedidoPendente": {
+        "type": "object",
+        "required": [
+          "id",
+          "tipo",
+          "motivo",
+          "pedido_por"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "pedido_por": {
+            "type": "string"
+          },
+          "perfil": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tipo": {
+            "type": "string"
           }
         }
       },
@@ -9138,6 +9460,59 @@
           },
           "nome": {
             "type": "string"
+          }
+        }
+      },
+      "UsuarioAdministrado": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "login",
+          "nome",
+          "perfis",
+          "ativo"
+        ],
+        "properties": {
+          "ativo": {
+            "type": "boolean"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "login": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "pendente": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/PedidoPendente",
+                "description": "Pedido aguardando a segunda pessoa (tipo e perfil)."
+              }
+            ]
+          },
+          "perfis": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ultimo_acesso": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
           }
         }
       },

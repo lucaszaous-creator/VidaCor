@@ -37,6 +37,8 @@ pub enum Ato {
     ComunicacaoEnviar,
     FinanceiroOperar,
     FinanceiroAprovar,
+    UsuarioAdministrar,
+    PerfilConferir,
 }
 
 impl Ato {
@@ -80,6 +82,10 @@ impl Ato {
             A::ComunicacaoEnviar => &["recepcao", "gerente"],
             // Financeiro (docs/18 § 5: contas, conciliação, repasse): financeiro e gerência.
             A::FinanceiroOperar | A::FinanceiroAprovar => &["financeiro", "gerente"],
+            // Contas e perfis (docs/18 § 6): TI e gerência administram; a conferência de perfil
+            // clínico (segunda pessoa) é da gerência.
+            A::UsuarioAdministrar => &["ti", "gerente"],
+            A::PerfilConferir => &["gerente"],
         };
         perfis.contains(&perfil)
     }
@@ -89,7 +95,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 33] = [
+    const TODOS: [Ato; 35] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -123,12 +129,20 @@ mod testes {
         Ato::ComunicacaoEnviar,
         Ato::FinanceiroOperar,
         Ato::FinanceiroAprovar,
+        Ato::UsuarioAdministrar,
+        Ato::PerfilConferir,
     ];
 
     #[test]
-    fn ti_e_sistema_nao_tem_nenhum_ato_de_tela() {
+    fn ti_so_administra_contas_e_sistema_nao_tem_ato_de_tela() {
+        // docs/18: TI administra usuários, aparelhos e integrações, sem dado clínico nem financeiro.
+        // O único ato de tela da TI é administrar contas (DEC-2026-11-08-69).
         for ato in TODOS {
-            assert!(!ato.concedido_a("ti"), "{ato:?}");
+            assert_eq!(
+                ato.concedido_a("ti"),
+                ato == Ato::UsuarioAdministrar,
+                "{ato:?}"
+            );
             assert!(!ato.concedido_a("sistema"), "{ato:?}");
             assert!(!ato.concedido_a(""), "{ato:?}");
         }

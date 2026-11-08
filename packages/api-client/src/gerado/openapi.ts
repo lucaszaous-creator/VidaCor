@@ -1578,6 +1578,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/usuarios": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Usuários da unidade com perfis e pedidos aguardando (TI e gerência). */
+        get: operations["listar_usuarios"];
+        put?: never;
+        /** Cria o usuário. Com perfil clínico, ele nasce inativo e espera a segunda pessoa. */
+        post: operations["criar_usuario"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/usuarios/pedidos/{id}/decisao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** A segunda pessoa confere o pedido (gerência; quem pediu não decide; reautenticação). */
+        post: operations["decidir_perfil"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/usuarios/{id}/mudancas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Pede uma mudança. Conceder perfil clínico e reativar esperam a segunda pessoa; o resto vale já. */
+        post: operations["mudar_perfil"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/webhooks/pix": {
         parameters: {
             query?: never;
@@ -1851,6 +1903,10 @@ export interface components {
             versao: number;
         };
         Decisao: {
+            motivo: string;
+        };
+        DecisaoDePerfil: {
+            aprovar: boolean;
             motivo: string;
         };
         DescontoPedido: {
@@ -2274,6 +2330,12 @@ export interface components {
             /** Format: date */
             validade: string;
         };
+        MudancaDePerfil: {
+            motivo: string;
+            perfil?: string | null;
+            /** @description conceder, retirar, desativar ou reativar. */
+            tipo: string;
+        };
         NoDaCadeia: {
             codigo: string;
             /** Format: date-time */
@@ -2341,6 +2403,13 @@ export interface components {
             valor_centavos: number;
             /** Format: date */
             vencimento: string;
+        };
+        NovoUsuario: {
+            /** @description O mesmo login do provedor de identidade (Keycloak). */
+            login: string;
+            motivo: string;
+            nome: string;
+            perfis: string[];
         };
         NumerosSituados: {
             /** Format: int64 */
@@ -2562,6 +2631,14 @@ export interface components {
             formulario: string;
             /** @description devolvido ou anulado. */
             situacao: string;
+        };
+        PedidoPendente: {
+            /** Format: uuid */
+            id: string;
+            motivo: string;
+            pedido_por: string;
+            perfil?: string | null;
+            tipo: string;
         };
         PedidoRascunho: {
             texto: string;
@@ -2855,6 +2932,18 @@ export interface components {
             /** Format: uuid */
             id: string;
             nome: string;
+        };
+        UsuarioAdministrado: {
+            ativo: boolean;
+            codigo: string;
+            /** Format: uuid */
+            id: string;
+            login: string;
+            nome: string;
+            pendente?: null | components["schemas"]["PedidoPendente"];
+            perfis: string[];
+            /** Format: date-time */
+            ultimo_acesso?: string | null;
         };
         UsuarioSessao: {
             /** Format: uuid */
@@ -6428,6 +6517,164 @@ export interface operations {
                 content?: never;
             };
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_usuarios: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UsuarioAdministrado"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    criar_usuario: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoUsuario"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UsuarioAdministrado"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    decidir_perfil: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecisaoDePerfil"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UsuarioAdministrado"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    mudar_perfil: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MudancaDePerfil"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UsuarioAdministrado"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };

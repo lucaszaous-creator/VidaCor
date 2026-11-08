@@ -1,0 +1,88 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT codigo, usuario_id, tipo, perfil, pedido_por, situacao FROM identidade.pedido_perfil WHERE id = $1 FOR UPDATE",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.pedido_perfil",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "usuario_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.pedido_perfil",
+            "name": "usuario_id"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "tipo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.pedido_perfil",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "perfil",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.pedido_perfil",
+            "name": "perfil"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "pedido_por",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.pedido_perfil",
+            "name": "pedido_por"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.pedido_perfil",
+            "name": "situacao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "f5a4555bc67fa782398d8fbedcadc392db2ba30ca35979ddbaf57e44e73beb9c"
+}

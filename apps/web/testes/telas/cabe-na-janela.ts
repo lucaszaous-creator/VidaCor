@@ -238,6 +238,10 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await ir('/financeiro');
   await esperar(page, 'region', 'Resumo do mês');
   await ok('32-financeiro');
+  await ir('/usuarios');
+  await page.getByRole('button', { name: /Dra\. Renata Alves/ }).click();
+  await esperar(page, 'region', 'Detalhe do usuário');
+  await ok('33-usuarios');
   estado.sessao = SESSOES.recepcao;
   await ir('/contingencia');
   await page.getByText('Nenhuma contingência aberta').waitFor();
