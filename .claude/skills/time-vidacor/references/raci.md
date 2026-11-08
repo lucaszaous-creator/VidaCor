@@ -1,7 +1,7 @@
 # Matriz de responsabilidade (RACI)
 
-**R** responsável por fazer · **A** aprova e responde pelo resultado (uma só pessoa) · **C** consultado
-antes · **I** informado depois.
+**R**: responsável por fazer. **A**: aprova e responde pelo resultado (uma só pessoa). **C**: consultado
+antes. **I**: informado depois.
 
 Coluna "Clínica" reúne as pessoas da clínica; o papel exato está entre parênteses. A coluna "A" sempre
 é uma pessoa: um agente nunca aprova. Base: `docs/25-plano-do-projeto.md` § 9.2 e `docs/16-protecao-do-usuario.md` C1.
