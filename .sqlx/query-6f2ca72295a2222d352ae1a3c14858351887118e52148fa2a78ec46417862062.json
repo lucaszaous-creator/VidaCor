@@ -1,0 +1,101 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT a.id AS agendamento_id, a.inicio, p.nome, p.nascimento, a.exame_nome AS exame, s.nome AS sala, a.situacao\n             FROM agenda.agendamento a JOIN identidade.paciente p ON p.id = a.paciente_id JOIN agenda.sala s ON s.id = a.sala_id\n            WHERE a.inicio >= $1 AND a.inicio < $2 AND a.situacao IN ('agendado','confirmado','reserva_provisoria')\n            ORDER BY a.inicio LIMIT 6",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "agendamento_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "inicio",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "inicio"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "exame",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "exame_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "sala",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "situacao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "6f2ca72295a2222d352ae1a3c14858351887118e52148fa2a78ec46417862062"
+}

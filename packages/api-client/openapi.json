@@ -4351,6 +4351,37 @@
         }
       }
     },
+    "/v1/inicio": {
+      "get": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "O dia da unidade (recepção e gerência).",
+        "operationId": "inicio_do_dia",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InicioDoDia"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/lastro/cadeia": {
       "get": {
         "tags": [
@@ -9033,6 +9064,38 @@
           }
         }
       },
+      "CaixaDoDia": {
+        "type": "object",
+        "required": [
+          "recebido_centavos",
+          "pix_centavos",
+          "cartao_centavos",
+          "dinheiro_centavos",
+          "aguardando_pagamento"
+        ],
+        "properties": {
+          "aguardando_pagamento": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "cartao_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dinheiro_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pix_centavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "recebido_centavos": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "CancelamentoDeAgendamento": {
         "type": "object",
         "required": [
@@ -10834,6 +10897,79 @@
           }
         }
       },
+      "InicioDoDia": {
+        "type": "object",
+        "required": [
+          "data",
+          "exames_agendados",
+          "realizados",
+          "aguardando_agora",
+          "faltas",
+          "laudos_a_liberar",
+          "retificacoes_em_rascunho",
+          "reservas_sem_guia",
+          "proximos",
+          "ocupacao"
+        ],
+        "properties": {
+          "aguardando_agora": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "caixa": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/CaixaDoDia",
+                "description": "Só para a gerência."
+              }
+            ]
+          },
+          "data": {
+            "type": "string",
+            "format": "date"
+          },
+          "exames_agendados": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "faltas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "laudos_a_liberar": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ocupacao": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OcupacaoDaSala"
+            }
+          },
+          "proximos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProximoPaciente"
+            }
+          },
+          "realizados": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reservas_sem_guia": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Reservas provisórias sem guia (travam o faturamento do convênio)."
+          },
+          "retificacoes_em_rascunho": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "IntegracaoVista": {
         "type": "object",
         "required": [
@@ -12127,6 +12263,32 @@
             "type": "integer",
             "format": "int64",
             "minimum": 0
+          }
+        }
+      },
+      "OcupacaoDaSala": {
+        "type": "object",
+        "required": [
+          "sala",
+          "minutos_marcados",
+          "minutos_abertos",
+          "percentual"
+        ],
+        "properties": {
+          "minutos_abertos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "minutos_marcados": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "percentual": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sala": {
+            "type": "string"
           }
         }
       },
@@ -13922,6 +14084,44 @@
             "format": "int64"
           },
           "exame": {
+            "type": "string"
+          }
+        }
+      },
+      "ProximoPaciente": {
+        "type": "object",
+        "required": [
+          "agendamento_id",
+          "inicio",
+          "nome",
+          "nascimento",
+          "exame",
+          "sala",
+          "situacao"
+        ],
+        "properties": {
+          "agendamento_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "sala": {
+            "type": "string"
+          },
+          "situacao": {
             "type": "string"
           }
         }

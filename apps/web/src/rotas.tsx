@@ -24,6 +24,7 @@ import { TelaIndicadores } from './telas/indicadores/TelaIndicadores';
 import { TelaFinanceiro } from './telas/financeiro/TelaFinanceiro';
 import { TelaUsuarios } from './telas/usuarios/TelaUsuarios';
 import { TelaAparelhos } from './telas/aparelhos/TelaAparelhos';
+import { TelaInicio } from './telas/inicio/TelaInicio';
 import { TelaPaciente } from './telas/paciente/TelaPaciente';
 import { TelaConfiguracoes } from './telas/configuracoes/TelaConfiguracoes';
 import { TelaListaEspera } from './telas/espera/TelaListaEspera';
@@ -165,6 +166,7 @@ const rotaPaciente = createRoute({
   },
   component: TelaPaciente,
 });
+const rotaPaginaInicial = createRoute({ getParentRoute: () => rotaApp, path: '/inicio', component: TelaInicio });
 const rotaConfiguracoes = createRoute({ getParentRoute: () => rotaApp, path: '/configuracoes', component: TelaConfiguracoes });
 const rotaListaEspera = createRoute({ getParentRoute: () => rotaApp, path: '/lista-espera', component: TelaListaEspera });
 const rotaOrcamento = createRoute({ getParentRoute: () => rotaApp, path: '/orcamentos', component: TelaOrcamento });
@@ -244,6 +246,7 @@ const arvore = raiz.addChildren([
     rotaListaEspera,
     rotaConfiguracoes,
     rotaPaciente,
+    rotaPaginaInicial,
     rotaAparelhos,
     rotaAgenda,
     rotaRecepcao,

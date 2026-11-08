@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT a_liberar AS \"a!\", em_retificacao AS \"r!\" FROM laudos.contagem_a_liberar()",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "a!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 1,
+        "name": "r!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      null,
+      null
+    ]
+  },
+  "hash": "a7d5dfc2165caf0e2af0b2c7c40eb8c4519a1b855e84c4b3ce3c9810dc44cba7"
+}

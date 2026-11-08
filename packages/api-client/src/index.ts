@@ -8,6 +8,7 @@ export * from './contrato-aparelhos';
 export * from './contrato-espera';
 export * from './contrato-configuracoes';
 export * from './contrato-paciente';
+export * from './contrato-inicio';
 export * from './contrato-portal';
 export * from './contrato-estoque';
 export * from './contrato-faturamento';

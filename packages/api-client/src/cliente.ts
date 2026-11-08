@@ -55,6 +55,7 @@ import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel
 import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-orcamento';
 import type { IntegracaoVista } from './contrato-configuracoes';
 import type { VisaoDoPaciente } from './contrato-paciente';
+import type { InicioDoDia } from './contrato-inicio';
 import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
 import type { DecisaoDePerfil, ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
@@ -319,6 +320,9 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
 
     /** Painel da TV de chamada (dispositivo TV, recepção e gerência). */
     painelDeChamada: (): Promise<Painel> => ler<Painel>('/v1/painel-de-chamada'),
+
+    /** O dia da unidade (recepção e gerência). */
+    inicio: (): Promise<InicioDoDia> => ler<InicioDoDia>('/v1/inicio'),
 
     /** Situação das integrações externas (TI e gerência); nunca traz valor de configuração. */
     integracoes: (): Promise<IntegracaoVista[]> => ler<IntegracaoVista[]>('/v1/configuracoes/integracoes'),

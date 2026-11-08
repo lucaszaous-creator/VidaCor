@@ -17,6 +17,8 @@ const SECOES: { id: string; titulo: string; itens: ItemComPerfis[] }[] = [
     id: 'clinica',
     titulo: 'Clínica',
     itens: [
+      // Início (Main.dc.html): recepção e gerência entram por aqui.
+      { id: 'inicio', rotulo: 'Início', href: '/inicio', icone: 'agenda', cor: 'blue', perfis: [...RECEPCAO, 'gerente'] },
       {
         id: 'agenda',
         rotulo: 'Agenda e check-in',

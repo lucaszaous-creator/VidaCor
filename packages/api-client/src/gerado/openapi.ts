@@ -1265,6 +1265,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/inicio": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** O dia da unidade (recepção e gerência). */
+        get: operations["inicio_do_dia"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/lastro/cadeia": {
         parameters: {
             query?: never;
@@ -2611,6 +2628,18 @@ export interface components {
             /** Format: uuid */
             id: string;
         };
+        CaixaDoDia: {
+            /** Format: int64 */
+            aguardando_pagamento: number;
+            /** Format: int64 */
+            cartao_centavos: number;
+            /** Format: int64 */
+            dinheiro_centavos: number;
+            /** Format: int64 */
+            pix_centavos: number;
+            /** Format: int64 */
+            recebido_centavos: number;
+        };
         CancelamentoDeAgendamento: {
             motivo: string;
         };
@@ -3151,6 +3180,30 @@ export interface components {
             /** Format: int64 */
             ticket_medio_centavos?: number | null;
         };
+        InicioDoDia: {
+            /** Format: int64 */
+            aguardando_agora: number;
+            caixa?: null | components["schemas"]["CaixaDoDia"];
+            /** Format: date */
+            data: string;
+            /** Format: int64 */
+            exames_agendados: number;
+            /** Format: int64 */
+            faltas: number;
+            /** Format: int64 */
+            laudos_a_liberar: number;
+            ocupacao: components["schemas"]["OcupacaoDaSala"][];
+            proximos: components["schemas"]["ProximoPaciente"][];
+            /** Format: int64 */
+            realizados: number;
+            /**
+             * Format: int64
+             * @description Reservas provisórias sem guia (travam o faturamento do convênio).
+             */
+            reservas_sem_guia: number;
+            /** Format: int64 */
+            retificacoes_em_rascunho: number;
+        };
         IntegracaoVista: {
             id: string;
             nome: string;
@@ -3550,6 +3603,15 @@ export interface components {
         NumerosSituados: {
             /** Format: int64 */
             numeros_situados: number;
+        };
+        OcupacaoDaSala: {
+            /** Format: int64 */
+            minutos_abertos: number;
+            /** Format: int64 */
+            minutos_marcados: number;
+            /** Format: int64 */
+            percentual: number;
+            sala: string;
         };
         OcupacaoPorHora: {
             /** Format: int64 */
@@ -4127,6 +4189,18 @@ export interface components {
             /** Format: int64 */
             atendimentos: number;
             exame: string;
+        };
+        ProximoPaciente: {
+            /** Format: uuid */
+            agendamento_id: string;
+            exame: string;
+            /** Format: date-time */
+            inicio: string;
+            /** Format: date */
+            nascimento: string;
+            nome: string;
+            sala: string;
+            situacao: string;
         };
         Publicacao: {
             /** @description Falso quando a versão já estava publicada (repetir não duplica). */
@@ -7481,6 +7555,33 @@ export interface operations {
                 };
             };
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    inicio_do_dia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InicioDoDia"];
+                };
+            };
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };

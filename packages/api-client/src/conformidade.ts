@@ -11,6 +11,7 @@ import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel
 import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-orcamento';
 import type { IntegracaoVista } from './contrato-configuracoes';
 import type { VisaoDoPaciente } from './contrato-paciente';
+import type { InicioDoDia } from './contrato-inicio';
 import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
@@ -173,3 +174,4 @@ export type ConferePedidoBloqueio = Cabe<PedidoBloqueio, S['PedidoBloqueio']>;
 export type ConfereBloqueioDeSala = Cabe<BloqueioDeSala, S['Bloqueio']>;
 export type ConfereIntegracaoVista = Cabe<IntegracaoVista, S['IntegracaoVista']>;
 export type ConfereVisaoDoPaciente = Cabe<VisaoDoPaciente, S['VisaoDoPaciente']>;
+export type ConfereInicioDoDia = Cabe<InicioDoDia, S['InicioDoDia']>;

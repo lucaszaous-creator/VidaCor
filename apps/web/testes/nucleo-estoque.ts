@@ -325,3 +325,17 @@ export const manipuladoresPaciente = [
       : semPermissao('ver o paciente'),
   ),
 ];
+
+/** Início simulado (regras reais em `crates/api/tests/inicio.rs`). */
+export const manipuladoresInicio = [
+  http.get('*/v1/inicio', () =>
+    temPerfil('recepcao', 'gerente')
+      ? HttpResponse.json({
+          data: '2026-11-06', exames_agendados: 41, realizados: 12, aguardando_agora: 6, faltas: 1, laudos_a_liberar: 11, retificacoes_em_rascunho: 0, reservas_sem_guia: 2,
+          proximos: [{ agendamento_id: 'a1', inicio: '2026-11-06T12:00:00Z', nome: 'Vera Lúcia Antunes', nascimento: '1957-09-18', exame: 'USG obstétrica', sala: 'Sala 2', situacao: 'reserva_provisoria' }],
+          ocupacao: [{ sala: 'Sala 1', minutos_marcados: 540, minutos_abertos: 720, percentual: 75 }],
+          caixa: temPerfil('gerente') ? { recebido_centavos: 378400, pix_centavos: 164000, cartao_centavos: 120400, dinheiro_centavos: 94000, aguardando_pagamento: 3 } : null,
+        })
+      : semPermissao('ver o início'),
+  ),
+];

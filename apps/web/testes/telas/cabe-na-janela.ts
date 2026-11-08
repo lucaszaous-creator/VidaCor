@@ -263,6 +263,9 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await ir(`/pacientes?id=${SONIA.paciente.id}`);
   await esperar(page, 'region', 'Cadastro e contato');
   await ok('40-paciente');
+  await ir('/inicio');
+  await esperar(page, 'region', 'Caixa do dia');
+  await ok('41-inicio');
   estado.sessao = SESSOES.tv;
   await ir('/telao');
   await esperar(page, 'region', 'Chamada atual');
