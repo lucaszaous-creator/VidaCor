@@ -37,7 +37,7 @@ function cabecalho(chamada: Chamada | undefined, nome: string): string | undefin
 
 const CORPO_CHECKIN = {
   agendamento_id: 'ag-1',
-  confirmacao: { nome: 'Antônio Carlos Ribeiro', nascimento: '1954-06-15' },
+  confirmacao: { nome: 'Antônio Carlos Ribeiro', nascimento: '1954-06-15', documento_com_foto: true },
 };
 
 const ATENDIMENTO = {

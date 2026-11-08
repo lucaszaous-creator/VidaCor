@@ -1,5 +1,6 @@
 export * from './contrato-m0';
-export { ErroDaApi, ErroSemConexao, ehProblemaHttp } from './erros';
+export * from './contrato-fase1';
+export { ErroDaApi, ErroSemConexao, ehProblemaHttp, ehReautenticacao } from './erros';
 export { criarCliente, novaChaveDeIdempotencia } from './cliente';
 export type { ClienteVidaCor, OpcoesDoCliente, OpcoesDeEscrita } from './cliente';
 export { abrirEventos, lerEstudoRecebido } from './eventos';

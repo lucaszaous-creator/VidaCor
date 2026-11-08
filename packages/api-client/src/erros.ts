@@ -23,6 +23,19 @@ export class ErroDaApi extends Error {
   get traceId(): string {
     return this.problema.trace_id ?? '';
   }
+
+  /**
+   * Campo extra do Problem Details (RFC 9457 permite extensões), como `sugestoes`, `sala_correta`,
+   * `tuss`, `validade`, `limite_pontos_base` ou `pendencias` (docs/30). `undefined` quando não veio.
+   */
+  campo(nome: string): unknown {
+    return (this.problema as unknown as Record<string, unknown>)[nome];
+  }
+}
+
+/** O ato precisa de nova confirmação de senha e segundo fator (`401 reautenticacao-necessaria`). */
+export function ehReautenticacao(erro: unknown): erro is ErroDaApi {
+  return erro instanceof ErroDaApi && erro.status === 401 && erro.codigo === 'reautenticacao-necessaria';
 }
 
 /**

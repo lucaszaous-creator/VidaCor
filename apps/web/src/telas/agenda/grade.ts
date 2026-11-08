@@ -1,4 +1,4 @@
-import type { ItemDaAgenda, Sala } from '@vidacor/api-client';
+import type { ItemDaAgendaFase1, Sala } from '@vidacor/api-client';
 
 /** A agenda é do horário de Brasília (openapi.json, parâmetro `data`), seja qual for o fuso do computador. */
 export const FUSO_DA_CLINICA = 'America/Sao_Paulo';
@@ -31,7 +31,7 @@ export function rotuloDaHora(minutos: number): string {
 }
 
 export interface ItemPosicionado {
-  item: ItemDaAgenda;
+  item: ItemDaAgendaFase1;
   coluna: number;
   linha: number;
   extensao: number;
@@ -43,22 +43,22 @@ export interface Grade {
   linhas: number;
   itens: ItemPosicionado[];
   /** Itens com horário que a tela não conseguiu ler: listados à parte, nunca escondidos. */
-  semHorario: ItemDaAgenda[];
+  semHorario: ItemDaAgendaFase1[];
 }
 
 /**
  * Posição de cada agendamento na grade (sala por coluna, meia hora por linha). Só desenho: a ordem,
  * os horários e as salas vêm do servidor.
  */
-export function montarGrade(itens: ItemDaAgenda[], salas: Sala[], salaFiltrada?: string): Grade {
+export function montarGrade(itens: ItemDaAgendaFase1[], salas: Sala[], salaFiltrada?: string): Grade {
   const colunas: Sala[] = salas.filter((s) => salaFiltrada === undefined || s.id === salaFiltrada);
   for (const item of itens) {
     if (!colunas.some((s) => s.id === item.sala.id) && (salaFiltrada === undefined || item.sala.id === salaFiltrada)) {
       colunas.push(item.sala);
     }
   }
-  const comHorario: { item: ItemDaAgenda; ini: number; fim: number }[] = [];
-  const semHorario: ItemDaAgenda[] = [];
+  const comHorario: { item: ItemDaAgendaFase1; ini: number; fim: number }[] = [];
+  const semHorario: ItemDaAgendaFase1[] = [];
   for (const item of itens) {
     const ini = minutosDoDia(item.inicio);
     const fim = minutosDoDia(item.fim);

@@ -43,7 +43,7 @@ export function ResumoDoAtendimento({ atendimentoId }: { atendimentoId: string }
         <dd className="num">{a.accession}</dd>
         <dt>Imagens</dt>
         <dd>
-          {a.estudo === null
+          {a.estudo === null || a.estudo === undefined
             ? 'Ainda não chegaram do aparelho.'
             : `${String(a.estudo.imagens)} ${a.estudo.imagens === 1 ? 'imagem recebida' : 'imagens recebidas'} às ${formatarHora(a.estudo.recebido_em, FUSO_DA_CLINICA)}.`}
         </dd>

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { getRouteApi } from '@tanstack/react-router';
-import type { ItemDaAgenda } from '@vidacor/api-client';
+import type { ItemDaAgendaFase1 } from '@vidacor/api-client';
 import {
   Aviso,
   Botao,
@@ -24,7 +24,7 @@ import { GradeDaAgenda } from './GradeDaAgenda';
 
 const rota = getRouteApi('/app/agenda');
 
-function AvisoDeEstudo({ itens }: { itens: ItemDaAgenda[] }) {
+function AvisoDeEstudo({ itens }: { itens: ItemDaAgendaFase1[] }) {
   const { recebidos, foraDoAr } = useEventosAoVivo();
   const ultimo = recebidos[0];
   return (

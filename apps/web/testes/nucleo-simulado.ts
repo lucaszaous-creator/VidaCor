@@ -3,30 +3,31 @@
  * (docs/29 § 6.2) para conferir o que a tela mostra; a prova das regras (dois identificadores,
  * idempotência, concorrência) é dos testes de integração do núcleo, com banco real (G4).
  */
-import type { Atendimento, ItemDaAgenda, NovoAtendimento } from '@vidacor/api-client';
+import type { AtendimentoFase1, ItemDaAgendaFase1, PedidoCheckin, Sessao } from '@vidacor/api-client';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { agendaDoDia, atendimentoDe, itensDaAgenda, SALAS, SESSAO } from './dados/ficticios';
+import { manipuladoresFase1, reiniciarFase1 } from './nucleo-fase1';
+import { problema } from './problema';
 
-export function problema(status: number, codigo: string, detail: string) {
-  return HttpResponse.json(
-    { type: `https://vidacor.local/erros/${codigo}`, title: codigo, status, detail, codigo, trace_id: `trace-${codigo}` },
-    { status, headers: { 'Content-Type': 'application/problem+json' } },
-  );
-}
+export { problema } from './problema';
 
 export interface EstadoDoNucleo {
-  itens: ItemDaAgenda[];
-  porChave: Map<string, Atendimento>;
-  pedidosDeCheckin: { chave: string | null; csrf: string | null; corpo: NovoAtendimento }[];
+  /** Quem está logado (troca por teste para provar o que cada perfil vê). */
+  sessao: Sessao;
+  itens: ItemDaAgendaFase1[];
+  porChave: Map<string, AtendimentoFase1>;
+  pedidosDeCheckin: { chave: string | null; csrf: string | null; corpo: PedidoCheckin }[];
 }
 
-export const estado: EstadoDoNucleo = { itens: itensDaAgenda(), porChave: new Map(), pedidosDeCheckin: [] };
+export const estado: EstadoDoNucleo = { sessao: SESSAO, itens: itensDaAgenda(), porChave: new Map(), pedidosDeCheckin: [] };
 
 export function reiniciarNucleo(): void {
+  estado.sessao = SESSAO;
   estado.itens = itensDaAgenda();
   estado.porChave.clear();
   estado.pedidosDeCheckin = [];
+  reiniciarFase1();
 }
 
 function normalizar(nome: string): string {
@@ -35,7 +36,7 @@ function normalizar(nome: string): string {
 
 export const manipuladores = [
   http.get('*/v1/saude', () => HttpResponse.json({ situacao: 'ok' })),
-  http.get('*/v1/sessao', () => HttpResponse.json(SESSAO)),
+  http.get('*/v1/sessao', () => HttpResponse.json(estado.sessao)),
   http.post('*/v1/sessao/sair', () => new HttpResponse(null, { status: 204 })),
   http.get('*/v1/salas', () => HttpResponse.json(SALAS)),
   http.get('*/v1/agenda', ({ request }) => {
@@ -52,14 +53,14 @@ export const manipuladores = [
       return problema(404, 'atendimento-nao-encontrado', 'Atendimento não encontrado.');
     }
     const criado = [...estado.porChave.values()].find((a) => a.id === params.id);
-    return HttpResponse.json(criado === undefined ? atendimentoDe(item, 1) : { ...criado, estudo: null });
+    return HttpResponse.json(criado === undefined ? atendimentoDe(item, 1) : { ...criado, estudo: null, triagem: null, laudo_situacao: null });
   }),
   http.post('*/v1/atendimentos', async ({ request }) => {
-    const corpo = (await request.json()) as NovoAtendimento;
+    const corpo = (await request.json()) as PedidoCheckin;
     const chave = request.headers.get('Idempotency-Key');
     const csrf = request.headers.get('X-CSRF-Token');
     estado.pedidosDeCheckin.push({ chave, csrf, corpo });
-    if (csrf !== SESSAO.csrf) {
+    if (csrf !== estado.sessao.csrf) {
       return problema(403, 'csrf-invalido', 'Pedido sem a confirmação de segurança. Recarregue a página.');
     }
     if (chave === null) {
@@ -68,6 +69,12 @@ export const manipuladores = [
     const repetido = estado.porChave.get(chave);
     if (repetido !== undefined) {
       return HttpResponse.json(repetido, { status: 201 });
+    }
+    if (!estado.sessao.usuario.perfis.some((p) => p === 'recepcao' || p === 'supervisor_recepcao')) {
+      return problema(403, 'sem-permissao', 'Seu perfil não faz check-in. Nada foi gravado. Peça a uma pessoa da recepção.');
+    }
+    if (!corpo.confirmacao.documento_com_foto) {
+      return problema(422, 'identificacao-incompleta', 'Falta conferir o documento com foto. Nada foi gravado: nenhuma senha ou pulseira foi emitida. Confira o documento e repita.');
     }
     const item = estado.itens.find((i) => i.id === corpo.agendamento_id);
     if (item === undefined) {
@@ -83,8 +90,11 @@ export const manipuladores = [
         'O nome ou o nascimento informado não confere com o cadastro. Nada foi gravado. Confira o documento do paciente e digite de novo.',
       );
     }
-    const { id, codigo, accession, agendamento_id, paciente, situacao, criado_em } = atendimentoDe(item, estado.porChave.size + 1);
-    const criado: Atendimento = { id, codigo, accession, agendamento_id, paciente, situacao, criado_em };
+    const { id, codigo, accession, agendamento_id, paciente, sala, requer_contraste, situacao, senha, pulseira, criado_em } = atendimentoDe(
+      item,
+      estado.porChave.size + 1,
+    );
+    const criado: AtendimentoFase1 = { id, codigo, accession, agendamento_id, paciente, sala, requer_contraste, situacao, senha, pulseira, criado_em };
     estado.porChave.set(chave, criado);
     item.atendimento_id = criado.id;
     item.situacao = 'em_atendimento';
@@ -92,4 +102,4 @@ export const manipuladores = [
   }),
 ];
 
-export const servidor = setupServer(...manipuladores);
+export const servidor = setupServer(...manipuladoresFase1, ...manipuladores);

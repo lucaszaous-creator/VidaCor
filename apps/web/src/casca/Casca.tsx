@@ -6,29 +6,20 @@ import {
   BotaoDeIcone,
   Carregando,
   ErroTela,
+  Icone,
   MenuLateral,
   SemConexao,
+  formatarHora,
   type PropsDoLink,
-  type SecaoDoMenu,
 } from '@vidacor/design-system';
 import { useState } from 'react';
 import simbolo from '../assets/simbolo.png';
-import { consultaSessao } from '../consultas';
+import { consultaContingenciaAberta, consultaSessao } from '../consultas';
 import { useDependencias } from '../contexto';
 import { erroParaTela } from '../erros';
 import { ProvedorDeEventos } from '../eventos/EventosAoVivo';
-
-/**
- * Só o que existe nesta entrega (M0) aparece no menu: item sem tela seria a tela mentindo.
- * Contadores e alertas virão do servidor quando houver rota para eles.
- */
-const SECOES: SecaoDoMenu[] = [
-  {
-    id: 'clinica',
-    titulo: 'Clínica',
-    itens: [{ id: 'agenda', rotulo: 'Agenda e check-in', href: '/agenda', icone: 'agenda', cor: 'blue' }],
-  },
-];
+import { FUSO_DA_CLINICA } from '../telas/agenda/grade';
+import { itemAtivo, secoesDoMenu } from './menu';
 
 /** Nome do perfil para leitura. Perfil desconhecido aparece como veio do servidor. */
 const NOMES_DE_PERFIL: Record<string, string> = {
@@ -40,6 +31,8 @@ const NOMES_DE_PERFIL: Record<string, string> = {
   medico: 'Médico',
   faturamento: 'Faturamento',
   coordenacao: 'Coordenação',
+  gerente: 'Gerência',
+  financeiro: 'Financeiro',
   ti: 'TI',
 };
 
@@ -56,6 +49,33 @@ function LinkDoRoteador({ href, className, children, ...aria }: PropsDoLink) {
     <Link to={href} className={className} {...aria}>
       {children}
     </Link>
+  );
+}
+
+const NIVEIS: Record<string, string> = { externo: 'serviços externos', setor: 'um setor', total: 'toda a unidade' };
+
+/**
+ * Faixa de contingência aberta no topo de toda tela (R7): quem chega sabe que o atendimento segue no
+ * papel. Erro ao consultar não vira faixa nenhuma aqui; a tela de Contingência mostra o erro.
+ */
+function FaixaDeContingencia() {
+  const { api } = useDependencias();
+  const aberta = useQuery(consultaContingenciaAberta(api));
+  const c = aberta.data;
+  if (c === undefined || c === null) {
+    return null;
+  }
+  return (
+    <div className="faixa-ctg" role="status">
+      <Icone nome="contingencia" tamanho={20} />
+      <span className="t14" style={{ flex: 1, minWidth: 0 }}>
+        <b>Contingência {c.codigo} aberta</b>, atinge {NIVEIS[c.nivel] ?? c.nivel}: {c.motivo}. Declarada às{' '}
+        {formatarHora(c.declarada_em, FUSO_DA_CLINICA)}. O atendimento segue nas fichas em papel.
+      </span>
+      <Link to="/contingencia" className="btn btn-sm">
+        Abrir contingência
+      </Link>
+    </div>
   );
 }
 
@@ -114,13 +134,14 @@ export function Casca() {
     );
   }
 
-  const ativo = caminho.startsWith('/agenda') ? 'agenda' : '';
+  const secoes = secoesDoMenu(sessao.data.usuario.perfis);
+  const ativo = itemAtivo(caminho, secoes);
 
   return (
     <ProvedorDeEventos>
       <div className="app">
         <MenuLateral
-          secoes={SECOES}
+          secoes={secoes}
           ativo={ativo}
           recolhido={recolhido}
           aoAlternar={() => {
@@ -139,6 +160,7 @@ export function Casca() {
           }
         />
         <main className="content">
+          <FaixaDeContingencia />
           {erroAoSair !== null && (
             <Aviso nivel="bloqueante" titulo="A sessão não foi encerrada." codigoDeSuporte={erroAoSair.codigoDeSuporte}>
               {erroAoSair.tipo === 'sem-conexao' ? 'Não foi possível falar com o servidor. ' : `${erroAoSair.mensagem} `}
