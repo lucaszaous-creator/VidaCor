@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE triagem.triagem SET conduta = $2, conduta_por = $3, conduta_em = now(), versao = versao + 1\n          WHERE id = $1 AND conduta IS NULL",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "ae049fba937132be48805dde35142d7ad488d278662102ad2d25901e71a4f357"
+}

@@ -18,7 +18,7 @@ async fn agenda_do_dia_traz_os_dois_identificadores() {
     assert_eq!(status, StatusCode::OK, "{corpo}");
     assert_eq!(resp.headers()["cache-control"], "no-store");
     let itens = corpo["itens"].as_array().unwrap();
-    assert_eq!(itens.len(), 2);
+    assert_eq!(itens.len(), 4);
     assert_eq!(itens[0]["paciente"]["nome"], "Antônio Carlos Ribeiro");
     assert_eq!(itens[0]["paciente"]["nascimento"], "1954-06-15");
     assert_eq!(itens[0]["sala"]["nome"], "Sala 1");
@@ -73,7 +73,7 @@ async fn rls_sem_contexto_nao_entrega_paciente() {
 #[tokio::test]
 async fn rls_com_contexto_autorizado_e_nao_autorizado() {
     let amb = Ambiente::novo().await;
-    for (perfis, esperado) in [("recepcao", 2_i64), ("ti", 0), ("financeiro", 0), ("", 0)] {
+    for (perfis, esperado) in [("recepcao", 5_i64), ("ti", 0), ("financeiro", 0), ("", 0)] {
         let mut tx = amb.app_pool.begin().await.unwrap();
         sqlx::query(
             "SELECT set_config('app.unidade_id', $1, true), set_config('app.perfis', $2, true)",

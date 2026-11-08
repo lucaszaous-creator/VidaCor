@@ -79,15 +79,20 @@ async fn criar_worklist(
         .context("carga sem atendimento_id")?
         .parse()?;
     let mut tx = banco::transacao(&estado.banco, &ContextoBanco::sistema(unidade_id)).await?;
+    let aparelho_id: Option<Uuid> = carga["aparelho_id"].as_str().and_then(|v| v.parse().ok());
+    // A worklist vai para o AE Title do aparelho bipado na sala; sem aparelho, o da sala.
     let d = sqlx::query!(
         r#"SELECT t.accession, p.codigo AS paciente_codigo, p.nome, p.nascimento,
-                  s.ae_title, s.modalidade, a.inicio
+                  COALESCE(ap.ae_title, s.ae_title) AS ae_title,
+                  COALESCE(ap.modalidade, s.modalidade) AS "modalidade!", a.inicio
              FROM recepcao.atendimento t
              JOIN identidade.paciente p ON p.id = t.paciente_id
              JOIN agenda.sala s ON s.id = t.sala_id
              JOIN agenda.agendamento a ON a.id = t.agendamento_id
+             LEFT JOIN agenda.aparelho ap ON ap.id = $2
             WHERE t.id = $1"#,
-        atendimento_id
+        atendimento_id,
+        aparelho_id
     )
     .fetch_optional(&mut *tx)
     .await?

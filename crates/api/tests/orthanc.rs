@@ -36,6 +36,7 @@ fn pacs() -> &'static Pacs {
                 .with_env_var("ORTHANC__WORKLISTS__ENABLE", "true")
                 .with_env_var("ORTHANC__WORKLISTS__SAVE_IN_ORTHANC_DATABASE", "true")
                 .with_env_var("ORTHANC__STABLE_AGE", "1")
+                .with_label("org.testcontainers.managed-by", "testcontainers")
                 .start()
                 .expect("subir Orthanc");
             let porta = c.get_host_port_ipv4(8042.tcp()).expect("porta");
@@ -118,6 +119,19 @@ async fn checkin_vira_worklist_e_estudo_recebido_e_conciliado() {
         .await;
     assert_eq!(status, StatusCode::CREATED);
     let accession = atd["accession"].as_str().unwrap().to_owned();
+    // O técnico da sala bipa a pulseira: só então a worklist vai ao aparelho (FC-PUL-01).
+    let bruno = amb.entrar("bruno.sales").await;
+    let (sb, _, bipe) = amb
+        .pedir(amb.json(
+            axum::http::Method::POST,
+            &format!("/v1/salas/{}/bipes", amb.sala1),
+            &bruno,
+            Some(Uuid::now_v7()),
+            json!({ "codigo_etiqueta": atd["pulseira"]["codigo"] }),
+        ))
+        .await;
+    assert_eq!(sb, StatusCode::OK, "{bipe}");
+    assert_eq!(bipe["worklist"], "enviada");
 
     assert!(outbox::processar_um(&amb.estado, &orthanc).await.unwrap());
     assert!(
@@ -152,7 +166,7 @@ async fn checkin_vira_worklist_e_estudo_recebido_e_conciliado() {
     assert_eq!(item["Tags"]["PatientBirthDate"], "19540615");
     assert_eq!(
         item["Tags"]["ScheduledProcedureStepSequence"][0]["ScheduledStationAETitle"],
-        "SALA1"
+        "AP1"
     );
 
     criar_estudo_no_aparelho(&p.url, &accession).await;
@@ -259,6 +273,21 @@ async fn orthanc_fora_do_ar_deixa_o_item_pendente_com_retentativa() {
         StatusCode::CREATED,
         "o atendimento não para por causa do PACS (R7)"
     );
+    let pulseira: String = sqlx::query_scalar("SELECT codigo FROM recepcao.etiqueta")
+        .fetch_one(&amb.admin)
+        .await
+        .unwrap();
+    let bruno = amb.entrar("bruno.sales").await;
+    let (sb, _, _) = amb
+        .pedir(amb.json(
+            axum::http::Method::POST,
+            &format!("/v1/salas/{}/bipes", amb.sala1),
+            &bruno,
+            Some(Uuid::now_v7()),
+            json!({ "codigo_etiqueta": pulseira }),
+        ))
+        .await;
+    assert_eq!(sb, StatusCode::OK);
     let fora = Orthanc::novo("http://127.0.0.1:9").unwrap();
     assert!(outbox::processar_um(&amb.estado, &fora).await.unwrap());
     let (concluido, erro, tentativas): (

@@ -1,0 +1,19 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO cuidado.vinculo (medico_id, paciente_id, motivo, expira_em, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, now() + make_interval(days => $4), 'nucleo', $5, $6)\n         ON CONFLICT (medico_id, paciente_id, motivo)\n         DO UPDATE SET expira_em = GREATEST(cuidado.vinculo.expira_em, EXCLUDED.expira_em),\n                       versao = cuidado.vinculo.versao + 1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Int4",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "b71bf3b053ccdec00f0506d332b18ee45762f5d8207fe9319b0c7c6ea5d0e524"
+}

@@ -46,8 +46,20 @@ async fn checkin_com_dois_identificadores_cria_atendimento_lastro_e_worklist() {
             .unwrap();
     assert_eq!(situacao, "em_atendimento");
     assert_eq!(amb.contar("SELECT count(*) FROM lastro.evento WHERE tipo = 'checkin_realizado' AND hash IS NOT NULL").await, 1);
+    // A worklist só sai no bipe da pulseira na sala (FC-PUL-01).
     assert_eq!(
-        amb.contar("SELECT count(*) FROM integracao.outbox WHERE tipo = 'worklist.criar'")
+        amb.contar("SELECT count(*) FROM integracao.outbox").await,
+        0
+    );
+    assert_eq!(corpo["situacao"], "aguardando_sala");
+    assert_eq!(corpo["senha"], "A001");
+    assert!(corpo["pulseira"]["codigo"]
+        .as_str()
+        .unwrap()
+        .starts_with("ETQ-"));
+    assert_eq!(corpo["pulseira"]["situacao"], "valida");
+    assert_eq!(
+        amb.contar("SELECT count(*) FROM recepcao.etiqueta WHERE situacao = 'valida'")
             .await,
         1
     );
@@ -165,8 +177,9 @@ async fn duas_recepcoes_ao_mesmo_tempo_geram_um_so_atendimento() {
         1
     );
     assert_eq!(
-        amb.contar("SELECT count(*) FROM integracao.outbox").await,
-        1
+        amb.contar("SELECT count(*) FROM recepcao.etiqueta").await,
+        1,
+        "uma só pulseira"
     );
 }
 

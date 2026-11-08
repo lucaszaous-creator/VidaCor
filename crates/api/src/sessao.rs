@@ -29,9 +29,38 @@ pub struct Usuario {
     pub unidade_id: Uuid,
     pub sessao_id: Uuid,
     pub csrf: String,
+    /// Último login com senha e 2FA nesta sessão (SEC-AUT-5).
+    pub reautenticado_em: chrono::DateTime<chrono::Utc>,
 }
 
+/// Validade da reautenticação para atos sensíveis.
+pub const JANELA_REAUTENTICACAO_MIN: i64 = 5;
+
 impl Usuario {
+    /// Exige login recente (senha e 2FA) para atos sensíveis: assinar, estornar, autorizar
+    /// desconto, conduta clínica, acesso de emergência, corrigir cadastro (SEC-AUT-5).
+    ///
+    /// # Errors
+    /// 401 `reautenticacao-necessaria`.
+    pub fn exigir_reautenticacao(&self) -> Result<(), ErroApi> {
+        let limite = chrono::Utc::now() - chrono::Duration::minutes(JANELA_REAUTENTICACAO_MIN);
+        if self.reautenticado_em >= limite {
+            Ok(())
+        } else {
+            Err(ErroApi::novo(
+                axum::http::StatusCode::UNAUTHORIZED,
+                "reautenticacao-necessaria",
+                "Confirme sua identidade",
+                "Este ato exige que você confirme sua senha e o segundo fator. Nada foi alterado. Confirme e o pedido será refeito.",
+            ))
+        }
+    }
+
+    #[must_use]
+    pub fn tem_perfil(&self, perfil: &str) -> bool {
+        self.perfis.iter().any(|p| p == perfil)
+    }
+
     /// # Errors
     /// [`ErroApi::proibido`] se nenhum perfil do usuário concede o ato.
     pub fn exigir(&self, ato: Ato) -> Result<(), ErroApi> {
@@ -152,7 +181,7 @@ impl FromRequestParts<Estado> for Usuario {
     ) -> Result<Self, Self::Rejection> {
         let segredo = ler_cookie(parts).ok_or_else(ErroApi::nao_autenticado)?;
         let linha = sqlx::query!(
-            r#"SELECT s.id AS sessao_id, s.csrf, u.id, u.nome, u.perfis, u.unidade_id
+            r#"SELECT s.id AS sessao_id, s.csrf, s.reautenticado_em, u.id, u.nome, u.perfis, u.unidade_id
                  FROM identidade.sessao s
                  JOIN identidade.usuario u ON u.id = s.usuario_id
                 WHERE s.segredo_hash = $1 AND s.revogada_em IS NULL
@@ -182,6 +211,7 @@ impl FromRequestParts<Estado> for Usuario {
             unidade_id: linha.unidade_id,
             sessao_id: linha.sessao_id,
             csrf: linha.csrf,
+            reautenticado_em: linha.reautenticado_em,
         })
     }
 }

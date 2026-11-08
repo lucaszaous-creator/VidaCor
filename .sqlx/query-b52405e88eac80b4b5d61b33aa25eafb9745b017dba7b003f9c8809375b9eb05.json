@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO recepcao.divergencia (id, codigo, tipo, atendimento_id, sala_id, dados, criado_por, origem, estacao, unidade_id, correlacao)\n             VALUES ($1, $2, 'pulseira_sala_errada', $3, $4, $5, $6, 'sala', $7, $8, $9)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Jsonb",
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "b52405e88eac80b4b5d61b33aa25eafb9745b017dba7b003f9c8809375b9eb05"
+}

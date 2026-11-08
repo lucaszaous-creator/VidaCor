@@ -42,7 +42,7 @@ pub struct FiltroAgenda {
     pub sala_id: Option<Uuid>,
 }
 
-#[derive(Serialize, ToSchema)]
+#[derive(Serialize, Deserialize, ToSchema, Clone)]
 pub struct PacienteResumo {
     pub id: Uuid,
     pub nome: String,
@@ -67,6 +67,13 @@ pub struct ItemAgenda {
     /// agendado, confirmado, em_atendimento, concluido, faltou ou cancelado.
     pub situacao: String,
     pub atendimento_id: Option<Uuid>,
+    /// Outros pacientes do dia com o mesmo nome e outro nascimento (alerta de atenção, FC-CHK-04).
+    pub homonimos: Vec<PacienteResumo>,
+    pub requer_contraste: bool,
+    /// Situação do laudo, sem conteúdo.
+    pub laudo_situacao: Option<String>,
+    /// Fim da reserva provisória, quando houver.
+    pub expira_em: Option<DateTime<Utc>>,
 }
 
 #[derive(Serialize, ToSchema)]
@@ -96,13 +103,15 @@ pub async fn agenda_do_dia(
         r#"SELECT a.id, a.codigo, a.inicio, a.fim, a.situacao, a.exame_tuss, a.exame_nome,
                   s.id AS sala_id, s.nome AS sala_nome,
                   p.id AS paciente_id, p.nome AS paciente_nome, p.nascimento,
-                  t.id AS "atendimento_id?"
+                  t.id AS "atendimento_id?", a.requer_contraste, a.expira_em,
+                  laudos.situacao_do_atendimento(t.id) AS laudo_situacao
              FROM agenda.agendamento a
              JOIN agenda.sala s ON s.id = a.sala_id
              JOIN identidade.paciente p ON p.id = a.paciente_id
              LEFT JOIN recepcao.atendimento t ON t.agendamento_id = a.id
             WHERE a.inicio >= $1 AND a.inicio < $2
               AND ($3::uuid IS NULL OR a.sala_id = $3)
+              AND a.situacao <> 'expirada'
             ORDER BY a.inicio, s.codigo
             LIMIT 500"#,
         inicio,
@@ -112,28 +121,60 @@ pub async fn agenda_do_dia(
     .fetch_all(&mut *tx)
     .await?;
     tx.commit().await?;
+    // Homônimos: mesmo nome (sem acento e maiúsculas) e outro paciente no mesmo dia.
+    let chave = |nome: &str| {
+        vidacor_comum::NomeCompleto::novo(nome)
+            .map(|n| n.forma_de_comparacao())
+            .unwrap_or_else(|_| nome.to_lowercase())
+    };
+    let pacientes_do_dia: Vec<(String, PacienteResumo)> = linhas
+        .iter()
+        .map(|l| {
+            (
+                chave(&l.paciente_nome),
+                PacienteResumo {
+                    id: l.paciente_id,
+                    nome: l.paciente_nome.clone(),
+                    nascimento: l.nascimento,
+                },
+            )
+        })
+        .collect();
     let itens = linhas
         .into_iter()
-        .map(|l| ItemAgenda {
-            id: l.id,
-            codigo: l.codigo,
-            inicio: l.inicio,
-            fim: l.fim,
-            sala: Sala {
-                id: l.sala_id,
-                nome: l.sala_nome,
-            },
-            paciente: PacienteResumo {
-                id: l.paciente_id,
-                nome: l.paciente_nome,
-                nascimento: l.nascimento,
-            },
-            exame: Exame {
-                codigo_tuss: l.exame_tuss,
-                nome: l.exame_nome,
-            },
-            situacao: l.situacao,
-            atendimento_id: l.atendimento_id,
+        .map(|l| {
+            let minha = chave(&l.paciente_nome);
+            let mut homonimos: Vec<PacienteResumo> = pacientes_do_dia
+                .iter()
+                .filter(|(k, p)| *k == minha && p.id != l.paciente_id)
+                .map(|(_, p)| p.clone())
+                .collect();
+            homonimos.dedup_by_key(|p| p.id);
+            ItemAgenda {
+                id: l.id,
+                codigo: l.codigo,
+                inicio: l.inicio,
+                fim: l.fim,
+                sala: Sala {
+                    id: l.sala_id,
+                    nome: l.sala_nome,
+                },
+                paciente: PacienteResumo {
+                    id: l.paciente_id,
+                    nome: l.paciente_nome,
+                    nascimento: l.nascimento,
+                },
+                exame: Exame {
+                    codigo_tuss: l.exame_tuss,
+                    nome: l.exame_nome,
+                },
+                situacao: l.situacao,
+                atendimento_id: l.atendimento_id,
+                homonimos,
+                requer_contraste: l.requer_contraste,
+                laudo_situacao: l.laudo_situacao,
+                expira_em: l.expira_em,
+            }
         })
         .collect();
     Ok(Json(AgendaDoDia {

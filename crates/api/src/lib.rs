@@ -19,6 +19,7 @@ pub mod rotas;
 pub mod sessao;
 pub mod tempo;
 pub mod trace;
+pub mod vinculo;
 
 use axum::http::{header, HeaderValue};
 use axum::Router;

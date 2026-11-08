@@ -1,0 +1,232 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT t.id, t.codigo, t.accession, t.agendamento_id, t.situacao, t.senha, t.criado_em,\n                  s.id AS sala_id, s.nome AS sala_nome, a.requer_contraste,\n                  p.id AS paciente_id, p.nome, p.nascimento,\n                  e.study_uid AS \"study_uid?\", e.imagens AS \"imagens?\", e.recebido_em AS \"recebido_em?\",\n                  g.codigo AS \"pulseira_codigo?\", g.situacao AS \"pulseira_situacao?\"\n             FROM recepcao.atendimento t\n             JOIN agenda.agendamento a ON a.id = t.agendamento_id\n             JOIN agenda.sala s ON s.id = t.sala_id\n             JOIN identidade.paciente p ON p.id = t.paciente_id\n             LEFT JOIN exames.estudo e ON e.atendimento_id = t.id AND e.conciliado\n             LEFT JOIN recepcao.etiqueta g ON g.atendimento_id = t.id AND g.situacao = 'valida'\n            WHERE t.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "accession",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "accession"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "agendamento_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "agendamento_id"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "senha",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "senha"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "sala_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "sala_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "requer_contraste",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "requer_contraste"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "paciente_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "study_uid?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.estudo",
+            "name": "study_uid"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "imagens?",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "exames.estudo",
+            "name": "imagens"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "recebido_em?",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "exames.estudo",
+            "name": "recebido_em"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "pulseira_codigo?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.etiqueta",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 17,
+        "name": "pulseira_situacao?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.etiqueta",
+            "name": "situacao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "b0481524088a56c39851c2680ffe008205610e6209a1ca906302387c7a3f5faf"
+}

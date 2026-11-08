@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT cuidado.pode_ler($1)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "pode_ler",
+        "type_info": "Bool",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "992586729a560899cab74622000110ab52a2734d70c7e3c2d9a29291456a55ba"
+}

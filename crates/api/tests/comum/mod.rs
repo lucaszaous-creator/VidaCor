@@ -78,6 +78,7 @@ pub struct Ambiente {
     pub agendamento_antonio: Uuid,
     pub agendamento_maria: Uuid,
     pub dia: NaiveDate,
+    pub s: Semente,
 }
 
 pub struct Sessao {
@@ -88,6 +89,11 @@ pub struct Sessao {
 
 impl Ambiente {
     pub async fn novo() -> Self {
+        // Logs do núcleo aparecem na saída do teste que falhar (diagnóstico sem dado real).
+        let _ = tracing_subscriber::fmt()
+            .with_test_writer()
+            .with_env_filter("warn,vidacor_api=info")
+            .try_init();
         let porta = servidor().porta;
         let base = format!("postgres://postgres:postgres@127.0.0.1:{porta}");
         let raiz = PgPoolOptions::new()
@@ -136,12 +142,13 @@ impl Ambiente {
             admin,
             app_pool,
             estado,
-            sala1: ids.0,
-            antonio: ids.1,
-            maria: ids.2,
-            agendamento_antonio: ids.3,
-            agendamento_maria: ids.4,
-            dia: ids.5,
+            sala1: ids.salas[&1],
+            antonio: ids.pacientes["Antônio Carlos Ribeiro"],
+            maria: ids.pacientes["Maria Helena Duarte"],
+            agendamento_antonio: ids.agendamentos["Antônio Carlos Ribeiro"],
+            agendamento_maria: ids.agendamentos["Maria Helena Duarte"],
+            dia: ids.dia,
+            s: ids,
         }
     }
 
@@ -199,9 +206,55 @@ impl Ambiente {
         }
         let corpo = serde_json::json!({
             "agendamento_id": agendamento,
-            "confirmacao": { "nome": nome, "nascimento": nasc }
+            "confirmacao": { "nome": nome, "nascimento": nasc, "documento_com_foto": true }
         });
         b.body(Body::from(corpo.to_string())).unwrap()
+    }
+
+    /// Pedido JSON genérico com sessão, CSRF e (opcional) Idempotency-Key.
+    pub fn json(
+        &self,
+        metodo: Method,
+        uri: &str,
+        s: &Sessao,
+        chave: Option<Uuid>,
+        corpo: Value,
+    ) -> Request<Body> {
+        let mut b = Request::builder()
+            .method(metodo)
+            .uri(uri)
+            .header("content-type", "application/json")
+            .header("cookie", &s.cookie)
+            .header("x-csrf-token", &s.csrf);
+        if let Some(c) = chave {
+            b = b.header("idempotency-key", c.to_string());
+        }
+        b.body(Body::from(corpo.to_string())).unwrap()
+    }
+
+    /// Check-in feito pela recepção (atalho para testes de etapas seguintes).
+    pub async fn fazer_checkin(&self, paciente: &str, nasc: &str) -> Value {
+        let ana = self.entrar("ana.souza").await;
+        let ag = self.s.agendamentos[paciente];
+        let (status, _, corpo) = self
+            .pedir(self.checkin(&ana, Some(Uuid::now_v7()), ag, paciente, nasc))
+            .await;
+        assert_eq!(
+            status,
+            StatusCode::CREATED,
+            "check-in de {paciente}: {corpo}"
+        );
+        corpo
+    }
+
+    /// Envelhece a reautenticação de todas as sessões (para testar o 401 de reautenticação).
+    pub async fn expirar_reautenticacao(&self) {
+        sqlx::query(
+            "UPDATE identidade.sessao SET reautenticado_em = now() - interval '10 minutes'",
+        )
+        .execute(&self.admin)
+        .await
+        .unwrap();
     }
 
     pub async fn contar(&self, sql: &'static str) -> i64 {
@@ -212,16 +265,13 @@ impl Ambiente {
     }
 }
 
-/// Dados fictícios: unidades Centro (A) e Norte (B), usuários por perfil, Sala 1, pacientes
-/// Antônio Carlos Ribeiro (15/06/1954) e Maria Helena Duarte (12/03/1968), agendados hoje.
-async fn semear(admin: &PgPool) -> (Uuid, Uuid, Uuid, Uuid, Uuid, NaiveDate) {
+/// Dados fictícios (design/dados-ficticios.md): unidades Centro (A) e Norte (B), usuários por
+/// perfil, Salas 1, 2 e 6 com aparelhos, lotação dos técnicos e agendamentos de hoje:
+/// Antônio Carlos Ribeiro (Sala 1, Dr. Paulo), Maria Helena Duarte (Sala 1), Juliana Sampaio Rocha
+/// (Sala 2) e Vera Lúcia Antunes (Sala 6, TC com contraste, Dra. Cecília).
+async fn semear(admin: &PgPool) -> Semente {
     let dia = vidacor_api::tempo::hoje_local();
     let meio_dia = Utc.from_utc_datetime(&dia.and_hms_opt(12, 0, 0).unwrap());
-    let sala1 = Uuid::now_v7();
-    let antonio = Uuid::now_v7();
-    let maria = Uuid::now_v7();
-    let ag_antonio = Uuid::now_v7();
-    let ag_maria = Uuid::now_v7();
     let mut tx = admin.begin().await.unwrap();
     for (id, codigo, nome) in [
         (UNIDADE_A, "UNI-CENTRO", "Centro"),
@@ -230,48 +280,142 @@ async fn semear(admin: &PgPool) -> (Uuid, Uuid, Uuid, Uuid, Uuid, NaiveDate) {
         sqlx::query("INSERT INTO identidade.unidade (id, codigo, nome, origem, unidade_id, correlacao) VALUES ($1,$2,$3,'seed',$1,'seed')")
             .bind(id).bind(codigo).bind(nome).execute(&mut *tx).await.unwrap();
     }
+    let mut usuarios = std::collections::HashMap::new();
     for (login, nome, perfil, unidade) in [
         ("ana.souza", "Ana Souza", "recepcao", UNIDADE_A),
         ("bruno.sales", "Bruno Sales", "tecnico", UNIDADE_A),
-        ("medico.a", "Dr. Paulo Mendes", "medico", UNIDADE_A),
+        ("livia.costa", "Lívia Costa", "tecnico", UNIDADE_A),
+        ("ricardo.lopes", "Ricardo Lopes", "tecnico", UNIDADE_A),
+        ("medico.a", "Dr. Paulo Medeiros", "medico", UNIDADE_A),
+        ("cecilia.souto", "Dra. Cecília Souto", "medico", UNIDADE_A),
+        ("marcos.freire", "Dr. Marcos Freire", "medico", UNIDADE_A),
+        ("carla.caixa", "Carla Mendes", "caixa", UNIDADE_A),
+        ("patricia.lemos", "Patrícia Lemos", "gerente", UNIDADE_A),
+        ("financeiro.a", "Equipe Financeiro", "financeiro", UNIDADE_A),
         ("ti.a", "Equipe TI", "ti", UNIDADE_A),
-        ("recepcao.b", "Carla Mendes", "recepcao", UNIDADE_B),
+        ("recepcao.b", "Recepção Norte", "recepcao", UNIDADE_B),
     ] {
+        let id = Uuid::now_v7();
         sqlx::query("INSERT INTO identidade.usuario (id, codigo, login, nome, perfis, origem, unidade_id, correlacao) VALUES ($1,$2,$3,$4,ARRAY[$5],'seed',$6,'seed')")
-            .bind(Uuid::now_v7()).bind(format!("USR-{login}")).bind(login).bind(nome).bind(perfil).bind(unidade)
+            .bind(id).bind(format!("USR-{login}")).bind(login).bind(nome).bind(perfil).bind(unidade)
             .execute(&mut *tx).await.unwrap();
+        usuarios.insert(login, id);
     }
-    sqlx::query("INSERT INTO agenda.sala (id, codigo, nome, ae_title, modalidade, origem, unidade_id, correlacao) VALUES ($1,'SALA-1','Sala 1','SALA1','US','seed',$2,'seed')")
-        .bind(sala1).bind(UNIDADE_A).execute(&mut *tx).await.unwrap();
-    for (id, codigo, nome, nasc) in [
+    let mut salas = std::collections::HashMap::new();
+    for (n, ae, modalidade, aparelho) in [
+        (1, "SALA1", "US", "Vivid E95"),
+        (2, "SALA2", "US", "Voluson E10"),
+        (6, "SALA6", "CT", "Revolution CT"),
+    ] {
+        let id = Uuid::now_v7();
+        sqlx::query("INSERT INTO agenda.sala (id, codigo, nome, ae_title, modalidade, origem, unidade_id, correlacao) VALUES ($1,$2,$3,$4,$5,'seed',$6,'seed')")
+            .bind(id).bind(format!("SALA-{n}")).bind(format!("Sala {n}")).bind(ae).bind(modalidade).bind(UNIDADE_A)
+            .execute(&mut *tx).await.unwrap();
+        sqlx::query("INSERT INTO agenda.aparelho (id, codigo, nome, ae_title, modalidade, sala_id, origem, unidade_id, correlacao) VALUES ($1,$2,$3,$4,$5,$6,'seed',$7,'seed')")
+            .bind(Uuid::now_v7()).bind(format!("APA-{n}")).bind(aparelho).bind(format!("AP{n}")).bind(modalidade).bind(id).bind(UNIDADE_A)
+            .execute(&mut *tx).await.unwrap();
+        salas.insert(n, id);
+    }
+    for (login, sala) in [("bruno.sales", 1), ("livia.costa", 6), ("ricardo.lopes", 6)] {
+        sqlx::query("INSERT INTO identidade.lotacao (usuario_id, sala_id, origem, unidade_id, correlacao) VALUES ($1,$2,'seed',$3,'seed')")
+            .bind(usuarios[login]).bind(salas[&sala]).bind(UNIDADE_A).execute(&mut *tx).await.unwrap();
+    }
+    let mut pacientes = std::collections::HashMap::new();
+    for (codigo, nome, nasc, sexo) in [
         (
-            antonio,
             "PAC-2026-000001",
             "Antônio Carlos Ribeiro",
             "1954-06-15",
+            "M",
         ),
+        ("PAC-2026-000002", "Maria Helena Duarte", "1968-03-12", "F"),
         (
-            maria,
-            "PAC-2026-000002",
-            "Maria Helena Duarte",
-            "1968-03-12",
+            "PAC-2026-000003",
+            "Juliana Sampaio Rocha",
+            "1993-04-12",
+            "F",
         ),
+        ("PAC-2026-000004", "Vera Lúcia Antunes", "1957-09-18", "F"),
+        ("PAC-2026-000005", "Sônia Maria Castro", "1962-02-03", "F"),
     ] {
-        sqlx::query("INSERT INTO identidade.paciente (id, codigo, nome, nascimento, origem, unidade_id, correlacao) VALUES ($1,$2,$3,$4::date,'seed',$5,'seed')")
-            .bind(id).bind(codigo).bind(nome).bind(nasc).bind(UNIDADE_A).execute(&mut *tx).await.unwrap();
+        let id = Uuid::now_v7();
+        sqlx::query("INSERT INTO identidade.paciente (id, codigo, nome, nascimento, sexo, origem, unidade_id, correlacao) VALUES ($1,$2,$3,$4::date,$5,'seed',$6,'seed')")
+            .bind(id).bind(codigo).bind(nome).bind(nasc).bind(sexo).bind(UNIDADE_A).execute(&mut *tx).await.unwrap();
+        pacientes.insert(nome, id);
     }
-    for (id, codigo, paciente, inicio) in [
-        (ag_antonio, "AGD-2026-000001", antonio, meio_dia),
+    let mut agendamentos = std::collections::HashMap::new();
+    for (codigo, paciente, sala, minutos, tuss, exame, contraste, medico) in [
         (
-            ag_maria,
+            "AGD-2026-000001",
+            "Antônio Carlos Ribeiro",
+            1,
+            0,
+            "40901114",
+            "Ecocardiograma transtorácico",
+            false,
+            Some("medico.a"),
+        ),
+        (
             "AGD-2026-000002",
-            maria,
-            meio_dia + Duration::minutes(30),
+            "Maria Helena Duarte",
+            1,
+            30,
+            "40901114",
+            "Ecocardiograma transtorácico",
+            false,
+            None,
+        ),
+        (
+            "AGD-2026-000003",
+            "Juliana Sampaio Rocha",
+            2,
+            60,
+            "40901203",
+            "USG obstétrica",
+            false,
+            None,
+        ),
+        (
+            "AGD-2026-000004",
+            "Vera Lúcia Antunes",
+            6,
+            90,
+            "41001109",
+            "TC de abdome com contraste",
+            true,
+            Some("cecilia.souto"),
         ),
     ] {
-        sqlx::query("INSERT INTO agenda.agendamento (id, codigo, sala_id, paciente_id, inicio, fim, exame_tuss, exame_nome, situacao, origem, unidade_id, correlacao) VALUES ($1,$2,$3,$4,$5,$5 + interval '30 minutes','40901114','Ecocardiograma transtorácico','confirmado','seed',$6,'seed')")
-            .bind(id).bind(codigo).bind(sala1).bind(paciente).bind(inicio).bind(UNIDADE_A).execute(&mut *tx).await.unwrap();
+        let id = Uuid::now_v7();
+        sqlx::query("INSERT INTO agenda.agendamento (id, codigo, sala_id, paciente_id, inicio, fim, exame_tuss, exame_nome, situacao, requer_contraste, medico_id, origem, unidade_id, correlacao) VALUES ($1,$2,$3,$4,$5,$5 + interval '30 minutes',$6,$7,'confirmado',$8,$9,'seed',$10,'seed')")
+            .bind(id).bind(codigo).bind(salas[&sala]).bind(pacientes[paciente]).bind(meio_dia + Duration::minutes(minutos))
+            .bind(tuss).bind(exame).bind(contraste).bind(medico.map(|m| usuarios[m])).bind(UNIDADE_A)
+            .execute(&mut *tx).await.unwrap();
+        agendamentos.insert(paciente, id);
     }
     tx.commit().await.unwrap();
-    (sala1, antonio, maria, ag_antonio, ag_maria, dia)
+    Semente {
+        dia,
+        usuarios: usuarios
+            .into_iter()
+            .map(|(k, v)| (k.to_owned(), v))
+            .collect(),
+        salas,
+        pacientes: pacientes
+            .into_iter()
+            .map(|(k, v)| (k.to_owned(), v))
+            .collect(),
+        agendamentos: agendamentos
+            .into_iter()
+            .map(|(k, v)| (k.to_owned(), v))
+            .collect(),
+    }
+}
+
+pub struct Semente {
+    pub dia: NaiveDate,
+    pub usuarios: std::collections::HashMap<String, Uuid>,
+    pub salas: std::collections::HashMap<i32, Uuid>,
+    pub pacientes: std::collections::HashMap<String, Uuid>,
+    pub agendamentos: std::collections::HashMap<String, Uuid>,
 }

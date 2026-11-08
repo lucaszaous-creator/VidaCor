@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT comum.proximo_numero('TRI', $1)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "proximo_numero",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "1035209c942ef0e5274182cf25f612ca0b5131aa925e7ec0f6156a508d738904"
+}

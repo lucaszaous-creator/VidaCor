@@ -96,10 +96,14 @@ impl Oidc {
     ///
     /// # Errors
     /// Falha de banco.
-    pub async fn iniciar(&self, banco: &PgPool) -> Result<(String, String), ErroApi> {
+    pub async fn iniciar(
+        &self,
+        banco: &PgPool,
+        reautenticacao: Option<(Uuid, String)>,
+    ) -> Result<(String, String), ErroApi> {
         let (desafio, verificador) = PkceCodeChallenge::new_random_sha256();
-        let (url, state, nonce) = self
-            .cliente()
+        let cliente = self.cliente();
+        let mut pedido = cliente
             .authorize_url(
                 CoreAuthenticationFlow::AuthorizationCode,
                 CsrfToken::new_random,
@@ -107,14 +111,23 @@ impl Oidc {
             )
             .add_scope(Scope::new("openid".to_owned()))
             .add_scope(Scope::new("profile".to_owned()))
-            .set_pkce_challenge(desafio)
-            .url();
+            .set_pkce_challenge(desafio);
+        if reautenticacao.is_some() {
+            // Reautenticação: o provedor pede senha e 2FA de novo, mesmo com sessão aberta lá.
+            pedido = pedido
+                .add_prompt(openidconnect::core::CoreAuthPrompt::Login)
+                .set_max_age(std::time::Duration::ZERO);
+        }
+        let (url, state, nonce) = pedido.url();
+        let (sessao_id, voltar) = reautenticacao.unzip();
         sqlx::query!(
-            "INSERT INTO identidade.login_pendente (state, nonce, verificador_pkce, expira_em)
-             VALUES ($1, $2, $3, now() + interval '10 minutes')",
+            "INSERT INTO identidade.login_pendente (state, nonce, verificador_pkce, expira_em, sessao_id, voltar)
+             VALUES ($1, $2, $3, now() + interval '10 minutes', $4, $5)",
             state.secret(),
             nonce.secret(),
-            verificador.secret()
+            verificador.secret(),
+            sessao_id,
+            voltar
         )
         .execute(banco)
         .await?;
@@ -131,11 +144,11 @@ impl Oidc {
         banco: &PgPool,
         codigo: &str,
         state: &str,
-    ) -> Result<(Uuid, Uuid), ErroApi> {
+    ) -> Result<LoginConcluido, ErroApi> {
         let pendente = sqlx::query!(
             "UPDATE identidade.login_pendente SET usado_em = now()
               WHERE state = $1 AND usado_em IS NULL AND expira_em > now()
-              RETURNING nonce, verificador_pkce",
+              RETURNING nonce, verificador_pkce, sessao_id, voltar",
             state
         )
         .fetch_optional(banco)
@@ -178,6 +191,16 @@ impl Oidc {
                 return Err(falhou());
             }
         };
+        if pendente.sessao_id.is_some() {
+            // Na reautenticação o login com senha precisa ter acabado de acontecer.
+            let recente = declaracoes
+                .auth_time()
+                .is_some_and(|t| chrono::Utc::now() - t < chrono::Duration::minutes(2));
+            if !recente {
+                tracing::warn!("reautenticação sem login recente no provedor");
+                return Err(falhou());
+            }
+        }
         let login = declaracoes
             .preferred_username()
             .map(|u| u.as_str().to_owned())
@@ -193,8 +216,21 @@ impl Oidc {
             tracing::warn!("login sem usuário ativo no VidaCor");
             falhou()
         })?;
-        Ok((usuario.id, usuario.unidade_id))
+        Ok(LoginConcluido {
+            usuario_id: usuario.id,
+            unidade_id: usuario.unidade_id,
+            reautenticacao_da_sessao: pendente.sessao_id,
+            voltar: pendente.voltar,
+        })
     }
+}
+
+pub struct LoginConcluido {
+    pub usuario_id: Uuid,
+    pub unidade_id: Uuid,
+    /// Presente quando o login foi uma reautenticação de uma sessão já aberta.
+    pub reautenticacao_da_sessao: Option<Uuid>,
+    pub voltar: Option<String>,
 }
 
 impl Oidc {

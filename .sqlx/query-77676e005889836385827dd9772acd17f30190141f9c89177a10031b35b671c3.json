@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE recepcao.atendimento SET situacao = 'em_exame', versao = versao + 1\n          WHERE id = $1 AND situacao = 'aguardando_sala'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "77676e005889836385827dd9772acd17f30190141f9c89177a10031b35b671c3"
+}

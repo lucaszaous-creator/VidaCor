@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT a.id, a.codigo, a.situacao, a.sala_id, a.unidade_id,\n                  p.id AS paciente_id, p.nome, p.nascimento\n             FROM agenda.agendamento a\n             JOIN identidade.paciente p ON p.id = a.paciente_id\n            WHERE a.id = $1\n            FOR UPDATE OF a",
+  "query": "SELECT t.id, t.codigo, t.sala_id, t.situacao, t.unidade_id, s.nome AS sala_nome, ag.requer_contraste\n             FROM recepcao.atendimento t\n             JOIN agenda.sala s ON s.id = t.sala_id\n             JOIN agenda.agendamento ag ON ag.id = t.agendamento_id\n            WHERE t.id = $1 FOR UPDATE OF t",
   "describe": {
     "columns": [
       {
@@ -9,7 +9,7 @@
         "type_info": "Uuid",
         "origin": {
           "Table": {
-            "table": "agenda.agendamento",
+            "table": "recepcao.atendimento",
             "name": "id"
           }
         }
@@ -20,30 +20,30 @@
         "type_info": "Text",
         "origin": {
           "Table": {
-            "table": "agenda.agendamento",
+            "table": "recepcao.atendimento",
             "name": "codigo"
           }
         }
       },
       {
         "ordinal": 2,
-        "name": "situacao",
-        "type_info": "Text",
+        "name": "sala_id",
+        "type_info": "Uuid",
         "origin": {
           "Table": {
-            "table": "agenda.agendamento",
-            "name": "situacao"
+            "table": "recepcao.atendimento",
+            "name": "sala_id"
           }
         }
       },
       {
         "ordinal": 3,
-        "name": "sala_id",
-        "type_info": "Uuid",
+        "name": "situacao",
+        "type_info": "Text",
         "origin": {
           "Table": {
-            "table": "agenda.agendamento",
-            "name": "sala_id"
+            "table": "recepcao.atendimento",
+            "name": "situacao"
           }
         }
       },
@@ -53,41 +53,30 @@
         "type_info": "Uuid",
         "origin": {
           "Table": {
-            "table": "agenda.agendamento",
+            "table": "recepcao.atendimento",
             "name": "unidade_id"
           }
         }
       },
       {
         "ordinal": 5,
-        "name": "paciente_id",
-        "type_info": "Uuid",
-        "origin": {
-          "Table": {
-            "table": "identidade.paciente",
-            "name": "id"
-          }
-        }
-      },
-      {
-        "ordinal": 6,
-        "name": "nome",
+        "name": "sala_nome",
         "type_info": "Text",
         "origin": {
           "Table": {
-            "table": "identidade.paciente",
+            "table": "agenda.sala",
             "name": "nome"
           }
         }
       },
       {
-        "ordinal": 7,
-        "name": "nascimento",
-        "type_info": "Date",
+        "ordinal": 6,
+        "name": "requer_contraste",
+        "type_info": "Bool",
         "origin": {
           "Table": {
-            "table": "identidade.paciente",
-            "name": "nascimento"
+            "table": "agenda.agendamento",
+            "name": "requer_contraste"
           }
         }
       }
@@ -104,9 +93,8 @@
       false,
       false,
       false,
-      false,
       false
     ]
   },
-  "hash": "8758cd3cc8c7b152e231d82cb91b63c15ca57ac18adab4f9146542923e66af33"
+  "hash": "db2c3532bda2a469148b1cbd52a2ccb93d1292e6f425a29a30dba0c84dbc003e"
 }

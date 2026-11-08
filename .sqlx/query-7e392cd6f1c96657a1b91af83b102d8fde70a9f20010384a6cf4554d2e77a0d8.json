@@ -1,22 +1,22 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT t.accession, p.codigo AS paciente_codigo, p.nome, p.nascimento,\n                  s.ae_title, s.modalidade, a.inicio\n             FROM recepcao.atendimento t\n             JOIN identidade.paciente p ON p.id = t.paciente_id\n             JOIN agenda.sala s ON s.id = t.sala_id\n             JOIN agenda.agendamento a ON a.id = t.agendamento_id\n            WHERE t.id = $1",
+  "query": "SELECT id, codigo, nome, nascimento, sexo, versao, unidade_id FROM identidade.paciente WHERE id = $1 FOR UPDATE",
   "describe": {
     "columns": [
       {
         "ordinal": 0,
-        "name": "accession",
-        "type_info": "Text",
+        "name": "id",
+        "type_info": "Uuid",
         "origin": {
           "Table": {
-            "table": "recepcao.atendimento",
-            "name": "accession"
+            "table": "identidade.paciente",
+            "name": "id"
           }
         }
       },
       {
         "ordinal": 1,
-        "name": "paciente_codigo",
+        "name": "codigo",
         "type_info": "Text",
         "origin": {
           "Table": {
@@ -49,34 +49,34 @@
       },
       {
         "ordinal": 4,
-        "name": "ae_title",
+        "name": "sexo",
         "type_info": "Text",
         "origin": {
           "Table": {
-            "table": "agenda.sala",
-            "name": "ae_title"
+            "table": "identidade.paciente",
+            "name": "sexo"
           }
         }
       },
       {
         "ordinal": 5,
-        "name": "modalidade",
-        "type_info": "Text",
+        "name": "versao",
+        "type_info": "Int4",
         "origin": {
           "Table": {
-            "table": "agenda.sala",
-            "name": "modalidade"
+            "table": "identidade.paciente",
+            "name": "versao"
           }
         }
       },
       {
         "ordinal": 6,
-        "name": "inicio",
-        "type_info": "Timestamptz",
+        "name": "unidade_id",
+        "type_info": "Uuid",
         "origin": {
           "Table": {
-            "table": "agenda.agendamento",
-            "name": "inicio"
+            "table": "identidade.paciente",
+            "name": "unidade_id"
           }
         }
       }
@@ -96,5 +96,5 @@
       false
     ]
   },
-  "hash": "35533cdac7cea8c713e7786d96992a5e707b3282199a237dfc3f1b4077c964cd"
+  "hash": "7e392cd6f1c96657a1b91af83b102d8fde70a9f20010384a6cf4554d2e77a0d8"
 }

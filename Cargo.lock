@@ -3654,6 +3654,7 @@ dependencies = [
  "uuid",
  "vidacor-comum",
  "vidacor-dominio-recepcao",
+ "vidacor-dominio-triagem",
 ]
 
 [[package]]
@@ -3675,6 +3676,13 @@ dependencies = [
  "serde",
  "thiserror 2.0.21",
  "vidacor-comum",
+]
+
+[[package]]
+name = "vidacor-dominio-triagem"
+version = "0.1.0"
+dependencies = [
+ "serde",
 ]
 
 [[package]]

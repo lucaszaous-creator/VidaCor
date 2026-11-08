@@ -90,7 +90,7 @@
         "tags": [
           "recepcao"
         ],
-        "summary": "Faz o check-in de um agendamento, conferindo nome completo e data de nascimento.",
+        "summary": "Faz o check-in de um agendamento conferindo nome completo, nascimento e documento com foto.",
         "operationId": "checkin",
         "parameters": [
           {
@@ -108,6 +108,17 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "X-Estacao",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
             }
           }
         ],
@@ -183,7 +194,7 @@
             }
           },
           "422": {
-            "description": "identificacao-nao-confere",
+            "description": "identificacao-incompleta ou identificacao-nao-confere",
             "content": {
               "application/json": {
                 "schema": {
@@ -200,7 +211,7 @@
         "tags": [
           "recepcao"
         ],
-        "summary": "Um atendimento da unidade, com o estudo recebido, se houver.",
+        "summary": "Um atendimento da unidade, com pulseira, triagem, situação do laudo e estudo recebido.",
         "operationId": "obter",
         "parameters": [
           {
@@ -257,6 +268,240 @@
         }
       }
     },
+    "/v1/atendimentos/{id}/triagem": {
+      "post": {
+        "tags": [
+          "triagem"
+        ],
+        "summary": "Registra a triagem de segurança (técnico lotado na sala do atendimento).",
+        "operationId": "registrar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoTriagem"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Triagem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/atendimentos/{id}/triagem/conduta": {
+      "post": {
+        "tags": [
+          "triagem"
+        ],
+        "summary": "Registra a conduta médica que libera a triagem (médico com vínculo; reautenticação).",
+        "operationId": "conduta",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoConduta"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Triagem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/etiquetas/{codigo}/reimpressao": {
+      "post": {
+        "tags": [
+          "recepcao"
+        ],
+        "summary": "Reimprime a pulseira com motivo: cria código novo e invalida a anterior.",
+        "operationId": "reimprimir",
+        "parameters": [
+          {
+            "name": "codigo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoReimpressao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Reimpressao"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/eventos": {
       "get": {
         "tags": [
@@ -272,6 +517,133 @@
             }
           },
           "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pacientes": {
+      "get": {
+        "tags": [
+          "pacientes"
+        ],
+        "summary": "Busca pacientes da unidade pelo nome (até 20), com os dois identificadores.",
+        "operationId": "buscar",
+        "parameters": [
+          {
+            "name": "busca",
+            "in": "query",
+            "description": "Parte do nome (mínimo 3 letras).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PacienteResumo"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pacientes/{id}/correcao": {
+      "post": {
+        "tags": [
+          "pacientes"
+        ],
+        "summary": "Corrige a data de nascimento com motivo: guarda a versão anterior e invalida as etiquetas válidas.",
+        "operationId": "corrigir",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoCorrecao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Correcao"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
             "description": "",
             "content": {
               "application/json": {
@@ -311,6 +683,139 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/salas/{sala_id}/bipes": {
+      "post": {
+        "tags": [
+          "sala"
+        ],
+        "summary": "Bipe da pulseira na sala: confere etiqueta, sala, triagem e envia a worklist ao aparelho.",
+        "operationId": "bipe",
+        "parameters": [
+          {
+            "name": "sala_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoBipe"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoBipe"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "etiqueta-substituida, paciente-de-outra-sala, conduta-medica-pendente, sala-sem-aparelho",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "triagem-ausente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/salas/{sala_id}/fila": {
+      "get": {
+        "tags": [
+          "sala"
+        ],
+        "summary": "Fila do dia da sala (técnico lotado, médico, gerente).",
+        "operationId": "fila",
+        "parameters": [
+          {
+            "name": "sala_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilaDaSala"
                 }
               }
             }
@@ -394,6 +899,44 @@
         }
       }
     },
+    "/v1/sessao/reautenticar": {
+      "get": {
+        "tags": [
+          "sessao"
+        ],
+        "summary": "Pede ao provedor senha e 2FA de novo para atos sensíveis (SEC-AUT-5).",
+        "operationId": "reautenticar",
+        "parameters": [
+          {
+            "name": "voltar",
+            "in": "query",
+            "description": "Caminho da tela para onde voltar (relativo, começando com `/`).",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "303": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/sessao/retorno": {
       "get": {
         "tags": [
@@ -464,6 +1007,21 @@
           }
         }
       },
+      "Aparelho": {
+        "type": "object",
+        "required": [
+          "nome",
+          "ae_title"
+        ],
+        "properties": {
+          "ae_title": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
       "Atendimento": {
         "type": "object",
         "required": [
@@ -472,7 +1030,9 @@
           "accession",
           "agendamento_id",
           "paciente",
+          "sala",
           "situacao",
+          "requer_contraste",
           "criado_em"
         ],
         "properties": {
@@ -504,29 +1064,122 @@
             "type": "string",
             "format": "uuid"
           },
+          "laudo_situacao": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Situação do laudo, sem conteúdo (a recepção vê só isto, FC-ACE-06)."
+          },
           "paciente": {
             "$ref": "#/components/schemas/PacienteResumo"
           },
+          "pulseira": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Etiqueta"
+              }
+            ]
+          },
+          "requer_contraste": {
+            "type": "boolean"
+          },
+          "sala": {
+            "$ref": "#/components/schemas/Sala"
+          },
+          "senha": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "situacao": {
             "type": "string",
-            "description": "aguardando_exame, em_exame, exame_concluido ou cancelado."
+            "description": "aguardando_sala, em_exame, exame_concluido ou cancelado."
+          },
+          "triagem": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Triagem"
+              }
+            ]
+          }
+        }
+      },
+      "Conduta": {
+        "type": "object",
+        "required": [
+          "texto",
+          "medico_id",
+          "registrada_em"
+        ],
+        "properties": {
+          "medico_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "registrada_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "texto": {
+            "type": "string"
           }
         }
       },
       "Confirmacao": {
         "type": "object",
-        "required": [
-          "nome",
-          "nascimento"
-        ],
         "properties": {
+          "documento_com_foto": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "A recepção conferiu o documento com foto."
+          },
           "nascimento": {
-            "type": "string",
+            "type": [
+              "string",
+              "null"
+            ],
             "format": "date"
           },
           "nome": {
-            "type": "string",
-            "description": "Nome completo como no documento do paciente."
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Nome completo dito pelo paciente, como no documento."
+          }
+        }
+      },
+      "Correcao": {
+        "type": "object",
+        "required": [
+          "paciente",
+          "versao",
+          "etiquetas_invalidadas"
+        ],
+        "properties": {
+          "etiquetas_invalidadas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Etiquetas que foram invalidadas e precisam ser reimpressas."
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -551,6 +1204,39 @@
           }
         }
       },
+      "Etiqueta": {
+        "type": "object",
+        "required": [
+          "codigo",
+          "tipo",
+          "situacao"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "motivo_invalidacao": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "situacao": {
+            "type": "string",
+            "description": "valida ou invalidada."
+          },
+          "substituida_por": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tipo": {
+            "type": "string",
+            "description": "pulseira."
+          }
+        }
+      },
       "Exame": {
         "type": "object",
         "required": [
@@ -566,6 +1252,24 @@
           }
         }
       },
+      "FilaDaSala": {
+        "type": "object",
+        "required": [
+          "sala",
+          "itens"
+        ],
+        "properties": {
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemFila"
+            }
+          },
+          "sala": {
+            "$ref": "#/components/schemas/Sala"
+          }
+        }
+      },
       "ItemAgenda": {
         "type": "object",
         "required": [
@@ -576,7 +1280,9 @@
           "sala",
           "paciente",
           "exame",
-          "situacao"
+          "situacao",
+          "homonimos",
+          "requer_contraste"
         ],
         "properties": {
           "atendimento_id": {
@@ -592,9 +1298,24 @@
           "exame": {
             "$ref": "#/components/schemas/Exame"
           },
+          "expira_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Fim da reserva provisória, quando houver."
+          },
           "fim": {
             "type": "string",
             "format": "date-time"
+          },
+          "homonimos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PacienteResumo"
+            },
+            "description": "Outros pacientes do dia com o mesmo nome e outro nascimento (alerta de atenção, FC-CHK-04)."
           },
           "id": {
             "type": "string",
@@ -604,8 +1325,18 @@
             "type": "string",
             "format": "date-time"
           },
+          "laudo_situacao": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Situação do laudo, sem conteúdo."
+          },
           "paciente": {
             "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "requer_contraste": {
+            "type": "boolean"
           },
           "sala": {
             "$ref": "#/components/schemas/Sala"
@@ -613,6 +1344,55 @@
           "situacao": {
             "type": "string",
             "description": "agendado, confirmado, em_atendimento, concluido, faltou ou cancelado."
+          }
+        }
+      },
+      "ItemFila": {
+        "type": "object",
+        "required": [
+          "atendimento_id",
+          "codigo",
+          "paciente",
+          "exame",
+          "inicio",
+          "situacao",
+          "requer_contraste"
+        ],
+        "properties": {
+          "atendimento_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "requer_contraste": {
+            "type": "boolean"
+          },
+          "senha": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "situacao": {
+            "type": "string"
+          },
+          "triagem_resultado": {
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -637,6 +1417,17 @@
           }
         }
       },
+      "PedidoBipe": {
+        "type": "object",
+        "required": [
+          "codigo_etiqueta"
+        ],
+        "properties": {
+          "codigo_etiqueta": {
+            "type": "string"
+          }
+        }
+      },
       "PedidoCheckin": {
         "type": "object",
         "required": [
@@ -650,6 +1441,84 @@
           },
           "confirmacao": {
             "$ref": "#/components/schemas/Confirmacao"
+          }
+        }
+      },
+      "PedidoConduta": {
+        "type": "object",
+        "required": [
+          "conduta"
+        ],
+        "properties": {
+          "conduta": {
+            "type": "string"
+          }
+        }
+      },
+      "PedidoCorrecao": {
+        "type": "object",
+        "required": [
+          "nascimento",
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string"
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "PedidoReimpressao": {
+        "type": "object",
+        "properties": {
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "PedidoTriagem": {
+        "type": "object",
+        "required": [
+          "reacao_previa_contraste",
+          "gestante",
+          "amamentando",
+          "usa_metformina"
+        ],
+        "properties": {
+          "amamentando": {
+            "type": "boolean"
+          },
+          "creatinina_data": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "creatinina_mg_dl": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Texto decimal com ponto (ex.: \"1.4\")."
+          },
+          "gestante": {
+            "type": "boolean"
+          },
+          "reacao_previa_contraste": {
+            "type": "boolean"
+          },
+          "tfg": {
+            "description": "Ignorado: o servidor calcula a TFG (FC-TRI-07)."
+          },
+          "usa_metformina": {
+            "type": "boolean"
           }
         }
       },
@@ -689,6 +1558,41 @@
           },
           "type": {
             "type": "string"
+          }
+        }
+      },
+      "Reimpressao": {
+        "type": "object",
+        "required": [
+          "nova",
+          "invalidada"
+        ],
+        "properties": {
+          "invalidada": {
+            "$ref": "#/components/schemas/Etiqueta"
+          },
+          "nova": {
+            "$ref": "#/components/schemas/Etiqueta"
+          }
+        }
+      },
+      "ResultadoBipe": {
+        "type": "object",
+        "required": [
+          "atendimento",
+          "aparelho",
+          "worklist"
+        ],
+        "properties": {
+          "aparelho": {
+            "$ref": "#/components/schemas/Aparelho"
+          },
+          "atendimento": {
+            "$ref": "#/components/schemas/Atendimento"
+          },
+          "worklist": {
+            "type": "string",
+            "description": "enviada (primeiro bipe) ou ja_enviada (bipe repetido, sem segundo item de worklist)."
           }
         }
       },
@@ -737,6 +1641,55 @@
           },
           "usuario": {
             "$ref": "#/components/schemas/UsuarioSessao"
+          }
+        }
+      },
+      "Triagem": {
+        "type": "object",
+        "required": [
+          "codigo",
+          "resultado",
+          "motivos",
+          "regra_versao",
+          "exame_liberado"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "conduta": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Conduta"
+              }
+            ]
+          },
+          "exame_liberado": {
+            "type": "boolean",
+            "description": "Exame pode iniciar: liberado, com ressalvas, ou com conduta médica registrada."
+          },
+          "motivos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "regra_versao": {
+            "type": "string"
+          },
+          "resultado": {
+            "type": "string",
+            "description": "liberado, liberado_com_ressalvas ou precisa_aprovacao_medica."
+          },
+          "tfg_calculada": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
           }
         }
       },

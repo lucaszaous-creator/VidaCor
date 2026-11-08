@@ -2,9 +2,13 @@
 
 pub mod agenda;
 pub mod atendimentos;
+pub mod etiquetas;
 pub mod eventos;
+pub mod pacientes;
+pub mod sala;
 pub mod saude;
 pub mod sessao;
+pub mod triagem;
 
 use crate::estado::Estado;
 use axum::routing::{get, post};
@@ -17,10 +21,24 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/sessao/entrar", get(sessao::entrar))
         .route("/v1/sessao/retorno", get(sessao::retorno))
         .route("/v1/sessao/sair", post(sessao::sair))
+        .route("/v1/sessao/reautenticar", get(sessao::reautenticar))
         .route("/v1/salas", get(agenda::salas))
         .route("/v1/agenda", get(agenda::agenda_do_dia))
         .route("/v1/atendimentos", post(atendimentos::checkin))
         .route("/v1/atendimentos/{id}", get(atendimentos::obter))
+        .route("/v1/atendimentos/{id}/triagem", post(triagem::registrar))
+        .route(
+            "/v1/atendimentos/{id}/triagem/conduta",
+            post(triagem::conduta),
+        )
+        .route(
+            "/v1/etiquetas/{codigo}/reimpressao",
+            post(etiquetas::reimprimir),
+        )
+        .route("/v1/pacientes", get(pacientes::buscar))
+        .route("/v1/pacientes/{id}/correcao", post(pacientes::corrigir))
+        .route("/v1/salas/{sala_id}/bipes", post(sala::bipe))
+        .route("/v1/salas/{sala_id}/fila", get(sala::fila))
         .route("/v1/eventos", get(eventos::fluxo))
         .fallback(nao_existe)
 }

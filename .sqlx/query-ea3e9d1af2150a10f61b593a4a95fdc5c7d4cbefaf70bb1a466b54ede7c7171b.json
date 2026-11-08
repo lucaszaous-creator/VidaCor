@@ -1,0 +1,21 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO recepcao.etiqueta\n           (id, codigo, tipo, atendimento_id, paciente_id, situacao, criado_por, origem, estacao, unidade_id, correlacao)\n         VALUES ($1, $2, 'pulseira', $3, $4, 'valida', $5, 'balcao', $6, $7, $8)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "ea3e9d1af2150a10f61b593a4a95fdc5c7d4cbefaf70bb1a466b54ede7c7171b"
+}

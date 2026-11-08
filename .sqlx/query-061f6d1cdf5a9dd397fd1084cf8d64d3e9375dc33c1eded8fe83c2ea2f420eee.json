@@ -1,0 +1,31 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO triagem.triagem\n           (id, codigo, atendimento_id, paciente_id, reacao_previa_contraste, gestante, amamentando, usa_metformina,\n            creatinina_mg_dl, creatinina_data, tfg_calculada, resultado, motivos, regra_versao,\n            criado_por, origem, estacao, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9::text::numeric, $10, $11, $12, $13, $14, $15, 'sala', $16, $17, $18)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Bool",
+        "Bool",
+        "Bool",
+        "Bool",
+        "Text",
+        "Date",
+        "Int4",
+        "Text",
+        "TextArray",
+        "Text",
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "061f6d1cdf5a9dd397fd1084cf8d64d3e9375dc33c1eded8fe83c2ea2f420eee"
+}

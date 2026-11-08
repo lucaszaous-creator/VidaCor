@@ -53,3 +53,28 @@ impl<S: Send + Sync> FromRequestParts<S> for ChaveIdempotencia {
             })
     }
 }
+
+/// Cabeçalho opcional `X-Estacao` (guichê, sala): só letras, números e hífen, até 32 caracteres.
+/// Informativo para o lastro; não decide nada (a permissão vem da sessão).
+pub struct Estacao(pub Option<String>);
+
+impl<S: Send + Sync> FromRequestParts<S> for Estacao {
+    type Rejection = ErroApi;
+
+    async fn from_request_parts(parts: &mut Parts, _: &S) -> Result<Self, Self::Rejection> {
+        let Some(valor) = parts.headers.get("x-estacao") else {
+            return Ok(Self(None));
+        };
+        let texto = valor.to_str().unwrap_or_default();
+        if texto.is_empty()
+            || texto.len() > 32
+            || !texto.chars().all(|c| c.is_ascii_alphanumeric() || c == '-')
+        {
+            return Err(ErroApi::requisicao(
+                "estacao-invalida",
+                "A identificação da estação veio em formato inválido. Nada foi gravado. Avise a TI para conferir a configuração desta máquina.",
+            ));
+        }
+        Ok(Self(Some(texto.to_owned())))
+    }
+}

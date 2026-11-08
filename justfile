@@ -18,8 +18,13 @@ lint:
 
 # Verificação completa: testes do núcleo (com PostgreSQL real via Testcontainers) e das telas
 test: lint
-    cargo test --workspace
+    cargo test --workspace || (just limpar-testes; exit 1)
+    just limpar-testes
     pnpm -r --if-present test
+
+# Remove os contêineres e volumes criados pelos testes (Testcontainers); não toca no compose de dev
+limpar-testes:
+    docker ps -aq --filter label=org.testcontainers.managed-by=testcontainers | xargs -r docker rm -f -v > /dev/null
 
 # Gera o contrato OpenAPI a partir do código e o cliente TypeScript
 contrato:

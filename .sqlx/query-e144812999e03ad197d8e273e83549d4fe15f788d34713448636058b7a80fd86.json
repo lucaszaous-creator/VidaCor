@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT comum.proximo_numero('DIV', $1)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "proximo_numero",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "e144812999e03ad197d8e273e83549d4fe15f788d34713448636058b7a80fd86"
+}
