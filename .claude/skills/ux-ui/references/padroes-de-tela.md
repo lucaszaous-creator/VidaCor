@@ -83,10 +83,13 @@ Rodar antes de entregar. Requer `node` e `playwright` (já instalados no ambient
 tools/verificacao/verifica.sh Pacientes-Lista.dc.html
 ```
 
-Renderiza com o motor do canvas em 1440×900 e 1280×800 e acusa `sh` (altura da página maior que a
-janela), `cortado` (painel escondendo conteúdo) e `ladoalado` (rolagem lateral). Capturas em
-`tools/verificacao/shots/`. Requer o motor do canvas em `tools/verificacao/render/support.js`, que
-não é versionado; sem ele, registrar "não verificado" e o motivo.
+Renderiza com o motor aberto e versionado `tools/verificacao/motor-dc/support.js` (DEC-2026-11-08-41)
+e **sai com erro (código 1)** se a tela reprovar (DEC-2026-11-08-42). Telas de sistema são conferidas em
+1440×900 e 1280×800, com página do tamanho exato da janela; telas com tamanho próprio (`$preview` do
+`.dc.html`: apps, tablet, telão, A4), só no próprio tamanho. Reprova `cortado` (painel escondendo conteúdo),
+`ladoalado` (rolagem lateral) e erro de script. Recorte de propósito só passa com exceção, motivo e decisão em
+`tools/verificacao/excecoes.tsv`. Sem argumentos, confere todas as telas. Capturas em
+`tools/verificacao/shots/`. Critério e limites: `tools/verificacao/README.md`.
 
 ```bash
 node tools/verificacao/sem-rolagem-lateral.js "$PWD/design/mockups" design/vc10.css 1000

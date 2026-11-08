@@ -13,7 +13,7 @@ implementada em homologação. Item não atendido sem exceção aprovada bloquei
 - [ ] Dados fictícios coerentes com `design/dados-ficticios.md`
 
 **Layout**
-- [ ] 1440×900 e 1280×800 sem rolar a página (`tools/verificacao/verifica.sh` sem `sh` nem `cortado`)
+- [ ] 1440×900 e 1280×800 sem rolar a página (`tools/verificacao/verifica.sh` aprovado, saída 0)
 - [ ] Sem rolagem lateral (`ladoalado` vazio); tabela sem `min-width` fixo
 - [ ] Longo rola dentro do painel com cabeçalho fixo; secundário em abas, detalhe ou gaveta
 - [ ] Nenhum bloco abaixo de cerca de 340 px; nomes em uma linha; células com até 2 linhas
