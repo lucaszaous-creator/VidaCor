@@ -49,51 +49,51 @@ fazer, como conforto (G1).
 
 ## 4. O que cada perfil **vê**
 
-`✓` vê · `◐` vê parcial (regra ao lado) · `—` não vê
+**Sim**: vê; **Parcial**: vê parte (regra ao lado); **—**: não vê
 
 | Perfil | N0 Operacional | N1 Cadastral | N2 Financeiro | N3 Clínico resumido | N4 Clínico completo |
 |---|---|---|---|---|---|
-| Recepção | ✓ | ✓ | ◐ guia e pendência do paciente atendido | ◐ preparo, alergias, alertas para o atendimento | — |
-| Caixa | ✓ | ✓ | ◐ só recebimentos e orçamentos do próprio caixa | — | — |
-| Técnico de sala | ◐ da sua sala | ◐ dos pacientes da sua sala hoje | — | ✓ dos pacientes da sua sala | ◐ imagens do exame que executa; laudo final só depois de liberado |
-| Médico executante/laudador | ✓ | ✓ dos seus pacientes | — | ✓ dos seus pacientes | ◐ **com vínculo**: agendado com ele, em exame, laudo atribuído ou histórico do paciente em atendimento |
-| Médico revisor | ◐ | ◐ | — | ✓ dos laudos para revisão | ◐ laudos atribuídos para revisão |
-| Faturista | ◐ | ✓ | ✓ | ◐ só códigos TUSS/CID exigidos na guia | — |
-| Financeiro | — | ◐ nome e documento fiscal | ✓ | — | — |
-| Estoque/compras | — | — | ◐ custos e fornecedores | — | — (consumo de contraste por exame sem identificar paciente) |
-| Atendimento WhatsApp | ✓ | ✓ | ◐ valores de orçamento | ◐ preparo e status do laudo (sem conteúdo) | — |
-| Gerente/direção | ✓ | ◐ | ✓ | ◐ agregados e indicadores | — (sem acesso individual por padrão) |
-| Responsável clínico de segurança | ✓ | ✓ | — | ✓ | ◐ em investigação registrada |
-| DPO/auditor | ◐ | ◐ | ◐ | ◐ metadados de acesso (quem viu o quê, quando) | — (conteúdo só com ordem justificada) |
-| TI/administrador | ◐ técnico | — | — | — | — (**zero dado clínico** por padrão) |
-| Paciente | ◐ seus agendamentos | ✓ o próprio | ✓ seus recibos e notas | ✓ o próprio | ✓ **só laudos assinados e liberados** e suas imagens |
-| Médico solicitante externo | — | ◐ do paciente compartilhado | — | ◐ do exame compartilhado | ◐ só o laudo e as imagens compartilhados, até o link expirar |
-| Dispositivo TV | ◐ senha, nome abreviado, sala | — | — | — | — |
+| Recepção | Sim | Sim | Parcial: guia e pendência do paciente atendido | Parcial: preparo, alergias, alertas para o atendimento | — |
+| Caixa | Sim | Sim | Parcial: só recebimentos e orçamentos do próprio caixa | — | — |
+| Técnico de sala | Parcial: da sua sala | Parcial: dos pacientes da sua sala hoje | — | Sim dos pacientes da sua sala | Parcial: imagens do exame que executa; laudo final só depois de liberado |
+| Médico executante/laudador | Sim | Sim dos seus pacientes | — | Sim dos seus pacientes | Parcial: **com vínculo**: agendado com ele, em exame, laudo atribuído ou histórico do paciente em atendimento |
+| Médico revisor | Parcial: | Parcial: | — | Sim dos laudos para revisão | Parcial: laudos atribuídos para revisão |
+| Faturista | Parcial: | Sim | Sim | Parcial: só códigos TUSS/CID exigidos na guia | — |
+| Financeiro | — | Parcial: nome e documento fiscal | Sim | — | — |
+| Estoque/compras | — | — | Parcial: custos e fornecedores | — | — (consumo de contraste por exame sem identificar paciente) |
+| Atendimento WhatsApp | Sim | Sim | Parcial: valores de orçamento | Parcial: preparo e status do laudo (sem conteúdo) | — |
+| Gerente/direção | Sim | Parcial: | Sim | Parcial: agregados e indicadores | — (sem acesso individual por padrão) |
+| Responsável clínico de segurança | Sim | Sim | — | Sim | Parcial: em investigação registrada |
+| DPO/auditor | Parcial: | Parcial: | Parcial: | Parcial: metadados de acesso (quem viu o quê, quando) | — (conteúdo só com ordem justificada) |
+| TI/administrador | Parcial: técnico | — | — | — | — (**zero dado clínico** por padrão) |
+| Paciente | Parcial: seus agendamentos | Sim o próprio | Sim seus recibos e notas | Sim o próprio | Sim **só laudos assinados e liberados** e suas imagens |
+| Médico solicitante externo | — | Parcial: do paciente compartilhado | — | Parcial: do exame compartilhado | Parcial: só o laudo e as imagens compartilhados, até o link expirar |
+| Dispositivo TV | Parcial: senha, nome abreviado, sala | — | — | — | — |
 
 ## 5. O que cada perfil **faz** (atos principais)
 
 | Ato | Recep. | Caixa | Técnico | Médico | Revisor | Fatur. | Financ. | Gerente | TI | Paciente |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Agendar, encaixar, remarcar | ✓ | — | — | ◐ bloquear a própria agenda | — | — | — | ✓ | — | ◐ agendamento online |
-| Check-in, documentos, etiquetas | ✓ | — | — | — | — | — | — | — | — | ◐ pré-check-in |
-| Chamar paciente (TV) | ✓ | — | ✓ | ✓ | — | — | — | — | — | — |
-| Abrir/fechar caixa, receber | — | ✓ | — | — | — | — | — | ◐ conferir fechamento | — | ◐ pagar PIX |
-| Desconto acima do limite | — | ◐ pede | — | — | — | — | — | ✓ aprova (**step-up**) | — | — |
-| Estornar | — | ◐ pede | — | — | — | — | ✓ (**step-up**) | ✓ (**step-up**) | — | — |
-| Executar exame, registrar contraste | — | — | ✓ | ✓ | — | — | — | — | — | — |
-| Vincular imagem manualmente | — | — | ◐ propõe | ✓ (**dois identificadores**) | — | — | — | — | — | — |
-| Escrever evolução/laudo | — | — | — | ✓ | ◐ comentar | — | — | — | — | — |
-| **Assinar e liberar laudo** | — | — | — | ✓ (**step-up**) | ◐ coassinar | — | — | — | — | — |
-| Retificar laudo (nova versão) | — | — | — | ✓ autor ou responsável técnico | — | — | — | — | — | — |
-| Marcar "conversar antes" | — | — | — | ✓ | ✓ | — | — | — | — | — |
-| Prescrever, atestado, pedido | — | — | — | ✓ | — | — | — | — | — | — |
-| Gerar guia, lote TISS, recurso | — | — | — | — | — | ✓ | — | ◐ | — | — |
-| Contas, conciliação, repasse, NF | — | — | — | — | — | — | ✓ | ✓ | — | — |
-| Exportar dados | — | — | — | — | — | ◐ faturamento | ◐ financeiro | ◐ agregados (**step-up**) | — | ✓ os próprios |
-| Gerenciar usuários e permissões | — | — | — | — | — | — | — | ◐ aprova | ✓ (**step-up**, duas pessoas para perfil clínico) | — |
-| Cadastrar aparelhos, integrações, backup | — | — | — | — | — | — | — | — | ✓ | — |
-| Compartilhar laudo com médico externo | — | — | — | ✓ | — | — | — | — | — | ✓ |
-| Revogar consentimento, pedir exclusão | — | — | — | — | — | — | — | — | — | ✓ |
+| Agendar, encaixar, remarcar | Sim | — | — | Parcial: bloquear a própria agenda | — | — | — | Sim | — | Parcial: agendamento online |
+| Check-in, documentos, etiquetas | Sim | — | — | — | — | — | — | — | — | Parcial: pré-check-in |
+| Chamar paciente (TV) | Sim | — | Sim | Sim | — | — | — | — | — | — |
+| Abrir/fechar caixa, receber | — | Sim | — | — | — | — | — | Parcial: conferir fechamento | — | Parcial: pagar PIX |
+| Desconto acima do limite | — | Parcial: pede | — | — | — | — | — | Sim aprova (**step-up**) | — | — |
+| Estornar | — | Parcial: pede | — | — | — | — | Sim (**step-up**) | Sim (**step-up**) | — | — |
+| Executar exame, registrar contraste | — | — | Sim | Sim | — | — | — | — | — | — |
+| Vincular imagem manualmente | — | — | Parcial: propõe | Sim (**dois identificadores**) | — | — | — | — | — | — |
+| Escrever evolução/laudo | — | — | — | Sim | Parcial: comentar | — | — | — | — | — |
+| **Assinar e liberar laudo** | — | — | — | Sim (**step-up**) | Parcial: coassinar | — | — | — | — | — |
+| Retificar laudo (nova versão) | — | — | — | Sim autor ou responsável técnico | — | — | — | — | — | — |
+| Marcar "conversar antes" | — | — | — | Sim | Sim | — | — | — | — | — |
+| Prescrever, atestado, pedido | — | — | — | Sim | — | — | — | — | — | — |
+| Gerar guia, lote TISS, recurso | — | — | — | — | — | Sim | — | Parcial: | — | — |
+| Contas, conciliação, repasse, NF | — | — | — | — | — | — | Sim | Sim | — | — |
+| Exportar dados | — | — | — | — | — | Parcial: faturamento | Parcial: financeiro | Parcial: agregados (**step-up**) | — | Sim os próprios |
+| Gerenciar usuários e permissões | — | — | — | — | — | — | — | Parcial: aprova | Sim (**step-up**, duas pessoas para perfil clínico) | — |
+| Cadastrar aparelhos, integrações, backup | — | — | — | — | — | — | — | — | Sim | — |
+| Compartilhar laudo com médico externo | — | — | — | Sim | — | — | — | — | — | Sim |
+| Revogar consentimento, pedir exclusão | — | — | — | — | — | — | — | — | — | Sim |
 
 **Step-up** = pedir de novo o segundo fator na hora do ato (SEC-AUT-5).
 

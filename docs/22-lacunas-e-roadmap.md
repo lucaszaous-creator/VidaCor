@@ -11,7 +11,7 @@
 | Comunicação obrigatória de achado crítico ao solicitante | **Descartado** pelo dono do produto (07/11/2026). Pode voltar à pauta se a clínica pedir |
 | Todos os demais itens abaixo | **Aprovados** para o roteiro |
 
-## 🔴 Essencial (antes de construir / no MVP)
+## Essencial (antes de construir / no MVP)
 
 | # | Item | O que é | Mockup / documento |
 |---|---|---|---|
@@ -20,11 +20,11 @@
 | E3 | **Exame externo** | Importar exame de outra instituição (link ou QR do portal dela, arquivos enviados pelo paciente, DICOMweb): conferência de identidade, escolha dos estudos, marcação como externo (somente leitura), correção de identificação (IHE PIR) com original guardado, uso como exame anterior | `Exame-Externo.dc.html` |
 | E4 | **Pedido de autorização pelo sistema** | Montar a solicitação a partir do agendamento (carteirinha, TUSS, CID, pedido anexado) e enviar por **webservice TISS** às operadoras que aceitam; para as demais, montar o pedido, enviar pelo portal e registrar a resposta. Fila com situação (em análise, autorizada, pendente de documento, negada com motivo), prazo e lastro; resposta preenche a guia sem digitação | `Autorizacao.dc.html` |
 | E5 | **Auditoria antes do faturamento** | Regras por operadora, versionadas: senha vencida, procedimento diferente do autorizado, laudo não assinado, CID ausente, assinatura do beneficiário, valor fora da tabela, prazo de envio, carteirinha, elegibilidade. Guia com erro bloqueante não entra no lote; glosa recebida sugere regra nova | `Auditoria-Faturamento.dc.html` |
-| E6 | **Modo contingência** | Procedimento oficial quando o sistema ou a rede caem: agenda do dia e fichas exportadas em PDF toda manhã, formulários em papel numerados, retomada com lançamento posterior e conciliação (lastro marca "registrado em contingência") | Documento a fazer |
-| E7 | **Plano de migração** (Medware/Medilab) | Inventário de dados, exportação, mapeamento, carga de teste, conferência por amostragem, período em paralelo, critério de virada e de volta atrás; imagens pelo PACS (DICOM), cadastros e laudos por exportação dos fornecedores | Documento a fazer |
-| E8 | **Plano do projeto** | Escopo do MVP, fases e datas, equipe, orçamento, critérios de aceite por módulo, contrato com a clínica (SLA, suporte, propriedade e devolução dos dados) | Documento a fazer |
+| E6 | **Modo contingência** | Procedimento oficial quando o sistema ou a rede caem: agenda do dia e fichas exportadas em PDF toda manhã, formulários em papel numerados, retomada com lançamento posterior e conciliação (lastro marca "registrado em contingência") | [docs/23](23-modo-contingencia.md), mockup `Contingencia.dc.html` |
+| E7 | **Plano de migração** (Medware/Medilab) | Inventário de dados, exportação, mapeamento, carga de teste, conferência por amostragem, período em paralelo, critério de virada e de volta atrás; imagens pelo PACS (DICOM), cadastros e laudos por exportação dos fornecedores | [docs/24](24-plano-de-migracao.md) |
+| E8 | **Plano do projeto** | Escopo do MVP, fases e datas, equipe, orçamento, critérios de aceite por módulo, contrato com a clínica (SLA, suporte, propriedade e devolução dos dados) | [docs/25](25-plano-do-projeto.md) |
 
-## 🟠 Importante (logo após o MVP)
+## Importante (logo após o MVP)
 
 | # | Item | O que é |
 |---|---|---|
@@ -38,7 +38,7 @@
 | I8 | **Agenda com vários recursos** | Sala + médico + técnico + aparelho + sedação/anestesia ao mesmo tempo; regras de pediatria e gestantes |
 | I9 | **Ouvidoria / SAC** | Reclamações e elogios com prazo, responsável, resposta e indicador |
 
-## 🟢 Futuro (diferenciais)
+## Futuro (diferenciais)
 
 | # | Item |
 |---|---|

@@ -26,4 +26,4 @@ Nada vai para produção sem todos os itens marcados (ou exceção aprovada e re
 - [ ] Modelagem de ameaças revisada; varreduras (SAST, dependências, segredos) limpas
 - [ ] Permissões por ato revisadas; nenhum segredo na tela
 
-**Aprovado por:** dono do produto ☐ · dono técnico ☐ · responsável clínico ☐ · data:
+**Aprovado por:** dono do produto [ ] · dono técnico [ ] · responsável clínico [ ] · data:

@@ -1,7 +1,7 @@
 # Documento de design — <nome da função/módulo>
 
 - **Autor:** · **Data:** · **Status:** rascunho / em revisão / aprovado
-- **Aprovações:** dono do produto ☐ · responsável clínico de segurança ☐ (se clínico) · dono técnico ☐
+- **Aprovações:** dono do produto [ ] · responsável clínico de segurança [ ] (se clínico) · dono técnico [ ]
 
 ## 1. Comunicado (de trás para frente)
 Escreva em 1 parágrafo, como se a função já estivesse pronta, o que muda para quem usa na clínica.

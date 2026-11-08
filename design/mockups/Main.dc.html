@@ -199,7 +199,7 @@ class Component extends DCLogic {
     };
     const dias = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex, hoje', 'Sáb'];
     const m = M[s.met];
-    const S = [['Ecocardiograma, Sala 1', 82], ['USG obstétrica, Sala 2', 94], ['USG geral e Doppler, Sala 3', 76], ['Teste ergométrico, Sala 4', 67], ['Raio X, Sala 5', 58], ['Tomografia, Sala 6', 71], ['MAPA e Holter, Sala 7', 50]];
+    const S = [['Ecocardiograma, Sala 1', 82], ['USG obstétrica, Sala 2', 94], ['USG geral e Doppler, Sala 3', 76], ['Teste ergométrico, Sala 4', 67], ['Raio X, Sala 5', 58], ['Tomografia, Sala 6', 71], ['Posto MAPA e Holter', 50]];
     return {
       periodos: [['hoje', 'Hoje'], ['semana', 'Semana'], ['mes', 'Mês']].map(([k, t]) => ({ t, cls: s.per === k ? 'on' : '', on: s.per === k ? 'true' : 'false', ir: () => this.setState({ per: k }) })),
       k: K[s.per],

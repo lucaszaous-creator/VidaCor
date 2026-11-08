@@ -8,7 +8,7 @@ permanência** e, conforme o cliente decidir, controlar **cancela**, emitir
 
 ## Repositórios avaliados (GitHub, nov/2026)
 
-| Repositório | ⭐ | Licença | Avaliação |
+| Repositório | Estrelas | Licença | Avaliação |
 |---|---|---|---|
 | [ankandrew/fast-alpr](https://github.com/ankandrew/fast-alpr) | 856 | MIT | **Recomendado.** Python, CPU, detecção + OCR em poucas linhas |
 | [ankandrew/fast-plate-ocr](https://github.com/ankandrew/fast-plate-ocr) | 805 | MIT | OCR usado pelo fast-alpr; modelo `global` inclui **Brazil** (conferido no `plate_config.yaml`); dá para treinar com fotos locais |

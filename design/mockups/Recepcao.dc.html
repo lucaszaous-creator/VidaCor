@@ -148,7 +148,7 @@ class Component extends DCLogic {
       ['pl', 'Patrícia Gomes Lopes', '03/05/1991', 'Obstétrica com Doppler', '09:00, confirmada', '', 0, false, 'Particular', '09:00, Sala 2'],
       ['mf', 'Marcelo Dias Faria', '17/02/1979', 'USG de abdome', '09:00, sem resposta', AM, 0, true, 'SulAmérica', '09:00, Sala 3'],
       ['lc', 'Laura Nunes Costa', '30/10/1983', 'Raio X de coluna', '09:00, confirmada', '', 0, false, 'Unimed', '09:00, Sala 5'],
-      ['jb', 'Jorge Luiz Batista', '01/08/1959', 'Holter 24 h', '09:00, confirmado', '', 0, false, 'Unimed', '09:00, Sala 7'],
+      ['jb', 'Jorge Luiz Batista', '01/08/1959', 'Holter 24 h', '09:00, confirmado', '', 0, false, 'Unimed', '09:00, Posto MAPA'],
       ['hm', 'Hélio Tavares Mendes', '08/05/1956', 'Ecocardiograma', '10:00, confirmado', '', 0, false, 'Particular', '10:00, Sala 1'],
       ['rt', 'Rosa Maria Teles', '11/12/1949', 'Ecocardiograma', '10:30, confirmada', '', 0, false, 'Amil', '10:30, Sala 1'],
       ['rb', 'Rita Costa Barbosa', '09/09/1966', 'USG de tireoide', '10:30, sem resposta', AM, 0, true, 'Particular', '10:30, Sala 3'],
@@ -162,14 +162,14 @@ class Component extends DCLogic {
       ['gp', 'Gustavo Henrique Pires', '14/01/1970', 'Teste ergométrico', 'Sala 4, desde 08:35', VI, 3, false, 'Amil', '08:00, Sala 4'],
       ['va', 'Vera Lúcia Antunes', '18/09/1957', 'TC de abdome', 'Sala 6, desde 08:30', VI, 3, false, 'Amil', '07:30, Sala 6'],
       ['it', 'Ivone Rocha Teixeira', '16/08/1951', 'Doppler de carótidas', 'Sala 3, desde 08:33', VI, 3, false, 'Petrobras', '07:30, Sala 3'],
-      ['nf', 'Neusa Almeida Freitas', '22/04/1961', 'Instalação de MAPA', 'Sala 7, desde 08:38', VI, 3, false, 'Petrobras', '08:00, Sala 7'],
+      ['nf', 'Neusa Almeida Freitas', '22/04/1961', 'Instalação de MAPA', 'Posto MAPA, desde 08:38', VI, 3, false, 'Petrobras', '08:00, Posto MAPA'],
       ['dg', 'Denise Prado Gomes', '25/01/1972', 'Pós-contraste', 'Observação, 12 de 30 min', TE, 4, false, 'Unimed', '07:30, Sala 6'],
       ['mh', 'Maria Helena Duarte', '12/03/1968', 'Eco, laudo liberado', 'Saiu 07:52', '', 4, false, 'Unimed', '07:30, Sala 1'],
       ['cm', 'Caio Vieira Moraes', '10/10/1985', 'Raio X, laudo até 14:00', 'Saiu 08:40', '', 4, false, 'Unimed', '07:00, Sala 5'],
       ['jp', 'João Pedro Alves', '04/09/1971', 'Eco, laudo liberado', 'Saiu 07:40', '', 4, false, 'Particular', '07:00, Sala 1'],
       ['bc', 'Beatriz Lima Cunha', '19/07/1995', 'Obstétrica, laudo liberado', 'Saiu 07:35', '', 4, false, 'Unimed', '07:00, Sala 2'],
       ['rl', 'Roberto Faria Lima', '02/02/1958', 'Doppler venoso', 'Saiu 07:38', '', 4, false, 'Unimed', '07:00, Sala 3'],
-      ['mp', 'Mário Jorge Pinto', '15/01/1955', 'Retirada de MAPA', 'Saiu 07:20', '', 4, false, 'Unimed', '07:00, Sala 7']
+      ['mp', 'Mário Jorge Pinto', '15/01/1955', 'Retirada de MAPA', 'Saiu 07:20', '', 4, false, 'Unimed', '07:00, Posto MAPA']
     ];
     const curto = n => { const x = n.split(' '); return x.length > 2 ? x[0] + ' ' + x[1].charAt(0) + '. ' + x[x.length - 1] : n; };
     const COL = ['A chegar', 'Check-in', 'Aguardando a sala', 'Em exame', 'Saindo'];
