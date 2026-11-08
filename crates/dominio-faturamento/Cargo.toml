@@ -10,6 +10,7 @@ description = "Faturamento TISS: auditoria antes do lote com regras versionadas 
 [dependencies]
 chrono = { version = "0.4.42", default-features = false, features = ["std", "serde"] }
 md-5 = "0.11.0"
+roxmltree = "0.20.0"
 serde = { version = "1.0.228", features = ["derive"] }
 sha2 = "0.10.9"
 thiserror = "2.0.17"
