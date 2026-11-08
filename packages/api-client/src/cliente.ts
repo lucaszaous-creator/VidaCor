@@ -52,7 +52,7 @@ import type { MenuDoObjeto, ObjetoDoMenu } from './contrato-menu';
 import type { CadeiaDoAtendimento } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
 import type { DecisaoDePerfil, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
-import type { ContaBancaria, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
+import type { ContaBancaria, NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
 import type { ComunicacaoDoPaciente, LembretesEnfileirados, PreferenciaWhatsapp } from './contrato-comunicacao';
 import type { ContrasteAplicado, EntradaDeEstoque, ItemDeEstoque, MovimentoFeito, RastreioDoLote } from './contrato-estoque';
 import type { AceiteDoConvite, ConviteEmitido, EntradaNoPortal, NovoPaciente, PacienteCadastrado, PossivelDuplicado, SessaoDoPortal, SituacaoDoConvite } from './contrato-portal';
@@ -393,6 +393,8 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
         criar<Recebimento>('POST', '/v1/recebimentos', corpo, o),
       /** Situação atual; o PIX copia e cola aparece quando o PSP devolver a cobrança. */
       obter: (id: string): Promise<Recebimento> => ler<Recebimento>(`/v1/recebimentos/${seg(id)}`),
+      /** NFS-e do recebimento; `404 nota-nao-emitida` até a prefeitura devolver. */
+      nota: (id: string): Promise<NotaFiscal> => ler<NotaFiscal>(`/v1/recebimentos/${seg(id)}/nota`),
       pedirEstorno: (id: string, corpo: PedidoEstorno, o: OpcoesDeEscrita): Promise<Estorno> =>
         criar<Estorno>('POST', `/v1/recebimentos/${seg(id)}/estornos`, corpo, o),
     },

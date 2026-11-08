@@ -1,0 +1,88 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT numero, codigo_verificacao, valor_centavos, situacao, emitida_em, cancelada_em FROM caixa.nota_fiscal WHERE recebimento_id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "numero",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.nota_fiscal",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo_verificacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.nota_fiscal",
+            "name": "codigo_verificacao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "valor_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "caixa.nota_fiscal",
+            "name": "valor_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.nota_fiscal",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "emitida_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "caixa.nota_fiscal",
+            "name": "emitida_em"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "cancelada_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "caixa.nota_fiscal",
+            "name": "cancelada_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "3a5ea81dd6e8d5517a9d56147187369bfbd7f86230a5265310766c0515b21950"
+}

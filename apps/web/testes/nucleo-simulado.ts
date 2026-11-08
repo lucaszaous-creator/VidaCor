@@ -8,7 +8,7 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { agendaDoDia, atendimentoDe, itensDaAgenda, SALAS, SESSAO } from './dados/ficticios';
 import { manipuladoresFase1, reiniciarFase1 } from './nucleo-fase1';
-import { comunicacaoSimulada, lastroSimulado, manipuladoresComunicacao, manipuladoresEstoque, manipuladoresFinanceiro, manipuladoresIndicadores, manipuladoresUsuarios, usuariosCriados, manipuladoresLastro } from './nucleo-estoque';
+import { comunicacaoSimulada, lastroSimulado, manipuladoresComunicacao, manipuladoresEstoque, manipuladoresFinanceiro, manipuladoresIndicadores, manipuladoresNfse, manipuladoresUsuarios, usuariosCriados, manipuladoresLastro } from './nucleo-estoque';
 import { manipuladoresLaudoEstruturado, reiniciarLaudoEstruturado } from './nucleo-laudo-estruturado';
 import { manipuladoresMenu } from './nucleo-menu';
 import { manipuladoresCadastro, manipuladoresPortal, portalSimulado } from './nucleo-portal';
@@ -113,4 +113,4 @@ export const manipuladores = [
   }),
 ];
 
-export const servidor = setupServer(...manipuladoresUsuarios, ...manipuladoresFinanceiro, ...manipuladoresComunicacao, ...manipuladoresIndicadores, ...manipuladoresLaudoEstruturado, ...manipuladoresLastro, ...manipuladoresEstoque, ...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores);
+export const servidor = setupServer(...manipuladoresNfse, ...manipuladoresUsuarios, ...manipuladoresFinanceiro, ...manipuladoresComunicacao, ...manipuladoresIndicadores, ...manipuladoresLaudoEstruturado, ...manipuladoresLastro, ...manipuladoresEstoque, ...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores);

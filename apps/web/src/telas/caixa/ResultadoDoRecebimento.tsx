@@ -174,7 +174,28 @@ export function ResultadoDoRecebimento({ r: inicial }: { r: Recebimento }) {
           <span className="t13 mute num">txid {pix.txid}. A situação acima muda para pago quando o banco confirmar.</span>
         </>
       )}
+      {r.situacao !== 'aguardando_pagamento' && <NotaDoRecebimento recebimentoId={r.id} />}
       <PedidoDeEstorno recebimento={r} />
     </div>
+  );
+}
+
+/** NFS-e do recebimento: aparece quando a prefeitura devolver (a emissão é pelo outbox). */
+function NotaDoRecebimento({ recebimentoId }: { recebimentoId: string }) {
+  const { api } = useDependencias();
+  const nota = useQuery({
+    queryKey: ['nota', recebimentoId],
+    queryFn: () => api.recebimentos.nota(recebimentoId),
+    retry: false,
+    refetchInterval: (q) => (q.state.data === undefined ? 5000 : false),
+  });
+  if (nota.data === undefined) {
+    return <span className="t13 mute">NFS-e: emissão em andamento; o número aparece aqui.</span>;
+  }
+  return (
+    <span className="t13" role="status">
+      NFS-e <span className="num">{nota.data.numero}</span>, código {nota.data.codigo_verificacao}
+      {nota.data.situacao === 'cancelada' ? ', cancelada pelo estorno' : ''}.
+    </span>
   );
 }

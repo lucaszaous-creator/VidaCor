@@ -86,6 +86,7 @@ pub struct Ambiente {
     pub psp: std::sync::Arc<vidacor_api::pix::PspDesenvolvimento>,
     pub correio: std::sync::Arc<vidacor_api::correio::CorreioEmMemoria>,
     pub mensageiro: std::sync::Arc<vidacor_api::mensageiro::MensageiroEmMemoria>,
+    pub prefeitura: std::sync::Arc<vidacor_api::prefeitura::PrefeituraEmMemoria>,
 }
 
 pub struct Sessao {
@@ -159,6 +160,9 @@ impl Ambiente {
         let mensageiro =
             std::sync::Arc::new(vidacor_api::mensageiro::MensageiroEmMemoria::default());
         estado.mensageiro = Some(mensageiro.clone());
+        let prefeitura =
+            std::sync::Arc::new(vidacor_api::prefeitura::PrefeituraEmMemoria::default());
+        estado.prefeitura = Some(prefeitura.clone());
         Self {
             app: aplicacao(estado.clone()),
             admin,
@@ -174,6 +178,7 @@ impl Ambiente {
             psp,
             correio,
             mensageiro,
+            prefeitura,
         }
     }
 

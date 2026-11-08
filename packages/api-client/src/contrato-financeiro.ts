@@ -50,3 +50,11 @@ export interface ContaBancaria {
   codigo: string;
   nome: string;
 }
+export interface NotaFiscal {
+  numero: string;
+  codigo_verificacao: string;
+  valor_centavos: number;
+  situacao: 'emitida' | 'cancelada' | string;
+  emitida_em: string;
+  cancelada_em?: string | null;
+}

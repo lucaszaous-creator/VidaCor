@@ -73,6 +73,20 @@ pub async fn processar_um(estado: &Estado, orthanc: &Orthanc) -> Result<bool> {
             }
             None => Err(anyhow::anyhow!("carga sem convite_id")),
         },
+        "nfse.emitir" | "nfse.cancelar" => match item.carga["recebimento_id"]
+            .as_str()
+            .and_then(|v| v.parse().ok())
+        {
+            Some(r) if item.tipo == "nfse.emitir" => {
+                crate::rotas::nfse::emitir(estado, item.unidade_id, r, item.chave_idempotencia)
+                    .await
+            }
+            Some(r) => {
+                crate::rotas::nfse::cancelar(estado, item.unidade_id, r, item.chave_idempotencia)
+                    .await
+            }
+            None => Err(anyhow::anyhow!("carga sem recebimento_id")),
+        },
         "pix.estornar" => match (estado.psp.clone(), item.carga["txid"].as_str()) {
             (Some(psp), Some(txid)) => psp.estornar(item.chave_idempotencia, txid).await,
             _ => Err(anyhow::anyhow!("PSP não configurado ou carga sem txid")),
@@ -133,9 +147,10 @@ pub async fn processar_um(estado: &Estado, orthanc: &Orthanc) -> Result<bool> {
         },
         // Oferta à lista de espera, aviso interno de emergência e NFS-e: o provedor entra numa próxima
         // entrega. Ficam pendentes no outbox, visíveis, sem se perder (R7).
-        "lista_espera.oferecer_vaga" | "aviso.acesso_emergencia" | "nfse.emitir" => Err(
-            anyhow::anyhow!("provedor de {} ainda não configurado", item.tipo),
-        ),
+        "lista_espera.oferecer_vaga" | "aviso.acesso_emergencia" => Err(anyhow::anyhow!(
+            "provedor de {} ainda não configurado",
+            item.tipo
+        )),
         outro => Err(anyhow::anyhow!("tipo de outbox desconhecido: {outro}")),
     };
 

@@ -24,6 +24,8 @@ pub struct Estado {
     pub correio: Option<Arc<dyn crate::correio::Correio>>,
     /// WhatsApp. Sem configuração, os avisos ficam pendentes no outbox (R7).
     pub mensageiro: Option<Arc<dyn crate::mensageiro::Mensageiro>>,
+    /// NFS-e. Sem configuração, a emissão fica pendente no outbox (R7).
+    pub prefeitura: Option<Arc<dyn crate::prefeitura::Prefeitura>>,
 }
 
 impl Estado {
@@ -40,6 +42,7 @@ impl Estado {
             psp: None,
             correio: None,
             mensageiro: None,
+            prefeitura: None,
         }
     }
 }

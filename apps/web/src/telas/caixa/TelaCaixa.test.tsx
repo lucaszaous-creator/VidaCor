@@ -88,6 +88,7 @@ describe('Caixa do particular (FC-CXA, FC-PIX)', () => {
     expect(tabela).toHaveTextContent('DescontoR$ 19,00');
     expect(tabela).toHaveTextContent('TotalR$ 361,00');
     expect(pedidosDe('recebimento')[0]?.corpo).toMatchObject({ desconto: { pontos_base: 500, motivo: 'Tabela social' } });
+    expect(await screen.findByText(/NFS-e/)).toHaveTextContent('NFS-e 004812, código A1B2C3D4.');
   });
 
   it('desconto acima do limite (403): pede à gerência pela fila e, autorizado, registra com a autorização', async () => {

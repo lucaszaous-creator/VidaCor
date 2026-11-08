@@ -450,6 +450,16 @@ pub async fn receber(
             .execute(&mut *tx)
             .await?;
     }
+    if p.forma != "pix" {
+        // Dinheiro e cartão já entram pagos: a NFS-e sai pelo outbox (uma por recebimento).
+        sqlx::query!(
+            "INSERT INTO integracao.outbox (id, tipo, chave_idempotencia, carga, unidade_id, correlacao, referencia)
+             VALUES ($1, 'nfse.emitir', $2, $3, $4, $5, $6) ON CONFLICT (tipo, referencia) WHERE referencia IS NOT NULL DO NOTHING",
+            novo_id(), novo_id(), json!({ "recebimento_id": id }), usuario.unidade_id, correlacao, id
+        )
+        .execute(&mut *tx)
+        .await?;
+    }
     if p.forma == "pix" {
         // Uma cobrança por recebimento (referência única no outbox + chave de idempotência no PSP).
         sqlx::query!(
@@ -704,6 +714,14 @@ pub async fn aprovar_estorno(
         .fetch_optional(&mut *tx)
         .await?
         .ok_or_else(|| ErroApi::conflito("estorno-indisponivel", "O recebimento não está pago. Nada foi estornado."))?;
+    // A NFS-e do recebimento estornado é cancelada pelo outbox.
+    sqlx::query!(
+        "INSERT INTO integracao.outbox (id, tipo, chave_idempotencia, carga, unidade_id, correlacao, referencia)
+         VALUES ($1, 'nfse.cancelar', $2, $3, $4, $5, $6) ON CONFLICT (tipo, referencia) WHERE referencia IS NOT NULL DO NOTHING",
+        novo_id(), novo_id(), json!({ "recebimento_id": e.recebimento_id }), e.unidade_id, correlacao, e.recebimento_id
+    )
+    .execute(&mut *tx)
+    .await?;
     if r.forma == "pix" {
         sqlx::query!(
             "INSERT INTO integracao.outbox (id, tipo, chave_idempotencia, carga, unidade_id, correlacao, referencia)

@@ -69,6 +69,7 @@ pub struct ProblemaDoc {
         crate::rotas::caixa::fechar,
         crate::rotas::caixa::receber,
         crate::rotas::caixa::obter_recebimento,
+        crate::rotas::nfse::nota,
         crate::rotas::caixa::autorizar_desconto,
         crate::rotas::caixa::pedir_estorno,
         crate::rotas::caixa::aprovar_estorno,

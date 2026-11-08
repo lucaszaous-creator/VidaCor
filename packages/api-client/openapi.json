@@ -4745,6 +4745,48 @@
         }
       }
     },
+    "/v1/recebimentos/{id}/nota": {
+      "get": {
+        "tags": [
+          "caixa"
+        ],
+        "summary": "NFS-e do recebimento (404 enquanto não foi emitida).",
+        "operationId": "nota",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotaFiscal"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/salas": {
       "get": {
         "tags": [
@@ -7663,6 +7705,43 @@
           "tipo": {
             "type": "string",
             "description": "agendamento, guia, atendimento, etiqueta, triagem, estudo, laudo, recebimento, estorno, contraste."
+          }
+        }
+      },
+      "NotaFiscal": {
+        "type": "object",
+        "required": [
+          "numero",
+          "codigo_verificacao",
+          "valor_centavos",
+          "situacao",
+          "emitida_em"
+        ],
+        "properties": {
+          "cancelada_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "codigo_verificacao": {
+            "type": "string"
+          },
+          "emitida_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "numero": {
+            "type": "string"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "emitida ou cancelada."
+          },
+          "valor_centavos": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },

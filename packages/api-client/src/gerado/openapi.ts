@@ -1408,6 +1408,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/recebimentos/{id}/nota": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** NFS-e do recebimento (404 enquanto não foi emitida). */
+        get: operations["nota"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/salas": {
         parameters: {
             query?: never;
@@ -2345,6 +2362,18 @@ export interface components {
             situacao?: string | null;
             /** @description agendamento, guia, atendimento, etiqueta, triagem, estudo, laudo, recebimento, estorno, contraste. */
             tipo: string;
+        };
+        NotaFiscal: {
+            /** Format: date-time */
+            cancelada_em?: string | null;
+            codigo_verificacao: string;
+            /** Format: date-time */
+            emitida_em: string;
+            numero: string;
+            /** @description emitida ou cancelada. */
+            situacao: string;
+            /** Format: int64 */
+            valor_centavos: number;
         };
         NovaRegraRepasse: {
             /** Format: uuid */
@@ -6234,6 +6263,35 @@ export interface operations {
                 };
             };
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    nota: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NotaFiscal"];
+                };
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

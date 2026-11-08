@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE caixa.nota_fiscal SET situacao = 'cancelada', cancelada_em = now(), motivo_cancelamento = 'estorno aprovado', versao = versao + 1 WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "f34682697ee86d3e026d85dd6a17356895fefd764de02930cb83e180574168e7"
+}

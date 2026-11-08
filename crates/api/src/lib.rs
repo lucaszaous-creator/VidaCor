@@ -21,6 +21,7 @@ pub mod orthanc;
 pub mod outbox;
 pub mod pix;
 pub mod portal;
+pub mod prefeitura;
 pub mod rotas;
 pub mod sessao;
 pub mod tempo;

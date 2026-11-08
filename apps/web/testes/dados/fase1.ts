@@ -258,7 +258,7 @@ export function recebimentoSonia(descontoPb: number, forma: string, comPix = tru
     total_centavos: subtotal - desconto,
     forma,
     tabela_versao: 12,
-    situacao: 'aguardando_pagamento',
+    situacao: forma === 'pix' ? 'aguardando_pagamento' : 'pago',
     pix: forma === 'pix' && comPix ? { txid: 'VC2026110600004410', copia_e_cola: '00020126580014br.gov.bcb.pix0136vidacor-ficticio-4410' } : null,
   };
 }

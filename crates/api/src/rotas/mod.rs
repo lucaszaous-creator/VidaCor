@@ -21,6 +21,7 @@ pub mod indicadores;
 pub mod lastro_explorador;
 pub mod laudos;
 pub mod menu;
+pub mod nfse;
 pub mod pacientes;
 pub mod pendencias;
 pub mod portal;
@@ -130,6 +131,7 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/caixas/{id}/fechamento", post(caixa::fechar))
         .route("/v1/recebimentos", post(caixa::receber))
         .route("/v1/recebimentos/{id}", get(caixa::obter_recebimento))
+        .route("/v1/recebimentos/{id}/nota", get(nfse::nota))
         .route("/v1/recebimentos/{id}/estornos", post(caixa::pedir_estorno))
         .route("/v1/autorizacoes-desconto", post(caixa::autorizar_desconto))
         .route("/v1/estornos/{id}/aprovacao", post(caixa::aprovar_estorno))

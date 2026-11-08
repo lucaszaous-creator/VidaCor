@@ -166,3 +166,10 @@ export const manipuladoresUsuarios = [
     return HttpResponse.json({ ...renata, ativo: true, pendente: null });
   }),
 ];
+
+/** NFS-e simulada: emitida para qualquer recebimento pago. */
+export const manipuladoresNfse = [
+  http.get('*/v1/recebimentos/:id/nota', () =>
+    HttpResponse.json({ numero: '004812', codigo_verificacao: 'A1B2C3D4', valor_centavos: 38000, situacao: 'emitida', emitida_em: '2026-11-06T12:00:00Z', cancelada_em: null }),
+  ),
+];

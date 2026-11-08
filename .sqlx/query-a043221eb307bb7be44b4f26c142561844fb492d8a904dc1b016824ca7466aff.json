@@ -1,0 +1,21 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO caixa.nota_fiscal (id, recebimento_id, numero, codigo_verificacao, valor_centavos, situacao, chave_idempotencia, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, 'emitida', $6, 'sistema', $7, $8) ON CONFLICT (recebimento_id) DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Text",
+        "Int8",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "a043221eb307bb7be44b4f26c142561844fb492d8a904dc1b016824ca7466aff"
+}
