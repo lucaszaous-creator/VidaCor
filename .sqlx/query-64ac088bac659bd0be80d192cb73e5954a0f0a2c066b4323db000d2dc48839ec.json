@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE contingencia.numero SET situacao = 'anulado' WHERE unidade_id = $1 AND formulario = $2 AND numero = $3 AND situacao = 'pendente'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "64ac088bac659bd0be80d192cb73e5954a0f0a2c066b4323db000d2dc48839ec"
+}

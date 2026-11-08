@@ -4,6 +4,8 @@ pub mod agenda;
 pub mod agendamentos;
 pub mod atendimentos;
 pub mod caixa;
+pub mod contingencia;
+pub mod estudos;
 pub mod etiquetas;
 pub mod eventos;
 pub mod laudos;
@@ -85,6 +87,31 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/autorizacoes-desconto", post(caixa::autorizar_desconto))
         .route("/v1/estornos/{id}/aprovacao", post(caixa::aprovar_estorno))
         .route("/v1/webhooks/pix", post(webhooks::pix))
+        .route("/v1/contingencias", post(contingencia::declarar))
+        .route("/v1/contingencias/aberta", get(contingencia::aberta))
+        .route("/v1/contingencias/kits", post(contingencia::kit))
+        .route(
+            "/v1/contingencias/{id}/fichas",
+            post(contingencia::lancar_ficha),
+        )
+        .route(
+            "/v1/contingencias/{id}/recibos",
+            post(contingencia::lancar_recibo),
+        )
+        .route(
+            "/v1/contingencias/{id}/numeros",
+            post(contingencia::situar_numeros),
+        )
+        .route(
+            "/v1/contingencias/{id}/encerramento",
+            post(contingencia::encerrar),
+        )
+        .route(
+            "/v1/divergencias/{id}/resolucao",
+            post(contingencia::resolver_divergencia),
+        )
+        .route("/v1/estudos/pendentes", get(estudos::pendentes))
+        .route("/v1/estudos/{id}/conciliacao", post(estudos::conciliar))
         .route("/v1/eventos", get(eventos::fluxo))
         .fallback(nao_existe)
 }

@@ -1,0 +1,35 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT f.formulario, count(*) FILTER (WHERE n.numero IS NULL) AS \"sem_situacao!\"\n             FROM contingencia.faixa f\n             CROSS JOIN LATERAL generate_series(f.inicio, f.fim) g\n             LEFT JOIN contingencia.numero n ON n.unidade_id = f.unidade_id AND n.formulario = f.formulario AND n.numero = g\n            WHERE f.dia = $1 GROUP BY f.formulario ORDER BY f.formulario",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "formulario",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "contingencia.faixa",
+            "name": "formulario"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "sem_situacao!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Date"
+      ]
+    },
+    "nullable": [
+      false,
+      null
+    ]
+  },
+  "hash": "dc3b886255f61c2addc0f513544d22dbb14907f5b2560ee73118f6cfc294816f"
+}

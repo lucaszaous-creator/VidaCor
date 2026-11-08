@@ -1,0 +1,42 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE recepcao.divergencia SET situacao = 'resolvida', dados = dados || jsonb_build_object('resolucao', $2::text, 'resolvida_por', $3::uuid), versao = versao + 1\n          WHERE id = $1 AND situacao = 'aberta' RETURNING codigo, dados",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.divergencia",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "dados",
+        "type_info": "Jsonb",
+        "origin": {
+          "Table": {
+            "table": "recepcao.divergencia",
+            "name": "dados"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "70408c203f3264602d6a381537cdb4f88865154cde8ae1e12ee9f016c7977b24"
+}

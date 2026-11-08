@@ -194,7 +194,14 @@ pub async fn registrar_estudo(
     estudo: &orthanc::EstudoOrthanc,
 ) -> Result<()> {
     let mut tx = banco::transacao(&estado.banco, &ContextoBanco::sistema(unidade_id)).await?;
+    // Estudo feito em contingência (Patient ID "C-NNNN") nunca é conciliado sozinho: vai para a fila
+    // própria e só entra no laudo depois da conferência com nome e nascimento (FC-CTG-08).
+    let de_contingencia = estudo
+        .patient_id
+        .as_deref()
+        .is_some_and(|p| p.starts_with("C-"));
     let atendimento = match &estudo.accession {
+        Some(_) if de_contingencia => None,
         Some(acc) => {
             sqlx::query!(
                 "SELECT id, codigo FROM recepcao.atendimento WHERE accession = $1",
@@ -215,8 +222,8 @@ pub async fn registrar_estudo(
     let gravado = sqlx::query!(
         r#"INSERT INTO exames.estudo
              (id, codigo, study_uid, orthanc_id, accession, atendimento_id, imagens, conciliado,
-              origem, unidade_id, correlacao)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'aparelho', $9, $10)
+              origem, unidade_id, correlacao, pendencia)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'aparelho', $9, $10, $11)
            ON CONFLICT (study_uid) DO UPDATE SET imagens = EXCLUDED.imagens, versao = exames.estudo.versao + 1
            RETURNING id, (xmax = 0) AS "novo!""#,
         novo_id(),
@@ -228,7 +235,14 @@ pub async fn registrar_estudo(
         estudo.imagens,
         atendimento.is_some(),
         unidade_id,
-        correlacao
+        correlacao,
+        if atendimento.is_some() {
+            None
+        } else if de_contingencia {
+            Some("conciliacao_contingencia")
+        } else {
+            Some("conciliacao")
+        }
     )
     .fetch_one(&mut *tx)
     .await?;
@@ -292,6 +306,16 @@ pub async fn rodar(estado: Estado, orthanc: Orthanc) {
             }
         }
         if let Some(u) = unidade {
+            // Kit de contingência do dia a partir das 06:00 (docs/23 § 5); repetir não gera outro.
+            let agora = chrono::Utc::now().with_timezone(&chrono_tz::America::Sao_Paulo);
+            if chrono::Timelike::hour(&agora) >= 6 {
+                if let Err(e) =
+                    crate::rotas::contingencia::gerar_kit(&estado, u, agora.date_naive(), None)
+                        .await
+                {
+                    tracing::warn!(erro = ?e, "kit de contingência do dia");
+                }
+            }
             if let Err(e) = crate::rotas::agendamentos::expirar_reservas(&estado, u).await {
                 tracing::warn!(erro = ?e, "expiração de reservas provisórias");
             }

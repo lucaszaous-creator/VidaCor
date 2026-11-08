@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE contingencia.contingencia SET situacao = 'encerrada', encerrada_em = now(), encerrada_por = $2, versao = versao + 1 WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "3f66b4802f575d967f79a707c3ba790f3a10a0a3f1025530d3f5ee972ebc7ef5"
+}

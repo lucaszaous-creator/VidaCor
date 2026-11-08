@@ -1,0 +1,21 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO contingencia.numero (unidade_id, formulario, numero, faixa_id, contingencia_id, situacao, criado_por, estacao, correlacao)\n         VALUES ($1, $2, $3, $4, $5, 'usado', $6, $7, $8) ON CONFLICT DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Int4",
+        "Uuid",
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "142ca0cf8e9855e950344c94239698b8a148a2233171cd91b7bee670e57a1f8d"
+}

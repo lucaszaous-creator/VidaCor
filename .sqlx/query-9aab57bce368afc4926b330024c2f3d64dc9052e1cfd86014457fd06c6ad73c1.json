@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO recepcao.atendimento (id, codigo, accession, agendamento_id, paciente_id, sala_id, situacao, documento_conferido,\n                contingencia_id, formulario, ocorrido_em, atendido_por, anexo_sha256, criado_por, origem, estacao, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, 'exame_concluido', false, $7, $8, $9, $10, $11, $12, 'contingencia', $13, $14, $15)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Timestamptz",
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "9aab57bce368afc4926b330024c2f3d64dc9052e1cfd86014457fd06c6ad73c1"
+}

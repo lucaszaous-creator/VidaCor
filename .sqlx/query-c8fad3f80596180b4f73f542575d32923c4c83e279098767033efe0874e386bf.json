@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "INSERT INTO exames.estudo\n             (id, codigo, study_uid, orthanc_id, accession, atendimento_id, imagens, conciliado,\n              origem, unidade_id, correlacao)\n           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'aparelho', $9, $10)\n           ON CONFLICT (study_uid) DO UPDATE SET imagens = EXCLUDED.imagens, versao = exames.estudo.versao + 1\n           RETURNING id, (xmax = 0) AS \"novo!\"",
+  "query": "INSERT INTO exames.estudo\n             (id, codigo, study_uid, orthanc_id, accession, atendimento_id, imagens, conciliado,\n              origem, unidade_id, correlacao, pendencia)\n           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'aparelho', $9, $10, $11)\n           ON CONFLICT (study_uid) DO UPDATE SET imagens = EXCLUDED.imagens, versao = exames.estudo.versao + 1\n           RETURNING id, (xmax = 0) AS \"novo!\"",
   "describe": {
     "columns": [
       {
@@ -32,6 +32,7 @@
         "Int4",
         "Bool",
         "Uuid",
+        "Text",
         "Text"
       ]
     },
@@ -40,5 +41,5 @@
       null
     ]
   },
-  "hash": "d7b86cd637e75b99292c9c58b3d4da92fffcfa295bd175daa0c98602ad9b7674"
+  "hash": "c8fad3f80596180b4f73f542575d32923c4c83e279098767033efe0874e386bf"
 }

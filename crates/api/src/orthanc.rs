@@ -49,6 +49,8 @@ pub struct EstudoOrthanc {
     pub orthanc_id: String,
     pub study_uid: String,
     pub accession: Option<String>,
+    /// Patient ID do estudo ("C-NNNN" indica estudo feito em contingência).
+    pub patient_id: Option<String>,
     pub imagens: i32,
 }
 
@@ -166,6 +168,9 @@ impl Orthanc {
                 .as_str()
                 .map(str::to_owned)
                 .filter(|a| !a.is_empty()),
+            patient_id: estudo["PatientMainDicomTags"]["PatientID"]
+                .as_str()
+                .map(str::to_owned),
             imagens: i32::try_from(imagens).unwrap_or(i32::MAX),
         })
     }

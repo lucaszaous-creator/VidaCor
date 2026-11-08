@@ -1,0 +1,30 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT t.codigo FROM contingencia.numero n LEFT JOIN recepcao.atendimento t ON t.id = n.registro_id WHERE n.unidade_id = $1 AND n.formulario = $2 AND n.numero = $3",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "codigo"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      true
+    ]
+  },
+  "hash": "55297642e7fcff4a91f038b175cd222550714d3e051425de9dcc3db7d2ae28b1"
+}

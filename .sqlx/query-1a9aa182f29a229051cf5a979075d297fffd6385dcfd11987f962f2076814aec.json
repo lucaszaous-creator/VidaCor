@@ -1,0 +1,26 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO contingencia.recibo (id, numero, contingencia_id, paciente_id, tuss, valor_papel_centavos, valor_recalculado_centavos, tabela_versao, ocorrido_em, criado_por, origem, estacao, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'contingencia', $11, $12, $13)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4",
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Int8",
+        "Int8",
+        "Int4",
+        "Timestamptz",
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "1a9aa182f29a229051cf5a979075d297fffd6385dcfd11987f962f2076814aec"
+}

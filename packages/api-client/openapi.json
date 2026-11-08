@@ -718,6 +718,391 @@
         }
       }
     },
+    "/v1/contingencias": {
+      "post": {
+        "tags": [
+          "contingencia"
+        ],
+        "summary": "Declara a contingência. A mesma chave sobe uma vez só, com a hora original.",
+        "operationId": "declarar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoDeclaracao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contingencia"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contingencia"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/contingencias/aberta": {
+      "get": {
+        "tags": [
+          "contingencia"
+        ],
+        "summary": "Contingência aberta na unidade, se houver.",
+        "operationId": "aberta",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Contingencia"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/contingencias/kits": {
+      "post": {
+        "tags": [
+          "contingencia"
+        ],
+        "summary": "Gera (ou devolve) o kit de contingência de hoje.",
+        "operationId": "kit",
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Kit"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/contingencias/{id}/encerramento": {
+      "post": {
+        "tags": [
+          "contingencia"
+        ],
+        "summary": "Encerra a contingência só sem pendência: ficha pendente, divergência aberta ou número sem situação (FC-CTG-09).",
+        "operationId": "encerrar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contingencia"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/contingencias/{id}/fichas": {
+      "post": {
+        "tags": [
+          "contingencia"
+        ],
+        "summary": "Lança a ficha de atendimento feita em papel (FC-CTG-03 a 06).",
+        "operationId": "lancar_ficha",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoFicha"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "202": {
+            "description": "divergencia-aberta"
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/contingencias/{id}/numeros": {
+      "post": {
+        "tags": [
+          "contingencia"
+        ],
+        "summary": "Dá situação aos números não usados da faixa (devolvidos ou anulados), para o encerramento.",
+        "operationId": "situar_numeros",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoNumeros"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/contingencias/{id}/recibos": {
+      "post": {
+        "tags": [
+          "contingencia"
+        ],
+        "summary": "Lança o recibo manual: grava o valor recalculado pela tabela da data e abre divergência se diferir (FC-CTG-07).",
+        "operationId": "lancar_recibo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoRecibo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/divergencias/{id}/resolucao": {
+      "post": {
+        "tags": [
+          "contingencia"
+        ],
+        "summary": "Resolve uma divergência (coordenação), com o que foi decidido.",
+        "operationId": "resolver_divergencia",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoResolucao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/estornos/{id}/aprovacao": {
       "post": {
         "tags": [
@@ -751,6 +1136,85 @@
             }
           },
           "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/estudos/pendentes": {
+      "get": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "Estudos recebidos que ainda não têm paciente conciliado.",
+        "operationId": "pendentes",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EstudoPendente"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/estudos/{id}/conciliacao": {
+      "post": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "Concilia o estudo com o atendimento depois de conferir nome e nascimento; só então entra no laudo.",
+        "operationId": "conciliar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoConciliacao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
             "description": "",
             "content": {
               "application/json": {
@@ -2570,6 +3034,56 @@
           }
         }
       },
+      "Contingencia": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "nivel",
+          "motivo",
+          "declarada_por",
+          "responsavel_id",
+          "declarada_em",
+          "situacao"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "declarada_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "declarada_por": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "encerrada_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "nivel": {
+            "type": "string"
+          },
+          "responsavel_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "situacao": {
+            "type": "string"
+          }
+        }
+      },
       "Correcao": {
         "type": "object",
         "required": [
@@ -2614,6 +3128,45 @@
           "pontos_base": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "EstudoPendente": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "imagens",
+          "recebido_em"
+        ],
+        "properties": {
+          "accession": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "imagens": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pendencia": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "conciliacao ou conciliacao_contingencia."
+          },
+          "recebido_em": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -2683,6 +3236,27 @@
           },
           "nome": {
             "type": "string"
+          }
+        }
+      },
+      "Faixa": {
+        "type": "object",
+        "required": [
+          "formulario",
+          "inicio",
+          "fim"
+        ],
+        "properties": {
+          "fim": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "formulario": {
+            "type": "string"
+          },
+          "inicio": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -2954,6 +3528,37 @@
           }
         }
       },
+      "Kit": {
+        "type": "object",
+        "required": [
+          "codigo",
+          "dia",
+          "modelo_versao",
+          "hash",
+          "faixas"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "dia": {
+            "type": "string",
+            "format": "date"
+          },
+          "faixas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Faixa"
+            }
+          },
+          "hash": {
+            "type": "string"
+          },
+          "modelo_versao": {
+            "type": "string"
+          }
+        }
+      },
       "Laudo": {
         "type": "object",
         "required": [
@@ -3212,6 +3817,27 @@
           }
         }
       },
+      "PedidoConciliacao": {
+        "type": "object",
+        "required": [
+          "atendimento_id",
+          "nome",
+          "nascimento"
+        ],
+        "properties": {
+          "atendimento_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
       "PedidoConduta": {
         "type": "object",
         "required": [
@@ -3250,6 +3876,39 @@
           }
         }
       },
+      "PedidoDeclaracao": {
+        "type": "object",
+        "required": [
+          "nivel",
+          "motivo",
+          "responsavel_id",
+          "declarada_em",
+          "chave"
+        ],
+        "properties": {
+          "chave": {
+            "type": "string",
+            "format": "uuid",
+            "description": "UUID gerado na estação; repetir não cria outra (FC-CTG-02)."
+          },
+          "declarada_em": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Hora em que a contingência foi declarada (pode ter sido sem servidor)."
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "nivel": {
+            "type": "string",
+            "description": "externo, setor ou total."
+          },
+          "responsavel_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
       "PedidoEmergencia": {
         "type": "object",
         "required": [
@@ -3281,6 +3940,52 @@
           "contado_centavos": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "PedidoFicha": {
+        "type": "object",
+        "required": [
+          "formulario",
+          "numero",
+          "agendamento_id",
+          "nome",
+          "nascimento",
+          "ocorrido_em",
+          "atendido_por",
+          "anexo_sha256"
+        ],
+        "properties": {
+          "agendamento_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "anexo_sha256": {
+            "type": "string",
+            "description": "SHA-256 do PDF digitalizado da ficha."
+          },
+          "atendido_por": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "formulario": {
+            "type": "string",
+            "description": "F-ATD."
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "numero": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ocorrido_em": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -3353,6 +4058,32 @@
           }
         }
       },
+      "PedidoNumeros": {
+        "type": "object",
+        "required": [
+          "formulario",
+          "de",
+          "ate",
+          "situacao"
+        ],
+        "properties": {
+          "ate": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "de": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "formulario": {
+            "type": "string"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "devolvido ou anulado."
+          }
+        }
+      },
       "PedidoRascunho": {
         "type": "object",
         "required": [
@@ -3410,6 +4141,37 @@
           }
         }
       },
+      "PedidoRecibo": {
+        "type": "object",
+        "required": [
+          "numero",
+          "paciente_id",
+          "tuss",
+          "valor_papel_centavos",
+          "ocorrido_em"
+        ],
+        "properties": {
+          "numero": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ocorrido_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "paciente_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tuss": {
+            "type": "string"
+          },
+          "valor_papel_centavos": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "PedidoReimpressao": {
         "type": "object",
         "properties": {
@@ -3418,6 +4180,17 @@
               "string",
               "null"
             ]
+          }
+        }
+      },
+      "PedidoResolucao": {
+        "type": "object",
+        "required": [
+          "resolucao"
+        ],
+        "properties": {
+          "resolucao": {
+            "type": "string"
           }
         }
       },

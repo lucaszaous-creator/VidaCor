@@ -280,6 +280,7 @@ impl Ambiente {
                 Uuid::now_v7().as_u128() % 1_000_000_000_000
             ),
             accession: Some(accession),
+            patient_id: None,
             imagens: 12,
         };
         vidacor_api::outbox::registrar_estudo(&self.estado, UNIDADE_A, &estudo)

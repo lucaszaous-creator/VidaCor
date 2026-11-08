@@ -25,6 +25,7 @@ pub enum Ato {
     ContingenciaLancar,
     ContingenciaEncerrar,
     ContingenciaKit,
+    EstudoConciliar,
 }
 
 impl Ato {
@@ -47,6 +48,8 @@ impl Ato {
             A::EstornoAprovar => &["financeiro", "gerente"],
             A::ContingenciaDeclarar | A::ContingenciaLancar => &["recepcao", "gerente"],
             A::ContingenciaEncerrar | A::ContingenciaKit => &["gerente"],
+            // Vínculo manual de imagem: médico, com dois identificadores (docs/18 § 5).
+            A::EstudoConciliar => &["medico"],
         };
         perfis.contains(&perfil)
     }
@@ -56,7 +59,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 21] = [
+    const TODOS: [Ato; 22] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -78,6 +81,7 @@ mod testes {
         Ato::ContingenciaLancar,
         Ato::ContingenciaEncerrar,
         Ato::ContingenciaKit,
+        Ato::EstudoConciliar,
     ];
 
     #[test]

@@ -346,6 +346,7 @@ async fn fc_lau_09_estudo_sem_conciliacao_nao_entra_na_fila() {
         orthanc_id: "abcd-0001".into(),
         study_uid: "1.2.3.4.5".into(),
         accession: Some("ACC-9999-999999".into()),
+        patient_id: None,
         imagens: 3,
     };
     outbox::registrar_estudo(&amb.estado, comum::UNIDADE_A, &estudo)
