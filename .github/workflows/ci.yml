@@ -33,8 +33,10 @@ jobs:
         run: cargo fmt --all -- --check
       - name: Clippy sem avisos
         run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: Ferramentas dos testes (xmllint valida o XML TISS no XSD oficial)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libxml2-utils
       - name: Testes (unidade e integração com Testcontainers)
-        run: cargo test --workspace
+        run: cargo test --workspace --no-fail-fast
       - name: Cadeia de suprimentos (cargo-deny, SEC-SUP-1)
         run: |
           cargo install cargo-deny --locked --version 0.20.2
