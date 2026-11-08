@@ -9,6 +9,15 @@ Cliente HTTP fino do núcleo VidaCor, usado pelas telas (`apps/web`).
 - Erros `application/problem+json` viram `ErroDaApi` com `codigo`, `detail` e `trace_id`.
 - `abrirEventos` abre o SSE `GET /v1/eventos` e reabre com espera crescente.
 
+## Fase 1
+
+`src/contrato-fase1.ts` tem os tipos das rotas do docs/30, escritos à mão e marcados "A CONFIRMAR"
+onde o docs/30 não descreve a forma. Serão conferidos contra o `openapi.json` gerado quando o núcleo
+publicar essas rotas (como `src/conformidade.ts` já faz com o M0). Atos sensíveis respondem
+`401 reautenticacao-necessaria` (`ehReautenticacao`); `sessao.urlDeReautenticacao(voltar)` monta a
+ida ao provedor só com caminho da própria aplicação. Campos extras do Problem Details
+(`sugestoes`, `sala_correta`, `pendencias`...) ficam em `erro.campo(nome)`.
+
 ## Tipos do contrato
 
 Enquanto o núcleo não publica o `openapi.json`, os tipos estão escritos à mão em
