@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE agenda.ausencia_medico SET situacao = 'cancelada', versao = versao + 1 WHERE id = $1 AND situacao = 'aguardando'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "bc2b8353abe10c4e72efe323eb0a05e5f71a631da5a535c64805b22a056a8978"
+}

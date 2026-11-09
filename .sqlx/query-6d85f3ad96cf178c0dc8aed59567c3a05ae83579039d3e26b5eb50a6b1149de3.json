@@ -1,0 +1,24 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO exames.nrd (id, codigo, exame_tuss, numero, grandeza, valor, fator_dose_efetiva, motivo, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'gestao_de_dose', $10, $11)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Int4",
+        "Text",
+        "Float8",
+        "Float8",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "6d85f3ad96cf178c0dc8aed59567c3a05ae83579039d3e26b5eb50a6b1149de3"
+}

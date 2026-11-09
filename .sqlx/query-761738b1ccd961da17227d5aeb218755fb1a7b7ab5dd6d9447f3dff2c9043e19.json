@@ -1,0 +1,90 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT d.modalidade, d.aparelho, d.dlp_mgycm, d.dap_gycm2, e.recebido_em,\n                  coalesce(c.nome, d.exame_tuss) AS \"exame!\",\n                  (SELECT n.fator_dose_efetiva FROM exames.nrd n WHERE n.exame_tuss = d.exame_tuss AND n.vigente) AS fator\n             FROM exames.dose d\n             JOIN exames.estudo e ON e.id = d.estudo_id\n             LEFT JOIN agenda.procedimento c ON c.tuss = d.exame_tuss\n            WHERE d.paciente_id = $1 AND e.recebido_em >= now() - interval '12 months'\n            ORDER BY e.recebido_em DESC LIMIT 100",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "modalidade",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.dose",
+            "name": "modalidade"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "aparelho",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.dose",
+            "name": "aparelho"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "dlp_mgycm",
+        "type_info": "Float8",
+        "origin": {
+          "Table": {
+            "table": "exames.dose",
+            "name": "dlp_mgycm"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "dap_gycm2",
+        "type_info": "Float8",
+        "origin": {
+          "Table": {
+            "table": "exames.dose",
+            "name": "dap_gycm2"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "recebido_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "exames.estudo",
+            "name": "recebido_em"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "exame!",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 6,
+        "name": "fator",
+        "type_info": "Float8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      true,
+      true,
+      false,
+      null,
+      null
+    ]
+  },
+  "hash": "761738b1ccd961da17227d5aeb218755fb1a7b7ab5dd6d9447f3dff2c9043e19"
+}

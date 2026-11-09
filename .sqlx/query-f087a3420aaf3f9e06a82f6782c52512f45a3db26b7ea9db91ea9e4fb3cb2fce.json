@@ -1,0 +1,25 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT count(*) AS \"n!\" FROM agenda.agendamento\n                WHERE medico_id = $1 AND inicio >= $2 AND inicio < $3 AND situacao NOT IN ('cancelado','expirada')",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "n!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "f087a3420aaf3f9e06a82f6782c52512f45a3db26b7ea9db91ea9e4fb3cb2fce"
+}

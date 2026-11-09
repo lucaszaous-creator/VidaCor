@@ -148,6 +148,7 @@ import type { AceiteDoConvite, ConviteEmitido, EntradaNoPortal, NovoPaciente, Pa
 import type { AchadoEstruturado, AchadosDoLaudo, NovoAchado } from './contrato-laudo-estruturado';
 import type { AtendimentoAReceber, Decisao, EstornoDetalhado, NovoPedidoDesconto, PedidoDesconto, SituacaoDoEstorno, SituacaoDoPedidoDeDesconto } from './contrato-pendencias';
 import { ErroDaApi, ErroSemConexao, ehProblemaHttp, problemaInesperado } from './erros';
+import { rotasDeGestao } from './cliente-gestao';
 
 export interface OpcoesDoCliente {
   /** Origem do núcleo. Padrão: a origem da própria página (o Vite encaminha `/v1` ao núcleo). */
@@ -943,5 +944,12 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
 
     /** Endereço do fluxo SSE (`abrirEventos`). */
     urlDeEventos: (): string => url('/v1/eventos'),
+
+    // Minha agenda do médico, gestão de dose e relatórios (cliente-gestao.ts).
+    ...rotasDeGestao({
+      ler,
+      criar: (metodo, caminho, corpo, o) => criar(metodo, caminho, corpo, o),
+      baixarComEscrita: (caminho, corpo) => baixar({ metodo: 'POST', caminho, corpo, escrita: true }),
+    }),
   };
 }

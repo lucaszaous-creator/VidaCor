@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE exames.nrd SET vigente = false WHERE exame_tuss = $1 AND numero = $2 AND vigente",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "4bcd7410723e199af6d9396dc3cdca9889b3294a96aea75824f61c9c09915124"
+}

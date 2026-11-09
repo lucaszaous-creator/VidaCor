@@ -1,0 +1,40 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT codigo, acima_do_nrd FROM exames.dose WHERE id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.dose",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "acima_do_nrd",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "exames.dose",
+            "name": "acima_do_nrd"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "dd9b77c1df095b3a9924492cbef604a4eb638cca54f76750226a47aa12ddda61"
+}

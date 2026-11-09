@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, grandeza, valor FROM exames.nrd WHERE exame_tuss = $1 AND vigente",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "exames.nrd",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "grandeza",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.nrd",
+            "name": "grandeza"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "valor",
+        "type_info": "Float8",
+        "origin": {
+          "Table": {
+            "table": "exames.nrd",
+            "name": "valor"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "f5b48a83124798d2fa5a23ada9a5993a798ac8377d29d7d92e310493f1ee2b99"
+}
