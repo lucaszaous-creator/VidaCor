@@ -1,0 +1,51 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT\n             (SELECT count(*) FROM recepcao.etiqueta e WHERE (e.criado_em AT TIME ZONE 'America/Sao_Paulo')::date = $1) AS \"impressas!\",\n             (SELECT count(*) FROM lastro.evento v WHERE v.tipo = 'pulseira_bipada' AND (v.criado_em AT TIME ZONE 'America/Sao_Paulo')::date = $1) AS \"bipadas!\",\n             (SELECT count(*) FROM lastro.evento v WHERE v.tipo = 'etiqueta_reimpressa' AND (v.criado_em AT TIME ZONE 'America/Sao_Paulo')::date = $1) AS \"reimpressoes!\",\n             (SELECT count(*) FROM lastro.evento v WHERE v.tipo = 'etiqueta_invalidada' AND (v.criado_em AT TIME ZONE 'America/Sao_Paulo')::date = $1) AS \"invalidadas!\",\n             (SELECT count(*) FROM recepcao.divergencia d WHERE d.tipo = 'pulseira_sala_errada' AND d.situacao = 'aberta') AS \"abertas!\"",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "impressas!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 1,
+        "name": "bipadas!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "reimpressoes!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 3,
+        "name": "invalidadas!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 4,
+        "name": "abertas!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Date"
+      ]
+    },
+    "nullable": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "57f47c2af19fdd970e971ae4b3fc56746f9fd66e045bc8f849fbdf27bacf858a"
+}

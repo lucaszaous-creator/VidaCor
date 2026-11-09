@@ -245,6 +245,10 @@ pub struct ProblemaDoc {
         crate::rotas::pacientes_duplicados::listar,
         crate::rotas::pacientes_duplicados::decidir,
         crate::rotas::menu_paciente::paciente,
+        crate::rotas::etiquetas_painel::painel,
+        crate::rotas::etiquetas_painel::detalhe,
+        crate::rotas::etiquetas_atos::invalidar,
+        crate::rotas::etiquetas_atos::resolver,
     ),
     components(schemas(ProblemaDoc))
 )]

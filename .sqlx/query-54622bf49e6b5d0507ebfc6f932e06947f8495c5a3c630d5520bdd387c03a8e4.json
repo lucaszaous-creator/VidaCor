@@ -1,0 +1,141 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT d.id, d.codigo, d.dados->>'etiqueta' AS \"etiqueta!\", d.criado_em, p.id AS paciente_id, p.nome, p.nascimento,\n                  ag.exame_nome, sb.nome AS sala_bipada, sc.nome AS sala_correta, sc.id AS sala_correta_id\n             FROM recepcao.divergencia d\n             JOIN recepcao.atendimento t ON t.id = d.atendimento_id\n             JOIN agenda.agendamento ag ON ag.id = t.agendamento_id\n             JOIN identidade.paciente p ON p.id = t.paciente_id\n             JOIN agenda.sala sb ON sb.id = d.sala_id\n             JOIN agenda.sala sc ON sc.id = t.sala_id\n            WHERE d.tipo = 'pulseira_sala_errada' AND d.situacao = 'aberta'\n            ORDER BY d.criado_em LIMIT 50",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "recepcao.divergencia",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.divergencia",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "etiqueta!",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 3,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "recepcao.divergencia",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "paciente_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "exame_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "exame_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "sala_bipada",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "sala_correta",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "sala_correta_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      null,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "54622bf49e6b5d0507ebfc6f932e06947f8495c5a3c630d5520bdd387c03a8e4"
+}

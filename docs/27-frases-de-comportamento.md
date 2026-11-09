@@ -708,3 +708,19 @@ Funcionalidade: Lista de pacientes
     Quando Bruno, técnico, tenta marcar o par como pessoas diferentes
     Então a rota responde 403 e nada é gravado
 ```
+
+---
+
+## 12. Etiquetas e rastreio (proposta, aguardando aprovação)
+
+> Propostas pelo Agente 1 em 09/11/2026. Testes: `crates/api/tests/etiquetas_rastreio.rs` (bipe real na sala).
+> Frases com efeito clínico (bloqueio na sala): passam pelo responsável clínico de segurança.
+
+| ID | Cenário | Status | Aprovador | Data | Observações |
+|---|---|---|---|---|---|
+| FC-ETR-01 | O painel do dia conta impressas, bipadas, reimpressões, invalidações e divergências pelo banco e pelo lastro | Proposta | — | — | Base: central de etiquetas da Medware Clínicas |
+| FC-ETR-02 | A divergência de pulseira bipada na sala errada aparece com nome, nascimento, sala bipada e sala certa | Proposta | — | — | Clínica |
+| FC-ETR-03 | Resolver a divergência (encaminhar à sala certa) vale uma vez; duas ao mesmo tempo, só uma; resolvida não reabre nem se apaga | Proposta | — | — | Clínica |
+| FC-ETR-04 | Invalidar a pulseira exige motivo; duas ao mesmo tempo, só uma; bipada depois, a sala bloqueia; invalidada não volta a valer | Proposta | — | — | Clínica |
+| FC-ETR-05 | A reimpressão aparece no histórico das duas etiquetas (a antiga diz o motivo e a nova; a nova diz qual substitui) | Proposta | — | — | — |
+| FC-ETR-06 | Caixa, financeiro, TI, faturamento e TV não veem etiquetas; outra unidade não vê nem resolve | Proposta | — | — | — |

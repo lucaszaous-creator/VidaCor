@@ -21,6 +21,7 @@ import { manipuladoresAReceber, manipuladoresPendencias, reiniciarPendencias } f
 import { manipuladoresCadastros, reiniciarCadastros } from './nucleo-cadastros';
 import { manipuladoresConvenios, reiniciarConvenios } from './nucleo-convenios';
 import { manipuladoresPacientes, reiniciarPacientes } from './nucleo-pacientes';
+import { manipuladoresEtiquetas, reiniciarEtiquetas } from './nucleo-etiquetas';
 import { problema } from './problema';
 
 export { problema } from './problema';
@@ -51,6 +52,7 @@ export function reiniciarNucleo(): void {
   reiniciarPreparo();
   reiniciarConvenios();
   reiniciarPacientes();
+  reiniciarEtiquetas();
   portalSimulado.logado = false;
   lastroSimulado.integra = true;
   comunicacaoSimulada.whatsapp = true;
@@ -129,4 +131,4 @@ export const manipuladores = [
   }),
 ];
 
-export const servidor = setupServer(...manipuladoresPacientes, ...manipuladoresPreparo, ...manipuladoresQualidade, ...manipuladoresCadastros, ...manipuladoresOuvidoria, ...manipuladoresBusca, ...manipuladoresFluxo, ...manipuladoresDocumentos, ...manipuladoresInicio, ...manipuladoresPaciente, ...manipuladoresConfiguracoes, ...manipuladoresVisualizacao, ...manipuladoresEspera, ...manipuladoresAparelhos, ...manipuladoresOrcamento, ...manipuladoresAutorizacao, ...manipuladoresPainel, ...manipuladoresExterno, ...manipuladoresFaturamento, ...manipuladoresNfse, ...manipuladoresUsuarios, ...manipuladoresFinanceiro, ...manipuladoresComunicacao, ...manipuladoresIndicadores, ...manipuladoresLaudoEstruturado, ...manipuladoresLastro, ...manipuladoresEstoque, ...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores, ...manipuladoresModelos, ...manipuladoresConvenios);
+export const servidor = setupServer(...manipuladoresPacientes, ...manipuladoresEtiquetas, ...manipuladoresPreparo, ...manipuladoresQualidade, ...manipuladoresCadastros, ...manipuladoresOuvidoria, ...manipuladoresBusca, ...manipuladoresFluxo, ...manipuladoresDocumentos, ...manipuladoresInicio, ...manipuladoresPaciente, ...manipuladoresConfiguracoes, ...manipuladoresVisualizacao, ...manipuladoresEspera, ...manipuladoresAparelhos, ...manipuladoresOrcamento, ...manipuladoresAutorizacao, ...manipuladoresPainel, ...manipuladoresExterno, ...manipuladoresFaturamento, ...manipuladoresNfse, ...manipuladoresUsuarios, ...manipuladoresFinanceiro, ...manipuladoresComunicacao, ...manipuladoresIndicadores, ...manipuladoresLaudoEstruturado, ...manipuladoresLastro, ...manipuladoresEstoque, ...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores, ...manipuladoresModelos, ...manipuladoresConvenios);

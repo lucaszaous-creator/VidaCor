@@ -11,6 +11,7 @@ export * from './contrato-convenios';
 export * from './contrato-espera';
 export * from './contrato-configuracoes';
 export * from './contrato-paciente';
+export * from './contrato-etiquetas';
 export * from './contrato-inicio';
 export * from './contrato-fluxo';
 export * from './contrato-modelos';

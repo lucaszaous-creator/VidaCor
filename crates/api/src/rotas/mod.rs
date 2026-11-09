@@ -30,6 +30,8 @@ pub mod estoque;
 pub mod estornos;
 pub mod estudos;
 pub mod etiquetas;
+pub mod etiquetas_atos;
+pub mod etiquetas_painel;
 pub mod eventos;
 pub mod externo;
 pub mod faturamento;
@@ -95,6 +97,16 @@ pub fn rotas() -> Router<Estado> {
         .route(
             "/v1/etiquetas/{codigo}/reimpressao",
             post(etiquetas::reimprimir),
+        )
+        .route("/v1/etiquetas", get(etiquetas_painel::painel))
+        .route("/v1/etiquetas/{codigo}", get(etiquetas_painel::detalhe))
+        .route(
+            "/v1/etiquetas/{codigo}/invalidacao",
+            post(etiquetas_atos::invalidar),
+        )
+        .route(
+            "/v1/divergencias-de-sala/{id}/resolucao",
+            post(etiquetas_atos::resolver),
         )
         .route(
             "/v1/pacientes",

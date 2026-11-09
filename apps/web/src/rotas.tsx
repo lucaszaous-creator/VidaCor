@@ -32,6 +32,7 @@ import { TelaModelosDeLaudo } from './telas/modelos/TelaModelosDeLaudo';
 import { TelaRevisaoPorPares } from './telas/revisao/TelaRevisaoPorPares';
 import { TelaConvenios } from './telas/convenios/TelaConvenios';
 import { TelaPacotes } from './telas/pacotes/TelaPacotes';
+import { TelaEtiquetas } from './telas/etiquetas/TelaEtiquetas';
 import { TelaInicio } from './telas/inicio/TelaInicio';
 import { TelaOuvidoria } from './telas/ouvidoria/TelaOuvidoria';
 import { TelaQualidade } from './telas/qualidade/TelaQualidade';
@@ -172,6 +173,7 @@ const rotaExames = createRoute({ getParentRoute: () => rotaApp, path: '/exames',
 const rotaPreparo = createRoute({ getParentRoute: () => rotaApp, path: '/preparo', component: TelaPreparo });
 const rotaConvenios = createRoute({ getParentRoute: () => rotaApp, path: '/convenios', component: TelaConvenios });
 const rotaPacotes = createRoute({ getParentRoute: () => rotaApp, path: '/pacotes', component: TelaPacotes });
+const rotaEtiquetas = createRoute({ getParentRoute: () => rotaApp, path: '/etiquetas', component: TelaEtiquetas });
 const rotaPaciente = createRoute({
   getParentRoute: () => rotaApp,
   path: '/pacientes',
@@ -278,6 +280,7 @@ const arvore = raiz.addChildren([
     rotaPreparo,
     rotaConvenios,
     rotaPacotes,
+    rotaEtiquetas,
     rotaAgenda,
     rotaRecepcao,
     rotaNovoAgendamento,

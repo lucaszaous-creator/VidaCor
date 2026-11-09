@@ -1028,6 +1028,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/divergencias-de-sala/{id}/resolucao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Resolve a divergência de pulseira bipada na sala errada (recepção, técnico, coordenação). */
+        post: operations["resolver_divergencia_de_sala"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/divergencias/{id}/resolucao": {
         parameters: {
             query?: never;
@@ -1226,6 +1243,57 @@ export interface paths {
         get: operations["abrir_imagens_do_estudo"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/etiquetas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Painel do dia (hoje, horário da clínica) de quem lida com o paciente. */
+        get: operations["painel_de_etiquetas"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/etiquetas/{codigo}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Histórico completo de uma etiqueta (qualquer dia), do lastro. */
+        get: operations["detalhe_da_etiqueta"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/etiquetas/{codigo}/invalidacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Invalida a pulseira válida com motivo (recepção). Bipada depois, a sala bloqueia (docs/20). */
+        post: operations["invalidar_etiqueta"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4239,6 +4307,10 @@ export interface components {
             forma: components["schemas"]["FormaTirads"];
             margem: components["schemas"]["MargemTirads"];
         };
+        DetalheDaEtiqueta: {
+            etiqueta: components["schemas"]["LinhaDeEtiqueta"];
+            eventos: components["schemas"]["EventoDaEtiqueta"][];
+        };
         DiscrepanciaDeRevisao: {
             autor: string;
             classe: string;
@@ -4258,9 +4330,25 @@ export interface components {
             /** @description Código da divergência (DIV-AAAA-NNNNNN). */
             divergencia: string;
         };
+        DivergenciaDeSala: {
+            /** Format: date-time */
+            aberta_em: string;
+            codigo: string;
+            etiqueta: string;
+            exame: string;
+            /** Format: uuid */
+            id: string;
+            paciente: components["schemas"]["PacienteDaEtiqueta"];
+            sala_bipada: string;
+            sala_correta: string;
+            /** Format: uuid */
+            sala_correta_id: string;
+        };
         DivergenciaResolvida: {
             codigo: string;
-            /** @description resolvida. */
+            descricao: string;
+            /** Format: uuid */
+            id: string;
             situacao: string;
         };
         /** @enum {string} */
@@ -4379,6 +4467,11 @@ export interface components {
             /** @description pulseira. */
             tipo: string;
         };
+        EtiquetaInvalidada: {
+            codigo: string;
+            motivo_invalidacao: string;
+            situacao: string;
+        };
         EventoDaCadeia: {
             /** Format: date-time */
             criado_em: string;
@@ -4391,6 +4484,16 @@ export interface components {
             registro_codigo?: string | null;
             /** Format: int64 */
             sequencia: number;
+            tipo: string;
+        };
+        EventoDaEtiqueta: {
+            descricao: string;
+            /** Format: date-time */
+            em: string;
+            /** @description ok (passo normal) ou alerta (bloqueio, invalidação). */
+            nivel: string;
+            por?: string | null;
+            /** @description impressa, invalidada, bipada, bloqueada, resolvida ou outro. */
             tipo: string;
         };
         EventoDeSeguranca: {
@@ -4888,6 +4991,23 @@ export interface components {
             /** @description na_clinica, pendencia, cadastro_incompleto, possivel_duplicado ou em_dia (a mais urgente). */
             situacao: string;
             ultimo_exame?: null | components["schemas"]["ExameDaLista"];
+        };
+        LinhaDeEtiqueta: {
+            /** @description Número do exame (accession) que liga etiqueta, aparelho e imagens. */
+            accession: string;
+            codigo: string;
+            /** @description impressa (aguardando a sala), em_uso (bipada), invalidada ou divergencia (bipada na sala errada, aberta). */
+            estado: string;
+            exame: string;
+            motivo_invalidacao?: string | null;
+            paciente: components["schemas"]["PacienteDaEtiqueta"];
+            sala: string;
+            /** @description Etiqueta que esta substituiu (reimpressão). */
+            substitui?: string | null;
+            substituida_por?: string | null;
+            /** @description pulseira. */
+            tipo: string;
+            ultimo_evento?: null | components["schemas"]["UltimoEvento"];
         };
         LinhaDoExtrato: {
             /** Format: date */
@@ -5590,6 +5710,13 @@ export interface components {
             nascimento: string;
             nome: string;
         };
+        PacienteDaEtiqueta: {
+            /** Format: uuid */
+            id: string;
+            /** Format: date */
+            nascimento: string;
+            nome: string;
+        };
         PacienteDoLote: {
             /** Format: date-time */
             aplicado_em: string;
@@ -5665,6 +5792,22 @@ export interface components {
             nc_vencidas: number;
             /** Format: int64 */
             quase_erros_no_mes: number;
+        };
+        PainelDeEtiquetas: {
+            /** Format: int64 */
+            bipadas: number;
+            /** Format: date */
+            dia: string;
+            divergencias: components["schemas"]["DivergenciaDeSala"][];
+            /** Format: int64 */
+            divergencias_abertas: number;
+            etiquetas: components["schemas"]["LinhaDeEtiqueta"][];
+            /** Format: int64 */
+            impressas: number;
+            /** Format: int64 */
+            invalidadas: number;
+            /** Format: int64 */
+            reimpressoes: number;
         };
         PainelDeRevisao: {
             abertas: components["schemas"]["RevisaoDesignada"][];
@@ -5971,6 +6114,9 @@ export interface components {
             /** @description urgente, oncologico, gestante ou rotina. */
             prioridade: string;
         };
+        PedidoInvalidacao: {
+            motivo: string;
+        };
         PedidoLembretes: {
             /**
              * Format: date
@@ -6061,6 +6207,8 @@ export interface components {
             motivo?: string | null;
         };
         PedidoResolucao: {
+            observacao?: string | null;
+            /** @description encaminhado (paciente levado à sala certa) ou outro (com observação). */
             resolucao: string;
         };
         PedidoRetificacao: {
@@ -6805,6 +6953,11 @@ export interface components {
             resultado: string;
             /** Format: int32 */
             tfg_calculada?: number | null;
+        };
+        UltimoEvento: {
+            descricao: string;
+            /** Format: date-time */
+            em: string;
         };
         UnidadeSessao: {
             /** Format: uuid */
@@ -9793,6 +9946,57 @@ export interface operations {
             };
         };
     };
+    resolver_divergencia_de_sala: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoResolucao"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DivergenciaResolvida"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     resolver_divergencia: {
         parameters: {
             query?: never;
@@ -10192,6 +10396,140 @@ export interface operations {
             };
             /** @description estudo-sem-paciente */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    painel_de_etiquetas: {
+        parameters: {
+            query?: {
+                /** @description Código da etiqueta (bipado), nome do paciente (3+ letras, sem acento) ou número do exame (ACC). */
+                q?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PainelDeEtiquetas"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    detalhe_da_etiqueta: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                codigo: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DetalheDaEtiqueta"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    invalidar_etiqueta: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                codigo: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoInvalidacao"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EtiquetaInvalidada"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };

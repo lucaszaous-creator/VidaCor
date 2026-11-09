@@ -54,6 +54,7 @@ import type { Indicadores } from './contrato-indicadores';
 import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel';
 import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-orcamento';
 import type { IntegracaoVista } from './contrato-configuracoes';
+import type { DetalheDaEtiqueta, DivergenciaResolvida, EtiquetaInvalidada, PainelDeEtiquetas, PedidoResolucaoDeSala } from './contrato-etiquetas';
 import type { DecisaoRegistrada, DecisaoSobreDuplicado, ListaDePacientes, ParDuplicado, RecorteDaLista, VisaoDoPaciente } from './contrato-paciente';
 import type { InicioDoDia } from './contrato-inicio';
 import type { NovoPreparo, PreparoDoExame, VersaoDoPreparo } from './contrato-preparo';
@@ -607,6 +608,17 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
     etiquetas: {
       reimprimir: (codigo: string, corpo: PedidoReimpressao, o: OpcoesDeEscrita): Promise<Reimpressao> =>
         criar<Reimpressao>('POST', `/v1/etiquetas/${seg(codigo)}/reimpressao`, corpo, o),
+      /** Painel do dia: contadores, etiquetas com estado e divergências abertas. A busca vai na consulta à API. */
+      painel: (q?: string): Promise<PainelDeEtiquetas> =>
+        ler<PainelDeEtiquetas>(`/v1/etiquetas${q === undefined || q.trim() === '' ? '' : `?${new URLSearchParams({ q: q.trim() }).toString()}`}`),
+      /** Histórico da etiqueta montado do lastro. */
+      detalhe: (codigo: string): Promise<DetalheDaEtiqueta> => ler<DetalheDaEtiqueta>(`/v1/etiquetas/${seg(codigo)}`),
+      /** Invalida com motivo (sem reimprimir); bipada depois, a sala bloqueia. */
+      invalidar: (codigo: string, motivo: string, o: OpcoesDeEscrita): Promise<EtiquetaInvalidada> =>
+        criar<EtiquetaInvalidada>('POST', `/v1/etiquetas/${seg(codigo)}/invalidacao`, { motivo }, o),
+      /** Resolve a divergência de pulseira bipada na sala errada. */
+      resolverDivergencia: (id: string, corpo: PedidoResolucaoDeSala, o: OpcoesDeEscrita): Promise<DivergenciaResolvida> =>
+        criar<DivergenciaResolvida>('POST', `/v1/divergencias-de-sala/${seg(id)}/resolucao`, corpo, o),
     },
 
     pacientes: {

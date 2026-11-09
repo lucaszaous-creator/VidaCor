@@ -1,0 +1,224 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT e.codigo, e.tipo, e.situacao, e.motivo_invalidacao, e.substituida_por,\n                  (SELECT a.codigo FROM recepcao.etiqueta a WHERE a.substituida_por = e.codigo) AS \"substitui?\",\n                  t.situacao AS atendimento_situacao, t.accession, p.id AS paciente_id, p.nome, p.nascimento,\n                  ag.exame_nome, s.nome AS sala,\n                  EXISTS (SELECT 1 FROM recepcao.divergencia d WHERE d.tipo = 'pulseira_sala_errada' AND d.situacao = 'aberta'\n                           AND d.dados->>'etiqueta' = e.codigo) AS \"divergencia!\",\n                  u.tipo AS \"ultimo_tipo?\", u.dados AS \"ultimo_dados?\", u.criado_em AS \"ultimo_em?\", us.nome AS \"ultimo_sala?\"\n             FROM recepcao.etiqueta e\n             JOIN recepcao.atendimento t ON t.id = e.atendimento_id\n             JOIN agenda.agendamento ag ON ag.id = t.agendamento_id\n             JOIN agenda.sala s ON s.id = t.sala_id\n             JOIN identidade.paciente p ON p.id = e.paciente_id\n             LEFT JOIN LATERAL (SELECT v.tipo, v.dados, v.criado_em FROM lastro.evento v\n                                 WHERE (v.registro_id = e.id OR v.dados->>'etiqueta' = e.codigo)\n                                   AND v.tipo IN ('etiqueta_emitida','etiqueta_reimpressa','etiqueta_invalidada','pulseira_bipada','bipe_bloqueado_sala_errada','divergencia_resolvida')\n                                 ORDER BY v.sequencia DESC LIMIT 1) u ON true\n             LEFT JOIN agenda.sala us ON us.id = (u.dados->>'sala_bipada')::uuid\n            WHERE ($1::date IS NULL OR (e.criado_em AT TIME ZONE 'America/Sao_Paulo')::date = $1)\n              AND ($3::text IS NULL OR e.codigo = $3)\n              AND ($2::text IS NULL OR upper(e.codigo) = upper($2) OR t.accession = $2\n                   OR comum.sem_acento(p.nome) LIKE '%' || comum.sem_acento($2) || '%')\n            ORDER BY e.criado_em DESC LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.etiqueta",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "tipo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.etiqueta",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.etiqueta",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "motivo_invalidacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.etiqueta",
+            "name": "motivo_invalidacao"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "substituida_por",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.etiqueta",
+            "name": "substituida_por"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "substitui?",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 6,
+        "name": "atendimento_situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "accession",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "accession"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "paciente_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "exame_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "exame_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "sala",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "divergencia!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 14,
+        "name": "ultimo_tipo?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "lastro.evento",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "ultimo_dados?",
+        "type_info": "Jsonb",
+        "origin": {
+          "Table": {
+            "table": "lastro.evento",
+            "name": "dados"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "ultimo_em?",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "lastro.evento",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 17,
+        "name": "ultimo_sala?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "nome"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Date",
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      null,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      null,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "9acec5723b3193106cfd0538a0646f9d798df34119e707fa65a0ac91ba217e1f"
+}

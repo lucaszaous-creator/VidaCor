@@ -4040,6 +4040,87 @@
         }
       }
     },
+    "/v1/divergencias-de-sala/{id}/resolucao": {
+      "post": {
+        "tags": [
+          "recepcao"
+        ],
+        "summary": "Resolve a divergência de pulseira bipada na sala errada (recepção, técnico, coordenação).",
+        "operationId": "resolver_divergencia_de_sala",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoResolucao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DivergenciaResolvida"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/divergencias/{id}/resolucao": {
       "post": {
         "tags": [
@@ -4615,6 +4696,202 @@
           },
           "409": {
             "description": "estudo-sem-paciente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/etiquetas": {
+      "get": {
+        "tags": [
+          "recepcao"
+        ],
+        "summary": "Painel do dia (hoje, horário da clínica) de quem lida com o paciente.",
+        "operationId": "painel_de_etiquetas",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Código da etiqueta (bipado), nome do paciente (3+ letras, sem acento) ou número do exame (ACC).",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PainelDeEtiquetas"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/etiquetas/{codigo}": {
+      "get": {
+        "tags": [
+          "recepcao"
+        ],
+        "summary": "Histórico completo de uma etiqueta (qualquer dia), do lastro.",
+        "operationId": "detalhe_da_etiqueta",
+        "parameters": [
+          {
+            "name": "codigo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetalheDaEtiqueta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/etiquetas/{codigo}/invalidacao": {
+      "post": {
+        "tags": [
+          "recepcao"
+        ],
+        "summary": "Invalida a pulseira válida com motivo (recepção). Bipada depois, a sala bloqueia (docs/20).",
+        "operationId": "invalidar_etiqueta",
+        "parameters": [
+          {
+            "name": "codigo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoInvalidacao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EtiquetaInvalidada"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -14992,6 +15269,24 @@
           }
         }
       },
+      "DetalheDaEtiqueta": {
+        "type": "object",
+        "required": [
+          "etiqueta",
+          "eventos"
+        ],
+        "properties": {
+          "etiqueta": {
+            "$ref": "#/components/schemas/LinhaDeEtiqueta"
+          },
+          "eventos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventoDaEtiqueta"
+            }
+          }
+        }
+      },
       "DiscrepanciaDeRevisao": {
         "type": "object",
         "required": [
@@ -15056,19 +15351,73 @@
           }
         }
       },
+      "DivergenciaDeSala": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "etiqueta",
+          "paciente",
+          "exame",
+          "sala_bipada",
+          "sala_correta",
+          "sala_correta_id",
+          "aberta_em"
+        ],
+        "properties": {
+          "aberta_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "etiqueta": {
+            "type": "string"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteDaEtiqueta"
+          },
+          "sala_bipada": {
+            "type": "string"
+          },
+          "sala_correta": {
+            "type": "string"
+          },
+          "sala_correta_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
       "DivergenciaResolvida": {
         "type": "object",
         "required": [
+          "id",
           "codigo",
-          "situacao"
+          "situacao",
+          "descricao"
         ],
         "properties": {
           "codigo": {
             "type": "string"
           },
-          "situacao": {
+          "descricao": {
+            "type": "string"
+          },
+          "id": {
             "type": "string",
-            "description": "resolvida."
+            "format": "uuid"
+          },
+          "situacao": {
+            "type": "string"
           }
         }
       },
@@ -15457,6 +15806,25 @@
           }
         }
       },
+      "EtiquetaInvalidada": {
+        "type": "object",
+        "required": [
+          "codigo",
+          "situacao",
+          "motivo_invalidacao"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "motivo_invalidacao": {
+            "type": "string"
+          },
+          "situacao": {
+            "type": "string"
+          }
+        }
+      },
       "EventoDaCadeia": {
         "type": "object",
         "required": [
@@ -15499,6 +15867,38 @@
           },
           "tipo": {
             "type": "string"
+          }
+        }
+      },
+      "EventoDaEtiqueta": {
+        "type": "object",
+        "required": [
+          "tipo",
+          "descricao",
+          "em",
+          "nivel"
+        ],
+        "properties": {
+          "descricao": {
+            "type": "string"
+          },
+          "em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "nivel": {
+            "type": "string",
+            "description": "ok (passo normal) ou alerta (bloqueio, invalidação)."
+          },
+          "por": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tipo": {
+            "type": "string",
+            "description": "impressa, invalidada, bipada, bloqueada, resolvida ou outro."
           }
         }
       },
@@ -17143,6 +17543,73 @@
               },
               {
                 "$ref": "#/components/schemas/ExameDaLista"
+              }
+            ]
+          }
+        }
+      },
+      "LinhaDeEtiqueta": {
+        "type": "object",
+        "required": [
+          "codigo",
+          "tipo",
+          "estado",
+          "paciente",
+          "exame",
+          "sala",
+          "accession"
+        ],
+        "properties": {
+          "accession": {
+            "type": "string",
+            "description": "Número do exame (accession) que liga etiqueta, aparelho e imagens."
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "estado": {
+            "type": "string",
+            "description": "impressa (aguardando a sala), em_uso (bipada), invalidada ou divergencia (bipada na sala errada, aberta)."
+          },
+          "exame": {
+            "type": "string"
+          },
+          "motivo_invalidacao": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteDaEtiqueta"
+          },
+          "sala": {
+            "type": "string"
+          },
+          "substitui": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Etiqueta que esta substituiu (reimpressão)."
+          },
+          "substituida_por": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tipo": {
+            "type": "string",
+            "description": "pulseira."
+          },
+          "ultimo_evento": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/UltimoEvento"
               }
             ]
           }
@@ -19386,6 +19853,27 @@
           }
         }
       },
+      "PacienteDaEtiqueta": {
+        "type": "object",
+        "required": [
+          "id",
+          "nome",
+          "nascimento"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
       "PacienteDoLote": {
         "type": "object",
         "required": [
@@ -19643,6 +20131,57 @@
             "format": "int64"
           },
           "quase_erros_no_mes": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "PainelDeEtiquetas": {
+        "type": "object",
+        "required": [
+          "dia",
+          "impressas",
+          "bipadas",
+          "reimpressoes",
+          "invalidadas",
+          "divergencias_abertas",
+          "divergencias",
+          "etiquetas"
+        ],
+        "properties": {
+          "bipadas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dia": {
+            "type": "string",
+            "format": "date"
+          },
+          "divergencias": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DivergenciaDeSala"
+            }
+          },
+          "divergencias_abertas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "etiquetas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinhaDeEtiqueta"
+            }
+          },
+          "impressas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "invalidadas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reimpressoes": {
             "type": "integer",
             "format": "int64"
           }
@@ -20623,6 +21162,17 @@
           }
         }
       },
+      "PedidoInvalidacao": {
+        "type": "object",
+        "required": [
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string"
+          }
+        }
+      },
       "PedidoLembretes": {
         "type": "object",
         "required": [
@@ -20894,8 +21444,15 @@
           "resolucao"
         ],
         "properties": {
+          "observacao": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "resolucao": {
-            "type": "string"
+            "type": "string",
+            "description": "encaminhado (paciente levado à sala certa) ou outro (com observação)."
           }
         }
       },
@@ -23208,6 +23765,22 @@
               "null"
             ],
             "format": "int32"
+          }
+        }
+      },
+      "UltimoEvento": {
+        "type": "object",
+        "required": [
+          "descricao",
+          "em"
+        ],
+        "properties": {
+          "descricao": {
+            "type": "string"
+          },
+          "em": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
