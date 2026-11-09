@@ -1,0 +1,41 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT proposta_por, situacao FROM laudos.modelo_versao WHERE modelo_id = $1 AND numero = $2 FOR UPDATE",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "proposta_por",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo_versao",
+            "name": "proposta_por"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo_versao",
+            "name": "situacao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "29687bdb07fc5ef1c01cacf355581bd9167c933a1d1575752a4f317fdeef9467"
+}

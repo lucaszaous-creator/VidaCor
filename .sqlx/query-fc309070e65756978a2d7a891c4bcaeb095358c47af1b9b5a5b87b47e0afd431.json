@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE laudos.modelo_versao SET situacao = 'substituida', versao = versao + 1 WHERE modelo_id = $1 AND situacao = 'publicada'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "fc309070e65756978a2d7a891c4bcaeb095358c47af1b9b5a5b87b47e0afd431"
+}

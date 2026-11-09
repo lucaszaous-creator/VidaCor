@@ -1,0 +1,53 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT v.id, v.texto, m.codigo FROM laudos.modelo_versao v JOIN laudos.modelo m ON m.id = v.modelo_id\n            WHERE v.modelo_id = $1 AND v.numero = $2 AND v.situacao = 'publicada' AND m.ativo",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo_versao",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "texto",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo_versao",
+            "name": "texto"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo",
+            "name": "codigo"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "ae889a15a42daa788096b1bb22f007d0006be3b3cf285a48951ec0e6ecccb3d9"
+}

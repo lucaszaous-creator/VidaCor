@@ -57,6 +57,24 @@ import type { IntegracaoVista } from './contrato-configuracoes';
 import type { VisaoDoPaciente } from './contrato-paciente';
 import type { InicioDoDia } from './contrato-inicio';
 import type { FluxoDeLaudos } from './contrato-fluxo';
+import type {
+  CasoDeRevisao,
+  DecisaoDePendencia,
+  DecisaoDeVersaoDeModelo,
+  FraseDeLaudo,
+  ItemDaFilaDeRevisao,
+  ModeloDeLaudo,
+  NovaFraseDeLaudo,
+  NovaVersaoDeModelo,
+  NovoModeloDeLaudo,
+  PainelDeRevisao,
+  ParecerDeRevisao,
+  RevisaoDesignada,
+  RevisaoDoMeuLaudo,
+  RevisoesDoAutor,
+  ResultadoDoSorteio,
+  UsoDeModelo,
+} from './contrato-modelos';
 import type { ResultadoDaBusca } from './contrato-busca';
 import type { AndamentoNovo, NovaNaoConformidade, NovoEventoAdverso, PainelDaQualidade, ProtocoloDeQualidade } from './contrato-qualidade';
 import type { Manifestacao, NovaManifestacao, PainelDaOuvidoria, ProtocoloDaManifestacao } from './contrato-ouvidoria';
@@ -427,6 +445,48 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
         criar<BloqueioDeSala>('POST', `/v1/bloqueios/${seg(id)}/retirada`, { motivo }, o),
     },
 
+    /** Modelos de laudo (médico; aprovação da clínica pela coordenação médica). Sem dado de paciente. */
+    modelosDeLaudo: {
+      listar: (): Promise<ModeloDeLaudo[]> => ler<ModeloDeLaudo[]>('/v1/modelos-de-laudo'),
+      obter: (id: string): Promise<ModeloDeLaudo> => ler<ModeloDeLaudo>(`/v1/modelos-de-laudo/${seg(id)}`),
+      criar: (corpo: NovoModeloDeLaudo, o: OpcoesDeEscrita): Promise<ModeloDeLaudo> => criar<ModeloDeLaudo>('POST', '/v1/modelos-de-laudo', corpo, o),
+      /** Pessoal: publica na hora; da clínica: vira proposta. Motivo obrigatório. */
+      novaVersao: (id: string, corpo: NovaVersaoDeModelo, o: OpcoesDeEscrita): Promise<ModeloDeLaudo> =>
+        criar<ModeloDeLaudo>('POST', `/v1/modelos-de-laudo/${seg(id)}/versoes`, corpo, o),
+      /** Coordenação médica; quem propôs não decide. */
+      decidir: (id: string, numero: number, corpo: DecisaoDeVersaoDeModelo): Promise<ModeloDeLaudo> =>
+        escrever<ModeloDeLaudo>('POST', `/v1/modelos-de-laudo/${seg(id)}/versoes/${String(numero)}/decisao`, corpo),
+      desativar: (id: string, motivo: string): Promise<ModeloDeLaudo> =>
+        escrever<ModeloDeLaudo>('POST', `/v1/modelos-de-laudo/${seg(id)}/desativacao`, { motivo }),
+    },
+
+    /** Frases rápidas do laudo (atalho com ponto). */
+    frasesDeLaudo: {
+      listar: (): Promise<FraseDeLaudo[]> => ler<FraseDeLaudo[]>('/v1/frases-de-laudo'),
+      criar: (corpo: NovaFraseDeLaudo, o: OpcoesDeEscrita): Promise<FraseDeLaudo> => criar<FraseDeLaudo>('POST', '/v1/frases-de-laudo', corpo, o),
+      desativar: (id: string, motivo: string): Promise<FraseDeLaudo> =>
+        escrever<FraseDeLaudo>('POST', `/v1/frases-de-laudo/${seg(id)}/desativacao`, { motivo }),
+    },
+
+    /** Revisão por pares (RADPEER): revisor, autor e coordenação médica. */
+    revisaoPorPares: {
+      fila: (): Promise<ItemDaFilaDeRevisao[]> => ler<ItemDaFilaDeRevisao[]>('/v1/revisoes-por-pares/fila'),
+      /** Abre o caso: a leitura do laudo é auditada. */
+      obter: (id: string): Promise<CasoDeRevisao> => ler<CasoDeRevisao>(`/v1/revisoes-por-pares/${seg(id)}`),
+      parecer: (id: string, corpo: ParecerDeRevisao, o: OpcoesDeEscrita): Promise<CasoDeRevisao> =>
+        criar<CasoDeRevisao>('POST', `/v1/revisoes-por-pares/${seg(id)}/parecer`, corpo, o),
+      conflito: (id: string, motivo: string): Promise<ItemDaFilaDeRevisao> =>
+        escrever<ItemDaFilaDeRevisao>('POST', `/v1/revisoes-por-pares/${seg(id)}/conflito`, { motivo }),
+      meusLaudos: (): Promise<RevisoesDoAutor> => ler<RevisoesDoAutor>('/v1/revisoes-por-pares/meus-laudos'),
+      decidirPendencia: (id: string, corpo: DecisaoDePendencia): Promise<RevisaoDoMeuLaudo> =>
+        escrever<RevisaoDoMeuLaudo>('POST', `/v1/revisoes-por-pares/${seg(id)}/pendencia`, corpo),
+      painel: (): Promise<PainelDeRevisao> => ler<PainelDeRevisao>('/v1/revisoes-por-pares/painel'),
+      sortear: (corpo: { quantidade: number; dias: number }, o: OpcoesDeEscrita): Promise<ResultadoDoSorteio> =>
+        criar<ResultadoDoSorteio>('POST', '/v1/revisoes-por-pares/sorteio', corpo, o),
+      designar: (corpo: { laudo_id: string; revisor_id: string }, o: OpcoesDeEscrita): Promise<RevisaoDesignada> =>
+        criar<RevisaoDesignada>('POST', '/v1/revisoes-por-pares', corpo, o),
+    },
+
     /** Aparelhos e integração DICOM (TI e gerência). */
     aparelhos: {
       painel: (): Promise<PainelDosAparelhos> => ler<PainelDosAparelhos>('/v1/aparelhos'),
@@ -542,6 +602,9 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
         criar<LinkCriado>('POST', `/v1/laudos/${seg(id)}/links`, { horas }, o),
       acessoDeEmergencia: (id: string, corpo: PedidoAcessoEmergencia, o: OpcoesDeEscrita): Promise<AcessoDeEmergencia> =>
         criar<AcessoDeEmergencia>('POST', `/v1/laudos/${seg(id)}/acesso-emergencia`, corpo, o),
+      /** Usa um modelo no rascunho: devolve o texto e grava a versão do modelo usada. */
+      usarModelo: (id: string, corpo: { modelo_id: string; numero: number }, o: OpcoesDeEscrita): Promise<UsoDeModelo> =>
+        criar<UsoDeModelo>('POST', `/v1/laudos/${seg(id)}/usos-de-modelo`, corpo, o),
       /** Achados estruturados da versão em edição (ou da vigente, se assinado). Leitura auditada. */
       achados: (id: string): Promise<AchadosDoLaudo> => ler<AchadosDoLaudo>(`/v1/laudos/${seg(id)}/achados`),
       /** Novo achado no rascunho: o servidor calcula categoria e conduta e grava a versão da regra. */

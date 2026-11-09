@@ -27,6 +27,8 @@ import { TelaAparelhos } from './telas/aparelhos/TelaAparelhos';
 import { TelaFluxoDeLaudos } from './telas/fluxo/TelaFluxoDeLaudos';
 import { TelaCorpoClinico } from './telas/corpo-clinico/TelaCorpoClinico';
 import { TelaExames } from './telas/exames/TelaExames';
+import { TelaModelosDeLaudo } from './telas/modelos/TelaModelosDeLaudo';
+import { TelaRevisaoPorPares } from './telas/revisao/TelaRevisaoPorPares';
 import { TelaInicio } from './telas/inicio/TelaInicio';
 import { TelaOuvidoria } from './telas/ouvidoria/TelaOuvidoria';
 import { TelaQualidade } from './telas/qualidade/TelaQualidade';
@@ -176,6 +178,8 @@ const rotaPaciente = createRoute({
 const rotaQualidade = createRoute({ getParentRoute: () => rotaApp, path: '/qualidade', component: TelaQualidade });
 const rotaOuvidoria = createRoute({ getParentRoute: () => rotaApp, path: '/ouvidoria', component: TelaOuvidoria });
 const rotaFluxoDeLaudos = createRoute({ getParentRoute: () => rotaApp, path: '/fluxo-de-laudos', component: TelaFluxoDeLaudos });
+const rotaModelosDeLaudo = createRoute({ getParentRoute: () => rotaApp, path: '/modelos-de-laudo', component: TelaModelosDeLaudo });
+const rotaRevisaoPorPares = createRoute({ getParentRoute: () => rotaApp, path: '/revisao-por-pares', component: TelaRevisaoPorPares });
 const rotaPaginaInicial = createRoute({ getParentRoute: () => rotaApp, path: '/inicio', component: TelaInicio });
 const rotaConfiguracoes = createRoute({ getParentRoute: () => rotaApp, path: '/configuracoes', component: TelaConfiguracoes });
 const rotaListaEspera = createRoute({ getParentRoute: () => rotaApp, path: '/lista-espera', component: TelaListaEspera });
@@ -260,6 +264,8 @@ const arvore = raiz.addChildren([
     rotaFluxoDeLaudos,
     rotaOuvidoria,
     rotaQualidade,
+    rotaModelosDeLaudo,
+    rotaRevisaoPorPares,
     rotaAparelhos,
     rotaCorpoClinico,
     rotaExames,

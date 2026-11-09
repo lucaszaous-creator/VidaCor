@@ -1855,314 +1855,6 @@
         }
       }
     },
-    "/v1/catalogo/procedimentos": {
-      "get": {
-        "tags": [
-          "catalogo"
-        ],
-        "summary": "Catálogo de exames com o preço vigente desta unidade e as versões da tabela (recepção e gerência).",
-        "operationId": "listar_catalogo_de_exames",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CatalogoDeExames"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "catalogo"
-        ],
-        "summary": "Inclui procedimento no catálogo (gerência; `Idempotency-Key`). O código TUSS é único.",
-        "operationId": "incluir_procedimento",
-        "parameters": [
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NovoProcedimento"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProcedimentoDoCatalogo"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/catalogo/procedimentos/{tuss}/historico": {
-      "get": {
-        "tags": [
-          "catalogo"
-        ],
-        "summary": "Histórico de mudanças do procedimento, com motivo e quem fez (recepção e gerência).",
-        "operationId": "historico_do_procedimento",
-        "parameters": [
-          {
-            "name": "tuss",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MudancaRegistradaNoCatalogo"
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/catalogo/procedimentos/{tuss}/mudancas": {
-      "post": {
-        "tags": [
-          "catalogo"
-        ],
-        "summary": "Muda duração, modalidade ou ativo, com motivo (gerência). Atômico pela versão vista: duas mudanças\nsobre a mesma versão, só a primeira entra (G2). Nada é apagado.",
-        "operationId": "mudar_procedimento",
-        "parameters": [
-          {
-            "name": "tuss",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MudancaNoProcedimento"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProcedimentoDoCatalogo"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/catalogo/tabelas-de-preco": {
-      "post": {
-        "tags": [
-          "catalogo"
-        ],
-        "summary": "Publica versão nova da tabela de preços desta unidade (gerência; `Idempotency-Key`). A vigente\nnão muda: a nova começa numa data futura, depois do início da última versão. Duas versões no\nmesmo dia, ou publicadas ao mesmo tempo, só uma entra (restrição única no banco, G2).",
-        "operationId": "publicar_tabela_de_precos",
-        "parameters": [
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NovaVersaoDaTabela"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VersaoDaTabelaDePreco"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/v1/comunicacao/lembretes": {
       "post": {
         "tags": [
@@ -2192,107 +1884,6 @@
             }
           },
           "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/configuracoes/cabecalho": {
-      "get": {
-        "tags": [
-          "configuracoes"
-        ],
-        "summary": "Cabeçalho vigente e versões anteriores (gerência).",
-        "operationId": "ver_cabecalho_dos_documentos",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CabecalhoDosDocumentos"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "configuracoes"
-        ],
-        "summary": "Publica a versão nova do cabeçalho (gerência; `Idempotency-Key`). Vale para os próximos PDFs.",
-        "operationId": "publicar_cabecalho_dos_documentos",
-        "parameters": [
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NovoCabecalho"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CabecalhoDosDocumentos"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "422": {
             "description": "",
             "content": {
               "application/json": {
@@ -2680,288 +2271,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ReciboLancado"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/corpo-clinico": {
-      "get": {
-        "tags": [
-          "corpo-clinico"
-        ],
-        "summary": "Médicos da unidade com registro, habilitação e pedidos aguardando conferência (gerência).",
-        "operationId": "listar_corpo_clinico",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MedicoDoCorpoClinico"
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/corpo-clinico/pedidos/{id}/decisao": {
-      "post": {
-        "tags": [
-          "corpo-clinico"
-        ],
-        "summary": "A segunda pessoa confere o pedido (gerência; quem pediu e o próprio médico não decidem;\nreautenticação). Aprovado, a versão nova entra vigente e a anterior deixa de ser.",
-        "operationId": "decidir_pedido_do_corpo_clinico",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DecisaoDoCorpoClinico"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MedicoDoCorpoClinico"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/corpo-clinico/{id}/historico": {
-      "get": {
-        "tags": [
-          "corpo-clinico"
-        ],
-        "summary": "Histórico de pedidos do médico, com quem pediu, quem conferiu e os motivos (gerência).",
-        "operationId": "historico_do_medico",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PedidoDoCorpoClinico"
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/corpo-clinico/{id}/pedidos": {
-      "post": {
-        "tags": [
-          "corpo-clinico"
-        ],
-        "summary": "Pede uma mudança no cadastro do médico (registro ou habilitação). Só vale depois da conferência\nde outra pessoa (gerência; reautenticação; `Idempotency-Key`).",
-        "operationId": "pedir_mudanca_no_corpo_clinico",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NovoPedidoDoCorpoClinico"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MedicoDoCorpoClinico"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
                 }
               }
             }
@@ -4952,6 +4261,192 @@
         }
       }
     },
+    "/v1/frases-de-laudo": {
+      "get": {
+        "tags": [
+          "modelos-de-laudo"
+        ],
+        "summary": "Frases ativas: as da clínica e as do próprio médico.",
+        "operationId": "listar_frases_de_laudo",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FraseDeLaudo"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "modelos-de-laudo"
+        ],
+        "summary": "Cria uma frase (ou nova versão de uma frase, que substitui a anterior com motivo). Pessoal: o\nmédico; da clínica: a coordenação médica. Idempotency-Key.",
+        "operationId": "criar_frase_de_laudo",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovaFraseDeLaudo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FraseDeLaudo"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/frases-de-laudo/{id}/desativacao": {
+      "post": {
+        "tags": [
+          "modelos-de-laudo"
+        ],
+        "summary": "Desativa a frase com motivo (pessoal: o dono; da clínica: a coordenação médica). Nada é apagado.",
+        "operationId": "desativar_frase_de_laudo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoDeDesativacao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FraseDeLaudo"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/guias": {
       "post": {
         "tags": [
@@ -6089,6 +5584,87 @@
         }
       }
     },
+    "/v1/laudos/{id}/usos-de-modelo": {
+      "post": {
+        "tags": [
+          "modelos-de-laudo"
+        ],
+        "summary": "Usa um modelo no rascunho do laudo: devolve o texto da versão publicada e grava qual versão do\nmodelo entrou em qual versão do laudo (só o médico atribuído; Idempotency-Key). O texto entra no\nrascunho pelo salvamento normal do laudo.",
+        "operationId": "registrar_uso_de_modelo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoUsoDeModelo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsoDeModelo"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/links/{token}": {
       "get": {
         "tags": [
@@ -6480,6 +6056,396 @@
             }
           },
           "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/modelos-de-laudo": {
+      "get": {
+        "tags": [
+          "modelos-de-laudo"
+        ],
+        "summary": "Modelos da clínica e os pessoais do médico, com as versões (médico e coordenação médica).",
+        "operationId": "listar_modelos_de_laudo",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ModeloDeLaudo"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "modelos-de-laudo"
+        ],
+        "summary": "Cria um modelo: pessoal (publicado na hora, versão 1) ou proposta de modelo da clínica (aguarda a\ncoordenação médica). Idempotency-Key.",
+        "operationId": "criar_modelo_de_laudo",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovoModeloDeLaudo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModeloDeLaudo"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/modelos-de-laudo/{id}": {
+      "get": {
+        "tags": [
+          "modelos-de-laudo"
+        ],
+        "summary": "Um modelo com todas as versões.",
+        "operationId": "obter_modelo_de_laudo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModeloDeLaudo"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/modelos-de-laudo/{id}/desativacao": {
+      "post": {
+        "tags": [
+          "modelos-de-laudo"
+        ],
+        "summary": "Desativa o modelo com motivo (pessoal: o dono; da clínica: a coordenação médica). Nada é apagado;\nlaudos que usaram o modelo continuam com a versão gravada.",
+        "operationId": "desativar_modelo_de_laudo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoDeDesativacao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModeloDeLaudo"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/modelos-de-laudo/{id}/versoes": {
+      "post": {
+        "tags": [
+          "modelos-de-laudo"
+        ],
+        "summary": "Nova versão: no pessoal publica na hora (a anterior fica substituída); na clínica vira proposta\npara a coordenação médica. Motivo obrigatório. Idempotency-Key.",
+        "operationId": "propor_versao_de_modelo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovaVersaoDeModelo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModeloDeLaudo"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/modelos-de-laudo/{id}/versoes/{numero}/decisao": {
+      "post": {
+        "tags": [
+          "modelos-de-laudo"
+        ],
+        "summary": "Aprova ou recusa a proposta de versão de um modelo da clínica (coordenação médica; quem propôs\nnão decide). Aprovar publica a versão e substitui a anterior; recusar exige motivo.",
+        "operationId": "decidir_versao_de_modelo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "numero",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisaoDeVersaoDeModelo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModeloDeLaudo"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
             "description": "",
             "content": {
               "application/json": {
@@ -6990,159 +6956,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Orcamento"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/ouvidoria": {
-      "get": {
-        "tags": [
-          "ouvidoria"
-        ],
-        "summary": "Manifestações abertas e respondidas nos últimos 30 dias, com indicadores (gerência).",
-        "operationId": "painel_da_ouvidoria",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PainelDaOuvidoria"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "ouvidoria"
-        ],
-        "summary": "Registra a manifestação e devolve o protocolo e o prazo (recepção e gerência; Idempotency-Key).",
-        "operationId": "registrar_manifestacao",
-        "parameters": [
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NovaManifestacao"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProtocoloDaManifestacao"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/ouvidoria/{id}/resposta": {
-      "post": {
-        "tags": [
-          "ouvidoria"
-        ],
-        "summary": "Responde a manifestação aberta (gerência). Atômico: duas respostas ao mesmo tempo, só uma vale.",
-        "operationId": "responder_manifestacao",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RespostaDaManifestacao"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Manifestacao"
                 }
               }
             }
@@ -8371,281 +8184,6 @@
         }
       }
     },
-    "/v1/qualidade": {
-      "get": {
-        "tags": [
-          "qualidade"
-        ],
-        "summary": "Painel do Núcleo de Segurança do Paciente e das não conformidades (gerência).",
-        "operationId": "painel_da_qualidade",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PainelDaQualidade"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/qualidade/eventos": {
-      "post": {
-        "tags": [
-          "qualidade"
-        ],
-        "summary": "Notifica evento ou quase-erro (qualquer pessoa da equipe; pode ser anônimo; Idempotency-Key).",
-        "operationId": "notificar_evento",
-        "parameters": [
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NovoEventoAdverso"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProtocoloDeQualidade"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/qualidade/eventos/{id}/situacao": {
-      "post": {
-        "tags": [
-          "qualidade"
-        ],
-        "summary": "Muda a situação do evento (gerência): recebido -> em_analise -> concluido, atômico.",
-        "operationId": "situacao_do_evento",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SituacaoDoEvento"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Situação registrada"
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/qualidade/nao-conformidades": {
-      "post": {
-        "tags": [
-          "qualidade"
-        ],
-        "summary": "Abre uma não conformidade (qualquer pessoa da equipe; Idempotency-Key).",
-        "operationId": "abrir_nao_conformidade",
-        "parameters": [
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NovaNaoConformidade"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProtocoloDeQualidade"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/qualidade/nao-conformidades/{id}/andamento": {
-      "post": {
-        "tags": [
-          "qualidade"
-        ],
-        "summary": "Registra andamento da não conformidade (gerência). Atômico pela versão: quem viu versão antiga recebe 409.",
-        "operationId": "andamento_da_nao_conformidade",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AndamentoNovo"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Andamento registrado"
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemaDoc"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/v1/recebimentos": {
       "post": {
         "tags": [
@@ -8842,6 +8380,553 @@
             }
           },
           "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/revisoes-por-pares": {
+      "post": {
+        "tags": [
+          "revisao-por-pares"
+        ],
+        "summary": "Designa um laudo assinado a um revisor escolhido (coordenação médica; Idempotency-Key). O banco\nrecusa o autor como revisor e um segundo revisor ao mesmo tempo no mesmo laudo.",
+        "operationId": "designar_revisao_por_par",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoDesignacao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevisaoDesignada"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/revisoes-por-pares/fila": {
+      "get": {
+        "tags": [
+          "revisao-por-pares"
+        ],
+        "summary": "Fila do revisor: revisões designadas a ele (sem o nome do autor nem do paciente).",
+        "operationId": "fila_de_revisao_por_pares",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemDaFilaDeRevisao"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/revisoes-por-pares/meus-laudos": {
+      "get": {
+        "tags": [
+          "revisao-por-pares"
+        ],
+        "summary": "Revisões dos laudos do médico (o revisor não é revelado ao autor) e o resultado dele.",
+        "operationId": "revisoes_dos_meus_laudos",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevisoesDoAutor"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/revisoes-por-pares/painel": {
+      "get": {
+        "tags": [
+          "revisao-por-pares"
+        ],
+        "summary": "Painel da coordenação médica: resultado por médico (laudos revisados, concordância e\ndiscrepâncias), discrepâncias com a situação da pendência, revisões abertas e conflitos a\nredesignar. Sem texto de laudo e sem comentário do revisor.",
+        "operationId": "painel_de_revisao_por_pares",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PainelDeRevisao"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/revisoes-por-pares/sorteio": {
+      "post": {
+        "tags": [
+          "revisao-por-pares"
+        ],
+        "summary": "Sorteia laudos assinados no período e designa a cada um o médico com menos revisões abertas,\nnunca o autor nem quem já declarou conflito naquele laudo (coordenação médica; Idempotency-Key).",
+        "operationId": "sortear_revisoes_por_pares",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoSorteio"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoDoSorteio"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/revisoes-por-pares/{id}": {
+      "get": {
+        "tags": [
+          "revisao-por-pares"
+        ],
+        "summary": "Abre o caso para o revisor. Revisão aberta: registra o vínculo de revisão com o paciente, lê a\nversão assinada revisada e audita a leitura. Concluída: só o parecer (o laudo não fica aberto).",
+        "operationId": "obter_revisao_por_par",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CasoDeRevisao"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/revisoes-por-pares/{id}/conflito": {
+      "post": {
+        "tags": [
+          "revisao-por-pares"
+        ],
+        "summary": "O revisor declara conflito (ex.: atendeu o paciente, parentesco): a revisão é encerrada sem parecer\ne a coordenação médica designa outro revisor.",
+        "operationId": "declarar_conflito_de_revisao",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoConflito"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemDaFilaDeRevisao"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/revisoes-por-pares/{id}/parecer": {
+      "post": {
+        "tags": [
+          "revisao-por-pares"
+        ],
+        "summary": "Registra o parecer (RADPEER). Discrepância exige comentário; as significativas (2b, 3a, 3b) abrem\npendência para o autor. Uma decisão só: a segunda requisição recebe 409. Idempotency-Key.",
+        "operationId": "registrar_parecer_de_revisao",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParecerDeRevisao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CasoDeRevisao"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/revisoes-por-pares/{id}/pendencia": {
+      "post": {
+        "tags": [
+          "revisao-por-pares"
+        ],
+        "summary": "O autor decide a pendência: \"retificado\" (o laudo já tem versão nova, aberta pelo fluxo de\nretificação) ou \"mantido\" (com motivo). Uma decisão só.",
+        "operationId": "decidir_pendencia_de_revisao",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisaoDePendencia"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevisaoDoMeuLaudo"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
             "description": "",
             "content": {
               "application/json": {
@@ -9851,73 +9936,6 @@
           }
         }
       },
-      "AndamentoDaNc": {
-        "type": "object",
-        "required": [
-          "texto",
-          "situacao_nova",
-          "por",
-          "em"
-        ],
-        "properties": {
-          "em": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "por": {
-            "type": "string"
-          },
-          "situacao_nova": {
-            "type": "string"
-          },
-          "texto": {
-            "type": "string"
-          }
-        }
-      },
-      "AndamentoNovo": {
-        "type": "object",
-        "required": [
-          "texto",
-          "situacao",
-          "versao"
-        ],
-        "properties": {
-          "eficaz": {
-            "type": [
-              "boolean",
-              "null"
-            ],
-            "description": "Obrigatório ao encerrar: a ação foi eficaz?"
-          },
-          "prazo_em": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date"
-          },
-          "responsavel_id": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "uuid"
-          },
-          "situacao": {
-            "type": "string",
-            "description": "aberta, em_acao, verificacao ou encerrada."
-          },
-          "texto": {
-            "type": "string"
-          },
-          "versao": {
-            "type": "integer",
-            "format": "int32",
-            "description": "Versão que a tela viu (evita sobrescrever o andamento de outra pessoa)."
-          }
-        }
-      },
       "Aparelho": {
         "type": "object",
         "required": [
@@ -10376,88 +10394,6 @@
           }
         }
       },
-      "CabecalhoDaUnidade": {
-        "type": "object",
-        "required": [
-          "numero",
-          "nome",
-          "desde"
-        ],
-        "properties": {
-          "cnpj": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "desde": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endereco": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "motivo": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "nome": {
-            "type": "string"
-          },
-          "numero": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "publicado_por": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "razao_social": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "responsavel_crm": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "responsavel_nome": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "responsavel_tecnico": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "Texto impresso no rodapé do PDF."
-          },
-          "site": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "telefone": {
-            "type": [
-              "string",
-              "null"
-            ]
-          }
-        }
-      },
       "CabecalhoDoMenu": {
         "type": "object",
         "required": [
@@ -10470,32 +10406,6 @@
           },
           "titulo": {
             "type": "string"
-          }
-        }
-      },
-      "CabecalhoDosDocumentos": {
-        "type": "object",
-        "required": [
-          "versoes"
-        ],
-        "properties": {
-          "versoes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CabecalhoDaUnidade"
-            },
-            "description": "Todas as versões, da mais nova para a mais antiga."
-          },
-          "vigente": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/CabecalhoDaUnidade",
-                "description": "Sem versão cadastrada, o PDF sai só com \"VidaCor Imagem\" e o nome da unidade."
-              }
-            ]
           }
         }
       },
@@ -10712,25 +10622,93 @@
           }
         }
       },
-      "CatalogoDeExames": {
+      "CasoDeRevisao": {
         "type": "object",
         "required": [
-          "procedimentos",
-          "tabelas"
+          "id",
+          "codigo",
+          "situacao",
+          "laudo_id",
+          "laudo_codigo",
+          "exame",
+          "versao",
+          "paciente"
         ],
         "properties": {
-          "procedimentos": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ProcedimentoDoCatalogo"
-            }
+          "assinada_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
           },
-          "tabelas": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/VersaoDaTabelaDePreco"
-            },
-            "description": "Versões da tabela de preços desta unidade, da mais nova para a mais antiga."
+          "autor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Quem laudou: oculto até o parecer ser enviado."
+          },
+          "classe": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "comentario": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "concluida_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "estudo_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "laudo_codigo": {
+            "type": "string"
+          },
+          "laudo_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "situacao": {
+            "type": "string"
+          },
+          "texto": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Texto da versão revisada (só enquanto a revisão está aberta)."
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Versão assinada revisada."
           }
         }
       },
@@ -11330,56 +11308,6 @@
           }
         }
       },
-      "DadosDaHabilitacao": {
-        "type": "object",
-        "required": [
-          "realiza",
-          "lauda"
-        ],
-        "properties": {
-          "lauda": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Modalidades que lauda."
-          },
-          "realiza": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Modalidades que realiza na sala (US, CT...)."
-          }
-        }
-      },
-      "DadosDoRegistro": {
-        "type": "object",
-        "required": [
-          "uf",
-          "numero"
-        ],
-        "properties": {
-          "especialidade": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "numero": {
-            "type": "string"
-          },
-          "rqe": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "uf": {
-            "type": "string"
-          }
-        }
-      },
       "Decisao": {
         "type": "object",
         "required": [
@@ -11388,6 +11316,24 @@
         "properties": {
           "motivo": {
             "type": "string"
+          }
+        }
+      },
+      "DecisaoDePendencia": {
+        "type": "object",
+        "required": [
+          "decisao"
+        ],
+        "properties": {
+          "decisao": {
+            "type": "string",
+            "description": "retificado (já há versão nova do laudo) ou mantido (com motivo)."
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -11406,18 +11352,20 @@
           }
         }
       },
-      "DecisaoDoCorpoClinico": {
+      "DecisaoDeVersaoDeModelo": {
         "type": "object",
         "required": [
-          "aprovar",
-          "motivo"
+          "aprovar"
         ],
         "properties": {
           "aprovar": {
             "type": "boolean"
           },
           "motivo": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -11520,6 +11468,49 @@
           },
           "margem": {
             "$ref": "#/components/schemas/MargemTirads"
+          }
+        }
+      },
+      "DiscrepanciaDeRevisao": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "laudo_codigo",
+          "exame",
+          "classe",
+          "autor",
+          "concluida_em"
+        ],
+        "properties": {
+          "autor": {
+            "type": "string"
+          },
+          "classe": {
+            "type": "string"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "concluida_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "laudo_codigo": {
+            "type": "string"
+          },
+          "pendencia": {
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -11627,36 +11618,6 @@
               "string",
               "null"
             ]
-          }
-        }
-      },
-      "EstadoDoProcedimento": {
-        "type": "object",
-        "required": [
-          "nome",
-          "duracao_min",
-          "requer_contraste",
-          "ativo"
-        ],
-        "properties": {
-          "ativo": {
-            "type": "boolean"
-          },
-          "duracao_min": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "modalidade": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "nome": {
-            "type": "string"
-          },
-          "requer_contraste": {
-            "type": "boolean"
           }
         }
       },
@@ -11990,67 +11951,6 @@
           }
         }
       },
-      "EventoDeSeguranca": {
-        "type": "object",
-        "required": [
-          "id",
-          "codigo",
-          "tipo",
-          "quase_erro",
-          "gravidade",
-          "descricao",
-          "notificado_em",
-          "situacao"
-        ],
-        "properties": {
-          "codigo": {
-            "type": "string"
-          },
-          "descricao": {
-            "type": "string"
-          },
-          "gravidade": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "notificado_em": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "notificado_por": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "Nulo quando anônimo."
-          },
-          "notificar_anvisa_ate": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          },
-          "paciente": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "quase_erro": {
-            "type": "boolean"
-          },
-          "situacao": {
-            "type": "string"
-          },
-          "tipo": {
-            "type": "string"
-          }
-        }
-      },
       "Exame": {
         "type": "object",
         "required": [
@@ -12313,6 +12213,61 @@
           "mais_alto_que_largo"
         ]
       },
+      "FraseDeLaudo": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "tipo",
+          "atalho",
+          "texto",
+          "dono",
+          "criado_em",
+          "pode_editar"
+        ],
+        "properties": {
+          "atalho": {
+            "type": "string"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dono": {
+            "type": "string",
+            "description": "\"Clínica\" ou o nome do médico dono."
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pode_editar": {
+            "type": "boolean"
+          },
+          "substitui_codigo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "texto": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string",
+            "description": "clinica ou pessoal."
+          }
+        }
+      },
       "Glosa": {
         "type": "object",
         "required": [
@@ -12520,32 +12475,6 @@
           "validade": {
             "type": "string",
             "format": "date"
-          }
-        }
-      },
-      "HabilitacaoVigente": {
-        "type": "object",
-        "required": [
-          "realiza",
-          "lauda",
-          "desde"
-        ],
-        "properties": {
-          "desde": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lauda": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "realiza": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           }
         }
       },
@@ -12992,6 +12921,53 @@
             ],
             "format": "int64",
             "description": "Nulo quando o código não está na tabela da operadora."
+          }
+        }
+      },
+      "ItemDaFilaDeRevisao": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "laudo_codigo",
+          "exame",
+          "situacao",
+          "designada_em"
+        ],
+        "properties": {
+          "classe": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "concluida_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "designada_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "laudo_codigo": {
+            "type": "string"
+          },
+          "situacao": {
+            "type": "string",
+            "description": "designada, concluida ou conflito_declarado."
           }
         }
       },
@@ -13557,83 +13533,6 @@
           }
         }
       },
-      "Manifestacao": {
-        "type": "object",
-        "required": [
-          "id",
-          "codigo",
-          "tipo",
-          "canal",
-          "anonima",
-          "relato",
-          "recebida_em",
-          "prazo_em",
-          "situacao",
-          "vencida"
-        ],
-        "properties": {
-          "anonima": {
-            "type": "boolean"
-          },
-          "canal": {
-            "type": "string"
-          },
-          "codigo": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "nascimento": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date"
-          },
-          "prazo_em": {
-            "type": "string",
-            "format": "date"
-          },
-          "quem": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "Nome do paciente do cadastro ou o nome informado; nulo se anônima."
-          },
-          "recebida_em": {
-            "type": "string",
-            "format": "date"
-          },
-          "relato": {
-            "type": "string"
-          },
-          "respondida_em": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          },
-          "resposta": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "situacao": {
-            "type": "string"
-          },
-          "tipo": {
-            "type": "string"
-          },
-          "vencida": {
-            "type": "boolean"
-          }
-        }
-      },
       "MargemBirads": {
         "type": "string",
         "enum": [
@@ -13684,59 +13583,19 @@
           }
         }
       },
-      "MedicoDoCorpoClinico": {
+      "MedicoDaUnidade": {
         "type": "object",
         "required": [
           "id",
-          "codigo",
-          "nome",
-          "ativo",
-          "situacao",
-          "pendentes"
+          "nome"
         ],
         "properties": {
-          "ativo": {
-            "type": "boolean"
-          },
-          "codigo": {
-            "type": "string"
-          },
-          "habilitacao": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/HabilitacaoVigente"
-              }
-            ]
-          },
           "id": {
             "type": "string",
             "format": "uuid"
           },
           "nome": {
             "type": "string"
-          },
-          "pendentes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PedidoDoCorpoClinico"
-            }
-          },
-          "registro": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/RegistroVigente"
-              }
-            ]
-          },
-          "situacao": {
-            "type": "string",
-            "description": "ativo, aguardando_conferencia, sem_registro ou inativo."
           }
         }
       },
@@ -13804,6 +13663,95 @@
           },
           "cabecalho": {
             "$ref": "#/components/schemas/CabecalhoDoMenu"
+          }
+        }
+      },
+      "ModeloDeLaudo": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "tipo",
+          "nome",
+          "exame",
+          "modalidade",
+          "autor",
+          "ativo",
+          "usos",
+          "pode_editar",
+          "pode_decidir",
+          "pode_desativar",
+          "versoes"
+        ],
+        "properties": {
+          "ativo": {
+            "type": "boolean"
+          },
+          "autor": {
+            "type": "string",
+            "description": "Dono do modelo pessoal; \"Clínica\" no da clínica."
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "modalidade": {
+            "type": "string"
+          },
+          "motivo_desativacao": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "nome": {
+            "type": "string"
+          },
+          "pode_decidir": {
+            "type": "boolean"
+          },
+          "pode_desativar": {
+            "type": "boolean"
+          },
+          "pode_editar": {
+            "type": "boolean",
+            "description": "O servidor diz o que esta pessoa pode fazer (a tela só mostra)."
+          },
+          "proposta_em_aberto": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
+          },
+          "tipo": {
+            "type": "string",
+            "description": "clinica ou pessoal."
+          },
+          "usos": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Laudos que usaram o modelo (qualquer versão)."
+          },
+          "versao_publicada": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
+          },
+          "versoes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VersaoDeModelo"
+            },
+            "description": "Da mais nova para a mais antiga."
           }
         }
       },
@@ -13876,166 +13824,6 @@
           }
         }
       },
-      "MudancaNoProcedimento": {
-        "type": "object",
-        "required": [
-          "versao",
-          "motivo"
-        ],
-        "properties": {
-          "ativo": {
-            "type": [
-              "boolean",
-              "null"
-            ]
-          },
-          "duracao_min": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "format": "int32"
-          },
-          "modalidade": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "motivo": {
-            "type": "string"
-          },
-          "versao": {
-            "type": "integer",
-            "format": "int32",
-            "description": "Versão do cadastro que a tela mostrou."
-          }
-        }
-      },
-      "MudancaRegistradaNoCatalogo": {
-        "type": "object",
-        "required": [
-          "codigo",
-          "tipo",
-          "motivo",
-          "versao_do_procedimento",
-          "depois",
-          "quem",
-          "em"
-        ],
-        "properties": {
-          "antes": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/EstadoDoProcedimento"
-              }
-            ]
-          },
-          "codigo": {
-            "type": "string"
-          },
-          "depois": {
-            "$ref": "#/components/schemas/EstadoDoProcedimento"
-          },
-          "em": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "motivo": {
-            "type": "string"
-          },
-          "quem": {
-            "type": "string"
-          },
-          "tipo": {
-            "type": "string",
-            "description": "incluir, alterar, desativar ou reativar."
-          },
-          "versao_do_procedimento": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "NaoConformidade": {
-        "type": "object",
-        "required": [
-          "id",
-          "codigo",
-          "descricao",
-          "classificacao",
-          "gravidade",
-          "situacao",
-          "vencida",
-          "aberta_por",
-          "aberta_em",
-          "versao",
-          "andamentos"
-        ],
-        "properties": {
-          "aberta_em": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "aberta_por": {
-            "type": "string"
-          },
-          "andamentos": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AndamentoDaNc"
-            }
-          },
-          "classificacao": {
-            "type": "string"
-          },
-          "codigo": {
-            "type": "string"
-          },
-          "descricao": {
-            "type": "string"
-          },
-          "eficaz": {
-            "type": [
-              "boolean",
-              "null"
-            ]
-          },
-          "gravidade": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "prazo_em": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date"
-          },
-          "responsavel": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "situacao": {
-            "type": "string"
-          },
-          "vencida": {
-            "type": "boolean"
-          },
-          "versao": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
       "NoDaCadeia": {
         "type": "object",
         "required": [
@@ -14105,60 +13893,37 @@
           }
         }
       },
-      "NovaManifestacao": {
+      "NovaFraseDeLaudo": {
         "type": "object",
         "required": [
           "tipo",
-          "canal",
-          "relato"
+          "atalho",
+          "texto"
         ],
         "properties": {
-          "anonima": {
-            "type": "boolean",
-            "description": "Só para denúncia."
+          "atalho": {
+            "type": "string"
           },
-          "canal": {
-            "type": "string",
-            "description": "telefone, presencial, email ou portal."
-          },
-          "nome_informado": {
+          "motivo": {
             "type": [
               "string",
               "null"
             ]
           },
-          "paciente_id": {
+          "substitui_id": {
             "type": [
               "string",
               "null"
             ],
-            "format": "uuid"
+            "format": "uuid",
+            "description": "Frase que esta nova versão substitui (com motivo)."
           },
-          "relato": {
+          "texto": {
             "type": "string"
           },
           "tipo": {
             "type": "string",
-            "description": "reclamacao, elogio, sugestao, denuncia ou lgpd."
-          }
-        }
-      },
-      "NovaNaoConformidade": {
-        "type": "object",
-        "required": [
-          "descricao",
-          "classificacao",
-          "gravidade"
-        ],
-        "properties": {
-          "classificacao": {
-            "type": "string"
-          },
-          "descricao": {
-            "type": "string"
-          },
-          "gravidade": {
-            "type": "string"
+            "description": "clinica ou pessoal."
           }
         }
       },
@@ -14184,31 +13949,26 @@
           }
         }
       },
-      "NovaVersaoDaTabela": {
+      "NovaVersaoDeModelo": {
         "type": "object",
         "required": [
-          "vigente_desde",
-          "descricao",
-          "motivo",
-          "precos"
+          "texto",
+          "motivo"
         ],
         "properties": {
-          "descricao": {
-            "type": "string"
-          },
           "motivo": {
             "type": "string"
           },
-          "precos": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PrecoDaVersao"
-            }
+          "texto": {
+            "type": "string"
           },
-          "vigente_desde": {
-            "type": "string",
-            "format": "date",
-            "description": "Primeiro dia da nova versão: depois de hoje e depois do início da última versão."
+          "versao_base": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "Versão publicada que a pessoa estava vendo (nenhuma: nulo). Diferente da atual: 409."
           }
         }
       },
@@ -14285,96 +14045,39 @@
           }
         }
       },
-      "NovoCabecalho": {
+      "NovoModeloDeLaudo": {
         "type": "object",
         "required": [
+          "tipo",
           "nome",
-          "razao_social",
-          "cnpj",
-          "endereco",
-          "telefone",
-          "responsavel_nome",
-          "responsavel_crm_uf",
-          "responsavel_crm_numero"
+          "exame",
+          "modalidade",
+          "texto"
         ],
         "properties": {
-          "cnpj": {
-            "type": "string"
-          },
-          "endereco": {
-            "type": "string"
-          },
-          "motivo": {
+          "derivado_de": {
             "type": [
               "string",
               "null"
             ],
-            "description": "Obrigatório a partir da segunda versão."
+            "format": "uuid",
+            "description": "Modelo da clínica de onde o pessoal foi derivado."
+          },
+          "exame": {
+            "type": "string"
+          },
+          "modalidade": {
+            "type": "string"
           },
           "nome": {
             "type": "string"
           },
-          "numero_atual": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "format": "int32",
-            "description": "Versão que a tela mostrou (nenhuma na primeira vez)."
-          },
-          "razao_social": {
+          "texto": {
             "type": "string"
-          },
-          "responsavel_crm_numero": {
-            "type": "string"
-          },
-          "responsavel_crm_uf": {
-            "type": "string"
-          },
-          "responsavel_nome": {
-            "type": "string"
-          },
-          "site": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "telefone": {
-            "type": "string"
-          }
-        }
-      },
-      "NovoEventoAdverso": {
-        "type": "object",
-        "required": [
-          "tipo",
-          "quase_erro",
-          "gravidade",
-          "descricao"
-        ],
-        "properties": {
-          "anonimo": {
-            "type": "boolean"
-          },
-          "descricao": {
-            "type": "string"
-          },
-          "gravidade": {
-            "type": "string"
-          },
-          "paciente_id": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "uuid"
-          },
-          "quase_erro": {
-            "type": "boolean"
           },
           "tipo": {
-            "type": "string"
+            "type": "string",
+            "description": "clinica ou pessoal."
           }
         }
       },
@@ -14532,74 +14235,6 @@
           "pontos_base": {
             "type": "integer",
             "format": "int32"
-          }
-        }
-      },
-      "NovoPedidoDoCorpoClinico": {
-        "type": "object",
-        "required": [
-          "tipo",
-          "motivo"
-        ],
-        "properties": {
-          "habilitacao": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/DadosDaHabilitacao"
-              }
-            ]
-          },
-          "motivo": {
-            "type": "string"
-          },
-          "registro": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/DadosDoRegistro"
-              }
-            ]
-          },
-          "tipo": {
-            "type": "string",
-            "description": "registro ou habilitacao."
-          }
-        }
-      },
-      "NovoProcedimento": {
-        "type": "object",
-        "required": [
-          "tuss",
-          "nome",
-          "modalidade",
-          "duracao_min",
-          "requer_contraste",
-          "motivo"
-        ],
-        "properties": {
-          "duracao_min": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "modalidade": {
-            "type": "string"
-          },
-          "motivo": {
-            "type": "string"
-          },
-          "nome": {
-            "type": "string"
-          },
-          "requer_contraste": {
-            "type": "boolean"
-          },
-          "tuss": {
-            "type": "string"
           }
         }
       },
@@ -15147,86 +14782,50 @@
           }
         }
       },
-      "PainelDaOuvidoria": {
+      "PainelDeRevisao": {
         "type": "object",
         "required": [
+          "dias",
+          "por_medico",
+          "discrepancias",
           "abertas",
-          "vencem_hoje",
-          "manifestacoes"
+          "conflitos",
+          "medicos"
         ],
         "properties": {
           "abertas": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "manifestacoes": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Manifestacao"
+              "$ref": "#/components/schemas/RevisaoDesignada"
             }
           },
-          "no_prazo_percentual": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "format": "int64",
-            "description": "Das respondidas nos últimos 30 dias, quantas dentro do prazo (%)."
-          },
-          "vencem_hoje": {
-            "type": "integer",
-            "format": "int64"
-          }
-        }
-      },
-      "PainelDaQualidade": {
-        "type": "object",
-        "required": [
-          "nc_abertas",
-          "nc_vencidas",
-          "eventos_no_mes",
-          "quase_erros_no_mes",
-          "graves_no_mes",
-          "anvisa_pendentes",
-          "nao_conformidades",
-          "eventos"
-        ],
-        "properties": {
-          "anvisa_pendentes": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "eventos": {
+          "conflitos": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/EventoDeSeguranca"
+              "$ref": "#/components/schemas/RevisaoDesignada"
             }
           },
-          "eventos_no_mes": {
+          "dias": {
             "type": "integer",
-            "format": "int64"
+            "format": "int32"
           },
-          "graves_no_mes": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "nao_conformidades": {
+          "discrepancias": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/NaoConformidade"
+              "$ref": "#/components/schemas/DiscrepanciaDeRevisao"
             }
           },
-          "nc_abertas": {
-            "type": "integer",
-            "format": "int64"
+          "medicos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MedicoDaUnidade"
+            }
           },
-          "nc_vencidas": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "quase_erros_no_mes": {
-            "type": "integer",
-            "format": "int64"
+          "por_medico": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResultadoDoMedico"
+            }
           }
         }
       },
@@ -15251,6 +14850,22 @@
           "estudos_sem_paciente": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "ParecerDeRevisao": {
+        "type": "object",
+        "required": [
+          "classe",
+          "comentario"
+        ],
+        "properties": {
+          "classe": {
+            "type": "string",
+            "description": "1, 2a, 2b, 3a ou 3b (RADPEER)."
+          },
+          "comentario": {
+            "type": "string"
           }
         }
       },
@@ -15486,6 +15101,17 @@
           }
         }
       },
+      "PedidoConflito": {
+        "type": "object",
+        "required": [
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string"
+          }
+        }
+      },
       "PedidoConversar": {
         "type": "object",
         "required": [
@@ -15569,6 +15195,17 @@
             ],
             "format": "int32",
             "description": "Número do guichê (1 a 20), só para a recepção."
+          }
+        }
+      },
+      "PedidoDeDesativacao": {
+        "type": "object",
+        "required": [
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string"
           }
         }
       },
@@ -15779,86 +15416,20 @@
           }
         }
       },
-      "PedidoDoCorpoClinico": {
+      "PedidoDesignacao": {
         "type": "object",
         "required": [
-          "id",
-          "codigo",
-          "tipo",
-          "situacao",
-          "motivo",
-          "pedido_por",
-          "pedido_por_id",
-          "pedido_em"
+          "laudo_id",
+          "revisor_id"
         ],
         "properties": {
-          "codigo": {
-            "type": "string"
-          },
-          "decidido_em": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          },
-          "decidido_por": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "habilitacao": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/DadosDaHabilitacao"
-              }
-            ]
-          },
-          "id": {
+          "laudo_id": {
             "type": "string",
             "format": "uuid"
           },
-          "motivo": {
-            "type": "string"
-          },
-          "motivo_decisao": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "pedido_em": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "pedido_por": {
-            "type": "string"
-          },
-          "pedido_por_id": {
+          "revisor_id": {
             "type": "string",
             "format": "uuid"
-          },
-          "registro": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/DadosDoRegistro"
-              }
-            ]
-          },
-          "situacao": {
-            "type": "string",
-            "description": "aguardando, aplicado ou recusado."
-          },
-          "tipo": {
-            "type": "string",
-            "description": "registro ou habilitacao."
           }
         }
       },
@@ -16380,6 +15951,25 @@
           }
         }
       },
+      "PedidoSorteio": {
+        "type": "object",
+        "required": [
+          "quantidade",
+          "dias"
+        ],
+        "properties": {
+          "dias": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Laudos assinados nos últimos N dias (1 a 90)."
+          },
+          "quantidade": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Quantos laudos sortear (1 a 50)."
+          }
+        }
+      },
       "PedidoTriagem": {
         "type": "object",
         "required": [
@@ -16417,6 +16007,23 @@
           },
           "usa_metformina": {
             "type": "boolean"
+          }
+        }
+      },
+      "PedidoUsoDeModelo": {
+        "type": "object",
+        "required": [
+          "modelo_id",
+          "numero"
+        ],
+        "properties": {
+          "modelo_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "numero": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -16522,22 +16129,6 @@
           "combinado"
         ]
       },
-      "PrecoDaVersao": {
-        "type": "object",
-        "required": [
-          "tuss",
-          "valor_centavos"
-        ],
-        "properties": {
-          "tuss": {
-            "type": "string"
-          },
-          "valor_centavos": {
-            "type": "integer",
-            "format": "int64"
-          }
-        }
-      },
       "PreferenciaWhatsapp": {
         "type": "object",
         "required": [
@@ -16613,62 +16204,6 @@
             ],
             "format": "int64",
             "description": "Nulo quando o procedimento não está na tabela vigente."
-          }
-        }
-      },
-      "ProcedimentoDoCatalogo": {
-        "type": "object",
-        "required": [
-          "tuss",
-          "nome",
-          "duracao_min",
-          "requer_contraste",
-          "ativo",
-          "versao"
-        ],
-        "properties": {
-          "ativo": {
-            "type": "boolean"
-          },
-          "duracao_min": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "modalidade": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "nome": {
-            "type": "string"
-          },
-          "preco_centavos": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "format": "int64",
-            "description": "Preço do particular na tabela vigente desta unidade (sem preço: não cobra no caixa)."
-          },
-          "proximo_preco_centavos": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "format": "int64",
-            "description": "Preço na próxima versão já publicada, se houver."
-          },
-          "requer_contraste": {
-            "type": "boolean"
-          },
-          "tuss": {
-            "type": "string"
-          },
-          "versao": {
-            "type": "integer",
-            "format": "int32",
-            "description": "Versão do cadastro; a mudança informa a versão que viu (G2)."
           }
         }
       },
@@ -16774,51 +16309,6 @@
           },
           "exame": {
             "type": "string"
-          }
-        }
-      },
-      "ProtocoloDaManifestacao": {
-        "type": "object",
-        "required": [
-          "id",
-          "codigo",
-          "prazo_em"
-        ],
-        "properties": {
-          "codigo": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "prazo_em": {
-            "type": "string",
-            "format": "date"
-          }
-        }
-      },
-      "ProtocoloDeQualidade": {
-        "type": "object",
-        "required": [
-          "id",
-          "codigo"
-        ],
-        "properties": {
-          "codigo": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "notificar_anvisa_ate": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time",
-            "description": "Só para evento com dano grave ou óbito."
           }
         }
       },
@@ -17020,42 +16510,6 @@
           }
         }
       },
-      "RegistroVigente": {
-        "type": "object",
-        "required": [
-          "conselho",
-          "uf",
-          "numero",
-          "desde"
-        ],
-        "properties": {
-          "conselho": {
-            "type": "string"
-          },
-          "desde": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "especialidade": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "numero": {
-            "type": "string"
-          },
-          "rqe": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "uf": {
-            "type": "string"
-          }
-        }
-      },
       "RegraDoConjunto": {
         "type": "object",
         "required": [
@@ -17213,17 +16667,6 @@
           "titulos_criados": {
             "type": "integer",
             "format": "int64"
-          }
-        }
-      },
-      "RespostaDaManifestacao": {
-        "type": "object",
-        "required": [
-          "resposta"
-        ],
-        "properties": {
-          "resposta": {
-            "type": "string"
           }
         }
       },
@@ -17400,6 +16843,74 @@
           }
         }
       },
+      "ResultadoDoMedico": {
+        "type": "object",
+        "required": [
+          "medico_id",
+          "medico",
+          "revisados",
+          "concordantes",
+          "discrepancias",
+          "pendentes"
+        ],
+        "properties": {
+          "concordancia_percentual": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
+          },
+          "concordantes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "discrepancias": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "medico": {
+            "type": "string"
+          },
+          "medico_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "pendentes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "revisados": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ResultadoDoSorteio": {
+        "type": "object",
+        "required": [
+          "candidatos",
+          "designadas",
+          "sem_revisor"
+        ],
+        "properties": {
+          "candidatos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "designadas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RevisaoDesignada"
+            }
+          },
+          "sem_revisor": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Laudos sorteados sem outro médico disponível para revisar."
+          }
+        }
+      },
       "ResumoAuditoria": {
         "type": "object",
         "required": [
@@ -17537,6 +17048,173 @@
           "valor_pago_centavos": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "RevisaoDesignada": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "laudo_id",
+          "laudo_codigo",
+          "exame",
+          "revisor_id",
+          "revisor",
+          "modo",
+          "situacao",
+          "designada_em"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "designada_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "laudo_codigo": {
+            "type": "string"
+          },
+          "laudo_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "modo": {
+            "type": "string",
+            "description": "sorteio ou selecao."
+          },
+          "motivo_conflito": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "revisor": {
+            "type": "string"
+          },
+          "revisor_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "situacao": {
+            "type": "string"
+          }
+        }
+      },
+      "RevisaoDoMeuLaudo": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "laudo_id",
+          "laudo_codigo",
+          "exame",
+          "versao",
+          "paciente",
+          "classe",
+          "concluida_em"
+        ],
+        "properties": {
+          "classe": {
+            "type": "string"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "comentario": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "concluida_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "laudo_codigo": {
+            "type": "string"
+          },
+          "laudo_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "pendencia": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "aguarda_autor, retificado ou mantido (só nas discrepâncias significativas)."
+          },
+          "pendencia_motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pendencia_resolvida_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RevisoesDoAutor": {
+        "type": "object",
+        "required": [
+          "revisados",
+          "concordantes",
+          "pendentes",
+          "revisoes"
+        ],
+        "properties": {
+          "concordancia_percentual": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
+          },
+          "concordantes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pendentes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "revisados": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "revisoes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RevisaoDoMeuLaudo"
+            }
           }
         }
       },
@@ -17683,18 +17361,6 @@
           "situacao": {
             "type": "string",
             "description": "valido ou indisponivel (vencido, usado, revogado ou inexistente: a mesma resposta)."
-          }
-        }
-      },
-      "SituacaoDoEvento": {
-        "type": "object",
-        "required": [
-          "situacao"
-        ],
-        "properties": {
-          "situacao": {
-            "type": "string",
-            "description": "em_analise ou concluido."
           }
         }
       },
@@ -17922,6 +17588,31 @@
           }
         }
       },
+      "UsoDeModelo": {
+        "type": "object",
+        "required": [
+          "modelo_codigo",
+          "numero",
+          "laudo_versao",
+          "texto"
+        ],
+        "properties": {
+          "laudo_versao": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modelo_codigo": {
+            "type": "string"
+          },
+          "numero": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "texto": {
+            "type": "string"
+          }
+        }
+      },
       "UsuarioAdministrado": {
         "type": "object",
         "required": [
@@ -18094,28 +17785,32 @@
           }
         }
       },
-      "VersaoDaTabelaDePreco": {
+      "VersaoDeModelo": {
         "type": "object",
         "required": [
-          "id",
-          "versao",
-          "vigente_desde",
-          "descricao",
-          "itens",
-          "publicada_em",
-          "situacao"
+          "numero",
+          "texto",
+          "situacao",
+          "proposta_por",
+          "criado_em"
         ],
         "properties": {
-          "descricao": {
-            "type": "string"
-          },
-          "id": {
+          "criado_em": {
             "type": "string",
-            "format": "uuid"
+            "format": "date-time"
           },
-          "itens": {
-            "type": "integer",
-            "format": "int64"
+          "decidido_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "decidido_por": {
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "motivo": {
             "type": [
@@ -18123,27 +17818,25 @@
               "null"
             ]
           },
-          "publicada_em": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "publicada_por": {
+          "motivo_decisao": {
             "type": [
               "string",
               "null"
             ]
           },
-          "situacao": {
-            "type": "string",
-            "description": "vigente, futura ou anterior."
-          },
-          "versao": {
+          "numero": {
             "type": "integer",
             "format": "int32"
           },
-          "vigente_desde": {
+          "proposta_por": {
+            "type": "string"
+          },
+          "situacao": {
             "type": "string",
-            "format": "date"
+            "description": "proposta, publicada, substituida ou recusada."
+          },
+          "texto": {
+            "type": "string"
           }
         }
       },

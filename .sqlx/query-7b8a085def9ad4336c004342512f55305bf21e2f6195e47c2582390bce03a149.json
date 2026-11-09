@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE cuidado.vinculo SET expira_em = now(), versao = versao + 1\n          WHERE medico_id = $1 AND paciente_id = $2 AND motivo = 'revisao_por_par' AND expira_em > now()\n            AND NOT EXISTS (SELECT 1 FROM laudos.revisao r WHERE r.revisor_id = $1 AND r.paciente_id = $2 AND r.situacao = 'designada')",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "7b8a085def9ad4336c004342512f55305bf21e2f6195e47c2582390bce03a149"
+}

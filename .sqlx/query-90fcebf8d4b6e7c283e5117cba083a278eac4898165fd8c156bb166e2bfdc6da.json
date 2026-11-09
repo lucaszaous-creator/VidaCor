@@ -1,0 +1,18 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO laudos.revisao_parecer (revisao_id, comentario, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, 'consultorio', $4, $5)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "90fcebf8d4b6e7c283e5117cba083a278eac4898165fd8c156bb166e2bfdc6da"
+}

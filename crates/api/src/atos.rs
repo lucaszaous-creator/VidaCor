@@ -61,6 +61,9 @@ pub enum Ato {
     CatalogoVer,
     CatalogoAdministrar,
     CabecalhoAdministrar,
+    ModeloLaudoUsar,
+    RevisaoPorParRevisar,
+    LaudoCoordenar,
 }
 
 impl Ato {
@@ -133,6 +136,12 @@ impl Ato {
             A::OuvidoriaTratar => &["gerente"],
             // Qualidade: a gerência (Núcleo de Segurança do Paciente) lê e trata.
             A::QualidadeTratar => &["gerente"],
+            // Modelos de laudo e frases (docs/04 Laudar): o médico usa, cria os seus e propõe os da
+            // clínica; revisão por par: o médico revisa o laudo de outro (docs/18 § 3, médico
+            // revisor). Coordenar (aprovar modelo da clínica, sortear revisão, ver resultados): perfil
+            // gerente, e o núcleo exige também o perfil médico (coordenação médica, DEC-2026-11-08-100).
+            A::ModeloLaudoUsar | A::RevisaoPorParRevisar => &["medico"],
+            A::LaudoCoordenar => &["gerente"],
             // Autorização pedida pelo sistema (docs/22 E4): recepção e faturista pedem; gerente acompanha.
             A::AutorizacaoPedir => &["recepcao", "faturista"],
             A::AutorizacaoVer => &["recepcao", "faturista", "gerente"],
@@ -154,7 +163,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 57] = [
+    const TODOS: [Ato; 60] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -212,6 +221,9 @@ mod testes {
         Ato::CatalogoVer,
         Ato::CatalogoAdministrar,
         Ato::CabecalhoAdministrar,
+        Ato::ModeloLaudoUsar,
+        Ato::RevisaoPorParRevisar,
+        Ato::LaudoCoordenar,
     ];
 
     #[test]
@@ -270,7 +282,13 @@ mod testes {
 
     #[test]
     fn clinico_so_para_medico() {
-        for ato in [Ato::TriagemConduta, Ato::LaudoEscrever, Ato::LaudoLer] {
+        for ato in [
+            Ato::TriagemConduta,
+            Ato::LaudoEscrever,
+            Ato::LaudoLer,
+            Ato::ModeloLaudoUsar,
+            Ato::RevisaoPorParRevisar,
+        ] {
             for p in [
                 "recepcao",
                 "tecnico",

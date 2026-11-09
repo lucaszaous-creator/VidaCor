@@ -1,0 +1,136 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT f.id, f.codigo, f.tipo, f.atalho, f.texto, f.dono_id, d.nome AS \"dono_nome?\", s.codigo AS \"substitui_codigo?\", f.motivo, f.criado_em\n             FROM laudos.frase f\n             LEFT JOIN identidade.usuario d ON d.id = f.dono_id\n             LEFT JOIN laudos.frase s ON s.id = f.substitui_id\n            WHERE f.ativo AND ($1::uuid IS NULL OR f.id = $1)\n            ORDER BY f.atalho, f.tipo LIMIT 500",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.frase",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.frase",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "tipo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.frase",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "atalho",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.frase",
+            "name": "atalho"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "texto",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.frase",
+            "name": "texto"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "dono_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.frase",
+            "name": "dono_id"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "dono_nome?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "substitui_codigo?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.frase",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.frase",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "laudos.frase",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "a275cd665e5da1c0852d711121bcc651efdd03d8a63357b44e4245dd3953fa28"
+}
