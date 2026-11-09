@@ -58,6 +58,7 @@ import type { VisaoDoPaciente } from './contrato-paciente';
 import type { InicioDoDia } from './contrato-inicio';
 import type { FluxoDeLaudos } from './contrato-fluxo';
 import type { ResultadoDaBusca } from './contrato-busca';
+import type { AndamentoNovo, NovaNaoConformidade, NovoEventoAdverso, PainelDaQualidade, ProtocoloDeQualidade } from './contrato-qualidade';
 import type { Manifestacao, NovaManifestacao, PainelDaOuvidoria, ProtocoloDaManifestacao } from './contrato-ouvidoria';
 import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
@@ -380,6 +381,18 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
       painel: (): Promise<PainelDaOuvidoria> => ler<PainelDaOuvidoria>('/v1/ouvidoria'),
       responder: (id: string, resposta: string, o: OpcoesDeEscrita): Promise<Manifestacao> =>
         criar<Manifestacao>('POST', `/v1/ouvidoria/${seg(id)}/resposta`, { resposta }, o),
+    },
+
+    /** Qualidade: equipe abre e notifica; a gerência (NSP) lê e trata. */
+    qualidade: {
+      painel: (): Promise<PainelDaQualidade> => ler<PainelDaQualidade>('/v1/qualidade'),
+      abrirNc: (corpo: NovaNaoConformidade, o: OpcoesDeEscrita): Promise<ProtocoloDeQualidade> => criar<ProtocoloDeQualidade>('POST', '/v1/qualidade/nao-conformidades', corpo, o),
+      notificar: (corpo: NovoEventoAdverso, o: OpcoesDeEscrita): Promise<ProtocoloDeQualidade> => criar<ProtocoloDeQualidade>('POST', '/v1/qualidade/eventos', corpo, o),
+      /** A rota responde 200 sem corpo; a confirmação explícita deixa a tela mostrar que gravou. */
+      andamento: (id: string, corpo: AndamentoNovo, o: OpcoesDeEscrita): Promise<{ registrado: true }> =>
+        criar<unknown>('POST', `/v1/qualidade/nao-conformidades/${seg(id)}/andamento`, corpo, o).then(() => ({ registrado: true as const })),
+      situacaoDoEvento: (id: string, situacao: 'em_analise' | 'concluido', o: OpcoesDeEscrita): Promise<{ registrado: true }> =>
+        criar<unknown>('POST', `/v1/qualidade/eventos/${seg(id)}/situacao`, { situacao }, o).then(() => ({ registrado: true as const })),
     },
 
     /** Busca global: só o que o perfil pode ver. */

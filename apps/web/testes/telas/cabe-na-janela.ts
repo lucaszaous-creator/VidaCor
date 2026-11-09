@@ -303,6 +303,10 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await page.getByRole('button', { name: /Maria Helena Duarte de Albuquerque/ }).click();
   await esperar(page, 'region', 'Detalhe da manifestação');
   await ok('43-ouvidoria');
+  await ir('/qualidade');
+  await page.getByRole('button', { name: /Nobreak da sala 6/ }).first().click();
+  await esperar(page, 'region', 'Detalhe da qualidade');
+  await ok('44-qualidade');
   estado.sessao = SESSOES.tv;
   await ir('/telao');
   await esperar(page, 'region', 'Chamada atual');

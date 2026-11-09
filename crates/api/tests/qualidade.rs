@@ -129,7 +129,7 @@ async fn evento_grave_tem_prazo_anvisa_anonimo_nao_mostra_quem_e_so_a_gerencia_l
     );
     let mut st = [a.0, b.0];
     st.sort();
-    assert_eq!(st, [StatusCode::OK, StatusCode::CONFLICT]);
+    assert_eq!(st, [StatusCode::NO_CONTENT, StatusCode::CONFLICT]);
 }
 
 #[tokio::test]
@@ -160,7 +160,7 @@ async fn nao_conformidade_andamento_pela_versao_e_encerramento_com_eficacia() {
     st.sort();
     assert_eq!(
         st,
-        [StatusCode::OK, StatusCode::CONFLICT],
+        [StatusCode::NO_CONTENT, StatusCode::CONFLICT],
         "quem viu a versão antiga recebe 409"
     );
     // Encerrar exige eficácia.
@@ -174,7 +174,7 @@ async fn nao_conformidade_andamento_pela_versao_e_encerramento_com_eficacia() {
     .await;
     assert_eq!(se, StatusCode::UNPROCESSABLE_ENTITY);
     let (sok, _) = post(&amb, "patricia.lemos", &uri, None, json!({ "texto": "Nobreak trocado e testado.", "situacao": "encerrada", "eficaz": true, "versao": 2 })).await;
-    assert_eq!(sok, StatusCode::OK);
+    assert_eq!(sok, StatusCode::NO_CONTENT);
     assert_eq!(
         post(
             &amb,

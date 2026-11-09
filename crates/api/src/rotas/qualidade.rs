@@ -409,7 +409,7 @@ pub async fn painel(State(estado): State<Estado>, usuario: Usuario) -> Result<Re
 /// Registra andamento da não conformidade (gerência). Atômico pela versão: quem viu versão antiga recebe 409.
 #[utoipa::path(post, operation_id = "andamento_da_nao_conformidade", path = "/v1/qualidade/nao-conformidades/{id}/andamento", tag = "qualidade", params(("id" = Uuid, Path)),
     request_body = AndamentoNovo,
-    responses((status = 200, description = "Andamento registrado"), (status = 404, body = crate::openapi::ProblemaDoc), (status = 409, body = crate::openapi::ProblemaDoc), (status = 422, body = crate::openapi::ProblemaDoc)))]
+    responses((status = 204, description = "Andamento registrado"), (status = 404, body = crate::openapi::ProblemaDoc), (status = 409, body = crate::openapi::ProblemaDoc), (status = 422, body = crate::openapi::ProblemaDoc)))]
 pub async fn andamento(
     State(estado): State<Estado>,
     usuario: Usuario,
@@ -474,13 +474,13 @@ pub async fn andamento(
     )
     .await?;
     tx.commit().await?;
-    Ok(StatusCode::OK)
+    Ok(StatusCode::NO_CONTENT)
 }
 
 /// Muda a situação do evento (gerência): recebido -> em_analise -> concluido, atômico.
 #[utoipa::path(post, operation_id = "situacao_do_evento", path = "/v1/qualidade/eventos/{id}/situacao", tag = "qualidade", params(("id" = Uuid, Path)),
     request_body = SituacaoDoEvento,
-    responses((status = 200, description = "Situação registrada"), (status = 404, body = crate::openapi::ProblemaDoc), (status = 409, body = crate::openapi::ProblemaDoc)))]
+    responses((status = 204, description = "Situação registrada"), (status = 404, body = crate::openapi::ProblemaDoc), (status = 409, body = crate::openapi::ProblemaDoc)))]
 pub async fn situacao_evento(
     State(estado): State<Estado>,
     usuario: Usuario,
@@ -537,5 +537,5 @@ pub async fn situacao_evento(
     )
     .await?;
     tx.commit().await?;
-    Ok(StatusCode::OK)
+    Ok(StatusCode::NO_CONTENT)
 }

@@ -392,3 +392,28 @@ export const manipuladoresOuvidoria = [
     return HttpResponse.json({ id: 'm2', codigo: 'OUV-2026-000002', prazo_em: '2026-11-13' }, { status: 201 });
   }),
 ];
+
+/** Qualidade simulada (regras reais em `crates/api/tests/qualidade.rs`). */
+export const manipuladoresQualidade = [
+  http.get('*/v1/qualidade', () =>
+    temPerfil('gerente')
+      ? HttpResponse.json({
+          nc_abertas: 1, nc_vencidas: 0, eventos_no_mes: 1, quase_erros_no_mes: 0, graves_no_mes: 1, anvisa_pendentes: 1,
+          nao_conformidades: [{ id: 'n1', codigo: 'NCF-2026-000001', descricao: 'Nobreak da sala 6 sem manutenção há 8 meses.', classificacao: 'equipamento', gravidade: 'moderada', responsavel: null, prazo_em: null, situacao: 'aberta', eficaz: null, vencida: false, aberta_por: 'Equipe TI', aberta_em: '2026-11-06T12:00:00Z', versao: 1, andamentos: [] }],
+          eventos: [{ id: 'e1', codigo: 'EVT-2026-000001', tipo: 'reacao_contraste', quase_erro: false, gravidade: 'grave', descricao: 'Reação anafilática após contraste iodado.', paciente: 'Vera Lúcia Antunes', notificado_por: null, notificado_em: '2026-11-06T12:00:00Z', notificar_anvisa_ate: '2026-11-09T12:00:00Z', situacao: 'recebido' }],
+        })
+      : semPermissao('ver a qualidade'),
+  ),
+  http.post('*/v1/qualidade/eventos', async ({ request }) => {
+    const c = (await registrar('notificar-evento', request)) as { gravidade: string };
+    return HttpResponse.json({ id: 'e2', codigo: 'EVT-2026-000002', notificar_anvisa_ate: c.gravidade === 'grave' || c.gravidade === 'obito' ? '2026-11-09T12:00:00Z' : null }, { status: 201 });
+  }),
+  http.post('*/v1/qualidade/nao-conformidades/:id/andamento', async ({ request }) => {
+    await registrar('andamento-nc', request);
+    return new HttpResponse(null, { status: 204 });
+  }),
+  http.post('*/v1/qualidade/nao-conformidades', async ({ request }) => {
+    await registrar('abrir-nc', request);
+    return HttpResponse.json({ id: 'n2', codigo: 'NCF-2026-000002', notificar_anvisa_ate: null }, { status: 201 });
+  }),
+];

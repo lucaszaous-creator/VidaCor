@@ -14,6 +14,7 @@ import type { VisaoDoPaciente } from './contrato-paciente';
 import type { InicioDoDia } from './contrato-inicio';
 import type { FluxoDeLaudos } from './contrato-fluxo';
 import type { ResultadoDaBusca } from './contrato-busca';
+import type { AndamentoNovo, EventoDeSeguranca, NaoConformidade, NovaNaoConformidade, NovoEventoAdverso, PainelDaQualidade, ProtocoloDeQualidade } from './contrato-qualidade';
 import type { Manifestacao, NovaManifestacao, PainelDaOuvidoria, ProtocoloDaManifestacao } from './contrato-ouvidoria';
 import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
@@ -217,3 +218,10 @@ export type ConfereNovaVersaoDaTabela = Cabe<NovaVersaoDaTabela, S['NovaVersaoDa
 export type ConfereCabecalhoDaUnidade = Cabe<CabecalhoDaUnidade, S['CabecalhoDaUnidade']>;
 export type ConfereCabecalhoDosDocumentos = Cabe<CabecalhoDosDocumentos, S['CabecalhoDosDocumentos']>;
 export type ConfereNovoCabecalho = Cabe<NovoCabecalho, S['NovoCabecalho']>;
+export type ConfereNovaNaoConformidade = Cabe<NovaNaoConformidade, S['NovaNaoConformidade']>;
+export type ConfereNovoEventoAdverso = Cabe<NovoEventoAdverso, S['NovoEventoAdverso']>;
+export type ConfereProtocoloDeQualidade = Cabe<ProtocoloDeQualidade, S['ProtocoloDeQualidade']>;
+export type ConfereNaoConformidade = Cabe<NaoConformidade, S['NaoConformidade']>;
+export type ConfereEventoDeSeguranca = Cabe<EventoDeSeguranca, S['EventoDeSeguranca']>;
+export type ConferePainelDaQualidade = Cabe<PainelDaQualidade, S['PainelDaQualidade']>;
+export type ConfereAndamentoNovo = Cabe<AndamentoNovo, S['AndamentoNovo']>;
