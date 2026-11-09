@@ -780,3 +780,54 @@ Funcionalidade: Gestão de dose
     Quando o período passa de 92 dias ou o início é depois do fim
     Então a rota responde 422
 ```
+
+## 33. Relatórios e exportação (proposta, aguardando aprovação)
+
+> Escritas pelo Agente 2 em 09/11/2026 (DEC-2026-11-09-150 a 154). Testadas em `crates/api/tests/relatorios.rs`.
+
+| ID | Cenário | Status | Aprovador | Data | Observações |
+|---|---|---|---|---|---|
+| FC-REL-01 | Cada perfil vê só os seus relatórios | Proposta, aguardando aprovação | — | — | Base: Medware Metrics e relatórios da Medware |
+| FC-REL-02 | Faltas saem com código, nunca com nome | Proposta, aguardando aprovação | — | — | Dado de saúde pseudonimizado |
+| FC-REL-03 | Exportar pede reautenticação; sem ela nada é registrado | Proposta, aguardando aprovação | — | — | SEC-AUT-5 |
+| FC-REL-04 | Exportação gera CSV com SHA-256 registrado e lastro | Proposta, aguardando aprovação | — | — | — |
+| FC-REL-05 | Histórico: cada um vê as suas; a gerência, as da unidade | Proposta, aguardando aprovação | — | — | — |
+| FC-REL-06 | Produção por sala mostra as salas da unidade | Proposta, aguardando aprovação | — | — | — |
+| FC-REL-07 | Período inválido, sem login ou sem CSRF é recusado | Proposta, aguardando aprovação | — | — | Até 366 dias |
+
+```gherkin
+Funcionalidade: Relatórios e exportação
+
+  Cenário: FC-REL-01 Catálogo por perfil
+    Quando Patrícia (gerência) abre Relatórios, vê os 7 relatórios
+    E Rita (faturamento) vê só Produção por convênio e Glosas
+    E o financeiro vê só Recebido no caixa, e o estoque só Estoque
+    E recepção, caixa, médico, técnico, TI e TV recebem 403
+    E relatório fora do perfil responde 403 na prévia e na exportação
+
+  Cenário: FC-REL-02 Dado de saúde pseudonimizado
+    Dado "Maria Helena Duarte" (PAC-2026-000002) faltou ao ecocardiograma (TUSS 40901114)
+    Quando Patrícia abre o relatório de faltas
+    Então a linha mostra "PAC-2026-000002" e "TUSS 40901114", nunca o nome nem o exame por extenso
+
+  Cenário: FC-REL-03 Reautenticação
+    Dado que o último login com senha e 2FA tem mais de 5 minutos
+    Quando Patrícia exporta, a rota responde 401 "reautenticacao-necessaria" e nada é registrado
+
+  Cenário: FC-REL-04 Arquivo com lastro
+    Quando Patrícia exporta as faltas
+    Então recebe um CSV (UTF-8, separador ;) sem nome de paciente, com o SHA-256 e o código EXP no cabeçalho
+    E a exportação fica registrada como "pseudonimizado" com o mesmo SHA-256, e entra no lastro
+    E exportar de novo gera outra emissão, com outro código
+
+  Cenário: FC-REL-05 Histórico
+    Quando Rita e o financeiro exportam, cada um vê só a própria exportação
+    E Patrícia vê as duas; o faturamento de outra unidade não vê nenhuma
+
+  Cenário: FC-REL-06 Produção por sala
+    Quando Patrícia abre Produção por sala, vê Sala 1, Sala 2 e Sala 6
+
+  Cenário: FC-REL-07 Limites
+    Quando o período passa de 366 dias ou o início é depois do fim, a rota responde 422
+    E sem login responde 401; exportar sem o cabeçalho CSRF responde 403
+```

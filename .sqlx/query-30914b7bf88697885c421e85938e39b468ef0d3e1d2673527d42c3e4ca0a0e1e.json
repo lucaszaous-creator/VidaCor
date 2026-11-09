@@ -1,0 +1,43 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT s.nome,\n                          count(a.id) FILTER (WHERE a.situacao = 'concluido' OR t.situacao = 'exame_concluido') AS \"exames!\",\n                          coalesce(sum(extract(epoch FROM (a.fim - a.inicio)) / 60)\n                                   FILTER (WHERE a.situacao NOT IN ('cancelado','expirada')), 0)::bigint AS \"minutos!\"\n                     FROM agenda.sala s\n                     LEFT JOIN agenda.agendamento a ON a.sala_id = s.id AND a.inicio >= $1 AND a.inicio < $2\n                     LEFT JOIN recepcao.atendimento t ON t.agendamento_id = a.id\n                    WHERE s.unidade_id = comum.ctx_unidade()\n                    GROUP BY s.id, s.nome ORDER BY s.nome LIMIT 100",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "exames!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "minutos!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      null,
+      null
+    ]
+  },
+  "hash": "30914b7bf88697885c421e85938e39b468ef0d3e1d2673527d42c3e4ca0a0e1e"
+}

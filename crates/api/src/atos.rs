@@ -80,6 +80,7 @@ pub enum Ato {
     DoseAgregadoVer,
     DoseJustificar,
     NrdAdministrar,
+    RelatoriosVer,
 }
 
 impl Ato {
@@ -196,6 +197,9 @@ impl Ato {
             A::DoseVer | A::DoseJustificar => &["medico"],
             A::DoseAgregadoVer => &["medico", "gerente"],
             A::NrdAdministrar => &["gerente"],
+            // Relatórios e exportação (Relatorios.dc.html): quem tem relatório no catálogo; cada relatório
+            // confere o próprio perfil e exportar pede reautenticação (DEC-2026-11-09-150 a 154).
+            A::RelatoriosVer => &["gerente", "faturista", "financeiro", "estoque"],
         };
         perfis.contains(&perfil)
     }
@@ -205,7 +209,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 75] = [
+    const TODOS: [Ato; 76] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -281,6 +285,7 @@ mod testes {
         Ato::DoseAgregadoVer,
         Ato::DoseJustificar,
         Ato::NrdAdministrar,
+        Ato::RelatoriosVer,
     ];
 
     #[test]

@@ -252,6 +252,10 @@ pub struct ProblemaDoc {
         crate::rotas::dose::justificar,
         crate::rotas::nrd::nrd,
         crate::rotas::nrd::publicar_nrd,
+        crate::rotas::relatorios::catalogo,
+        crate::rotas::relatorios::previa,
+        crate::rotas::relatorios::exportar,
+        crate::rotas::relatorios::exportacoes,
     ),
     components(schemas(ProblemaDoc))
 )]

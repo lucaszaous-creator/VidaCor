@@ -1,0 +1,48 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT p.codigo AS paciente, a.exame_tuss, count(*) AS \"faltas!\"\n                 FROM agenda.agendamento a JOIN identidade.paciente p ON p.id = a.paciente_id\n                WHERE a.situacao = 'faltou' AND a.inicio >= $1 AND a.inicio < $2\n                GROUP BY p.codigo, a.exame_tuss ORDER BY 3 DESC, 1 LIMIT 500",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "paciente",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "exame_tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "exame_tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "faltas!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      null
+    ]
+  },
+  "hash": "50d0efd1c1ceea8feb189314161f36a5e3b93e1da2d757d1f22c82b984412f1b"
+}

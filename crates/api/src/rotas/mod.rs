@@ -59,6 +59,7 @@ pub mod portal;
 pub mod portal_acesso;
 pub mod preparo;
 pub mod qualidade;
+pub mod relatorios;
 pub mod repasse;
 pub mod respostas;
 pub mod revisao_coordenacao;
@@ -553,6 +554,11 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/doses/{id}/justificativa", post(dose::justificar))
         .route("/v1/nrd", get(nrd::nrd))
         .route("/v1/nrd/{tuss}", post(nrd::publicar_nrd))
+        // Agente 2: relatórios e exportação (DEC-2026-11-09-150 a 154).
+        .route("/v1/relatorios", get(relatorios::catalogo))
+        .route("/v1/relatorios/exportacoes", get(relatorios::exportacoes))
+        .route("/v1/relatorios/{id}", get(relatorios::previa))
+        .route("/v1/relatorios/{id}/exportacao", post(relatorios::exportar))
         .route("/v1/equipe", get(equipe::listar))
         .route("/v1/eventos", get(eventos::fluxo))
         .fallback(nao_existe)

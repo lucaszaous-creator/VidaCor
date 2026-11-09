@@ -1,0 +1,136 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT e.codigo, e.relatorio, e.formato, e.de, e.ate, e.conteudo, e.linhas, e.sha256, u.nome AS quem, e.criado_em\n             FROM relatorios.exportacao e JOIN identidade.usuario u ON u.id = e.criado_por\n            WHERE e.criado_em >= $1 ORDER BY e.criado_em DESC LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "relatorios.exportacao",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "relatorio",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "relatorios.exportacao",
+            "name": "relatorio"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "formato",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "relatorios.exportacao",
+            "name": "formato"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "de",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "relatorios.exportacao",
+            "name": "de"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "ate",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "relatorios.exportacao",
+            "name": "ate"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "conteudo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "relatorios.exportacao",
+            "name": "conteudo"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "linhas",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "relatorios.exportacao",
+            "name": "linhas"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "sha256",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "relatorios.exportacao",
+            "name": "sha256"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "quem",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "relatorios.exportacao",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "ae71a99221dc4186d0e62814489c042baa005c219a8557e21f0932a9479557d2"
+}
