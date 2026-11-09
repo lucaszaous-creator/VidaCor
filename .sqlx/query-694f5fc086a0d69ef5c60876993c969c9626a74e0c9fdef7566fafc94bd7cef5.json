@@ -1,0 +1,19 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO faturamento.regra_autorizacao_item (regra_id, tuss, exige_senha, validade_dias, documentos, unidade_id)\n         SELECT $1, t, s, v, d, $6 FROM unnest($2::text[], $3::bool[], $4::int[], $5::text[]) AS u(t, s, v, d)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "TextArray",
+        "BoolArray",
+        "Int4Array",
+        "TextArray",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "694f5fc086a0d69ef5c60876993c969c9626a74e0c9fdef7566fafc94bd7cef5"
+}

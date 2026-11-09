@@ -1,0 +1,19 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO faturamento.tabela_proposta_preco (proposta_id, tuss, descricao, valor_centavos, valor_anterior_centavos, unidade_id)\n         SELECT $1, t, d, v, x, $6 FROM unnest($2::text[], $3::text[], $4::bigint[], $5::bigint[]) AS u(t, d, v, x)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "TextArray",
+        "TextArray",
+        "Int8Array",
+        "Int8Array",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "10d277907754f7ac31869d3f48560c8d7a0cf39625b53d3637d66bb73e5fee65"
+}

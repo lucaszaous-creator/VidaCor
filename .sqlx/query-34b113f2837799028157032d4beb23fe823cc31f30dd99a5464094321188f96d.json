@@ -1,0 +1,41 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT p.tuss, p.valor_centavos FROM financeiro.preco p\n          WHERE p.tabela_id = (SELECT t.id FROM financeiro.tabela_preco t WHERE t.unidade_id = $1 AND t.vigente_desde <= $2\n                                ORDER BY t.versao DESC LIMIT 1)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.preco",
+            "name": "tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "valor_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "financeiro.preco",
+            "name": "valor_centavos"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Date"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "34b113f2837799028157032d4beb23fe823cc31f30dd99a5464094321188f96d"
+}

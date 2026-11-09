@@ -77,6 +77,23 @@ import type {
   ProcedimentoDoCatalogo,
   VersaoDaTabelaDePreco,
 } from './contrato-cadastros';
+import type {
+  AlteracaoDoConvenio,
+  CatalogoDePacotes,
+  ConvenioDetalhe,
+  ConvenioResumo,
+  DecisaoDaPropostaDeTabela,
+  NovaPropostaDeTabela,
+  NovasRegrasDeAutorizacao,
+  NovaVersaoDoPacoteDeCheckup,
+  NovoConvenio,
+  NovoPacoteDeCheckup,
+  PacoteDeCheckup,
+  PrecosDoConvenio,
+  PreviaDeReajuste,
+  PropostaDeTabela,
+  RegrasDeAutorizacaoDoConvenio,
+} from './contrato-convenios';
 import type { DecisaoDePerfil, ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
 import type { ContaBancaria, NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
 import type { ComunicacaoDoPaciente, LembretesEnfileirados, PreferenciaWhatsapp } from './contrato-comunicacao';
@@ -454,6 +471,33 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
         criar<ProcedimentoDoCatalogo>('POST', `/v1/catalogo/procedimentos/${seg(tuss)}/mudancas`, corpo, o),
       publicarTabela: (corpo: NovaVersaoDaTabela, o: OpcoesDeEscrita): Promise<VersaoDaTabelaDePreco> =>
         criar<VersaoDaTabelaDePreco>('POST', '/v1/catalogo/tabelas-de-preco', corpo, o),
+    },
+
+    /** Convênios e tabelas: o faturamento cadastra e propõe; a gerência aprova a tabela nova. */
+    convenios: {
+      listar: (): Promise<ConvenioResumo[]> => ler<ConvenioResumo[]>('/v1/convenios'),
+      obter: (id: string): Promise<ConvenioDetalhe> => ler<ConvenioDetalhe>(`/v1/convenios/${seg(id)}`),
+      precos: (id: string, versao?: number): Promise<PrecosDoConvenio> =>
+        ler<PrecosDoConvenio>(versao === undefined ? `/v1/convenios/${seg(id)}/precos` : `/v1/convenios/${seg(id)}/precos?versao=${String(versao)}`),
+      previa: (id: string, pontosBase: number): Promise<PreviaDeReajuste> =>
+        ler<PreviaDeReajuste>(`/v1/convenios/${seg(id)}/previa-de-reajuste?pontos_base=${String(pontosBase)}`),
+      cadastrar: (corpo: NovoConvenio, o: OpcoesDeEscrita): Promise<ConvenioDetalhe> => criar<ConvenioDetalhe>('POST', '/v1/convenios', corpo, o),
+      alterar: (id: string, corpo: AlteracaoDoConvenio, o: OpcoesDeEscrita): Promise<ConvenioDetalhe> =>
+        criar<ConvenioDetalhe>('POST', `/v1/convenios/${seg(id)}/alteracoes`, corpo, o),
+      propor: (id: string, corpo: NovaPropostaDeTabela, o: OpcoesDeEscrita): Promise<PropostaDeTabela> =>
+        criar<PropostaDeTabela>('POST', `/v1/convenios/${seg(id)}/propostas`, corpo, o),
+      decidir: (propostaId: string, corpo: DecisaoDaPropostaDeTabela, o: OpcoesDeEscrita): Promise<PropostaDeTabela> =>
+        criar<PropostaDeTabela>('POST', `/v1/convenios/propostas/${seg(propostaId)}/decisao`, corpo, o),
+      publicarRegras: (id: string, corpo: NovasRegrasDeAutorizacao, o: OpcoesDeEscrita): Promise<RegrasDeAutorizacaoDoConvenio> =>
+        criar<RegrasDeAutorizacaoDoConvenio>('POST', `/v1/convenios/${seg(id)}/regras-de-autorizacao`, corpo, o),
+    },
+
+    /** Check-up e pacotes: a recepção consulta; a gerência publica versão nova (o servidor confere o preço). */
+    pacotes: {
+      listar: (): Promise<CatalogoDePacotes> => ler<CatalogoDePacotes>('/v1/pacotes'),
+      criar: (corpo: NovoPacoteDeCheckup, o: OpcoesDeEscrita): Promise<PacoteDeCheckup> => criar<PacoteDeCheckup>('POST', '/v1/pacotes', corpo, o),
+      novaVersao: (codigo: string, corpo: NovaVersaoDoPacoteDeCheckup, o: OpcoesDeEscrita): Promise<PacoteDeCheckup> =>
+        criar<PacoteDeCheckup>('POST', `/v1/pacotes/${seg(codigo)}/versoes`, corpo, o),
     },
 
     /** Cabeçalho impresso nos documentos da unidade (gerência), versionado. */

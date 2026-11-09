@@ -6,6 +6,7 @@ export * from './contrato-painel';
 export * from './contrato-orcamento';
 export * from './contrato-aparelhos';
 export * from './contrato-cadastros';
+export * from './contrato-convenios';
 export * from './contrato-espera';
 export * from './contrato-configuracoes';
 export * from './contrato-paciente';

@@ -22,6 +22,7 @@ pub mod chamada;
 pub mod comunicacao;
 pub mod configuracoes;
 pub mod contingencia;
+pub mod convenios;
 pub mod corpo_clinico;
 pub mod documentos;
 pub mod equipe;
@@ -46,6 +47,7 @@ pub mod orcamentos;
 pub mod ouvidoria;
 pub mod paciente_visao;
 pub mod pacientes;
+pub mod pacotes;
 pub mod pendencias;
 pub mod portal;
 pub mod portal_acesso;
@@ -259,6 +261,40 @@ pub fn rotas() -> Router<Estado> {
         .route(
             "/v1/configuracoes/cabecalho",
             get(cabecalho::ver).post(cabecalho::publicar),
+        )
+        .route(
+            "/v1/convenios",
+            get(convenios::listar).post(convenios::contratos::cadastrar),
+        )
+        .route(
+            "/v1/convenios/propostas/{id}/decisao",
+            post(convenios::decisao::decidir),
+        )
+        .route("/v1/convenios/{id}", get(convenios::obter))
+        .route(
+            "/v1/convenios/{id}/alteracoes",
+            post(convenios::contratos::alterar),
+        )
+        .route("/v1/convenios/{id}/precos", get(convenios::tabelas::precos))
+        .route(
+            "/v1/convenios/{id}/previa-de-reajuste",
+            get(convenios::tabelas::previa),
+        )
+        .route(
+            "/v1/convenios/{id}/propostas",
+            post(convenios::tabelas::propor),
+        )
+        .route(
+            "/v1/convenios/{id}/regras-de-autorizacao",
+            post(convenios::regras::publicar),
+        )
+        .route(
+            "/v1/pacotes",
+            get(pacotes::listar).post(pacotes::publicar::criar),
+        )
+        .route(
+            "/v1/pacotes/{codigo}/versoes",
+            post(pacotes::publicar::nova_versao),
         )
         .route("/v1/orcamentos/catalogo", get(orcamentos::catalogo))
         .route(
