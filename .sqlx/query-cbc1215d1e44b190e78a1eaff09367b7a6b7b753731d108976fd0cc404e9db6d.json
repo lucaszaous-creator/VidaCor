@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO exames.dose_tentativa (estudo_id, resultado, unidade_id) VALUES ($1, $2, $3)\n         ON CONFLICT (estudo_id) DO UPDATE SET tentativas = exames.dose_tentativa.tentativas + 1,\n             ultima_em = now(), resultado = EXCLUDED.resultado",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "cbc1215d1e44b190e78a1eaff09367b7a6b7b753731d108976fd0cc404e9db6d"
+}

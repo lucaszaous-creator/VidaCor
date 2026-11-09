@@ -76,6 +76,10 @@ pub enum Ato {
     AusenciaPedir,
     AusenciaVer,
     AusenciaDecidir,
+    DoseVer,
+    DoseAgregadoVer,
+    DoseJustificar,
+    NrdAdministrar,
 }
 
 impl Ato {
@@ -186,6 +190,12 @@ impl Ato {
             A::MinhaAgendaVer | A::AusenciaPedir => &["medico"],
             A::AusenciaVer => &["recepcao", "gerente"],
             A::AusenciaDecidir => &["gerente"],
+            // Gestão de dose (Gestao-Dose.dc.html; RDC 611/2022): dose por paciente é N3, só o médico com
+            // vínculo de cuidado (RLS) vê e justifica; a gerência vê o agregado por protocolo e publica o
+            // NRD da clínica (DEC-2026-11-09-144 a 149).
+            A::DoseVer | A::DoseJustificar => &["medico"],
+            A::DoseAgregadoVer => &["medico", "gerente"],
+            A::NrdAdministrar => &["gerente"],
         };
         perfis.contains(&perfil)
     }
@@ -195,7 +205,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 71] = [
+    const TODOS: [Ato; 75] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -267,6 +277,10 @@ mod testes {
         Ato::AusenciaPedir,
         Ato::AusenciaVer,
         Ato::AusenciaDecidir,
+        Ato::DoseVer,
+        Ato::DoseAgregadoVer,
+        Ato::DoseJustificar,
+        Ato::NrdAdministrar,
     ];
 
     #[test]

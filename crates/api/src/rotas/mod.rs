@@ -26,6 +26,7 @@ pub mod contingencia;
 pub mod convenios;
 pub mod corpo_clinico;
 pub mod documentos;
+pub mod dose;
 pub mod equipe;
 pub mod estoque;
 pub mod estornos;
@@ -46,6 +47,7 @@ pub mod menu;
 pub mod minha_agenda;
 pub mod modelos_laudo;
 pub mod nfse;
+pub mod nrd;
 pub mod ofertas;
 pub mod orcamentos;
 pub mod ouvidoria;
@@ -544,6 +546,13 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/ausencias", get(ausencias::listar))
         .route("/v1/ausencias/{id}/decisao", post(ausencias::decidir))
         .route("/v1/ausencias/{id}/cancelamento", post(ausencias::cancelar))
+        // Agente 2: gestão de dose (DEC-2026-11-09-144 a 149).
+        .route("/v1/doses", get(dose::listar))
+        .route("/v1/doses/protocolos", get(dose::protocolos))
+        .route("/v1/doses/pacientes/{id}", get(dose::historico))
+        .route("/v1/doses/{id}/justificativa", post(dose::justificar))
+        .route("/v1/nrd", get(nrd::nrd))
+        .route("/v1/nrd/{tuss}", post(nrd::publicar_nrd))
         .route("/v1/equipe", get(equipe::listar))
         .route("/v1/eventos", get(eventos::fluxo))
         .fallback(nao_existe)

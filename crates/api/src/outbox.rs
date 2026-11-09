@@ -471,6 +471,10 @@ pub async fn rodar(estado: Estado, orthanc: Orthanc) {
             if let Err(e) = conciliar(&estado, &orthanc, u).await {
                 tracing::warn!(erro = %e, "conciliação com o Orthanc");
             }
+            // Dose de radiação do RDSR dos estudos de TC e raio X conciliados (DEC-2026-11-09-145).
+            if let Err(e) = crate::dose::ler_pendentes(&estado, &orthanc, u).await {
+                tracing::warn!(erro = %e, "leitura de dose do RDSR");
+            }
         }
         tokio::select! {
             () = estado.outbox_aviso.notified() => {}

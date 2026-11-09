@@ -1,0 +1,70 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT estudo_id AS \"estudo_id!\", orthanc_id AS \"orthanc_id!\", atendimento_id AS \"atendimento_id!\",\n                  paciente_id AS \"paciente_id!\", sala_id AS \"sala_id!\", modalidade AS \"modalidade!\", aparelho, exame_tuss AS \"exame_tuss!\"\n             FROM exames.estudos_sem_dose(20)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "estudo_id!",
+        "type_info": "Uuid",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 1,
+        "name": "orthanc_id!",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "atendimento_id!",
+        "type_info": "Uuid",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 3,
+        "name": "paciente_id!",
+        "type_info": "Uuid",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 4,
+        "name": "sala_id!",
+        "type_info": "Uuid",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 5,
+        "name": "modalidade!",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 6,
+        "name": "aparelho",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 7,
+        "name": "exame_tuss!",
+        "type_info": "Text",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "83054d5500770d7d911f34692d23f15c5589bd2c117e8c9a2c0a9ca82fb08c5d"
+}

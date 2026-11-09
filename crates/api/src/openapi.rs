@@ -246,6 +246,12 @@ pub struct ProblemaDoc {
         crate::rotas::ausencias::listar,
         crate::rotas::ausencias::decidir,
         crate::rotas::ausencias::cancelar,
+        crate::rotas::dose::listar,
+        crate::rotas::dose::historico,
+        crate::rotas::dose::protocolos,
+        crate::rotas::dose::justificar,
+        crate::rotas::nrd::nrd,
+        crate::rotas::nrd::publicar_nrd,
     ),
     components(schemas(ProblemaDoc))
 )]

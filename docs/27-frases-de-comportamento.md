@@ -722,3 +722,61 @@ Funcionalidade: Minha agenda do médico
     Quando duas decisões chegam ao mesmo tempo sobre o mesmo pedido
     Então só uma tem efeito
 ```
+
+## 32. Gestão de dose (proposta, aguardando aprovação)
+
+> Escritas pelo Agente 2 em 09/11/2026 (DEC-2026-11-09-144 a 149). Testadas em `crates/api/tests/gestao_dose.rs`
+> com Orthanc real recebendo imagem e RDSR. Frases clínicas: precisam também do parecer do responsável clínico de segurança.
+
+| ID | Cenário | Status | Aprovador | Data | Observações |
+|---|---|---|---|---|---|
+| FC-DOS-01 | RDSR do aparelho vira dose comparada ao NRD | Proposta, aguardando aprovação | — | — | RDC 611/2022 |
+| FC-DOS-02 | Sem vínculo o médico não vê a dose; a gerência só vê o agregado | Proposta, aguardando aprovação | — | — | docs/18 N3 |
+| FC-DOS-03 | Justificativa uma vez só, por quem tem vínculo | Proposta, aguardando aprovação | — | — | — |
+| FC-DOS-04 | Dose dentro do NRD não pede justificativa | Proposta, aguardando aprovação | — | — | — |
+| FC-DOS-05 | NRD só a gerência publica, com grandeza certa e versão | Proposta, aguardando aprovação | — | — | — |
+| FC-DOS-06 | Duas publicações simultâneas do NRD: só uma entra | Proposta, aguardando aprovação | — | — | G2 |
+| FC-DOS-07 | Período inválido é recusado | Proposta, aguardando aprovação | — | — | Até 92 dias |
+
+```gherkin
+Funcionalidade: Gestão de dose
+
+  Cenário: FC-DOS-01 RDSR vira dose comparada ao NRD
+    Dado o NRD da TC de abdome com contraste em CTDIvol 12 mGy, com fator 0,015 mSv/mGy·cm
+    E "Vera Lúcia Antunes" (18/09/1957) com check-in para a TC com a Dra. Cecília Souto
+    Quando o tomógrafo manda a imagem e o RDSR com CTDIvol 14,2 mGy e DLP 520 mGy·cm
+    Então o núcleo concilia o estudo, grava a dose com o objeto RDSR e o SHA-256 das tags lidas
+    E marca "acima do NRD"
+    E a Dra. Cecília vê a dose com nome e nascimento e 7,8 mSv estimados em 12 meses
+    E ler de novo não grava outra dose
+
+  Cenário: FC-DOS-02 Acesso indevido
+    Quando o Dr. Paulo, sem vínculo com Vera, abre a gestão de dose
+    Então ele não vê o exame e o histórico de Vera responde 404
+    E Patrícia (gerência) recebe 403 na lista por paciente e vê só o agregado por protocolo, sem paciente
+    E recepção, técnico, caixa e TI recebem 403 até no agregado
+
+  Cenário: FC-DOS-03 Justificativa
+    Quando o Dr. Paulo tenta justificar, a rota responde 404
+    E "Outro" sem descrição responde 422
+    Quando a Dra. Cecília justifica "fase extra" duas vezes com a mesma chave
+    Então volta a mesma resposta; com outra chave, 409 "dose-ja-justificada"
+
+  Cenário: FC-DOS-04 Dose dentro do NRD
+    Dado NRD 15 mGy e dose de 9,8 mGy
+    Quando alguém tenta justificar
+    Então a rota responde 409 "dose-dentro-do-nrd"
+
+  Cenário: FC-DOS-05 Publicação do NRD
+    Quando um médico publica o NRD, a rota responde 403
+    E na TC em DAP, com valor zero, negativo ou acima de 100.000, responde 422
+    E a segunda versão exige a versão vista e o motivo; a anterior fica guardada
+
+  Cenário: FC-DOS-06 Concorrência
+    Quando duas publicações do primeiro NRD do mesmo exame chegam juntas
+    Então só uma entra e a outra recebe 409
+
+  Cenário: FC-DOS-07 Limites
+    Quando o período passa de 92 dias ou o início é depois do fim
+    Então a rota responde 422
+```
