@@ -1120,6 +1120,216 @@
         }
       }
     },
+    "/v1/ausencias": {
+      "get": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Pedidos de bloqueio: o médico vê os seus; a gerência e a recepção, os da unidade.",
+        "operationId": "listar_ausencias",
+        "parameters": [
+          {
+            "name": "situacao",
+            "in": "query",
+            "description": "aguardando, aprovada, recusada ou cancelada. Sem filtro: todas as dos últimos 90 dias.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AusenciaDoMedico"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ausencias/{id}/cancelamento": {
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "O médico desiste do próprio pedido enquanto aguarda (`Idempotency-Key`).",
+        "operationId": "cancelar_ausencia",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AusenciaDoMedico"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ausencias/{id}/decisao": {
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Aprova ou recusa o pedido (gerência, nunca o próprio médico; `Idempotency-Key`). A aprovação recontra\nos pacientes agendados no período sob a mesma trava do agendamento.",
+        "operationId": "decidir_ausencia",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisaoDaAusencia"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AusenciaDoMedico"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/autorizacoes": {
       "get": {
         "tags": [
@@ -4080,6 +4290,290 @@
             }
           },
           "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/doses": {
+      "get": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "Exames com dose no período (médico; só os pacientes com vínculo de cuidado, pelo RLS).",
+        "operationId": "exames_com_dose",
+        "parameters": [
+          {
+            "name": "de",
+            "in": "query",
+            "description": "Primeiro dia (AAAA-MM-DD). Sem data: 7 dias atrás.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          },
+          {
+            "name": "ate",
+            "in": "query",
+            "description": "Último dia, inclusive (AAAA-MM-DD). Sem data: hoje. Até 92 dias de período.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExamesComDose"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/doses/pacientes/{id}": {
+      "get": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "Histórico de dose do paciente nos últimos 12 meses (médico com vínculo de cuidado).",
+        "operationId": "historico_de_dose",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoricoDeDose"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/doses/protocolos": {
+      "get": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "Dose por protocolo no período, sem paciente (gerência e médicos).",
+        "operationId": "dose_por_protocolo",
+        "parameters": [
+          {
+            "name": "de",
+            "in": "query",
+            "description": "Primeiro dia (AAAA-MM-DD). Sem data: 7 dias atrás.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          },
+          {
+            "name": "ate",
+            "in": "query",
+            "description": "Último dia, inclusive (AAAA-MM-DD). Sem data: hoje. Até 92 dias de período.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProtocoloDeDose"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/doses/{id}/justificativa": {
+      "post": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "Justificativa de dose acima do NRD (médico com vínculo; `Idempotency-Key`). Fica no lastro do\nestudo e entra na revisão periódica da proteção radiológica.",
+        "operationId": "justificar_dose",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovaJustificativa"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JustificativaDeDose"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
             "description": "",
             "content": {
               "application/json": {
@@ -7810,6 +8304,134 @@
         }
       }
     },
+    "/v1/minha-agenda": {
+      "get": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "A agenda do dia do médico da sessão (só o próprio médico; ninguém lê a agenda de outro por aqui).",
+        "operationId": "minha_agenda",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "query",
+            "description": "Dia no formato AAAA-MM-DD (horário de Brasília). Sem data: hoje.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MinhaAgenda"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/minha-agenda/ausencias": {
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Pedido de bloqueio da própria agenda (médico; `Idempotency-Key`). O núcleo conta os pacientes já\nagendados no período; a agenda só fecha depois da aprovação.",
+        "operationId": "pedir_ausencia",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovaAusencia"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AusenciaDoMedico"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/modelos-de-laudo": {
       "get": {
         "tags": [
@@ -8168,6 +8790,130 @@
             }
           },
           "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/nrd": {
+      "get": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "NRD vigente de cada exame de TC e raio X do catálogo (médicos e gerência).",
+        "operationId": "listar_nrd",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NrdDoExame"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/nrd/{tuss}": {
+      "post": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "Publica versão nova do NRD de um exame (gerência; `Idempotency-Key`). Doses já lidas continuam\ncomparadas à versão aplicada na leitura.",
+        "operationId": "publicar_nrd",
+        "parameters": [
+          {
+            "name": "tuss",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovoNrd"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NrdDoExame"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
             "description": "",
             "content": {
               "application/json": {
@@ -10919,6 +11665,238 @@
         }
       }
     },
+    "/v1/relatorios": {
+      "get": {
+        "tags": [
+          "relatorios"
+        ],
+        "summary": "Relatórios que o perfil pode ver.",
+        "operationId": "catalogo_de_relatorios",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RelatorioDoCatalogo"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/relatorios/exportacoes": {
+      "get": {
+        "tags": [
+          "relatorios"
+        ],
+        "summary": "Exportações feitas: as próprias; a gerência vê as da unidade (últimos 90 dias).",
+        "operationId": "exportacoes_feitas",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExportacaoFeita"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/relatorios/{id}": {
+      "get": {
+        "tags": [
+          "relatorios"
+        ],
+        "summary": "Prévia do relatório no período (as mesmas linhas que vão para o arquivo).",
+        "operationId": "previa_do_relatorio",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "de",
+            "in": "query",
+            "description": "Primeiro dia (AAAA-MM-DD). Sem data: primeiro dia do mês corrente.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          },
+          {
+            "name": "ate",
+            "in": "query",
+            "description": "Último dia, inclusive (AAAA-MM-DD). Sem data: hoje. Até 366 dias.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreviaDoRelatorio"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/relatorios/{id}/exportacao": {
+      "post": {
+        "tags": [
+          "relatorios"
+        ],
+        "summary": "Exporta o relatório em CSV (reautenticação). O arquivo vem na resposta e não fica guardado; o\nregistro guarda o SHA-256, o filtro e se havia dado de saúde (removido).",
+        "operationId": "exportar_relatorio",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PeriodoDoRelatorio"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "CSV (UTF-8, separador ;); SHA-256 em X-Documento-Sha256 e código em X-Documento-Codigo",
+            "content": {
+              "text/csv": {}
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/revisoes-por-pares": {
       "post": {
         "tags": [
@@ -12815,6 +13793,93 @@
           }
         }
       },
+      "AusenciaDoMedico": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "medico_id",
+          "medico",
+          "inicio",
+          "fim",
+          "motivo",
+          "afetados_no_pedido",
+          "situacao",
+          "criado_em"
+        ],
+        "properties": {
+          "afetados_na_decisao": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
+          },
+          "afetados_no_pedido": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "decidido_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "decidido_por": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "detalhe": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fim": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "medico": {
+            "type": "string"
+          },
+          "medico_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "motivo": {
+            "type": "string",
+            "description": "congresso, ferias, licenca ou pessoal."
+          },
+          "motivo_decisao": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "situacao": {
+            "type": "string",
+            "description": "aguardando, aprovada, recusada ou cancelada."
+          }
+        }
+      },
       "AutorizacaoDesconto": {
         "type": "object",
         "required": [
@@ -12980,6 +14045,27 @@
           "situacao": {
             "type": "string",
             "description": "aguardando_envio, aguardando_portal, enviada, em_analise, pendente_documento, autorizada,\nparcial, negada, cancelada ou recusada."
+          }
+        }
+      },
+      "AvisoParaOMedico": {
+        "type": "object",
+        "required": [
+          "tipo",
+          "texto",
+          "quando"
+        ],
+        "properties": {
+          "quando": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "texto": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string",
+            "description": "imagens_recebidas ou laudo_vence."
           }
         }
       },
@@ -14443,6 +15529,24 @@
           }
         }
       },
+      "DecisaoDaAusencia": {
+        "type": "object",
+        "required": [
+          "aprovar"
+        ],
+        "properties": {
+          "aprovar": {
+            "type": "boolean"
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Obrigatório para recusar (5 a 300 caracteres)."
+          }
+        }
+      },
       "DecisaoDaPropostaDeTabela": {
         "type": "object",
         "required": [
@@ -14625,6 +15729,30 @@
           },
           "margem": {
             "$ref": "#/components/schemas/MargemTirads"
+          }
+        }
+      },
+      "DiaDaMinhaSemana": {
+        "type": "object",
+        "required": [
+          "data",
+          "pacientes"
+        ],
+        "properties": {
+          "ausencia": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Ausência aprovada que cobre o dia (motivo), quando houver."
+          },
+          "data": {
+            "type": "string",
+            "format": "date"
+          },
+          "pacientes": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -15214,6 +16342,102 @@
           }
         }
       },
+      "ExameComDose": {
+        "type": "object",
+        "required": [
+          "dose_id",
+          "codigo",
+          "paciente",
+          "menor_de_idade",
+          "exame",
+          "modalidade",
+          "realizado_em",
+          "acima_do_nrd"
+        ],
+        "properties": {
+          "acima_do_nrd": {
+            "type": "boolean"
+          },
+          "aparelho": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "ctdivol_mgy": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "dap_gycm2": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "dlp_mgycm": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "dose_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "justificativa": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/JustificativaDeDose"
+              }
+            ]
+          },
+          "menor_de_idade": {
+            "type": "boolean",
+            "description": "Menor de 18 anos na data do exame (atenção redobrada à dose)."
+          },
+          "modalidade": {
+            "type": "string"
+          },
+          "nrd": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/NrdAplicado"
+              }
+            ]
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "realizado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "valor_comparado": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          }
+        }
+      },
       "ExameComPreco": {
         "type": "object",
         "required": [
@@ -15231,6 +16455,50 @@
           "valor_centavos": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "ExameDoHistorico": {
+        "type": "object",
+        "required": [
+          "exame",
+          "realizado_em"
+        ],
+        "properties": {
+          "aparelho": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dap_gycm2": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "dlp_mgycm": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "dose_efetiva_msv": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double",
+            "description": "Estimativa (mSv) pelo fator do NRD vigente do exame; ausente sem fator cadastrado."
+          },
+          "exame": {
+            "type": "string"
+          },
+          "realizado_em": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -15350,6 +16618,96 @@
             "type": "string"
           },
           "tuss": {
+            "type": "string"
+          }
+        }
+      },
+      "ExamesComDose": {
+        "type": "object",
+        "required": [
+          "de",
+          "ate",
+          "exames",
+          "acima_do_nrd",
+          "sem_justificativa"
+        ],
+        "properties": {
+          "acima_do_nrd": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ate": {
+            "type": "string",
+            "format": "date"
+          },
+          "de": {
+            "type": "string",
+            "format": "date"
+          },
+          "exames": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExameComDose"
+            }
+          },
+          "sem_justificativa": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ExportacaoFeita": {
+        "type": "object",
+        "required": [
+          "codigo",
+          "relatorio",
+          "titulo",
+          "formato",
+          "de",
+          "ate",
+          "conteudo",
+          "linhas",
+          "sha256",
+          "quem",
+          "quando"
+        ],
+        "properties": {
+          "ate": {
+            "type": "string",
+            "format": "date"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "conteudo": {
+            "type": "string",
+            "description": "sem_dado_de_saude ou pseudonimizado."
+          },
+          "de": {
+            "type": "string",
+            "format": "date"
+          },
+          "formato": {
+            "type": "string"
+          },
+          "linhas": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quando": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "quem": {
+            "type": "string"
+          },
+          "relatorio": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "titulo": {
             "type": "string"
           }
         }
@@ -15817,6 +17175,37 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "HistoricoDeDose": {
+        "type": "object",
+        "required": [
+          "paciente",
+          "exames",
+          "exames_sem_estimativa"
+        ],
+        "properties": {
+          "dose_efetiva_12_meses_msv": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double",
+            "description": "Soma das estimativas dos últimos 12 meses nesta clínica (não é dosimetria individual)."
+          },
+          "exames": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExameDoHistorico"
+            }
+          },
+          "exames_sem_estimativa": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
           }
         }
       },
@@ -16313,6 +17702,80 @@
           }
         }
       },
+      "ItemDaMinhaAgenda": {
+        "type": "object",
+        "required": [
+          "agendamento_id",
+          "codigo",
+          "inicio",
+          "paciente",
+          "exame",
+          "sala",
+          "grupo"
+        ],
+        "properties": {
+          "agendamento_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "atendimento_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "esperando_desde": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Desde quando o paciente espera (check-in), para o grupo `esperando`."
+          },
+          "exame": {
+            "type": "string"
+          },
+          "grupo": {
+            "type": "string",
+            "description": "a_chegar, esperando, em_exame, liberado ou faltou."
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "laudo_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "Presente só quando o médico pode abrir o laudo (vínculo de cuidado, RLS)."
+          },
+          "laudo_situacao": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Situação do laudo, sem conteúdo."
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "sala": {
+            "type": "string"
+          },
+          "senha": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
       "ItemDeEstoque": {
         "type": "object",
         "required": [
@@ -16513,6 +17976,33 @@
           }
         }
       },
+      "JustificativaDeDose": {
+        "type": "object",
+        "required": [
+          "motivo",
+          "por",
+          "em"
+        ],
+        "properties": {
+          "detalhe": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "motivo": {
+            "type": "string",
+            "description": "imc_alto, repeticao_movimento, fase_extra, implante_metalico ou outro."
+          },
+          "por": {
+            "type": "string"
+          }
+        }
+      },
       "Kit": {
         "type": "object",
         "required": [
@@ -16708,6 +18198,31 @@
             "type": "integer",
             "format": "int64",
             "description": "Positivo entra, negativo sai."
+          }
+        }
+      },
+      "LinhaDoRelatorio": {
+        "type": "object",
+        "required": [
+          "a",
+          "b",
+          "valor",
+          "c"
+        ],
+        "properties": {
+          "a": {
+            "type": "string"
+          },
+          "b": {
+            "type": "string"
+          },
+          "c": {
+            "type": "string"
+          },
+          "valor": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Valor numérico da terceira coluna (centavos nos relatórios em reais)."
           }
         }
       },
@@ -17160,6 +18675,80 @@
           },
           "cabecalho": {
             "$ref": "#/components/schemas/CabecalhoDoMenu"
+          }
+        }
+      },
+      "MinhaAgenda": {
+        "type": "object",
+        "required": [
+          "data",
+          "medico",
+          "turnos",
+          "pacientes",
+          "ja_atendidos",
+          "atendidos_com_laudo_pendente",
+          "esperando",
+          "laudos_para_assinar",
+          "laudos_vencem_hoje",
+          "itens",
+          "avisos",
+          "semana"
+        ],
+        "properties": {
+          "atendidos_com_laudo_pendente": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "avisos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AvisoParaOMedico"
+            }
+          },
+          "data": {
+            "type": "string",
+            "format": "date"
+          },
+          "esperando": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemDaMinhaAgenda"
+            }
+          },
+          "ja_atendidos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "laudos_para_assinar": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "laudos_vencem_hoje": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "medico": {
+            "type": "string"
+          },
+          "pacientes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "semana": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DiaDaMinhaSemana"
+            }
+          },
+          "turnos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TurnoNaSala"
+            }
           }
         }
       },
@@ -17626,6 +19215,35 @@
           }
         }
       },
+      "NovaAusencia": {
+        "type": "object",
+        "required": [
+          "inicio",
+          "fim",
+          "motivo"
+        ],
+        "properties": {
+          "detalhe": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Opcional, 3 a 300 caracteres."
+          },
+          "fim": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "motivo": {
+            "type": "string",
+            "description": "congresso, ferias, licenca ou pessoal."
+          }
+        }
+      },
       "NovaConsultaCrm": {
         "type": "object",
         "required": [
@@ -17697,6 +19315,25 @@
           "tipo": {
             "type": "string",
             "description": "clinica ou pessoal."
+          }
+        }
+      },
+      "NovaJustificativa": {
+        "type": "object",
+        "required": [
+          "motivo"
+        ],
+        "properties": {
+          "detalhe": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Obrigatório em \"outro\" (5 a 500 caracteres)."
+          },
+          "motivo": {
+            "type": "string",
+            "description": "imc_alto, repeticao_movimento, fase_extra, implante_metalico ou outro."
           }
         }
       },
@@ -18189,6 +19826,46 @@
           }
         }
       },
+      "NovoNrd": {
+        "type": "object",
+        "required": [
+          "grandeza",
+          "valor"
+        ],
+        "properties": {
+          "fator_dose_efetiva": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double",
+            "description": "mSv por mGy·cm (TC) ou por Gy·cm² (raio X). Opcional."
+          },
+          "grandeza": {
+            "type": "string",
+            "description": "ctdivol ou dlp (TC); dap (raio X)."
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Obrigatório a partir da segunda versão (5 a 300 caracteres)."
+          },
+          "valor": {
+            "type": "number",
+            "format": "double"
+          },
+          "versao_vista": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "Número da versão vigente que a pessoa viu (ausente quando não há nenhuma)."
+          }
+        }
+      },
       "NovoOrcamento": {
         "type": "object",
         "required": [
@@ -18545,6 +20222,84 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "NrdAplicado": {
+        "type": "object",
+        "required": [
+          "grandeza",
+          "valor"
+        ],
+        "properties": {
+          "grandeza": {
+            "type": "string",
+            "description": "ctdivol, dlp ou dap."
+          },
+          "valor": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "NrdDoExame": {
+        "type": "object",
+        "required": [
+          "tuss",
+          "exame"
+        ],
+        "properties": {
+          "exame": {
+            "type": "string"
+          },
+          "fator_dose_efetiva": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "grandeza": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "modalidade": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "numero": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
+          },
+          "publicado_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "tuss": {
+            "type": "string"
+          },
+          "valor": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
           }
         }
       },
@@ -20504,6 +22259,27 @@
           }
         }
       },
+      "PeriodoDoRelatorio": {
+        "type": "object",
+        "properties": {
+          "ate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date",
+            "description": "Último dia, inclusive (AAAA-MM-DD). Sem data: hoje. Até 366 dias."
+          },
+          "de": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date",
+            "description": "Primeiro dia (AAAA-MM-DD). Sem data: primeiro dia do mês corrente."
+          }
+        }
+      },
       "Pessoa": {
         "type": "object",
         "required": [
@@ -20740,6 +22516,54 @@
           "total_depois_centavos": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "PreviaDoRelatorio": {
+        "type": "object",
+        "required": [
+          "id",
+          "titulo",
+          "de",
+          "ate",
+          "colunas",
+          "linhas",
+          "dado_de_saude",
+          "gerado_em"
+        ],
+        "properties": {
+          "ate": {
+            "type": "string",
+            "format": "date"
+          },
+          "colunas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "dado_de_saude": {
+            "type": "boolean"
+          },
+          "de": {
+            "type": "string",
+            "format": "date"
+          },
+          "gerado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string"
+          },
+          "linhas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinhaDoRelatorio"
+            }
+          },
+          "titulo": {
+            "type": "string"
           }
         }
       },
@@ -21112,6 +22936,61 @@
           "prazo_em": {
             "type": "string",
             "format": "date"
+          }
+        }
+      },
+      "ProtocoloDeDose": {
+        "type": "object",
+        "required": [
+          "exame_tuss",
+          "exame",
+          "aparelho",
+          "grandeza",
+          "exames",
+          "acima"
+        ],
+        "properties": {
+          "acima": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "aparelho": {
+            "type": "string"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "exame_tuss": {
+            "type": "string"
+          },
+          "exames": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "grandeza": {
+            "type": "string"
+          },
+          "mediana": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "nrd": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "percentual_do_nrd": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "description": "Mediana em percentual do NRD."
           }
         }
       },
@@ -21568,6 +23447,34 @@
           },
           "nova": {
             "$ref": "#/components/schemas/Etiqueta"
+          }
+        }
+      },
+      "RelatorioDoCatalogo": {
+        "type": "object",
+        "required": [
+          "id",
+          "grupo",
+          "titulo",
+          "descricao",
+          "dado_de_saude"
+        ],
+        "properties": {
+          "dado_de_saude": {
+            "type": "boolean",
+            "description": "O relatório tem dado de saúde: no arquivo, paciente vira código PAC e exame vira código TUSS."
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "grupo": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "titulo": {
+            "type": "string"
           }
         }
       },
@@ -22661,6 +24568,27 @@
               "null"
             ],
             "format": "int32"
+          }
+        }
+      },
+      "TurnoNaSala": {
+        "type": "object",
+        "required": [
+          "sala",
+          "inicio",
+          "fim"
+        ],
+        "properties": {
+          "fim": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sala": {
+            "type": "string"
           }
         }
       },

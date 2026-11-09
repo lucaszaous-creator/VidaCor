@@ -27,6 +27,7 @@ export * from './contrato-comunicacao';
 export * from './contrato-financeiro';
 export * from './contrato-usuarios';
 export * from './contrato-laudo-estruturado';
+export * from './contrato-gestao';
 export { ErroDaApi, ErroSemConexao, ehProblemaHttp, ehReautenticacao } from './erros';
 export { criarCliente, novaChaveDeIdempotencia } from './cliente';
 export type { ClienteVidaCor, OpcoesDoCliente, OpcoesDeEscrita } from './cliente';
