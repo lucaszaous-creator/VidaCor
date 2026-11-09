@@ -24,6 +24,16 @@ Na dúvida entre caminhos, escolha **o mais profissional e o mais rastreável** 
 Nada é apagado para resolver. Só pergunte ao dono do produto o que depende de informação que só ele tem ou de
 aprovação formal; mesmo assim, leve uma proposta pronta com premissas marcadas "a confirmar".
 
+## Referência das decisões (obrigatória) — [ADR-0022](docs/adr/0022-referencia-medware-mediworks-medilab.md)
+- Toda decisão parte de **como a Medware, a Mediworks e a Medilab fazem hoje** (são os sistemas que a clínica usa,
+  ver [docs/03](docs/03-levantamento-sistemas-atuais.md)); na falta deles, da prática de **sistemas grandes de clínica
+  e de RIS/PACS** e das normas do setor.
+- As seis garantias e as regras clínicas vencem a referência: mantém-se a intenção do sistema atual, feita do jeito seguro.
+- O registro em [docs/decisoes.md](docs/decisoes.md) diz qual sistema serviu de base; sem como verificar, escreve-se
+  **"não verificado"** e o motivo.
+- Os agentes que recebem o trabalho do dono do produto ficam no comando e não perguntam a cada escolha; aprovações
+  formais (frase, risco clínico, ADR, migration, aceite) ficam registradas como proposta aguardando aprovação.
+
 ## As seis garantias (inegociáveis)
 
 ### G1 · O servidor decide; o cliente só pede
