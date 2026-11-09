@@ -485,6 +485,13 @@ pub async fn agendar(
     .execute(&mut *tx)
     .await;
     if let Err(sqlx::Error::Database(d)) = &inserido {
+        // Ausência do médico aprovada pela coordenação (gatilho da migration 0080, DEC-2026-11-09-142).
+        if d.constraint() == Some("medico_ausente") {
+            return Err(ErroApi::conflito(
+                "medico-ausente",
+                "O médico escolhido está com a agenda bloqueada neste horário (ausência aprovada pela coordenação). Nada foi agendado. Escolha outro médico ou outro horário.",
+            ));
+        }
         // Só o índice do horário da sala vira "horário ocupado"; outra violação é falha real (R8).
         if d.is_unique_violation() && d.constraint() == Some("agendamento_horario_sala_unico") {
             // Horário ocupado (G2: índice único). Desfaz e devolve os próximos livres (FC-AGD-11).

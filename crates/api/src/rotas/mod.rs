@@ -7,6 +7,7 @@ pub mod agenda;
 pub mod agendamentos;
 pub mod aparelhos;
 pub mod atendimentos;
+pub mod ausencias;
 pub mod autorizacoes;
 pub mod autorizacoes_contrato;
 pub mod autorizacoes_portal;
@@ -42,6 +43,7 @@ pub mod lastro_explorador;
 pub mod laudos;
 pub mod lista_espera;
 pub mod menu;
+pub mod minha_agenda;
 pub mod modelos_laudo;
 pub mod nfse;
 pub mod ofertas;
@@ -536,6 +538,12 @@ pub fn rotas() -> Router<Estado> {
             "/v1/autorizacoes/{id}/consulta",
             post(autorizacoes::consultar),
         )
+        // Agente 2: minha agenda e ausência do médico (DEC-2026-11-09-140 a 143).
+        .route("/v1/minha-agenda", get(minha_agenda::obter))
+        .route("/v1/minha-agenda/ausencias", post(ausencias::pedir))
+        .route("/v1/ausencias", get(ausencias::listar))
+        .route("/v1/ausencias/{id}/decisao", post(ausencias::decidir))
+        .route("/v1/ausencias/{id}/cancelamento", post(ausencias::cancelar))
         .route("/v1/equipe", get(equipe::listar))
         .route("/v1/eventos", get(eventos::fluxo))
         .fallback(nao_existe)

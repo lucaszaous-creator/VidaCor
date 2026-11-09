@@ -1,0 +1,76 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT codigo, medico_id, inicio, fim, situacao FROM agenda.ausencia_medico WHERE id = $1 FOR UPDATE",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "medico_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "medico_id"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "inicio",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "inicio"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "fim",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "fim"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "situacao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "6d7c08efa9196d8a8332bcc79c59c386d0be65f2d94ca7be2b1f36e930069bdd"
+}

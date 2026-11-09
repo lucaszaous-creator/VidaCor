@@ -71,6 +71,11 @@ pub enum Ato {
     ConveniosAprovar,
     PacotesVer,
     PacotesAdministrar,
+    // Agente 2 (DEC-2026-11-09-140 a 159): minha agenda, gestão de dose, relatórios.
+    MinhaAgendaVer,
+    AusenciaPedir,
+    AusenciaVer,
+    AusenciaDecidir,
 }
 
 impl Ato {
@@ -175,6 +180,12 @@ impl Ato {
             // nova (composição, ordem do roteiro e preço). DEC-2026-11-09-115 a 117.
             A::PacotesVer => &["recepcao", "gerente"],
             A::PacotesAdministrar => &["gerente"],
+            // Minha agenda (Agenda-Medico.dc.html): o médico vê a própria agenda e pede o bloqueio dela;
+            // a recepção e a gerência veem os pedidos (para remarcar); só a gerência decide, e nunca o
+            // próprio médico (DEC-2026-11-09-140 a 142).
+            A::MinhaAgendaVer | A::AusenciaPedir => &["medico"],
+            A::AusenciaVer => &["recepcao", "gerente"],
+            A::AusenciaDecidir => &["gerente"],
         };
         perfis.contains(&perfil)
     }
@@ -184,7 +195,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 67] = [
+    const TODOS: [Ato; 71] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -252,6 +263,10 @@ mod testes {
         Ato::ConveniosAprovar,
         Ato::PacotesVer,
         Ato::PacotesAdministrar,
+        Ato::MinhaAgendaVer,
+        Ato::AusenciaPedir,
+        Ato::AusenciaVer,
+        Ato::AusenciaDecidir,
     ];
 
     #[test]
@@ -384,6 +399,19 @@ mod testes {
         }
         for p in ["caixa", "medico", "ti", "tv"] {
             assert!(!Ato::PacotesVer.concedido_a(p), "{p}");
+        }
+    }
+
+    #[test]
+    fn agenda_do_medico_o_medico_pede_e_a_gerencia_decide() {
+        assert!(Ato::MinhaAgendaVer.concedido_a("medico"));
+        assert!(Ato::AusenciaPedir.concedido_a("medico"));
+        assert!(Ato::AusenciaDecidir.concedido_a("gerente"));
+        assert!(!Ato::AusenciaDecidir.concedido_a("medico"));
+        for p in ["recepcao", "caixa", "tecnico", "ti", "faturista", "tv"] {
+            assert!(!Ato::MinhaAgendaVer.concedido_a(p), "{p}");
+            assert!(!Ato::AusenciaPedir.concedido_a(p), "{p}");
+            assert!(!Ato::AusenciaDecidir.concedido_a(p), "{p}");
         }
     }
 }

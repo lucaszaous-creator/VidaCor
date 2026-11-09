@@ -658,3 +658,67 @@ Funcionalidade: Contingência e lançamento posterior
     Quando Carla tenta declarar ou encerrar a contingência pela rota
     Então a rota responde 403
 ```
+
+## 31. Minha agenda do médico e ausência (proposta, aguardando aprovação)
+
+> Escritas pelo Agente 2 em 09/11/2026 (DEC-2026-11-09-140 a 143). Testadas em `crates/api/tests/minha_agenda.rs`.
+> Valem como proposta até o dono do produto aprovar; mudança depois da aprovação segue a regra de versão acima.
+
+| ID | Cenário | Status | Aprovador | Data | Observações |
+|---|---|---|---|---|---|
+| FC-MAG-01 | O médico vê só os próprios pacientes, com nome e nascimento | Proposta, aguardando aprovação | — | — | Base: App Agenda da Medware (agenda do médico) |
+| FC-MAG-02 | Depois do check-in o paciente aparece como esperando | Proposta, aguardando aprovação | — | — | — |
+| FC-MAG-03 | Quem não é médico não abre a agenda do médico | Proposta, aguardando aprovação | — | — | — |
+| FC-MAG-04 | O bloqueio pedido só fecha a agenda depois da aprovação | Proposta, aguardando aprovação | — | — | Segunda pessoa (docs/18) |
+| FC-MAG-05 | O médico não aprova o próprio pedido; recusa exige motivo | Proposta, aguardando aprovação | — | — | — |
+| FC-MAG-06 | Outro médico não vê nem cancela o pedido | Proposta, aguardando aprovação | — | — | — |
+| FC-MAG-07 | Período inválido é recusado | Proposta, aguardando aprovação | — | — | Até 62 dias por pedido |
+| FC-MAG-08 | Clique duplo e pedidos simultâneos não duplicam | Proposta, aguardando aprovação | — | — | G2 e G3 |
+
+```gherkin
+Funcionalidade: Minha agenda do médico
+
+  Cenário: FC-MAG-01 O médico vê só os próprios pacientes
+    Dado "Antônio Carlos Ribeiro" (15/06/1954) agendado hoje com o Dr. Paulo Medeiros
+    E "Vera Lúcia Antunes" agendada com a Dra. Cecília Souto
+    Quando o Dr. Paulo abre "Minha agenda"
+    Então ele vê Antônio, com nome e nascimento, no grupo "A chegar"
+    E não vê Vera
+
+  Cenário: FC-MAG-02 Check-in leva o paciente a "Esperando"
+    Quando a recepção faz o check-in de Antônio
+    Então na agenda do Dr. Paulo Antônio aparece em "Esperando", com a senha e desde quando espera
+
+  Cenário: FC-MAG-03 Só o médico abre a própria agenda
+    Quando recepção, caixa, técnico, gerência, TI ou faturamento pedem "Minha agenda"
+    Então a rota responde 403
+
+  Cenário: FC-MAG-04 Bloqueio só vale depois da aprovação
+    Dado um paciente já agendado com o Dr. Paulo daqui a 3 dias
+    Quando o Dr. Paulo pede o bloqueio de 3 a 5 dias à frente por congresso
+    Então o pedido fica "aguardando" com 1 paciente afetado e a agenda continua aberta
+    Quando Patrícia (coordenação) aprova
+    Então um agendamento novo com o Dr. Paulo no período é recusado com 409 "medico-ausente"
+    E com outro médico no mesmo período o agendamento entra
+
+  Cenário: FC-MAG-05 Segunda pessoa decide
+    Quando o próprio Dr. Paulo ou a recepção tentam aprovar o pedido
+    Então a rota responde 403
+    E a recusa sem motivo responde 422, e um pedido já decidido responde 409
+
+  Cenário: FC-MAG-06 Acesso indevido
+    Quando a Dra. Cecília lista ou tenta cancelar o pedido do Dr. Paulo
+    Então ela não o vê e o cancelamento responde 404
+
+  Cenário: FC-MAG-07 Limites
+    Quando o período é vazio, passa de 62 dias, já passou ou o motivo não é da lista
+    Então a rota responde 422 e nada é gravado
+
+  Cenário: FC-MAG-08 Repetição e concorrência
+    Quando o mesmo pedido é enviado duas vezes com a mesma chave
+    Então volta a mesma resposta e há um registro só
+    Quando dois pedidos sobrepostos chegam ao mesmo tempo
+    Então só um entra e o outro recebe 409
+    Quando duas decisões chegam ao mesmo tempo sobre o mesmo pedido
+    Então só uma tem efeito
+```

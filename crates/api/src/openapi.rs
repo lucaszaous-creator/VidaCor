@@ -240,6 +240,12 @@ pub struct ProblemaDoc {
         crate::rotas::faturamento::demonstrativo::demonstrativo,
         crate::rotas::faturamento::glosas::listar,
         crate::rotas::faturamento::glosas::recorrer,
+        // Agente 2: minha agenda e ausência do médico.
+        crate::rotas::minha_agenda::obter,
+        crate::rotas::ausencias::pedir,
+        crate::rotas::ausencias::listar,
+        crate::rotas::ausencias::decidir,
+        crate::rotas::ausencias::cancelar,
     ),
     components(schemas(ProblemaDoc))
 )]

@@ -1,0 +1,200 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT a.id, a.codigo, a.inicio, a.fim, a.situacao, a.exame_nome, s.nome AS sala,\n                  p.id AS paciente_id, p.nome AS paciente_nome, p.nascimento,\n                  t.id AS \"atendimento_id?\", t.situacao AS \"atendimento_situacao?\", t.criado_em AS \"checkin_em?\", t.senha,\n                  laudos.situacao_do_atendimento(t.id) AS laudo_situacao,\n                  (SELECT l.id FROM laudos.laudo l WHERE l.atendimento_id = t.id) AS laudo_id\n             FROM agenda.agendamento a\n             JOIN agenda.sala s ON s.id = a.sala_id\n             JOIN identidade.paciente p ON p.id = a.paciente_id\n             LEFT JOIN recepcao.atendimento t ON t.agendamento_id = a.id\n            WHERE a.medico_id = $1 AND a.inicio >= $2 AND a.inicio < $3\n              AND a.situacao NOT IN ('cancelado','expirada')\n            ORDER BY a.inicio\n            LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "inicio",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "inicio"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "fim",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "fim"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "exame_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "exame_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "sala",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "paciente_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "paciente_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "atendimento_id?",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "atendimento_situacao?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "checkin_em?",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "senha",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "senha"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "laudo_situacao",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 15,
+        "name": "laudo_id",
+        "type_info": "Uuid",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      null,
+      null
+    ]
+  },
+  "hash": "9dc7445bcdadfebe2af9fd84ede370bfb4f0efe67f2547a62a5bceba06ad9edd"
+}
