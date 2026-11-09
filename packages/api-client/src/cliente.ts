@@ -54,7 +54,7 @@ import type { Indicadores } from './contrato-indicadores';
 import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel';
 import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-orcamento';
 import type { IntegracaoVista } from './contrato-configuracoes';
-import type { VisaoDoPaciente } from './contrato-paciente';
+import type { DecisaoRegistrada, DecisaoSobreDuplicado, ListaDePacientes, ParDuplicado, RecorteDaLista, VisaoDoPaciente } from './contrato-paciente';
 import type { InicioDoDia } from './contrato-inicio';
 import type { NovoPreparo, PreparoDoExame, VersaoDoPreparo } from './contrato-preparo';
 import type { FluxoDeLaudos } from './contrato-fluxo';
@@ -625,6 +625,20 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
       cadastrar: (corpo: NovoPaciente, o: OpcoesDeEscrita): Promise<PacienteCadastrado> => criar<PacienteCadastrado>('POST', '/v1/pacientes', corpo, o),
       /** Paciente 360: identificação (CPF mascarado), próximos e histórico; leitura auditada. */
       visao: (id: string): Promise<VisaoDoPaciente> => ler<VisaoDoPaciente>(`/v1/pacientes/${seg(id)}/visao`),
+      /** Lista paginada com recortes; a busca vai na consulta à API, nunca no endereço da página. */
+      lista: (f: { q?: string; recorte?: RecorteDaLista; pagina?: number }): Promise<ListaDePacientes> => {
+        const p = new URLSearchParams();
+        if (f.q !== undefined && f.q.trim() !== '') p.set('q', f.q.trim());
+        if (f.recorte !== undefined) p.set('recorte', f.recorte);
+        if (f.pagina !== undefined) p.set('pagina', String(f.pagina));
+        const consulta = p.toString();
+        return ler<ListaDePacientes>(`/v1/pacientes/lista${consulta === '' ? '' : `?${consulta}`}`);
+      },
+      /** Pares de cadastros parecidos (recepção e gerência). */
+      paresDuplicados: (): Promise<ParDuplicado[]> => ler<ParDuplicado[]>('/v1/pacientes/pares-duplicados'),
+      /** Pedir junção ou marcar pessoas diferentes; única por par, imutável. */
+      decidirDuplicado: (corpo: DecisaoSobreDuplicado, o: OpcoesDeEscrita): Promise<DecisaoRegistrada> =>
+        criar<DecisaoRegistrada>('POST', '/v1/pacientes/pares-duplicados', corpo, o),
       examesExternos: (id: string): Promise<ExameExterno[]> => ler<ExameExterno[]>(`/v1/pacientes/${seg(id)}/exames-externos`),
       /** Importação de exame externo (só leitura) depois da conferência de identidade. */
       importarExameExterno: (id: string, corpo: ImportacaoExterna, o: OpcoesDeEscrita): Promise<ExameExterno> =>

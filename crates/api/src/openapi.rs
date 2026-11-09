@@ -240,6 +240,11 @@ pub struct ProblemaDoc {
         crate::rotas::faturamento::demonstrativo::demonstrativo,
         crate::rotas::faturamento::glosas::listar,
         crate::rotas::faturamento::glosas::recorrer,
+        // Agente 1 (DEC-2026-11-09-124): lista de pacientes, etiquetas e comunicação.
+        crate::rotas::pacientes_lista::listar,
+        crate::rotas::pacientes_duplicados::listar,
+        crate::rotas::pacientes_duplicados::decidir,
+        crate::rotas::menu_paciente::paciente,
     ),
     components(schemas(ProblemaDoc))
 )]

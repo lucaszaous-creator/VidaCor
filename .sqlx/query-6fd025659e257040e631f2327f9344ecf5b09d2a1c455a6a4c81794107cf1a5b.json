@@ -1,0 +1,48 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "WITH base AS (\n             SELECT p.id,\n                    EXISTS (SELECT 1 FROM recepcao.atendimento a JOIN agenda.agendamento g ON g.id = a.agendamento_id\n                             WHERE a.paciente_id = p.id AND (g.inicio AT TIME ZONE 'America/Sao_Paulo')::date = $5\n                               AND a.situacao <> 'cancelado') AS hoje,\n                    EXISTS (SELECT 1 FROM agenda.agendamento g WHERE g.paciente_id = p.id\n                             AND g.situacao = 'reserva_provisoria' AND g.inicio >= now()) AS pendencia,\n                    (p.cpf IS NULL OR p.celular IS NULL OR p.nome_mae IS NULL\n                     OR (p.alergias IS NULL AND p.nega_alergias IS NULL)) AS incompleto\n               FROM identidade.paciente p\n              WHERE ($1::text IS NULL OR comum.sem_acento(p.nome) LIKE '%' || comum.sem_acento($1) || '%')\n                AND ($2::date IS NULL OR p.nascimento = $2)\n                AND ($3::text IS NULL OR p.celular = $3 OR p.cpf = $3)\n                AND ($4::text IS NULL OR p.codigo = $4))\n           SELECT count(*) AS \"todos!\", count(*) FILTER (WHERE hoje) AS \"hoje!\",\n                  count(*) FILTER (WHERE pendencia) AS \"pendencia!\", count(*) FILTER (WHERE incompleto) AS \"incompleto!\"\n             FROM base",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "todos!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 1,
+        "name": "hoje!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "pendencia!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 3,
+        "name": "incompleto!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Date",
+        "Text",
+        "Text",
+        "Date"
+      ]
+    },
+    "nullable": [
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "6fd025659e257040e631f2327f9344ecf5b09d2a1c455a6a4c81794107cf1a5b"
+}

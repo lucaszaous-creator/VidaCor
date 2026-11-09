@@ -42,6 +42,7 @@ pub mod lastro_explorador;
 pub mod laudos;
 pub mod lista_espera;
 pub mod menu;
+pub mod menu_paciente;
 pub mod modelos_laudo;
 pub mod nfse;
 pub mod ofertas;
@@ -49,6 +50,8 @@ pub mod orcamentos;
 pub mod ouvidoria;
 pub mod paciente_visao;
 pub mod pacientes;
+pub mod pacientes_duplicados;
+pub mod pacientes_lista;
 pub mod pacotes;
 pub mod pendencias;
 pub mod portal;
@@ -100,6 +103,11 @@ pub fn rotas() -> Router<Estado> {
         .route(
             "/v1/pacientes/possiveis-duplicados",
             get(cadastro::duplicados),
+        )
+        .route("/v1/pacientes/lista", get(pacientes_lista::listar))
+        .route(
+            "/v1/pacientes/pares-duplicados",
+            get(pacientes_duplicados::listar).post(pacientes_duplicados::decidir),
         )
         .route("/v1/pacientes/{id}/correcao", post(pacientes::corrigir))
         .route("/v1/pacientes/{id}/visao", get(paciente_visao::visao))
@@ -422,6 +430,7 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/menu/agendamento/{id}", get(menu::agendamento))
         .route("/v1/menu/atendimento/{id}", get(menu::atendimento))
         .route("/v1/menu/laudo/{id}", get(menu::laudo))
+        .route("/v1/menu/paciente/{id}", get(menu_paciente::paciente))
         .route("/v1/estornos/{id}", get(estornos::obter))
         .route("/v1/estornos/{id}/recusa", post(estornos::recusar))
         .route(

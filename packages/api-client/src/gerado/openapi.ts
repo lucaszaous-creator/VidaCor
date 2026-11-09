@@ -2173,6 +2173,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/menu/paciente/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Menu de contexto de um paciente (lista de pacientes). */
+        get: operations["paciente"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/modelos-de-laudo": {
         parameters: {
             query?: never;
@@ -2422,6 +2439,44 @@ export interface paths {
         put?: never;
         /** Cadastra o paciente (recepção). Possível duplicado não conferido: `409 possivel-duplicado` com a lista. */
         post: operations["cadastrar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/pacientes/lista": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lista paginada de pacientes da unidade com recortes e situação calculada no banco. */
+        get: operations["listar_pacientes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/pacientes/pares-duplicados": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Pares de cadastros parecidos da unidade (recepção e gerência), até 100. */
+        get: operations["listar_pares_duplicados"];
+        put?: never;
+        /**
+         * Registra a decisão sobre um par. Primeira decisão: única por par (`409 par-ja-decidido` para a
+         *     segunda simultânea). Nova decisão sobre par já decidido exige motivo e substitui a anterior.
+         */
+        post: operations["decidir_par_duplicado"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3709,6 +3764,16 @@ export interface components {
             versoes: components["schemas"]["CabecalhoDaUnidade"][];
             vigente?: null | components["schemas"]["CabecalhoDaUnidade"];
         };
+        CadastroDoPar: {
+            celular?: string | null;
+            codigo: string;
+            cpf_mascarado?: string | null;
+            /** Format: uuid */
+            id: string;
+            /** Format: date */
+            nascimento: string;
+            nome: string;
+        };
         CadeiaDoAtendimento: {
             atendimento_codigo: string;
             eventos: components["schemas"]["EventoDaCadeia"][];
@@ -3992,6 +4057,18 @@ export interface components {
             /** Format: int64 */
             valor_total_centavos: number;
         };
+        ContagemDosRecortes: {
+            /** Format: int64 */
+            duplicados: number;
+            /** Format: int64 */
+            hoje: number;
+            /** Format: int64 */
+            incompleto: number;
+            /** Format: int64 */
+            pendencia: number;
+            /** Format: int64 */
+            todos: number;
+        };
         Contingencia: {
             codigo: string;
             /** Format: date-time */
@@ -4117,6 +4194,22 @@ export interface components {
         DecisaoDoCorpoClinico: {
             aprovar: boolean;
             motivo: string;
+        };
+        DecisaoRegistrada: {
+            codigo: string;
+            decisao: string;
+            /** Format: uuid */
+            id: string;
+        };
+        DecisaoSobreDuplicado: {
+            /** @description juncao_pedida ou pessoas_diferentes. */
+            decisao: string;
+            /** @description Obrigatório quando a decisão substitui outra já registrada. */
+            motivo?: string | null;
+            /** Format: uuid */
+            paciente_a: string;
+            /** Format: uuid */
+            paciente_b: string;
         };
         DescontoDoOrcamento: {
             /** @description paciente_frequente, funcionario_ou_familiar, condicao_social ou cobrir_outra_clinica. */
@@ -4326,6 +4419,11 @@ export interface components {
             tuss: string;
             /** Format: int64 */
             valor_centavos: number;
+        };
+        ExameDaLista: {
+            exame: string;
+            /** Format: date-time */
+            inicio: string;
         };
         ExameDoPacoteDeCheckup: {
             /**
@@ -4771,6 +4869,26 @@ export interface components {
             /** Format: int64 */
             enfileirados: number;
         };
+        LinhaDaListaDePacientes: {
+            alergias: string[];
+            celular?: string | null;
+            /** @description Prontuário (código legível). */
+            codigo: string;
+            /** @description Operadora do próximo agendamento (ou do último), ou "Particular". */
+            convenio: string;
+            cpf_mascarado?: string | null;
+            /** @description O que falta no cadastro (cpf, celular, nome_mae, alergias), para a tela dizer o quê. */
+            falta_no_cadastro: string[];
+            /** Format: uuid */
+            id: string;
+            /** Format: date */
+            nascimento: string;
+            nome: string;
+            proximo_exame?: null | components["schemas"]["ExameDaLista"];
+            /** @description na_clinica, pendencia, cadastro_incompleto, possivel_duplicado ou em_dia (a mais urgente). */
+            situacao: string;
+            ultimo_exame?: null | components["schemas"]["ExameDaLista"];
+        };
         LinhaDoExtrato: {
             /** Format: date */
             data: string;
@@ -4787,6 +4905,27 @@ export interface components {
             expira_em: string;
             /** @description Mostrado uma única vez; o banco guarda só o hash. */
             token: string;
+        };
+        ListaDePacientes: {
+            /**
+             * Format: int64
+             * @description Cadastros da unidade (sem filtro).
+             */
+            cadastrados: number;
+            itens: components["schemas"]["LinhaDaListaDePacientes"][];
+            /** Format: int64 */
+            pagina: number;
+            /** Format: int64 */
+            paginas: number;
+            /** Format: int64 */
+            por_pagina: number;
+            /** @description Contagem de cada recorte com a busca aplicada. */
+            recortes: components["schemas"]["ContagemDosRecortes"];
+            /**
+             * Format: int64
+             * @description Total de linhas do recorte com a busca (todas as páginas).
+             */
+            total: number;
         };
         Lote: {
             codigo: string;
@@ -5542,6 +5681,17 @@ export interface components {
             estudos_recebidos_hoje: number;
             /** Format: int64 */
             estudos_sem_paciente: number;
+        };
+        ParDuplicado: {
+            a: components["schemas"]["CadastroDoPar"];
+            b: components["schemas"]["CadastroDoPar"];
+            /** Format: date-time */
+            decidido_em?: string | null;
+            decidido_por?: string | null;
+            /** @description Por que o par apareceu (ex.: "Mesmo nome e mesmo celular"). */
+            motivo: string;
+            /** @description aberto ou juncao_pedida (os marcados como pessoas diferentes saem da lista). */
+            situacao: string;
         };
         ParecerDeRevisao: {
             /** @description 1, 2a, 2b, 3a ou 3b (RADPEER). */
@@ -12288,6 +12438,43 @@ export interface operations {
             };
         };
     };
+    paciente: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MenuDoObjeto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     listar_modelos_de_laudo: {
         parameters: {
             query?: never;
@@ -13071,6 +13258,132 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PacienteCadastrado"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_pacientes: {
+        parameters: {
+            query?: {
+                /** @description Nome (3+ letras), nascimento (dd/mm/aaaa), CPF ou celular (só dígitos) ou prontuário (PAC-AAAA-NNNNNN). */
+                q?: string | null;
+                /** @description todos, hoje (na clínica hoje), pendencia (reserva sem guia a vencer) ou incompleto. */
+                recorte?: string | null;
+                /** @description Página, a partir de 1. */
+                pagina?: number | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListaDePacientes"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_pares_duplicados: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParDuplicado"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    decidir_par_duplicado: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecisaoSobreDuplicado"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisaoRegistrada"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
                 };
             };
             409: {

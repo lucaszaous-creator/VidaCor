@@ -1,0 +1,215 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT a.id AS a_id, a.codigo AS a_codigo, a.nome AS a_nome, a.nascimento AS a_nasc, a.cpf AS a_cpf, a.celular AS a_cel,\n                  b.id AS b_id, b.codigo AS b_codigo, b.nome AS b_nome, b.nascimento AS b_nasc, b.cpf AS b_cpf, b.celular AS b_cel,\n                  (a.nascimento = b.nascimento) AS \"mesmo_nasc!\", coalesce(a.celular = b.celular, false) AS \"mesmo_cel!\",\n                  coalesce(a.nome_mae = b.nome_mae, false) AS \"mesma_mae!\",\n                  d.decisao AS \"decisao?\", d.criado_em AS \"decidido_em?\", u.nome AS \"decidido_por?\"\n             FROM identidade.paciente a JOIN identidade.paciente b\n               ON a.id < b.id AND a.unidade_id = b.unidade_id AND comum.sem_acento(a.nome) = comum.sem_acento(b.nome)\n              AND (a.nascimento = b.nascimento OR a.celular = b.celular OR a.nome_mae = b.nome_mae\n                   OR date_part('year', a.nascimento) = date_part('year', b.nascimento))\n             LEFT JOIN LATERAL (SELECT x.decisao, x.criado_em, x.criado_por FROM identidade.par_duplicado x\n                                 WHERE x.paciente_menor = a.id AND x.paciente_maior = b.id\n                                   AND NOT EXISTS (SELECT 1 FROM identidade.par_duplicado s WHERE s.substitui = x.id)) d ON true\n             LEFT JOIN identidade.usuario u ON u.id = d.criado_por\n            WHERE d.decisao IS DISTINCT FROM 'pessoas_diferentes'\n            ORDER BY a.nome, a.nascimento LIMIT 100",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "a_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "a_codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "a_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "a_nasc",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "a_cpf",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "cpf"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "a_cel",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "celular"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "b_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "b_codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "b_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "b_nasc",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "b_cpf",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "cpf"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "b_cel",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "celular"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "mesmo_nasc!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 13,
+        "name": "mesmo_cel!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 14,
+        "name": "mesma_mae!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 15,
+        "name": "decisao?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.par_duplicado",
+            "name": "decisao"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "decidido_em?",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "identidade.par_duplicado",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 17,
+        "name": "decidido_por?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      null,
+      null,
+      null,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "24afb194214916cd2aad90ca93d021fb4d673027b93cb282027a8a68ba469fc6"
+}

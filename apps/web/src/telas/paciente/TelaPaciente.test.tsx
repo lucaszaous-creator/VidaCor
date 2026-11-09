@@ -15,6 +15,7 @@ describe('Paciente 360 (Paciente.dc.html)', () => {
     const { container } = renderizar('/pacientes');
     await usuario.type(await screen.findByRole('searchbox', { name: 'Buscar paciente' }), 'Vera');
     await usuario.click(await screen.findByRole('button', { name: /^Vera Lúcia Antunes, nascimento 18\/09\/1957/ }));
+    await usuario.click(screen.getByRole('link', { name: 'Abrir ficha' }));
     expect(await screen.findByText(/Alergia: dipirona/)).toBeInTheDocument();
     const exames = screen.getByRole('region', { name: 'Exames do paciente' });
     expect(within(exames).getByText('MAPA 24 h')).toBeInTheDocument();

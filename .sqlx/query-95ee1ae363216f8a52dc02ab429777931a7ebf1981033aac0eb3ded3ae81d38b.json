@@ -1,0 +1,24 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT (comum.sem_acento(a.nome) = comum.sem_acento(b.nome)) AS \"ok!\" FROM identidade.paciente a, identidade.paciente b\n            WHERE a.id = $1 AND b.id = $2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "ok!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "95ee1ae363216f8a52dc02ab429777931a7ebf1981033aac0eb3ded3ae81d38b"
+}

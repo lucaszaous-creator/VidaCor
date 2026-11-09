@@ -1,6 +1,6 @@
 /** Menu de contexto vindo do servidor (docs/19 § 8). Conferido contra o OpenAPI em `conformidade.ts`. */
 
-export type ObjetoDoMenu = 'agendamento' | 'atendimento' | 'laudo';
+export type ObjetoDoMenu = 'agendamento' | 'atendimento' | 'laudo' | 'paciente';
 
 export interface AcaoDoMenuDoServidor {
   id: string;

@@ -300,6 +300,13 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await page.getByRole('button', { name: 'Nova versão' }).click();
   await esperar(page, 'form', 'Nova versão do preparo');
   await ok('47b-preparo-nova-versao');
+  await ir('/pacientes');
+  await esperar(page, 'complementary', 'Resumo do paciente');
+  await page.getByRole('button', { name: /^Maria Helena Duarte de Albuquerque Cavalcanti, nascimento/ }).click();
+  await ok('48-pacientes-lista');
+  await page.getByRole('button', { name: /Possíveis duplicados/ }).click();
+  await page.getByRole('article').first().waitFor();
+  await ok('48b-pacientes-duplicados');
   await ir(`/pacientes?id=${SONIA.paciente.id}`);
   await esperar(page, 'region', 'Cadastro e contato');
   await ok('40-paciente');

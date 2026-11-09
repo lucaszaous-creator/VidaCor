@@ -1,0 +1,21 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT count(*) AS \"n!\" FROM identidade.paciente a JOIN identidade.paciente b\n             ON a.id < b.id AND a.unidade_id = b.unidade_id AND comum.sem_acento(a.nome) = comum.sem_acento(b.nome)\n            AND (a.nascimento = b.nascimento OR a.celular = b.celular OR a.nome_mae = b.nome_mae\n                 OR date_part('year', a.nascimento) = date_part('year', b.nascimento))\n          WHERE NOT EXISTS (SELECT 1 FROM identidade.par_duplicado d\n                             WHERE d.paciente_menor = a.id AND d.paciente_maior = b.id AND d.decisao = 'pessoas_diferentes'\n                               AND NOT EXISTS (SELECT 1 FROM identidade.par_duplicado s WHERE s.substitui = d.id))",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "n!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "1d54d833084688f180a6c48f5b496bb97777926c51135fcd9312b9e72d170451"
+}

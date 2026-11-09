@@ -658,3 +658,53 @@ Funcionalidade: Contingência e lançamento posterior
     Quando Carla tenta declarar ou encerrar a contingência pela rota
     Então a rota responde 403
 ```
+
+---
+
+## 11. Lista de pacientes e possíveis duplicados (proposta, aguardando aprovação)
+
+> Propostas pelo Agente 1 em 09/11/2026 (DEC-2026-11-09-124 e ADR-0022). Os testes já foram escritos contra
+> estas frases para não travar a construção; se o dono do produto ajustar alguma, o teste muda junto, com
+> nova versão da frase. Testes: `crates/api/tests/pacientes_lista.rs`.
+
+| ID | Cenário | Status | Aprovador | Data | Observações |
+|---|---|---|---|---|---|
+| FC-PAC-01 | A lista mostra os cadastros da unidade em ordem de nome, com total, páginas de 12 e situação calculada pelo servidor | Proposta | — | — | Base: lista de pacientes da Medware Clínicas e do MediClinic RIS |
+| FC-PAC-02 | A busca acha por nome sem acento, nascimento, CPF, celular ou prontuário | Proposta | — | — | — |
+| FC-PAC-03 | "Na clínica hoje" vem do check-in registrado; "com pendência" é reserva sem guia; "incompleto" diz o que falta | Proposta | — | — | — |
+| FC-PAC-04 | Caixa, financeiro, TI, faturamento, estoque e TV não abrem a lista; outra unidade não vê nem conta | Proposta | — | — | docs/18 N1 |
+| FC-PAC-05 | Possível duplicado: decisão única por par (duas ao mesmo tempo, só uma vale), imutável e no lastro; mudar exige motivo | Proposta | — | — | Junção efetiva fora desta entrega (DEC-2026-11-09-127) |
+| FC-PAC-06 | Técnico e médico veem a lista mas não decidem sobre duplicado | Proposta | — | — | — |
+
+```gherkin
+Funcionalidade: Lista de pacientes
+
+  Cenário: FC-PAC-01 Lista com total e situação do servidor
+    Dado a unidade Centro com 5 pacientes cadastrados
+    Quando Ana, da recepção, abre a lista
+    Então vê os 5 em ordem de nome, "5 cadastrados" e a situação de cada um calculada pelo servidor
+
+  Cenário: FC-PAC-02 Busca sem acento
+    Quando Ana busca "antonio carlos", "15/06/1954", "529.982.247-25", "(48) 99640-1187" ou "PAC-2026-000001"
+    Então a lista mostra só "Antônio Carlos Ribeiro", com o CPF mascarado
+
+  Cenário: FC-PAC-03 Na clínica hoje vem do check-in
+    Dado que "Maria Helena Duarte" fez check-in hoje
+    Quando Ana escolhe o recorte "Na clínica hoje"
+    Então a lista mostra "Maria Helena Duarte" com a situação "Na clínica"
+
+  Cenário: FC-PAC-04 Perfil sem permissão não abre a lista
+    Quando Carla, do caixa, pede a lista pela rota
+    Então a rota responde 403
+    E a recepção da unidade Norte vê 0 cadastrados da unidade Centro
+
+  Cenário: FC-PAC-05 Duas decisões ao mesmo tempo sobre o mesmo par
+    Dado dois cadastros "Maria Helena Duarte" com o mesmo celular e nascimentos 12/03/1968 e 21/03/1968
+    Quando duas pessoas da recepção pedem a junção ao mesmo tempo
+    Então uma recebe 201 e a outra 409, e só uma decisão é gravada
+    E os dois cadastros continuam separados até a conferência de outra pessoa
+
+  Cenário: FC-PAC-06 Técnico não decide sobre duplicado
+    Quando Bruno, técnico, tenta marcar o par como pessoas diferentes
+    Então a rota responde 403 e nada é gravado
+```

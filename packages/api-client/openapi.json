@@ -7810,6 +7810,58 @@
         }
       }
     },
+    "/v1/menu/paciente/{id}": {
+      "get": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "Menu de contexto de um paciente (lista de pacientes).",
+        "operationId": "paciente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MenuDoObjeto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/modelos-de-laudo": {
       "get": {
         "tags": [
@@ -8956,6 +9008,200 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PacienteCadastrado"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pacientes/lista": {
+      "get": {
+        "tags": [
+          "pacientes"
+        ],
+        "summary": "Lista paginada de pacientes da unidade com recortes e situação calculada no banco.",
+        "operationId": "listar_pacientes",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Nome (3+ letras), nascimento (dd/mm/aaaa), CPF ou celular (só dígitos) ou prontuário (PAC-AAAA-NNNNNN).",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "recorte",
+            "in": "query",
+            "description": "todos, hoje (na clínica hoje), pendencia (reserva sem guia a vencer) ou incompleto.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "pagina",
+            "in": "query",
+            "description": "Página, a partir de 1.",
+            "required": false,
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListaDePacientes"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pacientes/pares-duplicados": {
+      "get": {
+        "tags": [
+          "pacientes"
+        ],
+        "summary": "Pares de cadastros parecidos da unidade (recepção e gerência), até 100.",
+        "operationId": "listar_pares_duplicados",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ParDuplicado"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "pacientes"
+        ],
+        "summary": "Registra a decisão sobre um par. Primeira decisão: única por par (`409 par-ja-decidido` para a\nsegunda simultânea). Nova decisão sobre par já decidido exige motivo e substitui a anterior.",
+        "operationId": "decidir_par_duplicado",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisaoSobreDuplicado"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisaoRegistrada"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
                 }
               }
             }
@@ -13163,6 +13409,43 @@
           }
         }
       },
+      "CadastroDoPar": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "nome",
+          "nascimento"
+        ],
+        "properties": {
+          "celular": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "cpf_mascarado": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
       "CadeiaDoAtendimento": {
         "type": "object",
         "required": [
@@ -14097,6 +14380,38 @@
           }
         }
       },
+      "ContagemDosRecortes": {
+        "type": "object",
+        "required": [
+          "todos",
+          "hoje",
+          "pendencia",
+          "incompleto",
+          "duplicados"
+        ],
+        "properties": {
+          "duplicados": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "hoje": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "incompleto": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pendencia": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "todos": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "Contingencia": {
         "type": "object",
         "required": [
@@ -14523,6 +14838,55 @@
           },
           "motivo": {
             "type": "string"
+          }
+        }
+      },
+      "DecisaoRegistrada": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "decisao"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "decisao": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "DecisaoSobreDuplicado": {
+        "type": "object",
+        "required": [
+          "paciente_a",
+          "paciente_b",
+          "decisao"
+        ],
+        "properties": {
+          "decisao": {
+            "type": "string",
+            "description": "juncao_pedida ou pessoas_diferentes."
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Obrigatório quando a decisão substitui outra já registrada."
+          },
+          "paciente_a": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "paciente_b": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },
@@ -15231,6 +15595,22 @@
           "valor_centavos": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "ExameDaLista": {
+        "type": "object",
+        "required": [
+          "exame",
+          "inicio"
+        ],
+        "properties": {
+          "exame": {
+            "type": "string"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -16685,6 +17065,89 @@
           }
         }
       },
+      "LinhaDaListaDePacientes": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "nome",
+          "nascimento",
+          "convenio",
+          "alergias",
+          "situacao",
+          "falta_no_cadastro"
+        ],
+        "properties": {
+          "alergias": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "celular": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "codigo": {
+            "type": "string",
+            "description": "Prontuário (código legível)."
+          },
+          "convenio": {
+            "type": "string",
+            "description": "Operadora do próximo agendamento (ou do último), ou \"Particular\"."
+          },
+          "cpf_mascarado": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "falta_no_cadastro": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "O que falta no cadastro (cpf, celular, nome_mae, alergias), para a tela dizer o quê."
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "proximo_exame": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ExameDaLista"
+              }
+            ]
+          },
+          "situacao": {
+            "type": "string",
+            "description": "na_clinica, pendencia, cadastro_incompleto, possivel_duplicado ou em_dia (a mais urgente)."
+          },
+          "ultimo_exame": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ExameDaLista"
+              }
+            ]
+          }
+        }
+      },
       "LinhaDoExtrato": {
         "type": "object",
         "required": [
@@ -16725,6 +17188,52 @@
           "token": {
             "type": "string",
             "description": "Mostrado uma única vez; o banco guarda só o hash."
+          }
+        }
+      },
+      "ListaDePacientes": {
+        "type": "object",
+        "required": [
+          "cadastrados",
+          "recortes",
+          "pagina",
+          "paginas",
+          "por_pagina",
+          "total",
+          "itens"
+        ],
+        "properties": {
+          "cadastrados": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Cadastros da unidade (sem filtro)."
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinhaDaListaDePacientes"
+            }
+          },
+          "pagina": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "paginas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "por_pagina": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "recortes": {
+            "$ref": "#/components/schemas/ContagemDosRecortes",
+            "description": "Contagem de cada recorte com a busca aplicada."
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Total de linhas do recorte com a busca (todas as páginas)."
           }
         }
       },
@@ -19207,6 +19716,44 @@
           "estudos_sem_paciente": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "ParDuplicado": {
+        "type": "object",
+        "required": [
+          "a",
+          "b",
+          "motivo",
+          "situacao"
+        ],
+        "properties": {
+          "a": {
+            "$ref": "#/components/schemas/CadastroDoPar"
+          },
+          "b": {
+            "$ref": "#/components/schemas/CadastroDoPar"
+          },
+          "decidido_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "decidido_por": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "motivo": {
+            "type": "string",
+            "description": "Por que o par apareceu (ex.: \"Mesmo nome e mesmo celular\")."
+          },
+          "situacao": {
+            "type": "string",
+            "description": "aberto ou juncao_pedida (os marcados como pessoas diferentes saem da lista)."
           }
         }
       },
