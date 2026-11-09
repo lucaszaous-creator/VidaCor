@@ -290,6 +290,13 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await page.getByRole('button', { name: 'Nova tabela de preços' }).click();
   await esperar(page, 'form', 'Nova tabela de preços');
   await ok('cad-exames-tabela');
+  await ir('/preparo');
+  await page.getByRole('button', { name: /Ecocardiograma com estresse físico/ }).click();
+  await esperar(page, 'region', 'Versões do preparo');
+  await ok('47-preparo');
+  await page.getByRole('button', { name: 'Nova versão' }).click();
+  await esperar(page, 'form', 'Nova versão do preparo');
+  await ok('47b-preparo-nova-versao');
   await ir(`/pacientes?id=${SONIA.paciente.id}`);
   await esperar(page, 'region', 'Cadastro e contato');
   await ok('40-paciente');

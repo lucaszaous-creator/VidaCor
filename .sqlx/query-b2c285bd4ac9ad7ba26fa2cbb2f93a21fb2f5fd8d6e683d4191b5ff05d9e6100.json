@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO agenda.preparo (id, codigo, tuss, numero, passos, chegar_antes_min, motivo, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'catalogo', $9, $10)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Int4",
+        "TextArray",
+        "Int4",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "b2c285bd4ac9ad7ba26fa2cbb2f93a21fb2f5fd8d6e683d4191b5ff05d9e6100"
+}

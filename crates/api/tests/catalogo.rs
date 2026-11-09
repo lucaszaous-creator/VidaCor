@@ -349,14 +349,14 @@ async fn quando_a_gerencia_publica_tabela_nova_entao_a_vigente_nao_muda_ate_a_da
         "a vigente não mudou"
     );
     // O caixa e o orçamento usam a mesma regra: vigente é a maior versão já iniciada.
-    let vigente: i32 = sqlx::query_scalar("SELECT versao FROM financeiro.tabela_preco WHERE unidade_id = $1 AND vigente_desde <= current_date ORDER BY versao DESC LIMIT 1")
+    let vigente: i32 = sqlx::query_scalar("SELECT versao FROM financeiro.tabela_preco WHERE unidade_id = $1 AND vigente_desde <= (now() AT TIME ZONE 'America/Sao_Paulo')::date ORDER BY versao DESC LIMIT 1")
         .bind(UNIDADE_A).fetch_one(&amb.admin).await.unwrap();
     assert_eq!(vigente, 12);
     // A tabela é versionada: ninguém altera nem apaga preço.
     for sql in [
         "UPDATE financeiro.preco SET valor_centavos = 1",
         "DELETE FROM financeiro.preco",
-        "UPDATE financeiro.tabela_preco SET vigente_desde = current_date",
+        "UPDATE financeiro.tabela_preco SET vigente_desde = (now() AT TIME ZONE 'America/Sao_Paulo')::date",
         "DELETE FROM financeiro.tabela_preco",
     ] {
         assert!(sqlx::query(sql).execute(&amb.admin).await.is_err(), "{sql}");
@@ -487,7 +487,7 @@ async fn quando_duas_versoes_com_a_mesma_vigencia_chegam_juntas_entao_so_uma_ent
     );
     assert_eq!(
         amb.contar(
-            "SELECT count(*) FROM financeiro.tabela_preco WHERE vigente_desde > current_date"
+            "SELECT count(*) FROM financeiro.tabela_preco WHERE vigente_desde > (now() AT TIME ZONE 'America/Sao_Paulo')::date"
         )
         .await,
         1

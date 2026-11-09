@@ -64,6 +64,8 @@ pub enum Ato {
     ModeloLaudoUsar,
     RevisaoPorParRevisar,
     LaudoCoordenar,
+    PreparoAdministrar,
+    DocumentoEmitir,
 }
 
 impl Ato {
@@ -154,6 +156,10 @@ impl Ato {
             A::CatalogoAdministrar => &["gerente"],
             // Cabeçalho impresso nos documentos da unidade (DEC-2026-11-08-92).
             A::CabecalhoAdministrar => &["gerente"],
+            // Preparo do exame (versão nova com motivo) e documentos do atendimento entregues ao
+            // paciente: comprovante e declaração de comparecimento (DEC-2026-11-09-106 a 108).
+            A::PreparoAdministrar => &["gerente"],
+            A::DocumentoEmitir => &["recepcao", "gerente"],
         };
         perfis.contains(&perfil)
     }
@@ -163,7 +169,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 60] = [
+    const TODOS: [Ato; 62] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -224,6 +230,8 @@ mod testes {
         Ato::ModeloLaudoUsar,
         Ato::RevisaoPorParRevisar,
         Ato::LaudoCoordenar,
+        Ato::PreparoAdministrar,
+        Ato::DocumentoEmitir,
     ];
 
     #[test]

@@ -56,6 +56,7 @@ import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-o
 import type { IntegracaoVista } from './contrato-configuracoes';
 import type { VisaoDoPaciente } from './contrato-paciente';
 import type { InicioDoDia } from './contrato-inicio';
+import type { NovoPreparo, PreparoDoExame, VersaoDoPreparo } from './contrato-preparo';
 import type { FluxoDeLaudos } from './contrato-fluxo';
 import type {
   CasoDeRevisao,
@@ -514,6 +515,24 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
         criar<ProcedimentoDoCatalogo>('POST', `/v1/catalogo/procedimentos/${seg(tuss)}/mudancas`, corpo, o),
       publicarTabela: (corpo: NovaVersaoDaTabela, o: OpcoesDeEscrita): Promise<VersaoDaTabelaDePreco> =>
         criar<VersaoDaTabelaDePreco>('POST', '/v1/catalogo/tabelas-de-preco', corpo, o),
+    },
+
+    /** Preparo do exame por procedimento, versionado (recepção lê; gerência publica com motivo). */
+    preparos: {
+      listar: (): Promise<PreparoDoExame[]> => ler<PreparoDoExame[]>('/v1/preparos'),
+      versoes: (tuss: string): Promise<VersaoDoPreparo[]> => ler<VersaoDoPreparo[]>(`/v1/preparos/${seg(tuss)}`),
+      publicar: (tuss: string, corpo: NovoPreparo, o: OpcoesDeEscrita): Promise<VersaoDoPreparo> =>
+        criar<VersaoDoPreparo>('POST', `/v1/preparos/${seg(tuss)}`, corpo, o),
+    },
+
+    /** Documentos do atendimento em PDF: comprovante com preparo, declaração de comparecimento e recibo. */
+    documentos: {
+      comprovante: (agendamentoId: string): Promise<DocumentoBaixado> =>
+        baixar({ metodo: 'GET', caminho: `/v1/agendamentos/${seg(agendamentoId)}/comprovante` }),
+      declaracao: (atendimentoId: string): Promise<DocumentoBaixado> =>
+        baixar({ metodo: 'GET', caminho: `/v1/atendimentos/${seg(atendimentoId)}/declaracao` }),
+      recibo: (recebimentoId: string): Promise<DocumentoBaixado> =>
+        baixar({ metodo: 'GET', caminho: `/v1/caixa/recebimentos/${seg(recebimentoId)}/recibo` }),
     },
 
     /** Cabeçalho impresso nos documentos da unidade (gerência), versionado. */

@@ -4,6 +4,7 @@
 //! cada entrega fica registrada em `documentos.emissao` com o SHA-256 dos bytes, devolvido também no
 //! cabeçalho `X-Documento-Sha256`. Nada de dado de saúde na URL nem no log (SEC-DAD).
 
+pub mod atendimento;
 pub mod dossie;
 pub mod laudo;
 

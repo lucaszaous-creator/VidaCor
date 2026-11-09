@@ -12,6 +12,7 @@ import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-o
 import type { IntegracaoVista } from './contrato-configuracoes';
 import type { VisaoDoPaciente } from './contrato-paciente';
 import type { InicioDoDia } from './contrato-inicio';
+import type { NovoPreparo, PreparoDoExame, VersaoDoPreparo } from './contrato-preparo';
 import type { FluxoDeLaudos } from './contrato-fluxo';
 import type {
   CasoDeRevisao,
@@ -260,3 +261,8 @@ export type ConferePainelDeRevisao = Cabe<PainelDeRevisao, S['PainelDeRevisao']>
 export type ConferePedidoSorteio = Cabe<{ quantidade: number; dias: number }, S['PedidoSorteio']>;
 export type ConferePedidoDesignacao = Cabe<{ laudo_id: string; revisor_id: string }, S['PedidoDesignacao']>;
 export type ConferePedidoUsoDeModelo = Cabe<{ modelo_id: string; numero: number }, S['PedidoUsoDeModelo']>;
+
+// Preparo do exame (versões com motivo).
+export type ConfereVersaoDoPreparo = Cabe<VersaoDoPreparo, S['VersaoDoPreparo']>;
+export type ConferePreparoDoExame = Cabe<PreparoDoExame, S['PreparoDoExame']>;
+export type ConfereNovoPreparo = Cabe<NovoPreparo, S['NovoPreparo']>;

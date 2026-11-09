@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import type { ItemDaAgendaFase1 } from '@vidacor/api-client';
 import {
@@ -17,7 +18,10 @@ import {
 } from '@vidacor/design-system';
 import { useState, type ReactNode } from 'react';
 import { FUSO_DA_CLINICA } from './grade';
+import { BaixarDocumento } from '../../componentes/BaixarDocumento';
 import { MenuDoServidor } from '../../componentes/MenuDoServidor';
+import { consultaSessao } from '../../consultas';
+import { useDependencias } from '../../contexto';
 import { cabecalhoDoMenu } from './menu';
 import { ResumoDoAtendimento } from './ResumoDoAtendimento';
 import { aparenciaDoAgendamento } from './situacoes';
@@ -237,6 +241,34 @@ function CheckIn({ item, aoVoltar, aoFechar }: PropsDoCheckIn) {
   );
 }
 
+const SEM_COMPROVANTE = new Set(['cancelado', 'faltou', 'expirada']);
+
+/**
+ * Documentos para entregar ao paciente (recepção e gerência): comprovante com o preparo do exame e,
+ * depois do check-in, a declaração de comparecimento. O servidor confere perfil, unidade e situação.
+ */
+function DocumentosDoAgendamento({ item, atendimentoId }: { item: ItemDaAgendaFase1; atendimentoId: string | null }) {
+  const { api } = useDependencias();
+  const sessao = useQuery(consultaSessao(api));
+  const perfis = sessao.data?.usuario.perfis ?? [];
+  if (!perfis.some((p) => p === 'recepcao' || p === 'gerente')) return null;
+  const comprovante = !SEM_COMPROVANTE.has(item.situacao);
+  if (!comprovante && atendimentoId === null) return null;
+  return (
+    <section aria-label="Documentos do paciente" className="col" style={{ gap: 8 }}>
+      <h3 className="t14 b" style={{ margin: 0 }}>
+        Documentos
+      </h3>
+      {comprovante && (
+        <BaixarDocumento rotulo="Comprovante e preparo" ato="gerar o comprovante do agendamento" baixar={() => api.documentos.comprovante(item.id)} />
+      )}
+      {atendimentoId !== null && (
+        <BaixarDocumento rotulo="Declaração de comparecimento" ato="gerar a declaração de comparecimento" baixar={() => api.documentos.declaracao(atendimentoId)} />
+      )}
+    </section>
+  );
+}
+
 export interface PropsDaGavetaDoAgendamento {
   item: ItemDaAgendaFase1;
   aoFechar: () => void;
@@ -278,6 +310,7 @@ export function GavetaDoAgendamento({ item, aoFechar }: PropsDaGavetaDoAgendamen
     >
       <DadosDoAgendamento item={item} />
       {atendimentoId !== null && <ResumoDoAtendimento atendimentoId={atendimentoId} />}
+      <DocumentosDoAgendamento item={item} atendimentoId={atendimentoId} />
     </GavetaBase>
   );
 }

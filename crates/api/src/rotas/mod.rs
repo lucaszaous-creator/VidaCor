@@ -51,6 +51,7 @@ pub mod pacientes;
 pub mod pendencias;
 pub mod portal;
 pub mod portal_acesso;
+pub mod preparo;
 pub mod qualidade;
 pub mod repasse;
 pub mod respostas;
@@ -177,6 +178,23 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/atendimentos/{id}/contraste", post(estoque::contraste))
         .route("/v1/lastro/cadeia", get(lastro_explorador::cadeia))
         .route("/v1/lastro/dossie", post(documentos::dossie::dossie))
+        .route(
+            "/v1/agendamentos/{id}/comprovante",
+            get(documentos::atendimento::comprovante),
+        )
+        .route(
+            "/v1/atendimentos/{id}/declaracao",
+            get(documentos::atendimento::declaracao),
+        )
+        .route(
+            "/v1/caixa/recebimentos/{id}/recibo",
+            get(documentos::atendimento::recibo),
+        )
+        .route("/v1/preparos", get(preparo::listar))
+        .route(
+            "/v1/preparos/{tuss}",
+            get(preparo::versoes).post(preparo::publicar),
+        )
         .route("/v1/indicadores", get(indicadores::indicadores))
         .route("/v1/usuarios", get(usuarios::listar).post(usuarios::criar))
         .route(

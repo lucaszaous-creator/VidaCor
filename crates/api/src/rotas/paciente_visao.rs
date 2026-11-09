@@ -55,7 +55,7 @@ pub struct VisaoDoPaciente {
     pub exames_externos: i64,
 }
 
-fn mascarar_cpf(cpf: &str) -> String {
+pub(crate) fn mascarar_cpf(cpf: &str) -> String {
     let fim: String = cpf
         .chars()
         .rev()

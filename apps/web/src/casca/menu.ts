@@ -74,6 +74,7 @@ const SECOES: { id: string; titulo: string; itens: ItemComPerfis[] }[] = [
       // Cadastros base (docs/04): corpo clínico só da gerência; o catálogo a recepção consulta.
       { id: 'corpo-clinico', rotulo: 'Corpo clínico', href: '/corpo-clinico', icone: 'laudos', cor: 'rose', perfis: ['gerente'] },
       { id: 'exames', rotulo: 'Exames e procedimentos', href: '/exames', icone: 'etiquetas', cor: 'rose', perfis: [...RECEPCAO, 'gerente'] },
+      { id: 'preparo', rotulo: 'Preparo de exames', href: '/preparo', icone: 'triagem', cor: 'rose', perfis: [...RECEPCAO, 'gerente'] },
       // Qualidade e segurança do paciente: toda a equipe notifica (menos a TV).
       { id: 'qualidade', rotulo: 'Qualidade', href: '/qualidade', icone: 'confere', cor: 'rose', perfis: ['recepcao', 'supervisor_recepcao', 'coordenacao', 'caixa', 'tecnico', 'enfermagem', 'medico', 'faturista', 'financeiro', 'gerente', 'estoque', 'auditor', 'ti'] },
       { id: 'ouvidoria', rotulo: 'Ouvidoria', href: '/ouvidoria', icone: 'confere', cor: 'rose', perfis: [...RECEPCAO, 'gerente'] },

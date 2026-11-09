@@ -14,6 +14,7 @@ import { manipuladoresFaturamento, reiniciarFaturamento } from './nucleo-faturam
 import { manipuladoresLaudoEstruturado, reiniciarLaudoEstruturado } from './nucleo-laudo-estruturado';
 import { manipuladoresDocumentos } from './nucleo-documentos';
 import { manipuladoresModelos, reiniciarModelos } from './nucleo-modelos';
+import { manipuladoresPreparo, reiniciarPreparo } from './nucleo-preparo';
 import { manipuladoresMenu } from './nucleo-menu';
 import { manipuladoresCadastro, manipuladoresPortal, portalSimulado } from './nucleo-portal';
 import { manipuladoresAReceber, manipuladoresPendencias, reiniciarPendencias } from './nucleo-pendencias';
@@ -45,6 +46,7 @@ export function reiniciarNucleo(): void {
   reiniciarAutorizacoes();
   reiniciarCadastros();
   reiniciarModelos();
+  reiniciarPreparo();
   portalSimulado.logado = false;
   lastroSimulado.integra = true;
   comunicacaoSimulada.whatsapp = true;
@@ -123,4 +125,4 @@ export const manipuladores = [
   }),
 ];
 
-export const servidor = setupServer(...manipuladoresQualidade, ...manipuladoresCadastros, ...manipuladoresOuvidoria, ...manipuladoresBusca, ...manipuladoresFluxo, ...manipuladoresDocumentos, ...manipuladoresInicio, ...manipuladoresPaciente, ...manipuladoresConfiguracoes, ...manipuladoresVisualizacao, ...manipuladoresEspera, ...manipuladoresAparelhos, ...manipuladoresOrcamento, ...manipuladoresAutorizacao, ...manipuladoresPainel, ...manipuladoresExterno, ...manipuladoresFaturamento, ...manipuladoresNfse, ...manipuladoresUsuarios, ...manipuladoresFinanceiro, ...manipuladoresComunicacao, ...manipuladoresIndicadores, ...manipuladoresLaudoEstruturado, ...manipuladoresLastro, ...manipuladoresEstoque, ...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores, ...manipuladoresModelos);
+export const servidor = setupServer(...manipuladoresPreparo, ...manipuladoresQualidade, ...manipuladoresCadastros, ...manipuladoresOuvidoria, ...manipuladoresBusca, ...manipuladoresFluxo, ...manipuladoresDocumentos, ...manipuladoresInicio, ...manipuladoresPaciente, ...manipuladoresConfiguracoes, ...manipuladoresVisualizacao, ...manipuladoresEspera, ...manipuladoresAparelhos, ...manipuladoresOrcamento, ...manipuladoresAutorizacao, ...manipuladoresPainel, ...manipuladoresExterno, ...manipuladoresFaturamento, ...manipuladoresNfse, ...manipuladoresUsuarios, ...manipuladoresFinanceiro, ...manipuladoresComunicacao, ...manipuladoresIndicadores, ...manipuladoresLaudoEstruturado, ...manipuladoresLastro, ...manipuladoresEstoque, ...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores, ...manipuladoresModelos);
