@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT l.codigo, p.nome AS paciente, e.recebido_em\n             FROM laudos.laudo l\n             JOIN exames.estudo e ON e.id = l.estudo_id\n             JOIN identidade.paciente p ON p.id = l.paciente_id\n            WHERE l.medico_atribuido_id = $1 AND l.situacao IN ('rascunho','retificacao_em_rascunho')\n            ORDER BY e.recebido_em LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.laudo",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "paciente",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "recebido_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "exames.estudo",
+            "name": "recebido_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "1ef9970c854541c207801405576198dd706b7a1f89b6a31c661f4216f777fd63"
+}

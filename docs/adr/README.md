@@ -23,5 +23,6 @@
 | [0019](0019-decisoes-pelo-mais-profissional-com-lastro.md) | Decidir pelo mais profissional e rastreável, com registro | Aceito |
 | [0020](0020-testes-ponta-a-ponta-e2e.md) | Testes ponta a ponta das telas com a skill e2e (TesterArmy) | Aceito |
 | [0021](0021-design-system-proprio-e-react-aria.md) | Design system próprio a partir dos mockups, com React Aria Components | Aceito |
+| [0022](0022-referencia-medware-mediworks-medilab.md) | Decisões a partir da Medware, Mediworks, Medilab e sistemas grandes | Aceito |
 
 Visão geral em [11 · Arquitetura e infraestrutura](../11-arquitetura-e-infraestrutura.md).

@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT agenda.travar_medico($1)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "travar_medico",
+        "type_info": "Void",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "e2f55438d558eb1986f59e29dc89604691d937213a31b98e77cf88f0ff0c06d7"
+}

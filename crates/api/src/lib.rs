@@ -9,6 +9,7 @@ pub mod certificado;
 pub mod cfm;
 pub mod config;
 pub mod correio;
+pub mod dose;
 pub mod erro;
 pub mod estado;
 pub mod eventos;

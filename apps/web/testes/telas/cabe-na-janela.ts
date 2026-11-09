@@ -15,6 +15,7 @@ import { createServer } from 'vite';
 import { ATENDIMENTO_VERA, LAUDO_ANTONIO_ID, PORTAL_LAUDO_ECO, SALA_1, SESSOES, SONIA } from '../dados/fase1.ts';
 import { DATA_DOS_TESTES } from '../dados/ficticios.ts';
 import { novoEstado, simularNucleo, type EstadoDaSimulacao } from './nucleo-playwright.ts';
+import { agenda, ausenciaAguardando, CATALOGO, doses } from '../dados/gestao.ts';
 
 const aqui = dirname(fileURLToPath(import.meta.url));
 const raizDoApp = join(aqui, '..', '..');
@@ -300,6 +301,22 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await page.getByRole('button', { name: 'Nova versão' }).click();
   await esperar(page, 'form', 'Nova versão do preparo');
   await ok('47b-preparo-nova-versao');
+  await ir('/etiquetas');
+  await esperar(page, 'list', 'Eventos da etiqueta');
+  await ok('49-etiquetas');
+  await ir('/comunicacao');
+  await esperar(page, 'tab', 'Mensagens enviadas');
+  await ok('50-comunicacao');
+  await page.getByRole('tab', { name: 'Mensagens automáticas' }).click();
+  await esperar(page, 'list', 'Mensagens automáticas');
+  await ok('50b-comunicacao-automaticas');
+  await ir('/pacientes');
+  await esperar(page, 'complementary', 'Resumo do paciente');
+  await page.getByRole('button', { name: /^Maria Helena Duarte de Albuquerque Cavalcanti, nascimento/ }).click();
+  await ok('48-pacientes-lista');
+  await page.getByRole('button', { name: /Possíveis duplicados/ }).click();
+  await page.getByRole('article').first().waitFor();
+  await ok('48b-pacientes-duplicados');
   await ir(`/pacientes?id=${SONIA.paciente.id}`);
   await esperar(page, 'region', 'Cadastro e contato');
   await ok('40-paciente');
@@ -400,6 +417,49 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   estado.contingenciaAberta = false;
 };
 
+/** Agente 2: minha agenda do médico, ausências, gestão de dose e relatórios (rotas próprias por cima do núcleo simulado). */
+const gestao: Passo = async (page, estado, ir, ok) => {
+  const json = (corpo: unknown) => ({ status: 200, contentType: 'application/json', body: JSON.stringify(corpo) });
+  // Lista longa de propósito: rola dentro do painel, nunca a página.
+  const a = agenda();
+  const base = a.itens[2];
+  if (base !== undefined) {
+    for (let i = 0; i < 12; i += 1) a.itens.push({ ...base, agendamento_id: `${base.agendamento_id.slice(0, -2)}${String(10 + i)}` });
+  }
+  await page.route('**/v1/minha-agenda**', (r) => r.fulfill(json(a)));
+  await page.route('**/v1/ausencias**', (r) => r.fulfill(json([ausenciaAguardando()])));
+  await page.route('**/v1/doses**', (r) => r.fulfill(json(r.request().url().includes('protocolos') ? [{ exame_tuss: '41001020', exame: 'TC de tórax', aparelho: 'Somatom go.Up', grandeza: 'ctdivol', exames: 21, mediana: 10.6, nrd: 12, percentual_do_nrd: 88, acima: 1 }] : doses())));
+  await page.route('**/v1/nrd', (r) => r.fulfill(json([{ tuss: '41001020', exame: 'TC de tórax', modalidade: 'CT', numero: 1, grandeza: 'ctdivol', valor: 12 }])));
+  await page.route('**/v1/relatorios**', (r) => {
+    const c = new URL(r.request().url()).pathname;
+    if (c === '/v1/relatorios') return r.fulfill(json(CATALOGO.map((x) => ({ id: x.id, grupo: x.grupo, titulo: x.titulo, descricao: x.descricao, dado_de_saude: x.dado_de_saude }))));
+    if (c === '/v1/relatorios/exportacoes') return r.fulfill(json([]));
+    const linhas = Array.from({ length: 30 }, (_, i) => ({ a: `Dr. Médico ${String(i + 1)}`, b: 'Ecocardiograma', valor: 400 - i, c: String(400 - i) }));
+    return r.fulfill(json({ id: 'producao_medico', titulo: 'Produção por médico', de: '2026-11-01', ate: '2026-11-06', colunas: ['Médico', 'Principal exame', 'Laudos'], linhas, dado_de_saude: false, gerado_em: '2026-11-06T13:40:00Z' }));
+  });
+  estado.sessao = SESSOES.medico;
+  await ir('/minha-agenda');
+  await esperar(page, 'table', 'Pacientes do dia');
+  await ok('60-minha-agenda');
+  await page.getByRole('button', { name: 'Bloquear horário' }).click();
+  await esperar(page, 'form', 'Pedido de bloqueio');
+  await ok('61-minha-agenda-bloqueio');
+  estado.sessao = SESSOES.gerente;
+  await ir('/ausencias-medicas');
+  await esperar(page, 'button', 'Aprovar o bloqueio');
+  await ok('62-ausencias');
+  estado.sessao = SESSOES.medicaTc;
+  await ir('/gestao-de-dose');
+  await esperar(page, 'table', 'Exames com dose');
+  await ok('63-gestao-de-dose');
+  estado.sessao = SESSOES.gerente;
+  await ir('/relatorios');
+  await esperar(page, 'table', 'Prévia de Produção por médico');
+  await ok('64-relatorios');
+  await page.unrouteAll({ behavior: 'ignoreErrors' });
+  await simularNucleo(page, estado);
+};
+
 const servidor = await createServer({
   root: raizDoApp,
   configFile: join(raizDoApp, 'vite.config.ts'),
@@ -427,6 +487,7 @@ try {
     const ok = (nome: string): Promise<void> => conferir(page, nome, largura, altura);
     await m0(page, estado, ir, ok);
     await fase1(page, estado, ir, ok);
+    await gestao(page, estado, ir, ok);
     await contexto.close();
   }
 } finally {

@@ -1,0 +1,86 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT x.id, x.modelo, x.ativo, x.motivo, x.criado_em, u.nome AS \"por?\"\n             FROM comunicacao.envio_automatico x LEFT JOIN identidade.usuario u ON u.id = x.criado_por\n            WHERE NOT EXISTS (SELECT 1 FROM comunicacao.envio_automatico s WHERE s.substitui = x.id)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "comunicacao.envio_automatico",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "modelo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "comunicacao.envio_automatico",
+            "name": "modelo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "ativo",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "comunicacao.envio_automatico",
+            "name": "ativo"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "comunicacao.envio_automatico",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "comunicacao.envio_automatico",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "por?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "c58dd1a872633c2f4904e5eb2f8597083dacff410febaca8fd8ccd4930657886"
+}

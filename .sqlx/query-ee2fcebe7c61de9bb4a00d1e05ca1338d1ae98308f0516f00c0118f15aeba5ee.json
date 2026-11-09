@@ -1,0 +1,51 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT count(*) FILTER (WHERE situacao = 'enviada') AS \"enviadas!\",\n                  count(*) FILTER (WHERE resposta = 'confirmou') AS \"confirmaram!\",\n                  count(*) FILTER (WHERE situacao = 'bloqueada_opt_out') AS \"opt_out!\",\n                  count(*) FILTER (WHERE situacao = 'sem_celular') AS \"sem_celular!\",\n                  count(*) FILTER (WHERE situacao = 'modelo_desligado') AS \"desligadas!\"\n             FROM comunicacao.mensagem WHERE (criado_em AT TIME ZONE 'America/Sao_Paulo')::date = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "enviadas!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 1,
+        "name": "confirmaram!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "opt_out!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 3,
+        "name": "sem_celular!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 4,
+        "name": "desligadas!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Date"
+      ]
+    },
+    "nullable": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "ee2fcebe7c61de9bb4a00d1e05ca1338d1ae98308f0516f00c0118f15aeba5ee"
+}

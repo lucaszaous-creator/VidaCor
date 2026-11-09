@@ -1,0 +1,252 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT d.id, d.codigo, d.modalidade, d.aparelho, d.ctdivol_mgy, d.dlp_mgycm, d.dap_gycm2, d.valor_comparado,\n                  d.acima_do_nrd, e.recebido_em, p.id AS paciente_id, p.nome, p.nascimento,\n                  coalesce(c.nome, d.exame_tuss) AS \"exame!\", n.grandeza AS \"grandeza?\", n.valor AS \"nrd_valor?\",\n                  j.motivo AS \"j_motivo?\", j.detalhe AS j_detalhe, ju.nome AS \"j_por?\", j.criado_em AS \"j_em?\"\n             FROM exames.dose d\n             JOIN exames.estudo e ON e.id = d.estudo_id\n             JOIN identidade.paciente p ON p.id = d.paciente_id\n             LEFT JOIN agenda.procedimento c ON c.tuss = d.exame_tuss\n             LEFT JOIN exames.nrd n ON n.id = d.nrd_id\n             LEFT JOIN exames.dose_justificativa j ON j.dose_id = d.id\n             LEFT JOIN identidade.usuario ju ON ju.id = j.criado_por\n            WHERE e.recebido_em >= $1 AND e.recebido_em < $2\n            ORDER BY d.acima_do_nrd DESC, e.recebido_em DESC\n            LIMIT 500",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "exames.dose",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.dose",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "modalidade",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.dose",
+            "name": "modalidade"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "aparelho",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.dose",
+            "name": "aparelho"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "ctdivol_mgy",
+        "type_info": "Float8",
+        "origin": {
+          "Table": {
+            "table": "exames.dose",
+            "name": "ctdivol_mgy"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "dlp_mgycm",
+        "type_info": "Float8",
+        "origin": {
+          "Table": {
+            "table": "exames.dose",
+            "name": "dlp_mgycm"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "dap_gycm2",
+        "type_info": "Float8",
+        "origin": {
+          "Table": {
+            "table": "exames.dose",
+            "name": "dap_gycm2"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "valor_comparado",
+        "type_info": "Float8",
+        "origin": {
+          "Table": {
+            "table": "exames.dose",
+            "name": "valor_comparado"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "acima_do_nrd",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "exames.dose",
+            "name": "acima_do_nrd"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "recebido_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "exames.estudo",
+            "name": "recebido_em"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "paciente_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "exame!",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 14,
+        "name": "grandeza?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.nrd",
+            "name": "grandeza"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "nrd_valor?",
+        "type_info": "Float8",
+        "origin": {
+          "Table": {
+            "table": "exames.nrd",
+            "name": "valor"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "j_motivo?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.dose_justificativa",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 17,
+        "name": "j_detalhe",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.dose_justificativa",
+            "name": "detalhe"
+          }
+        }
+      },
+      {
+        "ordinal": 18,
+        "name": "j_por?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 19,
+        "name": "j_em?",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "exames.dose_justificativa",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      null,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "315bcc33b25043c923e369f45088bf4208ea12176231b9e6c41e60efda519d65"
+}

@@ -1,0 +1,41 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, decisao FROM identidade.par_duplicado x\n          WHERE paciente_menor = $1 AND paciente_maior = $2\n            AND NOT EXISTS (SELECT 1 FROM identidade.par_duplicado s WHERE s.substitui = x.id)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.par_duplicado",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "decisao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.par_duplicado",
+            "name": "decisao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "52b8e2da3fdabfc372469c10be43be9931878d331783660da9c1f6350e10c94e"
+}

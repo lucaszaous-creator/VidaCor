@@ -658,3 +658,255 @@ Funcionalidade: Contingência e lançamento posterior
     Quando Carla tenta declarar ou encerrar a contingência pela rota
     Então a rota responde 403
 ```
+
+---
+
+## 11. Lista de pacientes e possíveis duplicados (proposta, aguardando aprovação)
+
+> Propostas pelo Agente 1 em 09/11/2026 (DEC-2026-11-09-124 e ADR-0022). Os testes já foram escritos contra
+> estas frases para não travar a construção; se o dono do produto ajustar alguma, o teste muda junto, com
+> nova versão da frase. Testes: `crates/api/tests/pacientes_lista.rs`.
+
+| ID | Cenário | Status | Aprovador | Data | Observações |
+|---|---|---|---|---|---|
+| FC-PAC-01 | A lista mostra os cadastros da unidade em ordem de nome, com total, páginas de 12 e situação calculada pelo servidor | Proposta | — | — | Base: lista de pacientes da Medware Clínicas e do MediClinic RIS |
+| FC-PAC-02 | A busca acha por nome sem acento, nascimento, CPF, celular ou prontuário | Proposta | — | — | — |
+| FC-PAC-03 | "Na clínica hoje" vem do check-in registrado; "com pendência" é reserva sem guia; "incompleto" diz o que falta | Proposta | — | — | — |
+| FC-PAC-04 | Caixa, financeiro, TI, faturamento, estoque e TV não abrem a lista; outra unidade não vê nem conta | Proposta | — | — | docs/18 N1 |
+| FC-PAC-05 | Possível duplicado: decisão única por par (duas ao mesmo tempo, só uma vale), imutável e no lastro; mudar exige motivo | Proposta | — | — | Junção efetiva fora desta entrega (DEC-2026-11-09-127) |
+| FC-PAC-06 | Técnico e médico veem a lista mas não decidem sobre duplicado | Proposta | — | — | — |
+
+```gherkin
+Funcionalidade: Lista de pacientes
+
+  Cenário: FC-PAC-01 Lista com total e situação do servidor
+    Dado a unidade Centro com 5 pacientes cadastrados
+    Quando Ana, da recepção, abre a lista
+    Então vê os 5 em ordem de nome, "5 cadastrados" e a situação de cada um calculada pelo servidor
+
+  Cenário: FC-PAC-02 Busca sem acento
+    Quando Ana busca "antonio carlos", "15/06/1954", "529.982.247-25", "(48) 99640-1187" ou "PAC-2026-000001"
+    Então a lista mostra só "Antônio Carlos Ribeiro", com o CPF mascarado
+
+  Cenário: FC-PAC-03 Na clínica hoje vem do check-in
+    Dado que "Maria Helena Duarte" fez check-in hoje
+    Quando Ana escolhe o recorte "Na clínica hoje"
+    Então a lista mostra "Maria Helena Duarte" com a situação "Na clínica"
+
+  Cenário: FC-PAC-04 Perfil sem permissão não abre a lista
+    Quando Carla, do caixa, pede a lista pela rota
+    Então a rota responde 403
+    E a recepção da unidade Norte vê 0 cadastrados da unidade Centro
+
+  Cenário: FC-PAC-05 Duas decisões ao mesmo tempo sobre o mesmo par
+    Dado dois cadastros "Maria Helena Duarte" com o mesmo celular e nascimentos 12/03/1968 e 21/03/1968
+    Quando duas pessoas da recepção pedem a junção ao mesmo tempo
+    Então uma recebe 201 e a outra 409, e só uma decisão é gravada
+    E os dois cadastros continuam separados até a conferência de outra pessoa
+
+  Cenário: FC-PAC-06 Técnico não decide sobre duplicado
+    Quando Bruno, técnico, tenta marcar o par como pessoas diferentes
+    Então a rota responde 403 e nada é gravado
+```
+
+---
+
+## 12. Etiquetas e rastreio (proposta, aguardando aprovação)
+
+> Propostas pelo Agente 1 em 09/11/2026. Testes: `crates/api/tests/etiquetas_rastreio.rs` (bipe real na sala).
+> Frases com efeito clínico (bloqueio na sala): passam pelo responsável clínico de segurança.
+
+| ID | Cenário | Status | Aprovador | Data | Observações |
+|---|---|---|---|---|---|
+| FC-ETR-01 | O painel do dia conta impressas, bipadas, reimpressões, invalidações e divergências pelo banco e pelo lastro | Proposta | — | — | Base: central de etiquetas da Medware Clínicas |
+| FC-ETR-02 | A divergência de pulseira bipada na sala errada aparece com nome, nascimento, sala bipada e sala certa | Proposta | — | — | Clínica |
+| FC-ETR-03 | Resolver a divergência (encaminhar à sala certa) vale uma vez; duas ao mesmo tempo, só uma; resolvida não reabre nem se apaga | Proposta | — | — | Clínica |
+| FC-ETR-04 | Invalidar a pulseira exige motivo; duas ao mesmo tempo, só uma; bipada depois, a sala bloqueia; invalidada não volta a valer | Proposta | — | — | Clínica |
+| FC-ETR-05 | A reimpressão aparece no histórico das duas etiquetas (a antiga diz o motivo e a nova; a nova diz qual substitui) | Proposta | — | — | — |
+| FC-ETR-06 | Caixa, financeiro, TI, faturamento e TV não veem etiquetas; outra unidade não vê nem resolve | Proposta | — | — | — |
+
+---
+
+## 13. Comunicação com pacientes, corte do MVP (proposta, aguardando aprovação)
+
+> Propostas pelo Agente 1 em 09/11/2026. Testes: `crates/api/tests/comunicacao_painel.rs` (WhatsApp simulado).
+
+| ID | Cenário | Status | Aprovador | Data | Observações |
+|---|---|---|---|---|---|
+| FC-COM-01 | O registro mostra cada aviso dos últimos 7 dias com nome, nascimento, situação (enviada ou por que não saiu) e resposta | Proposta | — | — | Base: Paciente Conectado (Medware) e MediAutonotify (Medilab) |
+| FC-COM-02 | Aviso desligado pela gerência com motivo não sai e cada mensagem fica registrada como "aviso desligado"; repetir a mudança não duplica | Proposta | — | — | — |
+| FC-COM-03 | Duas mudanças sobre a mesma versão vista, ao mesmo tempo: só uma vale; versão antiga é recusada; versão não se altera nem se apaga | Proposta | — | — | — |
+| FC-COM-04 | Só recepção e gerência veem o registro | Proposta | — | — | Caixa, técnico, médico, financeiro, TI e TV: 403 |
+| FC-COM-05 | Só a gerência liga ou desliga; a mudança vale só para a unidade dela | Proposta | — | — | — |
+## 14. Minha agenda do médico e ausência (proposta, aguardando aprovação)
+
+> Escritas pelo Agente 2 em 09/11/2026 (DEC-2026-11-09-140 a 143). Testadas em `crates/api/tests/minha_agenda.rs`.
+> Valem como proposta até o dono do produto aprovar; mudança depois da aprovação segue a regra de versão acima.
+
+| ID | Cenário | Status | Aprovador | Data | Observações |
+|---|---|---|---|---|---|
+| FC-MAG-01 | O médico vê só os próprios pacientes, com nome e nascimento | Proposta, aguardando aprovação | — | — | Base: App Agenda da Medware (agenda do médico) |
+| FC-MAG-02 | Depois do check-in o paciente aparece como esperando | Proposta, aguardando aprovação | — | — | — |
+| FC-MAG-03 | Quem não é médico não abre a agenda do médico | Proposta, aguardando aprovação | — | — | — |
+| FC-MAG-04 | O bloqueio pedido só fecha a agenda depois da aprovação | Proposta, aguardando aprovação | — | — | Segunda pessoa (docs/18) |
+| FC-MAG-05 | O médico não aprova o próprio pedido; recusa exige motivo | Proposta, aguardando aprovação | — | — | — |
+| FC-MAG-06 | Outro médico não vê nem cancela o pedido | Proposta, aguardando aprovação | — | — | — |
+| FC-MAG-07 | Período inválido é recusado | Proposta, aguardando aprovação | — | — | Até 62 dias por pedido |
+| FC-MAG-08 | Clique duplo e pedidos simultâneos não duplicam | Proposta, aguardando aprovação | — | — | G2 e G3 |
+
+```gherkin
+Funcionalidade: Minha agenda do médico
+
+  Cenário: FC-MAG-01 O médico vê só os próprios pacientes
+    Dado "Antônio Carlos Ribeiro" (15/06/1954) agendado hoje com o Dr. Paulo Medeiros
+    E "Vera Lúcia Antunes" agendada com a Dra. Cecília Souto
+    Quando o Dr. Paulo abre "Minha agenda"
+    Então ele vê Antônio, com nome e nascimento, no grupo "A chegar"
+    E não vê Vera
+
+  Cenário: FC-MAG-02 Check-in leva o paciente a "Esperando"
+    Quando a recepção faz o check-in de Antônio
+    Então na agenda do Dr. Paulo Antônio aparece em "Esperando", com a senha e desde quando espera
+
+  Cenário: FC-MAG-03 Só o médico abre a própria agenda
+    Quando recepção, caixa, técnico, gerência, TI ou faturamento pedem "Minha agenda"
+    Então a rota responde 403
+
+  Cenário: FC-MAG-04 Bloqueio só vale depois da aprovação
+    Dado um paciente já agendado com o Dr. Paulo daqui a 3 dias
+    Quando o Dr. Paulo pede o bloqueio de 3 a 5 dias à frente por congresso
+    Então o pedido fica "aguardando" com 1 paciente afetado e a agenda continua aberta
+    Quando Patrícia (coordenação) aprova
+    Então um agendamento novo com o Dr. Paulo no período é recusado com 409 "medico-ausente"
+    E com outro médico no mesmo período o agendamento entra
+
+  Cenário: FC-MAG-05 Segunda pessoa decide
+    Quando o próprio Dr. Paulo ou a recepção tentam aprovar o pedido
+    Então a rota responde 403
+    E a recusa sem motivo responde 422, e um pedido já decidido responde 409
+
+  Cenário: FC-MAG-06 Acesso indevido
+    Quando a Dra. Cecília lista ou tenta cancelar o pedido do Dr. Paulo
+    Então ela não o vê e o cancelamento responde 404
+
+  Cenário: FC-MAG-07 Limites
+    Quando o período é vazio, passa de 62 dias, já passou ou o motivo não é da lista
+    Então a rota responde 422 e nada é gravado
+
+  Cenário: FC-MAG-08 Repetição e concorrência
+    Quando o mesmo pedido é enviado duas vezes com a mesma chave
+    Então volta a mesma resposta e há um registro só
+    Quando dois pedidos sobrepostos chegam ao mesmo tempo
+    Então só um entra e o outro recebe 409
+    Quando duas decisões chegam ao mesmo tempo sobre o mesmo pedido
+    Então só uma tem efeito
+```
+
+## 15. Gestão de dose (proposta, aguardando aprovação)
+
+> Escritas pelo Agente 2 em 09/11/2026 (DEC-2026-11-09-144 a 149). Testadas em `crates/api/tests/gestao_dose.rs`
+> com Orthanc real recebendo imagem e RDSR. Frases clínicas: precisam também do parecer do responsável clínico de segurança.
+
+| ID | Cenário | Status | Aprovador | Data | Observações |
+|---|---|---|---|---|---|
+| FC-DOS-01 | RDSR do aparelho vira dose comparada ao NRD | Proposta, aguardando aprovação | — | — | RDC 611/2022 |
+| FC-DOS-02 | Sem vínculo o médico não vê a dose; a gerência só vê o agregado | Proposta, aguardando aprovação | — | — | docs/18 N3 |
+| FC-DOS-03 | Justificativa uma vez só, por quem tem vínculo | Proposta, aguardando aprovação | — | — | — |
+| FC-DOS-04 | Dose dentro do NRD não pede justificativa | Proposta, aguardando aprovação | — | — | — |
+| FC-DOS-05 | NRD só a gerência publica, com grandeza certa e versão | Proposta, aguardando aprovação | — | — | — |
+| FC-DOS-06 | Duas publicações simultâneas do NRD: só uma entra | Proposta, aguardando aprovação | — | — | G2 |
+| FC-DOS-07 | Período inválido é recusado | Proposta, aguardando aprovação | — | — | Até 92 dias |
+
+```gherkin
+Funcionalidade: Gestão de dose
+
+  Cenário: FC-DOS-01 RDSR vira dose comparada ao NRD
+    Dado o NRD da TC de abdome com contraste em CTDIvol 12 mGy, com fator 0,015 mSv/mGy·cm
+    E "Vera Lúcia Antunes" (18/09/1957) com check-in para a TC com a Dra. Cecília Souto
+    Quando o tomógrafo manda a imagem e o RDSR com CTDIvol 14,2 mGy e DLP 520 mGy·cm
+    Então o núcleo concilia o estudo, grava a dose com o objeto RDSR e o SHA-256 das tags lidas
+    E marca "acima do NRD"
+    E a Dra. Cecília vê a dose com nome e nascimento e 7,8 mSv estimados em 12 meses
+    E ler de novo não grava outra dose
+
+  Cenário: FC-DOS-02 Acesso indevido
+    Quando o Dr. Paulo, sem vínculo com Vera, abre a gestão de dose
+    Então ele não vê o exame e o histórico de Vera responde 404
+    E Patrícia (gerência) recebe 403 na lista por paciente e vê só o agregado por protocolo, sem paciente
+    E recepção, técnico, caixa e TI recebem 403 até no agregado
+
+  Cenário: FC-DOS-03 Justificativa
+    Quando o Dr. Paulo tenta justificar, a rota responde 404
+    E "Outro" sem descrição responde 422
+    Quando a Dra. Cecília justifica "fase extra" duas vezes com a mesma chave
+    Então volta a mesma resposta; com outra chave, 409 "dose-ja-justificada"
+
+  Cenário: FC-DOS-04 Dose dentro do NRD
+    Dado NRD 15 mGy e dose de 9,8 mGy
+    Quando alguém tenta justificar
+    Então a rota responde 409 "dose-dentro-do-nrd"
+
+  Cenário: FC-DOS-05 Publicação do NRD
+    Quando um médico publica o NRD, a rota responde 403
+    E na TC em DAP, com valor zero, negativo ou acima de 100.000, responde 422
+    E a segunda versão exige a versão vista e o motivo; a anterior fica guardada
+
+  Cenário: FC-DOS-06 Concorrência
+    Quando duas publicações do primeiro NRD do mesmo exame chegam juntas
+    Então só uma entra e a outra recebe 409
+
+  Cenário: FC-DOS-07 Limites
+    Quando o período passa de 92 dias ou o início é depois do fim
+    Então a rota responde 422
+```
+
+## 16. Relatórios e exportação (proposta, aguardando aprovação)
+
+> Escritas pelo Agente 2 em 09/11/2026 (DEC-2026-11-09-150 a 154). Testadas em `crates/api/tests/relatorios.rs`.
+
+| ID | Cenário | Status | Aprovador | Data | Observações |
+|---|---|---|---|---|---|
+| FC-REL-01 | Cada perfil vê só os seus relatórios | Proposta, aguardando aprovação | — | — | Base: Medware Metrics e relatórios da Medware |
+| FC-REL-02 | Faltas saem com código, nunca com nome | Proposta, aguardando aprovação | — | — | Dado de saúde pseudonimizado |
+| FC-REL-03 | Exportar pede reautenticação; sem ela nada é registrado | Proposta, aguardando aprovação | — | — | SEC-AUT-5 |
+| FC-REL-04 | Exportação gera CSV com SHA-256 registrado e lastro | Proposta, aguardando aprovação | — | — | — |
+| FC-REL-05 | Histórico: cada um vê as suas; a gerência, as da unidade | Proposta, aguardando aprovação | — | — | — |
+| FC-REL-06 | Produção por sala mostra as salas da unidade | Proposta, aguardando aprovação | — | — | — |
+| FC-REL-07 | Período inválido, sem login ou sem CSRF é recusado | Proposta, aguardando aprovação | — | — | Até 366 dias |
+
+```gherkin
+Funcionalidade: Relatórios e exportação
+
+  Cenário: FC-REL-01 Catálogo por perfil
+    Quando Patrícia (gerência) abre Relatórios, vê os 7 relatórios
+    E Rita (faturamento) vê só Produção por convênio e Glosas
+    E o financeiro vê só Recebido no caixa, e o estoque só Estoque
+    E recepção, caixa, médico, técnico, TI e TV recebem 403
+    E relatório fora do perfil responde 403 na prévia e na exportação
+
+  Cenário: FC-REL-02 Dado de saúde pseudonimizado
+    Dado "Maria Helena Duarte" (PAC-2026-000002) faltou ao ecocardiograma (TUSS 40901114)
+    Quando Patrícia abre o relatório de faltas
+    Então a linha mostra "PAC-2026-000002" e "TUSS 40901114", nunca o nome nem o exame por extenso
+
+  Cenário: FC-REL-03 Reautenticação
+    Dado que o último login com senha e 2FA tem mais de 5 minutos
+    Quando Patrícia exporta, a rota responde 401 "reautenticacao-necessaria" e nada é registrado
+
+  Cenário: FC-REL-04 Arquivo com lastro
+    Quando Patrícia exporta as faltas
+    Então recebe um CSV (UTF-8, separador ;) sem nome de paciente, com o SHA-256 e o código EXP no cabeçalho
+    E a exportação fica registrada como "pseudonimizado" com o mesmo SHA-256, e entra no lastro
+    E exportar de novo gera outra emissão, com outro código
+
+  Cenário: FC-REL-05 Histórico
+    Quando Rita e o financeiro exportam, cada um vê só a própria exportação
+    E Patrícia vê as duas; o faturamento de outra unidade não vê nenhuma
+
+  Cenário: FC-REL-06 Produção por sala
+    Quando Patrícia abre Produção por sala, vê Sala 1, Sala 2 e Sala 6
+
+  Cenário: FC-REL-07 Limites
+    Quando o período passa de 366 dias ou o início é depois do fim, a rota responde 422
+    E sem login responde 401; exportar sem o cabeçalho CSRF responde 403
+```

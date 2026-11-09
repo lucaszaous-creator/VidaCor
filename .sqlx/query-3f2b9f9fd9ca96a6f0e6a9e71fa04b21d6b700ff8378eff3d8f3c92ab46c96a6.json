@@ -1,0 +1,76 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT v.tipo, v.dados, v.criado_em, u.nome AS \"por?\", sb.nome AS \"sala_bipada?\"\n             FROM lastro.evento v\n             JOIN recepcao.etiqueta e ON e.codigo = $1\n             LEFT JOIN identidade.usuario u ON u.id = v.criado_por\n             LEFT JOIN agenda.sala sb ON sb.id = (v.dados->>'sala_bipada')::uuid\n            WHERE (v.registro_id = e.id OR v.dados->>'etiqueta' = e.codigo)\n              AND v.tipo IN ('etiqueta_emitida','etiqueta_reimpressa','etiqueta_invalidada','pulseira_bipada','bipe_bloqueado_sala_errada','divergencia_resolvida')\n            ORDER BY v.sequencia LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tipo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "lastro.evento",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "dados",
+        "type_info": "Jsonb",
+        "origin": {
+          "Table": {
+            "table": "lastro.evento",
+            "name": "dados"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "lastro.evento",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "por?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "sala_bipada?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "nome"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "3f2b9f9fd9ca96a6f0e6a9e71fa04b21d6b700ff8378eff3d8f3c92ab46c96a6"
+}

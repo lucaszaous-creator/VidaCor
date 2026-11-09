@@ -8,6 +8,7 @@ import { useDependencias } from '../../contexto';
 import { FUSO_DA_CLINICA } from '../agenda/grade';
 import { ComunicacaoDoPaciente } from '../recepcao/ComunicacaoDoPaciente';
 import { ConviteDoPortal } from '../recepcao/ConviteDoPortal';
+import { ListaDePacientes } from './ListaDePacientes';
 
 const rota = getRouteApi('/app/pacientes');
 
@@ -131,13 +132,21 @@ function Visao({ id }: { id: string }) {
   );
 }
 
-/** Paciente 360 (Paciente.dc.html), primeiro corte: busca, identificação, exames, comunicação e portal. */
+/**
+ * Pacientes: sem paciente escolhido, a lista (Pacientes-Lista.dc.html); com `?id=`, a ficha do
+ * Paciente 360 (Paciente.dc.html) com a busca no alto para trocar de paciente.
+ */
 export function TelaPaciente() {
   const busca = rota.useSearch();
   const navegar = useNavigate();
+  if (busca.id === undefined) return <ListaDePacientes />;
   return (
     <>
-      <CabecalhoDaTela titulo="Paciente" />
+      <CabecalhoDaTela titulo="Paciente">
+        <Link to="/pacientes" className="btn btn-sm">
+          Voltar à lista
+        </Link>
+      </CabecalhoDaTela>
       <div style={{ maxWidth: 520 }}>
         <EscolhaDePaciente
           rotulo="Buscar paciente"
@@ -147,7 +156,7 @@ export function TelaPaciente() {
           }}
         />
       </div>
-      {busca.id === undefined ? <Vazio titulo="Busque o paciente pelo nome." detalhe="Exames, cadastro, comunicação e portal aparecem aqui." /> : <Visao key={busca.id} id={busca.id} />}
+      <Visao key={busca.id} id={busca.id} />
     </>
   );
 }

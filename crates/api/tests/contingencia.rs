@@ -24,6 +24,23 @@ async fn pedir(
     (st, c)
 }
 
+/// "Há `minutos` minutos", mas sempre dentro do dia de hoje na clínica: logo depois da meia-noite os
+/// intervalos encolhem na mesma proporção (a ordem declaração, ficha e recibo se mantém). A faixa de
+/// fichas é do dia; sem isso o teste falhava entre 00:00 e 00:41 sem bug do produto (DEC-2026-11-09-133).
+fn antes(minutos: i64) -> chrono::DateTime<Utc> {
+    let agora = Utc::now();
+    let local = agora.with_timezone(&vidacor_api::tempo::FUSO);
+    let desde_meia_noite = i64::from(chrono::Timelike::num_seconds_from_midnight(&local));
+    let pedido = minutos * 60;
+    let teto = 41 * 60;
+    let segundos = if desde_meia_noite > teto {
+        pedido
+    } else {
+        pedido * (desde_meia_noite - 1).max(0) / teto
+    };
+    agora - chrono::Duration::seconds(segundos)
+}
+
 async fn kit(amb: &Ambiente) -> Value {
     let (st, k) = pedir(
         amb,
@@ -40,7 +57,7 @@ async fn kit(amb: &Ambiente) -> Value {
 async fn declarar(amb: &Ambiente, chave: Uuid) -> (StatusCode, Value) {
     pedir(amb, "ana.souza", Method::POST, "/v1/contingencias", json!({
         "nivel": "total", "motivo": "servidor local fora do ar", "responsavel_id": amb.s.usuarios["patricia.lemos"],
-        "declarada_em": Utc::now() - chrono::Duration::minutes(40), "chave": chave
+        "declarada_em": antes(40), "chave": chave
     })).await
 }
 
@@ -57,7 +74,7 @@ fn faixa(k: &Value, formulario: &str) -> (i64, i64) {
 fn ficha(amb: &Ambiente, numero: i64, paciente: &str, nascimento: &str) -> Value {
     json!({
         "formulario": "F-ATD", "numero": numero, "agendamento_id": amb.s.agendamentos[paciente], "nome": paciente,
-        "nascimento": nascimento, "ocorrido_em": Utc::now() - chrono::Duration::minutes(30),
+        "nascimento": nascimento, "ocorrido_em": antes(30),
         "atendido_por": amb.s.usuarios["medico.a"], "anexo_sha256": HASH_PDF
     })
 }
@@ -237,7 +254,7 @@ async fn fc_ctg_07_valor_do_papel_diferente_grava_o_recalculado_e_abre_divergenc
     let (n, _) = faixa(&k, "F-REC");
     let (st, r) = pedir(&amb, "ana.souza", Method::POST, &format!("/v1/contingencias/{}/recibos", c["id"].as_str().unwrap()), json!({
         "numero": n + 6, "paciente_id": amb.s.pacientes["Sônia Maria Castro"], "tuss": "40901114",
-        "valor_papel_centavos": 30000, "ocorrido_em": Utc::now() - chrono::Duration::minutes(20)
+        "valor_papel_centavos": 30000, "ocorrido_em": antes(20)
     })).await;
     assert_eq!(st, StatusCode::CREATED, "{r}");
     assert_eq!(r["valor_recalculado_centavos"], 38000);

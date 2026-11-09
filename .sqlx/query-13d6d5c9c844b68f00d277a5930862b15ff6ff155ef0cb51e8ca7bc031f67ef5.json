@@ -1,0 +1,24 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO identidade.par_duplicado (id, codigo, paciente_menor, paciente_maior, decisao, motivo, substitui, criado_por, origem, estacao, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'recepcao', $9, $10, $11)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "13d6d5c9c844b68f00d277a5930862b15ff6ff155ef0cb51e8ca7bc031f67ef5"
+}

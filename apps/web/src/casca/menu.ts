@@ -34,11 +34,17 @@ const SECOES: { id: string; titulo: string; itens: ItemComPerfis[] }[] = [
       { id: 'exame-externo', rotulo: 'Exame externo', href: '/exames-externos', icone: 'imagem', cor: 'blue', perfis: [...RECEPCAO, 'gerente'] },
       { id: 'novo-paciente', rotulo: 'Novo paciente', href: '/pacientes/novo', icone: 'recepcao', cor: 'blue', perfis: [...RECEPCAO, 'gerente'] },
       { id: 'recepcao', rotulo: 'Recepção e pulseiras', href: '/recepcao', icone: 'recepcao', cor: 'teal', perfis: RECEPCAO },
+      // Etiquetas e rastreio (Etiquetas.dc.html): recepção, técnico e coordenação acompanham e resolvem divergências.
+      { id: 'etiquetas', rotulo: 'Etiquetas e rastreio', href: '/etiquetas', icone: 'etiquetas', cor: 'teal', perfis: [...RECEPCAO, 'gerente', 'tecnico'] },
+      // Comunicação com pacientes (Comunicacao.dc.html): registro dos avisos; a gerência liga e desliga.
+      { id: 'comunicacao', rotulo: 'Comunicação', href: '/comunicacao', icone: 'recepcao', cor: 'teal', perfis: [...RECEPCAO, 'gerente'] },
       // Check-up e pacotes: a recepção orienta o paciente; a gerência publica versão nova.
       { id: 'pacotes', rotulo: 'Check-up e pacotes', href: '/pacotes', icone: 'agenda', cor: 'blue', perfis: [...RECEPCAO, 'gerente'] },
       // A conta da TV só tem este item, e `/` a leva direto ao painel.
       { id: 'painel', rotulo: 'TV de chamada', href: '/telao', icone: 'recepcao', cor: 'teal', perfis: ['tv', ...RECEPCAO, 'gerente'] },
       { id: 'autorizacoes', rotulo: 'Autorizações', href: '/autorizacoes', icone: 'autorizacao', cor: 'blue', perfis: [...RECEPCAO, 'faturista', 'gerente'] },
+      // Pedidos de bloqueio da agenda dos médicos: a gerência decide; a recepção acompanha para remarcar.
+      { id: 'ausencias', rotulo: 'Ausências dos médicos', href: '/ausencias-medicas', icone: 'agenda', cor: 'blue', perfis: [...RECEPCAO, 'gerente'] },
     ],
   },
   {
@@ -51,6 +57,9 @@ const SECOES: { id: string; titulo: string; itens: ItemComPerfis[] }[] = [
       { id: 'revisao-pares', rotulo: 'Revisão por pares', href: '/revisao-por-pares', icone: 'confere', cor: 'violet', perfis: ['medico'] },
       { id: 'fluxo-laudos', rotulo: 'Fluxo de laudos', href: '/fluxo-de-laudos', icone: 'laudos', cor: 'violet', perfis: ['gerente'] },
       { id: 'estudos', rotulo: 'Conciliar estudos', href: '/estudos', icone: 'imagem', cor: 'indigo', perfis: ['medico'] },
+      // Agente 2: agenda própria do médico e gestão de dose (DEC-2026-11-09-140 e 149).
+      { id: 'minha-agenda', rotulo: 'Minha agenda', href: '/minha-agenda', icone: 'agenda', cor: 'violet', perfis: ['medico'] },
+      { id: 'gestao-dose', rotulo: 'Gestão de dose', href: '/gestao-de-dose', icone: 'confere', cor: 'indigo', perfis: ['medico', 'gerente'] },
     ],
   },
   {
@@ -64,6 +73,8 @@ const SECOES: { id: string; titulo: string; itens: ItemComPerfis[] }[] = [
       { id: 'pendencias', rotulo: 'Pendências do caixa', href: '/caixa/pendencias', icone: 'autorizacao', cor: 'green', perfis: ['gerente', 'financeiro'] },
       { id: 'faturamento', rotulo: 'Faturamento TISS', href: '/faturamento', icone: 'caixa', cor: 'green', perfis: ['faturista', 'gerente'] },
       { id: 'auditoria-faturamento', rotulo: 'Auditoria do faturamento', href: '/faturamento/auditoria', icone: 'confere', cor: 'green', perfis: ['faturista', 'gerente'] },
+      // Relatórios e exportação (DEC-2026-11-09-150): o servidor diz quais relatórios cada perfil vê.
+      { id: 'relatorios', rotulo: 'Relatórios', href: '/relatorios', icone: 'agenda', cor: 'indigo', perfis: ['gerente', 'faturista', 'financeiro', 'estoque'] },
     ],
   },
   {

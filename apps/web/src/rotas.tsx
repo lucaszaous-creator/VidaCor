@@ -32,6 +32,8 @@ import { TelaModelosDeLaudo } from './telas/modelos/TelaModelosDeLaudo';
 import { TelaRevisaoPorPares } from './telas/revisao/TelaRevisaoPorPares';
 import { TelaConvenios } from './telas/convenios/TelaConvenios';
 import { TelaPacotes } from './telas/pacotes/TelaPacotes';
+import { TelaEtiquetas } from './telas/etiquetas/TelaEtiquetas';
+import { TelaComunicacao } from './telas/comunicacao/TelaComunicacao';
 import { TelaInicio } from './telas/inicio/TelaInicio';
 import { TelaOuvidoria } from './telas/ouvidoria/TelaOuvidoria';
 import { TelaQualidade } from './telas/qualidade/TelaQualidade';
@@ -58,6 +60,10 @@ import { TelaSala } from './telas/sala/TelaSala';
 import { TelaEntrar } from './telas/TelaEntrar';
 import { TelaReautenticado } from './telas/TelaReautenticado';
 import { TelaTriagem } from './telas/triagem/TelaTriagem';
+import { TelaMinhaAgenda } from './telas/minha-agenda/TelaMinhaAgenda';
+import { TelaAusencias } from './telas/minha-agenda/TelaAusencias';
+import { TelaGestaoDeDose } from './telas/dose/TelaGestaoDeDose';
+import { TelaRelatorios } from './telas/relatorios/TelaRelatorios';
 
 export interface ContextoDoRoteador {
   queryClient: QueryClient;
@@ -172,6 +178,13 @@ const rotaExames = createRoute({ getParentRoute: () => rotaApp, path: '/exames',
 const rotaPreparo = createRoute({ getParentRoute: () => rotaApp, path: '/preparo', component: TelaPreparo });
 const rotaConvenios = createRoute({ getParentRoute: () => rotaApp, path: '/convenios', component: TelaConvenios });
 const rotaPacotes = createRoute({ getParentRoute: () => rotaApp, path: '/pacotes', component: TelaPacotes });
+const rotaEtiquetas = createRoute({ getParentRoute: () => rotaApp, path: '/etiquetas', component: TelaEtiquetas });
+const rotaComunicacao = createRoute({ getParentRoute: () => rotaApp, path: '/comunicacao', component: TelaComunicacao });
+// Agente 2: minha agenda do médico, ausências, gestão de dose e relatórios.
+const rotaMinhaAgenda = createRoute({ getParentRoute: () => rotaApp, path: '/minha-agenda', component: TelaMinhaAgenda });
+const rotaAusencias = createRoute({ getParentRoute: () => rotaApp, path: '/ausencias-medicas', component: TelaAusencias });
+const rotaGestaoDeDose = createRoute({ getParentRoute: () => rotaApp, path: '/gestao-de-dose', component: TelaGestaoDeDose });
+const rotaRelatorios = createRoute({ getParentRoute: () => rotaApp, path: '/relatorios', component: TelaRelatorios });
 const rotaPaciente = createRoute({
   getParentRoute: () => rotaApp,
   path: '/pacientes',
@@ -278,6 +291,12 @@ const arvore = raiz.addChildren([
     rotaPreparo,
     rotaConvenios,
     rotaPacotes,
+    rotaEtiquetas,
+    rotaComunicacao,
+    rotaMinhaAgenda,
+    rotaAusencias,
+    rotaGestaoDeDose,
+    rotaRelatorios,
     rotaAgenda,
     rotaRecepcao,
     rotaNovoAgendamento,

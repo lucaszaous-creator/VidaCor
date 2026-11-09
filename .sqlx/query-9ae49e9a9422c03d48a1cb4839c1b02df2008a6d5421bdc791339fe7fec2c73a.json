@@ -1,0 +1,122 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT p.tuss, p.nome AS exame, p.modalidade, n.numero AS \"numero?\", n.grandeza AS \"grandeza?\", n.valor AS \"valor?\",\n                  n.fator_dose_efetiva, n.motivo, n.criado_em AS \"publicado_em?\"\n             FROM agenda.procedimento p\n             LEFT JOIN exames.nrd n ON n.exame_tuss = p.tuss AND n.vigente\n            WHERE p.ativo AND p.modalidade IN ('CT','DX','CR','MG','XA','RF')\n            ORDER BY p.modalidade, p.nome",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "exame",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "modalidade",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "modalidade"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "numero?",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "exames.nrd",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "grandeza?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.nrd",
+            "name": "grandeza"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "valor?",
+        "type_info": "Float8",
+        "origin": {
+          "Table": {
+            "table": "exames.nrd",
+            "name": "valor"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "fator_dose_efetiva",
+        "type_info": "Float8",
+        "origin": {
+          "Table": {
+            "table": "exames.nrd",
+            "name": "fator_dose_efetiva"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "exames.nrd",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "publicado_em?",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "exames.nrd",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "9ae49e9a9422c03d48a1cb4839c1b02df2008a6d5421bdc791339fe7fec2c73a"
+}

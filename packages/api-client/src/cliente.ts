@@ -54,7 +54,8 @@ import type { Indicadores } from './contrato-indicadores';
 import type { ChamadaNoPainel, Painel, PedidoDeChamada } from './contrato-painel';
 import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-orcamento';
 import type { IntegracaoVista } from './contrato-configuracoes';
-import type { VisaoDoPaciente } from './contrato-paciente';
+import type { DetalheDaEtiqueta, DivergenciaResolvida, EtiquetaInvalidada, PainelDeEtiquetas, PedidoResolucaoDeSala } from './contrato-etiquetas';
+import type { DecisaoRegistrada, DecisaoSobreDuplicado, ListaDePacientes, ParDuplicado, RecorteDaLista, VisaoDoPaciente } from './contrato-paciente';
 import type { InicioDoDia } from './contrato-inicio';
 import type { NovoPreparo, PreparoDoExame, VersaoDoPreparo } from './contrato-preparo';
 import type { FluxoDeLaudos } from './contrato-fluxo';
@@ -118,7 +119,7 @@ import type {
 } from './contrato-convenios';
 import type { DecisaoDePerfil, ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
 import type { ContaBancaria, NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
-import type { ComunicacaoDoPaciente, LembretesEnfileirados, PreferenciaWhatsapp } from './contrato-comunicacao';
+import type { AvisoAutomatico, ComunicacaoDoPaciente, FiltroDeMensagens, LembretesEnfileirados, ModeloDeAviso, MudancaDeAviso, PainelDeComunicacao, PreferenciaWhatsapp } from './contrato-comunicacao';
 import type {
   AutorizacaoDetalhe,
   AutorizacaoResumo,
@@ -147,6 +148,7 @@ import type { AceiteDoConvite, ConviteEmitido, EntradaNoPortal, NovoPaciente, Pa
 import type { AchadoEstruturado, AchadosDoLaudo, NovoAchado } from './contrato-laudo-estruturado';
 import type { AtendimentoAReceber, Decisao, EstornoDetalhado, NovoPedidoDesconto, PedidoDesconto, SituacaoDoEstorno, SituacaoDoPedidoDeDesconto } from './contrato-pendencias';
 import { ErroDaApi, ErroSemConexao, ehProblemaHttp, problemaInesperado } from './erros';
+import { rotasDeGestao } from './cliente-gestao';
 
 export interface OpcoesDoCliente {
   /** Origem do núcleo. Padrão: a origem da própria página (o Vite encaminha `/v1` ao núcleo). */
@@ -607,6 +609,17 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
     etiquetas: {
       reimprimir: (codigo: string, corpo: PedidoReimpressao, o: OpcoesDeEscrita): Promise<Reimpressao> =>
         criar<Reimpressao>('POST', `/v1/etiquetas/${seg(codigo)}/reimpressao`, corpo, o),
+      /** Painel do dia: contadores, etiquetas com estado e divergências abertas. A busca vai na consulta à API. */
+      painel: (q?: string): Promise<PainelDeEtiquetas> =>
+        ler<PainelDeEtiquetas>(`/v1/etiquetas${q === undefined || q.trim() === '' ? '' : `?${new URLSearchParams({ q: q.trim() }).toString()}`}`),
+      /** Histórico da etiqueta montado do lastro. */
+      detalhe: (codigo: string): Promise<DetalheDaEtiqueta> => ler<DetalheDaEtiqueta>(`/v1/etiquetas/${seg(codigo)}`),
+      /** Invalida com motivo (sem reimprimir); bipada depois, a sala bloqueia. */
+      invalidar: (codigo: string, motivo: string, o: OpcoesDeEscrita): Promise<EtiquetaInvalidada> =>
+        criar<EtiquetaInvalidada>('POST', `/v1/etiquetas/${seg(codigo)}/invalidacao`, { motivo }, o),
+      /** Resolve a divergência de pulseira bipada na sala errada. */
+      resolverDivergencia: (id: string, corpo: PedidoResolucaoDeSala, o: OpcoesDeEscrita): Promise<DivergenciaResolvida> =>
+        criar<DivergenciaResolvida>('POST', `/v1/divergencias-de-sala/${seg(id)}/resolucao`, corpo, o),
     },
 
     pacientes: {
@@ -625,6 +638,20 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
       cadastrar: (corpo: NovoPaciente, o: OpcoesDeEscrita): Promise<PacienteCadastrado> => criar<PacienteCadastrado>('POST', '/v1/pacientes', corpo, o),
       /** Paciente 360: identificação (CPF mascarado), próximos e histórico; leitura auditada. */
       visao: (id: string): Promise<VisaoDoPaciente> => ler<VisaoDoPaciente>(`/v1/pacientes/${seg(id)}/visao`),
+      /** Lista paginada com recortes; a busca vai na consulta à API, nunca no endereço da página. */
+      lista: (f: { q?: string; recorte?: RecorteDaLista; pagina?: number }): Promise<ListaDePacientes> => {
+        const p = new URLSearchParams();
+        if (f.q !== undefined && f.q.trim() !== '') p.set('q', f.q.trim());
+        if (f.recorte !== undefined) p.set('recorte', f.recorte);
+        if (f.pagina !== undefined) p.set('pagina', String(f.pagina));
+        const consulta = p.toString();
+        return ler<ListaDePacientes>(`/v1/pacientes/lista${consulta === '' ? '' : `?${consulta}`}`);
+      },
+      /** Pares de cadastros parecidos (recepção e gerência). */
+      paresDuplicados: (): Promise<ParDuplicado[]> => ler<ParDuplicado[]>('/v1/pacientes/pares-duplicados'),
+      /** Pedir junção ou marcar pessoas diferentes; única por par, imutável. */
+      decidirDuplicado: (corpo: DecisaoSobreDuplicado, o: OpcoesDeEscrita): Promise<DecisaoRegistrada> =>
+        criar<DecisaoRegistrada>('POST', '/v1/pacientes/pares-duplicados', corpo, o),
       examesExternos: (id: string): Promise<ExameExterno[]> => ler<ExameExterno[]>(`/v1/pacientes/${seg(id)}/exames-externos`),
       /** Importação de exame externo (só leitura) depois da conferência de identidade. */
       importarExameExterno: (id: string, corpo: ImportacaoExterna, o: OpcoesDeEscrita): Promise<ExameExterno> =>
@@ -788,6 +815,12 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
         escrever<ComunicacaoDoPaciente>('POST', `/v1/pacientes/${seg(id)}/comunicacao`, corpo),
       /** Confirmação por WhatsApp dos agendamentos do dia (repetir não manda de novo). */
       lembretes: (data: string): Promise<LembretesEnfileirados> => escrever<LembretesEnfileirados>('POST', '/v1/comunicacao/lembretes', { data }),
+      /** Registro de mensagens dos últimos 7 dias e avisos automáticos (recepção e gerência). */
+      painel: (filtro: FiltroDeMensagens = 'todas'): Promise<PainelDeComunicacao> =>
+        ler<PainelDeComunicacao>(`/v1/comunicacao${filtro === 'todas' ? '' : `?${new URLSearchParams({ filtro }).toString()}`}`),
+      /** Liga ou desliga um aviso automático (gerência), pela versão vista. */
+      mudarAviso: (modelo: ModeloDeAviso, corpo: MudancaDeAviso, o: OpcoesDeEscrita): Promise<AvisoAutomatico> =>
+        criar<AvisoAutomatico>('POST', `/v1/comunicacao/automaticas/${seg(modelo)}`, corpo, o),
     },
 
     indicadores: {
@@ -911,5 +944,12 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
 
     /** Endereço do fluxo SSE (`abrirEventos`). */
     urlDeEventos: (): string => url('/v1/eventos'),
+
+    // Minha agenda do médico, gestão de dose e relatórios (cliente-gestao.ts).
+    ...rotasDeGestao({
+      ler,
+      criar: (metodo, caminho, corpo, o) => criar(metodo, caminho, corpo, o),
+      baixarComEscrita: (caminho, corpo) => baixar({ metodo: 'POST', caminho, corpo, escrita: true }),
+    }),
   };
 }

@@ -1,0 +1,43 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT i.nome,\n                      (SELECT min(l2.validade) FROM estoque.lote l2 WHERE l2.item_id = i.id AND l2.saldo > 0) AS validade,\n                      coalesce((SELECT sum(m.quantidade) FROM estoque.movimento m JOIN estoque.lote l ON l.id = m.lote_id\n                                 WHERE l.item_id = i.id AND m.tipo IN ('baixa_exame','baixa_manual')\n                                   AND m.criado_em >= $1 AND m.criado_em < $2), 0)::bigint AS \"consumo!\"\n                 FROM estoque.item i WHERE i.ativo ORDER BY 3 DESC, i.nome LIMIT 300",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "estoque.item",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "validade",
+        "type_info": "Date",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "consumo!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      null,
+      null
+    ]
+  },
+  "hash": "307f92c0324e05b770e238124eea0e11befbd29183f1eec58379769d27a06a6f"
+}

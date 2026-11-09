@@ -7,6 +7,7 @@ pub mod agenda;
 pub mod agendamentos;
 pub mod aparelhos;
 pub mod atendimentos;
+pub mod ausencias;
 pub mod autorizacoes;
 pub mod autorizacoes_contrato;
 pub mod autorizacoes_portal;
@@ -20,16 +21,20 @@ pub mod cancelamento;
 pub mod catalogo;
 pub mod chamada;
 pub mod comunicacao;
+pub mod comunicacao_painel;
 pub mod configuracoes;
 pub mod contingencia;
 pub mod convenios;
 pub mod corpo_clinico;
 pub mod documentos;
+pub mod dose;
 pub mod equipe;
 pub mod estoque;
 pub mod estornos;
 pub mod estudos;
 pub mod etiquetas;
+pub mod etiquetas_atos;
+pub mod etiquetas_painel;
 pub mod eventos;
 pub mod externo;
 pub mod faturamento;
@@ -42,19 +47,25 @@ pub mod lastro_explorador;
 pub mod laudos;
 pub mod lista_espera;
 pub mod menu;
+pub mod menu_paciente;
+pub mod minha_agenda;
 pub mod modelos_laudo;
 pub mod nfse;
+pub mod nrd;
 pub mod ofertas;
 pub mod orcamentos;
 pub mod ouvidoria;
 pub mod paciente_visao;
 pub mod pacientes;
+pub mod pacientes_duplicados;
+pub mod pacientes_lista;
 pub mod pacotes;
 pub mod pendencias;
 pub mod portal;
 pub mod portal_acesso;
 pub mod preparo;
 pub mod qualidade;
+pub mod relatorios;
 pub mod repasse;
 pub mod respostas;
 pub mod revisao_coordenacao;
@@ -93,6 +104,16 @@ pub fn rotas() -> Router<Estado> {
             "/v1/etiquetas/{codigo}/reimpressao",
             post(etiquetas::reimprimir),
         )
+        .route("/v1/etiquetas", get(etiquetas_painel::painel))
+        .route("/v1/etiquetas/{codigo}", get(etiquetas_painel::detalhe))
+        .route(
+            "/v1/etiquetas/{codigo}/invalidacao",
+            post(etiquetas_atos::invalidar),
+        )
+        .route(
+            "/v1/divergencias-de-sala/{id}/resolucao",
+            post(etiquetas_atos::resolver),
+        )
         .route(
             "/v1/pacientes",
             get(pacientes::buscar).post(cadastro::cadastrar),
@@ -100,6 +121,11 @@ pub fn rotas() -> Router<Estado> {
         .route(
             "/v1/pacientes/possiveis-duplicados",
             get(cadastro::duplicados),
+        )
+        .route("/v1/pacientes/lista", get(pacientes_lista::listar))
+        .route(
+            "/v1/pacientes/pares-duplicados",
+            get(pacientes_duplicados::listar).post(pacientes_duplicados::decidir),
         )
         .route("/v1/pacientes/{id}/correcao", post(pacientes::corrigir))
         .route("/v1/pacientes/{id}/visao", get(paciente_visao::visao))
@@ -422,6 +448,7 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/menu/agendamento/{id}", get(menu::agendamento))
         .route("/v1/menu/atendimento/{id}", get(menu::atendimento))
         .route("/v1/menu/laudo/{id}", get(menu::laudo))
+        .route("/v1/menu/paciente/{id}", get(menu_paciente::paciente))
         .route("/v1/estornos/{id}", get(estornos::obter))
         .route("/v1/estornos/{id}/recusa", post(estornos::recusar))
         .route(
@@ -440,6 +467,11 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/webhooks/pix", post(webhooks::pix))
         .route("/v1/webhooks/whatsapp", post(webhooks::whatsapp))
         .route("/v1/comunicacao/lembretes", post(comunicacao::lembretes))
+        .route("/v1/comunicacao", get(comunicacao_painel::painel))
+        .route(
+            "/v1/comunicacao/automaticas/{modelo}",
+            post(comunicacao_painel::mudar),
+        )
         .route(
             "/v1/pacientes/{id}/comunicacao",
             get(comunicacao::do_paciente).post(comunicacao::preferir),
@@ -536,6 +568,24 @@ pub fn rotas() -> Router<Estado> {
             "/v1/autorizacoes/{id}/consulta",
             post(autorizacoes::consultar),
         )
+        // Agente 2: minha agenda e ausência do médico (DEC-2026-11-09-140 a 143).
+        .route("/v1/minha-agenda", get(minha_agenda::obter))
+        .route("/v1/minha-agenda/ausencias", post(ausencias::pedir))
+        .route("/v1/ausencias", get(ausencias::listar))
+        .route("/v1/ausencias/{id}/decisao", post(ausencias::decidir))
+        .route("/v1/ausencias/{id}/cancelamento", post(ausencias::cancelar))
+        // Agente 2: gestão de dose (DEC-2026-11-09-144 a 149).
+        .route("/v1/doses", get(dose::listar))
+        .route("/v1/doses/protocolos", get(dose::protocolos))
+        .route("/v1/doses/pacientes/{id}", get(dose::historico))
+        .route("/v1/doses/{id}/justificativa", post(dose::justificar))
+        .route("/v1/nrd", get(nrd::nrd))
+        .route("/v1/nrd/{tuss}", post(nrd::publicar_nrd))
+        // Agente 2: relatórios e exportação (DEC-2026-11-09-150 a 154).
+        .route("/v1/relatorios", get(relatorios::catalogo))
+        .route("/v1/relatorios/exportacoes", get(relatorios::exportacoes))
+        .route("/v1/relatorios/{id}", get(relatorios::previa))
+        .route("/v1/relatorios/{id}/exportacao", post(relatorios::exportar))
         .route("/v1/equipe", get(equipe::listar))
         .route("/v1/eventos", get(eventos::fluxo))
         .fallback(nao_existe)

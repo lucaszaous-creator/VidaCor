@@ -269,6 +269,60 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/ausencias": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Pedidos de bloqueio: o médico vê os seus; a gerência e a recepção, os da unidade. */
+        get: operations["listar_ausencias"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ausencias/{id}/cancelamento": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** O médico desiste do próprio pedido enquanto aguarda (`Idempotency-Key`). */
+        post: operations["cancelar_ausencia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ausencias/{id}/decisao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Aprova ou recusa o pedido (gerência, nunca o próprio médico; `Idempotency-Key`). A aprovação recontra
+         *     os pacientes agendados no período sob a mesma trava do agendamento.
+         */
+        post: operations["decidir_ausencia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/autorizacoes": {
         parameters: {
             query?: never;
@@ -582,6 +636,40 @@ export interface paths {
          *     mesmo dia, ou publicadas ao mesmo tempo, só uma entra (restrição única no banco, G2).
          */
         post: operations["publicar_tabela_de_precos"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/comunicacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Registro de mensagens e avisos automáticos (recepção e gerência). */
+        get: operations["painel_de_comunicacao"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/comunicacao/automaticas/{modelo}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Liga ou desliga um aviso automático da unidade (gerência), com motivo e a versão vista. */
+        post: operations["mudar_aviso_automatico"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1028,6 +1116,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/divergencias-de-sala/{id}/resolucao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Resolve a divergência de pulseira bipada na sala errada (recepção, técnico, coordenação). */
+        post: operations["resolver_divergencia_de_sala"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/divergencias/{id}/resolucao": {
         parameters: {
             query?: never;
@@ -1039,6 +1144,77 @@ export interface paths {
         put?: never;
         /** Resolve uma divergência (coordenação), com o que foi decidido. */
         post: operations["resolver_divergencia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/doses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Exames com dose no período (médico; só os pacientes com vínculo de cuidado, pelo RLS). */
+        get: operations["exames_com_dose"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/doses/pacientes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Histórico de dose do paciente nos últimos 12 meses (médico com vínculo de cuidado). */
+        get: operations["historico_de_dose"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/doses/protocolos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dose por protocolo no período, sem paciente (gerência e médicos). */
+        get: operations["dose_por_protocolo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/doses/{id}/justificativa": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Justificativa de dose acima do NRD (médico com vínculo; `Idempotency-Key`). Fica no lastro do
+         *     estudo e entra na revisão periódica da proteção radiológica.
+         */
+        post: operations["justificar_dose"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1226,6 +1402,57 @@ export interface paths {
         get: operations["abrir_imagens_do_estudo"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/etiquetas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Painel do dia (hoje, horário da clínica) de quem lida com o paciente. */
+        get: operations["painel_de_etiquetas"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/etiquetas/{codigo}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Histórico completo de uma etiqueta (qualquer dia), do lastro. */
+        get: operations["detalhe_da_etiqueta"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/etiquetas/{codigo}/invalidacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Invalida a pulseira válida com motivo (recepção). Bipada depois, a sala bloqueia (docs/20). */
+        post: operations["invalidar_etiqueta"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2173,6 +2400,60 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/menu/paciente/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Menu de contexto de um paciente (lista de pacientes). */
+        get: operations["paciente"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/minha-agenda": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A agenda do dia do médico da sessão (só o próprio médico; ninguém lê a agenda de outro por aqui). */
+        get: operations["minha_agenda"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/minha-agenda/ausencias": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Pedido de bloqueio da própria agenda (médico; `Idempotency-Key`). O núcleo conta os pacientes já
+         *     agendados no período; a agenda só fecha depois da aprovação.
+         */
+        post: operations["pedir_ausencia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/modelos-de-laudo": {
         parameters: {
             query?: never;
@@ -2265,6 +2546,43 @@ export interface paths {
          *     não decide). Aprovar publica a versão e substitui a anterior; recusar exige motivo.
          */
         post: operations["decidir_versao_de_modelo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/nrd": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** NRD vigente de cada exame de TC e raio X do catálogo (médicos e gerência). */
+        get: operations["listar_nrd"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/nrd/{tuss}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Publica versão nova do NRD de um exame (gerência; `Idempotency-Key`). Doses já lidas continuam
+         *     comparadas à versão aplicada na leitura.
+         */
+        post: operations["publicar_nrd"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2422,6 +2740,44 @@ export interface paths {
         put?: never;
         /** Cadastra o paciente (recepção). Possível duplicado não conferido: `409 possivel-duplicado` com a lista. */
         post: operations["cadastrar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/pacientes/lista": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lista paginada de pacientes da unidade com recortes e situação calculada no banco. */
+        get: operations["listar_pacientes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/pacientes/pares-duplicados": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Pares de cadastros parecidos da unidade (recepção e gerência), até 100. */
+        get: operations["listar_pares_duplicados"];
+        put?: never;
+        /**
+         * Registra a decisão sobre um par. Primeira decisão: única por par (`409 par-ja-decidido` para a
+         *     segunda simultânea). Nova decisão sobre par já decidido exige motivo e substitui a anterior.
+         */
+        post: operations["decidir_par_duplicado"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2970,6 +3326,77 @@ export interface paths {
         get: operations["nota"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/relatorios": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Relatórios que o perfil pode ver. */
+        get: operations["catalogo_de_relatorios"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/relatorios/exportacoes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Exportações feitas: as próprias; a gerência vê as da unidade (últimos 90 dias). */
+        get: operations["exportacoes_feitas"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/relatorios/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Prévia do relatório no período (as mesmas linhas que vão para o arquivo). */
+        get: operations["previa_do_relatorio"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/relatorios/{id}/exportacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Exporta o relatório em CSV (reautenticação). O arquivo vem na resposta e não fica guardado; o
+         *     registro guarda o SHA-256, o filtro e se havia dado de saúde (removido).
+         */
+        post: operations["exportar_relatorio"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3618,6 +4045,33 @@ export interface components {
             regras: components["schemas"]["RegraDaAuditoriaDoConvenio"][];
             versao: string;
         };
+        AusenciaDoMedico: {
+            /** Format: int32 */
+            afetados_na_decisao?: number | null;
+            /** Format: int32 */
+            afetados_no_pedido: number;
+            codigo: string;
+            /** Format: date-time */
+            criado_em: string;
+            /** Format: date-time */
+            decidido_em?: string | null;
+            decidido_por?: string | null;
+            detalhe?: string | null;
+            /** Format: date-time */
+            fim: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            inicio: string;
+            medico: string;
+            /** Format: uuid */
+            medico_id: string;
+            /** @description congresso, ferias, licenca ou pessoal. */
+            motivo: string;
+            motivo_decisao?: string | null;
+            /** @description aguardando, aprovada, recusada ou cancelada. */
+            situacao: string;
+        };
         AutorizacaoDesconto: {
             codigo: string;
             /** Format: uuid */
@@ -3664,6 +4118,28 @@ export interface components {
              */
             situacao: string;
         };
+        AvisoAutomatico: {
+            /** Format: date-time */
+            alterado_em?: string | null;
+            alterado_por?: string | null;
+            ativo: boolean;
+            descricao: string;
+            modelo: string;
+            motivo?: string | null;
+            nome: string;
+            /**
+             * Format: uuid
+             * @description Versão vigente (informar na mudança). Sem versão: ligado desde a instalação.
+             */
+            versao_id?: string | null;
+        };
+        AvisoParaOMedico: {
+            /** Format: date-time */
+            quando: string;
+            texto: string;
+            /** @description imagens_recebidas ou laudo_vence. */
+            tipo: string;
+        };
         Bloqueio: {
             codigo: string;
             /** Format: date-time */
@@ -3708,6 +4184,16 @@ export interface components {
             /** @description Todas as versões, da mais nova para a mais antiga. */
             versoes: components["schemas"]["CabecalhoDaUnidade"][];
             vigente?: null | components["schemas"]["CabecalhoDaUnidade"];
+        };
+        CadastroDoPar: {
+            celular?: string | null;
+            codigo: string;
+            cpf_mascarado?: string | null;
+            /** Format: uuid */
+            id: string;
+            /** Format: date */
+            nascimento: string;
+            nome: string;
         };
         CadeiaDoAtendimento: {
             atendimento_codigo: string;
@@ -3992,6 +4478,30 @@ export interface components {
             /** Format: int64 */
             valor_total_centavos: number;
         };
+        ContagemDeHoje: {
+            /** Format: int64 */
+            confirmaram: number;
+            /** Format: int64 */
+            desligadas: number;
+            /** Format: int64 */
+            enviadas: number;
+            /** Format: int64 */
+            opt_out: number;
+            /** Format: int64 */
+            sem_celular: number;
+        };
+        ContagemDosRecortes: {
+            /** Format: int64 */
+            duplicados: number;
+            /** Format: int64 */
+            hoje: number;
+            /** Format: int64 */
+            incompleto: number;
+            /** Format: int64 */
+            pendencia: number;
+            /** Format: int64 */
+            todos: number;
+        };
         Contingencia: {
             codigo: string;
             /** Format: date-time */
@@ -4096,6 +4606,11 @@ export interface components {
         Decisao: {
             motivo: string;
         };
+        DecisaoDaAusencia: {
+            aprovar: boolean;
+            /** @description Obrigatório para recusar (5 a 300 caracteres). */
+            motivo?: string | null;
+        };
         DecisaoDaPropostaDeTabela: {
             aprovar: boolean;
             /** @description Obrigatório para recusar. */
@@ -4117,6 +4632,22 @@ export interface components {
         DecisaoDoCorpoClinico: {
             aprovar: boolean;
             motivo: string;
+        };
+        DecisaoRegistrada: {
+            codigo: string;
+            decisao: string;
+            /** Format: uuid */
+            id: string;
+        };
+        DecisaoSobreDuplicado: {
+            /** @description juncao_pedida ou pessoas_diferentes. */
+            decisao: string;
+            /** @description Obrigatório quando a decisão substitui outra já registrada. */
+            motivo?: string | null;
+            /** Format: uuid */
+            paciente_a: string;
+            /** Format: uuid */
+            paciente_b: string;
         };
         DescontoDoOrcamento: {
             /** @description paciente_frequente, funcionario_ou_familiar, condicao_social ou cobrir_outra_clinica. */
@@ -4146,6 +4677,18 @@ export interface components {
             forma: components["schemas"]["FormaTirads"];
             margem: components["schemas"]["MargemTirads"];
         };
+        DetalheDaEtiqueta: {
+            etiqueta: components["schemas"]["LinhaDeEtiqueta"];
+            eventos: components["schemas"]["EventoDaEtiqueta"][];
+        };
+        DiaDaMinhaSemana: {
+            /** @description Ausência aprovada que cobre o dia (motivo), quando houver. */
+            ausencia?: string | null;
+            /** Format: date */
+            data: string;
+            /** Format: int64 */
+            pacientes: number;
+        };
         DiscrepanciaDeRevisao: {
             autor: string;
             classe: string;
@@ -4165,9 +4708,25 @@ export interface components {
             /** @description Código da divergência (DIV-AAAA-NNNNNN). */
             divergencia: string;
         };
+        DivergenciaDeSala: {
+            /** Format: date-time */
+            aberta_em: string;
+            codigo: string;
+            etiqueta: string;
+            exame: string;
+            /** Format: uuid */
+            id: string;
+            paciente: components["schemas"]["PacienteDaEtiqueta"];
+            sala_bipada: string;
+            sala_correta: string;
+            /** Format: uuid */
+            sala_correta_id: string;
+        };
         DivergenciaResolvida: {
             codigo: string;
-            /** @description resolvida. */
+            descricao: string;
+            /** Format: uuid */
+            id: string;
             situacao: string;
         };
         /** @enum {string} */
@@ -4286,6 +4845,11 @@ export interface components {
             /** @description pulseira. */
             tipo: string;
         };
+        EtiquetaInvalidada: {
+            codigo: string;
+            motivo_invalidacao: string;
+            situacao: string;
+        };
         EventoDaCadeia: {
             /** Format: date-time */
             criado_em: string;
@@ -4298,6 +4862,16 @@ export interface components {
             registro_codigo?: string | null;
             /** Format: int64 */
             sequencia: number;
+            tipo: string;
+        };
+        EventoDaEtiqueta: {
+            descricao: string;
+            /** Format: date-time */
+            em: string;
+            /** @description ok (passo normal) ou alerta (bloqueio, invalidação). */
+            nivel: string;
+            por?: string | null;
+            /** @description impressa, invalidada, bipada, bloqueada, resolvida ou outro. */
             tipo: string;
         };
         EventoDeSeguranca: {
@@ -4321,11 +4895,55 @@ export interface components {
             codigo_tuss: string;
             nome: string;
         };
+        ExameComDose: {
+            acima_do_nrd: boolean;
+            aparelho?: string | null;
+            codigo: string;
+            /** Format: double */
+            ctdivol_mgy?: number | null;
+            /** Format: double */
+            dap_gycm2?: number | null;
+            /** Format: double */
+            dlp_mgycm?: number | null;
+            /** Format: uuid */
+            dose_id: string;
+            exame: string;
+            justificativa?: null | components["schemas"]["JustificativaDeDose"];
+            /** @description Menor de 18 anos na data do exame (atenção redobrada à dose). */
+            menor_de_idade: boolean;
+            modalidade: string;
+            nrd?: null | components["schemas"]["NrdAplicado"];
+            paciente: components["schemas"]["PacienteResumo"];
+            /** Format: date-time */
+            realizado_em: string;
+            /** Format: double */
+            valor_comparado?: number | null;
+        };
         ExameComPreco: {
             nome: string;
             tuss: string;
             /** Format: int64 */
             valor_centavos: number;
+        };
+        ExameDaLista: {
+            exame: string;
+            /** Format: date-time */
+            inicio: string;
+        };
+        ExameDoHistorico: {
+            aparelho?: string | null;
+            /** Format: double */
+            dap_gycm2?: number | null;
+            /** Format: double */
+            dlp_mgycm?: number | null;
+            /**
+             * Format: double
+             * @description Estimativa (mSv) pelo fator do NRD vigente do exame; ausente sem fator cadastrado.
+             */
+            dose_efetiva_msv?: number | null;
+            exame: string;
+            /** Format: date-time */
+            realizado_em: string;
         };
         ExameDoPacoteDeCheckup: {
             /**
@@ -4367,6 +4985,35 @@ export interface components {
             porque: string;
             preparo: string;
             tuss: string;
+        };
+        ExamesComDose: {
+            /** Format: int64 */
+            acima_do_nrd: number;
+            /** Format: date */
+            ate: string;
+            /** Format: date */
+            de: string;
+            exames: components["schemas"]["ExameComDose"][];
+            /** Format: int64 */
+            sem_justificativa: number;
+        };
+        ExportacaoFeita: {
+            /** Format: date */
+            ate: string;
+            codigo: string;
+            /** @description sem_dado_de_saude ou pseudonimizado. */
+            conteudo: string;
+            /** Format: date */
+            de: string;
+            formato: string;
+            /** Format: int32 */
+            linhas: number;
+            /** Format: date-time */
+            quando: string;
+            quem: string;
+            relatorio: string;
+            sha256: string;
+            titulo: string;
         };
         ExtratoImportado: {
             /** Format: int64 */
@@ -4498,6 +5145,17 @@ export interface components {
             desde: string;
             lauda: string[];
             realiza: string[];
+        };
+        HistoricoDeDose: {
+            /**
+             * Format: double
+             * @description Soma das estimativas dos últimos 12 meses nesta clínica (não é dosimetria individual).
+             */
+            dose_efetiva_12_meses_msv?: number | null;
+            exames: components["schemas"]["ExameDoHistorico"][];
+            /** Format: int64 */
+            exames_sem_estimativa: number;
+            paciente: components["schemas"]["PacienteResumo"];
         };
         IdentificacaoDoPaciente: {
             alergias: string[];
@@ -4657,6 +5315,33 @@ export interface components {
             /** @description designada, concluida ou conflito_declarado. */
             situacao: string;
         };
+        ItemDaMinhaAgenda: {
+            /** Format: uuid */
+            agendamento_id: string;
+            /** Format: uuid */
+            atendimento_id?: string | null;
+            codigo: string;
+            /**
+             * Format: date-time
+             * @description Desde quando o paciente espera (check-in), para o grupo `esperando`.
+             */
+            esperando_desde?: string | null;
+            exame: string;
+            /** @description a_chegar, esperando, em_exame, liberado ou faltou. */
+            grupo: string;
+            /** Format: date-time */
+            inicio: string;
+            /**
+             * Format: uuid
+             * @description Presente só quando o médico pode abrir o laudo (vínculo de cuidado, RLS).
+             */
+            laudo_id?: string | null;
+            /** @description Situação do laudo, sem conteúdo. */
+            laudo_situacao?: string | null;
+            paciente: components["schemas"]["PacienteResumo"];
+            sala: string;
+            senha?: string | null;
+        };
         ItemDeEstoque: {
             abaixo_do_minimo: boolean;
             codigo: string;
@@ -4720,6 +5405,14 @@ export interface components {
             /** Format: int64 */
             valor_centavos: number;
         };
+        JustificativaDeDose: {
+            detalhe?: string | null;
+            /** Format: date-time */
+            em: string;
+            /** @description imc_alto, repeticao_movimento, fase_extra, implante_metalico ou outro. */
+            motivo: string;
+            por: string;
+        };
         Kit: {
             codigo: string;
             /** Format: date */
@@ -4771,6 +5464,43 @@ export interface components {
             /** Format: int64 */
             enfileirados: number;
         };
+        LinhaDaListaDePacientes: {
+            alergias: string[];
+            celular?: string | null;
+            /** @description Prontuário (código legível). */
+            codigo: string;
+            /** @description Operadora do próximo agendamento (ou do último), ou "Particular". */
+            convenio: string;
+            cpf_mascarado?: string | null;
+            /** @description O que falta no cadastro (cpf, celular, nome_mae, alergias), para a tela dizer o quê. */
+            falta_no_cadastro: string[];
+            /** Format: uuid */
+            id: string;
+            /** Format: date */
+            nascimento: string;
+            nome: string;
+            proximo_exame?: null | components["schemas"]["ExameDaLista"];
+            /** @description na_clinica, pendencia, cadastro_incompleto, possivel_duplicado ou em_dia (a mais urgente). */
+            situacao: string;
+            ultimo_exame?: null | components["schemas"]["ExameDaLista"];
+        };
+        LinhaDeEtiqueta: {
+            /** @description Número do exame (accession) que liga etiqueta, aparelho e imagens. */
+            accession: string;
+            codigo: string;
+            /** @description impressa (aguardando a sala), em_uso (bipada), invalidada ou divergencia (bipada na sala errada, aberta). */
+            estado: string;
+            exame: string;
+            motivo_invalidacao?: string | null;
+            paciente: components["schemas"]["PacienteDaEtiqueta"];
+            sala: string;
+            /** @description Etiqueta que esta substituiu (reimpressão). */
+            substitui?: string | null;
+            substituida_por?: string | null;
+            /** @description pulseira. */
+            tipo: string;
+            ultimo_evento?: null | components["schemas"]["UltimoEvento"];
+        };
         LinhaDoExtrato: {
             /** Format: date */
             data: string;
@@ -4782,11 +5512,42 @@ export interface components {
              */
             valor_centavos: number;
         };
+        LinhaDoRelatorio: {
+            a: string;
+            b: string;
+            c: string;
+            /**
+             * Format: int64
+             * @description Valor numérico da terceira coluna (centavos nos relatórios em reais).
+             */
+            valor: number;
+        };
         LinkCriado: {
             /** Format: date-time */
             expira_em: string;
             /** @description Mostrado uma única vez; o banco guarda só o hash. */
             token: string;
+        };
+        ListaDePacientes: {
+            /**
+             * Format: int64
+             * @description Cadastros da unidade (sem filtro).
+             */
+            cadastrados: number;
+            itens: components["schemas"]["LinhaDaListaDePacientes"][];
+            /** Format: int64 */
+            pagina: number;
+            /** Format: int64 */
+            paginas: number;
+            /** Format: int64 */
+            por_pagina: number;
+            /** @description Contagem de cada recorte com a busca aplicada. */
+            recortes: components["schemas"]["ContagemDosRecortes"];
+            /**
+             * Format: int64
+             * @description Total de linhas do recorte com a busca (todas as páginas).
+             */
+            total: number;
         };
         Lote: {
             codigo: string;
@@ -4896,9 +5657,46 @@ export interface components {
             resposta?: string | null;
             situacao: string;
         };
+        MensagemDoRegistro: {
+            /** Format: date-time */
+            criado_em: string;
+            /** Format: uuid */
+            id: string;
+            modelo: string;
+            /** Format: date */
+            nascimento: string;
+            nome: string;
+            /** Format: uuid */
+            paciente_id: string;
+            /** @description confirmou, saiu ou nenhuma. */
+            resposta?: string | null;
+            /** @description enviada, bloqueada_opt_out, sem_celular ou modelo_desligado. */
+            situacao: string;
+        };
         MenuDoObjeto: {
             acoes: components["schemas"]["AcaoDoMenu"][];
             cabecalho: components["schemas"]["CabecalhoDoMenu"];
+        };
+        MinhaAgenda: {
+            /** Format: int64 */
+            atendidos_com_laudo_pendente: number;
+            avisos: components["schemas"]["AvisoParaOMedico"][];
+            /** Format: date */
+            data: string;
+            /** Format: int64 */
+            esperando: number;
+            itens: components["schemas"]["ItemDaMinhaAgenda"][];
+            /** Format: int64 */
+            ja_atendidos: number;
+            /** Format: int64 */
+            laudos_para_assinar: number;
+            /** Format: int64 */
+            laudos_vencem_hoje: number;
+            medico: string;
+            /** Format: int64 */
+            pacientes: number;
+            semana: components["schemas"]["DiaDaMinhaSemana"][];
+            turnos: components["schemas"]["TurnoNaSala"][];
         };
         ModeloDeLaudo: {
             ativo: boolean;
@@ -4944,6 +5742,15 @@ export interface components {
             motivo: string;
             /** @description desativar ou reativar. */
             tipo: string;
+        };
+        MudancaDeAviso: {
+            ativo: boolean;
+            motivo: string;
+            /**
+             * Format: uuid
+             * @description Versão vista na tela (`versao_id`); `null` quando o aviso nunca foi mudado.
+             */
+            versao_vista?: string | null;
         };
         MudancaDePerfil: {
             motivo: string;
@@ -5042,6 +5849,16 @@ export interface components {
             /** Format: int64 */
             valor_centavos: number;
         };
+        NovaAusencia: {
+            /** @description Opcional, 3 a 300 caracteres. */
+            detalhe?: string | null;
+            /** Format: date-time */
+            fim: string;
+            /** Format: date-time */
+            inicio: string;
+            /** @description congresso, ferias, licenca ou pessoal. */
+            motivo: string;
+        };
         NovaConsultaCrm: {
             /** @description webservice_cfm (o núcleo consulta) ou portal_cfm (a gerência registra o que viu no portal). */
             fonte: string;
@@ -5064,6 +5881,12 @@ export interface components {
             texto: string;
             /** @description clinica ou pessoal. */
             tipo: string;
+        };
+        NovaJustificativa: {
+            /** @description Obrigatório em "outro" (5 a 500 caracteres). */
+            detalhe?: string | null;
+            /** @description imc_alto, repeticao_movimento, fase_extra, implante_metalico ou outro. */
+            motivo: string;
         };
         NovaManifestacao: {
             /** @description Só para denúncia. */
@@ -5232,6 +6055,24 @@ export interface components {
             /** @description clinica ou pessoal. */
             tipo: string;
         };
+        NovoNrd: {
+            /**
+             * Format: double
+             * @description mSv por mGy·cm (TC) ou por Gy·cm² (raio X). Opcional.
+             */
+            fator_dose_efetiva?: number | null;
+            /** @description ctdivol ou dlp (TC); dap (raio X). */
+            grandeza: string;
+            /** @description Obrigatório a partir da segunda versão (5 a 300 caracteres). */
+            motivo?: string | null;
+            /** Format: double */
+            valor: number;
+            /**
+             * Format: int32
+             * @description Número da versão vigente que a pessoa viu (ausente quando não há nenhuma).
+             */
+            versao_vista?: number | null;
+        };
         NovoOrcamento: {
             desconto?: null | components["schemas"]["DescontoDoOrcamento"];
             /** @description Códigos TUSS dos exames (o preço é do servidor). */
@@ -5342,6 +6183,27 @@ export interface components {
             nome: string;
             perfis: string[];
         };
+        NrdAplicado: {
+            /** @description ctdivol, dlp ou dap. */
+            grandeza: string;
+            /** Format: double */
+            valor: number;
+        };
+        NrdDoExame: {
+            exame: string;
+            /** Format: double */
+            fator_dose_efetiva?: number | null;
+            grandeza?: string | null;
+            modalidade?: string | null;
+            motivo?: string | null;
+            /** Format: int32 */
+            numero?: number | null;
+            /** Format: date-time */
+            publicado_em?: string | null;
+            tuss: string;
+            /** Format: double */
+            valor?: number | null;
+        };
         NumerosSituados: {
             /** Format: int64 */
             numeros_situados: number;
@@ -5451,6 +6313,13 @@ export interface components {
             nascimento: string;
             nome: string;
         };
+        PacienteDaEtiqueta: {
+            /** Format: uuid */
+            id: string;
+            /** Format: date */
+            nascimento: string;
+            nome: string;
+        };
         PacienteDoLote: {
             /** Format: date-time */
             aplicado_em: string;
@@ -5527,6 +6396,35 @@ export interface components {
             /** Format: int64 */
             quase_erros_no_mes: number;
         };
+        PainelDeComunicacao: {
+            automaticas: components["schemas"]["AvisoAutomatico"][];
+            hoje: components["schemas"]["ContagemDeHoje"];
+            /** @description Últimos 7 dias, até 200, mais recentes primeiro. */
+            mensagens: components["schemas"]["MensagemDoRegistro"][];
+            /**
+             * Format: int64
+             * @description Pacientes com WhatsApp desligado (opt-out) na unidade.
+             */
+            pacientes_sem_whatsapp: number;
+            /** @description O núcleo tem o provedor de WhatsApp configurado (sem ele, os avisos ficam no outbox). */
+            whatsapp_configurado: boolean;
+        };
+        PainelDeEtiquetas: {
+            /** Format: int64 */
+            bipadas: number;
+            /** Format: date */
+            dia: string;
+            divergencias: components["schemas"]["DivergenciaDeSala"][];
+            /** Format: int64 */
+            divergencias_abertas: number;
+            etiquetas: components["schemas"]["LinhaDeEtiqueta"][];
+            /** Format: int64 */
+            impressas: number;
+            /** Format: int64 */
+            invalidadas: number;
+            /** Format: int64 */
+            reimpressoes: number;
+        };
         PainelDeRevisao: {
             abertas: components["schemas"]["RevisaoDesignada"][];
             conflitos: components["schemas"]["RevisaoDesignada"][];
@@ -5542,6 +6440,17 @@ export interface components {
             estudos_recebidos_hoje: number;
             /** Format: int64 */
             estudos_sem_paciente: number;
+        };
+        ParDuplicado: {
+            a: components["schemas"]["CadastroDoPar"];
+            b: components["schemas"]["CadastroDoPar"];
+            /** Format: date-time */
+            decidido_em?: string | null;
+            decidido_por?: string | null;
+            /** @description Por que o par apareceu (ex.: "Mesmo nome e mesmo celular"). */
+            motivo: string;
+            /** @description aberto ou juncao_pedida (os marcados como pessoas diferentes saem da lista). */
+            situacao: string;
         };
         ParecerDeRevisao: {
             /** @description 1, 2a, 2b, 3a ou 3b (RADPEER). */
@@ -5821,6 +6730,9 @@ export interface components {
             /** @description urgente, oncologico, gestante ou rotina. */
             prioridade: string;
         };
+        PedidoInvalidacao: {
+            motivo: string;
+        };
         PedidoLembretes: {
             /**
              * Format: date
@@ -5911,6 +6823,8 @@ export interface components {
             motivo?: string | null;
         };
         PedidoResolucao: {
+            observacao?: string | null;
+            /** @description encaminhado (paciente levado à sala certa) ou outro (com observação). */
             resolucao: string;
         };
         PedidoRetificacao: {
@@ -5963,6 +6877,18 @@ export interface components {
             regra: string;
             regra_versao: string;
             titulo: string;
+        };
+        PeriodoDoRelatorio: {
+            /**
+             * Format: date
+             * @description Último dia, inclusive (AAAA-MM-DD). Sem data: hoje. Até 366 dias.
+             */
+            ate?: string | null;
+            /**
+             * Format: date
+             * @description Primeiro dia (AAAA-MM-DD). Sem data: primeiro dia do mês corrente.
+             */
+            de?: string | null;
         };
         Pessoa: {
             /** Format: uuid */
@@ -6034,6 +6960,19 @@ export interface components {
             total_antes_centavos: number;
             /** Format: int64 */
             total_depois_centavos: number;
+        };
+        PreviaDoRelatorio: {
+            /** Format: date */
+            ate: string;
+            colunas: string[];
+            dado_de_saude: boolean;
+            /** Format: date */
+            de: string;
+            /** Format: date-time */
+            gerado_em: string;
+            id: string;
+            linhas: components["schemas"]["LinhaDoRelatorio"][];
+            titulo: string;
         };
         /** @description Erro em Problem Details (RFC 9457). */
         ProblemaDoc: {
@@ -6171,6 +7110,25 @@ export interface components {
             id: string;
             /** Format: date */
             prazo_em: string;
+        };
+        ProtocoloDeDose: {
+            /** Format: int64 */
+            acima: number;
+            aparelho: string;
+            exame: string;
+            exame_tuss: string;
+            /** Format: int64 */
+            exames: number;
+            grandeza: string;
+            /** Format: double */
+            mediana?: number | null;
+            /** Format: double */
+            nrd?: number | null;
+            /**
+             * Format: int64
+             * @description Mediana em percentual do NRD.
+             */
+            percentual_do_nrd?: number | null;
         };
         ProtocoloDeQualidade: {
             codigo: string;
@@ -6310,6 +7268,14 @@ export interface components {
         Reimpressao: {
             invalidada: components["schemas"]["Etiqueta"];
             nova: components["schemas"]["Etiqueta"];
+        };
+        RelatorioDoCatalogo: {
+            /** @description O relatório tem dado de saúde: no arquivo, paciente vira código PAC e exame vira código TUSS. */
+            dado_de_saude: boolean;
+            descricao: string;
+            grupo: string;
+            id: string;
+            titulo: string;
         };
         RepasseDoMedico: {
             /** Format: int64 */
@@ -6655,6 +7621,18 @@ export interface components {
             resultado: string;
             /** Format: int32 */
             tfg_calculada?: number | null;
+        };
+        TurnoNaSala: {
+            /** Format: date-time */
+            fim: string;
+            /** Format: date-time */
+            inicio: string;
+            sala: string;
+        };
+        UltimoEvento: {
+            descricao: string;
+            /** Format: date-time */
+            em: string;
         };
         UnidadeSessao: {
             /** Format: uuid */
@@ -7602,6 +8580,142 @@ export interface operations {
             };
         };
     };
+    listar_ausencias: {
+        parameters: {
+            query?: {
+                /** @description aguardando, aprovada, recusada ou cancelada. Sem filtro: todas as dos últimos 90 dias. */
+                situacao?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AusenciaDoMedico"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    cancelar_ausencia: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AusenciaDoMedico"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    decidir_ausencia: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecisaoDaAusencia"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AusenciaDoMedico"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     listar_autorizacoes: {
         parameters: {
             query?: {
@@ -8420,6 +9534,103 @@ export interface operations {
                 };
             };
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    painel_de_comunicacao: {
+        parameters: {
+            query?: {
+                /** @description todas, nao_entregues (opt-out, sem celular, aviso desligado) ou confirmaram. */
+                filtro?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PainelDeComunicacao"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    mudar_aviso_automatico: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                modelo: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MudancaDeAviso"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AvisoAutomatico"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -9643,6 +10854,57 @@ export interface operations {
             };
         };
     };
+    resolver_divergencia_de_sala: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoResolucao"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DivergenciaResolvida"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     resolver_divergencia: {
         parameters: {
             query?: never;
@@ -9667,6 +10929,182 @@ export interface operations {
                 };
             };
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    exames_com_dose: {
+        parameters: {
+            query?: {
+                /** @description Primeiro dia (AAAA-MM-DD). Sem data: 7 dias atrás. */
+                de?: string | null;
+                /** @description Último dia, inclusive (AAAA-MM-DD). Sem data: hoje. Até 92 dias de período. */
+                ate?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExamesComDose"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    historico_de_dose: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HistoricoDeDose"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    dose_por_protocolo: {
+        parameters: {
+            query?: {
+                /** @description Primeiro dia (AAAA-MM-DD). Sem data: 7 dias atrás. */
+                de?: string | null;
+                /** @description Último dia, inclusive (AAAA-MM-DD). Sem data: hoje. Até 92 dias de período. */
+                ate?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProtocoloDeDose"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    justificar_dose: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovaJustificativa"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JustificativaDeDose"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -10042,6 +11480,140 @@ export interface operations {
             };
             /** @description estudo-sem-paciente */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    painel_de_etiquetas: {
+        parameters: {
+            query?: {
+                /** @description Código da etiqueta (bipado), nome do paciente (3+ letras, sem acento) ou número do exame (ACC). */
+                q?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PainelDeEtiquetas"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    detalhe_da_etiqueta: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                codigo: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DetalheDaEtiqueta"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    invalidar_etiqueta: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                codigo: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoInvalidacao"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EtiquetaInvalidada"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -12288,6 +13860,130 @@ export interface operations {
             };
         };
     };
+    paciente: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MenuDoObjeto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    minha_agenda: {
+        parameters: {
+            query?: {
+                /** @description Dia no formato AAAA-MM-DD (horário de Brasília). Sem data: hoje. */
+                data?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MinhaAgenda"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    pedir_ausencia: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovaAusencia"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AusenciaDoMedico"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
     listar_modelos_de_laudo: {
         parameters: {
             query?: never;
@@ -12526,6 +14222,92 @@ export interface operations {
                 };
             };
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_nrd: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NrdDoExame"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    publicar_nrd: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                tuss: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoNrd"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NrdDoExame"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -13071,6 +14853,132 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PacienteCadastrado"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_pacientes: {
+        parameters: {
+            query?: {
+                /** @description Nome (3+ letras), nascimento (dd/mm/aaaa), CPF ou celular (só dígitos) ou prontuário (PAC-AAAA-NNNNNN). */
+                q?: string | null;
+                /** @description todos, hoje (na clínica hoje), pendencia (reserva sem guia a vencer) ou incompleto. */
+                recorte?: string | null;
+                /** @description Página, a partir de 1. */
+                pagina?: number | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListaDePacientes"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_pares_duplicados: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParDuplicado"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    decidir_par_duplicado: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecisaoSobreDuplicado"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisaoRegistrada"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
                 };
             };
             409: {
@@ -14442,6 +16350,168 @@ export interface operations {
                 };
             };
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    catalogo_de_relatorios: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RelatorioDoCatalogo"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    exportacoes_feitas: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExportacaoFeita"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    previa_do_relatorio: {
+        parameters: {
+            query?: {
+                /** @description Primeiro dia (AAAA-MM-DD). Sem data: primeiro dia do mês corrente. */
+                de?: string | null;
+                /** @description Último dia, inclusive (AAAA-MM-DD). Sem data: hoje. Até 366 dias. */
+                ate?: string | null;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PreviaDoRelatorio"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    exportar_relatorio: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PeriodoDoRelatorio"];
+            };
+        };
+        responses: {
+            /** @description CSV (UTF-8, separador ;); SHA-256 em X-Documento-Sha256 e código em X-Documento-Codigo */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/csv": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };

@@ -1,0 +1,226 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "WITH base AS (\n             SELECT p.id, p.codigo, p.nome, p.nascimento, p.cpf, p.celular, p.nome_mae,\n                    coalesce(p.alergias, '{}') AS \"alergias!\", p.nega_alergias,\n                    EXISTS (SELECT 1 FROM recepcao.atendimento a JOIN agenda.agendamento g ON g.id = a.agendamento_id\n                             WHERE a.paciente_id = p.id AND (g.inicio AT TIME ZONE 'America/Sao_Paulo')::date = $5\n                               AND a.situacao <> 'cancelado') AS hoje,\n                    EXISTS (SELECT 1 FROM agenda.agendamento g WHERE g.paciente_id = p.id\n                             AND g.situacao = 'reserva_provisoria' AND g.inicio >= now()) AS pendencia,\n                    (p.cpf IS NULL OR p.celular IS NULL OR p.nome_mae IS NULL\n                     OR (p.alergias IS NULL AND p.nega_alergias IS NULL)) AS incompleto\n               FROM identidade.paciente p\n              WHERE ($1::text IS NULL OR comum.sem_acento(p.nome) LIKE '%' || comum.sem_acento($1) || '%')\n                AND ($2::date IS NULL OR p.nascimento = $2)\n                AND ($3::text IS NULL OR p.celular = $3 OR p.cpf = $3)\n                AND ($4::text IS NULL OR p.codigo = $4))\n           SELECT b.id, b.codigo, b.nome, b.nascimento, b.cpf, b.celular, b.nome_mae, b.\"alergias!\", b.nega_alergias,\n                  b.hoje AS \"hoje!\", b.pendencia AS \"pendencia!\", b.incompleto AS \"incompleto!\",\n                  px.exame_nome AS \"proximo_exame?\", px.inicio AS \"proximo_inicio?\", px.operadora AS \"proximo_operadora?\",\n                  ul.exame_nome AS \"ultimo_exame?\", ul.inicio AS \"ultimo_inicio?\", ul.operadora AS \"ultimo_operadora?\",\n                  EXISTS (SELECT 1 FROM identidade.paciente o\n                           WHERE o.id <> b.id AND comum.sem_acento(o.nome) = comum.sem_acento(b.nome)\n                             AND (o.nascimento = b.nascimento OR o.celular = b.celular OR o.nome_mae = b.nome_mae\n                                  OR date_part('year', o.nascimento) = date_part('year', b.nascimento))\n                             AND NOT EXISTS (SELECT 1 FROM identidade.par_duplicado d\n                                              WHERE d.paciente_menor = LEAST(o.id, b.id) AND d.paciente_maior = GREATEST(o.id, b.id)\n                                                AND d.decisao = 'pessoas_diferentes'\n                                                AND NOT EXISTS (SELECT 1 FROM identidade.par_duplicado s WHERE s.substitui = d.id))) AS \"duplicado!\"\n             FROM base b\n             LEFT JOIN LATERAL (SELECT g.exame_nome, g.inicio, gu.operadora FROM agenda.agendamento g\n                                  LEFT JOIN convenio.guia gu ON gu.id = g.guia_id\n                                 WHERE g.paciente_id = b.id AND g.inicio >= now()\n                                   AND g.situacao IN ('reserva_provisoria','agendado','confirmado','em_atendimento')\n                                 ORDER BY g.inicio LIMIT 1) px ON true\n             LEFT JOIN LATERAL (SELECT g.exame_nome, g.inicio, gu.operadora FROM agenda.agendamento g\n                                  LEFT JOIN convenio.guia gu ON gu.id = g.guia_id\n                                 WHERE g.paciente_id = b.id AND g.situacao IN ('concluido','em_atendimento') AND g.inicio < now()\n                                 ORDER BY g.inicio DESC LIMIT 1) ul ON true\n            WHERE ($6 = 'todos' OR ($6 = 'hoje' AND b.hoje) OR ($6 = 'pendencia' AND b.pendencia) OR ($6 = 'incompleto' AND b.incompleto))\n            ORDER BY b.nome, b.nascimento, b.id\n            LIMIT $7 OFFSET $8",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "cpf",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "cpf"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "celular",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "celular"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "nome_mae",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome_mae"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "alergias!",
+        "type_info": "TextArray",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 8,
+        "name": "nega_alergias",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nega_alergias"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "hoje!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 10,
+        "name": "pendencia!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 11,
+        "name": "incompleto!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 12,
+        "name": "proximo_exame?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "exame_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "proximo_inicio?",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "inicio"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "proximo_operadora?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.guia",
+            "name": "operadora"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "ultimo_exame?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "exame_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "ultimo_inicio?",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "inicio"
+          }
+        }
+      },
+      {
+        "ordinal": 17,
+        "name": "ultimo_operadora?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.guia",
+            "name": "operadora"
+          }
+        }
+      },
+      {
+        "ordinal": 18,
+        "name": "duplicado!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Date",
+        "Text",
+        "Text",
+        "Date",
+        "Text",
+        "Int8",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      null,
+      true,
+      null,
+      null,
+      null,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      null
+    ]
+  },
+  "hash": "6ebfb03acb118693d9294783b355259845a49d90593fa6cb5e47489f859b32bf"
+}

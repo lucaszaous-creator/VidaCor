@@ -71,6 +71,19 @@ pub enum Ato {
     ConveniosAprovar,
     PacotesVer,
     PacotesAdministrar,
+    // Agente 1 (DEC-2026-11-09-124): etiquetas e rastreio.
+    DivergenciaResolver,
+    ComunicacaoConfigurar,
+    // Agente 2 (DEC-2026-11-09-140 a 159): minha agenda, gestão de dose, relatórios.
+    MinhaAgendaVer,
+    AusenciaPedir,
+    AusenciaVer,
+    AusenciaDecidir,
+    DoseVer,
+    DoseAgregadoVer,
+    DoseJustificar,
+    NrdAdministrar,
+    RelatoriosVer,
 }
 
 impl Ato {
@@ -175,6 +188,26 @@ impl Ato {
             // nova (composição, ordem do roteiro e preço). DEC-2026-11-09-115 a 117.
             A::PacotesVer => &["recepcao", "gerente"],
             A::PacotesAdministrar => &["gerente"],
+            // Divergência de pulseira bipada na sala errada: quem atende o paciente resolve (recepção,
+            // técnico e coordenação), com o encaminhamento registrado (Etiquetas.dc.html, DEC-2026-11-09-129).
+            A::DivergenciaResolver => &["recepcao", "tecnico", "gerente"],
+            // Ligar ou desligar aviso automático da unidade (Comunicacao.dc.html, DEC-2026-11-09-132).
+            A::ComunicacaoConfigurar => &["gerente"],
+            // Minha agenda (Agenda-Medico.dc.html): o médico vê a própria agenda e pede o bloqueio dela;
+            // a recepção e a gerência veem os pedidos (para remarcar); só a gerência decide, e nunca o
+            // próprio médico (DEC-2026-11-09-140 a 142).
+            A::MinhaAgendaVer | A::AusenciaPedir => &["medico"],
+            A::AusenciaVer => &["recepcao", "gerente"],
+            A::AusenciaDecidir => &["gerente"],
+            // Gestão de dose (Gestao-Dose.dc.html; RDC 611/2022): dose por paciente é N3, só o médico com
+            // vínculo de cuidado (RLS) vê e justifica; a gerência vê o agregado por protocolo e publica o
+            // NRD da clínica (DEC-2026-11-09-144 a 149).
+            A::DoseVer | A::DoseJustificar => &["medico"],
+            A::DoseAgregadoVer => &["medico", "gerente"],
+            A::NrdAdministrar => &["gerente"],
+            // Relatórios e exportação (Relatorios.dc.html): quem tem relatório no catálogo; cada relatório
+            // confere o próprio perfil e exportar pede reautenticação (DEC-2026-11-09-150 a 154).
+            A::RelatoriosVer => &["gerente", "faturista", "financeiro", "estoque"],
         };
         perfis.contains(&perfil)
     }
@@ -184,7 +217,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 67] = [
+    const TODOS: [Ato; 78] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -252,6 +285,17 @@ mod testes {
         Ato::ConveniosAprovar,
         Ato::PacotesVer,
         Ato::PacotesAdministrar,
+        Ato::DivergenciaResolver,
+        Ato::ComunicacaoConfigurar,
+        Ato::MinhaAgendaVer,
+        Ato::AusenciaPedir,
+        Ato::AusenciaVer,
+        Ato::AusenciaDecidir,
+        Ato::DoseVer,
+        Ato::DoseAgregadoVer,
+        Ato::DoseJustificar,
+        Ato::NrdAdministrar,
+        Ato::RelatoriosVer,
     ];
 
     #[test]
@@ -384,6 +428,19 @@ mod testes {
         }
         for p in ["caixa", "medico", "ti", "tv"] {
             assert!(!Ato::PacotesVer.concedido_a(p), "{p}");
+        }
+    }
+
+    #[test]
+    fn agenda_do_medico_o_medico_pede_e_a_gerencia_decide() {
+        assert!(Ato::MinhaAgendaVer.concedido_a("medico"));
+        assert!(Ato::AusenciaPedir.concedido_a("medico"));
+        assert!(Ato::AusenciaDecidir.concedido_a("gerente"));
+        assert!(!Ato::AusenciaDecidir.concedido_a("medico"));
+        for p in ["recepcao", "caixa", "tecnico", "ti", "faturista", "tv"] {
+            assert!(!Ato::MinhaAgendaVer.concedido_a(p), "{p}");
+            assert!(!Ato::AusenciaPedir.concedido_a(p), "{p}");
+            assert!(!Ato::AusenciaDecidir.concedido_a(p), "{p}");
         }
     }
 }

@@ -1,0 +1,43 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT operadora, count(*) AS \"guias!\", coalesce(sum(valor_total_centavos), 0)::bigint AS \"valor!\"\n                 FROM faturamento.conta\n                WHERE data_execucao >= ($1 AT TIME ZONE 'America/Sao_Paulo')::date\n                  AND data_execucao < ($2 AT TIME ZONE 'America/Sao_Paulo')::date\n                GROUP BY operadora ORDER BY 3 DESC LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "operadora",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.conta",
+            "name": "operadora"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "guias!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "valor!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      null,
+      null
+    ]
+  },
+  "hash": "29a3d2c2085810448b945dd60cd1b6b9711e32cd06e66c1f7c2c999489d80dbc"
+}

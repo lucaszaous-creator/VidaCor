@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT s.nome FROM recepcao.divergencia d JOIN recepcao.atendimento t ON t.id = d.atendimento_id\n           JOIN agenda.sala s ON s.id = t.sala_id WHERE d.id = $1 AND d.tipo = 'pulseira_sala_errada'",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "nome"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "d54329f2d5bcfe2575e7101d22d143f96faa8dc0bdb641804cb81a0c22fade10"
+}

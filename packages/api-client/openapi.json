@@ -1120,6 +1120,216 @@
         }
       }
     },
+    "/v1/ausencias": {
+      "get": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Pedidos de bloqueio: o médico vê os seus; a gerência e a recepção, os da unidade.",
+        "operationId": "listar_ausencias",
+        "parameters": [
+          {
+            "name": "situacao",
+            "in": "query",
+            "description": "aguardando, aprovada, recusada ou cancelada. Sem filtro: todas as dos últimos 90 dias.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AusenciaDoMedico"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ausencias/{id}/cancelamento": {
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "O médico desiste do próprio pedido enquanto aguarda (`Idempotency-Key`).",
+        "operationId": "cancelar_ausencia",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AusenciaDoMedico"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ausencias/{id}/decisao": {
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Aprova ou recusa o pedido (gerência, nunca o próprio médico; `Idempotency-Key`). A aprovação recontra\nos pacientes agendados no período sob a mesma trava do agendamento.",
+        "operationId": "decidir_ausencia",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisaoDaAusencia"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AusenciaDoMedico"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/autorizacoes": {
       "get": {
         "tags": [
@@ -2305,6 +2515,151 @@
             }
           },
           "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/comunicacao": {
+      "get": {
+        "tags": [
+          "comunicacao"
+        ],
+        "summary": "Registro de mensagens e avisos automáticos (recepção e gerência).",
+        "operationId": "painel_de_comunicacao",
+        "parameters": [
+          {
+            "name": "filtro",
+            "in": "query",
+            "description": "todas, nao_entregues (opt-out, sem celular, aviso desligado) ou confirmaram.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PainelDeComunicacao"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/comunicacao/automaticas/{modelo}": {
+      "post": {
+        "tags": [
+          "comunicacao"
+        ],
+        "summary": "Liga ou desliga um aviso automático da unidade (gerência), com motivo e a versão vista.",
+        "operationId": "mudar_aviso_automatico",
+        "parameters": [
+          {
+            "name": "modelo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MudancaDeAviso"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvisoAutomatico"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
             "description": "",
             "content": {
               "application/json": {
@@ -4040,6 +4395,87 @@
         }
       }
     },
+    "/v1/divergencias-de-sala/{id}/resolucao": {
+      "post": {
+        "tags": [
+          "recepcao"
+        ],
+        "summary": "Resolve a divergência de pulseira bipada na sala errada (recepção, técnico, coordenação).",
+        "operationId": "resolver_divergencia_de_sala",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoResolucao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DivergenciaResolvida"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/divergencias/{id}/resolucao": {
       "post": {
         "tags": [
@@ -4080,6 +4516,290 @@
             }
           },
           "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/doses": {
+      "get": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "Exames com dose no período (médico; só os pacientes com vínculo de cuidado, pelo RLS).",
+        "operationId": "exames_com_dose",
+        "parameters": [
+          {
+            "name": "de",
+            "in": "query",
+            "description": "Primeiro dia (AAAA-MM-DD). Sem data: 7 dias atrás.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          },
+          {
+            "name": "ate",
+            "in": "query",
+            "description": "Último dia, inclusive (AAAA-MM-DD). Sem data: hoje. Até 92 dias de período.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExamesComDose"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/doses/pacientes/{id}": {
+      "get": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "Histórico de dose do paciente nos últimos 12 meses (médico com vínculo de cuidado).",
+        "operationId": "historico_de_dose",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoricoDeDose"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/doses/protocolos": {
+      "get": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "Dose por protocolo no período, sem paciente (gerência e médicos).",
+        "operationId": "dose_por_protocolo",
+        "parameters": [
+          {
+            "name": "de",
+            "in": "query",
+            "description": "Primeiro dia (AAAA-MM-DD). Sem data: 7 dias atrás.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          },
+          {
+            "name": "ate",
+            "in": "query",
+            "description": "Último dia, inclusive (AAAA-MM-DD). Sem data: hoje. Até 92 dias de período.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProtocoloDeDose"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/doses/{id}/justificativa": {
+      "post": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "Justificativa de dose acima do NRD (médico com vínculo; `Idempotency-Key`). Fica no lastro do\nestudo e entra na revisão periódica da proteção radiológica.",
+        "operationId": "justificar_dose",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovaJustificativa"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JustificativaDeDose"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
             "description": "",
             "content": {
               "application/json": {
@@ -4615,6 +5335,202 @@
           },
           "409": {
             "description": "estudo-sem-paciente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/etiquetas": {
+      "get": {
+        "tags": [
+          "recepcao"
+        ],
+        "summary": "Painel do dia (hoje, horário da clínica) de quem lida com o paciente.",
+        "operationId": "painel_de_etiquetas",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Código da etiqueta (bipado), nome do paciente (3+ letras, sem acento) ou número do exame (ACC).",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PainelDeEtiquetas"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/etiquetas/{codigo}": {
+      "get": {
+        "tags": [
+          "recepcao"
+        ],
+        "summary": "Histórico completo de uma etiqueta (qualquer dia), do lastro.",
+        "operationId": "detalhe_da_etiqueta",
+        "parameters": [
+          {
+            "name": "codigo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetalheDaEtiqueta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/etiquetas/{codigo}/invalidacao": {
+      "post": {
+        "tags": [
+          "recepcao"
+        ],
+        "summary": "Invalida a pulseira válida com motivo (recepção). Bipada depois, a sala bloqueia (docs/20).",
+        "operationId": "invalidar_etiqueta",
+        "parameters": [
+          {
+            "name": "codigo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoInvalidacao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EtiquetaInvalidada"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -7810,6 +8726,186 @@
         }
       }
     },
+    "/v1/menu/paciente/{id}": {
+      "get": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "Menu de contexto de um paciente (lista de pacientes).",
+        "operationId": "paciente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MenuDoObjeto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/minha-agenda": {
+      "get": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "A agenda do dia do médico da sessão (só o próprio médico; ninguém lê a agenda de outro por aqui).",
+        "operationId": "minha_agenda",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "query",
+            "description": "Dia no formato AAAA-MM-DD (horário de Brasília). Sem data: hoje.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MinhaAgenda"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/minha-agenda/ausencias": {
+      "post": {
+        "tags": [
+          "agenda"
+        ],
+        "summary": "Pedido de bloqueio da própria agenda (médico; `Idempotency-Key`). O núcleo conta os pacientes já\nagendados no período; a agenda só fecha depois da aprovação.",
+        "operationId": "pedir_ausencia",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovaAusencia"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AusenciaDoMedico"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/modelos-de-laudo": {
       "get": {
         "tags": [
@@ -8168,6 +9264,130 @@
             }
           },
           "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/nrd": {
+      "get": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "NRD vigente de cada exame de TC e raio X do catálogo (médicos e gerência).",
+        "operationId": "listar_nrd",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NrdDoExame"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/nrd/{tuss}": {
+      "post": {
+        "tags": [
+          "exames"
+        ],
+        "summary": "Publica versão nova do NRD de um exame (gerência; `Idempotency-Key`). Doses já lidas continuam\ncomparadas à versão aplicada na leitura.",
+        "operationId": "publicar_nrd",
+        "parameters": [
+          {
+            "name": "tuss",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovoNrd"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NrdDoExame"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
             "description": "",
             "content": {
               "application/json": {
@@ -8956,6 +10176,200 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PacienteCadastrado"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pacientes/lista": {
+      "get": {
+        "tags": [
+          "pacientes"
+        ],
+        "summary": "Lista paginada de pacientes da unidade com recortes e situação calculada no banco.",
+        "operationId": "listar_pacientes",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Nome (3+ letras), nascimento (dd/mm/aaaa), CPF ou celular (só dígitos) ou prontuário (PAC-AAAA-NNNNNN).",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "recorte",
+            "in": "query",
+            "description": "todos, hoje (na clínica hoje), pendencia (reserva sem guia a vencer) ou incompleto.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "pagina",
+            "in": "query",
+            "description": "Página, a partir de 1.",
+            "required": false,
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListaDePacientes"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pacientes/pares-duplicados": {
+      "get": {
+        "tags": [
+          "pacientes"
+        ],
+        "summary": "Pares de cadastros parecidos da unidade (recepção e gerência), até 100.",
+        "operationId": "listar_pares_duplicados",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ParDuplicado"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "pacientes"
+        ],
+        "summary": "Registra a decisão sobre um par. Primeira decisão: única por par (`409 par-ja-decidido` para a\nsegunda simultânea). Nova decisão sobre par já decidido exige motivo e substitui a anterior.",
+        "operationId": "decidir_par_duplicado",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisaoSobreDuplicado"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisaoRegistrada"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
                 }
               }
             }
@@ -10919,6 +12333,238 @@
         }
       }
     },
+    "/v1/relatorios": {
+      "get": {
+        "tags": [
+          "relatorios"
+        ],
+        "summary": "Relatórios que o perfil pode ver.",
+        "operationId": "catalogo_de_relatorios",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RelatorioDoCatalogo"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/relatorios/exportacoes": {
+      "get": {
+        "tags": [
+          "relatorios"
+        ],
+        "summary": "Exportações feitas: as próprias; a gerência vê as da unidade (últimos 90 dias).",
+        "operationId": "exportacoes_feitas",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExportacaoFeita"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/relatorios/{id}": {
+      "get": {
+        "tags": [
+          "relatorios"
+        ],
+        "summary": "Prévia do relatório no período (as mesmas linhas que vão para o arquivo).",
+        "operationId": "previa_do_relatorio",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "de",
+            "in": "query",
+            "description": "Primeiro dia (AAAA-MM-DD). Sem data: primeiro dia do mês corrente.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          },
+          {
+            "name": "ate",
+            "in": "query",
+            "description": "Último dia, inclusive (AAAA-MM-DD). Sem data: hoje. Até 366 dias.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreviaDoRelatorio"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/relatorios/{id}/exportacao": {
+      "post": {
+        "tags": [
+          "relatorios"
+        ],
+        "summary": "Exporta o relatório em CSV (reautenticação). O arquivo vem na resposta e não fica guardado; o\nregistro guarda o SHA-256, o filtro e se havia dado de saúde (removido).",
+        "operationId": "exportar_relatorio",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PeriodoDoRelatorio"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "CSV (UTF-8, separador ;); SHA-256 em X-Documento-Sha256 e código em X-Documento-Codigo",
+            "content": {
+              "text/csv": {}
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/revisoes-por-pares": {
       "post": {
         "tags": [
@@ -12815,6 +14461,93 @@
           }
         }
       },
+      "AusenciaDoMedico": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "medico_id",
+          "medico",
+          "inicio",
+          "fim",
+          "motivo",
+          "afetados_no_pedido",
+          "situacao",
+          "criado_em"
+        ],
+        "properties": {
+          "afetados_na_decisao": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
+          },
+          "afetados_no_pedido": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "decidido_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "decidido_por": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "detalhe": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fim": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "medico": {
+            "type": "string"
+          },
+          "medico_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "motivo": {
+            "type": "string",
+            "description": "congresso, ferias, licenca ou pessoal."
+          },
+          "motivo_decisao": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "situacao": {
+            "type": "string",
+            "description": "aguardando, aprovada, recusada ou cancelada."
+          }
+        }
+      },
       "AutorizacaoDesconto": {
         "type": "object",
         "required": [
@@ -12980,6 +14713,77 @@
           "situacao": {
             "type": "string",
             "description": "aguardando_envio, aguardando_portal, enviada, em_analise, pendente_documento, autorizada,\nparcial, negada, cancelada ou recusada."
+          }
+        }
+      },
+      "AvisoAutomatico": {
+        "type": "object",
+        "required": [
+          "modelo",
+          "nome",
+          "descricao",
+          "ativo"
+        ],
+        "properties": {
+          "alterado_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "alterado_por": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ativo": {
+            "type": "boolean"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "modelo": {
+            "type": "string"
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "nome": {
+            "type": "string"
+          },
+          "versao_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "Versão vigente (informar na mudança). Sem versão: ligado desde a instalação."
+          }
+        }
+      },
+      "AvisoParaOMedico": {
+        "type": "object",
+        "required": [
+          "tipo",
+          "texto",
+          "quando"
+        ],
+        "properties": {
+          "quando": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "texto": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string",
+            "description": "imagens_recebidas ou laudo_vence."
           }
         }
       },
@@ -13160,6 +14964,43 @@
                 "description": "Sem versão cadastrada, o PDF sai só com \"VidaCor Imagem\" e o nome da unidade."
               }
             ]
+          }
+        }
+      },
+      "CadastroDoPar": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "nome",
+          "nascimento"
+        ],
+        "properties": {
+          "celular": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "cpf_mascarado": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string"
           }
         }
       },
@@ -14097,6 +15938,70 @@
           }
         }
       },
+      "ContagemDeHoje": {
+        "type": "object",
+        "required": [
+          "enviadas",
+          "confirmaram",
+          "opt_out",
+          "sem_celular",
+          "desligadas"
+        ],
+        "properties": {
+          "confirmaram": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "desligadas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "enviadas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "opt_out": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sem_celular": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ContagemDosRecortes": {
+        "type": "object",
+        "required": [
+          "todos",
+          "hoje",
+          "pendencia",
+          "incompleto",
+          "duplicados"
+        ],
+        "properties": {
+          "duplicados": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "hoje": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "incompleto": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pendencia": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "todos": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "Contingencia": {
         "type": "object",
         "required": [
@@ -14443,6 +16348,24 @@
           }
         }
       },
+      "DecisaoDaAusencia": {
+        "type": "object",
+        "required": [
+          "aprovar"
+        ],
+        "properties": {
+          "aprovar": {
+            "type": "boolean"
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Obrigatório para recusar (5 a 300 caracteres)."
+          }
+        }
+      },
       "DecisaoDaPropostaDeTabela": {
         "type": "object",
         "required": [
@@ -14523,6 +16446,55 @@
           },
           "motivo": {
             "type": "string"
+          }
+        }
+      },
+      "DecisaoRegistrada": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "decisao"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "decisao": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "DecisaoSobreDuplicado": {
+        "type": "object",
+        "required": [
+          "paciente_a",
+          "paciente_b",
+          "decisao"
+        ],
+        "properties": {
+          "decisao": {
+            "type": "string",
+            "description": "juncao_pedida ou pessoas_diferentes."
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Obrigatório quando a decisão substitui outra já registrada."
+          },
+          "paciente_a": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "paciente_b": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },
@@ -14628,6 +16600,48 @@
           }
         }
       },
+      "DetalheDaEtiqueta": {
+        "type": "object",
+        "required": [
+          "etiqueta",
+          "eventos"
+        ],
+        "properties": {
+          "etiqueta": {
+            "$ref": "#/components/schemas/LinhaDeEtiqueta"
+          },
+          "eventos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventoDaEtiqueta"
+            }
+          }
+        }
+      },
+      "DiaDaMinhaSemana": {
+        "type": "object",
+        "required": [
+          "data",
+          "pacientes"
+        ],
+        "properties": {
+          "ausencia": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Ausência aprovada que cobre o dia (motivo), quando houver."
+          },
+          "data": {
+            "type": "string",
+            "format": "date"
+          },
+          "pacientes": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "DiscrepanciaDeRevisao": {
         "type": "object",
         "required": [
@@ -14692,19 +16706,73 @@
           }
         }
       },
+      "DivergenciaDeSala": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "etiqueta",
+          "paciente",
+          "exame",
+          "sala_bipada",
+          "sala_correta",
+          "sala_correta_id",
+          "aberta_em"
+        ],
+        "properties": {
+          "aberta_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "etiqueta": {
+            "type": "string"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteDaEtiqueta"
+          },
+          "sala_bipada": {
+            "type": "string"
+          },
+          "sala_correta": {
+            "type": "string"
+          },
+          "sala_correta_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
       "DivergenciaResolvida": {
         "type": "object",
         "required": [
+          "id",
           "codigo",
-          "situacao"
+          "situacao",
+          "descricao"
         ],
         "properties": {
           "codigo": {
             "type": "string"
           },
-          "situacao": {
+          "descricao": {
+            "type": "string"
+          },
+          "id": {
             "type": "string",
-            "description": "resolvida."
+            "format": "uuid"
+          },
+          "situacao": {
+            "type": "string"
           }
         }
       },
@@ -15093,6 +17161,25 @@
           }
         }
       },
+      "EtiquetaInvalidada": {
+        "type": "object",
+        "required": [
+          "codigo",
+          "situacao",
+          "motivo_invalidacao"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "motivo_invalidacao": {
+            "type": "string"
+          },
+          "situacao": {
+            "type": "string"
+          }
+        }
+      },
       "EventoDaCadeia": {
         "type": "object",
         "required": [
@@ -15135,6 +17222,38 @@
           },
           "tipo": {
             "type": "string"
+          }
+        }
+      },
+      "EventoDaEtiqueta": {
+        "type": "object",
+        "required": [
+          "tipo",
+          "descricao",
+          "em",
+          "nivel"
+        ],
+        "properties": {
+          "descricao": {
+            "type": "string"
+          },
+          "em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "nivel": {
+            "type": "string",
+            "description": "ok (passo normal) ou alerta (bloqueio, invalidação)."
+          },
+          "por": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tipo": {
+            "type": "string",
+            "description": "impressa, invalidada, bipada, bloqueada, resolvida ou outro."
           }
         }
       },
@@ -15214,6 +17333,102 @@
           }
         }
       },
+      "ExameComDose": {
+        "type": "object",
+        "required": [
+          "dose_id",
+          "codigo",
+          "paciente",
+          "menor_de_idade",
+          "exame",
+          "modalidade",
+          "realizado_em",
+          "acima_do_nrd"
+        ],
+        "properties": {
+          "acima_do_nrd": {
+            "type": "boolean"
+          },
+          "aparelho": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "ctdivol_mgy": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "dap_gycm2": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "dlp_mgycm": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "dose_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "justificativa": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/JustificativaDeDose"
+              }
+            ]
+          },
+          "menor_de_idade": {
+            "type": "boolean",
+            "description": "Menor de 18 anos na data do exame (atenção redobrada à dose)."
+          },
+          "modalidade": {
+            "type": "string"
+          },
+          "nrd": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/NrdAplicado"
+              }
+            ]
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "realizado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "valor_comparado": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          }
+        }
+      },
       "ExameComPreco": {
         "type": "object",
         "required": [
@@ -15231,6 +17446,66 @@
           "valor_centavos": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "ExameDaLista": {
+        "type": "object",
+        "required": [
+          "exame",
+          "inicio"
+        ],
+        "properties": {
+          "exame": {
+            "type": "string"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ExameDoHistorico": {
+        "type": "object",
+        "required": [
+          "exame",
+          "realizado_em"
+        ],
+        "properties": {
+          "aparelho": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dap_gycm2": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "dlp_mgycm": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "dose_efetiva_msv": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double",
+            "description": "Estimativa (mSv) pelo fator do NRD vigente do exame; ausente sem fator cadastrado."
+          },
+          "exame": {
+            "type": "string"
+          },
+          "realizado_em": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -15350,6 +17625,96 @@
             "type": "string"
           },
           "tuss": {
+            "type": "string"
+          }
+        }
+      },
+      "ExamesComDose": {
+        "type": "object",
+        "required": [
+          "de",
+          "ate",
+          "exames",
+          "acima_do_nrd",
+          "sem_justificativa"
+        ],
+        "properties": {
+          "acima_do_nrd": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ate": {
+            "type": "string",
+            "format": "date"
+          },
+          "de": {
+            "type": "string",
+            "format": "date"
+          },
+          "exames": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExameComDose"
+            }
+          },
+          "sem_justificativa": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ExportacaoFeita": {
+        "type": "object",
+        "required": [
+          "codigo",
+          "relatorio",
+          "titulo",
+          "formato",
+          "de",
+          "ate",
+          "conteudo",
+          "linhas",
+          "sha256",
+          "quem",
+          "quando"
+        ],
+        "properties": {
+          "ate": {
+            "type": "string",
+            "format": "date"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "conteudo": {
+            "type": "string",
+            "description": "sem_dado_de_saude ou pseudonimizado."
+          },
+          "de": {
+            "type": "string",
+            "format": "date"
+          },
+          "formato": {
+            "type": "string"
+          },
+          "linhas": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quando": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "quem": {
+            "type": "string"
+          },
+          "relatorio": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "titulo": {
             "type": "string"
           }
         }
@@ -15817,6 +18182,37 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "HistoricoDeDose": {
+        "type": "object",
+        "required": [
+          "paciente",
+          "exames",
+          "exames_sem_estimativa"
+        ],
+        "properties": {
+          "dose_efetiva_12_meses_msv": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double",
+            "description": "Soma das estimativas dos últimos 12 meses nesta clínica (não é dosimetria individual)."
+          },
+          "exames": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExameDoHistorico"
+            }
+          },
+          "exames_sem_estimativa": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
           }
         }
       },
@@ -16313,6 +18709,80 @@
           }
         }
       },
+      "ItemDaMinhaAgenda": {
+        "type": "object",
+        "required": [
+          "agendamento_id",
+          "codigo",
+          "inicio",
+          "paciente",
+          "exame",
+          "sala",
+          "grupo"
+        ],
+        "properties": {
+          "agendamento_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "atendimento_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "esperando_desde": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Desde quando o paciente espera (check-in), para o grupo `esperando`."
+          },
+          "exame": {
+            "type": "string"
+          },
+          "grupo": {
+            "type": "string",
+            "description": "a_chegar, esperando, em_exame, liberado ou faltou."
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "laudo_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "Presente só quando o médico pode abrir o laudo (vínculo de cuidado, RLS)."
+          },
+          "laudo_situacao": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Situação do laudo, sem conteúdo."
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteResumo"
+          },
+          "sala": {
+            "type": "string"
+          },
+          "senha": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
       "ItemDeEstoque": {
         "type": "object",
         "required": [
@@ -16513,6 +18983,33 @@
           }
         }
       },
+      "JustificativaDeDose": {
+        "type": "object",
+        "required": [
+          "motivo",
+          "por",
+          "em"
+        ],
+        "properties": {
+          "detalhe": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "motivo": {
+            "type": "string",
+            "description": "imc_alto, repeticao_movimento, fase_extra, implante_metalico ou outro."
+          },
+          "por": {
+            "type": "string"
+          }
+        }
+      },
       "Kit": {
         "type": "object",
         "required": [
@@ -16685,6 +19182,156 @@
           }
         }
       },
+      "LinhaDaListaDePacientes": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "nome",
+          "nascimento",
+          "convenio",
+          "alergias",
+          "situacao",
+          "falta_no_cadastro"
+        ],
+        "properties": {
+          "alergias": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "celular": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "codigo": {
+            "type": "string",
+            "description": "Prontuário (código legível)."
+          },
+          "convenio": {
+            "type": "string",
+            "description": "Operadora do próximo agendamento (ou do último), ou \"Particular\"."
+          },
+          "cpf_mascarado": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "falta_no_cadastro": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "O que falta no cadastro (cpf, celular, nome_mae, alergias), para a tela dizer o quê."
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "proximo_exame": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ExameDaLista"
+              }
+            ]
+          },
+          "situacao": {
+            "type": "string",
+            "description": "na_clinica, pendencia, cadastro_incompleto, possivel_duplicado ou em_dia (a mais urgente)."
+          },
+          "ultimo_exame": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ExameDaLista"
+              }
+            ]
+          }
+        }
+      },
+      "LinhaDeEtiqueta": {
+        "type": "object",
+        "required": [
+          "codigo",
+          "tipo",
+          "estado",
+          "paciente",
+          "exame",
+          "sala",
+          "accession"
+        ],
+        "properties": {
+          "accession": {
+            "type": "string",
+            "description": "Número do exame (accession) que liga etiqueta, aparelho e imagens."
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "estado": {
+            "type": "string",
+            "description": "impressa (aguardando a sala), em_uso (bipada), invalidada ou divergencia (bipada na sala errada, aberta)."
+          },
+          "exame": {
+            "type": "string"
+          },
+          "motivo_invalidacao": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "paciente": {
+            "$ref": "#/components/schemas/PacienteDaEtiqueta"
+          },
+          "sala": {
+            "type": "string"
+          },
+          "substitui": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Etiqueta que esta substituiu (reimpressão)."
+          },
+          "substituida_por": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tipo": {
+            "type": "string",
+            "description": "pulseira."
+          },
+          "ultimo_evento": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/UltimoEvento"
+              }
+            ]
+          }
+        }
+      },
       "LinhaDoExtrato": {
         "type": "object",
         "required": [
@@ -16711,6 +19358,31 @@
           }
         }
       },
+      "LinhaDoRelatorio": {
+        "type": "object",
+        "required": [
+          "a",
+          "b",
+          "valor",
+          "c"
+        ],
+        "properties": {
+          "a": {
+            "type": "string"
+          },
+          "b": {
+            "type": "string"
+          },
+          "c": {
+            "type": "string"
+          },
+          "valor": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Valor numérico da terceira coluna (centavos nos relatórios em reais)."
+          }
+        }
+      },
       "LinkCriado": {
         "type": "object",
         "required": [
@@ -16725,6 +19397,52 @@
           "token": {
             "type": "string",
             "description": "Mostrado uma única vez; o banco guarda só o hash."
+          }
+        }
+      },
+      "ListaDePacientes": {
+        "type": "object",
+        "required": [
+          "cadastrados",
+          "recortes",
+          "pagina",
+          "paginas",
+          "por_pagina",
+          "total",
+          "itens"
+        ],
+        "properties": {
+          "cadastrados": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Cadastros da unidade (sem filtro)."
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinhaDaListaDePacientes"
+            }
+          },
+          "pagina": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "paginas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "por_pagina": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "recortes": {
+            "$ref": "#/components/schemas/ContagemDosRecortes",
+            "description": "Contagem de cada recorte com a busca aplicada."
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Total de linhas do recorte com a busca (todas as páginas)."
           }
         }
       },
@@ -17145,6 +19863,53 @@
           }
         }
       },
+      "MensagemDoRegistro": {
+        "type": "object",
+        "required": [
+          "id",
+          "paciente_id",
+          "nome",
+          "nascimento",
+          "modelo",
+          "situacao",
+          "criado_em"
+        ],
+        "properties": {
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "modelo": {
+            "type": "string"
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "paciente_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "resposta": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "confirmou, saiu ou nenhuma."
+          },
+          "situacao": {
+            "type": "string",
+            "description": "enviada, bloqueada_opt_out, sem_celular ou modelo_desligado."
+          }
+        }
+      },
       "MenuDoObjeto": {
         "type": "object",
         "required": [
@@ -17160,6 +19925,80 @@
           },
           "cabecalho": {
             "$ref": "#/components/schemas/CabecalhoDoMenu"
+          }
+        }
+      },
+      "MinhaAgenda": {
+        "type": "object",
+        "required": [
+          "data",
+          "medico",
+          "turnos",
+          "pacientes",
+          "ja_atendidos",
+          "atendidos_com_laudo_pendente",
+          "esperando",
+          "laudos_para_assinar",
+          "laudos_vencem_hoje",
+          "itens",
+          "avisos",
+          "semana"
+        ],
+        "properties": {
+          "atendidos_com_laudo_pendente": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "avisos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AvisoParaOMedico"
+            }
+          },
+          "data": {
+            "type": "string",
+            "format": "date"
+          },
+          "esperando": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemDaMinhaAgenda"
+            }
+          },
+          "ja_atendidos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "laudos_para_assinar": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "laudos_vencem_hoje": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "medico": {
+            "type": "string"
+          },
+          "pacientes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "semana": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DiaDaMinhaSemana"
+            }
+          },
+          "turnos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TurnoNaSala"
+            }
           }
         }
       },
@@ -17296,6 +20135,29 @@
           "tipo": {
             "type": "string",
             "description": "desativar ou reativar."
+          }
+        }
+      },
+      "MudancaDeAviso": {
+        "type": "object",
+        "required": [
+          "ativo",
+          "motivo"
+        ],
+        "properties": {
+          "ativo": {
+            "type": "boolean"
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "versao_vista": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "Versão vista na tela (`versao_id`); `null` quando o aviso nunca foi mudado."
           }
         }
       },
@@ -17626,6 +20488,35 @@
           }
         }
       },
+      "NovaAusencia": {
+        "type": "object",
+        "required": [
+          "inicio",
+          "fim",
+          "motivo"
+        ],
+        "properties": {
+          "detalhe": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Opcional, 3 a 300 caracteres."
+          },
+          "fim": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "motivo": {
+            "type": "string",
+            "description": "congresso, ferias, licenca ou pessoal."
+          }
+        }
+      },
       "NovaConsultaCrm": {
         "type": "object",
         "required": [
@@ -17697,6 +20588,25 @@
           "tipo": {
             "type": "string",
             "description": "clinica ou pessoal."
+          }
+        }
+      },
+      "NovaJustificativa": {
+        "type": "object",
+        "required": [
+          "motivo"
+        ],
+        "properties": {
+          "detalhe": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Obrigatório em \"outro\" (5 a 500 caracteres)."
+          },
+          "motivo": {
+            "type": "string",
+            "description": "imc_alto, repeticao_movimento, fase_extra, implante_metalico ou outro."
           }
         }
       },
@@ -18189,6 +21099,46 @@
           }
         }
       },
+      "NovoNrd": {
+        "type": "object",
+        "required": [
+          "grandeza",
+          "valor"
+        ],
+        "properties": {
+          "fator_dose_efetiva": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double",
+            "description": "mSv por mGy·cm (TC) ou por Gy·cm² (raio X). Opcional."
+          },
+          "grandeza": {
+            "type": "string",
+            "description": "ctdivol ou dlp (TC); dap (raio X)."
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Obrigatório a partir da segunda versão (5 a 300 caracteres)."
+          },
+          "valor": {
+            "type": "number",
+            "format": "double"
+          },
+          "versao_vista": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "Número da versão vigente que a pessoa viu (ausente quando não há nenhuma)."
+          }
+        }
+      },
       "NovoOrcamento": {
         "type": "object",
         "required": [
@@ -18548,6 +21498,84 @@
           }
         }
       },
+      "NrdAplicado": {
+        "type": "object",
+        "required": [
+          "grandeza",
+          "valor"
+        ],
+        "properties": {
+          "grandeza": {
+            "type": "string",
+            "description": "ctdivol, dlp ou dap."
+          },
+          "valor": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "NrdDoExame": {
+        "type": "object",
+        "required": [
+          "tuss",
+          "exame"
+        ],
+        "properties": {
+          "exame": {
+            "type": "string"
+          },
+          "fator_dose_efetiva": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "grandeza": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "modalidade": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "numero": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
+          },
+          "publicado_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "tuss": {
+            "type": "string"
+          },
+          "valor": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          }
+        }
+      },
       "NumerosSituados": {
         "type": "object",
         "required": [
@@ -18877,6 +21905,27 @@
           }
         }
       },
+      "PacienteDaEtiqueta": {
+        "type": "object",
+        "required": [
+          "id",
+          "nome",
+          "nascimento"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
       "PacienteDoLote": {
         "type": "object",
         "required": [
@@ -19139,6 +22188,94 @@
           }
         }
       },
+      "PainelDeComunicacao": {
+        "type": "object",
+        "required": [
+          "whatsapp_configurado",
+          "hoje",
+          "mensagens",
+          "automaticas",
+          "pacientes_sem_whatsapp"
+        ],
+        "properties": {
+          "automaticas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AvisoAutomatico"
+            }
+          },
+          "hoje": {
+            "$ref": "#/components/schemas/ContagemDeHoje"
+          },
+          "mensagens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MensagemDoRegistro"
+            },
+            "description": "Últimos 7 dias, até 200, mais recentes primeiro."
+          },
+          "pacientes_sem_whatsapp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Pacientes com WhatsApp desligado (opt-out) na unidade."
+          },
+          "whatsapp_configurado": {
+            "type": "boolean",
+            "description": "O núcleo tem o provedor de WhatsApp configurado (sem ele, os avisos ficam no outbox)."
+          }
+        }
+      },
+      "PainelDeEtiquetas": {
+        "type": "object",
+        "required": [
+          "dia",
+          "impressas",
+          "bipadas",
+          "reimpressoes",
+          "invalidadas",
+          "divergencias_abertas",
+          "divergencias",
+          "etiquetas"
+        ],
+        "properties": {
+          "bipadas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dia": {
+            "type": "string",
+            "format": "date"
+          },
+          "divergencias": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DivergenciaDeSala"
+            }
+          },
+          "divergencias_abertas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "etiquetas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinhaDeEtiqueta"
+            }
+          },
+          "impressas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "invalidadas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reimpressoes": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "PainelDeRevisao": {
         "type": "object",
         "required": [
@@ -19207,6 +22344,44 @@
           "estudos_sem_paciente": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "ParDuplicado": {
+        "type": "object",
+        "required": [
+          "a",
+          "b",
+          "motivo",
+          "situacao"
+        ],
+        "properties": {
+          "a": {
+            "$ref": "#/components/schemas/CadastroDoPar"
+          },
+          "b": {
+            "$ref": "#/components/schemas/CadastroDoPar"
+          },
+          "decidido_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "decidido_por": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "motivo": {
+            "type": "string",
+            "description": "Por que o par apareceu (ex.: \"Mesmo nome e mesmo celular\")."
+          },
+          "situacao": {
+            "type": "string",
+            "description": "aberto ou juncao_pedida (os marcados como pessoas diferentes saem da lista)."
           }
         }
       },
@@ -20076,6 +23251,17 @@
           }
         }
       },
+      "PedidoInvalidacao": {
+        "type": "object",
+        "required": [
+          "motivo"
+        ],
+        "properties": {
+          "motivo": {
+            "type": "string"
+          }
+        }
+      },
       "PedidoLembretes": {
         "type": "object",
         "required": [
@@ -20347,8 +23533,15 @@
           "resolucao"
         ],
         "properties": {
+          "observacao": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "resolucao": {
-            "type": "string"
+            "type": "string",
+            "description": "encaminhado (paciente levado à sala certa) ou outro (com observação)."
           }
         }
       },
@@ -20501,6 +23694,27 @@
           },
           "titulo": {
             "type": "string"
+          }
+        }
+      },
+      "PeriodoDoRelatorio": {
+        "type": "object",
+        "properties": {
+          "ate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date",
+            "description": "Último dia, inclusive (AAAA-MM-DD). Sem data: hoje. Até 366 dias."
+          },
+          "de": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date",
+            "description": "Primeiro dia (AAAA-MM-DD). Sem data: primeiro dia do mês corrente."
           }
         }
       },
@@ -20740,6 +23954,54 @@
           "total_depois_centavos": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "PreviaDoRelatorio": {
+        "type": "object",
+        "required": [
+          "id",
+          "titulo",
+          "de",
+          "ate",
+          "colunas",
+          "linhas",
+          "dado_de_saude",
+          "gerado_em"
+        ],
+        "properties": {
+          "ate": {
+            "type": "string",
+            "format": "date"
+          },
+          "colunas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "dado_de_saude": {
+            "type": "boolean"
+          },
+          "de": {
+            "type": "string",
+            "format": "date"
+          },
+          "gerado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string"
+          },
+          "linhas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinhaDoRelatorio"
+            }
+          },
+          "titulo": {
+            "type": "string"
           }
         }
       },
@@ -21112,6 +24374,61 @@
           "prazo_em": {
             "type": "string",
             "format": "date"
+          }
+        }
+      },
+      "ProtocoloDeDose": {
+        "type": "object",
+        "required": [
+          "exame_tuss",
+          "exame",
+          "aparelho",
+          "grandeza",
+          "exames",
+          "acima"
+        ],
+        "properties": {
+          "acima": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "aparelho": {
+            "type": "string"
+          },
+          "exame": {
+            "type": "string"
+          },
+          "exame_tuss": {
+            "type": "string"
+          },
+          "exames": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "grandeza": {
+            "type": "string"
+          },
+          "mediana": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "nrd": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
+          },
+          "percentual_do_nrd": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "description": "Mediana em percentual do NRD."
           }
         }
       },
@@ -21568,6 +24885,34 @@
           },
           "nova": {
             "$ref": "#/components/schemas/Etiqueta"
+          }
+        }
+      },
+      "RelatorioDoCatalogo": {
+        "type": "object",
+        "required": [
+          "id",
+          "grupo",
+          "titulo",
+          "descricao",
+          "dado_de_saude"
+        ],
+        "properties": {
+          "dado_de_saude": {
+            "type": "boolean",
+            "description": "O relatório tem dado de saúde: no arquivo, paciente vira código PAC e exame vira código TUSS."
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "grupo": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "titulo": {
+            "type": "string"
           }
         }
       },
@@ -22661,6 +26006,43 @@
               "null"
             ],
             "format": "int32"
+          }
+        }
+      },
+      "TurnoNaSala": {
+        "type": "object",
+        "required": [
+          "sala",
+          "inicio",
+          "fim"
+        ],
+        "properties": {
+          "fim": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sala": {
+            "type": "string"
+          }
+        }
+      },
+      "UltimoEvento": {
+        "type": "object",
+        "required": [
+          "descricao",
+          "em"
+        ],
+        "properties": {
+          "descricao": {
+            "type": "string"
+          },
+          "em": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },

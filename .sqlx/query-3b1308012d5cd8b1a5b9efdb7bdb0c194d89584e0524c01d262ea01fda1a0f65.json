@@ -1,0 +1,198 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT x.id, x.codigo, x.medico_id, m.nome AS medico, x.inicio, x.fim, x.motivo, x.detalhe, x.afetados_no_pedido,\n                  x.situacao, d.nome AS \"decidido_por?\", x.decidido_em, x.motivo_decisao, x.afetados_na_decisao, x.criado_em\n             FROM agenda.ausencia_medico x\n             JOIN identidade.usuario m ON m.id = x.medico_id\n             LEFT JOIN identidade.usuario d ON d.id = x.decidido_por\n            WHERE ($1::text IS NULL OR x.situacao = $1)\n              AND (NOT $2 OR x.medico_id = $3)\n              AND (x.situacao = 'aguardando' OR x.fim >= now() - interval '90 days')\n            ORDER BY (x.situacao = 'aguardando') DESC, x.inicio\n            LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "medico_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "medico_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "medico",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "inicio",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "inicio"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "fim",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "fim"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "detalhe",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "detalhe"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "afetados_no_pedido",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "afetados_no_pedido"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "decidido_por?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "decidido_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "decidido_em"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "motivo_decisao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "motivo_decisao"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "afetados_na_decisao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "afetados_na_decisao"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.ausencia_medico",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Bool",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "3b1308012d5cd8b1a5b9efdb7bdb0c194d89584e0524c01d262ea01fda1a0f65"
+}

@@ -1,0 +1,18 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE agenda.ausencia_medico\n            SET situacao = $2, decidido_por = $3, decidido_em = now(), motivo_decisao = $4, afetados_na_decisao = $5,\n                versao = versao + 1\n          WHERE id = $1 AND situacao = 'aguardando'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "06884f4b038a97a10d20596b716c34a36e8c4e06613ad35f9b28f1763f43b5dc"
+}

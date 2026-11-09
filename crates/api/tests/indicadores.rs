@@ -14,7 +14,11 @@ const ANTONIO: &str = "Antônio Carlos Ribeiro";
 async fn producao_faltas_e_laudo_por_medico_sem_identificar_paciente() {
     let amb = Ambiente::novo().await;
     amb.fazer_checkin(ANTONIO, "1954-06-15").await;
-    sqlx::query("UPDATE agenda.agendamento SET situacao = 'faltou', inicio = now() - interval '1 hour', fim = now() - interval '30 minutes' WHERE id = $1")
+    // "Há uma hora", mas nunca antes da meia-noite de hoje no fuso da clínica (DEC-2026-11-09-133).
+    sqlx::query("UPDATE agenda.agendamento SET situacao = 'faltou',
+                        inicio = greatest(now() - interval '1 hour', (date_trunc('day', now() AT TIME ZONE 'America/Sao_Paulo') + interval '1 minute') AT TIME ZONE 'America/Sao_Paulo'),
+                        fim = greatest(now() - interval '1 hour', (date_trunc('day', now() AT TIME ZONE 'America/Sao_Paulo') + interval '1 minute') AT TIME ZONE 'America/Sao_Paulo') + interval '30 minutes'
+                  WHERE id = $1")
         .bind(amb.s.agendamentos["Maria Helena Duarte"])
         .execute(&amb.admin)
         .await

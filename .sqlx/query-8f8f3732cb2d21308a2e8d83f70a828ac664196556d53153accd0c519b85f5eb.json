@@ -1,0 +1,36 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT forma, coalesce(sum(total_centavos), 0)::bigint AS \"valor!\"\n                     FROM caixa.recebimento WHERE situacao = 'pago' AND criado_em >= $1 AND criado_em < $2\n                    GROUP BY forma ORDER BY 2 DESC",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "forma",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "forma"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "valor!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      null
+    ]
+  },
+  "hash": "8f8f3732cb2d21308a2e8d83f70a828ac664196556d53153accd0c519b85f5eb"
+}

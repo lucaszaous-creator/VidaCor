@@ -188,6 +188,58 @@ pub fn nome_dicom(nome: &str) -> String {
     }
 }
 
+/// Objeto SR de um estudo: SOP Instance UID e tags simplificadas (para o RDSR de dose).
+pub struct ObjetoSr {
+    pub sop_uid: String,
+    pub tags: Value,
+}
+
+impl Orthanc {
+    /// Objetos SR (relatório estruturado) do estudo, onde o aparelho manda o RDSR de dose
+    /// (DEC-2026-11-09-145). Só ids no formato do Orthanc (SEC-INJ-5); até 20 objetos por série.
+    ///
+    /// # Errors
+    /// Orthanc fora do ar ou resposta fora do formato.
+    pub async fn objetos_sr(&self, orthanc_id: &str) -> Result<Vec<ObjetoSr>> {
+        let id_valido = |s: &str| s.chars().all(|c| c.is_ascii_hexdigit() || c == '-');
+        if !id_valido(orthanc_id) {
+            bail!("id de estudo do Orthanc em formato inesperado");
+        }
+        let series: Value = self
+            .http
+            .get(format!("{}/studies/{orthanc_id}/series", self.base))
+            .send()
+            .await?
+            .error_for_status()?
+            .json()
+            .await?;
+        let mut r = Vec::new();
+        for s in series.as_array().into_iter().flatten() {
+            if s["MainDicomTags"]["Modality"].as_str() != Some("SR") {
+                continue;
+            }
+            for inst in s["Instances"].as_array().into_iter().flatten().take(20) {
+                let Some(id) = inst.as_str().filter(|i| id_valido(i)) else {
+                    continue;
+                };
+                let tags: Value = self
+                    .http
+                    .get(format!("{}/instances/{id}/tags?simplify", self.base))
+                    .send()
+                    .await?
+                    .error_for_status()?
+                    .json()
+                    .await?;
+                let Some(sop) = tags["SOPInstanceUID"].as_str().map(str::to_owned) else {
+                    continue;
+                };
+                r.push(ObjetoSr { sop_uid: sop, tags });
+            }
+        }
+        Ok(r)
+    }
+}
+
 mod unicode_normalization_shim {
     pub fn sem_acento(texto: &str) -> String {
         vidacor_comum::NomeCompleto::novo(texto)
