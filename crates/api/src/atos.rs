@@ -66,6 +66,11 @@ pub enum Ato {
     LaudoCoordenar,
     PreparoAdministrar,
     DocumentoEmitir,
+    ConveniosVer,
+    ConveniosAdministrar,
+    ConveniosAprovar,
+    PacotesVer,
+    PacotesAdministrar,
 }
 
 impl Ato {
@@ -160,6 +165,16 @@ impl Ato {
             // paciente: comprovante e declaração de comparecimento (DEC-2026-11-09-106 a 108).
             A::PreparoAdministrar => &["gerente"],
             A::DocumentoEmitir => &["recepcao", "gerente"],
+            // Convênios e tabelas (Convenios-Tabelas.dc.html): o faturamento cadastra o contrato, as
+            // regras de autorização e propõe a tabela nova; a gerência acompanha e aprova a proposta
+            // (segunda pessoa: quem propõe não aprova, também no banco). DEC-2026-11-09-110 a 114.
+            A::ConveniosVer => &["faturista", "gerente"],
+            A::ConveniosAdministrar => &["faturista"],
+            A::ConveniosAprovar => &["gerente"],
+            // Check-up e pacotes: a recepção consulta para orientar o paciente; a gerência publica versão
+            // nova (composição, ordem do roteiro e preço). DEC-2026-11-09-115 a 117.
+            A::PacotesVer => &["recepcao", "gerente"],
+            A::PacotesAdministrar => &["gerente"],
         };
         perfis.contains(&perfil)
     }
@@ -169,7 +184,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 62] = [
+    const TODOS: [Ato; 67] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -232,6 +247,11 @@ mod testes {
         Ato::LaudoCoordenar,
         Ato::PreparoAdministrar,
         Ato::DocumentoEmitir,
+        Ato::ConveniosVer,
+        Ato::ConveniosAdministrar,
+        Ato::ConveniosAprovar,
+        Ato::PacotesVer,
+        Ato::PacotesAdministrar,
     ];
 
     #[test]
@@ -326,6 +346,44 @@ mod testes {
         assert!(Ato::CatalogoVer.concedido_a("gerente"));
         for p in ["ti", "medico", "caixa", "tv"] {
             assert!(!Ato::CatalogoVer.concedido_a(p), "{p}");
+        }
+    }
+
+    #[test]
+    fn convenio_o_faturamento_propoe_e_a_gerencia_aprova() {
+        assert!(Ato::ConveniosAdministrar.concedido_a("faturista"));
+        assert!(Ato::ConveniosAprovar.concedido_a("gerente"));
+        assert!(!Ato::ConveniosAprovar.concedido_a("faturista"));
+        assert!(!Ato::ConveniosAdministrar.concedido_a("gerente"));
+        for p in [
+            "recepcao",
+            "caixa",
+            "medico",
+            "ti",
+            "financeiro",
+            "tecnico",
+            "tv",
+        ] {
+            for ato in [
+                Ato::ConveniosVer,
+                Ato::ConveniosAdministrar,
+                Ato::ConveniosAprovar,
+            ] {
+                assert!(!ato.concedido_a(p), "{ato:?} {p}");
+            }
+        }
+    }
+
+    #[test]
+    fn pacote_a_recepcao_consulta_e_a_gerencia_publica() {
+        assert!(Ato::PacotesVer.concedido_a("recepcao"));
+        assert!(Ato::PacotesVer.concedido_a("gerente"));
+        assert!(Ato::PacotesAdministrar.concedido_a("gerente"));
+        for p in ["recepcao", "caixa", "medico", "ti", "faturista", "tv"] {
+            assert!(!Ato::PacotesAdministrar.concedido_a(p), "{p}");
+        }
+        for p in ["caixa", "medico", "ti", "tv"] {
+            assert!(!Ato::PacotesVer.concedido_a(p), "{p}");
         }
     }
 }

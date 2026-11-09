@@ -1,0 +1,112 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT m.codigo, m.tipo, m.motivo, m.versao_do_contrato, m.antes, m.depois, u.nome AS quem, m.criado_em\n             FROM faturamento.contrato_mudanca m JOIN identidade.usuario u ON u.id = m.criado_por\n            WHERE m.contrato_id = $1 ORDER BY m.versao_do_contrato DESC LIMIT 100",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato_mudanca",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "tipo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato_mudanca",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato_mudanca",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "versao_do_contrato",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato_mudanca",
+            "name": "versao_do_contrato"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "antes",
+        "type_info": "Jsonb",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato_mudanca",
+            "name": "antes"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "depois",
+        "type_info": "Jsonb",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato_mudanca",
+            "name": "depois"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "quem",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato_mudanca",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "bce393f61cd6d3b6e389eae1b89bccbe7b565ddf1e28d8a9c2c38ac600057fdc"
+}

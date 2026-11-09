@@ -34,6 +34,8 @@ const SECOES: { id: string; titulo: string; itens: ItemComPerfis[] }[] = [
       { id: 'exame-externo', rotulo: 'Exame externo', href: '/exames-externos', icone: 'imagem', cor: 'blue', perfis: [...RECEPCAO, 'gerente'] },
       { id: 'novo-paciente', rotulo: 'Novo paciente', href: '/pacientes/novo', icone: 'recepcao', cor: 'blue', perfis: [...RECEPCAO, 'gerente'] },
       { id: 'recepcao', rotulo: 'Recepção e pulseiras', href: '/recepcao', icone: 'recepcao', cor: 'teal', perfis: RECEPCAO },
+      // Check-up e pacotes: a recepção orienta o paciente; a gerência publica versão nova.
+      { id: 'pacotes', rotulo: 'Check-up e pacotes', href: '/pacotes', icone: 'agenda', cor: 'blue', perfis: [...RECEPCAO, 'gerente'] },
       // A conta da TV só tem este item, e `/` a leva direto ao painel.
       { id: 'painel', rotulo: 'TV de chamada', href: '/telao', icone: 'recepcao', cor: 'teal', perfis: ['tv', ...RECEPCAO, 'gerente'] },
       { id: 'autorizacoes', rotulo: 'Autorizações', href: '/autorizacoes', icone: 'autorizacao', cor: 'blue', perfis: [...RECEPCAO, 'faturista', 'gerente'] },
@@ -75,6 +77,8 @@ const SECOES: { id: string; titulo: string; itens: ItemComPerfis[] }[] = [
       { id: 'corpo-clinico', rotulo: 'Corpo clínico', href: '/corpo-clinico', icone: 'laudos', cor: 'rose', perfis: ['gerente'] },
       { id: 'exames', rotulo: 'Exames e procedimentos', href: '/exames', icone: 'etiquetas', cor: 'rose', perfis: [...RECEPCAO, 'gerente'] },
       { id: 'preparo', rotulo: 'Preparo de exames', href: '/preparo', icone: 'triagem', cor: 'rose', perfis: [...RECEPCAO, 'gerente'] },
+      // Convênios e tabelas: o faturamento cadastra e propõe; a gerência aprova a tabela nova.
+      { id: 'convenios', rotulo: 'Convênios e tabelas', href: '/convenios', icone: 'caixa', cor: 'rose', perfis: ['faturista', 'gerente'] },
       // Qualidade e segurança do paciente: toda a equipe notifica (menos a TV).
       { id: 'qualidade', rotulo: 'Qualidade', href: '/qualidade', icone: 'confere', cor: 'rose', perfis: ['recepcao', 'supervisor_recepcao', 'coordenacao', 'caixa', 'tecnico', 'enfermagem', 'medico', 'faturista', 'financeiro', 'gerente', 'estoque', 'auditor', 'ti'] },
       { id: 'ouvidoria', rotulo: 'Ouvidoria', href: '/ouvidoria', icone: 'confere', cor: 'rose', perfis: [...RECEPCAO, 'gerente'] },

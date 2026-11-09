@@ -759,6 +759,159 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/convenios": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Convênios da unidade (ativos e inativos), com a situação da vigência e a tabela de hoje. */
+        get: operations["listar_convenios"];
+        put?: never;
+        /** Cadastra o convênio (faturamento; `Idempotency-Key`). Uma operadora por unidade (índice único). */
+        post: operations["cadastrar_convenio"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/convenios/propostas/{id}/decisao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Decide a proposta (gerência que não propôs; reautenticação). Aprovada, nasce a versão nova da
+         *     tabela com os preços propostos; recusada, nada muda na tabela. Uma decisão só (UPDATE atômico).
+         */
+        post: operations["decidir_proposta_de_tabela"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/convenios/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Convênio com termos, versões da tabela, proposta pendente, regras de autorização, conjunto da
+         *     auditoria e histórico (faturamento e gerência).
+         */
+        get: operations["obter_convenio"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/convenios/{id}/alteracoes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Muda os termos do convênio, desativa ou reativa (faturamento), com motivo. Informa a versão vista:
+         *     duas mudanças sobre a mesma versão, só a primeira entra (G2).
+         */
+        post: operations["alterar_convenio"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/convenios/{id}/precos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Preços de uma versão da tabela do convênio, com o preço da versão anterior (faturamento e gerência). */
+        get: operations["precos_do_convenio"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/convenios/{id}/previa-de-reajuste": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Prévia do reajuste em lote sobre a última versão, calculada pelo servidor (nada é gravado). */
+        get: operations["previa_de_reajuste_do_convenio"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/convenios/{id}/propostas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Propõe a tabela nova (faturamento; `Idempotency-Key`): reajuste em lote sobre a última versão ou a
+         *     tabela inteira com preços. O servidor calcula e grava os preços; a versão só nasce na aprovação.
+         *     Uma proposta pendente por convênio (índice único, G2).
+         */
+        post: operations["propor_tabela_do_convenio"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/convenios/{id}/regras-de-autorizacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Publica a versão nova das regras de autorização do convênio (faturamento), com motivo. Informa a
+         *     versão vista: duas publicações sobre a mesma versão, só a primeira entra (restrição única, G2).
+         */
+        post: operations["publicar_regras_de_autorizacao"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/corpo-clinico": {
         parameters: {
             query?: never;
@@ -2382,6 +2535,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/pacotes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Pacotes e check-ups da unidade, com o preço do pacote, o avulso calculado pelo servidor e as
+         *     versões (recepção e gerência).
+         */
+        get: operations["listar_pacotes_de_checkup"];
+        put?: never;
+        /** Cria o pacote com a primeira versão (gerência; `Idempotency-Key`). */
+        post: operations["criar_pacote_de_checkup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/pacotes/{codigo}/versoes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Publica versão nova do pacote (gerência; `Idempotency-Key`). A vigente não muda: a nova começa
+         *     depois de hoje e depois do início da última versão. Duas versões ao mesmo tempo: só uma entra.
+         */
+        post: operations["nova_versao_do_pacote_de_checkup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/painel-de-chamada": {
         parameters: {
             query?: never;
@@ -3319,6 +3513,16 @@ export interface components {
             sala: string;
             situacao: string;
         };
+        AlteracaoDoConvenio: {
+            motivo: string;
+            /** @description Estado inteiro dos termos depois da mudança. */
+            termos: components["schemas"]["TermosDoConvenio"];
+            /**
+             * Format: int32
+             * @description Versão do cadastro que a tela mostrou.
+             */
+            versao: number;
+        };
         AndamentoDaNc: {
             /** Format: date-time */
             em: string;
@@ -3406,6 +3610,13 @@ export interface components {
             ultimo_envio?: string | null;
             /** @description Último erro técnico do envio, sem dado de paciente. */
             ultimo_erro?: string | null;
+        };
+        AuditoriaDoConvenio: {
+            /** @description Conjuntos que o contrato pode usar (escolha no cadastro). */
+            disponiveis: components["schemas"]["ConjuntoDeAuditoriaDisponivel"][];
+            nome: string;
+            regras: components["schemas"]["RegraDaAuditoriaDoConvenio"][];
+            versao: string;
         };
         AutorizacaoDesconto: {
             codigo: string;
@@ -3595,6 +3806,14 @@ export interface components {
             /** @description Versões da tabela de preços desta unidade, da mais nova para a mais antiga. */
             tabelas: components["schemas"]["VersaoDaTabelaDePreco"][];
         };
+        CatalogoDePacotes: {
+            /**
+             * Format: int64
+             * @description Maior desconto do pacote sobre o avulso, em pontos base.
+             */
+            desconto_maximo_pontos_base: number;
+            pacotes: components["schemas"]["PacoteDeCheckup"][];
+        };
         CatalogoDoOrcamento: {
             exames: components["schemas"]["ExameComPreco"][];
             /**
@@ -3671,6 +3890,10 @@ export interface components {
             nascimento: string;
             /** @description Nome completo dito pelo paciente. */
             nome: string;
+        };
+        ConjuntoDeAuditoriaDisponivel: {
+            nome: string;
+            versao: string;
         };
         ConjuntoDeRegras: {
             nome: string;
@@ -3805,6 +4028,43 @@ export interface components {
             registro_ans: string;
             regra_versao: string;
         };
+        ConvenioDetalhe: {
+            auditoria: components["schemas"]["AuditoriaDoConvenio"];
+            codigo: string;
+            historico: components["schemas"]["MudancaDoConvenio"][];
+            /** Format: uuid */
+            id: string;
+            operadora: string;
+            proposta_pendente?: null | components["schemas"]["PropostaDeTabela"];
+            registro_ans: string;
+            regras_autorizacao?: null | components["schemas"]["RegrasDeAutorizacaoDoConvenio"];
+            situacao: string;
+            /** @description Versões da tabela, da mais nova para a mais antiga. */
+            tabelas: components["schemas"]["VersaoDaTabelaDoConvenio"][];
+            termos: components["schemas"]["TermosDoConvenio"];
+            /**
+             * Format: int32
+             * @description Versão do cadastro; a mudança informa a versão que viu (G2).
+             */
+            versao: number;
+        };
+        ConvenioResumo: {
+            codigo: string;
+            /** Format: uuid */
+            id: string;
+            operadora: string;
+            proposta_pendente: boolean;
+            registro_ans: string;
+            /** @description vigente, renovar, vencido, sem_vigencia ou inativo. */
+            situacao: string;
+            /**
+             * Format: int32
+             * @description Versão da tabela vigente hoje (nula sem tabela).
+             */
+            tabela_versao?: number | null;
+            /** Format: date */
+            vigencia_fim?: string | null;
+        };
         ConviteEmitido: {
             codigo: string;
             /** @description E-mail do cadastro, mascarado (o link vai só para lá; a recepção não o vê). */
@@ -3835,6 +4095,11 @@ export interface components {
         };
         Decisao: {
             motivo: string;
+        };
+        DecisaoDaPropostaDeTabela: {
+            aprovar: boolean;
+            /** @description Obrigatório para recusar. */
+            motivo?: string | null;
         };
         DecisaoDePendencia: {
             /** @description retificado (já há versão nova do laudo) ou mantido (com motivo). */
@@ -4062,6 +4327,26 @@ export interface components {
             /** Format: int64 */
             valor_centavos: number;
         };
+        ExameDoPacoteDeCheckup: {
+            /**
+             * Format: int64
+             * @description Preço avulso na tabela do particular da data de referência (nulo sem preço).
+             */
+            avulso_centavos?: number | null;
+            /** Format: int32 */
+            duracao_min: number;
+            nome: string;
+            /**
+             * Format: int32
+             * @description Posição no roteiro do dia (1 é o primeiro).
+             */
+            ordem: number;
+            /** @description Por que vem nesta posição. */
+            porque?: string | null;
+            /** @description Preparo para o paciente (nulo nas versões anteriores ao cadastro de roteiro). */
+            preparo?: string | null;
+            tuss: string;
+        };
         ExameExterno: {
             codigo: string;
             /** Format: date-time */
@@ -4076,6 +4361,12 @@ export interface components {
             origem: string;
             /** @description Sempre verdadeiro: exame externo é só leitura e nunca vira laudo da VidaCor. */
             somente_leitura: boolean;
+        };
+        ExamePedidoNoPacote: {
+            /** @description Por que vem nesta posição do roteiro. */
+            porque: string;
+            preparo: string;
+            tuss: string;
         };
         ExtratoImportado: {
             /** Format: int64 */
@@ -4660,6 +4951,30 @@ export interface components {
             /** @description conceder, retirar, desativar ou reativar. */
             tipo: string;
         };
+        MudancaDePrecoDoConvenio: {
+            /**
+             * Format: int64
+             * @description Preço na versão de partida (nulo quando o exame entra agora).
+             */
+            antes_centavos?: number | null;
+            /** Format: int64 */
+            depois_centavos: number;
+            descricao: string;
+            tuss: string;
+        };
+        MudancaDoConvenio: {
+            antes?: null | components["schemas"]["TermosDoConvenio"];
+            codigo: string;
+            depois: components["schemas"]["TermosDoConvenio"];
+            /** Format: date-time */
+            em: string;
+            motivo: string;
+            quem: string;
+            /** @description cadastrar, alterar, desativar ou reativar. */
+            tipo: string;
+            /** Format: int32 */
+            versao_do_contrato: number;
+        };
         MudancaNoProcedimento: {
             ativo?: boolean | null;
             /** Format: int32 */
@@ -4767,6 +5082,24 @@ export interface components {
             descricao: string;
             gravidade: string;
         };
+        NovaPropostaDeTabela: {
+            descricao: string;
+            /** @description Documento que sustenta a mudança (ex.: "Carta de reajuste 2027"). */
+            documento: string;
+            motivo: string;
+            /** @description ...a tabela inteira com os preços negociados. */
+            precos?: components["schemas"]["PrecoPropostoDoConvenio"][] | null;
+            /**
+             * Format: int32
+             * @description Reajuste em lote sobre a última versão, em pontos base; ou...
+             */
+            reajuste_pontos_base?: number | null;
+            /**
+             * Format: date
+             * @description Primeiro dia da versão nova: depois de hoje e depois do início da última versão.
+             */
+            vigente_desde: string;
+        };
         NovaRegraRepasse: {
             /** Format: uuid */
             medico_id: string;
@@ -4793,6 +5126,33 @@ export interface components {
              * @description Versão publicada que a pessoa estava vendo (nenhuma: nulo). Diferente da atual: 409.
              */
             versao_base?: number | null;
+        };
+        NovaVersaoDoPacoteDeCheckup: {
+            exames: components["schemas"]["ExamePedidoNoPacote"][];
+            motivo: string;
+            nome: string;
+            para_quem: string;
+            /** Format: int64 */
+            preco_centavos: number;
+            /**
+             * Format: int32
+             * @description Versão mais nova que a tela mostrou (G2).
+             */
+            regra_versao_vista: number;
+            /**
+             * Format: date
+             * @description Primeiro dia: depois de hoje e depois do início da última versão.
+             */
+            vigente_desde: string;
+        };
+        NovasRegrasDeAutorizacao: {
+            itens: components["schemas"]["RegraDeAutorizacaoPedida"][];
+            motivo: string;
+            /**
+             * Format: int32
+             * @description Versão das regras que a tela mostrou (nula quando ainda não há regras).
+             */
+            versao_vista?: number | null;
         };
         /**
          * @description Novo achado. Só os descritores do sistema escolhido são lidos; pontos, categoria e conduta
@@ -4841,6 +5201,14 @@ export interface components {
             arquivo_base64: string;
             /** @description Obrigatório quando substitui o certificado vigente. */
             motivo?: string | null;
+        };
+        NovoConvenio: {
+            motivo: string;
+            /** @description Nome da operadora como vem escrito na guia (ex.: "Unimed"). */
+            operadora: string;
+            /** @description Registro na ANS, 6 algarismos. */
+            registro_ans: string;
+            termos: components["schemas"]["TermosDoConvenio"];
         };
         NovoEventoAdverso: {
             anonimo?: boolean;
@@ -4891,6 +5259,20 @@ export interface components {
             nome_social?: string | null;
             /** @description F ou M. */
             sexo: string;
+        };
+        NovoPacoteDeCheckup: {
+            /** @description Exames na ordem do roteiro. */
+            exames: components["schemas"]["ExamePedidoNoPacote"][];
+            motivo: string;
+            nome: string;
+            para_quem: string;
+            /** Format: int64 */
+            preco_centavos: number;
+            /**
+             * Format: date
+             * @description Primeiro dia (a partir de hoje, em até um ano).
+             */
+            vigente_desde: string;
         };
         /**
          * @description Pedido de autorização a partir do agendamento (ou da reserva provisória). Os procedimentos vêm do
@@ -5088,6 +5470,13 @@ export interface components {
             /** Format: date */
             nascimento: string;
             nome: string;
+        };
+        PacoteDeCheckup: {
+            codigo: string;
+            /** @description Nome da versão vigente (ou da mais nova). */
+            nome: string;
+            /** @description Versões da mais nova para a mais antiga. */
+            versoes: components["schemas"]["VersaoDoPacoteDeCheckup"][];
         };
         PacoteDoCatalogo: {
             codigo: string;
@@ -5599,6 +5988,30 @@ export interface components {
             /** Format: int64 */
             valor_centavos: number;
         };
+        PrecoDoConvenio: {
+            descricao: string;
+            tuss: string;
+            /**
+             * Format: int64
+             * @description Preço na versão anterior (nulo quando o exame entrou nesta versão).
+             */
+            valor_anterior_centavos?: number | null;
+            /** Format: int64 */
+            valor_centavos: number;
+        };
+        PrecoPropostoDoConvenio: {
+            tuss: string;
+            /** Format: int64 */
+            valor_centavos: number;
+        };
+        PrecosDoConvenio: {
+            descricao: string;
+            itens: components["schemas"]["PrecoDoConvenio"][];
+            /** Format: int32 */
+            versao: number;
+            /** Format: date */
+            vigente_desde: string;
+        };
         PreferenciaWhatsapp: {
             motivo: string;
             whatsapp: boolean;
@@ -5608,6 +6021,19 @@ export interface components {
             nome: string;
             tuss: string;
             vigente?: null | components["schemas"]["VersaoDoPreparo"];
+        };
+        PreviaDeReajuste: {
+            /** Format: int64 */
+            afetados: number;
+            /** Format: int32 */
+            base_versao: number;
+            maiores: components["schemas"]["MudancaDePrecoDoConvenio"][];
+            /** Format: int32 */
+            pontos_base: number;
+            /** Format: int64 */
+            total_antes_centavos: number;
+            /** Format: int64 */
+            total_depois_centavos: number;
         };
         /** @description Erro em Problem Details (RFC 9457). */
         ProblemaDoc: {
@@ -5693,6 +6119,51 @@ export interface components {
             /** Format: int64 */
             atendimentos: number;
             exame: string;
+        };
+        PropostaDeTabela: {
+            /** Format: int32 */
+            base_versao?: number | null;
+            codigo: string;
+            /** Format: uuid */
+            contrato_id: string;
+            /** Format: date-time */
+            decidido_em?: string | null;
+            decidido_por?: string | null;
+            descricao: string;
+            documento: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: int64 */
+            itens: number;
+            /** @description As maiores mudanças em reais. */
+            maiores: components["schemas"]["MudancaDePrecoDoConvenio"][];
+            motivo: string;
+            motivo_decisao?: string | null;
+            /** Format: date-time */
+            proposta_em: string;
+            proposta_por: string;
+            /** Format: uuid */
+            proposta_por_id: string;
+            /** Format: int32 */
+            reajuste_pontos_base?: number | null;
+            /** @description pendente, aprovada ou recusada. */
+            situacao: string;
+            /**
+             * Format: int32
+             * @description Versão da tabela criada pela aprovação.
+             */
+            tabela_versao?: number | null;
+            /** @description reajuste ou precos. */
+            tipo: string;
+            /**
+             * Format: int64
+             * @description Soma dos preços que já existiam, antes e depois (calculadas pelo servidor).
+             */
+            total_antes_centavos: number;
+            /** Format: int64 */
+            total_depois_centavos: number;
+            /** Format: date */
+            vigente_desde: string;
         };
         ProtocoloDaManifestacao: {
             codigo: string;
@@ -5780,6 +6251,31 @@ export interface components {
             rqe?: string | null;
             uf: string;
         };
+        RegraDaAuditoriaDoConvenio: {
+            /** @description bloqueia, corrigir_antes ou atencao. */
+            efeito: string;
+            origem: string;
+            regra: string;
+            titulo: string;
+        };
+        RegraDeAutorizacaoDoExame: {
+            documentos: string;
+            exige_senha: boolean;
+            nome: string;
+            tuss: string;
+            /** Format: int32 */
+            validade_dias?: number | null;
+        };
+        RegraDeAutorizacaoPedida: {
+            documentos: string;
+            exige_senha: boolean;
+            tuss: string;
+            /**
+             * Format: int32
+             * @description Dias de validade da senha (só quando pede senha), de 1 a 365.
+             */
+            validade_dias?: number | null;
+        };
         RegraDoConjunto: {
             efeito: string;
             origem: string;
@@ -5800,6 +6296,16 @@ export interface components {
         RegraVigente: {
             sistema: components["schemas"]["SistemaClassificacao"];
             versao: string;
+        };
+        RegrasDeAutorizacaoDoConvenio: {
+            codigo: string;
+            itens: components["schemas"]["RegraDeAutorizacaoDoExame"][];
+            motivo: string;
+            /** Format: date-time */
+            publicada_em: string;
+            publicada_por: string;
+            /** Format: int32 */
+            versao_regras: number;
         };
         Reimpressao: {
             invalidada: components["schemas"]["Etiqueta"];
@@ -6092,6 +6598,31 @@ export interface components {
             /** @description Código IBGE da UF (33 = RJ). */
             uf: string;
         };
+        /** @description Termos do contrato que o faturamento edita (o estado inteiro vai e volta, sem campo solto). */
+        TermosDoConvenio: {
+            ativo: boolean;
+            autorizacao_por_webservice: boolean;
+            cnes: string;
+            codigo_prestador: string;
+            contato_email?: string | null;
+            contato_nome?: string | null;
+            contato_telefone?: string | null;
+            nome_prestador: string;
+            /** Format: int32 */
+            prazo_envio_dias: number;
+            /** Format: int32 */
+            prazo_pagamento_dias?: number | null;
+            /** Format: int32 */
+            prazo_recurso_dias: number;
+            /** @description Índice e mês do reajuste (ex.: "IPCA em janeiro"). */
+            reajuste?: string | null;
+            /** @description Conjunto de regras da auditoria antes do lote (ex.: `AUD-UNIMED-2026.1`). */
+            regra_versao: string;
+            /** Format: date */
+            vigencia_fim?: string | null;
+            /** Format: date */
+            vigencia_inicio?: string | null;
+        };
         /** @enum {string} */
         TipoBloqueio: "feriado" | "manutencao" | "outro";
         Titulo: {
@@ -6201,6 +6732,25 @@ export interface components {
             /** Format: date */
             vigente_desde: string;
         };
+        VersaoDaTabelaDoConvenio: {
+            aprovada_por?: string | null;
+            codigo: string;
+            /** Format: date-time */
+            criada_em: string;
+            descricao: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: int64 */
+            itens: number;
+            motivo?: string | null;
+            proposta_por?: string | null;
+            /** @description vigente, futura ou anterior. */
+            situacao: string;
+            /** Format: int32 */
+            versao: number;
+            /** Format: date */
+            vigente_desde: string;
+        };
         VersaoDeModelo: {
             /** Format: date-time */
             criado_em: string;
@@ -6215,6 +6765,41 @@ export interface components {
             /** @description proposta, publicada, substituida ou recusada. */
             situacao: string;
             texto: string;
+        };
+        VersaoDoPacoteDeCheckup: {
+            /**
+             * Format: int64
+             * @description Soma avulsa pela tabela do particular (hoje para a vigente; no início para as outras). Nula
+             *     quando algum exame não tem preço.
+             */
+            avulso_centavos?: number | null;
+            /** Format: int64 */
+            desconto_pontos_base?: number | null;
+            /** Format: int32 */
+            duracao_total_min: number;
+            /** Format: int64 */
+            economia_centavos?: number | null;
+            exames: components["schemas"]["ExameDoPacoteDeCheckup"][];
+            /** Format: uuid */
+            id: string;
+            motivo?: string | null;
+            nome: string;
+            para_quem?: string | null;
+            /** Format: int64 */
+            preco_centavos: number;
+            /** Format: date-time */
+            publicada_em: string;
+            publicada_por?: string | null;
+            /** Format: int32 */
+            regra_versao: number;
+            /** @description vigente, futura ou anterior. */
+            situacao: string;
+            /** @description O orçamento aplica o pacote (ele sai mais barato que o avulso). */
+            vale_no_orcamento: boolean;
+            /** Format: date */
+            vigente_ate?: string | null;
+            /** Format: date */
+            vigente_desde: string;
         };
         VersaoDoPreparo: {
             /** Format: int32 */
@@ -8236,6 +8821,445 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReciboLancado"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_convenios: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConvenioResumo"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    cadastrar_convenio: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoConvenio"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConvenioDetalhe"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    decidir_proposta_de_tabela: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecisaoDaPropostaDeTabela"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PropostaDeTabela"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    obter_convenio: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConvenioDetalhe"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    alterar_convenio: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AlteracaoDoConvenio"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConvenioDetalhe"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    precos_do_convenio: {
+        parameters: {
+            query?: {
+                /** @description Versão da tabela (sem ela, a vigente hoje; sem vigente, a mais nova). */
+                versao?: number | null;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PrecosDoConvenio"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    previa_de_reajuste_do_convenio: {
+        parameters: {
+            query: {
+                /** @description Reajuste em pontos base (520 = 5,20%). */
+                pontos_base: number;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PreviaDeReajuste"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    propor_tabela_do_convenio: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovaPropostaDeTabela"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PropostaDeTabela"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    publicar_regras_de_autorizacao: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovasRegrasDeAutorizacao"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegrasDeAutorizacaoDoConvenio"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
                 };
             };
             409: {
@@ -12396,6 +13420,133 @@ export interface operations {
                 };
             };
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    listar_pacotes_de_checkup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogoDePacotes"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    criar_pacote_de_checkup: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoPacoteDeCheckup"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PacoteDeCheckup"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    nova_versao_do_pacote_de_checkup: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                codigo: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovaVersaoDoPacoteDeCheckup"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PacoteDeCheckup"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };

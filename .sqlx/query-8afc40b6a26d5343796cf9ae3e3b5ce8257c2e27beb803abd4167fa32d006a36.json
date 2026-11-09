@@ -1,0 +1,103 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT k.id, k.codigo, k.operadora, k.registro_ans, k.ativo, k.vigencia_fim,\n                  (SELECT t.versao FROM faturamento.tabela t WHERE t.contrato_id = k.id AND t.vigente_desde <= $2\n                    ORDER BY t.vigente_desde DESC, t.versao DESC LIMIT 1) AS tabela_versao,\n                  EXISTS (SELECT 1 FROM faturamento.tabela_proposta p WHERE p.contrato_id = k.id AND p.situacao = 'pendente') AS \"pendente!\"\n             FROM faturamento.contrato k WHERE k.unidade_id = $1\n            ORDER BY k.ativo DESC, k.operadora LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "operadora",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "operadora"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "registro_ans",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "registro_ans"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "ativo",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "ativo"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "vigencia_fim",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "vigencia_fim"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "tabela_versao",
+        "type_info": "Int4",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 7,
+        "name": "pendente!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Date"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      null,
+      null
+    ]
+  },
+  "hash": "8afc40b6a26d5343796cf9ae3e3b5ce8257c2e27beb803abd4167fa32d006a36"
+}

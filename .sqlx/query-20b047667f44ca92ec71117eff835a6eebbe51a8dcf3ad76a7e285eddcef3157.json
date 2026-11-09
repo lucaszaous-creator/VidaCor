@@ -1,0 +1,26 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO faturamento.tabela_proposta (id, codigo, contrato_id, tipo, reajuste_pontos_base, base_tabela_id, vigente_desde,\n                descricao, documento, motivo, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'convenios', $12, $13)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text",
+        "Int4",
+        "Uuid",
+        "Date",
+        "Text",
+        "Text",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "20b047667f44ca92ec71117eff835a6eebbe51a8dcf3ad76a7e285eddcef3157"
+}

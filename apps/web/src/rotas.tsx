@@ -30,6 +30,8 @@ import { TelaExames } from './telas/exames/TelaExames';
 import { TelaPreparo } from './telas/preparo/TelaPreparo';
 import { TelaModelosDeLaudo } from './telas/modelos/TelaModelosDeLaudo';
 import { TelaRevisaoPorPares } from './telas/revisao/TelaRevisaoPorPares';
+import { TelaConvenios } from './telas/convenios/TelaConvenios';
+import { TelaPacotes } from './telas/pacotes/TelaPacotes';
 import { TelaInicio } from './telas/inicio/TelaInicio';
 import { TelaOuvidoria } from './telas/ouvidoria/TelaOuvidoria';
 import { TelaQualidade } from './telas/qualidade/TelaQualidade';
@@ -168,6 +170,8 @@ const rotaAparelhos = createRoute({ getParentRoute: () => rotaApp, path: '/apare
 const rotaCorpoClinico = createRoute({ getParentRoute: () => rotaApp, path: '/corpo-clinico', component: TelaCorpoClinico });
 const rotaExames = createRoute({ getParentRoute: () => rotaApp, path: '/exames', component: TelaExames });
 const rotaPreparo = createRoute({ getParentRoute: () => rotaApp, path: '/preparo', component: TelaPreparo });
+const rotaConvenios = createRoute({ getParentRoute: () => rotaApp, path: '/convenios', component: TelaConvenios });
+const rotaPacotes = createRoute({ getParentRoute: () => rotaApp, path: '/pacotes', component: TelaPacotes });
 const rotaPaciente = createRoute({
   getParentRoute: () => rotaApp,
   path: '/pacientes',
@@ -272,6 +276,8 @@ const arvore = raiz.addChildren([
     rotaCorpoClinico,
     rotaExames,
     rotaPreparo,
+    rotaConvenios,
+    rotaPacotes,
     rotaAgenda,
     rotaRecepcao,
     rotaNovoAgendamento,

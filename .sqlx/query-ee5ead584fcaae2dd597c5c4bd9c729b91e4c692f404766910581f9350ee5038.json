@@ -1,0 +1,31 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE faturamento.contrato SET codigo_prestador = $3, nome_prestador = $4, cnes = $5, regra_versao = $6,\n                prazo_envio_dias = $7, prazo_recurso_dias = $8, prazo_pagamento_dias = $9, vigencia_inicio = $10, vigencia_fim = $11,\n                reajuste = $12, contato_nome = $13, contato_telefone = $14, contato_email = $15, autorizacao_por_webservice = $16,\n                ativo = $17, versao = versao + 1\n          WHERE id = $1 AND versao = $2 AND unidade_id = $18",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Int4",
+        "Int4",
+        "Int4",
+        "Date",
+        "Date",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Bool",
+        "Bool",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "ee5ead584fcaae2dd597c5c4bd9c729b91e4c692f404766910581f9350ee5038"
+}

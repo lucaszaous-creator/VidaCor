@@ -1,0 +1,253 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT p.id, p.codigo, p.contrato_id, p.tipo, p.reajuste_pontos_base, b.versao AS \"base_versao?\", p.vigente_desde,\n                  p.descricao, p.documento, p.motivo, p.situacao, u.nome AS proposta_por, p.criado_por, p.criado_em,\n                  d.nome AS \"decidido_por?\", p.decidido_em, p.motivo_decisao, t.versao AS \"tabela_versao?\",\n                  (SELECT count(*) FROM faturamento.tabela_proposta_preco x WHERE x.proposta_id = p.id) AS \"itens!\",\n                  (SELECT coalesce(sum(x.valor_anterior_centavos), 0)::bigint FROM faturamento.tabela_proposta_preco x\n                    WHERE x.proposta_id = p.id AND x.valor_anterior_centavos IS NOT NULL) AS \"antes!\",\n                  (SELECT coalesce(sum(x.valor_centavos), 0)::bigint FROM faturamento.tabela_proposta_preco x\n                    WHERE x.proposta_id = p.id AND x.valor_anterior_centavos IS NOT NULL) AS \"depois!\"\n             FROM faturamento.tabela_proposta p\n             JOIN identidade.usuario u ON u.id = p.criado_por\n             LEFT JOIN identidade.usuario d ON d.id = p.decidido_por\n             LEFT JOIN faturamento.tabela b ON b.id = p.base_tabela_id\n             LEFT JOIN faturamento.tabela t ON t.proposta_id = p.id\n            WHERE p.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "contrato_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta",
+            "name": "contrato_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "tipo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "reajuste_pontos_base",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta",
+            "name": "reajuste_pontos_base"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "base_versao?",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela",
+            "name": "versao"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "vigente_desde",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta",
+            "name": "vigente_desde"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "descricao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta",
+            "name": "descricao"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "documento",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta",
+            "name": "documento"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "proposta_por",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "criado_por",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta",
+            "name": "criado_por"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "decidido_por?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "decidido_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta",
+            "name": "decidido_em"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "motivo_decisao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta",
+            "name": "motivo_decisao"
+          }
+        }
+      },
+      {
+        "ordinal": 17,
+        "name": "tabela_versao?",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela",
+            "name": "versao"
+          }
+        }
+      },
+      {
+        "ordinal": 18,
+        "name": "itens!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 19,
+        "name": "antes!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 20,
+        "name": "depois!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "b8c32cef5293c86c55ef39adbb0d98fc83debd1c64d739e59631db7e9dd0558b"
+}

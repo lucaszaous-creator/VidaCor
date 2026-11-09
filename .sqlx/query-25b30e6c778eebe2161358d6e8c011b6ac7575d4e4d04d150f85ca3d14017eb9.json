@@ -1,0 +1,61 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT p.tuss, p.descricao, p.valor_centavos,\n                  (SELECT a.valor_centavos FROM faturamento.preco a JOIN faturamento.tabela ta ON ta.id = a.tabela_id\n                    WHERE ta.contrato_id = $2 AND ta.vigente_desde < $3 AND a.tuss = p.tuss\n                    ORDER BY ta.vigente_desde DESC LIMIT 1) AS valor_anterior_centavos\n             FROM faturamento.preco p WHERE p.tabela_id = $1 ORDER BY p.descricao, p.tuss LIMIT 2000",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.preco",
+            "name": "tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "descricao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.preco",
+            "name": "descricao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "valor_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "faturamento.preco",
+            "name": "valor_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "valor_anterior_centavos",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Date"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      null
+    ]
+  },
+  "hash": "25b30e6c778eebe2161358d6e8c011b6ac7575d4e4d04d150f85ca3d14017eb9"
+}

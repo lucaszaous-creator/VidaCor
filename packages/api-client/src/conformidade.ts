@@ -56,6 +56,31 @@ import type {
   CertificadoDoMedico,
   NovoCertificado,
 } from './contrato-cadastros';
+import type {
+  AlteracaoDoConvenio,
+  AuditoriaDoConvenio,
+  CatalogoDePacotes,
+  ConvenioDetalhe,
+  ConvenioResumo,
+  DecisaoDaPropostaDeTabela,
+  MudancaDePrecoDoConvenio,
+  MudancaDoConvenio,
+  NovaPropostaDeTabela,
+  NovaVersaoDoPacoteDeCheckup,
+  NovasRegrasDeAutorizacao,
+  NovoConvenio,
+  NovoPacoteDeCheckup,
+  PacoteDeCheckup,
+  PrecosDoConvenio,
+  PreviaDeReajuste,
+  PropostaDeTabela,
+  RegraDaAuditoriaDoConvenio,
+  RegraDeAutorizacaoDoExame,
+  RegrasDeAutorizacaoDoConvenio,
+  TermosDoConvenio,
+  VersaoDaTabelaDoConvenio,
+  VersaoDoPacoteDeCheckup,
+} from './contrato-convenios';
 import type { CadeiaDoAtendimento, PedidoDossie } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
 import type { ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
@@ -276,3 +301,35 @@ export type ConfereConsultaCrm = Cabe<ConsultaCrm, S['ConsultaCrm']>;
 export type ConfereNovaConsultaCrm = Cabe<NovaConsultaCrm, S['NovaConsultaCrm']>;
 export type ConfereCertificadoDoMedico = Cabe<CertificadoDoMedico, S['CertificadoDoMedico']>;
 export type ConfereNovoCertificado = Cabe<NovoCertificado, S['NovoCertificado']>;
+
+// Convênios e tabelas; check-up e pacotes.
+export type ConfereTermosDoConvenio = Cabe<TermosDoConvenio, S['TermosDoConvenio']>;
+export type ConfereConvenioResumo = Cabe<ConvenioResumo, S['ConvenioResumo']>;
+export type ConfereVersaoDaTabelaDoConvenio = Cabe<VersaoDaTabelaDoConvenio, S['VersaoDaTabelaDoConvenio']>;
+export type ConfereMudancaDePrecoDoConvenio = Cabe<MudancaDePrecoDoConvenio, S['MudancaDePrecoDoConvenio']>;
+export type ConferePropostaDeTabela = Cabe<PropostaDeTabela, S['PropostaDeTabela']>;
+export type ConfereRegraDeAutorizacaoDoExame = Cabe<RegraDeAutorizacaoDoExame, S['RegraDeAutorizacaoDoExame']>;
+export type ConfereRegrasDeAutorizacaoDoConvenio = Cabe<RegrasDeAutorizacaoDoConvenio, S['RegrasDeAutorizacaoDoConvenio']>;
+export type ConfereRegraDaAuditoriaDoConvenio = Cabe<RegraDaAuditoriaDoConvenio, S['RegraDaAuditoriaDoConvenio']>;
+export type ConfereAuditoriaDoConvenio = Cabe<AuditoriaDoConvenio, S['AuditoriaDoConvenio']>;
+export type ConfereMudancaDoConvenio = Cabe<MudancaDoConvenio, S['MudancaDoConvenio']>;
+export type ConfereConvenioDetalhe = Cabe<ConvenioDetalhe, S['ConvenioDetalhe']>;
+export type ConfereNovoConvenio = Cabe<NovoConvenio, S['NovoConvenio']>;
+export type ConfereAlteracaoDoConvenio = Cabe<AlteracaoDoConvenio, S['AlteracaoDoConvenio']>;
+export type ConferePrecosDoConvenio = Cabe<PrecosDoConvenio, S['PrecosDoConvenio']>;
+export type ConferePreviaDeReajuste = Cabe<PreviaDeReajuste, S['PreviaDeReajuste']>;
+export type ConfereNovaPropostaDeTabela = Cabe<NovaPropostaDeTabela, S['NovaPropostaDeTabela']>;
+export type ConfereDecisaoDaPropostaDeTabela = Cabe<DecisaoDaPropostaDeTabela, S['DecisaoDaPropostaDeTabela']>;
+export type ConfereNovasRegrasDeAutorizacao = Cabe<NovasRegrasDeAutorizacao, S['NovasRegrasDeAutorizacao']>;
+export type ConfereVersaoDoPacoteDeCheckup = Cabe<VersaoDoPacoteDeCheckup, S['VersaoDoPacoteDeCheckup']>;
+export type ConferePacoteDeCheckup = Cabe<PacoteDeCheckup, S['PacoteDeCheckup']>;
+export type ConfereCatalogoDePacotes = Cabe<CatalogoDePacotes, S['CatalogoDePacotes']>;
+export type ConfereNovoPacoteDeCheckup = Cabe<NovoPacoteDeCheckup, S['NovoPacoteDeCheckup']>;
+export type ConfereNovaVersaoDoPacoteDeCheckup = Cabe<NovaVersaoDoPacoteDeCheckup, S['NovaVersaoDoPacoteDeCheckup']>;
+export type ConfereNovoConvenioVolta = Cabe<S['NovoConvenio'], NovoConvenio>;
+export type ConfereAlteracaoDoConvenioVolta = Cabe<S['AlteracaoDoConvenio'], AlteracaoDoConvenio>;
+export type ConfereNovaPropostaDeTabelaVolta = Cabe<S['NovaPropostaDeTabela'], NovaPropostaDeTabela>;
+export type ConfereDecisaoDaPropostaDeTabelaVolta = Cabe<S['DecisaoDaPropostaDeTabela'], DecisaoDaPropostaDeTabela>;
+export type ConfereNovasRegrasDeAutorizacaoVolta = Cabe<S['NovasRegrasDeAutorizacao'], NovasRegrasDeAutorizacao>;
+export type ConfereNovoPacoteDeCheckupVolta = Cabe<S['NovoPacoteDeCheckup'], NovoPacoteDeCheckup>;
+export type ConfereNovaVersaoDoPacoteDeCheckupVolta = Cabe<S['NovaVersaoDoPacoteDeCheckup'], NovaVersaoDoPacoteDeCheckup>;

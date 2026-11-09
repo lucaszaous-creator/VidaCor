@@ -1,0 +1,34 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO faturamento.contrato (id, codigo, operadora, registro_ans, codigo_prestador, nome_prestador, cnes, regra_versao,\n                prazo_envio_dias, prazo_recurso_dias, prazo_pagamento_dias, vigencia_inicio, vigencia_fim, reajuste, contato_nome,\n                contato_telefone, contato_email, autorizacao_por_webservice, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, 'convenios', $20, $21)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Int4",
+        "Int4",
+        "Int4",
+        "Date",
+        "Date",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Bool",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "5e955f6c6fe9e1250dc628a1bfdbe99ebbe27194672acf85ff2a0a42a6f0d253"
+}
