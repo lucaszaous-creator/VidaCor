@@ -20,6 +20,7 @@ pub mod cancelamento;
 pub mod catalogo;
 pub mod chamada;
 pub mod comunicacao;
+pub mod comunicacao_painel;
 pub mod configuracoes;
 pub mod contingencia;
 pub mod convenios;
@@ -461,6 +462,11 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/webhooks/pix", post(webhooks::pix))
         .route("/v1/webhooks/whatsapp", post(webhooks::whatsapp))
         .route("/v1/comunicacao/lembretes", post(comunicacao::lembretes))
+        .route("/v1/comunicacao", get(comunicacao_painel::painel))
+        .route(
+            "/v1/comunicacao/automaticas/{modelo}",
+            post(comunicacao_painel::mudar),
+        )
         .route(
             "/v1/pacientes/{id}/comunicacao",
             get(comunicacao::do_paciente).post(comunicacao::preferir),

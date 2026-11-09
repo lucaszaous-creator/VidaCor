@@ -249,6 +249,8 @@ pub struct ProblemaDoc {
         crate::rotas::etiquetas_painel::detalhe,
         crate::rotas::etiquetas_atos::invalidar,
         crate::rotas::etiquetas_atos::resolver,
+        crate::rotas::comunicacao_painel::painel,
+        crate::rotas::comunicacao_painel::mudar,
     ),
     components(schemas(ProblemaDoc))
 )]

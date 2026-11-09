@@ -724,3 +724,17 @@ Funcionalidade: Lista de pacientes
 | FC-ETR-04 | Invalidar a pulseira exige motivo; duas ao mesmo tempo, só uma; bipada depois, a sala bloqueia; invalidada não volta a valer | Proposta | — | — | Clínica |
 | FC-ETR-05 | A reimpressão aparece no histórico das duas etiquetas (a antiga diz o motivo e a nova; a nova diz qual substitui) | Proposta | — | — | — |
 | FC-ETR-06 | Caixa, financeiro, TI, faturamento e TV não veem etiquetas; outra unidade não vê nem resolve | Proposta | — | — | — |
+
+---
+
+## 13. Comunicação com pacientes, corte do MVP (proposta, aguardando aprovação)
+
+> Propostas pelo Agente 1 em 09/11/2026. Testes: `crates/api/tests/comunicacao_painel.rs` (WhatsApp simulado).
+
+| ID | Cenário | Status | Aprovador | Data | Observações |
+|---|---|---|---|---|---|
+| FC-COM-01 | O registro mostra cada aviso dos últimos 7 dias com nome, nascimento, situação (enviada ou por que não saiu) e resposta | Proposta | — | — | Base: Paciente Conectado (Medware) e MediAutonotify (Medilab) |
+| FC-COM-02 | Aviso desligado pela gerência com motivo não sai e cada mensagem fica registrada como "aviso desligado"; repetir a mudança não duplica | Proposta | — | — | — |
+| FC-COM-03 | Duas mudanças sobre a mesma versão vista, ao mesmo tempo: só uma vale; versão antiga é recusada; versão não se altera nem se apaga | Proposta | — | — | — |
+| FC-COM-04 | Só recepção e gerência veem o registro | Proposta | — | — | Caixa, técnico, médico, financeiro, TI e TV: 403 |
+| FC-COM-05 | Só a gerência liga ou desliga; a mudança vale só para a unidade dela | Proposta | — | — | — |

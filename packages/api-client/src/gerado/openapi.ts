@@ -588,6 +588,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/comunicacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Registro de mensagens e avisos automáticos (recepção e gerência). */
+        get: operations["painel_de_comunicacao"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/comunicacao/automaticas/{modelo}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Liga ou desliga um aviso automático da unidade (gerência), com motivo e a versão vista. */
+        post: operations["mudar_aviso_automatico"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/comunicacao/lembretes": {
         parameters: {
             query?: never;
@@ -3787,6 +3821,21 @@ export interface components {
              */
             situacao: string;
         };
+        AvisoAutomatico: {
+            /** Format: date-time */
+            alterado_em?: string | null;
+            alterado_por?: string | null;
+            ativo: boolean;
+            descricao: string;
+            modelo: string;
+            motivo?: string | null;
+            nome: string;
+            /**
+             * Format: uuid
+             * @description Versão vigente (informar na mudança). Sem versão: ligado desde a instalação.
+             */
+            versao_id?: string | null;
+        };
         Bloqueio: {
             codigo: string;
             /** Format: date-time */
@@ -4124,6 +4173,18 @@ export interface components {
             situacao: string;
             /** Format: int64 */
             valor_total_centavos: number;
+        };
+        ContagemDeHoje: {
+            /** Format: int64 */
+            confirmaram: number;
+            /** Format: int64 */
+            desligadas: number;
+            /** Format: int64 */
+            enviadas: number;
+            /** Format: int64 */
+            opt_out: number;
+            /** Format: int64 */
+            sem_celular: number;
         };
         ContagemDosRecortes: {
             /** Format: int64 */
@@ -5155,6 +5216,22 @@ export interface components {
             resposta?: string | null;
             situacao: string;
         };
+        MensagemDoRegistro: {
+            /** Format: date-time */
+            criado_em: string;
+            /** Format: uuid */
+            id: string;
+            modelo: string;
+            /** Format: date */
+            nascimento: string;
+            nome: string;
+            /** Format: uuid */
+            paciente_id: string;
+            /** @description confirmou, saiu ou nenhuma. */
+            resposta?: string | null;
+            /** @description enviada, bloqueada_opt_out, sem_celular ou modelo_desligado. */
+            situacao: string;
+        };
         MenuDoObjeto: {
             acoes: components["schemas"]["AcaoDoMenu"][];
             cabecalho: components["schemas"]["CabecalhoDoMenu"];
@@ -5203,6 +5280,15 @@ export interface components {
             motivo: string;
             /** @description desativar ou reativar. */
             tipo: string;
+        };
+        MudancaDeAviso: {
+            ativo: boolean;
+            motivo: string;
+            /**
+             * Format: uuid
+             * @description Versão vista na tela (`versao_id`); `null` quando o aviso nunca foi mudado.
+             */
+            versao_vista?: string | null;
         };
         MudancaDePerfil: {
             motivo: string;
@@ -5792,6 +5878,19 @@ export interface components {
             nc_vencidas: number;
             /** Format: int64 */
             quase_erros_no_mes: number;
+        };
+        PainelDeComunicacao: {
+            automaticas: components["schemas"]["AvisoAutomatico"][];
+            hoje: components["schemas"]["ContagemDeHoje"];
+            /** @description Últimos 7 dias, até 200, mais recentes primeiro. */
+            mensagens: components["schemas"]["MensagemDoRegistro"][];
+            /**
+             * Format: int64
+             * @description Pacientes com WhatsApp desligado (opt-out) na unidade.
+             */
+            pacientes_sem_whatsapp: number;
+            /** @description O núcleo tem o provedor de WhatsApp configurado (sem ele, os avisos ficam no outbox). */
+            whatsapp_configurado: boolean;
         };
         PainelDeEtiquetas: {
             /** Format: int64 */
@@ -8723,6 +8822,103 @@ export interface operations {
                 };
             };
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    painel_de_comunicacao: {
+        parameters: {
+            query?: {
+                /** @description todas, nao_entregues (opt-out, sem celular, aviso desligado) ou confirmaram. */
+                filtro?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PainelDeComunicacao"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    mudar_aviso_automatico: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                modelo: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MudancaDeAviso"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AvisoAutomatico"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

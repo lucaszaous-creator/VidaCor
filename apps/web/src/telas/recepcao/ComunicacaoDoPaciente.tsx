@@ -7,7 +7,7 @@ import { useOperacao } from '../../operacao';
 import { FUSO_DA_CLINICA } from '../agenda/grade';
 
 const MODELOS: Record<string, string> = { confirmacao: 'Confirmação de horário', laudo_pronto: 'Resultado no portal', reserva_expirada: 'Reserva expirada' };
-const SITUACOES: Record<string, string> = { enviada: 'Enviada', bloqueada_opt_out: 'Não enviada: paciente desligou', sem_celular: 'Não enviada: sem celular' };
+const SITUACOES: Record<string, string> = { enviada: 'Enviada', bloqueada_opt_out: 'Não enviada: paciente desligou', sem_celular: 'Não enviada: sem celular', modelo_desligado: 'Não enviada: aviso desligado pela gerência' };
 
 /**
  * WhatsApp do paciente na recepção: se está ligado, o histórico de mensagens e a troca com motivo.

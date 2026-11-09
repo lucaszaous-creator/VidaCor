@@ -86,7 +86,7 @@ import type { CadeiaDoAtendimento, PedidoDossie } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
 import type { ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
 import type { NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
-import type { ComunicacaoDoPaciente, LembretesEnfileirados } from './contrato-comunicacao';
+import type { AvisoAutomatico, ComunicacaoDoPaciente, LembretesEnfileirados, MensagemDoRegistro, MudancaDeAviso, PainelDeComunicacao } from './contrato-comunicacao';
 import type {
   ContaDetalhe,
   ContratoDeConvenio,
@@ -248,6 +248,10 @@ export type ConfereLinhaDaListaDePacientes = Cabe<LinhaDaListaDePacientes, S['Li
 export type ConfereParDuplicado = Cabe<ParDuplicado, S['ParDuplicado']>;
 export type ConfereDecisaoSobreDuplicado = Cabe<DecisaoSobreDuplicado, S['DecisaoSobreDuplicado']>;
 export type ConfereDecisaoRegistrada = Cabe<DecisaoRegistrada, S['DecisaoRegistrada']>;
+export type ConferePainelDeComunicacao = Cabe<PainelDeComunicacao, S['PainelDeComunicacao']>;
+export type ConfereMensagemDoRegistro = Cabe<MensagemDoRegistro, S['MensagemDoRegistro']>;
+export type ConfereAvisoAutomatico = Cabe<AvisoAutomatico, S['AvisoAutomatico']>;
+export type ConfereMudancaDeAviso = Cabe<MudancaDeAviso, S['MudancaDeAviso']>;
 export type ConferePainelDeEtiquetas = Cabe<PainelDeEtiquetas, S['PainelDeEtiquetas']>;
 export type ConfereLinhaDeEtiqueta = Cabe<LinhaDeEtiqueta, S['LinhaDeEtiqueta']>;
 export type ConfereDivergenciaDeSala = Cabe<DivergenciaDeSala, S['DivergenciaDeSala']>;

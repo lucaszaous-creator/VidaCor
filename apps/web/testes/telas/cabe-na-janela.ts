@@ -303,6 +303,12 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await ir('/etiquetas');
   await esperar(page, 'list', 'Eventos da etiqueta');
   await ok('49-etiquetas');
+  await ir('/comunicacao');
+  await esperar(page, 'tab', 'Mensagens enviadas');
+  await ok('50-comunicacao');
+  await page.getByRole('tab', { name: 'Mensagens automáticas' }).click();
+  await esperar(page, 'list', 'Mensagens automáticas');
+  await ok('50b-comunicacao-automaticas');
   await ir('/pacientes');
   await esperar(page, 'complementary', 'Resumo do paciente');
   await page.getByRole('button', { name: /^Maria Helena Duarte de Albuquerque Cavalcanti, nascimento/ }).click();

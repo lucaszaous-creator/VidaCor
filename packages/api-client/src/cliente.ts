@@ -119,7 +119,7 @@ import type {
 } from './contrato-convenios';
 import type { DecisaoDePerfil, ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
 import type { ContaBancaria, NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
-import type { ComunicacaoDoPaciente, LembretesEnfileirados, PreferenciaWhatsapp } from './contrato-comunicacao';
+import type { AvisoAutomatico, ComunicacaoDoPaciente, FiltroDeMensagens, LembretesEnfileirados, ModeloDeAviso, MudancaDeAviso, PainelDeComunicacao, PreferenciaWhatsapp } from './contrato-comunicacao';
 import type {
   AutorizacaoDetalhe,
   AutorizacaoResumo,
@@ -814,6 +814,12 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
         escrever<ComunicacaoDoPaciente>('POST', `/v1/pacientes/${seg(id)}/comunicacao`, corpo),
       /** Confirmação por WhatsApp dos agendamentos do dia (repetir não manda de novo). */
       lembretes: (data: string): Promise<LembretesEnfileirados> => escrever<LembretesEnfileirados>('POST', '/v1/comunicacao/lembretes', { data }),
+      /** Registro de mensagens dos últimos 7 dias e avisos automáticos (recepção e gerência). */
+      painel: (filtro: FiltroDeMensagens = 'todas'): Promise<PainelDeComunicacao> =>
+        ler<PainelDeComunicacao>(`/v1/comunicacao${filtro === 'todas' ? '' : `?${new URLSearchParams({ filtro }).toString()}`}`),
+      /** Liga ou desliga um aviso automático (gerência), pela versão vista. */
+      mudarAviso: (modelo: ModeloDeAviso, corpo: MudancaDeAviso, o: OpcoesDeEscrita): Promise<AvisoAutomatico> =>
+        criar<AvisoAutomatico>('POST', `/v1/comunicacao/automaticas/${seg(modelo)}`, corpo, o),
     },
 
     indicadores: {

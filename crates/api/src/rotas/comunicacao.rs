@@ -103,11 +103,21 @@ pub async fn enviar_aviso(
     .fetch_optional(&mut *tx)
     .await?
     .unwrap_or(true);
+    // Aviso desligado pela gerência na unidade (versão vigente; sem versão, ligado). DEC-2026-11-09-132.
+    let ligado = sqlx::query_scalar!(
+        "SELECT ativo FROM comunicacao.envio_automatico x
+          WHERE modelo = $1 AND NOT EXISTS (SELECT 1 FROM comunicacao.envio_automatico s WHERE s.substitui = x.id)",
+        modelo
+    )
+    .fetch_optional(&mut *tx)
+    .await?
+    .unwrap_or(true);
     let mut provedor_id = None;
-    let situacao = match (permitido, celular) {
-        (false, _) => "bloqueada_opt_out",
-        (true, None) => "sem_celular",
-        (true, Some(celular)) => {
+    let situacao = match (ligado, permitido, celular) {
+        (false, _, _) => "modelo_desligado",
+        (true, false, _) => "bloqueada_opt_out",
+        (true, true, None) => "sem_celular",
+        (true, true, Some(celular)) => {
             let mensageiro = estado
                 .mensageiro
                 .clone()

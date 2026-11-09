@@ -2337,6 +2337,151 @@
         }
       }
     },
+    "/v1/comunicacao": {
+      "get": {
+        "tags": [
+          "comunicacao"
+        ],
+        "summary": "Registro de mensagens e avisos automáticos (recepção e gerência).",
+        "operationId": "painel_de_comunicacao",
+        "parameters": [
+          {
+            "name": "filtro",
+            "in": "query",
+            "description": "todas, nao_entregues (opt-out, sem celular, aviso desligado) ou confirmaram.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PainelDeComunicacao"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/comunicacao/automaticas/{modelo}": {
+      "post": {
+        "tags": [
+          "comunicacao"
+        ],
+        "summary": "Liga ou desliga um aviso automático da unidade (gerência), com motivo e a versão vista.",
+        "operationId": "mudar_aviso_automatico",
+        "parameters": [
+          {
+            "name": "modelo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MudancaDeAviso"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvisoAutomatico"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/comunicacao/lembretes": {
       "post": {
         "tags": [
@@ -13506,6 +13651,56 @@
           }
         }
       },
+      "AvisoAutomatico": {
+        "type": "object",
+        "required": [
+          "modelo",
+          "nome",
+          "descricao",
+          "ativo"
+        ],
+        "properties": {
+          "alterado_em": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "alterado_por": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ativo": {
+            "type": "boolean"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "modelo": {
+            "type": "string"
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "nome": {
+            "type": "string"
+          },
+          "versao_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "Versão vigente (informar na mudança). Sem versão: ligado desde a instalação."
+          }
+        }
+      },
       "Bloqueio": {
         "type": "object",
         "required": [
@@ -14652,6 +14847,38 @@
             "description": "em_conferencia, pronta, com_pendencia, em_lote, enviada, paga, paga_com_glosa ou glosada."
           },
           "valor_total_centavos": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ContagemDeHoje": {
+        "type": "object",
+        "required": [
+          "enviadas",
+          "confirmaram",
+          "opt_out",
+          "sem_celular",
+          "desligadas"
+        ],
+        "properties": {
+          "confirmaram": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "desligadas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "enviadas": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "opt_out": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sem_celular": {
             "type": "integer",
             "format": "int64"
           }
@@ -18121,6 +18348,53 @@
           }
         }
       },
+      "MensagemDoRegistro": {
+        "type": "object",
+        "required": [
+          "id",
+          "paciente_id",
+          "nome",
+          "nascimento",
+          "modelo",
+          "situacao",
+          "criado_em"
+        ],
+        "properties": {
+          "criado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "modelo": {
+            "type": "string"
+          },
+          "nascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "paciente_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "resposta": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "confirmou, saiu ou nenhuma."
+          },
+          "situacao": {
+            "type": "string",
+            "description": "enviada, bloqueada_opt_out, sem_celular ou modelo_desligado."
+          }
+        }
+      },
       "MenuDoObjeto": {
         "type": "object",
         "required": [
@@ -18272,6 +18546,29 @@
           "tipo": {
             "type": "string",
             "description": "desativar ou reativar."
+          }
+        }
+      },
+      "MudancaDeAviso": {
+        "type": "object",
+        "required": [
+          "ativo",
+          "motivo"
+        ],
+        "properties": {
+          "ativo": {
+            "type": "boolean"
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "versao_vista": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "Versão vista na tela (`versao_id`); `null` quando o aviso nunca foi mudado."
           }
         }
       },
@@ -20133,6 +20430,43 @@
           "quase_erros_no_mes": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "PainelDeComunicacao": {
+        "type": "object",
+        "required": [
+          "whatsapp_configurado",
+          "hoje",
+          "mensagens",
+          "automaticas",
+          "pacientes_sem_whatsapp"
+        ],
+        "properties": {
+          "automaticas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AvisoAutomatico"
+            }
+          },
+          "hoje": {
+            "$ref": "#/components/schemas/ContagemDeHoje"
+          },
+          "mensagens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MensagemDoRegistro"
+            },
+            "description": "Últimos 7 dias, até 200, mais recentes primeiro."
+          },
+          "pacientes_sem_whatsapp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Pacientes com WhatsApp desligado (opt-out) na unidade."
+          },
+          "whatsapp_configurado": {
+            "type": "boolean",
+            "description": "O núcleo tem o provedor de WhatsApp configurado (sem ele, os avisos ficam no outbox)."
           }
         }
       },

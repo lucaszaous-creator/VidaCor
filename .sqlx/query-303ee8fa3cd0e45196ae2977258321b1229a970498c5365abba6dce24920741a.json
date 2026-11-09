@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT ativo FROM comunicacao.envio_automatico x\n          WHERE modelo = $1 AND NOT EXISTS (SELECT 1 FROM comunicacao.envio_automatico s WHERE s.substitui = x.id)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "ativo",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "comunicacao.envio_automatico",
+            "name": "ativo"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "303ee8fa3cd0e45196ae2977258321b1229a970498c5365abba6dce24920741a"
+}

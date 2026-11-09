@@ -73,6 +73,7 @@ pub enum Ato {
     PacotesAdministrar,
     // Agente 1 (DEC-2026-11-09-124): etiquetas e rastreio.
     DivergenciaResolver,
+    ComunicacaoConfigurar,
 }
 
 impl Ato {
@@ -180,6 +181,8 @@ impl Ato {
             // Divergência de pulseira bipada na sala errada: quem atende o paciente resolve (recepção,
             // técnico e coordenação), com o encaminhamento registrado (Etiquetas.dc.html, DEC-2026-11-09-129).
             A::DivergenciaResolver => &["recepcao", "tecnico", "gerente"],
+            // Ligar ou desligar aviso automático da unidade (Comunicacao.dc.html, DEC-2026-11-09-132).
+            A::ComunicacaoConfigurar => &["gerente"],
         };
         perfis.contains(&perfil)
     }
@@ -189,7 +192,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 68] = [
+    const TODOS: [Ato; 69] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -258,6 +261,7 @@ mod testes {
         Ato::PacotesVer,
         Ato::PacotesAdministrar,
         Ato::DivergenciaResolver,
+        Ato::ComunicacaoConfigurar,
     ];
 
     #[test]
