@@ -486,6 +486,20 @@ async fn conferir_pela_rota(amb: &Ambiente, uri_pedido: &str, corpo: Value) {
         .await;
     assert_eq!(st, StatusCode::CREATED, "{m}");
     let pedido = m["pendentes"][0]["id"].as_str().unwrap().to_owned();
+    // Registro de CRM só é aprovado com consulta regular no CFM (DEC-2026-11-09-120).
+    if let Some(r) = m["pendentes"][0]["registro"].as_object() {
+        let medico = m["id"].as_str().unwrap();
+        let (st, _, c) = amb
+            .pedir(amb.json(
+                Method::POST,
+                &format!("/v1/corpo-clinico/{medico}/consultas-crm"),
+                &p,
+                None,
+                json!({ "uf": r["uf"], "numero": r["numero"], "fonte": "portal_cfm", "situacao": "regular", "observacao": "portal do CFM, busca por CRM e UF" }),
+            ))
+            .await;
+        assert_eq!(st, StatusCode::CREATED, "{c}");
+    }
     let h = amb.entrar("helena.gerencia").await;
     let (st, _, d) = amb
         .pedir(amb.json(
