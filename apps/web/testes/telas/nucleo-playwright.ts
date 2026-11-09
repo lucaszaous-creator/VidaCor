@@ -28,6 +28,7 @@ import { agendaDoDia, atendimentoDe, itensDaAgenda, SALAS } from '../dados/ficti
 import { autorizacoesIniciais } from '../dados/autorizacao.ts';
 import { CONTRATO_UNIMED, faturamentoInicial, painelDe } from '../dados/faturamento.ts';
 import { achadosDoLaudoAntonio } from '../dados/laudo-estruturado.ts';
+import { convenioUnimed, conveniosIniciais, pacotesIniciais, precosUnimed, propostaUnimed } from '../dados/convenios.ts';
 import { estornoDaSonia, pedidoDaSonia } from '../dados/pendencias.ts';
 
 export interface EstadoDaSimulacao {
@@ -230,6 +231,19 @@ export async function simularNucleo(page: Page, estado: EstadoDaSimulacao): Prom
       const evs = Array.from({ length: 30 }, (_, i) => ({ sequencia: i + 1, dominio: 'recepcao', tipo: 'evento_de_teste', registro_codigo: 'ATD-2026-000031', criado_em: '2026-11-06T11:00:00Z', origem: 'recepcao', hash: '3f9ac21b77e0', integro: true }));
       return json(route, { paciente: { id: 'p', nome: 'Sônia Maria Castro', nascimento: '1962-02-03' }, atendimento_codigo: 'ATD-2026-000031', nos: Array.from({ length: 12 }, (_, i) => ({ tipo: 'etiqueta', id: `n${String(i)}`, codigo: `ETQ-2026-0000${String(i)}`, situacao: 'valida', criado_em: '2026-11-06T11:00:00Z' })), eventos: evs, integra: true });
     }
+    // Convênios e pacotes: listas longas de propósito (rolam dentro do painel, nunca a página).
+    if (c === '/v1/convenios') {
+      const base = conveniosIniciais(true);
+      const extras = Array.from({ length: 18 }, (_, k) => ({ ...base[1], id: `cvn${String(k)}`, codigo: `CVN-2026-0001${String(10 + k)}`, operadora: k === 0 ? 'Caixa de Assistência dos Servidores Públicos Municipais Fictícia' : `Operadora fictícia ${String(k)}` }));
+      return json(route, [...base, ...extras]);
+    }
+    if (/^\/v1\/convenios\/[^/]+\/precos$/.test(c)) return json(route, precosUnimed(40));
+    if (/^\/v1\/convenios\/[^/]+\/previa-de-reajuste$/.test(c)) {
+      const p = propostaUnimed();
+      return json(route, { base_versao: 14, pontos_base: 520, afetados: 142, total_antes_centavos: p.total_antes_centavos, total_depois_centavos: p.total_depois_centavos, maiores: p.maiores });
+    }
+    if (/^\/v1\/convenios\/[^/]+$/.test(c)) return json(route, convenioUnimed(true));
+    if (c === '/v1/pacotes') return json(route, pacotesIniciais(16));
     if (c.startsWith('/v1/faturamento/')) {
       // Lista longa de propósito: rola dentro do painel, nunca a página.
       const f = faturamentoInicial();

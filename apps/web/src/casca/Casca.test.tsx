@@ -13,13 +13,13 @@ beforeEach(() => {
 
 describe('Menu lateral por perfil (conforto; o servidor decide)', () => {
   it.each([
-    ['recepção', SESSOES.recepcao, ['Início', 'Agenda e check-in', 'Novo agendamento', 'Pacientes', 'Lista de espera', 'Orçamento particular', 'Exame externo', 'Novo paciente', 'Recepção e pulseiras', 'TV de chamada', 'Autorizações', 'Exames e procedimentos', 'Qualidade', 'Ouvidoria', 'Contingência']],
+    ['recepção', SESSOES.recepcao, ['Início', 'Agenda e check-in', 'Novo agendamento', 'Pacientes', 'Lista de espera', 'Orçamento particular', 'Exame externo', 'Novo paciente', 'Recepção e pulseiras', 'Check-up e pacotes', 'TV de chamada', 'Autorizações', 'Exames e procedimentos', 'Qualidade', 'Ouvidoria', 'Contingência']],
     ['técnico', SESSOES.tecnico, ['Agenda e check-in', 'Pacientes', 'Sala de exame', 'Qualidade']],
     ['médico', SESSOES.medico, ['Agenda e check-in', 'Pacientes', 'Sala de exame', 'Laudar', 'Conciliar estudos', 'Qualidade']],
     ['caixa', SESSOES.caixa, ['Caixa (particular)', 'Qualidade']],
-    ['gerência', SESSOES.gerente, ['Início', 'Agenda e check-in', 'Novo agendamento', 'Pacientes', 'Lista de espera', 'Orçamento particular', 'Exame externo', 'Novo paciente', 'Recepção e pulseiras', 'TV de chamada', 'Autorizações', 'Fluxo de laudos', 'Financeiro', 'Indicadores', 'Estoque', 'Pendências do caixa', 'Faturamento TISS', 'Auditoria do faturamento', 'Configurações', 'Aparelhos', 'Usuários e perfis', 'Corpo clínico', 'Exames e procedimentos', 'Qualidade', 'Ouvidoria', 'Lastro', 'Contingência']],
+    ['gerência', SESSOES.gerente, ['Início', 'Agenda e check-in', 'Novo agendamento', 'Pacientes', 'Lista de espera', 'Orçamento particular', 'Exame externo', 'Novo paciente', 'Recepção e pulseiras', 'Check-up e pacotes', 'TV de chamada', 'Autorizações', 'Fluxo de laudos', 'Financeiro', 'Indicadores', 'Estoque', 'Pendências do caixa', 'Faturamento TISS', 'Auditoria do faturamento', 'Configurações', 'Aparelhos', 'Usuários e perfis', 'Corpo clínico', 'Exames e procedimentos', 'Convênios e tabelas', 'Qualidade', 'Ouvidoria', 'Lastro', 'Contingência']],
     ['TI', SESSOES.ti, ['Configurações', 'Aparelhos', 'Usuários e perfis', 'Qualidade']],
-    ['faturista', SESSOES.faturista, ['Autorizações', 'Faturamento TISS', 'Auditoria do faturamento', 'Qualidade']],
+    ['faturista', SESSOES.faturista, ['Autorizações', 'Faturamento TISS', 'Auditoria do faturamento', 'Convênios e tabelas', 'Qualidade']],
   ])('%s vê só os módulos do perfil', (_nome, sessao, esperados) => {
     expect(secoesDoMenu(sessao.usuario.perfis).flatMap((s) => s.itens.map((i) => i.rotulo))).toEqual(esperados);
   });
