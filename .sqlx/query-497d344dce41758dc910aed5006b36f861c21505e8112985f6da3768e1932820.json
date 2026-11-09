@@ -1,0 +1,24 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT EXISTS (SELECT 1 FROM laudos.versao WHERE laudo_id = $1 AND numero > $2) AS \"ha!\"",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "ha!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "497d344dce41758dc910aed5006b36f861c21505e8112985f6da3768e1932820"
+}

@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE corpo.pedido SET situacao = $2, decidido_por = $3, decidido_em = now(), motivo_decisao = $4, versao = versao + 1\n          WHERE id = $1 AND situacao = 'aguardando'",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "2afecf10295f1f63b9e16b328f0671efcce2e6d115846d0f868a2aec07f16933"
+}

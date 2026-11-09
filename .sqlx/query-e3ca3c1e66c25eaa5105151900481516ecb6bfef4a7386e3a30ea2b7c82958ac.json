@@ -1,0 +1,136 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT a.codigo, a.inicio, a.fim, a.exame_tuss, a.exame_nome, a.situacao, p.nome AS paciente_nome,\n                  p.nascimento, s.nome AS sala, g.operadora AS \"operadora?\"\n             FROM agenda.agendamento a\n             JOIN identidade.paciente p ON p.id = a.paciente_id\n             JOIN agenda.sala s ON s.id = a.sala_id\n             LEFT JOIN convenio.guia g ON g.id = a.guia_id\n            WHERE a.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "inicio",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "inicio"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "fim",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "fim"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "exame_tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "exame_tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "exame_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "exame_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "paciente_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "sala",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.sala",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "operadora?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "convenio.guia",
+            "name": "operadora"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "e3ca3c1e66c25eaa5105151900481516ecb6bfef4a7386e3a30ea2b7c82958ac"
+}

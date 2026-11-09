@@ -1,0 +1,19 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO financeiro.pacote_item (pacote_id, ordem, tuss, preparo, porque, unidade_id)\n         SELECT $1, o, t, p, q, $6 FROM unnest($2::int[], $3::text[], $4::text[], $5::text[]) AS u(o, t, p, q)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4Array",
+        "TextArray",
+        "TextArray",
+        "TextArray",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "e110f181707f5451eb603a28bf2483a73d5e1d77519f4883f29bc61d713e7b93"
+}

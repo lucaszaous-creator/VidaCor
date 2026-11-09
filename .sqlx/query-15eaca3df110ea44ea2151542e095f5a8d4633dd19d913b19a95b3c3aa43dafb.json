@@ -1,0 +1,21 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO qualidade.nao_conformidade (id, codigo, descricao, classificacao, gravidade, criado_por, origem, unidade_id, correlacao) VALUES ($1, $2, $3, $4, $5, $6, 'qualidade', $7, $8)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "15eaca3df110ea44ea2151542e095f5a8d4633dd19d913b19a95b3c3aa43dafb"
+}

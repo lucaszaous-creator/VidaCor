@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE corpo.certificado SET vigente = false, versao = versao + 1 WHERE id = $1 AND vigente",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "2b6ae792de8101aad8c400bff5874880efbdebe675b984fcecab8209c67f200d"
+}

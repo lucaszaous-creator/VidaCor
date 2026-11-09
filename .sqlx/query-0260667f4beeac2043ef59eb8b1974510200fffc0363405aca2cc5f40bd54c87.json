@@ -1,0 +1,136 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT r.codigo, r.situacao, r.forma, r.desconto_centavos, r.total_centavos, r.pago_em, p.nome AS paciente_nome, p.cpf,\n                  u.nome AS \"recebido_por?\", n.numero AS \"nfse?\"\n             FROM caixa.recebimento r\n             JOIN identidade.paciente p ON p.id = r.paciente_id\n             LEFT JOIN identidade.usuario u ON u.id = r.criado_por\n             LEFT JOIN caixa.nota_fiscal n ON n.recebimento_id = r.id AND n.situacao = 'emitida'\n            WHERE r.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "forma",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "forma"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "desconto_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "desconto_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "total_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "total_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "pago_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento",
+            "name": "pago_em"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "paciente_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "cpf",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "cpf"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "recebido_por?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "nfse?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.nota_fiscal",
+            "name": "numero"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "0260667f4beeac2043ef59eb8b1974510200fffc0363405aca2cc5f40bd54c87"
+}

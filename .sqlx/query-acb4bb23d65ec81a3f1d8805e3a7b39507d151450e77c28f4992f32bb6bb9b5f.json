@@ -1,0 +1,90 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT k.id AS pacote_id, x.ordem::int AS \"ordem!\", x.tuss AS \"tuss!\", pc.nome, pc.duracao_min, i.preparo AS \"preparo?\", i.porque AS \"porque?\"\n             FROM financeiro.pacote k\n             CROSS JOIN LATERAL unnest(k.tuss) WITH ORDINALITY AS x(tuss, ordem)\n             JOIN agenda.procedimento pc ON pc.tuss = x.tuss\n             LEFT JOIN financeiro.pacote_item i ON i.pacote_id = k.id AND i.tuss = x.tuss\n            WHERE k.id = ANY($1)\n            ORDER BY k.id, coalesce(i.ordem, x.ordem::int)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "pacote_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "financeiro.pacote",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "ordem!",
+        "type_info": "Int4",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "tuss!",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 3,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "duracao_min",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "duracao_min"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "preparo?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.pacote_item",
+            "name": "preparo"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "porque?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "financeiro.pacote_item",
+            "name": "porque"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "UuidArray"
+      ]
+    },
+    "nullable": [
+      false,
+      null,
+      null,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "acb4bb23d65ec81a3f1d8805e3a7b39507d151450e77c28f4992f32bb6bb9b5f"
+}

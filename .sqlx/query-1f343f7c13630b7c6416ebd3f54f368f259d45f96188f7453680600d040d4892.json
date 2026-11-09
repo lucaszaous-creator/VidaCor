@@ -1,0 +1,40 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT descricao, valor_centavos FROM caixa.recebimento_item WHERE recebimento_id = $1 ORDER BY descricao",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "descricao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento_item",
+            "name": "descricao"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "valor_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "caixa.recebimento_item",
+            "name": "valor_centavos"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "1f343f7c13630b7c6416ebd3f54f368f259d45f96188f7453680600d040d4892"
+}

@@ -56,6 +56,21 @@ pub enum Ato {
     FluxoLaudosVer,
     OuvidoriaRegistrar,
     OuvidoriaTratar,
+    QualidadeTratar,
+    CorpoClinicoAdministrar,
+    CatalogoVer,
+    CatalogoAdministrar,
+    CabecalhoAdministrar,
+    ModeloLaudoUsar,
+    RevisaoPorParRevisar,
+    LaudoCoordenar,
+    PreparoAdministrar,
+    DocumentoEmitir,
+    ConveniosVer,
+    ConveniosAdministrar,
+    ConveniosAprovar,
+    PacotesVer,
+    PacotesAdministrar,
 }
 
 impl Ato {
@@ -126,9 +141,40 @@ impl Ato {
             // Ouvidoria: a recepção registra; a gerência (ouvidoria) lê e responde.
             A::OuvidoriaRegistrar => &["recepcao", "gerente"],
             A::OuvidoriaTratar => &["gerente"],
+            // Qualidade: a gerência (Núcleo de Segurança do Paciente) lê e trata.
+            A::QualidadeTratar => &["gerente"],
+            // Modelos de laudo e frases (docs/04 Laudar): o médico usa, cria os seus e propõe os da
+            // clínica; revisão por par: o médico revisa o laudo de outro (docs/18 § 3, médico
+            // revisor). Coordenar (aprovar modelo da clínica, sortear revisão, ver resultados): perfil
+            // gerente, e o núcleo exige também o perfil médico (coordenação médica, DEC-2026-11-08-100).
+            A::ModeloLaudoUsar | A::RevisaoPorParRevisar => &["medico"],
+            A::LaudoCoordenar => &["gerente"],
             // Autorização pedida pelo sistema (docs/22 E4): recepção e faturista pedem; gerente acompanha.
             A::AutorizacaoPedir => &["recepcao", "faturista"],
             A::AutorizacaoVer => &["recepcao", "faturista", "gerente"],
+            // Corpo clínico (docs/04: médico novo e mudanças só valem após segunda conferência): a
+            // gerência pede; a conferência é de OUTRA pessoa da gerência (PerfilConferir).
+            A::CorpoClinicoAdministrar => &["gerente"],
+            // Exames e procedimentos e tabela de preços (docs/04 Cadastros base): a recepção consulta;
+            // a gerência inclui, muda e publica versão nova de preços (DEC-2026-11-08-93 e 94).
+            A::CatalogoVer => &["recepcao", "gerente"],
+            A::CatalogoAdministrar => &["gerente"],
+            // Cabeçalho impresso nos documentos da unidade (DEC-2026-11-08-92).
+            A::CabecalhoAdministrar => &["gerente"],
+            // Preparo do exame (versão nova com motivo) e documentos do atendimento entregues ao
+            // paciente: comprovante e declaração de comparecimento (DEC-2026-11-09-106 a 108).
+            A::PreparoAdministrar => &["gerente"],
+            A::DocumentoEmitir => &["recepcao", "gerente"],
+            // Convênios e tabelas (Convenios-Tabelas.dc.html): o faturamento cadastra o contrato, as
+            // regras de autorização e propõe a tabela nova; a gerência acompanha e aprova a proposta
+            // (segunda pessoa: quem propõe não aprova, também no banco). DEC-2026-11-09-110 a 114.
+            A::ConveniosVer => &["faturista", "gerente"],
+            A::ConveniosAdministrar => &["faturista"],
+            A::ConveniosAprovar => &["gerente"],
+            // Check-up e pacotes: a recepção consulta para orientar o paciente; a gerência publica versão
+            // nova (composição, ordem do roteiro e preço). DEC-2026-11-09-115 a 117.
+            A::PacotesVer => &["recepcao", "gerente"],
+            A::PacotesAdministrar => &["gerente"],
         };
         perfis.contains(&perfil)
     }
@@ -138,7 +184,7 @@ impl Ato {
 mod testes {
     use super::*;
 
-    const TODOS: [Ato; 52] = [
+    const TODOS: [Ato; 67] = [
         Ato::AgendaVer,
         Ato::AgendaAgendar,
         Ato::GuiaRegistrar,
@@ -191,6 +237,21 @@ mod testes {
         Ato::FluxoLaudosVer,
         Ato::OuvidoriaRegistrar,
         Ato::OuvidoriaTratar,
+        Ato::QualidadeTratar,
+        Ato::CorpoClinicoAdministrar,
+        Ato::CatalogoVer,
+        Ato::CatalogoAdministrar,
+        Ato::CabecalhoAdministrar,
+        Ato::ModeloLaudoUsar,
+        Ato::RevisaoPorParRevisar,
+        Ato::LaudoCoordenar,
+        Ato::PreparoAdministrar,
+        Ato::DocumentoEmitir,
+        Ato::ConveniosVer,
+        Ato::ConveniosAdministrar,
+        Ato::ConveniosAprovar,
+        Ato::PacotesVer,
+        Ato::PacotesAdministrar,
     ];
 
     #[test]
@@ -249,7 +310,13 @@ mod testes {
 
     #[test]
     fn clinico_so_para_medico() {
-        for ato in [Ato::TriagemConduta, Ato::LaudoEscrever, Ato::LaudoLer] {
+        for ato in [
+            Ato::TriagemConduta,
+            Ato::LaudoEscrever,
+            Ato::LaudoLer,
+            Ato::ModeloLaudoUsar,
+            Ato::RevisaoPorParRevisar,
+        ] {
             for p in [
                 "recepcao",
                 "tecnico",
@@ -260,6 +327,63 @@ mod testes {
             ] {
                 assert!(!ato.concedido_a(p), "{ato:?} {p}");
             }
+        }
+    }
+
+    #[test]
+    fn cadastros_base_sao_da_gerencia_e_a_recepcao_so_consulta_o_catalogo() {
+        for ato in [
+            Ato::CorpoClinicoAdministrar,
+            Ato::CatalogoAdministrar,
+            Ato::CabecalhoAdministrar,
+        ] {
+            assert!(ato.concedido_a("gerente"), "{ato:?}");
+            for p in ["recepcao", "medico", "ti", "caixa", "financeiro", "tecnico"] {
+                assert!(!ato.concedido_a(p), "{ato:?} {p}");
+            }
+        }
+        assert!(Ato::CatalogoVer.concedido_a("recepcao"));
+        assert!(Ato::CatalogoVer.concedido_a("gerente"));
+        for p in ["ti", "medico", "caixa", "tv"] {
+            assert!(!Ato::CatalogoVer.concedido_a(p), "{p}");
+        }
+    }
+
+    #[test]
+    fn convenio_o_faturamento_propoe_e_a_gerencia_aprova() {
+        assert!(Ato::ConveniosAdministrar.concedido_a("faturista"));
+        assert!(Ato::ConveniosAprovar.concedido_a("gerente"));
+        assert!(!Ato::ConveniosAprovar.concedido_a("faturista"));
+        assert!(!Ato::ConveniosAdministrar.concedido_a("gerente"));
+        for p in [
+            "recepcao",
+            "caixa",
+            "medico",
+            "ti",
+            "financeiro",
+            "tecnico",
+            "tv",
+        ] {
+            for ato in [
+                Ato::ConveniosVer,
+                Ato::ConveniosAdministrar,
+                Ato::ConveniosAprovar,
+            ] {
+                assert!(!ato.concedido_a(p), "{ato:?} {p}");
+            }
+        }
+    }
+
+    #[test]
+    fn pacote_a_recepcao_consulta_e_a_gerencia_publica() {
+        assert!(Ato::PacotesVer.concedido_a("recepcao"));
+        assert!(Ato::PacotesVer.concedido_a("gerente"));
+        assert!(Ato::PacotesAdministrar.concedido_a("gerente"));
+        for p in ["recepcao", "caixa", "medico", "ti", "faturista", "tv"] {
+            assert!(!Ato::PacotesAdministrar.concedido_a(p), "{p}");
+        }
+        for p in ["caixa", "medico", "ti", "tv"] {
+            assert!(!Ato::PacotesVer.concedido_a(p), "{p}");
         }
     }
 }

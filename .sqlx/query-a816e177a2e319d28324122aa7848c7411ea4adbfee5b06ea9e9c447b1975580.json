@@ -1,0 +1,148 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT v.modelo_id, v.numero, v.texto, v.motivo, v.situacao, v.proposta_por AS proposta_por_id, p.nome AS proposta_por,\n                  d.nome AS \"decidido_por?\", v.decidido_em, v.motivo_decisao, v.criado_em\n             FROM laudos.modelo_versao v\n             JOIN identidade.usuario p ON p.id = v.proposta_por\n             LEFT JOIN identidade.usuario d ON d.id = v.decidido_por\n            WHERE v.modelo_id = ANY($1) ORDER BY v.modelo_id, v.numero DESC",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "modelo_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo_versao",
+            "name": "modelo_id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "numero",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo_versao",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "texto",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo_versao",
+            "name": "texto"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo_versao",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo_versao",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "proposta_por_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo_versao",
+            "name": "proposta_por"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "proposta_por",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "decidido_por?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "decidido_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo_versao",
+            "name": "decidido_em"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "motivo_decisao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo_versao",
+            "name": "motivo_decisao"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "laudos.modelo_versao",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "UuidArray"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "a816e177a2e319d28324122aa7848c7411ea4adbfee5b06ea9e9c447b1975580"
+}

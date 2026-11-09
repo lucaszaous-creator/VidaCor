@@ -8,14 +8,18 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { agendaDoDia, atendimentoDe, itensDaAgenda, SALAS, SESSAO } from './dados/ficticios';
 import { manipuladoresFase1, reiniciarFase1 } from './nucleo-fase1';
-import { comunicacaoSimulada, lastroSimulado, manipuladoresComunicacao, manipuladoresEstoque, manipuladoresFinanceiro, manipuladoresExterno, manipuladoresIndicadores, manipuladoresPainel, manipuladoresOrcamento, manipuladoresAparelhos, manipuladoresEspera, manipuladoresVisualizacao, manipuladoresConfiguracoes, manipuladoresPaciente, manipuladoresInicio, manipuladoresFluxo, manipuladoresBusca, manipuladoresOuvidoria, chamadasSimuladas, manipuladoresNfse, manipuladoresUsuarios, usuariosCriados, manipuladoresLastro } from './nucleo-estoque';
+import { comunicacaoSimulada, lastroSimulado, manipuladoresComunicacao, manipuladoresEstoque, manipuladoresFinanceiro, manipuladoresExterno, manipuladoresIndicadores, manipuladoresPainel, manipuladoresOrcamento, manipuladoresAparelhos, manipuladoresEspera, manipuladoresVisualizacao, manipuladoresConfiguracoes, manipuladoresPaciente, manipuladoresInicio, manipuladoresFluxo, manipuladoresBusca, manipuladoresOuvidoria, manipuladoresQualidade, chamadasSimuladas, manipuladoresNfse, manipuladoresUsuarios, usuariosCriados, manipuladoresLastro } from './nucleo-estoque';
 import { manipuladoresAutorizacao, reiniciarAutorizacoes } from './nucleo-autorizacao';
 import { manipuladoresFaturamento, reiniciarFaturamento } from './nucleo-faturamento';
 import { manipuladoresLaudoEstruturado, reiniciarLaudoEstruturado } from './nucleo-laudo-estruturado';
 import { manipuladoresDocumentos } from './nucleo-documentos';
+import { manipuladoresModelos, reiniciarModelos } from './nucleo-modelos';
+import { manipuladoresPreparo, reiniciarPreparo } from './nucleo-preparo';
 import { manipuladoresMenu } from './nucleo-menu';
 import { manipuladoresCadastro, manipuladoresPortal, portalSimulado } from './nucleo-portal';
 import { manipuladoresAReceber, manipuladoresPendencias, reiniciarPendencias } from './nucleo-pendencias';
+import { manipuladoresCadastros, reiniciarCadastros } from './nucleo-cadastros';
+import { manipuladoresConvenios, reiniciarConvenios } from './nucleo-convenios';
 import { problema } from './problema';
 
 export { problema } from './problema';
@@ -41,6 +45,10 @@ export function reiniciarNucleo(): void {
   reiniciarLaudoEstruturado();
   reiniciarFaturamento();
   reiniciarAutorizacoes();
+  reiniciarCadastros();
+  reiniciarModelos();
+  reiniciarPreparo();
+  reiniciarConvenios();
   portalSimulado.logado = false;
   lastroSimulado.integra = true;
   comunicacaoSimulada.whatsapp = true;
@@ -119,4 +127,4 @@ export const manipuladores = [
   }),
 ];
 
-export const servidor = setupServer(...manipuladoresOuvidoria, ...manipuladoresBusca, ...manipuladoresFluxo, ...manipuladoresDocumentos, ...manipuladoresInicio, ...manipuladoresPaciente, ...manipuladoresConfiguracoes, ...manipuladoresVisualizacao, ...manipuladoresEspera, ...manipuladoresAparelhos, ...manipuladoresOrcamento, ...manipuladoresAutorizacao, ...manipuladoresPainel, ...manipuladoresExterno, ...manipuladoresFaturamento, ...manipuladoresNfse, ...manipuladoresUsuarios, ...manipuladoresFinanceiro, ...manipuladoresComunicacao, ...manipuladoresIndicadores, ...manipuladoresLaudoEstruturado, ...manipuladoresLastro, ...manipuladoresEstoque, ...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores);
+export const servidor = setupServer(...manipuladoresPreparo, ...manipuladoresQualidade, ...manipuladoresCadastros, ...manipuladoresOuvidoria, ...manipuladoresBusca, ...manipuladoresFluxo, ...manipuladoresDocumentos, ...manipuladoresInicio, ...manipuladoresPaciente, ...manipuladoresConfiguracoes, ...manipuladoresVisualizacao, ...manipuladoresEspera, ...manipuladoresAparelhos, ...manipuladoresOrcamento, ...manipuladoresAutorizacao, ...manipuladoresPainel, ...manipuladoresExterno, ...manipuladoresFaturamento, ...manipuladoresNfse, ...manipuladoresUsuarios, ...manipuladoresFinanceiro, ...manipuladoresComunicacao, ...manipuladoresIndicadores, ...manipuladoresLaudoEstruturado, ...manipuladoresLastro, ...manipuladoresEstoque, ...manipuladoresCadastro, ...manipuladoresPortal, ...manipuladoresMenu, ...manipuladoresAReceber, ...manipuladoresPendencias, ...manipuladoresFase1, ...manipuladores, ...manipuladoresModelos, ...manipuladoresConvenios);

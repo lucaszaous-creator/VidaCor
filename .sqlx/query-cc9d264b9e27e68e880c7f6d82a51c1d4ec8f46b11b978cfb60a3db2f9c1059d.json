@@ -1,0 +1,24 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO documentos.registro_profissional (id, usuario_id, conselho, uf, numero, rqe, especialidade, motivo, pedido_id, criado_por, origem, unidade_id, correlacao)\n             VALUES ($1, $2, 'CRM', $3, $4, $5, $6, $7, $8, $9, 'corpo_clinico', $10, $11)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "cc9d264b9e27e68e880c7f6d82a51c1d4ec8f46b11b978cfb60a3db2f9c1059d"
+}

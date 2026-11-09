@@ -1,0 +1,158 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT e.id, e.codigo, e.tipo, e.quase_erro, e.gravidade, e.descricao, p.nome AS \"paciente?\", e.anonimo, u.nome AS notificado_por,\n                  e.criado_em, e.notificar_anvisa_ate, e.situacao\n             FROM qualidade.evento e JOIN identidade.usuario u ON u.id = e.criado_por LEFT JOIN identidade.paciente p ON p.id = e.paciente_id\n            WHERE e.situacao <> 'concluido' OR e.criado_em > now() - interval '90 days'\n            ORDER BY (e.situacao = 'concluido'), e.notificar_anvisa_ate NULLS LAST, e.criado_em DESC LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "qualidade.evento",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "qualidade.evento",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "tipo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "qualidade.evento",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "quase_erro",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "qualidade.evento",
+            "name": "quase_erro"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "gravidade",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "qualidade.evento",
+            "name": "gravidade"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "descricao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "qualidade.evento",
+            "name": "descricao"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "paciente?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "anonimo",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "qualidade.evento",
+            "name": "anonimo"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "notificado_por",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "qualidade.evento",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "notificar_anvisa_ate",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "qualidade.evento",
+            "name": "notificar_anvisa_ate"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "qualidade.evento",
+            "name": "situacao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "bdf9bf70722ea7a81b7b0774d0ba914c007f4b23392c2ae3399301c14e9e67d0"
+}

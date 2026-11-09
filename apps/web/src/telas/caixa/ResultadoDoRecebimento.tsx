@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import type { Estorno, Recebimento } from '@vidacor/api-client';
 import { AreaDeTexto, Aviso, Botao, BotaoDeIcone, Chip, DialogoDeFormulario, formatarDinheiro, type CorDoChip } from '@vidacor/design-system';
 import { useState } from 'react';
+import { BaixarDocumento } from '../../componentes/BaixarDocumento';
 import { ErroDoAto } from '../../componentes/ErroDoAto';
 import { useDependencias } from '../../contexto';
 import { useOperacao } from '../../operacao';
@@ -175,6 +176,7 @@ export function ResultadoDoRecebimento({ r: inicial }: { r: Recebimento }) {
         </>
       )}
       {r.situacao !== 'aguardando_pagamento' && <NotaDoRecebimento recebimentoId={r.id} />}
+      {r.situacao === 'pago' && <BaixarDocumento rotulo="Recibo" ato="gerar o recibo" baixar={() => api.documentos.recibo(r.id)} />}
       <PedidoDeEstorno recebimento={r} />
     </div>
   );

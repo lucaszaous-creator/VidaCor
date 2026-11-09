@@ -56,11 +56,66 @@ import type { CatalogoDoOrcamento, NovoOrcamento, Orcamento } from './contrato-o
 import type { IntegracaoVista } from './contrato-configuracoes';
 import type { VisaoDoPaciente } from './contrato-paciente';
 import type { InicioDoDia } from './contrato-inicio';
+import type { NovoPreparo, PreparoDoExame, VersaoDoPreparo } from './contrato-preparo';
 import type { FluxoDeLaudos } from './contrato-fluxo';
+import type {
+  CasoDeRevisao,
+  DecisaoDePendencia,
+  DecisaoDeVersaoDeModelo,
+  FraseDeLaudo,
+  ItemDaFilaDeRevisao,
+  ModeloDeLaudo,
+  NovaFraseDeLaudo,
+  NovaVersaoDeModelo,
+  NovoModeloDeLaudo,
+  PainelDeRevisao,
+  ParecerDeRevisao,
+  RevisaoDesignada,
+  RevisaoDoMeuLaudo,
+  RevisoesDoAutor,
+  ResultadoDoSorteio,
+  UsoDeModelo,
+} from './contrato-modelos';
 import type { ResultadoDaBusca } from './contrato-busca';
+import type { AndamentoNovo, NovaNaoConformidade, NovoEventoAdverso, PainelDaQualidade, ProtocoloDeQualidade } from './contrato-qualidade';
 import type { Manifestacao, NovaManifestacao, PainelDaOuvidoria, ProtocoloDaManifestacao } from './contrato-ouvidoria';
 import type { BloqueioDeSala, OfertaDeVaga, PedidoBloqueio, PedidoDeEspera, PedidoInclusao } from './contrato-espera';
 import type { AparelhoCadastrado, MudancaDeAparelho, NovoAparelho, PainelDosAparelhos } from './contrato-aparelhos';
+import type {
+  CabecalhoDosDocumentos,
+  CatalogoDeExames,
+  DecisaoDoCorpoClinico,
+  MedicoDoCorpoClinico,
+  MudancaNoProcedimento,
+  MudancaRegistradaNoCatalogo,
+  NovaVersaoDaTabela,
+  NovoCabecalho,
+  NovoPedidoDoCorpoClinico,
+  NovoProcedimento,
+  PedidoDoCorpoClinico,
+  ProcedimentoDoCatalogo,
+  VersaoDaTabelaDePreco,
+  ConsultaCrm,
+  NovaConsultaCrm,
+  NovoCertificado,
+} from './contrato-cadastros';
+import type {
+  AlteracaoDoConvenio,
+  CatalogoDePacotes,
+  ConvenioDetalhe,
+  ConvenioResumo,
+  DecisaoDaPropostaDeTabela,
+  NovaPropostaDeTabela,
+  NovasRegrasDeAutorizacao,
+  NovaVersaoDoPacoteDeCheckup,
+  NovoConvenio,
+  NovoPacoteDeCheckup,
+  PacoteDeCheckup,
+  PrecosDoConvenio,
+  PreviaDeReajuste,
+  PropostaDeTabela,
+  RegrasDeAutorizacaoDoConvenio,
+} from './contrato-convenios';
 import type { DecisaoDePerfil, ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
 import type { ContaBancaria, NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
 import type { ComunicacaoDoPaciente, LembretesEnfileirados, PreferenciaWhatsapp } from './contrato-comunicacao';
@@ -367,6 +422,18 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
         criar<Manifestacao>('POST', `/v1/ouvidoria/${seg(id)}/resposta`, { resposta }, o),
     },
 
+    /** Qualidade: equipe abre e notifica; a gerência (NSP) lê e trata. */
+    qualidade: {
+      painel: (): Promise<PainelDaQualidade> => ler<PainelDaQualidade>('/v1/qualidade'),
+      abrirNc: (corpo: NovaNaoConformidade, o: OpcoesDeEscrita): Promise<ProtocoloDeQualidade> => criar<ProtocoloDeQualidade>('POST', '/v1/qualidade/nao-conformidades', corpo, o),
+      notificar: (corpo: NovoEventoAdverso, o: OpcoesDeEscrita): Promise<ProtocoloDeQualidade> => criar<ProtocoloDeQualidade>('POST', '/v1/qualidade/eventos', corpo, o),
+      /** A rota responde 200 sem corpo; a confirmação explícita deixa a tela mostrar que gravou. */
+      andamento: (id: string, corpo: AndamentoNovo, o: OpcoesDeEscrita): Promise<{ registrado: true }> =>
+        criar<unknown>('POST', `/v1/qualidade/nao-conformidades/${seg(id)}/andamento`, corpo, o).then(() => ({ registrado: true as const })),
+      situacaoDoEvento: (id: string, situacao: 'em_analise' | 'concluido', o: OpcoesDeEscrita): Promise<{ registrado: true }> =>
+        criar<unknown>('POST', `/v1/qualidade/eventos/${seg(id)}/situacao`, { situacao }, o).then(() => ({ registrado: true as const })),
+    },
+
     /** Busca global: só o que o perfil pode ver. */
     buscar: (q: string): Promise<ResultadoDaBusca[]> => ler<ResultadoDaBusca[]>(`/v1/busca?q=${encodeURIComponent(q)}`),
 
@@ -399,12 +466,132 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
         criar<BloqueioDeSala>('POST', `/v1/bloqueios/${seg(id)}/retirada`, { motivo }, o),
     },
 
+    /** Modelos de laudo (médico; aprovação da clínica pela coordenação médica). Sem dado de paciente. */
+    modelosDeLaudo: {
+      listar: (): Promise<ModeloDeLaudo[]> => ler<ModeloDeLaudo[]>('/v1/modelos-de-laudo'),
+      obter: (id: string): Promise<ModeloDeLaudo> => ler<ModeloDeLaudo>(`/v1/modelos-de-laudo/${seg(id)}`),
+      criar: (corpo: NovoModeloDeLaudo, o: OpcoesDeEscrita): Promise<ModeloDeLaudo> => criar<ModeloDeLaudo>('POST', '/v1/modelos-de-laudo', corpo, o),
+      /** Pessoal: publica na hora; da clínica: vira proposta. Motivo obrigatório. */
+      novaVersao: (id: string, corpo: NovaVersaoDeModelo, o: OpcoesDeEscrita): Promise<ModeloDeLaudo> =>
+        criar<ModeloDeLaudo>('POST', `/v1/modelos-de-laudo/${seg(id)}/versoes`, corpo, o),
+      /** Coordenação médica; quem propôs não decide. */
+      decidir: (id: string, numero: number, corpo: DecisaoDeVersaoDeModelo): Promise<ModeloDeLaudo> =>
+        escrever<ModeloDeLaudo>('POST', `/v1/modelos-de-laudo/${seg(id)}/versoes/${String(numero)}/decisao`, corpo),
+      desativar: (id: string, motivo: string): Promise<ModeloDeLaudo> =>
+        escrever<ModeloDeLaudo>('POST', `/v1/modelos-de-laudo/${seg(id)}/desativacao`, { motivo }),
+    },
+
+    /** Frases rápidas do laudo (atalho com ponto). */
+    frasesDeLaudo: {
+      listar: (): Promise<FraseDeLaudo[]> => ler<FraseDeLaudo[]>('/v1/frases-de-laudo'),
+      criar: (corpo: NovaFraseDeLaudo, o: OpcoesDeEscrita): Promise<FraseDeLaudo> => criar<FraseDeLaudo>('POST', '/v1/frases-de-laudo', corpo, o),
+      desativar: (id: string, motivo: string): Promise<FraseDeLaudo> =>
+        escrever<FraseDeLaudo>('POST', `/v1/frases-de-laudo/${seg(id)}/desativacao`, { motivo }),
+    },
+
+    /** Revisão por pares (RADPEER): revisor, autor e coordenação médica. */
+    revisaoPorPares: {
+      fila: (): Promise<ItemDaFilaDeRevisao[]> => ler<ItemDaFilaDeRevisao[]>('/v1/revisoes-por-pares/fila'),
+      /** Abre o caso: a leitura do laudo é auditada. */
+      obter: (id: string): Promise<CasoDeRevisao> => ler<CasoDeRevisao>(`/v1/revisoes-por-pares/${seg(id)}`),
+      parecer: (id: string, corpo: ParecerDeRevisao, o: OpcoesDeEscrita): Promise<CasoDeRevisao> =>
+        criar<CasoDeRevisao>('POST', `/v1/revisoes-por-pares/${seg(id)}/parecer`, corpo, o),
+      conflito: (id: string, motivo: string): Promise<ItemDaFilaDeRevisao> =>
+        escrever<ItemDaFilaDeRevisao>('POST', `/v1/revisoes-por-pares/${seg(id)}/conflito`, { motivo }),
+      meusLaudos: (): Promise<RevisoesDoAutor> => ler<RevisoesDoAutor>('/v1/revisoes-por-pares/meus-laudos'),
+      decidirPendencia: (id: string, corpo: DecisaoDePendencia): Promise<RevisaoDoMeuLaudo> =>
+        escrever<RevisaoDoMeuLaudo>('POST', `/v1/revisoes-por-pares/${seg(id)}/pendencia`, corpo),
+      painel: (): Promise<PainelDeRevisao> => ler<PainelDeRevisao>('/v1/revisoes-por-pares/painel'),
+      sortear: (corpo: { quantidade: number; dias: number }, o: OpcoesDeEscrita): Promise<ResultadoDoSorteio> =>
+        criar<ResultadoDoSorteio>('POST', '/v1/revisoes-por-pares/sorteio', corpo, o),
+      designar: (corpo: { laudo_id: string; revisor_id: string }, o: OpcoesDeEscrita): Promise<RevisaoDesignada> =>
+        criar<RevisaoDesignada>('POST', '/v1/revisoes-por-pares', corpo, o),
+    },
+
     /** Aparelhos e integração DICOM (TI e gerência). */
     aparelhos: {
       painel: (): Promise<PainelDosAparelhos> => ler<PainelDosAparelhos>('/v1/aparelhos'),
       cadastrar: (corpo: NovoAparelho, o: OpcoesDeEscrita): Promise<AparelhoCadastrado> => criar<AparelhoCadastrado>('POST', '/v1/aparelhos', corpo, o),
       mudar: (id: string, corpo: MudancaDeAparelho, o: OpcoesDeEscrita): Promise<AparelhoCadastrado> =>
         criar<AparelhoCadastrado>('POST', `/v1/aparelhos/${seg(id)}/mudancas`, corpo, o),
+    },
+
+    /** Corpo clínico (gerência): toda mudança espera a conferência de outra pessoa e pede reautenticação. */
+    corpoClinico: {
+      listar: (): Promise<MedicoDoCorpoClinico[]> => ler<MedicoDoCorpoClinico[]>('/v1/corpo-clinico'),
+      historico: (id: string): Promise<PedidoDoCorpoClinico[]> => ler<PedidoDoCorpoClinico[]>(`/v1/corpo-clinico/${seg(id)}/historico`),
+      pedir: (id: string, corpo: NovoPedidoDoCorpoClinico, o: OpcoesDeEscrita): Promise<MedicoDoCorpoClinico> =>
+        criar<MedicoDoCorpoClinico>('POST', `/v1/corpo-clinico/${seg(id)}/pedidos`, corpo, o),
+      decidir: (pedidoId: string, corpo: DecisaoDoCorpoClinico, o: OpcoesDeEscrita): Promise<MedicoDoCorpoClinico> =>
+        criar<MedicoDoCorpoClinico>('POST', `/v1/corpo-clinico/pedidos/${seg(pedidoId)}/decisao`, corpo, o),
+      consultasCrm: (id: string): Promise<ConsultaCrm[]> => ler<ConsultaCrm[]>(`/v1/corpo-clinico/${seg(id)}/consultas-crm`),
+      consultarCrm: (id: string, corpo: NovaConsultaCrm, o: OpcoesDeEscrita): Promise<ConsultaCrm> =>
+        criar<ConsultaCrm>('POST', `/v1/corpo-clinico/${seg(id)}/consultas-crm`, corpo, o),
+      cadastrarCertificado: (id: string, corpo: NovoCertificado, o: OpcoesDeEscrita): Promise<MedicoDoCorpoClinico> =>
+        criar<MedicoDoCorpoClinico>('POST', `/v1/corpo-clinico/${seg(id)}/certificados`, corpo, o),
+    },
+
+    /** Exames e procedimentos e tabela de preços versionada (recepção consulta; gerência muda). */
+    catalogo: {
+      listar: (): Promise<CatalogoDeExames> => ler<CatalogoDeExames>('/v1/catalogo/procedimentos'),
+      historico: (tuss: string): Promise<MudancaRegistradaNoCatalogo[]> => ler<MudancaRegistradaNoCatalogo[]>(`/v1/catalogo/procedimentos/${seg(tuss)}/historico`),
+      incluir: (corpo: NovoProcedimento, o: OpcoesDeEscrita): Promise<ProcedimentoDoCatalogo> => criar<ProcedimentoDoCatalogo>('POST', '/v1/catalogo/procedimentos', corpo, o),
+      mudar: (tuss: string, corpo: MudancaNoProcedimento, o: OpcoesDeEscrita): Promise<ProcedimentoDoCatalogo> =>
+        criar<ProcedimentoDoCatalogo>('POST', `/v1/catalogo/procedimentos/${seg(tuss)}/mudancas`, corpo, o),
+      publicarTabela: (corpo: NovaVersaoDaTabela, o: OpcoesDeEscrita): Promise<VersaoDaTabelaDePreco> =>
+        criar<VersaoDaTabelaDePreco>('POST', '/v1/catalogo/tabelas-de-preco', corpo, o),
+    },
+
+    /** Preparo do exame por procedimento, versionado (recepção lê; gerência publica com motivo). */
+    preparos: {
+      listar: (): Promise<PreparoDoExame[]> => ler<PreparoDoExame[]>('/v1/preparos'),
+      versoes: (tuss: string): Promise<VersaoDoPreparo[]> => ler<VersaoDoPreparo[]>(`/v1/preparos/${seg(tuss)}`),
+      publicar: (tuss: string, corpo: NovoPreparo, o: OpcoesDeEscrita): Promise<VersaoDoPreparo> =>
+        criar<VersaoDoPreparo>('POST', `/v1/preparos/${seg(tuss)}`, corpo, o),
+    },
+
+    /** Documentos do atendimento em PDF: comprovante com preparo, declaração de comparecimento e recibo. */
+    documentos: {
+      comprovante: (agendamentoId: string): Promise<DocumentoBaixado> =>
+        baixar({ metodo: 'GET', caminho: `/v1/agendamentos/${seg(agendamentoId)}/comprovante` }),
+      declaracao: (atendimentoId: string): Promise<DocumentoBaixado> =>
+        baixar({ metodo: 'GET', caminho: `/v1/atendimentos/${seg(atendimentoId)}/declaracao` }),
+      recibo: (recebimentoId: string): Promise<DocumentoBaixado> =>
+        baixar({ metodo: 'GET', caminho: `/v1/caixa/recebimentos/${seg(recebimentoId)}/recibo` }),
+    },
+
+    /** Convênios e tabelas: o faturamento cadastra e propõe; a gerência aprova a tabela nova. */
+    convenios: {
+      listar: (): Promise<ConvenioResumo[]> => ler<ConvenioResumo[]>('/v1/convenios'),
+      obter: (id: string): Promise<ConvenioDetalhe> => ler<ConvenioDetalhe>(`/v1/convenios/${seg(id)}`),
+      precos: (id: string, versao?: number): Promise<PrecosDoConvenio> =>
+        ler<PrecosDoConvenio>(versao === undefined ? `/v1/convenios/${seg(id)}/precos` : `/v1/convenios/${seg(id)}/precos?versao=${String(versao)}`),
+      previa: (id: string, pontosBase: number): Promise<PreviaDeReajuste> =>
+        ler<PreviaDeReajuste>(`/v1/convenios/${seg(id)}/previa-de-reajuste?pontos_base=${String(pontosBase)}`),
+      cadastrar: (corpo: NovoConvenio, o: OpcoesDeEscrita): Promise<ConvenioDetalhe> => criar<ConvenioDetalhe>('POST', '/v1/convenios', corpo, o),
+      alterar: (id: string, corpo: AlteracaoDoConvenio, o: OpcoesDeEscrita): Promise<ConvenioDetalhe> =>
+        criar<ConvenioDetalhe>('POST', `/v1/convenios/${seg(id)}/alteracoes`, corpo, o),
+      propor: (id: string, corpo: NovaPropostaDeTabela, o: OpcoesDeEscrita): Promise<PropostaDeTabela> =>
+        criar<PropostaDeTabela>('POST', `/v1/convenios/${seg(id)}/propostas`, corpo, o),
+      decidir: (propostaId: string, corpo: DecisaoDaPropostaDeTabela, o: OpcoesDeEscrita): Promise<PropostaDeTabela> =>
+        criar<PropostaDeTabela>('POST', `/v1/convenios/propostas/${seg(propostaId)}/decisao`, corpo, o),
+      publicarRegras: (id: string, corpo: NovasRegrasDeAutorizacao, o: OpcoesDeEscrita): Promise<RegrasDeAutorizacaoDoConvenio> =>
+        criar<RegrasDeAutorizacaoDoConvenio>('POST', `/v1/convenios/${seg(id)}/regras-de-autorizacao`, corpo, o),
+    },
+
+    /** Check-up e pacotes: a recepção consulta; a gerência publica versão nova (o servidor confere o preço). */
+    pacotes: {
+      listar: (): Promise<CatalogoDePacotes> => ler<CatalogoDePacotes>('/v1/pacotes'),
+      criar: (corpo: NovoPacoteDeCheckup, o: OpcoesDeEscrita): Promise<PacoteDeCheckup> => criar<PacoteDeCheckup>('POST', '/v1/pacotes', corpo, o),
+      novaVersao: (codigo: string, corpo: NovaVersaoDoPacoteDeCheckup, o: OpcoesDeEscrita): Promise<PacoteDeCheckup> =>
+        criar<PacoteDeCheckup>('POST', `/v1/pacotes/${seg(codigo)}/versoes`, corpo, o),
+    },
+
+    /** Cabeçalho impresso nos documentos da unidade (gerência), versionado. */
+    cabecalho: {
+      ver: (): Promise<CabecalhoDosDocumentos> => ler<CabecalhoDosDocumentos>('/v1/configuracoes/cabecalho'),
+      publicar: (corpo: NovoCabecalho, o: OpcoesDeEscrita): Promise<CabecalhoDosDocumentos> =>
+        criar<CabecalhoDosDocumentos>('POST', '/v1/configuracoes/cabecalho', corpo, o),
     },
 
     /** Orçamento do particular: o servidor calcula preço, pacote e desconto (G1). */
@@ -486,6 +673,9 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
         criar<LinkCriado>('POST', `/v1/laudos/${seg(id)}/links`, { horas }, o),
       acessoDeEmergencia: (id: string, corpo: PedidoAcessoEmergencia, o: OpcoesDeEscrita): Promise<AcessoDeEmergencia> =>
         criar<AcessoDeEmergencia>('POST', `/v1/laudos/${seg(id)}/acesso-emergencia`, corpo, o),
+      /** Usa um modelo no rascunho: devolve o texto e grava a versão do modelo usada. */
+      usarModelo: (id: string, corpo: { modelo_id: string; numero: number }, o: OpcoesDeEscrita): Promise<UsoDeModelo> =>
+        criar<UsoDeModelo>('POST', `/v1/laudos/${seg(id)}/usos-de-modelo`, corpo, o),
       /** Achados estruturados da versão em edição (ou da vigente, se assinado). Leitura auditada. */
       achados: (id: string): Promise<AchadosDoLaudo> => ler<AchadosDoLaudo>(`/v1/laudos/${seg(id)}/achados`),
       /** Novo achado no rascunho: o servidor calcula categoria e conduta e grava a versão da regra. */

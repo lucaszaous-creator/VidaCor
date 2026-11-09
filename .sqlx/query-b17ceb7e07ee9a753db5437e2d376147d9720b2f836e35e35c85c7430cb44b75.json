@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE corpo.habilitacao SET vigente = false, versao = versao + 1 WHERE usuario_id = $1 AND vigente AND unidade_id = $2",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "b17ceb7e07ee9a753db5437e2d376147d9720b2f836e35e35c85c7430cb44b75"
+}

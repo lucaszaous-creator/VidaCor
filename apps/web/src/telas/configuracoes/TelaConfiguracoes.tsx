@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import type { IntegracaoVista } from '@vidacor/api-client';
-import { Aviso, Chip, Vazio } from '@vidacor/design-system';
+import { Aviso, Botao, Chip, Vazio } from '@vidacor/design-system';
 import { useState } from 'react';
 import { CabecalhoDaTela, EstadoDaConsulta } from '../../componentes/Bloco';
+import { consultaSessao } from '../../consultas';
 import { useDependencias } from '../../contexto';
+import { CabecalhoDosDocumentos } from './CabecalhoDosDocumentos';
 
 const SITUACAO: Record<IntegracaoVista['situacao'], { texto: string; cor: 'verde' | 'ambar' | 'cinza' | 'azul' | 'rosa' }> = {
   em_uso: { texto: 'Em uso', cor: 'verde' },
@@ -82,6 +84,10 @@ export function TelaConfiguracoes() {
   const { api } = useDependencias();
   const lista = useQuery({ queryKey: ['integracoes'], queryFn: () => api.integracoes() });
   const [escolhida, setEscolhida] = useState<string>('email');
+  // Painel da direita: a integração escolhida ou o cabeçalho dos documentos (só a gerência edita).
+  const [cabecalho, setCabecalho] = useState(false);
+  const sessao = useQuery(consultaSessao(api));
+  const gerencia = sessao.data?.usuario.perfis.includes('gerente') ?? false;
   const atual = lista.data?.find((i) => i.id === escolhida) ?? null;
   return (
     <>
@@ -103,6 +109,7 @@ export function TelaConfiguracoes() {
                       style={{ width: '100%', textAlign: 'left', display: 'flex', gap: 10, alignItems: 'center', padding: '10px 8px', border: 0, background: i.id === escolhida ? 'var(--line)' : 'transparent', borderBottom: '1px solid var(--line)', cursor: 'pointer', font: 'inherit', color: 'inherit' }}
                       onClick={() => {
                         setEscolhida(i.id);
+                        setCabecalho(false);
                       }}
                     >
                       <span style={{ flex: 1, minWidth: 0 }}>
@@ -121,6 +128,19 @@ export function TelaConfiguracoes() {
               Outras configurações
             </h2>
             <ul className="col" style={{ gap: 6, listStyle: 'none', margin: 0, padding: 0 }}>
+              {gerencia && (
+                <li>
+                  <Botao
+                    pequeno
+                    onPress={() => {
+                      setCabecalho(true);
+                    }}
+                  >
+                    Cabeçalho dos documentos
+                  </Botao>
+                  <span className="t13 mute">, nome, CNPJ, endereço e responsável técnico impressos no laudo e no dossiê.</span>
+                </li>
+              )}
               {OUTRAS.map((o) => (
                 <li key={o.href}>
                   <Link to={o.href} className="b">
@@ -132,8 +152,8 @@ export function TelaConfiguracoes() {
             </ul>
           </nav>
         </div>
-        <section className="card pane" aria-label="Detalhe da integração">
-          <div className="scroll">{atual === null ? <Vazio titulo="Escolha uma integração." /> : <Detalhe i={atual} />}</div>
+        <section className="card pane" aria-label={cabecalho ? 'Cabeçalho dos documentos' : 'Detalhe da integração'}>
+          <div className="scroll">{cabecalho ? <CabecalhoDosDocumentos /> : atual === null ? <Vazio titulo="Escolha uma integração." /> : <Detalhe i={atual} />}</div>
         </section>
       </div>
     </>

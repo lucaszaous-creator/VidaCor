@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO faturamento.preco (tabela_id, tuss, descricao, valor_centavos, unidade_id)\n             SELECT $1, tuss, descricao, valor_centavos, unidade_id FROM faturamento.tabela_proposta_preco WHERE proposta_id = $2",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "fdffe874e6b0f48efa12ad28cb8421d72ab9becb6fef878610587f78bb6d0593"
+}

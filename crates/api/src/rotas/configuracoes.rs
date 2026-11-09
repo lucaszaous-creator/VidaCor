@@ -30,6 +30,7 @@ pub async fn integracoes(
             "email" => estado.correio.is_some(),
             "whatsapp" => estado.mensageiro.is_some(),
             "nfse" => estado.prefeitura.is_some(),
+            "cfm" => estado.cfm.is_some(),
             "pix" => estado.psp.is_some(),
             "assinatura" => estado.assinador.is_some(),
             "visualizador" => estado.config.visualizador_url.is_some(),

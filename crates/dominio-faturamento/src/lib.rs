@@ -4,12 +4,14 @@
 //!   pendências; guia com pendência que impede o lote não entra em lote.
 //! - [`tiss`]: montagem da guia SP/SADT e do lote no padrão TISS 4.03.00 (XSD oficial da ANS em
 //!   `xsd/tiss-4.03.00`), com o hash do epílogo e o SHA-256 do arquivo para o lastro.
+//! - [`tabela`]: reajuste em lote da tabela de preços do convênio e a prévia para a aprovação.
 //!
 //! O núcleo (crate `api`) lê o banco, chama estas funções e grava o resultado com a versão da regra.
 
 pub mod auditoria;
 pub mod autorizacao;
 pub mod guia;
+pub mod tabela;
 pub mod tiss;
 
 pub use auditoria::{auditar, conjunto, ContextoAuditoria, Efeito, Pendencia, CONJUNTOS};

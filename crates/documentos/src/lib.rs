@@ -1,15 +1,22 @@
-//! Documentos do VidaCor em PDF (docs/11 § 9.1 `documentos/`, ADR-0002): laudo impresso e dossiê do
-//! lastro, com Typst embutido como biblioteca. Este crate não conhece HTTP, SQL nem provedores (G5):
-//! recebe os dados já autorizados e montados pelo núcleo e devolve os bytes do PDF com o SHA-256.
+//! Documentos do VidaCor em PDF (docs/11 § 9.1 `documentos/`, ADR-0002): laudo impresso, dossiê do
+//! lastro e documentos do atendimento (comprovante com preparo, declaração e recibo), com Typst
+//! embutido como biblioteca. Este crate não conhece HTTP, SQL nem provedores (G5): recebe
+//! os dados já autorizados e montados pelo núcleo e devolve os bytes do PDF com o SHA-256.
 //!
 //! Regras (docs/17 SEC-INJ-4): o modelo é código fixo do binário, versionado pelo nome
 //! ([`MODELO_LAUDO`], [`MODELO_DOSSIE`]); o dado do paciente entra como dado JSON e é colocado no
 //! documento como texto, nunca interpretado como marcação Typst.
 
+mod atendimento;
 mod dossie;
 mod laudo;
 mod motor;
 
+pub use atendimento::{
+    comprovante_pdf, declaracao_pdf, por_extenso, reais, recibo_pdf, ComprovanteAgendamento,
+    DeclaracaoComparecimento, EmissaoImpressa, ItemDoRecibo, PreparoImpresso, Recibo,
+    MODELO_COMPROVANTE, MODELO_DECLARACAO, MODELO_RECIBO,
+};
 pub use dossie::{dossie_pdf, DossieLastro, EventoDoDossie, NoDoDossie, MODELO_DOSSIE};
 pub use laudo::{
     codigo_verificacao, laudo_pdf, AchadoImpresso, Assinatura, LaudoImpresso, MedicoImpresso,

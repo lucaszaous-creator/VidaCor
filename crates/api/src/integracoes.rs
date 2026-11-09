@@ -92,6 +92,16 @@ pub const INTEGRACOES: &[Definicao] = &[
         modo_desenvolvimento: Some(("VIDACOR_ASSINADOR", "desenvolvimento")),
     },
     Definicao {
+        id: "cfm",
+        nome: "Consulta ao CFM (CRM)",
+        para_que: "Situação do CRM do médico no conselho, conferida antes de aprovar o registro no corpo clínico.",
+        variaveis: &[
+            v("VIDACOR_CFM_URL", "Endereço do webservice de consulta do CFM, dado no convênio com o conselho.", true, false),
+            v("VIDACOR_CFM_CHAVE", "Chave de acesso do convênio com o CFM.", true, true),
+        ],
+        modo_desenvolvimento: Some(("VIDACOR_CFM", "desenvolvimento")),
+    },
+    Definicao {
         id: "visualizador",
         nome: "Visualizador de imagens (OHIF)",
         para_que: "Abrir as imagens do estudo a partir do laudo.",

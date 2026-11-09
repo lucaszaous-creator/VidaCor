@@ -477,3 +477,90 @@ async fn dossie_so_para_gerencia_e_auditoria_e_codigo_desconhecido_nao_gera_nada
         0
     );
 }
+
+/// Pede (gerente) e confere (segunda pessoa da gerência) pela rota do corpo clínico.
+async fn conferir_pela_rota(amb: &Ambiente, uri_pedido: &str, corpo: Value) {
+    let p = amb.entrar("patricia.lemos").await;
+    let (st, _, m) = amb
+        .pedir(amb.json(Method::POST, uri_pedido, &p, Some(Uuid::now_v7()), corpo))
+        .await;
+    assert_eq!(st, StatusCode::CREATED, "{m}");
+    let pedido = m["pendentes"][0]["id"].as_str().unwrap().to_owned();
+    // Registro de CRM só é aprovado com consulta regular no CFM (DEC-2026-11-09-120).
+    if let Some(r) = m["pendentes"][0]["registro"].as_object() {
+        let medico = m["id"].as_str().unwrap();
+        let (st, _, c) = amb
+            .pedir(amb.json(
+                Method::POST,
+                &format!("/v1/corpo-clinico/{medico}/consultas-crm"),
+                &p,
+                None,
+                json!({ "uf": r["uf"], "numero": r["numero"], "fonte": "portal_cfm", "situacao": "regular", "observacao": "portal do CFM, busca por CRM e UF" }),
+            ))
+            .await;
+        assert_eq!(st, StatusCode::CREATED, "{c}");
+    }
+    let h = amb.entrar("helena.gerencia").await;
+    let (st, _, d) = amb
+        .pedir(amb.json(
+            Method::POST,
+            &format!("/v1/corpo-clinico/pedidos/{pedido}/decisao"),
+            &h,
+            None,
+            json!({ "aprovar": true, "motivo": "conferido com o documento do conselho" }),
+        ))
+        .await;
+    assert_eq!(st, StatusCode::OK, "{d}");
+}
+
+#[tokio::test]
+async fn crm_e_cabecalho_cadastrados_pelas_telas_passam_a_sair_no_laudo_impresso() {
+    let amb = Ambiente::novo().await;
+    sqlx::query("INSERT INTO identidade.usuario (id, codigo, login, nome, perfis, origem, unidade_id, correlacao) VALUES ($1, 'USR-helena.gerencia', 'helena.gerencia', 'Helena Prado', ARRAY['gerente'], 'seed', $2, 'seed')")
+        .bind(Uuid::now_v7()).bind(comum::UNIDADE_A).execute(&amb.admin).await.unwrap();
+    let laudo = laudo_assinado(&amb).await;
+    // Sem cadastro: o PDF diz que o registro não está cadastrado.
+    let sem_crm = pdf_da_equipe(&amb, "medico.a", laudo).await.conferir_pdf();
+    let paulo = amb.s.usuarios["medico.a"];
+    conferir_pela_rota(
+        &amb,
+        &format!("/v1/corpo-clinico/{paulo}/pedidos"),
+        json!({ "tipo": "registro", "registro": { "uf": "SP", "numero": "000000", "rqe": "0000", "especialidade": "Cardiologia" }, "motivo": "cadastro do corpo clínico" }),
+    )
+    .await;
+    // Mesma versão assinada; o que mudou foi só o registro vigente que o PDF lê.
+    let com_crm = pdf_da_equipe(&amb, "medico.a", laudo).await.conferir_pdf();
+    assert_ne!(com_crm, sem_crm, "o CRM cadastrado entra no PDF");
+    let lido: (String, String, Option<String>) = sqlx::query_as(
+        "SELECT uf, numero, rqe FROM documentos.registro_profissional WHERE usuario_id = $1 AND conselho = 'CRM' AND vigente",
+    )
+    .bind(paulo)
+    .fetch_one(&amb.admin)
+    .await
+    .unwrap();
+    assert_eq!(lido, ("SP".into(), "000000".into(), Some("0000".into())));
+    assert_eq!(
+        pdf_da_equipe(&amb, "medico.a", laudo).await.conferir_pdf(),
+        com_crm,
+        "estável enquanto nada muda"
+    );
+    // O cabeçalho publicado em Configurações também passa a sair.
+    let p = amb.entrar("patricia.lemos").await;
+    let (st, _, c) = amb
+        .pedir(amb.json(
+            Method::POST,
+            "/v1/configuracoes/cabecalho",
+            &p,
+            Some(Uuid::now_v7()),
+            json!({ "numero_atual": null, "nome": "VidaCor Imagem Centro", "razao_social": "VidaCor Diagnóstico por Imagem Ltda.",
+                    "cnpj": "11.222.333/0001-81", "endereco": "Rua Fictícia, 100, Centro", "telefone": "(11) 3000-0000",
+                    "site": null, "responsavel_nome": "Dra. Cecília Souto", "responsavel_crm_uf": "SP", "responsavel_crm_numero": "000001", "motivo": null }),
+        ))
+        .await;
+    assert_eq!(st, StatusCode::CREATED, "{c}");
+    let com_cabecalho = pdf_da_equipe(&amb, "medico.a", laudo).await.conferir_pdf();
+    assert_ne!(
+        com_cabecalho, com_crm,
+        "o cabeçalho cadastrado entra no PDF"
+    );
+}

@@ -1,0 +1,257 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, codigo, operadora, registro_ans, versao, codigo_prestador, nome_prestador, cnes, regra_versao,\n                  prazo_envio_dias, prazo_recurso_dias, prazo_pagamento_dias, vigencia_inicio, vigencia_fim, reajuste,\n                  contato_nome, contato_telefone, contato_email, autorizacao_por_webservice, ativo\n             FROM faturamento.contrato WHERE id = $1 AND unidade_id = $2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "operadora",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "operadora"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "registro_ans",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "registro_ans"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "versao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "versao"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "codigo_prestador",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "codigo_prestador"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "nome_prestador",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "nome_prestador"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "cnes",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "cnes"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "regra_versao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "regra_versao"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "prazo_envio_dias",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "prazo_envio_dias"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "prazo_recurso_dias",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "prazo_recurso_dias"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "prazo_pagamento_dias",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "prazo_pagamento_dias"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "vigencia_inicio",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "vigencia_inicio"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "vigencia_fim",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "vigencia_fim"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "reajuste",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "reajuste"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "contato_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "contato_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "contato_telefone",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "contato_telefone"
+          }
+        }
+      },
+      {
+        "ordinal": 17,
+        "name": "contato_email",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "contato_email"
+          }
+        }
+      },
+      {
+        "ordinal": 18,
+        "name": "autorizacao_por_webservice",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "autorizacao_por_webservice"
+          }
+        }
+      },
+      {
+        "ordinal": 19,
+        "name": "ativo",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "faturamento.contrato",
+            "name": "ativo"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "e30fcdceefd2c3e933883425a2bd1f7d8673f5007b7f59908dd5f65485a560e1"
+}

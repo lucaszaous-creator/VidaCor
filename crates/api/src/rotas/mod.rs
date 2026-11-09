@@ -13,13 +13,17 @@ pub mod autorizacoes_portal;
 pub mod autorizacoes_resposta;
 pub mod bloqueios;
 pub mod busca;
+pub mod cabecalho;
 pub mod cadastro;
 pub mod caixa;
 pub mod cancelamento;
+pub mod catalogo;
 pub mod chamada;
 pub mod comunicacao;
 pub mod configuracoes;
 pub mod contingencia;
+pub mod convenios;
+pub mod corpo_clinico;
 pub mod documentos;
 pub mod equipe;
 pub mod estoque;
@@ -31,23 +35,30 @@ pub mod externo;
 pub mod faturamento;
 pub mod financeiro;
 pub mod fluxo_laudos;
+pub mod frases_laudo;
 pub mod indicadores;
 pub mod inicio;
 pub mod lastro_explorador;
 pub mod laudos;
 pub mod lista_espera;
 pub mod menu;
+pub mod modelos_laudo;
 pub mod nfse;
 pub mod ofertas;
 pub mod orcamentos;
 pub mod ouvidoria;
 pub mod paciente_visao;
 pub mod pacientes;
+pub mod pacotes;
 pub mod pendencias;
 pub mod portal;
 pub mod portal_acesso;
+pub mod preparo;
+pub mod qualidade;
 pub mod repasse;
 pub mod respostas;
+pub mod revisao_coordenacao;
+pub mod revisao_pares;
 pub mod sala;
 pub mod saude;
 pub mod sessao;
@@ -169,6 +180,23 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/atendimentos/{id}/contraste", post(estoque::contraste))
         .route("/v1/lastro/cadeia", get(lastro_explorador::cadeia))
         .route("/v1/lastro/dossie", post(documentos::dossie::dossie))
+        .route(
+            "/v1/agendamentos/{id}/comprovante",
+            get(documentos::atendimento::comprovante),
+        )
+        .route(
+            "/v1/atendimentos/{id}/declaracao",
+            get(documentos::atendimento::declaracao),
+        )
+        .route(
+            "/v1/caixa/recebimentos/{id}/recibo",
+            get(documentos::atendimento::recibo),
+        )
+        .route("/v1/preparos", get(preparo::listar))
+        .route(
+            "/v1/preparos/{tuss}",
+            get(preparo::versoes).post(preparo::publicar),
+        )
         .route("/v1/indicadores", get(indicadores::indicadores))
         .route("/v1/usuarios", get(usuarios::listar).post(usuarios::criar))
         .route(
@@ -179,12 +207,79 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/painel-de-chamada", get(chamada::painel))
         .route("/v1/inicio", get(inicio::inicio))
         .route("/v1/busca", get(busca::buscar))
+        .route("/v1/qualidade", get(qualidade::painel))
+        .route("/v1/qualidade/nao-conformidades", post(qualidade::abrir_nc))
+        .route(
+            "/v1/qualidade/nao-conformidades/{id}/andamento",
+            post(qualidade::andamento),
+        )
+        .route("/v1/qualidade/eventos", post(qualidade::notificar))
+        .route(
+            "/v1/qualidade/eventos/{id}/situacao",
+            post(qualidade::situacao_evento),
+        )
         .route(
             "/v1/ouvidoria",
             get(ouvidoria::painel).post(ouvidoria::registrar),
         )
         .route("/v1/ouvidoria/{id}/resposta", post(ouvidoria::responder))
         .route("/v1/laudos/fluxo", get(fluxo_laudos::fluxo))
+        .route(
+            "/v1/modelos-de-laudo",
+            get(modelos_laudo::listar).post(modelos_laudo::criar),
+        )
+        .route("/v1/modelos-de-laudo/{id}", get(modelos_laudo::obter))
+        .route(
+            "/v1/modelos-de-laudo/{id}/versoes",
+            post(modelos_laudo::nova_versao),
+        )
+        .route(
+            "/v1/modelos-de-laudo/{id}/versoes/{numero}/decisao",
+            post(modelos_laudo::decidir),
+        )
+        .route(
+            "/v1/modelos-de-laudo/{id}/desativacao",
+            post(modelos_laudo::desativar),
+        )
+        .route("/v1/laudos/{id}/usos-de-modelo", post(modelos_laudo::usar))
+        .route(
+            "/v1/frases-de-laudo",
+            get(frases_laudo::listar).post(frases_laudo::criar),
+        )
+        .route(
+            "/v1/frases-de-laudo/{id}/desativacao",
+            post(frases_laudo::desativar),
+        )
+        .route(
+            "/v1/revisoes-por-pares",
+            post(revisao_coordenacao::designar),
+        )
+        .route(
+            "/v1/revisoes-por-pares/sorteio",
+            post(revisao_coordenacao::sortear),
+        )
+        .route(
+            "/v1/revisoes-por-pares/painel",
+            get(revisao_coordenacao::painel),
+        )
+        .route("/v1/revisoes-por-pares/fila", get(revisao_pares::fila))
+        .route(
+            "/v1/revisoes-por-pares/meus-laudos",
+            get(revisao_pares::meus_laudos),
+        )
+        .route("/v1/revisoes-por-pares/{id}", get(revisao_pares::obter))
+        .route(
+            "/v1/revisoes-por-pares/{id}/parecer",
+            post(revisao_pares::parecer),
+        )
+        .route(
+            "/v1/revisoes-por-pares/{id}/conflito",
+            post(revisao_pares::conflito),
+        )
+        .route(
+            "/v1/revisoes-por-pares/{id}/pendencia",
+            post(revisao_pares::decidir_pendencia),
+        )
         .route(
             "/v1/configuracoes/integracoes",
             get(configuracoes::integracoes),
@@ -212,6 +307,82 @@ pub fn rotas() -> Router<Estado> {
             get(aparelhos::listar).post(aparelhos::cadastrar),
         )
         .route("/v1/aparelhos/{id}/mudancas", post(aparelhos::mudar))
+        .route("/v1/corpo-clinico", get(corpo_clinico::listar))
+        .route(
+            "/v1/corpo-clinico/{id}/consultas-crm",
+            get(corpo_clinico::conferencias::consultas)
+                .post(corpo_clinico::conferencias::consultar),
+        )
+        .route(
+            "/v1/corpo-clinico/{id}/certificados",
+            post(corpo_clinico::conferencias::cadastrar_certificado),
+        )
+        .route(
+            "/v1/corpo-clinico/{id}/historico",
+            get(corpo_clinico::historico),
+        )
+        .route(
+            "/v1/corpo-clinico/{id}/pedidos",
+            post(corpo_clinico::pedidos::pedir),
+        )
+        .route(
+            "/v1/corpo-clinico/pedidos/{id}/decisao",
+            post(corpo_clinico::pedidos::decidir),
+        )
+        .route(
+            "/v1/catalogo/procedimentos",
+            get(catalogo::listar).post(catalogo::mudancas::incluir),
+        )
+        .route(
+            "/v1/catalogo/procedimentos/{tuss}/historico",
+            get(catalogo::historico),
+        )
+        .route(
+            "/v1/catalogo/procedimentos/{tuss}/mudancas",
+            post(catalogo::mudancas::mudar),
+        )
+        .route(
+            "/v1/catalogo/tabelas-de-preco",
+            post(catalogo::precos::publicar_tabela),
+        )
+        .route(
+            "/v1/configuracoes/cabecalho",
+            get(cabecalho::ver).post(cabecalho::publicar),
+        )
+        .route(
+            "/v1/convenios",
+            get(convenios::listar).post(convenios::contratos::cadastrar),
+        )
+        .route(
+            "/v1/convenios/propostas/{id}/decisao",
+            post(convenios::decisao::decidir),
+        )
+        .route("/v1/convenios/{id}", get(convenios::obter))
+        .route(
+            "/v1/convenios/{id}/alteracoes",
+            post(convenios::contratos::alterar),
+        )
+        .route("/v1/convenios/{id}/precos", get(convenios::tabelas::precos))
+        .route(
+            "/v1/convenios/{id}/previa-de-reajuste",
+            get(convenios::tabelas::previa),
+        )
+        .route(
+            "/v1/convenios/{id}/propostas",
+            post(convenios::tabelas::propor),
+        )
+        .route(
+            "/v1/convenios/{id}/regras-de-autorizacao",
+            post(convenios::regras::publicar),
+        )
+        .route(
+            "/v1/pacotes",
+            get(pacotes::listar).post(pacotes::publicar::criar),
+        )
+        .route(
+            "/v1/pacotes/{codigo}/versoes",
+            post(pacotes::publicar::nova_versao),
+        )
         .route("/v1/orcamentos/catalogo", get(orcamentos::catalogo))
         .route(
             "/v1/orcamentos",

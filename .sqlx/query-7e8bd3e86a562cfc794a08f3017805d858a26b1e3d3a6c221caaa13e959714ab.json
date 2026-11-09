@@ -1,0 +1,100 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT t.codigo, t.criado_em, t.situacao, a.exame_nome, p.nome AS paciente_nome, p.nascimento, p.cpf\n             FROM recepcao.atendimento t\n             JOIN agenda.agendamento a ON a.id = t.agendamento_id\n             JOIN identidade.paciente p ON p.id = t.paciente_id\n            WHERE t.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recepcao.atendimento",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "exame_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.agendamento",
+            "name": "exame_nome"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "paciente_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "nascimento",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "nascimento"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "cpf",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.paciente",
+            "name": "cpf"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "7e8bd3e86a562cfc794a08f3017805d858a26b1e3d3a6c221caaa13e959714ab"
+}

@@ -87,6 +87,7 @@ pub struct Ambiente {
     pub correio: std::sync::Arc<vidacor_api::correio::CorreioEmMemoria>,
     pub mensageiro: std::sync::Arc<vidacor_api::mensageiro::MensageiroEmMemoria>,
     pub prefeitura: std::sync::Arc<vidacor_api::prefeitura::PrefeituraEmMemoria>,
+    pub cfm: std::sync::Arc<vidacor_api::cfm::CfmEmMemoria>,
 }
 
 pub struct Sessao {
@@ -164,6 +165,9 @@ impl Ambiente {
         let prefeitura =
             std::sync::Arc::new(vidacor_api::prefeitura::PrefeituraEmMemoria::default());
         estado.prefeitura = Some(prefeitura.clone());
+        // Consulta ao CFM: provedor externo simulado em memória (G4); registro não cadastrado volta não encontrado.
+        let cfm = std::sync::Arc::new(vidacor_api::cfm::CfmEmMemoria::default());
+        estado.cfm = Some(cfm.clone());
         Self {
             app: aplicacao(estado.clone()),
             admin,
@@ -180,6 +184,7 @@ impl Ambiente {
             correio,
             mensageiro,
             prefeitura,
+            cfm,
         }
     }
 

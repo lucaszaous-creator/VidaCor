@@ -1,0 +1,24 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO agenda.procedimento_mudanca (id, codigo, tuss, tipo, motivo, versao_do_procedimento, antes, depois, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'catalogo', $10, $11)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Int4",
+        "Jsonb",
+        "Jsonb",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "9b53a78fc7f67079729a643059cd407e6afb35b898ac7b36c8bb3bb678a67bd9"
+}

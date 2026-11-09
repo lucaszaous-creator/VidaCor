@@ -1,0 +1,76 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT i.tuss, p.nome, i.exige_senha, i.validade_dias, i.documentos\n           FROM faturamento.regra_autorizacao_item i JOIN agenda.procedimento p ON p.tuss = i.tuss\n          WHERE i.regra_id = $1 ORDER BY i.exige_senha DESC, p.nome",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.regra_autorizacao_item",
+            "name": "tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "exige_senha",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "faturamento.regra_autorizacao_item",
+            "name": "exige_senha"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "validade_dias",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "faturamento.regra_autorizacao_item",
+            "name": "validade_dias"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "documentos",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.regra_autorizacao_item",
+            "name": "documentos"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "708be9b1dd8f4fdd5e50571f8ad9c2904b5271d7bda8111010f9ea54952e0baf"
+}

@@ -101,6 +101,15 @@ async fn main() -> Result<()> {
             vidacor_api::mensageiro::MensageiroCloudApi::novo(&api, &numero, &token)?,
         ));
     }
+    // CFM: simulado sem valor de conferência só com escolha explícita; o webservice entra com o
+    // convênio e a chave da clínica.
+    if std::env::var("VIDACOR_CFM").as_deref() == Ok("desenvolvimento") {
+        tracing::warn!("consulta ao CFM em modo de desenvolvimento: SEM VALOR DE CONFERÊNCIA");
+        estado.cfm = Some(std::sync::Arc::new(vidacor_api::cfm::CfmEmMemoria {
+            tudo_regular: true,
+            ..Default::default()
+        }));
+    }
     // NFS-e: simulado sem valor fiscal só com escolha explícita. O adaptador do município entra quando
     // ele e o certificado forem definidos (a tela de Configurações mostra o que falta).
     if std::env::var("VIDACOR_NFSE_PROVEDOR").as_deref() == Ok("desenvolvimento") {

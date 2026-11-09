@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT tuss, descricao, valor_anterior_centavos AS antes_centavos, valor_centavos AS depois_centavos\n             FROM faturamento.tabela_proposta_preco WHERE proposta_id = $1\n            ORDER BY (valor_anterior_centavos IS NULL), (valor_centavos - coalesce(valor_anterior_centavos, 0)) DESC, tuss\n            LIMIT 3",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tuss",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta_preco",
+            "name": "tuss"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "descricao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta_preco",
+            "name": "descricao"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "antes_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta_preco",
+            "name": "valor_anterior_centavos"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "depois_centavos",
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "faturamento.tabela_proposta_preco",
+            "name": "valor_centavos"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "61a557c924e3964db716e96477c53f8959a1d7d3f665cee0a3bd46796863f549"
+}

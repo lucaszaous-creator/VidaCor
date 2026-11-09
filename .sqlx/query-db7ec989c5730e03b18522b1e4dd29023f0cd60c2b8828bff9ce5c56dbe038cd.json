@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT numero, passos, chegar_antes_min, criado_em FROM agenda.preparo WHERE tuss = $1 AND vigente",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "numero",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "agenda.preparo",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "passos",
+        "type_info": "TextArray",
+        "origin": {
+          "Table": {
+            "table": "agenda.preparo",
+            "name": "passos"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "chegar_antes_min",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "agenda.preparo",
+            "name": "chegar_antes_min"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "agenda.preparo",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "db7ec989c5730e03b18522b1e4dd29023f0cd60c2b8828bff9ce5c56dbe038cd"
+}

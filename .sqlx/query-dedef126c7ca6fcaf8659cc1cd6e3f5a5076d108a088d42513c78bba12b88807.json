@@ -1,0 +1,174 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT p.id, p.codigo, p.medico_id, p.tipo, p.situacao, p.dados, p.motivo, p.pedido_por, q.nome AS pedido_por_nome,\n                  p.criado_em, d.nome AS \"decidido_por_nome?\", p.decidido_em, p.motivo_decisao\n             FROM corpo.pedido p\n             JOIN identidade.usuario q ON q.id = p.pedido_por\n             LEFT JOIN identidade.usuario d ON d.id = p.decidido_por\n            WHERE p.unidade_id = $1 AND ($2::uuid IS NULL OR p.medico_id = $2) AND (NOT $3 OR p.situacao = 'aguardando')\n            ORDER BY p.criado_em DESC LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "corpo.pedido",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.pedido",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "medico_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "corpo.pedido",
+            "name": "medico_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "tipo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.pedido",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.pedido",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "dados",
+        "type_info": "Jsonb",
+        "origin": {
+          "Table": {
+            "table": "corpo.pedido",
+            "name": "dados"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "motivo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.pedido",
+            "name": "motivo"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "pedido_por",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "corpo.pedido",
+            "name": "pedido_por"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "pedido_por_nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "corpo.pedido",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "decidido_por_nome?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "decidido_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "corpo.pedido",
+            "name": "decidido_em"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "motivo_decisao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.pedido",
+            "name": "motivo_decisao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Bool"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true
+    ]
+  },
+  "hash": "dedef126c7ca6fcaf8659cc1cd6e3f5a5076d108a088d42513c78bba12b88807"
+}

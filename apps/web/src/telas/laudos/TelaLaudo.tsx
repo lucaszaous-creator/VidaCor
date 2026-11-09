@@ -26,6 +26,7 @@ import { AcessoDeEmergencia, BotaoDeLiberacao, BotaoDePublicacao, CompartilharLa
 import { AbrirImagens } from './AbrirImagens';
 import { FilaDeLaudos, SITUACAO_DO_LAUDO } from './FilaDeLaudos';
 import { PainelDeAchados } from './PainelDeAchados';
+import { PainelDeModelos } from './PainelDeModelos';
 import { useRascunho } from './useRascunho';
 
 const rota = getRouteApi('/app/laudos/$laudoId');
@@ -110,6 +111,12 @@ function EditorDoRascunho({ laudo, versao, retomada }: { laudo: Laudo; versao: V
           Assinar (ICP-Brasil)
         </Botao>
       </div>
+      <PainelDeModelos
+        laudo={laudo}
+        aoInserir={(t) => {
+          r.mudar(r.texto.trim() === '' ? t : `${r.texto}\n\n${t}`);
+        }}
+      />
       <PainelDeAchados
         laudo={laudo}
         aoLevarAoTexto={(t) => {

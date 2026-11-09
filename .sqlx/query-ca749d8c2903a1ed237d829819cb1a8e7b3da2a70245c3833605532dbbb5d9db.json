@@ -1,0 +1,158 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT n.id, n.codigo, n.descricao, n.classificacao, n.gravidade, r.nome AS \"responsavel?\", n.prazo_em, n.situacao, n.eficaz,\n                  a.nome AS aberta_por, n.criado_em, n.versao\n             FROM qualidade.nao_conformidade n JOIN identidade.usuario a ON a.id = n.criado_por LEFT JOIN identidade.usuario r ON r.id = n.responsavel_id\n            WHERE n.situacao <> 'encerrada' OR n.criado_em > now() - interval '90 days'\n            ORDER BY (n.situacao = 'encerrada'), n.prazo_em NULLS LAST, n.criado_em LIMIT 200",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "qualidade.nao_conformidade",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "qualidade.nao_conformidade",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "descricao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "qualidade.nao_conformidade",
+            "name": "descricao"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "classificacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "qualidade.nao_conformidade",
+            "name": "classificacao"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "gravidade",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "qualidade.nao_conformidade",
+            "name": "gravidade"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "responsavel?",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "prazo_em",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "qualidade.nao_conformidade",
+            "name": "prazo_em"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "qualidade.nao_conformidade",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "eficaz",
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "qualidade.nao_conformidade",
+            "name": "eficaz"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "aberta_por",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "qualidade.nao_conformidade",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "versao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "qualidade.nao_conformidade",
+            "name": "versao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "ca749d8c2903a1ed237d829819cb1a8e7b3da2a70245c3833605532dbbb5d9db"
+}

@@ -207,7 +207,7 @@ async fn sem_triagem_vencido_ou_outra_sala_nao_baixa() {
     assert_eq!(s2, StatusCode::FORBIDDEN, "técnico de outra sala");
     let (s3, _) = aplicar(&amb, "livia.costa", &id, item, 0, Uuid::now_v7()).await;
     assert_eq!(s3, StatusCode::UNPROCESSABLE_ENTITY, "quantidade zero");
-    sqlx::query("UPDATE estoque.lote SET validade = current_date - 1 WHERE numero = 'L-OK'")
+    sqlx::query("UPDATE estoque.lote SET validade = (now() AT TIME ZONE 'America/Sao_Paulo')::date - 1 WHERE numero = 'L-OK'")
         .execute(&amb.admin)
         .await
         .unwrap();

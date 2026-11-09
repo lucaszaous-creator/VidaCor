@@ -1,0 +1,25 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO financeiro.pacote (id, codigo, nome, regra_versao, tuss, valor_centavos, vigente_desde, para_quem, motivo,\n                criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'pacotes', $11, $12)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Int4",
+        "TextArray",
+        "Int8",
+        "Date",
+        "Text",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "5c3a5d2b847c921cbf043fdb467f5e9556451b26e6358a00171f5cb85f444d70"
+}

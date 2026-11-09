@@ -1,0 +1,76 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT a.nc_id, a.texto, a.situacao_nova, u.nome, a.criado_em FROM qualidade.nc_andamento a JOIN identidade.usuario u ON u.id = a.criado_por WHERE a.nc_id = ANY($1) ORDER BY a.criado_em",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "nc_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "qualidade.nc_andamento",
+            "name": "nc_id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "texto",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "qualidade.nc_andamento",
+            "name": "texto"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "situacao_nova",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "qualidade.nc_andamento",
+            "name": "situacao_nova"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "nome",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "qualidade.nc_andamento",
+            "name": "criado_em"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "UuidArray"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "5c7f36de575ffc97f3b44cc0330192f9cb0dad8693b9e40e78d1b5a6bb8e775f"
+}

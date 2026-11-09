@@ -18,7 +18,7 @@ async fn inicio_conta_o_dia_e_esconde_o_caixa_de_quem_nao_e_gerencia() {
     let (st, resp, v) = amb.pedir(amb.get("/v1/inicio", Some(&ana))).await;
     assert_eq!(st, StatusCode::OK, "{v}");
     assert_eq!(resp.headers()["cache-control"], "no-store");
-    let agendados: i64 = amb.contar("SELECT count(*) FROM agenda.agendamento WHERE situacao NOT IN ('cancelado','expirada') AND inicio::date = current_date").await;
+    let agendados: i64 = amb.contar("SELECT count(*) FROM agenda.agendamento WHERE situacao NOT IN ('cancelado','expirada') AND (inicio AT TIME ZONE 'America/Sao_Paulo')::date = (now() AT TIME ZONE 'America/Sao_Paulo')::date").await;
     assert_eq!(v["exames_agendados"].as_i64(), Some(agendados));
     assert!(v["aguardando_agora"].as_i64().unwrap() >= 1, "{v}");
     assert_eq!(

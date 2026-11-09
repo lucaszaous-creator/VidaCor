@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE laudos.frase SET ativo = false, desativado_em = now(), desativado_por = $2, motivo_desativacao = $3, versao = versao + 1\n          WHERE id = $1 AND ativo",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "bd5db9cf04dc216a4e1c065f8bb340107a61622522641f2efaaeea121192e64b"
+}

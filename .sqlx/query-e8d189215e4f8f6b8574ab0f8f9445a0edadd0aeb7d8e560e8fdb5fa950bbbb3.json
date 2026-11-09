@@ -1,0 +1,32 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE agenda.procedimento SET duracao_min = $3, modalidade = $4, ativo = $5, versao = versao + 1\n          WHERE tuss = $1 AND versao = $2 RETURNING versao",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "versao",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "agenda.procedimento",
+            "name": "versao"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Int4",
+        "Int4",
+        "Text",
+        "Bool"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "e8d189215e4f8f6b8574ab0f8f9445a0edadd0aeb7d8e560e8fdb5fa950bbbb3"
+}
