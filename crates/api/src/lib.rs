@@ -5,6 +5,8 @@
 pub mod assinatura;
 pub mod atos;
 pub mod banco;
+pub mod certificado;
+pub mod cfm;
 pub mod config;
 pub mod correio;
 pub mod erro;

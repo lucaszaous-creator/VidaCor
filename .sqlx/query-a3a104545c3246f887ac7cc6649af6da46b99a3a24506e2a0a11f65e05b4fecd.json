@@ -1,0 +1,27 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO corpo.consulta_crm (id, codigo, medico_id, uf, numero, fonte, situacao, nome_no_conselho, especialidades, resposta_sha256, observacao, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 'corpo_clinico', $13, $14)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "TextArray",
+        "Text",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "a3a104545c3246f887ac7cc6649af6da46b99a3a24506e2a0a11f65e05b4fecd"
+}

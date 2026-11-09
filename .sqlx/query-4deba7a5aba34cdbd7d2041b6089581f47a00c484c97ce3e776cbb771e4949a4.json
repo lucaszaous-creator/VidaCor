@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO corpo.certificado (id, codigo, medico_id, titular, cpf_mascarado, emissor, serie, tipo, valido_de, valido_ate, sha256, motivo, criado_por, origem, unidade_id, correlacao)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 'corpo_clinico', $14, $15)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Uuid",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Timestamptz",
+        "Timestamptz",
+        "Text",
+        "Text",
+        "Uuid",
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "4deba7a5aba34cdbd7d2041b6089581f47a00c484c97ce3e776cbb771e4949a4"
+}

@@ -51,6 +51,10 @@ import type {
   PedidoDoCorpoClinico,
   ProcedimentoDoCatalogo,
   VersaoDaTabelaDePreco,
+  ConsultaCrm,
+  NovaConsultaCrm,
+  CertificadoDoMedico,
+  NovoCertificado,
 } from './contrato-cadastros';
 import type { CadeiaDoAtendimento, PedidoDossie } from './contrato-lastro';
 import type { Indicadores } from './contrato-indicadores';
@@ -266,3 +270,9 @@ export type ConferePedidoUsoDeModelo = Cabe<{ modelo_id: string; numero: number 
 export type ConfereVersaoDoPreparo = Cabe<VersaoDoPreparo, S['VersaoDoPreparo']>;
 export type ConferePreparoDoExame = Cabe<PreparoDoExame, S['PreparoDoExame']>;
 export type ConfereNovoPreparo = Cabe<NovoPreparo, S['NovoPreparo']>;
+
+// Corpo clínico: consulta do CRM no CFM e certificado ICP-Brasil.
+export type ConfereConsultaCrm = Cabe<ConsultaCrm, S['ConsultaCrm']>;
+export type ConfereNovaConsultaCrm = Cabe<NovaConsultaCrm, S['NovaConsultaCrm']>;
+export type ConfereCertificadoDoMedico = Cabe<CertificadoDoMedico, S['CertificadoDoMedico']>;
+export type ConfereNovoCertificado = Cabe<NovoCertificado, S['NovoCertificado']>;

@@ -56,6 +56,59 @@ export interface MedicoDoCorpoClinico {
   registro?: RegistroVigente | null;
   habilitacao?: HabilitacaoVigente | null;
   pendentes: PedidoDoCorpoClinico[];
+  /** Última consulta do CRM no CFM. */
+  consulta_crm?: ConsultaCrm | null;
+  /** Certificado ICP-Brasil vigente. */
+  certificado?: CertificadoDoMedico | null;
+}
+
+export type SituacaoNoConselho = 'regular' | 'suspenso' | 'cassado' | 'cancelado' | 'falecido' | 'transferido' | 'interdicao_cautelar' | 'nao_encontrado';
+
+export interface ConsultaCrm {
+  id: string;
+  codigo: string;
+  uf: string;
+  numero: string;
+  fonte: 'webservice_cfm' | 'portal_cfm';
+  situacao: SituacaoNoConselho;
+  nome_no_conselho?: string | null;
+  especialidades: string[];
+  resposta_sha256?: string | null;
+  observacao?: string | null;
+  consultado_em: string;
+  consultado_por: string;
+}
+
+export interface NovaConsultaCrm {
+  uf: string;
+  numero: string;
+  fonte: 'webservice_cfm' | 'portal_cfm';
+  situacao?: SituacaoNoConselho | null;
+  nome_no_conselho?: string | null;
+  observacao?: string | null;
+}
+
+export interface CertificadoDoMedico {
+  id: string;
+  codigo: string;
+  titular: string;
+  cpf_mascarado?: string | null;
+  emissor: string;
+  serie: string;
+  tipo?: 'A1' | 'A2' | 'A3' | 'A4' | 'outro' | null;
+  valido_de: string;
+  valido_ate: string;
+  sha256: string;
+  /** Dias até vencer (negativo: vencido), calculado pelo servidor. */
+  vence_em_dias: number;
+  cadastrado_em: string;
+  cadastrado_por: string;
+}
+
+export interface NovoCertificado {
+  /** Arquivo .cer (PEM ou DER) em base64; só o certificado público. */
+  arquivo_base64: string;
+  motivo?: string | null;
 }
 
 export interface NovoPedidoDoCorpoClinico {

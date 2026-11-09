@@ -1,0 +1,173 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT c.id, c.codigo, c.medico_id, c.uf, c.numero, c.fonte, c.situacao, c.nome_no_conselho, c.especialidades,\n                  c.resposta_sha256, c.observacao, c.criado_em, u.nome AS consultado_por\n             FROM corpo.consulta_crm c JOIN identidade.usuario u ON u.id = c.criado_por\n            WHERE c.unidade_id = $1 AND ($2::uuid IS NULL OR c.medico_id = $2)\n            ORDER BY c.criado_em DESC LIMIT 500",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "corpo.consulta_crm",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.consulta_crm",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "medico_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "corpo.consulta_crm",
+            "name": "medico_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "uf",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.consulta_crm",
+            "name": "uf"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "numero",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.consulta_crm",
+            "name": "numero"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "fonte",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.consulta_crm",
+            "name": "fonte"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "situacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.consulta_crm",
+            "name": "situacao"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "nome_no_conselho",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.consulta_crm",
+            "name": "nome_no_conselho"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "especialidades",
+        "type_info": "TextArray",
+        "origin": {
+          "Table": {
+            "table": "corpo.consulta_crm",
+            "name": "especialidades"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "resposta_sha256",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.consulta_crm",
+            "name": "resposta_sha256"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "observacao",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.consulta_crm",
+            "name": "observacao"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "corpo.consulta_crm",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "consultado_por",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "82bb834b1fc498c860eb0608ec44d22095b3446481439b74b566be4af0cdd664"
+}

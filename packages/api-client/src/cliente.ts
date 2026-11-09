@@ -95,6 +95,9 @@ import type {
   PedidoDoCorpoClinico,
   ProcedimentoDoCatalogo,
   VersaoDaTabelaDePreco,
+  ConsultaCrm,
+  NovaConsultaCrm,
+  NovoCertificado,
 } from './contrato-cadastros';
 import type { DecisaoDePerfil, ExameExterno, ImportacaoExterna, MudancaDePerfil, NovoUsuario, UsuarioAdministrado } from './contrato-usuarios';
 import type { ContaBancaria, NotaFiscal, NovoTitulo, RepasseDoMedico, RepasseGerado, ResumoFinanceiro, Titulo } from './contrato-financeiro';
@@ -504,6 +507,11 @@ export function criarCliente(opcoes: OpcoesDoCliente = {}) {
         criar<MedicoDoCorpoClinico>('POST', `/v1/corpo-clinico/${seg(id)}/pedidos`, corpo, o),
       decidir: (pedidoId: string, corpo: DecisaoDoCorpoClinico, o: OpcoesDeEscrita): Promise<MedicoDoCorpoClinico> =>
         criar<MedicoDoCorpoClinico>('POST', `/v1/corpo-clinico/pedidos/${seg(pedidoId)}/decisao`, corpo, o),
+      consultasCrm: (id: string): Promise<ConsultaCrm[]> => ler<ConsultaCrm[]>(`/v1/corpo-clinico/${seg(id)}/consultas-crm`),
+      consultarCrm: (id: string, corpo: NovaConsultaCrm, o: OpcoesDeEscrita): Promise<ConsultaCrm> =>
+        criar<ConsultaCrm>('POST', `/v1/corpo-clinico/${seg(id)}/consultas-crm`, corpo, o),
+      cadastrarCertificado: (id: string, corpo: NovoCertificado, o: OpcoesDeEscrita): Promise<MedicoDoCorpoClinico> =>
+        criar<MedicoDoCorpoClinico>('POST', `/v1/corpo-clinico/${seg(id)}/certificados`, corpo, o),
     },
 
     /** Exames e procedimentos e tabela de preços versionada (recepção consulta; gerência muda). */

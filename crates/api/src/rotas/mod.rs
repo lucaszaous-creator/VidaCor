@@ -307,6 +307,15 @@ pub fn rotas() -> Router<Estado> {
         .route("/v1/aparelhos/{id}/mudancas", post(aparelhos::mudar))
         .route("/v1/corpo-clinico", get(corpo_clinico::listar))
         .route(
+            "/v1/corpo-clinico/{id}/consultas-crm",
+            get(corpo_clinico::conferencias::consultas)
+                .post(corpo_clinico::conferencias::consultar),
+        )
+        .route(
+            "/v1/corpo-clinico/{id}/certificados",
+            post(corpo_clinico::conferencias::cadastrar_certificado),
+        )
+        .route(
             "/v1/corpo-clinico/{id}/historico",
             get(corpo_clinico::historico),
         )

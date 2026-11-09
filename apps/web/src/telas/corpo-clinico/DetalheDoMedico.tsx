@@ -10,6 +10,7 @@ import { useOperacao } from '../../operacao';
 import { useReautenticar } from '../../reautenticacao';
 import { FUSO_DA_CLINICA } from '../agenda/grade';
 import { CHAVE_CORPO_CLINICO, resumoDoRegistro, SITUACAO_DO_MEDICO } from './comum';
+import { AvisoDoCertificado, ConferenciasDoMedico, SITUACAO_NO_CONSELHO } from './ConferenciasDoMedico';
 
 const UFS = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
 
@@ -310,6 +311,7 @@ export function DetalheDoMedico({ m }: { m: MedicoDoCorpoClinico }) {
           O laudo impresso sai com o aviso de registro não cadastrado até a conferência do CRM.
         </Aviso>
       ) : null}
+      <AvisoDoCertificado c={m.certificado} />
       <ListaDeDados
         larguraDoRotulo={150}
         itens={[
@@ -320,6 +322,13 @@ export function DetalheDoMedico({ m }: { m: MedicoDoCorpoClinico }) {
           {
             rotulo: 'RQE',
             valor: typeof r?.rqe === 'string' ? <span className="num">{r.rqe}</span> : 'Não informado',
+          },
+          {
+            rotulo: 'Consulta ao CFM',
+            valor:
+              m.consulta_crm == null
+                ? 'Não consultado'
+                : `${SITUACAO_NO_CONSELHO[m.consulta_crm.situacao]}, ${formatarDataHora(m.consulta_crm.consultado_em, FUSO_DA_CLINICA)}`,
           },
           {
             rotulo: 'Realiza na sala',
@@ -349,6 +358,11 @@ export function DetalheDoMedico({ m }: { m: MedicoDoCorpoClinico }) {
             id: 'habilitacao',
             rotulo: 'Realiza e lauda',
             conteudo: <FormularioDaHabilitacao m={m} />,
+          },
+          {
+            id: 'conferencias',
+            rotulo: 'CFM e certificado',
+            conteudo: <ConferenciasDoMedico m={m} />,
           },
           {
             id: 'historico',

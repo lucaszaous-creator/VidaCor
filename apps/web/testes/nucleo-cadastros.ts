@@ -5,6 +5,8 @@
  */
 import type {
   CabecalhoDaUnidade,
+  ConsultaCrm,
+  NovaConsultaCrm,
   CatalogoDeExames,
   MedicoDoCorpoClinico,
   NovaVersaoDaTabela,
@@ -63,6 +65,22 @@ function medicosIniciais(): MedicoDoCorpoClinico[] {
         desde: '2026-01-03T12:00:00Z',
       },
       pendentes: [],
+      consulta_crm: null,
+      certificado: {
+        id: '0000000d-0000-7000-8000-000000000001',
+        codigo: 'CER-2026-000001',
+        titular: 'PAULO MEDEIROS',
+        cpf_mascarado: '***.***.***-35',
+        emissor: 'AC Fictícia de Teste',
+        serie: '1A2B',
+        tipo: 'A3',
+        valido_de: '2024-11-20T12:00:00Z',
+        valido_ate: '2026-11-30T12:00:00Z',
+        sha256: 'b'.repeat(64),
+        vence_em_dias: 21,
+        cadastrado_em: '2024-11-21T12:00:00Z',
+        cadastrado_por: 'Patrícia Lemos',
+      },
     },
     {
       id: '0000000a-0000-7000-8000-000000000005',
@@ -192,6 +210,36 @@ export const manipuladoresCadastros = [
     }
     m.situacao = m.pendentes.length > 0 ? 'aguardando_conferencia' : m.registro === null || m.registro === undefined ? 'sem_registro' : 'ativo';
     return HttpResponse.json(m);
+  }),
+  http.get('*/v1/corpo-clinico/:id/consultas-crm', ({ params }) => {
+    if (!ehGerente()) return semPermissao('administrar o corpo clínico');
+    const m = cadastrosSimulados.medicos.find((x) => x.id === params.id);
+    return HttpResponse.json(m?.consulta_crm == null ? [] : [m.consulta_crm]);
+  }),
+  http.post('*/v1/corpo-clinico/:id/consultas-crm', async ({ request, params }) => {
+    const n = (await registrar('consulta-crm', request)) as NovaConsultaCrm;
+    if (!ehGerente()) return semPermissao('administrar o corpo clínico');
+    const m = cadastrosSimulados.medicos.find((x) => x.id === params.id);
+    if (m === undefined) return problema(404, 'medico-nao-encontrado', 'Médico não encontrado nesta unidade. Nada foi alterado.');
+    if (n.fonte === 'webservice_cfm') {
+      return problema(503, 'cfm-nao-configurado', 'A consulta automática ao CFM ainda não está configurada. Consulte no portal do CFM e registre o que viu (fonte: portal do CFM).');
+    }
+    const c: ConsultaCrm = {
+      id: '0000000e-0000-7000-8000-000000000001',
+      codigo: 'CCF-2026-000001',
+      uf: n.uf,
+      numero: n.numero,
+      fonte: n.fonte,
+      situacao: n.situacao ?? 'nao_encontrado',
+      nome_no_conselho: null,
+      especialidades: [],
+      resposta_sha256: null,
+      observacao: n.observacao ?? null,
+      consultado_em: '2026-11-09T13:00:00Z',
+      consultado_por: estado.sessao.usuario.nome,
+    };
+    m.consulta_crm = c;
+    return HttpResponse.json(c, { status: 201 });
   }),
   http.post('*/v1/corpo-clinico/:id/pedidos', async ({ request, params }) => {
     const c = (await registrar('pedir-corpo-clinico', request)) as NovoPedidoDoCorpoClinico;

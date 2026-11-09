@@ -28,6 +28,8 @@ pub struct Estado {
     pub prefeitura: Option<Arc<dyn crate::prefeitura::Prefeitura>>,
     /// Webservice TISS das operadoras. Sem configuração, o envio do lote fica pendente no outbox (R7).
     pub operadora: Option<Arc<dyn crate::operadora::Operadora>>,
+    /// Consulta ao CFM. Sem configuração, a gerência registra a consulta feita no portal do CFM.
+    pub cfm: Option<Arc<dyn crate::cfm::Cfm>>,
 }
 
 impl Estado {
@@ -46,6 +48,7 @@ impl Estado {
             mensageiro: None,
             prefeitura: None,
             operadora: None,
+            cfm: None,
         }
     }
 }

@@ -87,6 +87,10 @@ pub struct MedicoDoCorpoClinico {
     pub registro: Option<RegistroVigente>,
     pub habilitacao: Option<HabilitacaoVigente>,
     pub pendentes: Vec<PedidoDoCorpoClinico>,
+    /// Última consulta do CRM no CFM (qualquer fonte).
+    pub consulta_crm: Option<conferencias::ConsultaCrm>,
+    /// Certificado ICP-Brasil vigente.
+    pub certificado: Option<conferencias::CertificadoDoMedico>,
 }
 
 #[derive(Deserialize, ToSchema)]
@@ -278,6 +282,12 @@ async fn carregar(
     for (medico, p) in pedidos(tx, unidade, id, true).await? {
         pendentes.entry(medico).or_default().push(p);
     }
+    let mut consultas: HashMap<Uuid, conferencias::ConsultaCrm> =
+        conferencias::ultimas_consultas(tx, unidade, id, false)
+            .await?
+            .into_iter()
+            .collect();
+    let mut certificados = conferencias::certificados_vigentes(tx, unidade, id).await?;
     Ok(linhas
         .into_iter()
         .map(|l| {
@@ -310,6 +320,8 @@ async fn carregar(
                 registro,
                 habilitacao,
                 pendentes,
+                consulta_crm: consultas.remove(&l.id),
+                certificado: certificados.remove(&l.id),
             }
         })
         .collect())
@@ -362,4 +374,5 @@ pub async fn historico(
     Ok(Json(r))
 }
 
+pub mod conferencias;
 pub mod pedidos;

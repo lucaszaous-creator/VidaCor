@@ -196,6 +196,19 @@ pub async fn decidir(
         ));
     }
     let motivo = motivo_valido(&d.motivo, "Nada foi alterado.")?;
+    // Registro de CRM só é aprovado com consulta regular no CFM dos últimos 30 dias (DEC-2026-11-09-120).
+    if d.aprovar && p.tipo == "registro" {
+        let r: DadosDoRegistro =
+            serde_json::from_value(p.dados.clone()).map_err(ErroApi::interno)?;
+        super::conferencias::exigir_consulta_regular(
+            &mut tx,
+            usuario.unidade_id,
+            p.medico_id,
+            &r.uf,
+            &r.numero,
+        )
+        .await?;
+    }
     let feito = sqlx::query!(
         "UPDATE corpo.pedido SET situacao = $2, decidido_por = $3, decidido_em = now(), motivo_decisao = $4, versao = versao + 1
           WHERE id = $1 AND situacao = 'aguardando'",

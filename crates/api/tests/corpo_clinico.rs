@@ -57,6 +57,19 @@ fn medico(lista: &Value, nome: &str) -> Value {
         .unwrap_or(Value::Null)
 }
 
+/// Registra a consulta do CRM feita no portal do CFM (gerente A), exigida para aprovar o registro.
+async fn consultar_no_cfm(amb: &Ambiente, medico_id: Uuid, numero: &str, situacao: &str) {
+    let (st, c) = post(
+        amb,
+        "patricia.lemos",
+        &format!("/v1/corpo-clinico/{medico_id}/consultas-crm"),
+        None,
+        json!({ "uf": "SP", "numero": numero, "fonte": "portal_cfm", "situacao": situacao, "observacao": "portal do CFM, busca por CRM e UF" }),
+    )
+    .await;
+    assert_eq!(st, StatusCode::CREATED, "{c}");
+}
+
 /// Pede (gerente A) e confere (Helena) um pedido; devolve o médico depois da conferência.
 async fn pedir_e_conferir(amb: &Ambiente, medico_id: Uuid, corpo: Value) -> Value {
     let (st, m) = post(
@@ -69,6 +82,9 @@ async fn pedir_e_conferir(amb: &Ambiente, medico_id: Uuid, corpo: Value) -> Valu
     .await;
     assert_eq!(st, StatusCode::CREATED, "{m}");
     let pedido = m["pendentes"][0]["id"].as_str().unwrap().to_owned();
+    if let Some(numero) = m["pendentes"][0]["registro"]["numero"].as_str() {
+        consultar_no_cfm(amb, medico_id, numero, "regular").await;
+    }
     let (st, d) = post(
         amb,
         "helena.gerencia",
@@ -124,6 +140,24 @@ async fn quando_a_gerencia_cadastra_o_crm_entao_so_vale_depois_da_segunda_confer
     // O próprio médico não tem o ato.
     let (st, _) = post(&amb, "medico.a", &decisao_uri, None, aprova.clone()).await;
     assert_eq!(st, StatusCode::FORBIDDEN);
+    // Sem consulta no CFM, ou com situação irregular, o registro não é aprovado (DEC-2026-11-09-120).
+    let (st, e) = post(&amb, "helena.gerencia", &decisao_uri, None, aprova.clone()).await;
+    assert_eq!(
+        (st, e["codigo"].as_str()),
+        (StatusCode::CONFLICT, Some("crm-sem-consulta"))
+    );
+    consultar_no_cfm(&amb, paulo, "123456", "suspenso").await;
+    let (st, e) = post(&amb, "helena.gerencia", &decisao_uri, None, aprova.clone()).await;
+    assert_eq!(
+        (st, e["codigo"].as_str()),
+        (StatusCode::CONFLICT, Some("crm-irregular"))
+    );
+    assert_eq!(
+        amb.contar("SELECT count(*) FROM corpo.pedido WHERE situacao = 'aguardando'")
+            .await,
+        1
+    );
+    consultar_no_cfm(&amb, paulo, "123456", "regular").await;
     let (st, d) = post(&amb, "helena.gerencia", &decisao_uri, None, aprova.clone()).await;
     assert_eq!(st, StatusCode::OK, "{d}");
     assert_eq!(
@@ -170,9 +204,15 @@ async fn quando_a_gerencia_cadastra_o_crm_entao_so_vale_depois_da_segunda_confer
         .iter()
         .all(|p| p["situacao"] == "aplicado" && p["decidido_por"] == "Helena Prado"));
     assert_eq!(
-        amb.contar("SELECT count(*) FROM lastro.evento WHERE dominio = 'corpo_clinico'")
+        amb.contar("SELECT count(*) FROM lastro.evento WHERE dominio = 'corpo_clinico' AND tipo <> 'crm_consultado'")
             .await,
         4
+    );
+    assert_eq!(
+        amb.contar("SELECT count(*) FROM lastro.evento WHERE dominio = 'corpo_clinico' AND tipo = 'crm_consultado'")
+            .await,
+        3,
+        "cada consulta ao CFM entra no lastro"
     );
 }
 
@@ -396,6 +436,11 @@ async fn quando_duas_conferencias_ou_dois_pedidos_chegam_juntos_entao_so_um_tem_
         .fetch_one(&amb.admin)
         .await
         .unwrap();
+    let numero: String = sqlx::query_scalar("SELECT dados->>'numero' FROM corpo.pedido")
+        .fetch_one(&amb.admin)
+        .await
+        .unwrap();
+    consultar_no_cfm(&amb, paulo, &numero, "regular").await;
     let decisao = format!("/v1/corpo-clinico/pedidos/{pedido}/decisao");
     let corpo = json!({ "aprovar": true, "motivo": "conferido no CFM" });
     let ((s1, _), (s2, _)) = tokio::join!(

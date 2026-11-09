@@ -1,0 +1,173 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT c.id, c.codigo, c.medico_id, c.titular, c.cpf_mascarado, c.emissor, c.serie, c.tipo, c.valido_de, c.valido_ate,\n                  c.sha256, c.criado_em, u.nome AS cadastrado_por\n             FROM corpo.certificado c JOIN identidade.usuario u ON u.id = c.criado_por\n            WHERE c.unidade_id = $1 AND c.vigente AND ($2::uuid IS NULL OR c.medico_id = $2)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "corpo.certificado",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "codigo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.certificado",
+            "name": "codigo"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "medico_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "corpo.certificado",
+            "name": "medico_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "titular",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.certificado",
+            "name": "titular"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "cpf_mascarado",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.certificado",
+            "name": "cpf_mascarado"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "emissor",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.certificado",
+            "name": "emissor"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "serie",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.certificado",
+            "name": "serie"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "tipo",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.certificado",
+            "name": "tipo"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "valido_de",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "corpo.certificado",
+            "name": "valido_de"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "valido_ate",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "corpo.certificado",
+            "name": "valido_ate"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "sha256",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "corpo.certificado",
+            "name": "sha256"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "criado_em",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "corpo.certificado",
+            "name": "criado_em"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "cadastrado_por",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "identidade.usuario",
+            "name": "nome"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "fc3f5096a70b5349c1b6baca30ab11f76a7bbf793857f1230aaa947fbc343c89"
+}

@@ -283,6 +283,9 @@ const fase1: Passo = async (page, estado, ir, ok) => {
   await page.getByRole('tab', { name: 'Histórico' }).click();
   await esperar(page, 'tabpanel', 'Histórico');
   await ok('cad-corpo-clinico-historico');
+  await page.getByRole('tab', { name: 'CFM e certificado' }).click();
+  await esperar(page, 'region', 'Certificado ICP-Brasil');
+  await ok('cad-corpo-clinico-cfm');
   await ir('/exames');
   await page.getByRole('button', { name: /Ecocardiograma transtorácico com Doppler/ }).click();
   await esperar(page, 'form', 'Mudar cadastro do exame');

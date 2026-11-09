@@ -3007,6 +3007,243 @@
         }
       }
     },
+    "/v1/corpo-clinico/{id}/certificados": {
+      "post": {
+        "tags": [
+          "corpo-clinico"
+        ],
+        "summary": "Cadastra o certificado ICP-Brasil do médico (gerência; reautenticação). Só o certificado\npúblico; recusa chave privada, certificado fora da ICP-Brasil, vencido ou de outra pessoa.\nSubstituir exige motivo; o anterior fica guardado.",
+        "operationId": "cadastrar_certificado_do_medico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovoCertificado"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MedicoDoCorpoClinico"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/corpo-clinico/{id}/consultas-crm": {
+      "get": {
+        "tags": [
+          "corpo-clinico"
+        ],
+        "summary": "Consultas do CRM do médico, da mais nova para a mais antiga (gerência).",
+        "operationId": "consultas_crm_do_medico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConsultaCrm"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "corpo-clinico"
+        ],
+        "summary": "Consulta do CRM no CFM: pelo webservice (quando configurado) ou registro da consulta feita no\nportal do CFM pela gerência. Somente inserção; entra no lastro do médico.",
+        "operationId": "consultar_crm_no_cfm",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovaConsultaCrm"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsultaCrm"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaDoc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/corpo-clinico/{id}/historico": {
       "get": {
         "tags": [
@@ -12425,6 +12662,76 @@
           "6"
         ]
       },
+      "CertificadoDoMedico": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "titular",
+          "emissor",
+          "serie",
+          "valido_de",
+          "valido_ate",
+          "sha256",
+          "vence_em_dias",
+          "cadastrado_em",
+          "cadastrado_por"
+        ],
+        "properties": {
+          "cadastrado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "cadastrado_por": {
+            "type": "string"
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "cpf_mascarado": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "emissor": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "serie": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "A1, A2, A3, A4 ou outro."
+          },
+          "titular": {
+            "type": "string"
+          },
+          "valido_ate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "valido_de": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "vence_em_dias": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Dias até vencer (negativo: vencido), calculado pelo servidor."
+          }
+        }
+      },
       "ChamadaNoPainel": {
         "type": "object",
         "description": "O que a TV mostra. Sem exame, sem nascimento, sem identificador do paciente.",
@@ -12578,6 +12885,74 @@
             }
           },
           "versao": {
+            "type": "string"
+          }
+        }
+      },
+      "ConsultaCrm": {
+        "type": "object",
+        "required": [
+          "id",
+          "codigo",
+          "uf",
+          "numero",
+          "fonte",
+          "situacao",
+          "especialidades",
+          "consultado_em",
+          "consultado_por"
+        ],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "consultado_em": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "consultado_por": {
+            "type": "string"
+          },
+          "especialidades": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "fonte": {
+            "type": "string",
+            "description": "webservice_cfm ou portal_cfm."
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nome_no_conselho": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "numero": {
+            "type": "string"
+          },
+          "observacao": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "resposta_sha256": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "situacao": {
+            "type": "string",
+            "description": "regular, suspenso, cassado, cancelado, falecido, transferido, interdicao_cautelar ou nao_encontrado."
+          },
+          "uf": {
             "type": "string"
           }
         }
@@ -15538,8 +15913,30 @@
           "ativo": {
             "type": "boolean"
           },
+          "certificado": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/CertificadoDoMedico",
+                "description": "Certificado ICP-Brasil vigente."
+              }
+            ]
+          },
           "codigo": {
             "type": "string"
+          },
+          "consulta_crm": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ConsultaCrm",
+                "description": "Última consulta do CRM no CFM (qualquer fonte)."
+              }
+            ]
           },
           "habilitacao": {
             "oneOf": [
@@ -16034,6 +16431,46 @@
           }
         }
       },
+      "NovaConsultaCrm": {
+        "type": "object",
+        "required": [
+          "uf",
+          "numero",
+          "fonte"
+        ],
+        "properties": {
+          "fonte": {
+            "type": "string",
+            "description": "webservice_cfm (o núcleo consulta) ou portal_cfm (a gerência registra o que viu no portal)."
+          },
+          "nome_no_conselho": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "numero": {
+            "type": "string"
+          },
+          "observacao": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Obrigatória para portal_cfm: onde e como a consulta foi feita."
+          },
+          "situacao": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Só para portal_cfm."
+          },
+          "uf": {
+            "type": "string"
+          }
+        }
+      },
       "NovaFraseDeLaudo": {
         "type": "object",
         "required": [
@@ -16328,6 +16765,25 @@
           },
           "telefone": {
             "type": "string"
+          }
+        }
+      },
+      "NovoCertificado": {
+        "type": "object",
+        "required": [
+          "arquivo_base64"
+        ],
+        "properties": {
+          "arquivo_base64": {
+            "type": "string",
+            "description": "Conteúdo do arquivo `.cer` (PEM ou DER) em base64. Só o certificado público."
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Obrigatório quando substitui o certificado vigente."
           }
         }
       },

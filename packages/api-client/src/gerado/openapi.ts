@@ -796,6 +796,48 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/corpo-clinico/{id}/certificados": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cadastra o certificado ICP-Brasil do médico (gerência; reautenticação). Só o certificado
+         *     público; recusa chave privada, certificado fora da ICP-Brasil, vencido ou de outra pessoa.
+         *     Substituir exige motivo; o anterior fica guardado.
+         */
+        post: operations["cadastrar_certificado_do_medico"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/corpo-clinico/{id}/consultas-crm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Consultas do CRM do médico, da mais nova para a mais antiga (gerência). */
+        get: operations["consultas_crm_do_medico"];
+        put?: never;
+        /**
+         * Consulta do CRM no CFM: pelo webservice (quando configurado) ou registro da consulta feita no
+         *     portal do CFM pela gerência. Somente inserção; entra no lastro do médico.
+         */
+        post: operations["consultar_crm_no_cfm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/corpo-clinico/{id}/historico": {
         parameters: {
             query?: never;
@@ -3569,6 +3611,30 @@ export interface components {
          * @enum {string}
          */
         CategoriaBirads: "0" | "1" | "2" | "3" | "4A" | "4B" | "4C" | "5" | "6";
+        CertificadoDoMedico: {
+            /** Format: date-time */
+            cadastrado_em: string;
+            cadastrado_por: string;
+            codigo: string;
+            cpf_mascarado?: string | null;
+            emissor: string;
+            /** Format: uuid */
+            id: string;
+            serie: string;
+            sha256: string;
+            /** @description A1, A2, A3, A4 ou outro. */
+            tipo?: string | null;
+            titular: string;
+            /** Format: date-time */
+            valido_ate: string;
+            /** Format: date-time */
+            valido_de: string;
+            /**
+             * Format: int64
+             * @description Dias até vencer (negativo: vencido), calculado pelo servidor.
+             */
+            vence_em_dias: number;
+        };
         /** @description O que a TV mostra. Sem exame, sem nascimento, sem identificador do paciente. */
         ChamadaNoPainel: {
             /** Format: date-time */
@@ -3612,6 +3678,24 @@ export interface components {
             operadoras: string[];
             regras: components["schemas"]["RegraDoConjunto"][];
             versao: string;
+        };
+        ConsultaCrm: {
+            codigo: string;
+            /** Format: date-time */
+            consultado_em: string;
+            consultado_por: string;
+            especialidades: string[];
+            /** @description webservice_cfm ou portal_cfm. */
+            fonte: string;
+            /** Format: uuid */
+            id: string;
+            nome_no_conselho?: string | null;
+            numero: string;
+            observacao?: string | null;
+            resposta_sha256?: string | null;
+            /** @description regular, suspenso, cassado, cancelado, falecido, transferido, interdicao_cautelar ou nao_encontrado. */
+            situacao: string;
+            uf: string;
         };
         /** @description Consulta automática da operadora pendente no outbox (espera crescente; R7). */
         ConsultaPendente: {
@@ -4496,7 +4580,9 @@ export interface components {
         };
         MedicoDoCorpoClinico: {
             ativo: boolean;
+            certificado?: null | components["schemas"]["CertificadoDoMedico"];
             codigo: string;
+            consulta_crm?: null | components["schemas"]["ConsultaCrm"];
             habilitacao?: null | components["schemas"]["HabilitacaoVigente"];
             /** Format: uuid */
             id: string;
@@ -4641,6 +4727,17 @@ export interface components {
             /** Format: int64 */
             valor_centavos: number;
         };
+        NovaConsultaCrm: {
+            /** @description webservice_cfm (o núcleo consulta) ou portal_cfm (a gerência registra o que viu no portal). */
+            fonte: string;
+            nome_no_conselho?: string | null;
+            numero: string;
+            /** @description Obrigatória para portal_cfm: onde e como a consulta foi feita. */
+            observacao?: string | null;
+            /** @description Só para portal_cfm. */
+            situacao?: string | null;
+            uf: string;
+        };
         NovaFraseDeLaudo: {
             atalho: string;
             motivo?: string | null;
@@ -4738,6 +4835,12 @@ export interface components {
             responsavel_nome: string;
             site?: string | null;
             telefone: string;
+        };
+        NovoCertificado: {
+            /** @description Conteúdo do arquivo `.cer` (PEM ou DER) em base64. Só o certificado público. */
+            arquivo_base64: string;
+            /** @description Obrigatório quando substitui o certificado vigente. */
+            motivo?: string | null;
         };
         NovoEventoAdverso: {
             anonimo?: boolean;
@@ -8236,6 +8339,173 @@ export interface operations {
                 };
             };
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    cadastrar_certificado_do_medico: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovoCertificado"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MedicoDoCorpoClinico"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    consultas_crm_do_medico: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConsultaCrm"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+        };
+    };
+    consultar_crm_no_cfm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovaConsultaCrm"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConsultaCrm"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemaDoc"];
+                };
+            };
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };
