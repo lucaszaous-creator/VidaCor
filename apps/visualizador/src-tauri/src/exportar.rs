@@ -15,9 +15,12 @@ pub use vidacor_documentos::Grade;
 use crate::dto::ItemDto;
 use crate::ErroApp;
 
-/// Cabeçalho da clínica no PDF. Endereço, telefone e responsável técnico: a confirmar com o dono
-/// do produto (docs/31 P-06); campo ausente não é impresso.
+/// Cabeçalho da clínica no PDF (dados informados pelo dono do produto em 23/11/2026, DEC-2026-11-23-14).
+/// Telefone e responsável técnico ainda a confirmar (docs/31 P-06); campo ausente não é impresso.
 pub const CLINICA: &str = "VidaCor Imagem";
+pub const RAZAO_SOCIAL: &str = "VIDACOR SERVICOS MEDICOS MACAE LTDA";
+pub const ENDERECO: &str = "Av. Nossa Senhora da Glória, 1225, Praia Campista, Macaé, RJ";
+pub const CNPJ: &str = "07.000.379/0001-89";
 
 /// Limite por exportação (o mesmo do PDF).
 pub const MAX_ITENS: usize = vidacor_documentos::MAX_IMAGENS_PDF;
@@ -150,12 +153,13 @@ pub fn montar_pdf<'a>(
     let dados = ImagensDoExame {
         clinica: Clinica {
             nome: CLINICA.into(),
-            endereco: None,
+            endereco: Some(ENDERECO.into()),
             telefone: None,
             site: None,
-            cnpj: None,
+            cnpj: Some(CNPJ.into()),
             responsavel_tecnico: None,
         },
+        razao_social: Some(RAZAO_SOCIAL.into()),
         paciente_nome: p.nome(),
         paciente_nascimento: nascimento,
         exame: estudo.descricao.clone(),

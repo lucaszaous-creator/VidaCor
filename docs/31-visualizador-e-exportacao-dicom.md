@@ -3,7 +3,7 @@
 **Status:** plano aprovado pelo dono do produto em 23/11/2026 (DEC-2026-11-23-02). E1 (núcleo), E2 (tela) e
 E3 (PDF) entregues; E4 (login, instalador assinado, piloto) a fazer. Riscos RCP-VIS seguem aguardando o
 responsável clínico; teste de usabilidade com a equipe ainda não feito.
-**Decisões:** DEC-2026-11-23-01 a DEC-2026-11-23-13 em [decisoes.md](decisoes.md).
+**Decisões:** DEC-2026-11-23-01 a DEC-2026-11-23-14 em [decisoes.md](decisoes.md).
 **Base (ADR-0022):** prática de RIS/PACS (OHIF, visualizadores que acompanham o CD do exame, impressão
 de imagens em papel no lugar do filme). Como a Medware e a Mediworks exportam imagens para o paciente:
 **não verificado** (não há acesso aos sistemas nesta sessão; levantar com a equipe, item P-03).
@@ -181,6 +181,6 @@ no Windows (gera `.msi` e `.exe`); precisa das ferramentas de C/C++ do Visual St
 | P-03 | Como a Medware/Mediworks entrega imagens hoje (papel, CD, portal)? | Não verificado (sem acesso aos sistemas) |
 | P-04 | Quem gera o PDF? | **Técnico, recepção e médico** (respondido em 23/11/2026) |
 | P-05 | Os computadores são Windows? | **Sim, Windows** (respondido em 23/11/2026); versão a confirmar, premissa Windows 10/11 |
-| P-06 | Logotipo e dados da clínica para o cabeçalho | Logotipo de `design/assets/marca/logo.png` em uso (recorte, original vetorial ainda a pedir, docs/10). **Endereço, telefone, CNPJ e responsável técnico: a confirmar**; até lá o cabeçalho traz só "VidaCor Imagem" |
+| P-06 | Logotipo e dados da clínica para o cabeçalho | Logotipo de `design/assets/marca/logo.png` (recorte; original vetorial ainda a pedir, docs/10). **Respondido em 23/11/2026:** VIDACOR SERVICOS MEDICOS MACAE LTDA, CNPJ 07.000.379/0001-89, Av. Nossa Senhora da Glória, 1225, Praia Campista, Macaé, RJ. **Telefone e responsável técnico: a confirmar** |
 | P-08 | Quem usa: login próprio do programa ou o login do Windows? | Premissa até a E4: registro com o usuário do Windows; login próprio (VIS-S4) na E4 |
 | P-07 | Como o PDF chega ao paciente? | **Arquivo**; a clínica escolhe enviar ou imprimir (respondido em 23/11/2026) |

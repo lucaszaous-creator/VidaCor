@@ -64,6 +64,8 @@ impl std::fmt::Debug for ImagemDoExame {
 #[derive(Clone)]
 pub struct ImagensDoExame {
     pub clinica: Clinica,
+    /// Razão social, impressa acima do endereço (documento entregue ao paciente identifica a empresa).
+    pub razao_social: Option<String>,
     pub paciente_nome: String,
     /// `dd/mm/aaaa`.
     pub paciente_nascimento: String,
@@ -130,7 +132,10 @@ fn conferir(x: &ImagensDoExame) -> Result<(), ErroDocumento> {
 fn dados(x: &ImagensDoExame) -> serde_json::Value {
     let (colunas, linhas) = x.grade.colunas_e_linhas();
     json!({
-        "clinica": { "nome": x.clinica.nome, "linhas": x.clinica.linhas() },
+        "clinica": {
+            "nome": x.clinica.nome,
+            "linhas": x.razao_social.iter().cloned().chain(x.clinica.linhas()).collect::<Vec<_>>(),
+        },
         "paciente": { "nome": x.paciente_nome.trim(), "nascimento": x.paciente_nascimento.trim() },
         "exame": {
             "descricao": ou_nao_informado(&x.exame),
@@ -188,6 +193,7 @@ mod testes {
                 cnpj: None,
                 responsavel_tecnico: None,
             },
+            razao_social: Some("CLINICA FICTICIA LTDA".into()),
             paciente_nome: "ANA MARIA FICTICIO".into(),
             paciente_nascimento: "01/01/1980".into(),
             exame: "TC CRANIO".into(),
@@ -234,6 +240,7 @@ mod testes {
                 assert!(p.contains(esperado), "{esperado} em {p}");
             }
             assert!(p.contains("laudo assinado"), "aviso VIS-10 em {p}");
+            assert!(p.contains("CLINICA FICTICIA LTDA"), "razão social em {p}");
         }
         assert!(paginas[1].contains("imagem 12"));
         assert!(paginas[0].contains("não informado"), "solicitante vazio");
