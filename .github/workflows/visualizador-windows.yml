@@ -1,0 +1,70 @@
+# Instalador do Visualizador VidaCor para Windows (docs/31 E4).
+# Compila e testa no próprio Windows (bibliotecas C do OpenJPEG e do CharLS, Tauri com WebView2) e
+# publica o instalador .exe (NSIS) e .msi como artefato da execução, com o SHA-256 de cada arquivo.
+# O instalador ainda NÃO é assinado (certificado de assinatura de código pendente, docs/31 § 9).
+name: Visualizador (instalador Windows)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "apps/visualizador/**"
+      - "crates/visualizador/**"
+      - "crates/documentos/**"
+      - "Cargo.lock"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/visualizador-windows.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: visualizador-windows-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  instalador:
+    name: Testes e instalador (Windows)
+    runs-on: windows-2022
+    timeout-minutes: 75
+    env:
+      CARGO_TERM_COLOR: always
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+      - name: Toolchain do rust-toolchain.toml
+        run: rustup show active-toolchain || rustup toolchain install
+      - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1 # v2.8.1
+      - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Tela (lint, tipos, testes)
+        run: |
+          pnpm --filter @vidacor/visualizador lint
+          pnpm --filter @vidacor/visualizador typecheck
+          pnpm --filter @vidacor/visualizador test
+      - name: Testes do núcleo, do PDF e do programa no Windows
+        shell: bash
+        run: |
+          mkdir -p apps/visualizador/dist
+          cargo test -p vidacor-visualizador -p vidacor-documentos -p vidacor-visualizador-app
+      - name: Instalador (.exe e .msi)
+        run: pnpm --filter @vidacor/visualizador tauri build
+      - name: SHA-256 dos instaladores
+        shell: bash
+        run: |
+          cd target/release/bundle
+          sha256sum nsis/*.exe msi/*.msi | tee SHA256SUMS.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: visualizador-vidacor-windows
+          path: |
+            target/release/bundle/nsis/*.exe
+            target/release/bundle/msi/*.msi
+            target/release/bundle/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
