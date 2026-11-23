@@ -1,8 +1,9 @@
 # 31 · Visualizador VidaCor: abrir exames DICOM e exportar PDF e JPEG para o paciente
 
-**Status:** plano aprovado pelo dono do produto em 23/11/2026 (DEC-2026-11-23-02). E1 (núcleo) entregue
-em `crates/visualizador`; E2 a E4 a fazer. Riscos RCP-VIS seguem aguardando o responsável clínico.
-**Decisões:** DEC-2026-11-23-01 a DEC-2026-11-23-05 em [decisoes.md](decisoes.md).
+**Status:** plano aprovado pelo dono do produto em 23/11/2026 (DEC-2026-11-23-02). E1 (núcleo), E2 (tela) e
+E3 (PDF) entregues; E4 (login, instalador assinado, piloto) a fazer. Riscos RCP-VIS seguem aguardando o
+responsável clínico; teste de usabilidade com a equipe ainda não feito.
+**Decisões:** DEC-2026-11-23-01 a DEC-2026-11-23-13 em [decisoes.md](decisoes.md).
 **Base (ADR-0022):** prática de RIS/PACS (OHIF, visualizadores que acompanham o CD do exame, impressão
 de imagens em papel no lugar do filme). Como a Medware e a Mediworks exportam imagens para o paciente:
 **não verificado** (não há acesso aos sistemas nesta sessão; levantar com a equipe, item P-03).
@@ -121,7 +122,7 @@ Riscos propostos para o responsável clínico (entram no registro só com o acei
 - Janela do arquivo (todas as gravadas), automática e as quatro prontas da TC; reescala aplicada.
 - JPEG com a mesma renderização da tela; nome do arquivo sem dado pessoal.
 - Limites de quantidade, tamanho de arquivo, tamanho total e tamanho de imagem.
-- 28 testes (`cargo test -p vidacor-visualizador`) com exames **sintéticos** gerados por
+- 29 testes (`cargo test -p vidacor-visualizador`) com exames **sintéticos** gerados por
   `tools/imagens-dicom/gerar_amostras_teste.py` (TC, RX, MG, RM, US). Conferência extra feita só na
   sessão, fora do repositório, com 5 cortes reais anonimizados do Canon Aquilion Start: abriram e a
   imagem saiu igual à conversão de referência.
@@ -135,6 +136,42 @@ Riscos propostos para o responsável clínico (entram no registro só com o acei
 - Arquivo DICOM sem o cabeçalho de arquivo (ACR-NEMA antigo): listado como "não é DICOM".
 - Compilar no Windows exige as ferramentas de C/C++ do Visual Studio e o CMake (OpenJPEG e CharLS); fica para a E4.
 
+### 7.2 E2 e E3 entregues (tela e PDF)
+
+**Onde:** `apps/visualizador` (tela React) e `apps/visualizador/src-tauri` (programa Tauri, Rust); PDF em
+`crates/documentos/src/imagens.rs` com o modelo `crates/documentos/modelos/imagens.typ` (versão `imagens-exame-1`).
+
+**Tela (1440×900 e 1280×800, sem rolar a página):**
+- topo com logotipo, "Abrir pasta" e "Abrir arquivo"; barra do paciente com nome e nascimento (VIS-06);
+- à esquerda, exames e séries (com aviso quando a abertura tem mais de um paciente) e os arquivos que
+  ficaram de fora, com o motivo;
+- no meio, a imagem: janelas do aparelho e prontas (teclas 1 a 4), arrastar ajusta contraste ou move,
+  roda troca o corte, Ctrl + roda amplia, setas, PageUp/PageDown, Home/End, M marca, R volta à janela do
+  aparelho; menu de contexto por clique direito, Shift+F10, tecla Menu e botão de mais opções (VIS-14);
+- à direita, as imagens marcadas (cada uma com a janela com que foi marcada), imagens por página
+  (1, 4, 6 ou 12), "Gerar PDF do paciente", "Salvar JPEG" e "Desmarcar todas". Com exames diferentes
+  marcados o botão do PDF fica apagado com o motivo (R1); o Rust confere de novo (VIS-S1).
+- antes do PDF, confirmação com nome e nascimento (VIS-S2); depois, aviso de onde foi salvo.
+
+**Regras no Rust (a tela só pede):** o diálogo de arquivo é aberto pelo Rust (a tela nunca manda caminho);
+os dados impressos vêm do exame; os pixels chegam à tela sem perda, com a mesma renderização do JPEG;
+arquivo existente nunca é sobrescrito (`-2`, `-3`); cada exportação vai para o registro encadeado (VIS-12)
+em `%APPDATA%\br.com.vidacorimagem.visualizador\registro-exportacoes.jsonl`, sem nome do paciente.
+
+**PDF:** A4 retrato, PDF/A-2b; cabeçalho em todas as páginas com logotipo, nome e nascimento em destaque,
+data do exame, exame, atendimento e solicitante; imagens em fundo preto com legenda (série, imagem, quadro,
+janela); rodapé com o aviso do laudo, data da geração e página "x de y" (VIS-08 a VIS-10).
+
+**Testes:** 15 do PDF em `crates/documentos`, 8 do programa em `apps/visualizador/src-tauri/tests`
+(PDF, dois pacientes, dois exames, índices fora do exame, legenda, JPEG, nome livre, registro e
+adulteração), 9 da tela com a ponte simulada (`pnpm --filter @vidacor/visualizador test`) e a conferência
+"cabe na janela" no Chromium (`test:telas`). O programa Tauri foi aberto de verdade em tela virtual
+(WebKitGTK); o fluxo completo pelo diálogo de arquivo **não foi verificado** de forma automática (o diálogo
+nativo não é acionável no teste) e fica para a conferência manual no Windows (E4).
+
+**Como rodar em desenvolvimento:** `just visualizador`. **Instalador:** `just visualizador-instalador`
+no Windows (gera `.msi` e `.exe`); precisa das ferramentas de C/C++ do Visual Studio, CMake e WebView2.
+
 ## 8. Pendências
 
 | ID | Pergunta | Resposta ou premissa |
@@ -144,5 +181,6 @@ Riscos propostos para o responsável clínico (entram no registro só com o acei
 | P-03 | Como a Medware/Mediworks entrega imagens hoje (papel, CD, portal)? | Não verificado (sem acesso aos sistemas) |
 | P-04 | Quem gera o PDF? | **Técnico, recepção e médico** (respondido em 23/11/2026) |
 | P-05 | Os computadores são Windows? | **Sim, Windows** (respondido em 23/11/2026); versão a confirmar, premissa Windows 10/11 |
-| P-06 | Logotipo e dados da clínica para o cabeçalho | Premissa: logotipo em `design/` |
+| P-06 | Logotipo e dados da clínica para o cabeçalho | Logotipo de `design/assets/marca/logo.png` em uso (recorte, original vetorial ainda a pedir, docs/10). **Endereço, telefone, CNPJ e responsável técnico: a confirmar**; até lá o cabeçalho traz só "VidaCor Imagem" |
+| P-08 | Quem usa: login próprio do programa ou o login do Windows? | Premissa até a E4: registro com o usuário do Windows; login próprio (VIS-S4) na E4 |
 | P-07 | Como o PDF chega ao paciente? | **Arquivo**; a clínica escolhe enviar ou imprimir (respondido em 23/11/2026) |

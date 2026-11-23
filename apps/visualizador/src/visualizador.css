@@ -1,0 +1,64 @@
+/* Visualizador VidaCor: layout de tela inteira (docs/05: cabe na janela, rola dentro do painel). */
+html, body, #raiz { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--ink); font-family: Inter, system-ui, sans-serif; overflow: hidden; }
+
+.vz { height: 100vh; display: grid; grid-template-rows: auto auto auto minmax(0, 1fr); gap: 10px; padding: 10px 14px 12px; box-sizing: border-box; }
+.vz-vazio { display: flex; flex-direction: column; }
+.vz-topo { display: flex; align-items: center; gap: 12px; }
+.vz-nome { font-size: 15px; font-weight: 600; color: var(--navy); }
+.vz-aviso:empty { display: none; }
+.vz-aviso-topo { max-width: 720px; margin: 0 auto; width: 100%; }
+
+.vz-corpo { display: grid; grid-template-columns: 264px minmax(0, 1fr) 288px; gap: 12px; min-height: 0; }
+
+/* Lista de séries */
+.vz-lista { background: var(--card); border-radius: var(--r2); box-shadow: var(--sh); padding: 12px; overflow-y: auto; min-height: 0; display: flex; flex-direction: column; gap: 14px; }
+.vz-estudo-cab { display: flex; flex-direction: column; gap: 2px; font-size: 13px; color: var(--ink2); padding: 0 4px 6px; border-bottom: 1px solid var(--line); }
+.vz-estudo-cab b { color: var(--ink); font-size: 14px; }
+.vz-series { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.vz-serie { width: 100%; display: flex; gap: 10px; align-items: center; text-align: left; border: 1px solid transparent; background: none; border-radius: var(--r3); padding: 8px; cursor: pointer; font: inherit; color: inherit; }
+.vz-serie:hover { background: var(--gray-bg); }
+.vz-serie.atual { background: var(--sky); border-color: var(--blue2); }
+.vz-serie:focus-visible, .vz-jan:focus-visible, .vz-area:focus-visible { outline: 2px solid var(--foco); outline-offset: 2px; }
+.vz-mod { flex: none; width: 34px; height: 34px; border-radius: 10px; background: var(--navy); color: #fff; font-size: 12px; font-weight: 600; display: grid; place-items: center; }
+.vz-serie-txt { display: flex; flex-direction: column; min-width: 0; font-size: 14px; }
+.vz-aviso-pacientes { margin: 0; padding: 8px 10px; border-radius: var(--r3); background: var(--amber-bg); color: var(--amber); font-size: 13px; }
+.vz-ignorados { font-size: 13px; color: var(--ink2); margin-top: auto; }
+.vz-ignorados summary { cursor: pointer; padding: 4px; }
+.vz-ignorados ul { margin: 6px 0 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; overflow-wrap: anywhere; }
+
+/* Visor */
+.vz-visor { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 8px; min-height: 0; min-width: 0; }
+.vz-ferramentas { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.vz-janelas { display: flex; flex-wrap: wrap; gap: 4px; }
+.vz-jan { border: 1px solid var(--line2); background: var(--card); color: var(--ink2); border-radius: 10px; padding: 5px 10px; font: inherit; font-size: 13px; cursor: pointer; }
+.vz-jan.ativa { background: var(--navy); border-color: var(--navy); color: #fff; }
+.vz-zoom { gap: 6px; margin-left: auto; }
+.vz-area { position: relative; background: #000; border-radius: var(--r2); overflow: hidden; cursor: ns-resize; touch-action: none; min-height: 0; }
+.vz-area.mover { cursor: grab; }
+.vz-canvas { position: absolute; left: 50%; top: 50%; transform-origin: center; }
+.vz-sobre { position: absolute; color: #E8EAEF; font-size: 12px; line-height: 1.5; text-shadow: 0 1px 2px #000; pointer-events: none; }
+.vz-sobre-esq { left: 12px; top: 10px; }
+.vz-sobre-dir { right: 12px; top: 10px; text-align: right; }
+.vz-marcada { color: #8FD3FF; font-weight: 600; }
+.vz-erro { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: 70%; background: var(--rose-bg); color: var(--rose); padding: 12px 16px; border-radius: var(--r3); font-size: 14px; }
+.vz-rodape { display: flex; align-items: center; gap: 12px; }
+.vz-barra { flex: 1; min-width: 0; accent-color: var(--blue); }
+
+/* Painel de exportação */
+.vz-painel { background: var(--card); border-radius: var(--r2); box-shadow: var(--sh); padding: 14px; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.vz-titulo { margin: 0; font-size: 16px; color: var(--navy); }
+.vz-marcadas { list-style: none; margin: 0; padding: 0; flex: 1; min-height: 60px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+.vz-marcadas li { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: var(--r3); background: var(--gray-bg); }
+.vz-marcada-txt { display: flex; flex-direction: column; flex: 1; min-width: 0; font-size: 14px; }
+.vz-bloqueio { margin: 0; padding: 10px; border-radius: var(--r3); background: var(--rose-bg); color: var(--rose); font-size: 13px; }
+
+/* Tela inicial */
+.vz-inicio { flex: 1; display: grid; place-items: center; min-height: 0; }
+.vz-inicio-cartao { background: var(--card); border-radius: var(--r); box-shadow: var(--sh2); padding: 36px 44px; max-width: 520px; text-align: center; display: flex; flex-direction: column; gap: 14px; align-items: center; }
+.vz-inicio-cartao h1 { margin: 0; font-size: 22px; color: var(--navy); }
+.vz-inicio-cartao p { margin: 0; color: var(--ink2); }
+
+/* Seletor de imagens por página: rótulo acima, opções numa linha. */
+.vz-painel .grp-op { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.vz-painel .grp-op .seg { flex-wrap: nowrap; }

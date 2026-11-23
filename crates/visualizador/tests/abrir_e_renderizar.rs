@@ -6,8 +6,9 @@
 use std::path::PathBuf;
 
 use vidacor_visualizador::{
-    abrir, codificar_jpeg, decodificar, nome_arquivo_jpeg, Erro, Estudo, Exames, Janela, Limites,
-    MotivoIgnorado, Pixels, QuadroCinza, QuadroDecodificado, QUALIDADE_PADRAO,
+    abrir, codificar_jpeg, conferir_um_estudo, decodificar, nome_arquivo_jpeg, Erro, Estudo,
+    Exames, Janela, Limites, MotivoIgnorado, Pixels, QuadroCinza, QuadroDecodificado,
+    QUALIDADE_PADRAO,
 };
 
 fn dados(nome: &str) -> PathBuf {
@@ -313,4 +314,30 @@ fn nada_do_paciente_no_debug_nem_no_nome_do_arquivo() {
         None,
     );
     assert_eq!(nome, "exame-TESTE0001-serie2-img003.jpg");
+}
+
+// FC-VIS-03: imagens de dois pacientes não viram um PDF.
+#[test]
+fn um_pdf_um_paciente() {
+    let exames = abrir(&dados("exame.zip"), &Limites::default()).unwrap();
+    let tc = estudo(&exames, "TESTE0001");
+    let rx = estudo(&exames, "TESTE0002");
+    let outro = estudo(&exames, "TESTE0006");
+    assert_eq!(conferir_um_estudo([tc, tc]).unwrap().uid, tc.uid);
+    assert!(matches!(
+        conferir_um_estudo([tc, outro]),
+        Err(Erro::PacientesDiferentes)
+    ));
+    assert!(matches!(
+        conferir_um_estudo([tc, rx, outro]),
+        Err(Erro::PacientesDiferentes)
+    ));
+    assert!(matches!(
+        conferir_um_estudo([tc, rx]),
+        Err(Erro::EstudosDiferentes)
+    ));
+    assert!(matches!(
+        conferir_um_estudo(std::iter::empty()),
+        Err(Erro::NadaEscolhido)
+    ));
 }

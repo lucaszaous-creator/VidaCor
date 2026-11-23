@@ -9,6 +9,7 @@
 
 mod atendimento;
 mod dossie;
+mod imagens;
 mod laudo;
 mod motor;
 
@@ -18,6 +19,9 @@ pub use atendimento::{
     MODELO_COMPROVANTE, MODELO_DECLARACAO, MODELO_RECIBO,
 };
 pub use dossie::{dossie_pdf, DossieLastro, EventoDoDossie, NoDoDossie, MODELO_DOSSIE};
+pub use imagens::{
+    imagens_pdf, Grade, ImagemDoExame, ImagensDoExame, MAX_IMAGENS_PDF, MODELO_IMAGENS,
+};
 pub use laudo::{
     codigo_verificacao, laudo_pdf, AchadoImpresso, Assinatura, LaudoImpresso, MedicoImpresso,
     Retificacao, MODELO_LAUDO,

@@ -15,6 +15,13 @@ ignore = [
   # astral-tokio-tar sem manutenção: entra só como dependência de TESTE (testcontainers) e não vai
   # para o binário. DEC-2026-11-08-47.
   { id = "RUSTSEC-2026-0440", reason = "dependência só de teste (testcontainers)" },
+  # Visualizador (docs/31). `encoding` sem manutenção (sem vulnerabilidade): o dicom-rs 0.10 usa para ler
+  # os conjuntos de caracteres antigos dos textos DICOM (nomes com acento). Só decodifica texto de exames
+  # abertos localmente, com limites de tamanho. Rever a cada atualização do dicom-rs. DEC-2026-11-23-13.
+  { id = "RUSTSEC-2021-0153", reason = "dicom-rs: só leitura de texto DICOM; sem vulnerabilidade" },
+  # `proc-macro-error` sem manutenção: macro de COMPILAÇÃO das bibliotecas GTK, que o Tauri usa só no
+  # Linux; não entra no binário do Windows nem roda em tempo de execução. DEC-2026-11-23-13.
+  { id = "RUSTSEC-2024-0370", reason = "macro de compilação do GTK (Linux); sem código em execução" },
   # Dependências internas do Typst (PDF do laudo e do dossiê). Aceitas pelo dono do produto em
   # 08/11/2026 (DEC-2026-11-08-87). Rever até 06/02/2027 ou a cada atualização do Typst.
   # quick-xml: só é usado pelo Typst para ler XML/bibliografia; o modelo é fixo e o mundo é fechado
@@ -77,3 +84,6 @@ crate = "vidacor-visualizador"
 [[licenses.exceptions]]
 allow = ["IJG"]
 crate = "jpeg-encoder"
+[[licenses.exceptions]]
+allow = ["LicenseRef-VidaCor-Proprietario"]
+crate = "vidacor-visualizador-app"

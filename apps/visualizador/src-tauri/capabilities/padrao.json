@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "padrao",
+  "description": "Janela principal: só os comandos do próprio programa (SEC Tauri, capacidades mínimas). Diálogos de arquivo são abertos pelo Rust, sem permissão para a tela.",
+  "windows": ["principal"],
+  "permissions": ["core:event:default"]
+}

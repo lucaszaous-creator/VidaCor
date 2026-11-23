@@ -44,11 +44,13 @@ fn arquivo(caminho: &str) -> Result<FileId, ErroDocumento> {
     Ok(RootedPath::new(VirtualRoot::Project, virtual_).intern())
 }
 
-/// O mundo de uma compilação: o modelo (fixo, do binário) e os dados deste documento.
+/// O mundo de uma compilação: o modelo (fixo, do binário), os dados deste documento e, quando o
+/// documento tem figuras, os arquivos binários com caminhos gerados pelo código (nunca pelo dado).
 struct Mundo {
     principal: Source,
     dados_id: FileId,
     dados: Bytes,
+    anexos: Vec<(FileId, Bytes)>,
 }
 
 impl World for Mundo {
@@ -75,6 +77,8 @@ impl World for Mundo {
     fn file(&self, id: FileId) -> FileResult<Bytes> {
         if id == self.dados_id {
             Ok(self.dados.clone())
+        } else if let Some((_, b)) = self.anexos.iter().find(|(a, _)| *a == id) {
+            Ok(b.clone())
         } else if id == self.principal.id() {
             Ok(Bytes::from_string(self.principal.text().to_owned()))
         } else {
@@ -116,13 +120,28 @@ pub(crate) fn compilar_documento(
     modelo: &'static str,
     dados: &serde_json::Value,
 ) -> Result<PagedDocument, ErroDocumento> {
+    compilar_documento_com_anexos(modelo, dados, Vec::new())
+}
+
+/// Como [`compilar_documento`], com arquivos binários (imagens) que o modelo lê por caminho fixo.
+/// Os caminhos são escolhidos pelo código do crate (ex.: `/imagem/3.jpg`), nunca vindos do dado.
+pub(crate) fn compilar_documento_com_anexos(
+    modelo: &'static str,
+    dados: &serde_json::Value,
+    anexos: Vec<(String, Vec<u8>)>,
+) -> Result<PagedDocument, ErroDocumento> {
     let principal_id = arquivo("/principal.typ")?;
     let dados_id = arquivo("/dados.json")?;
     let json = serde_json::to_vec(dados).map_err(|e| ErroDocumento::Dados(e.to_string()))?;
+    let anexos = anexos
+        .into_iter()
+        .map(|(caminho, bytes)| Ok((arquivo(&caminho)?, Bytes::new(bytes))))
+        .collect::<Result<Vec<_>, ErroDocumento>>()?;
     let mundo = Mundo {
         principal: Source::new(principal_id, modelo.to_owned()),
         dados_id,
         dados: Bytes::new(json),
+        anexos,
     };
     let resultado = typst::compile::<PagedDocument>(&mundo).output;
     // Libera o cache de memoização das compilações antigas (servidor de longa duração).

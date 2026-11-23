@@ -31,10 +31,14 @@ jobs:
       - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1 # v2.8.1
       - name: Formatação
         run: cargo fmt --all -- --check
+      - name: Bibliotecas de sistema (xmllint valida o XML TISS; WebKitGTK compila o Visualizador Tauri)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libxml2-utils libwebkit2gtk-4.1-dev libsoup-3.0-dev libjavascriptcoregtk-4.1-dev librsvg2-dev
+          # O Tauri embute a tela compilada (apps/visualizador/dist); para lint e testes do Rust basta a pasta existir.
+          mkdir -p apps/visualizador/dist
       - name: Clippy sem avisos
         run: cargo clippy --workspace --all-targets -- -D warnings
-      - name: Ferramentas dos testes (xmllint valida o XML TISS no XSD oficial)
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq libxml2-utils
       - name: Testes (unidade e integração com Testcontainers)
         run: cargo test --workspace --no-fail-fast
       - name: Cadeia de suprimentos (cargo-deny, SEC-SUP-1)
@@ -68,3 +72,4 @@ jobs:
         run: |
           pnpm --filter @vidacor/web exec playwright install --with-deps chromium
           pnpm --filter @vidacor/web test:telas
+          pnpm --filter @vidacor/visualizador test:telas

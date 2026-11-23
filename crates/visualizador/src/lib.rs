@@ -20,6 +20,7 @@ mod fonte;
 mod janela;
 mod jpeg;
 mod render;
+mod selecao;
 mod texto;
 
 pub use erro::Erro;
@@ -28,4 +29,5 @@ pub use fonte::{Limites, Origem};
 pub use janela::{janelas_prontas, Janela, JanelaPronta};
 pub use jpeg::{codificar_jpeg, nome_arquivo_jpeg, QUALIDADE_PADRAO};
 pub use render::{decodificar, ImagemRenderizada, Pixels, QuadroCinza, QuadroDecodificado};
+pub use selecao::conferir_um_estudo;
 pub use texto::data_br;

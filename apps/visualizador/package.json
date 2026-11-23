@@ -1,0 +1,43 @@
+{
+  "name": "@vidacor/visualizador",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Visualizador VidaCor (docs/31): tela do programa Tauri que abre exames DICOM e gera PDF e JPEG.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:telas": "node testes/telas/cabe-na-janela.mjs",
+    "build": "vite build",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@fontsource/inter": "5.3.0",
+    "@tauri-apps/api": "2.12.4",
+    "@vidacor/design-system": "workspace:*",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@tauri-apps/cli": "2.12.4",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.8",
+    "@types/node": "22.20.5",
+    "@types/react": "18.3.31",
+    "@types/react-dom": "18.3.7",
+    "@vitejs/plugin-react": "5.2.0",
+    "eslint": "10.14.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "jsdom": "26.1.0",
+    "playwright": "1.63.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1",
+    "vite": "7.3.7",
+    "vitest": "4.1.12"
+  }
+}

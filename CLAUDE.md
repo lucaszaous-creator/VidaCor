@@ -18,6 +18,10 @@ núcleo Rust com login OIDC, agenda do dia, check-in com dois identificadores, w
 e conciliação de estudo, com testes de integração em PostgreSQL e Orthanc reais. O comando único de
 verificação é `just test`; como rodar está no [README](README.md#como-rodar).
 
+**Foco atual (23/11/2026, DEC-2026-11-23-01 e 02):** o **Visualizador VidaCor** ([docs/31](docs/31-visualizador-e-exportacao-dicom.md)),
+programa Tauri para Windows que abre exames DICOM e gera PDF e JPEG para o paciente (`crates/visualizador`,
+`apps/visualizador`, PDF em `crates/documentos`). O sistema completo acima fica pausado, não apagado.
+
 ## Regra de decisão (obrigatória) — [ADR-0019](docs/adr/0019-decisoes-pelo-mais-profissional-com-lastro.md)
 Na dúvida entre caminhos, escolha **o mais profissional e o mais rastreável** e registre em
 [docs/decisoes.md](docs/decisoes.md): data, quem decidiu, alternativas, motivo, onde foi aplicado e como desfazer.

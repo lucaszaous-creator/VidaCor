@@ -24,4 +24,12 @@ pub enum Erro {
     ImagemGrandeDemais,
     #[error("não foi possível gerar o JPEG")]
     Jpeg,
+    #[error("nenhuma imagem foi escolhida")]
+    NadaEscolhido,
+    #[error(
+        "as imagens escolhidas são de pacientes diferentes; um PDF leva imagens de um só paciente"
+    )]
+    PacientesDiferentes,
+    #[error("as imagens escolhidas são de exames diferentes; gere um PDF por exame")]
+    EstudosDiferentes,
 }
