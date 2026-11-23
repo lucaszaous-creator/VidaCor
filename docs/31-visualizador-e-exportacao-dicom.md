@@ -1,9 +1,9 @@
 # 31 · Visualizador VidaCor: abrir exames DICOM e exportar PDF e JPEG para o paciente
 
 **Status:** plano aprovado pelo dono do produto em 23/11/2026 (DEC-2026-11-23-02). E1 (núcleo), E2 (tela) e
-E3 (PDF) entregues; E4 (login, instalador assinado, piloto) a fazer. Riscos RCP-VIS seguem aguardando o
+E3 (PDF) entregues; E4: instalador pela CI feito, piloto a fazer. Riscos RCP-VIS seguem aguardando o
 responsável clínico; teste de usabilidade com a equipe ainda não feito.
-**Decisões:** DEC-2026-11-23-01 a DEC-2026-11-23-14 em [decisoes.md](decisoes.md).
+**Decisões:** DEC-2026-11-23-01 a DEC-2026-11-23-15 em [decisoes.md](decisoes.md).
 **Base (ADR-0022):** prática de RIS/PACS (OHIF, visualizadores que acompanham o CD do exame, impressão
 de imagens em papel no lugar do filme). Como a Medware e a Mediworks exportam imagens para o paciente:
 **não verificado** (não há acesso aos sistemas nesta sessão; levantar com a equipe, item P-03).
@@ -182,7 +182,7 @@ no Windows (gera `.msi` e `.exe`); precisa das ferramentas de C/C++ do Visual St
 | P-04 | Quem gera o PDF? | **Técnico, recepção e médico** (respondido em 23/11/2026) |
 | P-05 | Os computadores são Windows? | **Sim, Windows** (respondido em 23/11/2026); versão a confirmar, premissa Windows 10/11 |
 | P-06 | Logotipo e dados da clínica para o cabeçalho | Logotipo de `design/assets/marca/logo.png` (recorte; original vetorial ainda a pedir, docs/10). **Respondido em 23/11/2026:** VIDACOR SERVICOS MEDICOS MACAE LTDA, CNPJ 07.000.379/0001-89, Av. Nossa Senhora da Glória, 1225, Praia Campista, Macaé, RJ. **Telefone e responsável técnico: a confirmar** |
-| P-08 | Quem usa: login próprio do programa ou o login do Windows? | Premissa até a E4: registro com o usuário do Windows; login próprio (VIS-S4) na E4 |
+| P-08 | Quem usa: login próprio do programa ou o login do Windows? | **Login do Windows** (respondido em 23/11/2026); o registro de exportações grava o usuário do Windows e a estação |
 | P-07 | Como o PDF chega ao paciente? | **Arquivo**; a clínica escolhe enviar ou imprimir (respondido em 23/11/2026) |
 
 ## 9. Instalação e liberação (E4)
@@ -199,10 +199,10 @@ nessa hora.
 | # | Item | Quem | Situação |
 |---|---|---|---|
 | L1 | Instalador gerado e testado no Windows pela CI | Claude | Feito na CI (ver a execução) |
-| L2 | Instalação numa estação piloto e roteiro de conferência manual (abrir pasta, CD e `.zip`; gerar PDF e JPEG; conferir nome e nascimento; tentar dois pacientes) | TI da clínica com o técnico | A fazer |
+| L2 | Instalação piloto e roteiro de conferência manual (abrir pasta, CD e `.zip`; gerar PDF e JPEG; conferir nome e nascimento; tentar dois pacientes) | Dono do produto, no próprio computador (decidido em 23/11/2026) | A fazer: no computador pessoal só com exames fictícios ou anonimizados; exame real só em computador da clínica (G4, LGPD) |
 | L3 | Parecer do responsável clínico de segurança sobre RCP-VIS-01 a 03 e o modelo do PDF | Responsável clínico | A fazer (bloqueia uso com paciente) |
 | L4 | Teste de usabilidade com técnico, recepção e médico nas tarefas "abrir exame" e "gerar PDF" (docs/26) | Equipe da clínica | A fazer |
-| L5 | Assinatura de código do instalador (certificado de assinatura em nome da empresa); sem ela o Windows mostra o aviso "editor desconhecido" | Dono do produto (compra do certificado) | A decidir; piloto pode usar sem assinatura, com o SHA-256 conferido pela TI |
-| L6 | Login: usuário do Windows (hoje) ou login próprio do programa (VIS-S4, P-08) | Dono do produto | A decidir |
+| L5 | Assinatura de código do instalador; sem ela o Windows mostra o aviso "editor desconhecido" | Dono do produto | **Decidido em 23/11/2026: segue sem certificado, com o aviso** (DEC-2026-11-23-15); conferir o SHA-256 do instalador antes de instalar |
+| L6 | Login: usuário do Windows ou login próprio do programa (VIS-S4, P-08) | Dono do produto | **Decidido em 23/11/2026: login do Windows basta** (DEC-2026-11-23-15) |
 | L7 | Telefone e responsável técnico no cabeçalho do PDF (P-06) | Dono do produto | A informar (o PDF já sai sem eles, sem inventar) |
 | L8 | Liberação: piloto em uma estação por pelo menos uma semana, depois as demais; sem liberar em véspera de feriado | Dono do produto | A fazer |
