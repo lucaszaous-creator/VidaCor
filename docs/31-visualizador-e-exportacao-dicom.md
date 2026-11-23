@@ -1,7 +1,8 @@
 # 31 · Visualizador VidaCor: abrir exames DICOM e exportar PDF e JPEG para o paciente
 
-**Status:** proposta aguardando aprovação do dono do produto (G6). Nenhum código foi escrito.
-**Decisão de origem:** DEC-2026-11-23-01 em [decisoes.md](decisoes.md).
+**Status:** plano aprovado pelo dono do produto em 23/11/2026 (DEC-2026-11-23-02). E1 (núcleo) entregue
+em `crates/visualizador`; E2 a E4 a fazer. Riscos RCP-VIS seguem aguardando o responsável clínico.
+**Decisões:** DEC-2026-11-23-01 a DEC-2026-11-23-05 em [decisoes.md](decisoes.md).
 **Base (ADR-0022):** prática de RIS/PACS (OHIF, visualizadores que acompanham o CD do exame, impressão
 de imagens em papel no lugar do filme). Como a Medware e a Mediworks exportam imagens para o paciente:
 **não verificado** (não há acesso aos sistemas nesta sessão; levantar com a equipe, item P-03).
@@ -109,14 +110,39 @@ Riscos propostos para o responsável clínico (entram no registro só com o acei
 | E3 | PDF Typst com VIS-08 a VIS-10 e bloqueio VIS-S1 | Modelo aprovado pelo dono e pelo responsável clínico |
 | E4 | Login, registro de exportação, instalador Windows assinado | Instalação em uma estação piloto |
 
-## 8. Pendências (a confirmar com o dono do produto)
+### 7.1 E1 entregue (núcleo, `crates/visualizador`)
 
-| ID | Pergunta | Premissa usada até a resposta |
+- Abre pasta (com subpastas e `.zip` dentro), `.zip` e arquivo solto; nada é extraído para o disco;
+  imagem repetida (mesmo SOPInstanceUID, comum em CD) entra uma vez só.
+- Agrupa por paciente + estudo (o mesmo UID de estudo com paciente diferente fica separado) e série;
+  ordena os cortes pela posição ao longo da normal, depois pelo InstanceNumber.
+- Lê: sem compressão (implícito e explícito), JPEG Baseline, JPEG Lossless, JPEG 2000, JPEG-LS, RLE e
+  Deflate; MONOCHROME1 e 2, RGB, YBR_FULL, YBR_FULL_422 e PALETTE COLOR; vários quadros (cine).
+- Janela do arquivo (todas as gravadas), automática e as quatro prontas da TC; reescala aplicada.
+- JPEG com a mesma renderização da tela; nome do arquivo sem dado pessoal.
+- Limites de quantidade, tamanho de arquivo, tamanho total e tamanho de imagem.
+- 28 testes (`cargo test -p vidacor-visualizador`) com exames **sintéticos** gerados por
+  `tools/imagens-dicom/gerar_amostras_teste.py` (TC, RX, MG, RM, US). Conferência extra feita só na
+  sessão, fora do repositório, com 5 cortes reais anonimizados do Canon Aquilion Start: abriram e a
+  imagem saiu igual à conversão de referência.
+- Ferramenta de conferência: `cargo run -p vidacor-visualizador --example exportar_jpeg -- <exame> <saída>`.
+
+**Limites conhecidos da E1 (não verificados com aparelho real):**
+- VOI LUT em tabela (alguns RX digitais) e função SIGMOID (algumas mamografias): hoje usa a janela
+  numérica ou a automática; conferir quando houver amostra desses aparelhos.
+- Paleta segmentada, cor em 16 bits, JPEG-XL e HTJ2K: o arquivo abre no índice, mas a imagem mostra
+  "formato que o visualizador ainda não lê".
+- Arquivo DICOM sem o cabeçalho de arquivo (ACR-NEMA antigo): listado como "não é DICOM".
+- Compilar no Windows exige as ferramentas de C/C++ do Visual Studio e o CMake (OpenJPEG e CharLS); fica para a E4.
+
+## 8. Pendências
+
+| ID | Pergunta | Resposta ou premissa |
 |---|---|---|
-| P-01 | Quais outros aparelhos e modalidades (ultrassom, raio-X, ressonância, mamografia)? | Só TC Canon na E1 |
-| P-02 | De onde vêm os arquivos: CD, pasta na rede, exportação do PACS atual? | `.zip` e pasta local |
-| P-03 | Como a Medware/Mediworks entrega imagens hoje (papel, CD, portal)? | Não verificado |
-| P-04 | Quem gera o PDF: recepção, técnico ou médico? | Recepção e técnico |
-| P-05 | Os computadores são Windows? Qual versão? | Windows 10/11 |
-| P-06 | Logotipo e dados da clínica para o cabeçalho | Logotipo em `design/` |
-| P-07 | O PDF vai impresso, por e-mail/WhatsApp ou pelo portal? | Arquivo salvo e impresso |
+| P-01 | Quais aparelhos e modalidades? | Dono do produto não sabe; pediu **todos que usam DICOM**. Atendido pela lista de formatos da E1; amostras anonimizadas de cada aparelho continuam bem-vindas |
+| P-02 | De onde vêm os arquivos: CD, pasta na rede, exportação do PACS atual? | Premissa: `.zip`, pasta local e CD |
+| P-03 | Como a Medware/Mediworks entrega imagens hoje (papel, CD, portal)? | Não verificado (sem acesso aos sistemas) |
+| P-04 | Quem gera o PDF? | **Técnico, recepção e médico** (respondido em 23/11/2026) |
+| P-05 | Os computadores são Windows? | **Sim, Windows** (respondido em 23/11/2026); versão a confirmar, premissa Windows 10/11 |
+| P-06 | Logotipo e dados da clínica para o cabeçalho | Premissa: logotipo em `design/` |
+| P-07 | Como o PDF chega ao paciente? | **Arquivo**; a clínica escolhe enviar ou imprimir (respondido em 23/11/2026) |

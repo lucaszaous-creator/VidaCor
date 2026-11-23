@@ -1,0 +1,22 @@
+[package]
+name = "vidacor-visualizador"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Núcleo do Visualizador VidaCor (docs/31): abre exames DICOM de pasta, .zip ou arquivo, agrupa por paciente, estudo e série, decodifica, aplica janela e gera JPEG"
+
+[dependencies]
+dicom-core = "=0.10.1"
+dicom-dictionary-std = "=0.10.1"
+dicom-encoding = "=0.10.1"
+dicom-object = "=0.10.1"
+dicom-pixeldata = { version = "=0.10.1", features = ["openjpeg-sys", "charls"] }
+dicom-transfer-syntax-registry = "=0.10.1"
+image = { version = "=0.25.10", default-features = false, features = ["jpeg"] }
+thiserror = "2.0.17"
+zip = { version = "=9.8.2", default-features = false, features = ["deflate"] }
+
+[lints]
+workspace = true

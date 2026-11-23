@@ -68,3 +68,12 @@ allow-registry = ["https://github.com/rust-lang/crates.io-index"]
 [[licenses.exceptions]]
 allow = ["LicenseRef-VidaCor-Proprietario"]
 crate = "vidacor-documentos"
+[[licenses.exceptions]]
+allow = ["LicenseRef-VidaCor-Proprietario"]
+crate = "vidacor-visualizador"
+# jpeg-encoder entra pelo dicom-rs (recurso "jpeg" do registro de transfer syntaxes, que junta
+# leitura e escrita de JPEG). Licença IJG: permissiva, pede crédito na documentação (THIRD_PARTY_NOTICES).
+# DEC-2026-11-23-04.
+[[licenses.exceptions]]
+allow = ["IJG"]
+crate = "jpeg-encoder"
