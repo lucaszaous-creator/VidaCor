@@ -184,3 +184,25 @@ no Windows (gera `.msi` e `.exe`); precisa das ferramentas de C/C++ do Visual St
 | P-06 | Logotipo e dados da clínica para o cabeçalho | Logotipo de `design/assets/marca/logo.png` (recorte; original vetorial ainda a pedir, docs/10). **Respondido em 23/11/2026:** VIDACOR SERVICOS MEDICOS MACAE LTDA, CNPJ 07.000.379/0001-89, Av. Nossa Senhora da Glória, 1225, Praia Campista, Macaé, RJ. **Telefone e responsável técnico: a confirmar** |
 | P-08 | Quem usa: login próprio do programa ou o login do Windows? | Premissa até a E4: registro com o usuário do Windows; login próprio (VIS-S4) na E4 |
 | P-07 | Como o PDF chega ao paciente? | **Arquivo**; a clínica escolhe enviar ou imprimir (respondido em 23/11/2026) |
+
+## 9. Instalação e liberação (E4)
+
+**Como o instalador é feito:** a CI (`.github/workflows/visualizador-windows.yml`) roda em Windows, testa a
+tela e o Rust no próprio Windows e gera `Visualizador VidaCor_0.1.0_x64-setup.exe` (NSIS, instala para
+todos os usuários da máquina, pede administrador) e o `.msi` (para instalação pela TI em várias máquinas),
+com o SHA-256 de cada um. O artefato fica 30 dias na execução da CI. O WebView2 (já presente no
+Windows 11 e no Windows 10 atualizado) é instalado pelo próprio instalador se faltar, o que pede internet
+nessa hora.
+
+**Antes de usar com paciente (portões do docs/16), cada um com quem aprova:**
+
+| # | Item | Quem | Situação |
+|---|---|---|---|
+| L1 | Instalador gerado e testado no Windows pela CI | Claude | Feito na CI (ver a execução) |
+| L2 | Instalação numa estação piloto e roteiro de conferência manual (abrir pasta, CD e `.zip`; gerar PDF e JPEG; conferir nome e nascimento; tentar dois pacientes) | TI da clínica com o técnico | A fazer |
+| L3 | Parecer do responsável clínico de segurança sobre RCP-VIS-01 a 03 e o modelo do PDF | Responsável clínico | A fazer (bloqueia uso com paciente) |
+| L4 | Teste de usabilidade com técnico, recepção e médico nas tarefas "abrir exame" e "gerar PDF" (docs/26) | Equipe da clínica | A fazer |
+| L5 | Assinatura de código do instalador (certificado de assinatura em nome da empresa); sem ela o Windows mostra o aviso "editor desconhecido" | Dono do produto (compra do certificado) | A decidir; piloto pode usar sem assinatura, com o SHA-256 conferido pela TI |
+| L6 | Login: usuário do Windows (hoje) ou login próprio do programa (VIS-S4, P-08) | Dono do produto | A decidir |
+| L7 | Telefone e responsável técnico no cabeçalho do PDF (P-06) | Dono do produto | A informar (o PDF já sai sem eles, sem inventar) |
+| L8 | Liberação: piloto em uma estação por pelo menos uma semana, depois as demais; sem liberar em véspera de feriado | Dono do produto | A fazer |
