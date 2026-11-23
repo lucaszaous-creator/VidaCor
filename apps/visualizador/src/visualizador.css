@@ -62,3 +62,9 @@ body { background: var(--bg); color: var(--ink); font-family: Inter, system-ui, 
 /* Seletor de imagens por página: rótulo acima, opções numa linha. */
 .vz-painel .grp-op { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
 .vz-painel .grp-op .seg { flex-wrap: nowrap; }
+
+/* Painel: PDF do exame (séries) em cima, JPEG avulso embaixo; cada lista rola dentro do bloco. */
+.vz-bloco { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+.vz-bloco-pdf { flex: 1 1 58%; }
+.vz-bloco-jpeg { flex: 1 1 42%; border-top: 1px solid var(--line); padding-top: 12px; }
+.vz-series-pdf { list-style: none; margin: 0; padding: 0; flex: 1; min-height: 56px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }

@@ -1,18 +1,19 @@
-//! Exportação de PDF e JPEG, sem Tauri (testável): resolve os itens escolhidos no exame aberto,
-//! renderiza cada um com a janela com que foi marcado e monta o PDF com os dados do próprio exame.
+//! Exportação de PDF e JPEG, sem Tauri (testável). O PDF leva todas as imagens das séries pedidas de
+//! um exame, com os dados do próprio exame (DEC-2026-11-23-16); o JPEG leva as imagens marcadas, cada
+//! uma com a janela com que foi marcada.
 
 use std::path::{Path, PathBuf};
 
 use chrono::{DateTime, Datelike, Local, Timelike, Utc};
-use vidacor_documentos::{imagens_pdf, Clinica, ImagemDoExame, ImagensDoExame, Momento, Pdf};
+use vidacor_documentos::{
+    imagens_pdf, Clinica, ImagemDoExame, ImagensDoExame, Momento, Pdf, SerieDoPdf,
+};
 use vidacor_visualizador::{
-    codificar_jpeg, conferir_um_estudo, decodificar, nome_arquivo_jpeg, Estudo, Exames, Imagem,
-    ImagemRenderizada, Janela, Limites, QuadroDecodificado, Serie, QUALIDADE_PADRAO,
+    codificar_jpeg, decodificar, nome_arquivo_jpeg, Estudo, Exames, Imagem, ImagemRenderizada,
+    Janela, Limites, QuadroDecodificado, Serie, QUALIDADE_PADRAO,
 };
 
-pub use vidacor_documentos::Grade;
-
-use crate::dto::ItemDto;
+use crate::dto::{ItemDto, SeriePedidaDto};
 use crate::ErroApp;
 
 /// Cabeçalho da clínica no PDF (dados informados pelo dono do produto em 23/11/2026, DEC-2026-11-23-14).
@@ -128,28 +129,118 @@ fn momento(agora: DateTime<Local>) -> Momento {
     }
 }
 
-/// Monta o PDF. Confere "um PDF, um paciente" (VIS-S1) e os dois identificadores antes de tudo.
-/// Os dados impressos vêm do exame, nunca da tela (G1).
+/// Título da série na página: número, descrição e a janela, quando foi escolhida uma para a série.
+pub fn titulo_da_serie(serie: &Serie, janela: Option<Janela>) -> String {
+    let mut t = match (serie.numero, serie.descricao.is_empty()) {
+        (Some(n), false) => format!("Série {n}, {}", serie.descricao),
+        (Some(n), true) => format!("Série {n}"),
+        (None, false) => format!("Série {}", serie.descricao),
+        (None, true) => "Série sem número".to_owned(),
+    };
+    if let Some(j) = janela {
+        t.push_str(&format!(
+            ", janela {}/{}",
+            numero(j.centro),
+            numero(j.largura)
+        ));
+    }
+    t
+}
+
+/// Legenda curta de cada imagem no PDF (as imagens ficam pequenas em 4×5).
+fn legenda_curta(imagem: &Imagem, posicao: usize, janela: Option<Janela>) -> String {
+    let mut partes = vec![format!(
+        "Imagem {}",
+        imagem
+            .numero
+            .map_or(posicao, |n| usize::try_from(n).unwrap_or(posicao))
+    )];
+    if imagem.quadros > 1 {
+        partes.push(format!("vídeo de {} quadros, quadro 1", imagem.quadros));
+    }
+    if let Some(j) = janela {
+        partes.push(format!("janela {}/{}", numero(j.centro), numero(j.largura)));
+    }
+    partes.join(", ")
+}
+
+/// Séries pedidas, sem repetição e na ordem do exame. Índice fora do exame é erro.
+pub fn series_pedidas<'a>(
+    estudo: &'a Estudo,
+    pedidas: &[SeriePedidaDto],
+) -> Result<Vec<(&'a Serie, Option<Janela>)>, ErroApp> {
+    let mut indices: Vec<&SeriePedidaDto> = Vec::new();
+    for p in pedidas {
+        if estudo.series.get(p.serie).is_none() {
+            return Err(ErroApp::ItemInexistente);
+        }
+        if !indices.iter().any(|x| x.serie == p.serie) {
+            indices.push(p);
+        }
+    }
+    indices.sort_by_key(|p| p.serie);
+    if indices.is_empty() {
+        return Err(vidacor_visualizador::Erro::NadaEscolhido.into());
+    }
+    let escolhidas: Vec<_> = indices
+        .iter()
+        .filter_map(|p| {
+            estudo
+                .series
+                .get(p.serie)
+                .map(|s| (s, p.janela.map(Janela::from)))
+        })
+        .collect();
+    let total: usize = escolhidas.iter().map(|(s, _)| s.imagens.len()).sum();
+    if total > MAX_ITENS {
+        return Err(ErroApp::MuitasImagens(MAX_ITENS));
+    }
+    Ok(escolhidas)
+}
+
+/// Monta o PDF do exame com todas as imagens das séries pedidas (uma série por página, grade pela
+/// quantidade). Um só exame por PDF (VIS-S1) e os dois identificadores conferidos antes de tudo; os
+/// dados impressos vêm do exame, nunca da tela (G1). Vídeo (vários quadros) entra pelo primeiro quadro.
 pub fn montar_pdf<'a>(
-    itens: &[ItemResolvido<'a>],
-    grade: Grade,
+    exames: &'a Exames,
+    estudo: usize,
+    pedidas: &[SeriePedidaDto],
     agora: DateTime<Local>,
-) -> Result<(Pdf, &'a Estudo), ErroApp> {
-    let estudo = conferir_um_estudo(itens.iter().map(|i| i.estudo))?;
+) -> Result<(Pdf, &'a Estudo, usize), ErroApp> {
+    let estudo = exames.estudos.get(estudo).ok_or(ErroApp::ItemInexistente)?;
     let p = &estudo.paciente;
     let Some(nascimento) = p.nascimento().filter(|_| !p.nome().is_empty()) else {
         return Err(ErroApp::SemIdentificadores);
     };
-    let imagens = itens
-        .iter()
-        .map(|item| {
-            let (img, janela) = renderizar(item)?;
-            Ok(ImagemDoExame {
-                jpeg: codificar_jpeg(&img, QUALIDADE_PADRAO)?,
-                legenda: legenda(item, janela),
+    let escolhidas = series_pedidas(estudo, pedidas)?;
+    let mut series = Vec::new();
+    let mut quantidade = 0;
+    for (serie, janela) in escolhidas {
+        let imagens = serie
+            .imagens
+            .iter()
+            .enumerate()
+            .map(|(i, imagem)| {
+                let item = ItemResolvido {
+                    estudo,
+                    serie,
+                    imagem,
+                    quadro: 0,
+                    janela,
+                };
+                let (img, usada) = renderizar(&item)?;
+                Ok(ImagemDoExame {
+                    jpeg: codificar_jpeg(&img, QUALIDADE_PADRAO)?,
+                    legenda: legenda_curta(imagem, i + 1, usada),
+                })
             })
-        })
-        .collect::<Result<Vec<_>, ErroApp>>()?;
+            .collect::<Result<Vec<_>, ErroApp>>()?;
+        quantidade += imagens.len();
+        series.push(SerieDoPdf {
+            titulo: titulo_da_serie(serie, janela),
+            imagens,
+        });
+    }
     let dados = ImagensDoExame {
         clinica: Clinica {
             nome: CLINICA.into(),
@@ -168,11 +259,10 @@ pub fn montar_pdf<'a>(
         medico_solicitante: estudo.medico_solicitante.clone(),
         gerado_em: agora.format("%d/%m/%Y às %H:%M").to_string(),
         momento: momento(agora),
-        grade,
-        imagens,
+        series,
     };
     let pdf = imagens_pdf(&dados).map_err(|e| ErroApp::Documento(e.to_string()))?;
-    Ok((pdf, estudo))
+    Ok((pdf, estudo, quantidade))
 }
 
 /// JPEG de cada item com o nome sem dado pessoal.

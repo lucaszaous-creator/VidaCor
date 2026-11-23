@@ -8,9 +8,11 @@ use tauri::{AppHandle, Manager, State};
 use tauri_plugin_dialog::{DialogExt, FilePath};
 use vidacor_visualizador::{abrir, decodificar, Janela, Limites, Pixels, QuadroDecodificado};
 
-use crate::dto::{self, AcaoDto, InfoQuadroDto, ItemDto, JanelaDto, ResultadoDto, ResumoDto};
+use crate::dto::{
+    self, AcaoDto, InfoQuadroDto, ItemDto, JanelaDto, ResultadoDto, ResumoDto, SeriePedidaDto,
+};
 use crate::estado::{ChaveQuadro, Estado};
-use crate::exportar::{self, Grade};
+use crate::exportar;
 use crate::registro::{sha256, Lancamento, Registro};
 use crate::ErroApp;
 
@@ -133,9 +135,9 @@ pub fn acoes_da_imagem(marcada: bool, total_marcadas: usize) -> Vec<AcaoDto> {
         AcaoDto {
             id: if marcada { "desmarcar" } else { "marcar" },
             rotulo: if marcada {
-                "Tirar da exportação"
+                "Tirar dos JPEG"
             } else {
-                "Marcar para exportar"
+                "Marcar para JPEG"
             },
             atalho: Some("M"),
             estado: if cheio { "indisponivel" } else { "disponivel" },
@@ -251,28 +253,20 @@ pub async fn exportar_jpeg(
     }))
 }
 
-/// Gera o PDF para o paciente e salva onde a pessoa escolher. A confirmação com nome e
-/// nascimento é feita na tela antes desta chamada (VIS-S2).
+/// Gera o PDF do exame para o paciente, com todas as imagens das séries pedidas, e salva onde a
+/// pessoa escolher. A confirmação com nome e nascimento é feita na tela antes desta chamada (VIS-S2).
 #[tauri::command]
 pub async fn gerar_pdf(
     app: AppHandle,
     estado: State<'_, Estado>,
     abertura: u64,
-    itens: Vec<ItemDto>,
-    por_pagina: u8,
+    estudo: usize,
+    series: Vec<SeriePedidaDto>,
 ) -> Result<Option<ResultadoDto>, ErroApp> {
-    let grade = match por_pagina {
-        1 => Grade::Uma,
-        4 => Grade::Quatro,
-        6 => Grade::Seis,
-        12 => Grade::Doze,
-        _ => return Err(ErroApp::GradeInvalida),
-    };
     let reg = registro(&app)?;
-    let (pdf, uid, sugerido) = estado.com_exame(abertura, |ex| {
-        let resolvidos = exportar::resolver(ex, &itens)?;
-        let (pdf, estudo) = exportar::montar_pdf(&resolvidos, grade, chrono::Local::now())?;
-        Ok((pdf, estudo.uid.clone(), exportar::nome_pdf(estudo)))
+    let (pdf, uid, sugerido, quantidade) = estado.com_exame(abertura, |ex| {
+        let (pdf, e, n) = exportar::montar_pdf(ex, estudo, &series, chrono::Local::now())?;
+        Ok((pdf, e.uid.clone(), exportar::nome_pdf(e), n))
     })?;
     let Some(destino) = app
         .dialog()
@@ -291,13 +285,13 @@ pub async fn gerar_pdf(
         &Lancamento {
             ato: "pdf",
             estudo_uid: uid,
-            imagens: itens.len(),
+            imagens: quantidade,
             sha256: vec![pdf.sha256.clone()],
             modelo: Some(pdf.modelo),
         },
     )?;
     Ok(Some(ResultadoDto {
-        quantidade: itens.len(),
+        quantidade,
         destino: destino.to_string_lossy().into_owned(),
     }))
 }

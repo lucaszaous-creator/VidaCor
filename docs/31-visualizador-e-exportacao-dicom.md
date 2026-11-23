@@ -3,7 +3,7 @@
 **Status:** plano aprovado pelo dono do produto em 23/11/2026 (DEC-2026-11-23-02). E1 (núcleo), E2 (tela) e
 E3 (PDF) entregues; E4: instalador pela CI feito, piloto a fazer. Riscos RCP-VIS seguem aguardando o
 responsável clínico; teste de usabilidade com a equipe ainda não feito.
-**Decisões:** DEC-2026-11-23-01 a DEC-2026-11-23-15 em [decisoes.md](decisoes.md).
+**Decisões:** DEC-2026-11-23-01 a DEC-2026-11-23-17 em [decisoes.md](decisoes.md).
 **Base (ADR-0022):** prática de RIS/PACS (OHIF, visualizadores que acompanham o CD do exame, impressão
 de imagens em papel no lugar do filme). Como a Medware e a Mediworks exportam imagens para o paciente:
 **não verificado** (não há acesso aos sistemas nesta sessão; levantar com a equipe, item P-03).
@@ -59,9 +59,9 @@ quando os exames já estiverem no PACS. O pedido atual é abrir os arquivos que 
 | VIS-04 | Janelas prontas (partes moles 40/400, cérebro 40/80, osso 500/2000, pulmão -600/1500, padrão do aparelho) e ajuste com o mouse |
 | VIS-05 | Trocar de corte com a roda do mouse e o teclado; zoom e arrasto; voltar ao original |
 | VIS-06 | Barra do paciente sempre visível com **nome e data de nascimento** (dois identificadores), exame e data |
-| VIS-07 | Marcar imagens para exportar; a seleção mostra quantas e de qual série |
-| VIS-08 | PDF de **um único estudo e um único paciente**, com 1, 2×2, 3×2 ou 4×3 imagens por página |
-| VIS-09 | Cabeçalho do PDF: logotipo, nome e nascimento do paciente, exame, data do exame, nº de atendimento, médico solicitante, série e janela de cada imagem, página "x de y" |
+| VIS-07 | ~~Marcar imagens para o PDF~~ (substituído em 23/11/2026, DEC-2026-11-23-16): o PDF leva **todas as imagens** das séries marcadas (todas começam marcadas); marcar imagem avulsa serve só para JPEG |
+| VIS-08 | PDF de **um único estudo e um único paciente** (o exame que está na tela), **uma série por página**, grade pela quantidade de imagens da série: 1 imagem ocupa a página, até 4 em 2×2, até 9 em 3×3, acima disso 4×5 (20 por página), como as folhas que a clínica entrega hoje (Medilab) |
+| VIS-09 | Cabeçalho do PDF em todas as páginas: logotipo, nome e nascimento do paciente, exame, data do exame, número do atendimento, médico solicitante, razão social, endereço e CNPJ; título da série no alto de cada página; legenda curta em cada imagem (número e janela); página "x de y". Sem código de barras (não é usado na clínica) |
 | VIS-10 | Rodapé do PDF: "Imagens para referência. O documento oficial do exame é o laudo assinado." e data/hora da geração |
 | VIS-11 | JPEG por imagem, nome do arquivo sem dado pessoal (ex.: `exame-2026-0001-serie2-img035.jpg`) |
 | VIS-12 | Registro de cada exportação: quem, quando, estação, estudo (UID), quantas imagens, hash do arquivo gerado, sem nome do paciente no registro |
@@ -94,6 +94,11 @@ Riscos propostos para o responsável clínico (entram no registro só com o acei
   nascimento do paciente na barra.
 - **FC-VIS-02** Quando o usuário marca 12 imagens de um mesmo estudo e pede o PDF em 3×2, então sai um
   PDF de 2 páginas com nome, nascimento, exame e data em todas as páginas.
+- **FC-VIS-02 v2** (substitui a FC-VIS-02 em 23/11/2026, proposta aprovada pelo dono do produto) Quando o
+  usuário pede o PDF de uma TC com uma série de 4 imagens e outra de 35, então sai um PDF de 3 páginas (a
+  série de 4 em 2×2; a de 35 em duas páginas de 4×5) com nome, nascimento, exame, data e número em todas.
+- **FC-VIS-06** Quando o usuário desmarca uma série antes de gerar o PDF, então as imagens dela não entram;
+  sem nenhuma série marcada, o PDF não é gerado.
 - **FC-VIS-03** Quando a seleção tem imagens de dois pacientes, então o PDF não é gerado e a tela mostra
   quais imagens são de outro paciente.
 - **FC-VIS-04** Quando o `.zip` tem arquivos que não são DICOM, então eles são listados como ignorados e
@@ -148,9 +153,10 @@ Riscos propostos para o responsável clínico (entram no registro só com o acei
 - no meio, a imagem: janelas do aparelho e prontas (teclas 1 a 4), arrastar ajusta contraste ou move,
   roda troca o corte, Ctrl + roda amplia, setas, PageUp/PageDown, Home/End, M marca, R volta à janela do
   aparelho; menu de contexto por clique direito, Shift+F10, tecla Menu e botão de mais opções (VIS-14);
-- à direita, as imagens marcadas (cada uma com a janela com que foi marcada), imagens por página
-  (1, 4, 6 ou 12), "Gerar PDF do paciente", "Salvar JPEG" e "Desmarcar todas". Com exames diferentes
-  marcados o botão do PDF fica apagado com o motivo (R1); o Rust confere de novo (VIS-S1).
+- à direita, **PDF do exame**: a lista de séries do exame na tela, todas marcadas, com quantas imagens e
+  páginas cada uma dá, o total e "Gerar PDF do exame"; acima de 600 imagens o botão fica apagado com o
+  motivo (desmarcar séries de corte fino). Embaixo, **imagens avulsas em JPEG** (marcadas com M), "Salvar
+  JPEG" e "Desmarcar todas". A janela escolhida em cada série vale para a tela e para o PDF.
 - antes do PDF, confirmação com nome e nascimento (VIS-S2); depois, aviso de onde foi salvo.
 
 **Regras no Rust (a tela só pede):** o diálogo de arquivo é aberto pelo Rust (a tela nunca manda caminho);
@@ -158,9 +164,11 @@ os dados impressos vêm do exame; os pixels chegam à tela sem perda, com a mesm
 arquivo existente nunca é sobrescrito (`-2`, `-3`); cada exportação vai para o registro encadeado (VIS-12)
 em `%APPDATA%\br.com.vidacorimagem.visualizador\registro-exportacoes.jsonl`, sem nome do paciente.
 
-**PDF:** A4 retrato, PDF/A-2b; cabeçalho em todas as páginas com logotipo, nome e nascimento em destaque,
-data do exame, exame, atendimento e solicitante; imagens em fundo preto com legenda (série, imagem, quadro,
-janela); rodapé com o aviso do laudo, data da geração e página "x de y" (VIS-08 a VIS-10).
+**PDF (modelo `imagens-exame-2`):** A4 retrato, PDF/A-2b, no arranjo das folhas que a clínica entrega hoje
+(Medilab, modelo conferido em 23/11/2026): todas as imagens, uma série por página, grade 1, 2×2, 3×3 ou 4×5;
+cabeçalho com logotipo, nome e nascimento em destaque, exame, data, número, solicitante, razão social,
+endereço e CNPJ; imagens em fundo preto com legenda curta; vídeo (vários quadros) entra pelo primeiro quadro;
+rodapé com o aviso do laudo, data da geração e página "x de y" (VIS-08 a VIS-10).
 
 **Testes:** 15 do PDF em `crates/documentos`, 8 do programa em `apps/visualizador/src-tauri/tests`
 (PDF, dois pacientes, dois exames, índices fora do exame, legenda, JPEG, nome livre, registro e

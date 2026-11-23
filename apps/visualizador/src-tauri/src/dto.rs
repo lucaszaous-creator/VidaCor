@@ -36,6 +36,8 @@ pub struct EstudoDto {
 #[serde(rename_all = "camelCase")]
 pub struct SerieDto {
     pub numero: Option<i32>,
+    /// Páginas que a série ocupa no PDF do exame (mesma regra do modelo, decidida no Rust).
+    pub paginas_no_pdf: usize,
     pub descricao: String,
     pub modalidade: String,
     pub imagens: Vec<ImagemDto>,
@@ -108,6 +110,14 @@ pub struct ItemDto {
     pub janela: Option<JanelaDto>,
 }
 
+/// Série pedida para o PDF do exame, com a janela escolhida para ela (nula = a do aparelho).
+#[derive(Debug, Clone, Copy, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SeriePedidaDto {
+    pub serie: usize,
+    pub janela: Option<JanelaDto>,
+}
+
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ResultadoDto {
@@ -143,6 +153,7 @@ fn estudo_dto(e: &Estudo) -> EstudoDto {
             .iter()
             .map(|s| SerieDto {
                 numero: s.numero,
+                paginas_no_pdf: vidacor_documentos::paginas_da_serie(s.imagens.len()),
                 descricao: s.descricao.clone(),
                 modalidade: s.modalidade.clone(),
                 imagens: s

@@ -1,5 +1,5 @@
 //! Exportação do Visualizador com os exames sintéticos de `crates/visualizador/tests/dados`
-//! (FC-VIS-02, FC-VIS-03, FC-VIS-05; VIS-11, VIS-12, VIS-S1). Sem Tauri: a lógica que os
+//! (FC-VIS-02 v2, FC-VIS-05; VIS-11, VIS-12, VIS-S1). Sem Tauri: a lógica que os
 //! comandos chamam, com arquivos e PDF de verdade.
 #![allow(clippy::unwrap_used, clippy::expect_used, clippy::panic)]
 
@@ -8,8 +8,8 @@ use std::path::PathBuf;
 use chrono::{Local, TimeZone};
 use vidacor_visualizador::{abrir, Exames, Limites};
 use vidacor_visualizador_app::{
-    jpegs, legenda, montar_pdf, nome_livre, nome_pdf, resolver, ErroApp, Grade, ItemDto,
-    Lancamento, Registro,
+    jpegs, legenda, montar_pdf, nome_livre, nome_pdf, resolver, titulo_da_serie, ErroApp, ItemDto,
+    Lancamento, Registro, SeriePedidaDto,
 };
 
 fn exames() -> Exames {
@@ -47,55 +47,100 @@ fn agora() -> chrono::DateTime<Local> {
     Local.with_ymd_and_hms(2026, 11, 23, 14, 5, 0).unwrap()
 }
 
-// FC-VIS-02 pelo programa: 4 imagens de um estudo viram PDF com os dados do próprio exame.
+fn series(v: &[(usize, Option<(f64, f64)>)]) -> Vec<SeriePedidaDto> {
+    serde_json::from_value(serde_json::Value::Array(
+        v.iter()
+            .map(|(s, j)| {
+                serde_json::json!({
+                    "serie": s,
+                    "janela": j.map(|(c, l)| serde_json::json!({ "centro": c, "largura": l })),
+                })
+            })
+            .collect(),
+    ))
+    .unwrap()
+}
+
+// FC-VIS-02 (v2) pelo programa: o PDF leva todas as imagens das séries do exame.
 #[test]
-fn pdf_de_um_estudo_sai_com_os_dados_do_exame() {
+fn pdf_do_exame_leva_todas_as_imagens_das_series() {
     let ex = exames();
     let tc = indice(&ex, "TESTE0001");
-    let lista = itens(vec![
-        item(tc, 0, 0, 0, Some((40.0, 400.0))),
-        item(tc, 0, 1, 0, None),
-        item(tc, 0, 2, 0, None),
-        item(tc, 1, 0, 0, Some((500.0, 2000.0))),
-    ]);
-    let r = resolver(&ex, &lista).unwrap();
-    let (pdf, estudo) = montar_pdf(&r, Grade::Quatro, agora()).unwrap();
+    let (pdf, estudo, n) = montar_pdf(
+        &ex,
+        tc,
+        &series(&[(0, None), (1, Some((500.0, 2000.0)))]),
+        agora(),
+    )
+    .unwrap();
     assert!(pdf.bytes.starts_with(b"%PDF"));
+    assert_eq!(n, 4, "3 cortes da série 2 e 1 da série 3");
     assert_eq!(estudo.numero_atendimento, "TESTE0001");
     assert_eq!(nome_pdf(estudo), "imagens-exame-TESTE0001.pdf");
 }
 
-// FC-VIS-03 pelo programa: imagens de dois pacientes não viram PDF.
 #[test]
-fn pdf_com_dois_pacientes_e_bloqueado() {
+fn serie_desmarcada_fica_fora_e_repetida_conta_uma_vez() {
     let ex = exames();
-    let lista = itens(vec![
-        item(indice(&ex, "TESTE0001"), 0, 0, 0, None),
-        item(indice(&ex, "TESTE0006"), 0, 0, 0, None),
-    ]);
-    let r = resolver(&ex, &lista).unwrap();
-    let erro = montar_pdf(&r, Grade::Uma, agora()).unwrap_err();
-    assert!(matches!(
-        erro,
-        ErroApp::Visualizador(vidacor_visualizador::Erro::PacientesDiferentes)
-    ));
-    assert!(erro.to_string().contains("pacientes diferentes"));
+    let tc = indice(&ex, "TESTE0001");
+    let (_, _, so_uma) = montar_pdf(&ex, tc, &series(&[(1, None)]), agora()).unwrap();
+    assert_eq!(so_uma, 1);
+    let (_, _, repetida) = montar_pdf(
+        &ex,
+        tc,
+        &series(&[(1, None), (0, None), (1, None)]),
+        agora(),
+    )
+    .unwrap();
+    assert_eq!(repetida, 4);
 }
 
 #[test]
-fn pdf_com_dois_exames_do_mesmo_paciente_e_bloqueado() {
+fn video_entra_pelo_primeiro_quadro() {
     let ex = exames();
-    let lista = itens(vec![
-        item(indice(&ex, "TESTE0001"), 0, 0, 0, None),
-        item(indice(&ex, "TESTE0002"), 0, 0, 0, None),
-    ]);
-    let r = resolver(&ex, &lista).unwrap();
+    let us = indice(&ex, "TESTE0005");
+    let (_, _, n) = montar_pdf(
+        &ex,
+        us,
+        &series(&[(0, None), (1, None), (2, None)]),
+        agora(),
+    )
+    .unwrap();
+    assert_eq!(n, 3, "cine de 4 quadros conta uma imagem");
+}
+
+#[test]
+fn pedido_invalido_e_recusado() {
+    let ex = exames();
+    let tc = indice(&ex, "TESTE0001");
     assert!(matches!(
-        montar_pdf(&r, Grade::Uma, agora()),
+        montar_pdf(&ex, 99, &series(&[(0, None)]), agora()),
+        Err(ErroApp::ItemInexistente)
+    ));
+    assert!(matches!(
+        montar_pdf(&ex, tc, &series(&[(9, None)]), agora()),
+        Err(ErroApp::ItemInexistente)
+    ));
+    assert!(matches!(
+        montar_pdf(&ex, tc, &series(&[]), agora()),
         Err(ErroApp::Visualizador(
-            vidacor_visualizador::Erro::EstudosDiferentes
+            vidacor_visualizador::Erro::NadaEscolhido
         ))
     ));
+}
+
+#[test]
+fn titulo_da_serie_com_e_sem_janela() {
+    let ex = exames();
+    let e = &ex.estudos[indice(&ex, "TESTE0001")];
+    assert_eq!(titulo_da_serie(&e.series[0], None), "Série 2, PARTES MOLES");
+    assert_eq!(
+        titulo_da_serie(
+            &e.series[1],
+            Some(vidacor_visualizador::Janela::nova(500.0, 2000.0))
+        ),
+        "Série 3, OSSO, janela 500/2000"
+    );
 }
 
 #[test]

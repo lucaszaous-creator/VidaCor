@@ -27,6 +27,7 @@ function ponteSimulada() {
   const serie = (numero, descricao, n) => ({
     numero,
     descricao,
+    paginasNoPdf: n <= 1 ? 1 : n <= 4 ? 1 : n <= 9 ? 1 : Math.ceil(n / 20),
     modalidade: 'CT',
     imagens: Array.from({ length: n }, (_, i) => ({ numero: i + 1, quadros: 1 })),
   });
@@ -34,10 +35,12 @@ function ponteSimulada() {
     abertura: 1,
     estudos: [
       estudo('ANA MARIA FICTICIO DE OLIVEIRA SANTOS', '01/01/1980', 'TC CRANIO SEM CONTRASTE', 'TESTE0001', [
+        serie(1, 'VOLUME 3D', 4),
         serie(2, 'PARTES MOLES Head 2.0', 35),
         serie(3, 'OSSO Head 1.0', 70),
         serie(4, 'CORONAL MPR', 40),
         serie(5, 'SAGITAL MPR', 40),
+        serie(6, 'AXIAL OSSO 0.5 mm', 480),
       ]),
     ],
     ignorados: [{ nome: 'DICOMDIR', motivo: 'arquivo DICOM sem imagem (índice, laudo ou outro objeto)' }],
@@ -85,7 +88,7 @@ function ponteSimulada() {
         case 'pixels':
           return fantoma(512, args.janela);
         case 'acoes_da_imagem':
-          return [{ id: args.marcada ? 'desmarcar' : 'marcar', rotulo: args.marcada ? 'Tirar da exportação' : 'Marcar para exportar', atalho: 'M', estado: 'disponivel' }];
+          return [{ id: args.marcada ? 'desmarcar' : 'marcar', rotulo: args.marcada ? 'Tirar dos JPEG' : 'Marcar para JPEG', atalho: 'M', estado: 'disponivel' }];
         default:
           return null;
       }
@@ -121,17 +124,21 @@ for (const [largura, altura] of [
       async () => {
         await pagina.getByRole('button', { name: 'Abrir pasta' }).click();
         await pagina.getByLabel(/Paciente em foco/).waitFor();
+        await pagina.getByRole('button', { name: /PARTES MOLES Head 2.0/ }).click();
         for (let i = 0; i < 8; i++) {
-          await pagina.getByRole('button', { name: /Marcar para exportar|Tirar da exportação/ }).click();
+          await pagina.getByRole('button', { name: /Marcar para JPEG|Tirar dos JPEG/ }).click();
           await pagina.getByLabel(/Setas trocam a imagem/).press('ArrowDown');
         }
-        await pagina.getByRole('button', { name: 'Marcar para exportar (M)' }).waitFor();
+        await pagina.getByRole('button', { name: 'Marcar para JPEG (M)' }).waitFor();
+        // Série de corte fino passa do limite: desmarcar para liberar o PDF.
+        await pagina.getByText('Série 6, AXIAL OSSO 0.5 mm').click();
+        await pagina.getByRole('checkbox', { name: /AXIAL OSSO 0.5 mm/ }).and(pagina.locator(':not(:checked)')).waitFor({ state: 'attached' });
       },
     ],
     [
       'confirmar-pdf',
       async () => {
-        await pagina.getByRole('button', { name: 'Gerar PDF do paciente' }).click();
+        await pagina.getByRole('button', { name: 'Gerar PDF do exame' }).click();
         await pagina.getByRole('alertdialog').waitFor();
       },
     ],

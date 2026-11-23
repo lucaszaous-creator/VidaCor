@@ -34,46 +34,74 @@ test('trocar de imagem pelo teclado e escolher janela pronta', async () => {
   });
 });
 
-// FC-VIS-02 pela tela: confirmar com nome e nascimento antes de gerar o PDF.
-test('marcar e gerar o PDF pede confirmação com o nome e o nascimento', async () => {
+// FC-VIS-02 (v2) pela tela: todas as séries entram marcadas; confirmar com nome e nascimento.
+test('gerar o PDF do exame leva todas as séries e pede confirmação com nome e nascimento', async () => {
   const { usuario, ponte } = await abrirExame();
-  await usuario.click(await screen.findByRole('button', { name: 'Marcar para exportar (M)' }));
   const painel = screen.getByRole('complementary', { name: 'Exportar' });
-  expect(within(painel).getByText(/1 de no máximo 600/)).toBeInTheDocument();
-  expect(within(painel).getByText('Janela 35/100')).toBeInTheDocument();
+  const pdf = within(painel).getByRole('region', { name: 'PDF do exame' });
+  expect(within(pdf).getByRole('checkbox', { name: /Série 2, PARTES MOLES/ })).toBeChecked();
+  expect(within(pdf).getByRole('checkbox', { name: /Série 3, OSSO/ })).toBeChecked();
+  expect(within(pdf).getByText('O PDF terá 4 imagens em 2 páginas.')).toBeInTheDocument();
 
-  await usuario.click(within(painel).getByRole('button', { name: 'Gerar PDF do paciente' }));
+  await usuario.click(within(pdf).getByRole('button', { name: 'Gerar PDF do exame' }));
   const dialogo = await screen.findByRole('alertdialog');
   expect(within(dialogo).getByText('ANA MARIA FICTICIO')).toBeInTheDocument();
   expect(within(dialogo).getByText('01/01/1980')).toBeInTheDocument();
+  expect(within(dialogo).getByRole('heading')).toHaveTextContent('Gerar o PDF do exame com 4 imagens para este paciente');
   await usuario.click(within(dialogo).getByRole('button', { name: 'Gerar PDF' }));
 
-  expect(ponte.gerarPdf).toHaveBeenCalledWith(1, [{ estudo: 0, serie: 0, imagem: 0, quadro: 0, janela: { centro: 35, largura: 100 } }], 6);
-  expect(await screen.findByText(/PDF com 1 imagem salvo/)).toBeInTheDocument();
+  expect(ponte.gerarPdf).toHaveBeenCalledWith(1, 0, [
+    { serie: 0, janela: null },
+    { serie: 1, janela: null },
+  ]);
+  expect(await screen.findByText(/PDF com 4 imagens salvo/)).toBeInTheDocument();
 });
 
-// FC-VIS-03 pela tela: exames diferentes marcados apagam o botão do PDF com o motivo.
-test('imagens de dois exames não deixam gerar o PDF', async () => {
+test('a janela escolhida numa série vai para o PDF e a série desmarcada fica fora', async () => {
   const { usuario, ponte } = await abrirExame();
-  await usuario.click(await screen.findByRole('button', { name: 'Marcar para exportar (M)' }));
+  await usuario.click(await screen.findByRole('button', { name: 'Osso' }));
+  const pdf = screen.getByRole('region', { name: 'PDF do exame' });
+  await usuario.click(within(pdf).getByRole('checkbox', { name: /Série 3, OSSO/ }));
+  expect(within(pdf).getByText('O PDF terá 3 imagens em 1 página.')).toBeInTheDocument();
+  await usuario.click(within(pdf).getByRole('button', { name: 'Gerar PDF do exame' }));
+  await usuario.click(within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Gerar PDF' }));
+  expect(ponte.gerarPdf).toHaveBeenCalledWith(1, 0, [{ serie: 0, janela: { centro: 500, largura: 2000 } }]);
+
+  await usuario.click(within(pdf).getByRole('checkbox', { name: /Série 2, PARTES MOLES/ }));
+  expect(within(pdf).getByRole('button', { name: 'Gerar PDF do exame' })).toBeDisabled();
+});
+
+// VIS-S1 pela tela: o PDF é sempre do exame mostrado, com o paciente dele na confirmação.
+test('o PDF é do exame que está na tela', async () => {
+  const { usuario, ponte } = await abrirExame();
   await usuario.click(screen.getByRole('button', { name: /PORTAL/ }));
-  await usuario.click(await screen.findByRole('button', { name: 'Marcar para exportar (M)' }));
-  const painel = screen.getByRole('complementary', { name: 'Exportar' });
-  expect(within(painel).getByRole('alert')).toHaveTextContent('exames diferentes');
-  expect(within(painel).getByRole('button', { name: 'Gerar PDF do paciente' })).toBeDisabled();
-  expect(ponte.gerarPdf).not.toHaveBeenCalled();
+  await screen.findByLabelText(/Paciente em foco: JOÃO PEDRO FICTICIO, nascimento 15\/06\/1975/);
+  await usuario.click(screen.getByRole('button', { name: 'Gerar PDF do exame' }));
+  const dialogo = await screen.findByRole('alertdialog');
+  expect(within(dialogo).getByText('JOÃO PEDRO FICTICIO')).toBeInTheDocument();
+  expect(within(dialogo).queryByText('ANA MARIA FICTICIO')).not.toBeInTheDocument();
+  await usuario.click(within(dialogo).getByRole('button', { name: 'Gerar PDF' }));
+  expect(ponte.gerarPdf).toHaveBeenCalledWith(1, 1, [{ serie: 0, janela: null }]);
+});
+
+test('imagens avulsas marcadas vão para o JPEG', async () => {
+  const { usuario, ponte } = await abrirExame();
+  await usuario.click(await screen.findByRole('button', { name: 'Marcar para JPEG (M)' }));
+  const jpeg = screen.getByRole('region', { name: 'Imagens avulsas em JPEG' });
+  expect(within(jpeg).getByText('Janela 35/100')).toBeInTheDocument();
+  await usuario.click(within(jpeg).getByRole('button', { name: 'Salvar JPEG' }));
+  expect(ponte.exportarJpeg).toHaveBeenCalledWith(1, [{ estudo: 0, serie: 0, imagem: 0, quadro: 0, janela: { centro: 35, largura: 100 } }]);
 });
 
 test('erro do programa aparece dizendo o que fazer', async () => {
   const ponte = ponteFalsa({
-    gerarPdf: () => Promise.reject(new Error('as imagens escolhidas são de pacientes diferentes; um PDF leva imagens de um só paciente')),
+    gerarPdf: () => Promise.reject(new Error('o exame não tem nome e data de nascimento do paciente; sem os dois identificadores o PDF não é gerado')),
   });
   const { usuario } = await abrirExame(ponte);
-  await usuario.click(await screen.findByRole('button', { name: 'Marcar para exportar (M)' }));
-  await usuario.click(screen.getByRole('button', { name: 'Gerar PDF do paciente' }));
+  await usuario.click(screen.getByRole('button', { name: 'Gerar PDF do exame' }));
   await usuario.click(within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Gerar PDF' }));
   expect(await screen.findByText('O PDF não foi gerado.')).toBeInTheDocument();
-  expect(screen.getByText(/um PDF leva imagens de um só paciente/)).toBeInTheDocument();
+  expect(screen.getByText(/sem os dois identificadores/)).toBeInTheDocument();
 });
 
 test('pasta sem imagem de exame avisa e continua na tela inicial', async () => {

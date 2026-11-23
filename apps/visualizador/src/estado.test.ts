@@ -14,7 +14,7 @@ test('marcar, desmarcar e o limite', () => {
 });
 
 test('quadros do cine entram em sequência', () => {
-  const serie = { numero: 1, descricao: '', modalidade: 'US', imagens: [{ numero: 1, quadros: 3 }, { numero: 2, quadros: 1 }] };
+  const serie = { numero: 1, descricao: '', modalidade: 'US', paginasNoPdf: 1, imagens: [{ numero: 1, quadros: 3 }, { numero: 2, quadros: 1 }] };
   expect(posicoesDaSerie(serie)).toEqual([
     { imagem: 0, quadro: 0 },
     { imagem: 0, quadro: 1 },

@@ -1,56 +1,49 @@
 //! Imagens do exame em PDF para entregar ao paciente (docs/31 VIS-08 a VIS-10, FC-VIS-02).
 //!
-//! Recebe as imagens já renderizadas em JPEG (pelo visualizador, com a janela escolhida na tela) e os
-//! dados já conferidos: um só paciente e um só estudo (VIS-S1, conferido por quem chama). Sem nome e
-//! nascimento do paciente o PDF não é gerado (dois identificadores).
+//! Arranjo das folhas que a clínica entrega hoje (Medilab, DEC-2026-11-23-16): todas as imagens, uma
+//! série por página, grade escolhida pela quantidade (1, 2×2, 3×3 ou 4×5). Recebe as imagens já
+//! renderizadas em JPEG (pelo visualizador, com a janela da série) e os dados já conferidos: um só
+//! paciente e um só estudo (VIS-S1, conferido por quem chama). Sem nome e nascimento do paciente o
+//! PDF não é gerado (dois identificadores).
 
 use crate::motor::{self, Momento, Pdf};
 use crate::{Clinica, ErroDocumento};
 use serde_json::json;
 
 /// Versão do modelo; muda a cada alteração de `modelos/imagens.typ`.
-pub const MODELO_IMAGENS: &str = "imagens-exame-1";
+pub const MODELO_IMAGENS: &str = "imagens-exame-2";
 const FONTE: &str = include_str!("../modelos/imagens.typ");
 /// Logotipo da VidaCor (recorte em `design/assets/marca`, ver docs/10).
 const LOGO: &[u8] = include_bytes!("../../../design/assets/marca/logo.png");
 
-/// Limite de imagens num PDF (docs/17 disponibilidade): 50 páginas de 12.
+/// Limite de imagens num PDF (docs/17 disponibilidade): 30 páginas de 20.
 pub const MAX_IMAGENS_PDF: usize = 600;
 
-/// Imagens por página, em retrato: colunas × linhas.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Grade {
-    /// 1 por página (1 × 1).
-    Uma,
-    /// 4 por página (2 × 2).
-    Quatro,
-    /// 6 por página (2 colunas × 3 linhas).
-    Seis,
-    /// 12 por página (3 colunas × 4 linhas).
-    Doze,
+/// Grade da página (colunas, linhas) pela quantidade de imagens da série, como nas folhas da
+/// clínica: 1 imagem ocupa a página; até 4, 2×2; até 9, 3×3; acima, 4×5 (20 por página).
+pub fn grade_da_serie(imagens: usize) -> (u8, u8) {
+    match imagens {
+        0 | 1 => (1, 1),
+        2..=4 => (2, 2),
+        5..=9 => (3, 3),
+        _ => (4, 5),
+    }
 }
 
-impl Grade {
-    pub fn colunas_e_linhas(self) -> (u8, u8) {
-        match self {
-            Grade::Uma => (1, 1),
-            Grade::Quatro => (2, 2),
-            Grade::Seis => (2, 3),
-            Grade::Doze => (3, 4),
-        }
+/// Páginas que uma série com `imagens` imagens ocupa.
+pub fn paginas_da_serie(imagens: usize) -> usize {
+    if imagens == 0 {
+        return 0;
     }
-
-    pub fn por_pagina(self) -> usize {
-        let (c, l) = self.colunas_e_linhas();
-        usize::from(c) * usize::from(l)
-    }
+    let (c, l) = grade_da_serie(imagens);
+    imagens.div_ceil(usize::from(c) * usize::from(l))
 }
 
 #[derive(Clone)]
 pub struct ImagemDoExame {
     /// JPEG já renderizado (o mesmo que foi visto na tela).
     pub jpeg: Vec<u8>,
-    /// Ex.: "Série 2 (PARTES MOLES), imagem 35, janela 40/400".
+    /// Ex.: "Imagem 35, janela 40/400".
     pub legenda: String,
 }
 
@@ -60,11 +53,25 @@ impl std::fmt::Debug for ImagemDoExame {
     }
 }
 
+/// Uma série do exame: começa sempre em página nova.
+#[derive(Clone)]
+pub struct SerieDoPdf {
+    /// Ex.: "Série 2, PARTES MOLES Head 2.0, janela 35/100".
+    pub titulo: String,
+    pub imagens: Vec<ImagemDoExame>,
+}
+
+impl std::fmt::Debug for SerieDoPdf {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "SerieDoPdf {{ {} imagem(ns) }}", self.imagens.len())
+    }
+}
+
 /// Dados impressos. Campo vazio sai como "não informado" (a página nunca inventa dado, R13).
 #[derive(Clone)]
 pub struct ImagensDoExame {
     pub clinica: Clinica,
-    /// Razão social, impressa acima do endereço (documento entregue ao paciente identifica a empresa).
+    /// Razão social, impressa no cabeçalho (documento entregue ao paciente identifica a empresa).
     pub razao_social: Option<String>,
     pub paciente_nome: String,
     /// `dd/mm/aaaa`.
@@ -78,17 +85,22 @@ pub struct ImagensDoExame {
     pub gerado_em: String,
     /// Momento da geração (UTC), gravado como data de criação do PDF.
     pub momento: Momento,
-    pub grade: Grade,
-    pub imagens: Vec<ImagemDoExame>,
+    pub series: Vec<SerieDoPdf>,
+}
+
+impl ImagensDoExame {
+    pub fn quantidade_imagens(&self) -> usize {
+        self.series.iter().map(|s| s.imagens.len()).sum()
+    }
 }
 
 impl std::fmt::Debug for ImagensDoExame {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "ImagensDoExame {{ {} imagem(ns), grade {:?}, .. }}",
-            self.imagens.len(),
-            self.grade
+            "ImagensDoExame {{ {} série(s), {} imagem(ns), .. }}",
+            self.series.len(),
+            self.quantidade_imagens()
         )
     }
 }
@@ -108,17 +120,19 @@ fn conferir(x: &ImagensDoExame) -> Result<(), ErroDocumento> {
             "o PDF exige o nome e a data de nascimento do paciente".into(),
         ));
     }
-    if x.imagens.is_empty() {
+    let total = x.quantidade_imagens();
+    if total == 0 {
         return Err(ErroDocumento::Dados("nenhuma imagem foi escolhida".into()));
     }
-    if x.imagens.len() > MAX_IMAGENS_PDF {
+    if total > MAX_IMAGENS_PDF {
         return Err(ErroDocumento::Dados(format!(
             "no máximo {MAX_IMAGENS_PDF} imagens por PDF"
         )));
     }
     if let Some(n) = x
-        .imagens
+        .series
         .iter()
+        .flat_map(|s| &s.imagens)
         .position(|i| !i.jpeg.starts_with(&[0xFF, 0xD8, 0xFF]))
     {
         return Err(ErroDocumento::Dados(format!(
@@ -129,8 +143,39 @@ fn conferir(x: &ImagensDoExame) -> Result<(), ErroDocumento> {
     Ok(())
 }
 
+/// Páginas prontas para o modelo: título, grade e as imagens (índice global e legenda).
+fn paginas(x: &ImagensDoExame) -> Vec<serde_json::Value> {
+    let mut saida = Vec::new();
+    let mut indice = 0usize;
+    for serie in x.series.iter().filter(|s| !s.imagens.is_empty()) {
+        let (colunas, linhas) = grade_da_serie(serie.imagens.len());
+        let por_pagina = usize::from(colunas) * usize::from(linhas);
+        let total = serie.imagens.len();
+        for (n, bloco) in serie.imagens.chunks(por_pagina).enumerate() {
+            let primeira = n * por_pagina + 1;
+            let ultima = primeira + bloco.len() - 1;
+            let titulo = if total > por_pagina {
+                format!("{}, imagens {primeira} a {ultima} de {total}", serie.titulo)
+            } else {
+                serie.titulo.clone()
+            };
+            let imagens: Vec<_> = bloco
+                .iter()
+                .map(|img| {
+                    let v = json!({ "indice": indice, "legenda": img.legenda });
+                    indice += 1;
+                    v
+                })
+                .collect();
+            saida.push(json!({
+                "titulo": titulo, "colunas": colunas, "linhas": linhas, "imagens": imagens,
+            }));
+        }
+    }
+    saida
+}
+
 fn dados(x: &ImagensDoExame) -> serde_json::Value {
-    let (colunas, linhas) = x.grade.colunas_e_linhas();
     json!({
         "clinica": {
             "nome": x.clinica.nome,
@@ -144,16 +189,16 @@ fn dados(x: &ImagensDoExame) -> serde_json::Value {
             "solicitante": ou_nao_informado(&x.medico_solicitante),
         },
         "gerado_em": x.gerado_em,
-        "grade": { "colunas": colunas, "linhas": linhas },
-        "imagens": x.imagens.iter().map(|i| json!({ "legenda": i.legenda })).collect::<Vec<_>>(),
+        "paginas": paginas(x),
     })
 }
 
 fn anexos(x: &ImagensDoExame) -> Vec<(String, Vec<u8>)> {
     let mut a = vec![("/logo.png".to_owned(), LOGO.to_vec())];
     a.extend(
-        x.imagens
+        x.series
             .iter()
+            .flat_map(|s| &s.imagens)
             .enumerate()
             .map(|(i, img)| (format!("/imagem/{i}.jpg"), img.jpeg.clone())),
     );
@@ -183,14 +228,26 @@ mod testes {
 
     const QUADRO: &[u8] = include_bytes!("../tests/dados/quadro.jpg");
 
-    fn exemplo(n: usize, grade: Grade) -> ImagensDoExame {
+    fn serie(titulo: &str, n: usize) -> SerieDoPdf {
+        SerieDoPdf {
+            titulo: titulo.into(),
+            imagens: (0..n)
+                .map(|i| ImagemDoExame {
+                    jpeg: QUADRO.to_vec(),
+                    legenda: format!("Imagem {}", i + 1),
+                })
+                .collect(),
+        }
+    }
+
+    fn exemplo(series: Vec<SerieDoPdf>) -> ImagensDoExame {
         ImagensDoExame {
             clinica: Clinica {
                 nome: "VidaCor Imagem".into(),
                 endereco: Some("Rua Fictícia, 100, Centro".into()),
-                telefone: Some("(00) 0000-0000".into()),
+                telefone: None,
                 site: None,
-                cnpj: None,
+                cnpj: Some("00.000.000/0001-00".into()),
                 responsavel_tecnico: None,
             },
             razao_social: Some("CLINICA FICTICIA LTDA".into()),
@@ -209,13 +266,7 @@ mod testes {
                 minuto: 5,
                 segundo: 0,
             },
-            grade,
-            imagens: (0..n)
-                .map(|i| ImagemDoExame {
-                    jpeg: QUADRO.to_vec(),
-                    legenda: format!("Série 2, imagem {}", i + 1),
-                })
-                .collect(),
+            series,
         }
     }
 
@@ -224,25 +275,46 @@ mod testes {
         motor::texto(&doc).lines().map(str::to_owned).collect()
     }
 
-    // FC-VIS-02: 12 imagens em 6 por página = 2 páginas com os identificadores em todas.
     #[test]
-    fn doze_imagens_em_seis_por_pagina_dao_duas_paginas_com_os_identificadores() {
-        let x = exemplo(12, Grade::Seis);
+    fn grade_pela_quantidade_como_nas_folhas_da_clinica() {
+        assert_eq!(grade_da_serie(1), (1, 1));
+        assert_eq!(grade_da_serie(4), (2, 2));
+        assert_eq!(grade_da_serie(5), (3, 3));
+        assert_eq!(grade_da_serie(9), (3, 3));
+        assert_eq!(grade_da_serie(10), (4, 5));
+        assert_eq!(paginas_da_serie(0), 0);
+        assert_eq!(paginas_da_serie(4), 1);
+        assert_eq!(paginas_da_serie(20), 1);
+        assert_eq!(paginas_da_serie(35), 2);
+        assert_eq!(paginas_da_serie(70), 4);
+    }
+
+    // FC-VIS-02 (v2): todas as imagens, uma série por página, identificadores em todas as páginas.
+    #[test]
+    fn cada_serie_comeca_em_pagina_nova_com_os_identificadores() {
+        let x = exemplo(vec![
+            serie("Série 1, 3D", 4),
+            serie("Série 2, PARTES MOLES", 35),
+        ]);
         let paginas = texto_por_pagina(&x);
-        assert_eq!(paginas.len(), 2);
+        assert_eq!(paginas.len(), 1 + 2);
         for p in &paginas {
             for esperado in [
                 "ANA MARIA FICTICIO",
                 "01/01/1980",
                 "TC CRANIO",
                 "01/01/2026",
+                "TESTE0001",
             ] {
                 assert!(p.contains(esperado), "{esperado} em {p}");
             }
             assert!(p.contains("laudo assinado"), "aviso VIS-10 em {p}");
             assert!(p.contains("CLINICA FICTICIA LTDA"), "razão social em {p}");
+            assert!(p.contains("00.000.000/0001-00"), "CNPJ em {p}");
         }
-        assert!(paginas[1].contains("imagem 12"));
+        assert!(paginas[0].contains("Série 1, 3D") && !paginas[0].contains("PARTES MOLES"));
+        assert!(paginas[1].contains("Série 2, PARTES MOLES, imagens 1 a 20 de 35"));
+        assert!(paginas[2].contains("imagens 21 a 35 de 35") && paginas[2].contains("Imagem 35"));
         assert!(paginas[0].contains("não informado"), "solicitante vazio");
         let pdf = imagens_pdf(&x).unwrap();
         assert!(pdf.bytes.starts_with(b"%PDF"));
@@ -256,50 +328,41 @@ mod testes {
     }
 
     #[test]
-    fn paginas_por_grade() {
-        for (grade, n, paginas) in [
-            (Grade::Uma, 3, 3),
-            (Grade::Quatro, 5, 2),
-            (Grade::Doze, 12, 1),
-            (Grade::Doze, 13, 2),
-        ] {
-            assert_eq!(
-                texto_por_pagina(&exemplo(n, grade)).len(),
-                paginas,
-                "{grade:?}"
-            );
-        }
+    fn serie_vazia_nao_gera_pagina() {
+        let x = exemplo(vec![serie("Vazia", 0), serie("Série 3", 1)]);
+        assert_eq!(texto_por_pagina(&x).len(), 1);
     }
 
     #[test]
     fn sem_os_dois_identificadores_nao_gera() {
-        let mut x = exemplo(1, Grade::Uma);
+        let mut x = exemplo(vec![serie("S", 1)]);
         x.paciente_nascimento = "  ".into();
         assert!(matches!(imagens_pdf(&x), Err(ErroDocumento::Dados(_))));
-        let mut x = exemplo(1, Grade::Uma);
+        let mut x = exemplo(vec![serie("S", 1)]);
         x.paciente_nome = String::new();
         assert!(matches!(imagens_pdf(&x), Err(ErroDocumento::Dados(_))));
     }
 
     #[test]
     fn limites_de_imagens_e_formato() {
-        assert!(imagens_pdf(&exemplo(0, Grade::Uma)).is_err());
-        assert!(imagens_pdf(&exemplo(MAX_IMAGENS_PDF + 1, Grade::Doze)).is_err());
-        let mut x = exemplo(2, Grade::Uma);
-        x.imagens[1].jpeg = b"%PDF-1.7 nao e imagem".to_vec();
+        assert!(imagens_pdf(&exemplo(vec![])).is_err());
+        assert!(imagens_pdf(&exemplo(vec![serie("S", 0)])).is_err());
+        assert!(imagens_pdf(&exemplo(vec![serie("S", 300), serie("T", 301)])).is_err());
+        let mut x = exemplo(vec![serie("S", 1), serie("T", 1)]);
+        x.series[1].imagens[0].jpeg = b"%PDF-1.7 nao e imagem".to_vec();
         let Err(ErroDocumento::Dados(m)) = imagens_pdf(&x) else {
             unreachable!("esperava erro de dados")
         };
         assert!(m.contains("imagem 2"));
     }
 
-    /// SEC-INJ-4: marcação Typst no nome e na legenda sai como texto.
+    /// SEC-INJ-4: marcação Typst no nome, no título e na legenda sai como texto.
     #[test]
     fn marcacao_no_dado_sai_como_texto() {
         let maligno = r#"Ana #image("/logo.png") #panic("x") *negrito* $x$"#;
-        let mut x = exemplo(1, Grade::Uma);
+        let mut x = exemplo(vec![serie(maligno, 1)]);
         x.paciente_nome = maligno.into();
-        x.imagens[0].legenda = maligno.into();
+        x.series[0].imagens[0].legenda = maligno.into();
         let texto: String = texto_por_pagina(&x).concat().split_whitespace().collect();
         for pedaco in ["#image(\"/logo.png\")", "#panic(\"x\")", "*negrito*", "$x$"] {
             assert!(texto.contains(pedaco), "{pedaco} impresso literalmente");
@@ -308,8 +371,7 @@ mod testes {
 
     #[test]
     fn debug_nao_mostra_o_paciente() {
-        let x = exemplo(2, Grade::Quatro);
-        let d = format!("{x:?}");
+        let d = format!("{:?}", exemplo(vec![serie("S", 2)]));
         assert!(!d.contains("ANA") && !d.contains("1980"));
     }
 }

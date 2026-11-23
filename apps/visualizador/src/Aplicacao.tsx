@@ -27,9 +27,11 @@ export function Aplicacao({ ponte }: { ponte: Ponte }) {
   const [estudo, setEstudo] = useState(0);
   const [serie, setSerie] = useState(0);
   const [indice, setIndice] = useState(0);
-  const [janela, setJanela] = useState<Janela | null>(null);
+  // Janela escolhida por série ("estudo-serie"); sem entrada = a do aparelho. Vale para a tela e o PDF.
+  const [janelas, setJanelas] = useState<Record<string, Janela>>({});
+  // Séries desmarcadas do PDF, por exame; todas começam marcadas (DEC-2026-11-23-16).
+  const [foraDoPdf, setForaDoPdf] = useState<Record<number, number[]>>({});
   const [selecao, setSelecao] = useState<Item[]>([]);
-  const [porPagina, setPorPagina] = useState(6);
   const [exportando, setExportando] = useState(false);
   const [confirmarPdf, setConfirmarPdf] = useState(false);
 
@@ -54,7 +56,8 @@ export function Aplicacao({ ponte }: { ponte: Ponte }) {
         setEstudo(0);
         setSerie(0);
         setIndice(0);
-        setJanela(null);
+        setJanelas({});
+        setForaDoPdf({});
         setSelecao([]);
         setAviso(
           tinhaSelecao
@@ -72,6 +75,7 @@ export function Aplicacao({ ponte }: { ponte: Ponte }) {
 
   const atual = resumo?.estudos[estudo];
   const serieAtual = atual?.series[serie];
+  const seriesNoPdf = atual ? atual.series.map((_, i) => i).filter((i) => !(foraDoPdf[estudo] ?? []).includes(i)) : [];
   const posicoes = useMemo(() => (serieAtual ? posicoesDaSerie(serieAtual) : []), [serieAtual]);
   const pos = posicoes[Math.min(indice, Math.max(0, posicoes.length - 1))];
   const posicao = useMemo(() => (pos ? { estudo, serie, imagem: pos.imagem, quadro: pos.quadro } : null), [estudo, serie, pos]);
@@ -99,7 +103,7 @@ export function Aplicacao({ ponte }: { ponte: Ponte }) {
     }
     setExportando(true);
     try {
-      const r = await ponte.gerarPdf(resumo.abertura, selecao, porPagina);
+      const r = await ponte.gerarPdf(resumo.abertura, estudo, seriesNoPdf.map((s) => ({ serie: s, janela: janelas[`${String(estudo)}-${String(s)}`] ?? null })));
       setConfirmarPdf(false);
       if (r) {
         setAviso({ nivel: 'feito', titulo: `PDF com ${quantas(r.quantidade)} salvo.`, texto: `Arquivo: ${r.destino}. A exportação ficou registrada.` });
@@ -137,7 +141,8 @@ export function Aplicacao({ ponte }: { ponte: Ponte }) {
     `Imagem ${String(posicao.imagem + 1)} de ${String(serieAtual.imagens.length)}${imagemAtual?.numero != null ? ` (nº ${String(imagemAtual.numero)})` : ''}`,
     ...(imagemAtual && imagemAtual.quadros > 1 ? [`Quadro ${String(posicao.quadro + 1)} de ${String(imagemAtual.quadros)}`] : []),
   ];
-  const pacienteDoPdf = resumo.estudos[selecao[0]?.estudo ?? estudo] ?? atual;
+  const janela = janelas[`${String(estudo)}-${String(serie)}`] ?? null;
+  const imagensNoPdf = seriesNoPdf.reduce((t, s) => t + (atual.series[s]?.imagens.length ?? 0), 0);
 
   return (
     <div className="vz">
@@ -193,7 +198,6 @@ export function Aplicacao({ ponte }: { ponte: Ponte }) {
             setEstudo(e);
             setSerie(s);
             setIndice(0);
-            setJanela(null);
           }}
         />
         <Visor
@@ -207,7 +211,12 @@ export function Aplicacao({ ponte }: { ponte: Ponte }) {
           indice={Math.min(indice, posicoes.length - 1)}
           aoIrPara={setIndice}
           janela={janela}
-          aoMudarJanela={setJanela}
+          aoMudarJanela={(j) => {
+            const k = `${String(estudo)}-${String(serie)}`;
+            setJanelas((atuais) =>
+              j === null ? Object.fromEntries(Object.entries(atuais).filter(([chaveDaSerie]) => chaveDaSerie !== k)) : { ...atuais, [k]: j },
+            );
+          }}
           marcada={estaMarcada(selecao, posicao)}
           totalMarcadas={selecao.length}
           aoAlternarMarca={(j) => {
@@ -219,8 +228,14 @@ export function Aplicacao({ ponte }: { ponte: Ponte }) {
         <PainelDeExportacao
           estudos={resumo.estudos}
           selecao={selecao}
-          porPagina={porPagina}
-          aoMudarPorPagina={setPorPagina}
+          estudo={atual}
+          seriesNoPdf={seriesNoPdf}
+          aoMarcarSerie={(s, marcada) => {
+            setForaDoPdf((f) => {
+              const fora = (f[estudo] ?? []).filter((x) => x !== s);
+              return { ...f, [estudo]: marcada ? fora : [...fora, s] };
+            });
+          }}
           aoTirar={(i) => {
             setSelecao((s) => s.filter((x) => chave(x) !== chave(i)));
           }}
@@ -236,8 +251,8 @@ export function Aplicacao({ ponte }: { ponte: Ponte }) {
       </div>
       <Dialogo
         aberto={confirmarPdf}
-        titulo={`Gerar o PDF com ${quantas(selecao.length)} para este paciente`}
-        paciente={{ nome: pacienteDoPdf.paciente.nome, nascimento: pacienteDoPdf.paciente.nascimento ?? 'não informado' }}
+        titulo={`Gerar o PDF do exame com ${quantas(imagensNoPdf)} para este paciente`}
+        paciente={{ nome: atual.paciente.nome, nascimento: atual.paciente.nascimento ?? 'não informado' }}
         rotuloConfirmar="Gerar PDF"
         ocupado={exportando}
         aoConfirmar={() => void gerarPdf()}
@@ -246,8 +261,8 @@ export function Aplicacao({ ponte }: { ponte: Ponte }) {
         }}
       >
         <p style={{ margin: 0 }}>
-          {pacienteDoPdf.descricao || 'Exame sem descrição'}
-          {pacienteDoPdf.data !== null && ` de ${pacienteDoPdf.data}`}. O PDF sai com nome, nascimento, exame e data em todas
+          {atual.descricao || 'Exame sem descrição'}
+          {atual.data !== null && ` de ${atual.data}`}, {quantas(imagensNoPdf)} de {String(seriesNoPdf.length)} série(s). O PDF sai com nome, nascimento, exame e data em todas
           as páginas; depois você escolhe onde salvar.
         </p>
       </Dialogo>

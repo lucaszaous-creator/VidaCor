@@ -334,7 +334,7 @@ export function Visor(p: PropsDoVisor) {
         ref={caixa}
         className={ferramenta === 'mover' ? 'vz-area mover' : 'vz-area'}
         tabIndex={0}
-        aria-label={`${p.descricaoDaSerie}, ${p.rotulos.join(', ')}. Setas trocam a imagem; M marca para exportar; menu de contexto com Shift+F10.`}
+        aria-label={`${p.descricaoDaSerie}, ${p.rotulos.join(', ')}. Setas trocam a imagem; M marca para JPEG; menu de contexto com Shift+F10.`}
         onWheel={aoRodar}
         onPointerDown={aoApertar}
         onPointerMove={aoMover}
@@ -358,7 +358,7 @@ export function Visor(p: PropsDoVisor) {
         <div className="vz-sobre vz-sobre-dir">
           {efetiva && info?.cor !== true && <div>Janela {rotuloDaJanela(efetiva)}</div>}
           <div>Zoom {Math.round(escala * 100)}%</div>
-          {p.marcada && <div className="vz-marcada">Marcada para exportar</div>}
+          {p.marcada && <div className="vz-marcada">Marcada para JPEG</div>}
         </div>
         {erro !== null && (
           <div className="vz-erro" role="alert">
@@ -387,7 +387,7 @@ export function Visor(p: PropsDoVisor) {
             escolherAcao(p.marcada ? 'desmarcar' : 'marcar');
           }}
         >
-          {p.marcada ? 'Tirar da exportação (M)' : 'Marcar para exportar (M)'}
+          {p.marcada ? 'Tirar dos JPEG (M)' : 'Marcar para JPEG (M)'}
         </Botao>
         <BotaoDeIcone
           icone="maisOpcoes"

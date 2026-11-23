@@ -22,6 +22,8 @@ export interface ImagemResumo {
 
 export interface Serie {
   numero: number | null;
+  /** Páginas que a série ocupa no PDF do exame (regra do Rust). */
+  paginasNoPdf: number;
   descricao: string;
   modalidade: string;
   imagens: ImagemResumo[];
@@ -70,6 +72,12 @@ export interface Posicao {
 
 export interface Item extends Posicao {
   /** Janela com que a imagem foi marcada; nula na imagem colorida. */
+  janela: Janela | null;
+}
+
+/** Série pedida para o PDF do exame, com a janela escolhida para ela (nula = a do aparelho). */
+export interface SeriePedida {
+  serie: number;
   janela: Janela | null;
 }
 
@@ -123,7 +131,7 @@ export interface Ponte {
   pixels: (abertura: number, p: Posicao, janela: Janela | null) => Promise<Pixels>;
   acoesDaImagem: (marcada: boolean, totalMarcadas: number) => Promise<Acao[]>;
   exportarJpeg: (abertura: number, itens: Item[]) => Promise<Resultado | null>;
-  gerarPdf: (abertura: number, itens: Item[], porPagina: number) => Promise<Resultado | null>;
+  gerarPdf: (abertura: number, estudo: number, series: SeriePedida[]) => Promise<Resultado | null>;
 }
 
 export const ponteTauri: Ponte = {
@@ -133,7 +141,7 @@ export const ponteTauri: Ponte = {
   pixels: async (abertura, p, janela) => decodificarPixels(await invoke<ArrayBuffer>('pixels', { abertura, ...p, janela })),
   acoesDaImagem: (marcada, totalMarcadas) => invoke<Acao[]>('acoes_da_imagem', { marcada, totalMarcadas }),
   exportarJpeg: (abertura, itens) => invoke<Resultado | null>('exportar_jpeg', { abertura, itens }),
-  gerarPdf: (abertura, itens, porPagina) => invoke<Resultado | null>('gerar_pdf', { abertura, itens, porPagina }),
+  gerarPdf: (abertura, estudo, series) => invoke<Resultado | null>('gerar_pdf', { abertura, estudo, series }),
 };
 
 /** Mensagem do Rust (texto) ou de uma falha inesperada, sempre dizendo o que fazer (R8). */

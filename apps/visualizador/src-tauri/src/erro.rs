@@ -11,8 +11,6 @@ pub enum ErroApp {
     ItemInexistente,
     #[error("no máximo {0} imagens por exportação; escolha menos imagens")]
     MuitasImagens(usize),
-    #[error("tamanho de página desconhecido")]
-    GradeInvalida,
     #[error("o exame não tem nome e data de nascimento do paciente; sem os dois identificadores o PDF não é gerado")]
     SemIdentificadores,
     #[error("não foi possível gravar o arquivo na pasta escolhida ({0}); escolha outra pasta")]

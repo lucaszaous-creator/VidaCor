@@ -12,10 +12,11 @@ mod estado;
 mod exportar;
 mod registro;
 
-pub use dto::ItemDto;
+pub use dto::{ItemDto, SeriePedidaDto};
 pub use erro::ErroApp;
 pub use exportar::{
-    jpegs, legenda, montar_pdf, nome_livre, nome_pdf, resolver, Grade, ItemResolvido, CLINICA,
+    jpegs, legenda, montar_pdf, nome_livre, nome_pdf, resolver, series_pedidas, titulo_da_serie,
+    ItemResolvido, CLINICA,
 };
 pub use registro::{Lancamento, Registro};
 

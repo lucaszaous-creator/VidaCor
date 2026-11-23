@@ -14,8 +14,8 @@ export const RESUMO: Resumo = {
       solicitante: 'MEDICO FICTICIO',
       modalidades: ['CT'],
       series: [
-        { numero: 2, descricao: 'PARTES MOLES', modalidade: 'CT', imagens: [{ numero: 3, quadros: 1 }, { numero: 2, quadros: 1 }, { numero: 1, quadros: 1 }] },
-        { numero: 3, descricao: 'OSSO', modalidade: 'CT', imagens: [{ numero: 1, quadros: 1 }] },
+        { numero: 2, descricao: 'PARTES MOLES', modalidade: 'CT', paginasNoPdf: 1, imagens: [{ numero: 3, quadros: 1 }, { numero: 2, quadros: 1 }, { numero: 1, quadros: 1 }] },
+        { numero: 3, descricao: 'OSSO', modalidade: 'CT', paginasNoPdf: 1, imagens: [{ numero: 1, quadros: 1 }] },
       ],
     },
     {
@@ -25,7 +25,7 @@ export const RESUMO: Resumo = {
       atendimento: 'TESTE0006',
       solicitante: '',
       modalidades: ['CT'],
-      series: [{ numero: 1, descricao: 'PORTAL', modalidade: 'CT', imagens: [{ numero: 1, quadros: 1 }] }],
+      series: [{ numero: 1, descricao: 'PORTAL', modalidade: 'CT', paginasNoPdf: 1, imagens: [{ numero: 1, quadros: 1 }] }],
     },
   ],
   ignorados: [{ nome: 'nao_dicom.txt', motivo: 'não é um arquivo DICOM' }],
@@ -53,12 +53,12 @@ export function ponteFalsa(sobrescrever: Partial<Ponte> = {}) {
     pixels: vi.fn(() => Promise.resolve({ largura: 4, altura: 4, rgba: new Uint8ClampedArray(64) })),
     acoesDaImagem: vi.fn((marcada: boolean) =>
       Promise.resolve([
-        { id: marcada ? 'desmarcar' : 'marcar', rotulo: marcada ? 'Tirar da exportação' : 'Marcar para exportar', atalho: 'M', estado: 'disponivel' as const },
+        { id: marcada ? 'desmarcar' : 'marcar', rotulo: marcada ? 'Tirar dos JPEG' : 'Marcar para JPEG', atalho: 'M', estado: 'disponivel' as const },
         { id: 'salvar-jpeg', rotulo: 'Salvar esta imagem em JPEG', estado: 'disponivel' as const },
       ]),
     ),
     exportarJpeg: vi.fn(() => Promise.resolve({ quantidade: 1, destino: 'C:\\Exportados' })),
-    gerarPdf: vi.fn(() => Promise.resolve({ quantidade: 1, destino: 'C:\\Exportados\\imagens-exame-TESTE0001.pdf' })),
+    gerarPdf: vi.fn(() => Promise.resolve({ quantidade: 4, destino: 'C:\\Exportados\\imagens-exame-TESTE0001.pdf' })),
     ...sobrescrever,
   };
   return p;

@@ -1,6 +1,6 @@
 {
   "name": "@vidacor/visualizador",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Visualizador VidaCor (docs/31): tela do programa Tauri que abre exames DICOM e gera PDF e JPEG.",
   "type": "module",
